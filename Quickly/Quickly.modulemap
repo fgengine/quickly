@@ -1,0 +1,11 @@
+framework module Quickly {
+    umbrella header "Quickly.h"
+
+    export *
+    module * { export * }
+
+    explicit module Private {
+        header "QuicklyPrivate.h"
+    }
+
+}

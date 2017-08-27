@@ -1,0 +1,36 @@
+# MacOSX
+.DS_Store
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+.AppleDB
+.AppleDesktop
+.apdisk
+
+# Windows
+$RECYCLE.BIN/
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.lnk
+
+# XCode
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+*.xcuserstate
+
+# Visual Studio
+*.suo
+*.sdf
+*.opensdf
+*.user
