@@ -712,7 +712,7 @@ UIColor* QJsonImplColorFromString(NSString* string) {
         characterSet = NSCharacterSet.alphanumericCharacterSet.invertedSet;
     });
     NSString* colorString = [string stringByTrimmingCharactersInSet:characterSet];
-    UInt32 hex = 0;
+    unsigned hex = 0;
     [[NSScanner scannerWithString:colorString] scanHexInt:&hex];
     UInt8 r = 255, g = 255, b = 255, a = 255;
     switch (colorString.length) {
@@ -738,8 +738,8 @@ UIColor* QJsonImplColorFromString(NSString* string) {
         default:
             break;
     }
-    return [UIColor colorWithRed:(CGFloat)(r) / 255.0
-                           green:(CGFloat)(g) / 255.0
-                            blue:(CGFloat)(b) / 255.0
-                           alpha:(CGFloat)(a) / 255.0];
+    return [UIColor colorWithRed:(CGFloat)(r) / (CGFloat)(255.0)
+                           green:(CGFloat)(g) / (CGFloat)(255.0)
+                            blue:(CGFloat)(b) / (CGFloat)(255.0)
+                           alpha:(CGFloat)(a) / (CGFloat)(255.0)];
 }
