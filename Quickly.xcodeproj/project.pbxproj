@@ -120,6 +120,10 @@
 		40FBE6861F536C6000F5194B /* QColorTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE6841F536C6000F5194B /* QColorTableRow.swift */; };
 		40FBE6871F536C6000F5194B /* QEdgeInsetsTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE6851F536C6000F5194B /* QEdgeInsetsTableRow.swift */; };
 		40FBE6891F53FCA600F5194B /* Quickly.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 401829591F4C1C0A005C9949 /* Quickly.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		40FBE68C1F540A2800F5194B /* ChoiseSectionTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE68B1F540A2800F5194B /* ChoiseSectionTableRow.swift */; };
+		40FBE68F1F540AD500F5194B /* TextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE68E1F540AD500F5194B /* TextStyle.swift */; };
+		40FBE6931F540D5C00F5194B /* LabelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE6911F540D5C00F5194B /* LabelViewController.swift */; };
+		40FBE6941F540D5C00F5194B /* LabelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40FBE6921F540D5C00F5194B /* LabelViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -270,6 +274,10 @@
 		40FBE67F1F536BB600F5194B /* QSpaceTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSpaceTableRow.swift; sourceTree = "<group>"; };
 		40FBE6841F536C6000F5194B /* QColorTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QColorTableRow.swift; sourceTree = "<group>"; };
 		40FBE6851F536C6000F5194B /* QEdgeInsetsTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QEdgeInsetsTableRow.swift; sourceTree = "<group>"; };
+		40FBE68B1F540A2800F5194B /* ChoiseSectionTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChoiseSectionTableRow.swift; sourceTree = "<group>"; };
+		40FBE68E1F540AD500F5194B /* TextStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextStyle.swift; sourceTree = "<group>"; };
+		40FBE6911F540D5C00F5194B /* LabelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelViewController.swift; sourceTree = "<group>"; };
+		40FBE6921F540D5C00F5194B /* LabelViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LabelViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -381,6 +389,7 @@
 			children = (
 				4039BCDA1F522B0600E38090 /* Containers */,
 				4039BCD71F522AC200E38090 /* Routers */,
+				40FBE68D1F540AC100F5194B /* Styles */,
 				4039BCD41F522AB000E38090 /* ViewControllers */,
 				4039BCC11F522A6400E38090 /* AppDelegate.swift */,
 				4039BCC81F522A6400E38090 /* Assets.xcassets */,
@@ -394,7 +403,7 @@
 			isa = PBXGroup;
 			children = (
 				4039BCD51F522AB000E38090 /* Choise */,
-				4039BCD61F522AB000E38090 /* Labels */,
+				40FBE6901F540D5C00F5194B /* Label */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -402,17 +411,11 @@
 		4039BCD51F522AB000E38090 /* Choise */ = {
 			isa = PBXGroup;
 			children = (
+				40FBE68A1F540A0A00F5194B /* Rows */,
 				4039BCDD1F522D1100E38090 /* ChoiseViewController.swift */,
 				4039BCE11F52314000E38090 /* ChoiseTableController.swift */,
 			);
 			path = Choise;
-			sourceTree = "<group>";
-		};
-		4039BCD61F522AB000E38090 /* Labels */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Labels;
 			sourceTree = "<group>";
 		};
 		4039BCD71F522AC200E38090 /* Routers */ = {
@@ -662,6 +665,31 @@
 			path = Other;
 			sourceTree = "<group>";
 		};
+		40FBE68A1F540A0A00F5194B /* Rows */ = {
+			isa = PBXGroup;
+			children = (
+				40FBE68B1F540A2800F5194B /* ChoiseSectionTableRow.swift */,
+			);
+			path = Rows;
+			sourceTree = "<group>";
+		};
+		40FBE68D1F540AC100F5194B /* Styles */ = {
+			isa = PBXGroup;
+			children = (
+				40FBE68E1F540AD500F5194B /* TextStyle.swift */,
+			);
+			path = Styles;
+			sourceTree = "<group>";
+		};
+		40FBE6901F540D5C00F5194B /* Label */ = {
+			isa = PBXGroup;
+			children = (
+				40FBE6911F540D5C00F5194B /* LabelViewController.swift */,
+				40FBE6921F540D5C00F5194B /* LabelViewController.xib */,
+			);
+			path = Label;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -801,6 +829,7 @@
 			files = (
 				4039BCCC1F522A6400E38090 /* LaunchScreen.storyboard in Resources */,
 				4039BCC91F522A6400E38090 /* Assets.xcassets in Resources */,
+				40FBE6941F540D5C00F5194B /* LabelViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -923,9 +952,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40FBE68F1F540AD500F5194B /* TextStyle.swift in Sources */,
 				4039BCDC1F522B2C00E38090 /* AppContainer.swift in Sources */,
+				40FBE68C1F540A2800F5194B /* ChoiseSectionTableRow.swift in Sources */,
 				4039BCE01F522FAC00E38090 /* ChoiseRouter.swift in Sources */,
 				4039BCD91F522AD500E38090 /* AppRouter.swift in Sources */,
+				40FBE6931F540D5C00F5194B /* LabelViewController.swift in Sources */,
 				4039BCC21F522A6400E38090 /* AppDelegate.swift in Sources */,
 				4039BCDE1F522D1100E38090 /* ChoiseViewController.swift in Sources */,
 				4039BCE21F52314000E38090 /* ChoiseTableController.swift in Sources */,

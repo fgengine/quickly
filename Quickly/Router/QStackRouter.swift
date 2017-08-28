@@ -23,11 +23,11 @@ open class QStackRouter<
         self.router = router
     }
 
-    internal func prepareStackViewController() -> QStackViewController {
+    open func prepareStackViewController() -> QStackViewController {
         return QStackViewController(rootViewController: self.rootViewController)
     }
 
-    internal func prepareRootViewController() -> ViewControllerType {
+    open func prepareRootViewController() -> ViewControllerType {
         return ViewControllerType()
     }
 

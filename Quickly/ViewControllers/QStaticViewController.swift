@@ -16,12 +16,12 @@ open class QStaticViewController : UIViewController, IQContentViewController {
         didSet { self.setNeedsStatusBarAppearanceUpdate() }
     }
     open var supportedOrientationMask: UIInterfaceOrientationMask = .portrait
-    open var navigationBarHidden: Bool = true
-    open var toolbarHidden: Bool = true
+    open var navigationBarHidden: Bool = false
+    open var toolbarHidden: Bool = false
     open var isAppeared: Bool = false
 
     public init() {
-        super.init(nibName: QStaticViewController.currentNibName(), bundle: QStaticViewController.currentNibBundle())
+        super.init(nibName: nil, bundle: nil)
         self.setup()
     }
 
@@ -35,12 +35,18 @@ open class QStaticViewController : UIViewController, IQContentViewController {
         self.setup()
     }
 
-    open class func currentNibName() -> String {
-        return String(describing: self)
+    open func currentNibName() -> String {
+        if let nibName: String = self.nibName {
+            return nibName
+        }
+        return String(describing: self.classForCoder)
     }
 
-    open class func currentNibBundle() -> Bundle? {
-        return nil
+    open func currentNibBundle() -> Bundle {
+        if let nibBundle: Bundle = self.nibBundle {
+            return nibBundle
+        }
+        return Bundle.main
     }
 
     open func setup() {
@@ -79,6 +85,13 @@ open class QStaticViewController : UIViewController, IQContentViewController {
 
     open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         get { return self.supportedOrientationMask }
+    }
+
+    open override func loadView() {
+        let nibName: String = self.currentNibName()
+        let bundle: Bundle = self.currentNibBundle()
+        let nib: UINib = UINib(nibName: nibName, bundle: bundle)
+        _ = nib.instantiate(withOwner: self, options: nil)
     }
 
     open override func viewWillAppear(_ animated: Bool) {

@@ -11,54 +11,27 @@ class ChoiseViewController: QTableViewController, IQRouted {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let tc: ChoiseTableController = ChoiseTableController()
+        let tc: ChoiseTableController = ChoiseTableController(self)
         tc.sections = [
             QTableSection(rows: [
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)),
-                QLabelTableRow(text: QText("Text text text text text text\nText text text text text text text text text text text text text text text text text text text text text text text text text text"), edgeInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
+                ChoiseSectionTableRow(mode: .label),
+                ChoiseSectionTableRow(mode: .button)
             ])
         ]
         self.tableController = tc
     }
 
+}
+
+extension ChoiseViewController: ChoiseTableControllerDelegate {
+
+    public func pressedChoiseSectionRow(_ row: ChoiseSectionTableRow) {
+        if let router: ChoiseRouter = self.router {
+            switch row.mode {
+            case .label: router.presentLabelViewController()
+            case .button: break
+            }
+        }
+    }
+    
 }

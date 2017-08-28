@@ -29,8 +29,8 @@ open class QCollectionViewController : UICollectionViewController, IQContentView
         didSet { self.setNeedsStatusBarAppearanceUpdate() }
     }
     open var supportedOrientationMask: UIInterfaceOrientationMask = .portrait
-    open var navigationBarHidden: Bool = true
-    open var toolbarHidden: Bool = true
+    open var navigationBarHidden: Bool = false
+    open var toolbarHidden: Bool = false
     open var isAppeared: Bool = false
 
     open override var prefersStatusBarHidden: Bool {

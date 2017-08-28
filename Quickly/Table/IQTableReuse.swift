@@ -19,7 +19,7 @@ public protocol IQTableReuse: class {
 
 }
 
-extension IQTableReuse {
+extension IQTableReuse where Self: UIView {
 
     public static func reuseIdentifier() -> String {
         return String(describing: self)
@@ -35,7 +35,7 @@ extension IQTableReuse {
     }
 
     public static func currentNibName() -> String {
-        return String(describing: self)
+        return String(describing: self.classForCoder)
     }
 
     public static func currentNibBundle() -> Bundle {

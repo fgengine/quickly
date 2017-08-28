@@ -17,7 +17,7 @@ public protocol IQCollectionReuse: class {
 
 }
 
-extension IQCollectionReuse {
+extension IQCollectionReuse where Self: UIView {
 
     public static func reuseIdentifier() -> String {
         return String(describing: self)
@@ -33,7 +33,7 @@ extension IQCollectionReuse {
     }
 
     public static func currentNibName() -> String {
-        return String(describing: self)
+        return String(describing: self.classForCoder)
     }
 
     public static func currentNibBundle() -> Bundle {
