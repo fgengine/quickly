@@ -39,8 +39,8 @@ public struct QLayoutItem< T > {
     ) {
         self.item = item
         self.attribute = attribute
-        self.constant = 0.0
-        self.multiplier = 1.0
+        self.constant = constant
+        self.multiplier = multiplier
     }
 
     fileprivate func constrain(

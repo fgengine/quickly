@@ -6,6 +6,10 @@ import UIKit
 
 open class QSpaceTableCell: QTableCell< QSpaceTableRow > {
 
+    open override class func height(row: QSpaceTableRow, width: CGFloat) -> CGFloat {
+        return row.size
+    }
+
     open override func set(row: QSpaceTableRow) {
         super.set(row: row)
         self.apply(colorRow: row)

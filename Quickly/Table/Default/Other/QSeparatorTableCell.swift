@@ -9,22 +9,22 @@ open class QSeparatorTableCell: QTableCell< QSeparatorTableRow > {
     internal var separator: QView!
     internal var separatorConstraints: [NSLayoutConstraint] = [] {
         willSet {
-            for constraint: NSLayoutConstraint in self.separatorConstraints {
-                self.contentView.removeConstraint(constraint)
-            }
-            self.separatorConstraints.removeAll()
+            self.contentView.removeConstraints(self.separatorConstraints)
         }
         didSet {
-            for constraint: NSLayoutConstraint in self.separatorConstraints {
-                self.contentView.addConstraint(constraint)
-            }
+            self.contentView.addConstraints(self.separatorConstraints)
         }
+    }
+
+    open override class func height(row: QSeparatorTableRow, width: CGFloat) -> CGFloat {
+        return row.edgeInsets.top + (1 / UIScreen.main.scale) + row.edgeInsets.bottom
     }
 
     open override func setup() {
         super.setup()
 
         self.separator = QView(frame: self.contentView.bounds)
+        self.separator.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(self.separator)
     }
 
@@ -49,8 +49,8 @@ open class QSeparatorTableCell: QTableCell< QSeparatorTableRow > {
         self.separatorConstraints = [
             self.separator.topLayout == self.contentView.topLayout + edgeInsetsRow.edgeInsets.top,
             self.separator.leadingLayout == self.contentView.leadingLayout + edgeInsetsRow.edgeInsets.left,
-            self.separator.trailingLayout == self.contentView.trailingLayout + edgeInsetsRow.edgeInsets.right,
-            self.separator.bottomLayout == self.contentView.bottomLayout + edgeInsetsRow.edgeInsets.bottom
+            self.separator.trailingLayout == self.contentView.trailingLayout - edgeInsetsRow.edgeInsets.right,
+            self.separator.bottomLayout == self.contentView.bottomLayout - edgeInsetsRow.edgeInsets.bottom
         ]
     }
 

@@ -9,22 +9,24 @@ open class QLabelTableCell: QTableCell< QLabelTableRow > {
     internal var label: QLabel!
     internal var labelConstraints: [NSLayoutConstraint] = [] {
         willSet {
-            for constraint: NSLayoutConstraint in self.labelConstraints {
-                self.contentView.removeConstraint(constraint)
-            }
-            self.labelConstraints.removeAll()
+            self.contentView.removeConstraints(self.labelConstraints)
         }
         didSet {
-            for constraint: NSLayoutConstraint in self.labelConstraints {
-                self.contentView.addConstraint(constraint)
-            }
+            self.contentView.addConstraints(self.labelConstraints)
         }
+    }
+
+    open override class func height(row: QLabelTableRow, width: CGFloat) -> CGFloat {
+        let availableWidth: CGFloat = width - (row.edgeInsets.left + row.edgeInsets.right)
+        let textSize: CGSize = row.text.size(width: availableWidth)
+        return row.edgeInsets.top + textSize.height + row.edgeInsets.bottom
     }
 
     open override func setup() {
         super.setup()
 
         self.label = QLabel(frame: self.contentView.bounds)
+        self.label.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(self.label)
     }
 
@@ -49,8 +51,8 @@ open class QLabelTableCell: QTableCell< QLabelTableRow > {
         self.labelConstraints = [
             self.label.topLayout == self.contentView.topLayout + edgeInsetsRow.edgeInsets.top,
             self.label.leadingLayout == self.contentView.leadingLayout + edgeInsetsRow.edgeInsets.left,
-            self.label.trailingLayout == self.contentView.trailingLayout + edgeInsetsRow.edgeInsets.right,
-            self.label.bottomLayout == self.contentView.bottomLayout + edgeInsetsRow.edgeInsets.bottom
+            self.label.trailingLayout == self.contentView.trailingLayout - edgeInsetsRow.edgeInsets.right,
+            self.label.bottomLayout == self.contentView.bottomLayout - edgeInsetsRow.edgeInsets.bottom
         ]
     }
 

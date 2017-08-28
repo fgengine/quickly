@@ -119,6 +119,7 @@
 		40FBE6831F536BB600F5194B /* QSpaceTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE67F1F536BB600F5194B /* QSpaceTableRow.swift */; };
 		40FBE6861F536C6000F5194B /* QColorTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE6841F536C6000F5194B /* QColorTableRow.swift */; };
 		40FBE6871F536C6000F5194B /* QEdgeInsetsTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE6851F536C6000F5194B /* QEdgeInsetsTableRow.swift */; };
+		40FBE6891F53FCA600F5194B /* Quickly.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 401829591F4C1C0A005C9949 /* Quickly.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -137,6 +138,19 @@
 			remoteInfo = Quickly;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		40FBE6881F53FC9A00F5194B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				40FBE6891F53FCA600F5194B /* Quickly.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4011E03C1F4CAD3A0056CA79 /* QuicklyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuicklyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -708,6 +722,7 @@
 				4039BCBB1F522A6300E38090 /* Sources */,
 				4039BCBC1F522A6300E38090 /* Frameworks */,
 				4039BCBD1F522A6300E38090 /* Resources */,
+				40FBE6881F53FC9A00F5194B /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -740,6 +755,7 @@
 					};
 					4039BCBE1F522A6300E38090 = {
 						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = B9XUJUP5WD;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -1179,6 +1195,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = B9XUJUP5WD;
 				INFOPLIST_FILE = QuicklyDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1192,6 +1209,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = B9XUJUP5WD;
 				INFOPLIST_FILE = QuicklyDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

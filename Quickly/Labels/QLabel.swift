@@ -132,11 +132,11 @@ open class QLabel: QView {
     open override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.textContainer.size = self.bounds.size
+        self.textContainer.size = self.bounds.integral.size
     }
     
     open override func draw(_ rect: CGRect) {
-        let viewRect: CGRect = self.bounds
+        let viewRect: CGRect = self.bounds.integral
         let textSize: CGSize = self.layoutManager.usedRect(for: self.textContainer).integral.size
         let textOffset: CGPoint = self.contentAlignment.point(size: viewRect.size, textSize: textSize)
         let textRange: NSRange = self.layoutManager.glyphRange(for: self.textContainer)
