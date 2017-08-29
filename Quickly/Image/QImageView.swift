@@ -30,9 +30,8 @@ open class QImageView: QView {
         self.backgroundColor = UIColor.clear
 
         self.imageView = UIImageView(frame: self.bounds)
-        self.imageView.translatesAutoresizingMaskIntoConstraints = false
-        self.imageView.isUserInteractionEnabled = false
         self.imageView.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
+        self.imageView.isUserInteractionEnabled = false
         self.imageView.backgroundColor = UIColor.clear
         self.imageView.contentMode = .scaleAspectFit
         self.addSubview(self.imageView)
