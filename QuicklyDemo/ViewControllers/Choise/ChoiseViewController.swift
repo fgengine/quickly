@@ -7,6 +7,9 @@ import Quickly
 class ChoiseViewController: QTableViewController, IQRouted {
 
     public var router: ChoiseRouter?
+    public var container: IQContainer {
+        get { return self.router!.container }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

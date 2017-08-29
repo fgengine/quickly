@@ -4,7 +4,7 @@
 
 import UIKit
 
-open class QTabGroupRouter: IQViewControllerRouter {
+open class QTabGroupRouter: IQLocalRouter {
 
     public weak var router: IQRouter?
     public var container: IQContainer
@@ -12,14 +12,14 @@ open class QTabGroupRouter: IQViewControllerRouter {
         get { return self.tabGroupViewController }
     }
     public private(set) lazy var tabGroupViewController: QTabGroupViewController = self.prepareTabGroupViewController()
-    public var routers: [IQViewControllerRouter] = [] {
+    public var routers: [IQLocalRouter] = [] {
         didSet {
-            self.tabGroupViewController.viewControllers = self.routers.flatMap({ (router: IQViewControllerRouter) -> UIViewController? in
+            self.tabGroupViewController.viewControllers = self.routers.flatMap({ (router: IQLocalRouter) -> UIViewController? in
                 return router.viewController
             })
             if self.routers.count > 0 {
-                if let currentRouter: IQViewControllerRouter = self.currentRouter {
-                    if let index = self.routers.index(where: { (router: IQViewControllerRouter) -> Bool in
+                if let currentRouter: IQLocalRouter = self.currentRouter {
+                    if let index = self.routers.index(where: { (router: IQLocalRouter) -> Bool in
                         return router === currentRouter
                     }) {
                         self.currentRouter = self.routers[index]
@@ -34,9 +34,9 @@ open class QTabGroupRouter: IQViewControllerRouter {
             }
         }
     }
-    public var currentRouter: IQViewControllerRouter? = nil {
+    public var currentRouter: IQLocalRouter? = nil {
         didSet {
-            if let currentRouter: IQViewControllerRouter = self.currentRouter {
+            if let currentRouter: IQLocalRouter = self.currentRouter {
                 self.tabGroupViewController.currentViewController = currentRouter.viewController
             } else {
                 self.tabGroupViewController.currentViewController = nil

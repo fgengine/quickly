@@ -15,5 +15,8 @@ protocol ILabelViewControllerRouter: IQRouter {
 class LabelViewController: QStaticViewController, IQRouted {
 
     public var router: ILabelViewControllerRouter?
+    public var container: IQContainer {
+        get { return self.router!.container }
+    }
 
 }

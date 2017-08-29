@@ -4,7 +4,7 @@
 
 import UIKit
 
-open class QStackRouter: IQViewControllerRouter {
+open class QStackRouter: IQLocalRouter {
 
     public weak var router: IQRouter?
     public var container: IQContainer

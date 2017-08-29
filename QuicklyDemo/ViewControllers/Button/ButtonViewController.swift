@@ -15,6 +15,9 @@ protocol IButtonViewControllerRouter: IQRouter {
 class ButtonViewController: QStaticViewController, IQRouted {
 
     public var router: IButtonViewControllerRouter?
+    public var container: IQContainer {
+        get { return self.router!.container }
+    }
 
     @IBOutlet private weak var button: QButton!
     @IBOutlet private weak var spinnerButton: QButton!
