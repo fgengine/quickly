@@ -4,14 +4,16 @@
 
 import UIKit
 
-open class QAppRouter: IQRouter {
+open class QAppRouter<
+    ContainerType: IQContainer
+>: IQRouter {
 
-    public var container: IQContainer
+    public var container: ContainerType
     public lazy var window: QWindow? = self.prepareWindow()
-    public var currentRouter: IQLocalRouter? = nil {
+    public var currentRouter: IQViewControllerRouter? = nil {
         didSet {
             if let window: QWindow = self.window {
-                if let currentRouter: IQLocalRouter = self.currentRouter {
+                if let currentRouter: IQViewControllerRouter = self.currentRouter {
                     window.rootViewController = currentRouter.viewController
                 } else {
                     window.rootViewController = nil
@@ -23,7 +25,7 @@ open class QAppRouter: IQRouter {
         }
     }
 
-    public init(container: IQContainer) {
+    public init(container: ContainerType) {
         self.container = container
     }
 

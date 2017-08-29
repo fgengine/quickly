@@ -4,10 +4,8 @@
 
 import UIKit
 
-public protocol IQLocalRouter: IQRouter {
-
-    weak var router: IQRouter? { get }
+public protocol IQViewControllerRouter: IQRouter {
 
     var viewController: UIViewController { get }
-
+    
 }

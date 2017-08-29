@@ -113,7 +113,7 @@
 		40CF45EF1F4DE6AB004D00D8 /* QView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45B31F4DE6AB004D00D8 /* QView.swift */; };
 		40CF45F01F4DE6AB004D00D8 /* QWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45B41F4DE6AB004D00D8 /* QWindow.swift */; };
 		40E7382C1F556AF600B192C6 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E7382B1F556AF600B192C6 /* UIDevice.swift */; };
-		40E7383A1F55847F00B192C6 /* IQLocalRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E738391F55847F00B192C6 /* IQLocalRouter.swift */; };
+		40E7383A1F55847F00B192C6 /* IQViewControllerRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E738391F55847F00B192C6 /* IQViewControllerRouter.swift */; };
 		40EBC12D1F4DC40200D42A64 /* QuicklyJsonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EBC12C1F4DC40200D42A64 /* QuicklyJsonTests.swift */; };
 		40FBE67A1F5311EB00F5194B /* QLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE6791F5311EB00F5194B /* QLayout.swift */; };
 		40FBE6801F536BB600F5194B /* QSeparatorTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE67C1F536BB600F5194B /* QSeparatorTableCell.swift */; };
@@ -281,7 +281,7 @@
 		40CF45B31F4DE6AB004D00D8 /* QView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QView.swift; sourceTree = "<group>"; };
 		40CF45B41F4DE6AB004D00D8 /* QWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QWindow.swift; sourceTree = "<group>"; };
 		40E7382B1F556AF600B192C6 /* UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
-		40E738391F55847F00B192C6 /* IQLocalRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQLocalRouter.swift; sourceTree = "<group>"; };
+		40E738391F55847F00B192C6 /* IQViewControllerRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQViewControllerRouter.swift; sourceTree = "<group>"; };
 		40EBC12C1F4DC40200D42A64 /* QuicklyJsonTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuicklyJsonTests.swift; sourceTree = "<group>"; };
 		40FBE6791F5311EB00F5194B /* QLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QLayout.swift; sourceTree = "<group>"; };
 		40FBE67C1F536BB600F5194B /* QSeparatorTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSeparatorTableCell.swift; sourceTree = "<group>"; };
@@ -628,7 +628,7 @@
 			children = (
 				40CF458C1F4DE6AB004D00D8 /* IQContainer.swift */,
 				40CF458E1F4DE6AB004D00D8 /* IQRouter.swift */,
-				40E738391F55847F00B192C6 /* IQLocalRouter.swift */,
+				40E738391F55847F00B192C6 /* IQViewControllerRouter.swift */,
 				40CF458D1F4DE6AB004D00D8 /* IQRouted.swift */,
 				40CF458F1F4DE6AB004D00D8 /* QAppRouter.swift */,
 				40CF45901F4DE6AB004D00D8 /* QStackRouter.swift */,
@@ -993,7 +993,7 @@
 				40CF45E91F4DE6AB004D00D8 /* QStaticViewController.swift in Sources */,
 				402F1FB21F4EE0F8007625CA /* IQApiResponse.swift in Sources */,
 				40CF45D11F4DE6AB004D00D8 /* QTabGroupRouter.swift in Sources */,
-				40E7383A1F55847F00B192C6 /* IQLocalRouter.swift in Sources */,
+				40E7383A1F55847F00B192C6 /* IQViewControllerRouter.swift in Sources */,
 				4094035E1F4E2645008A8B90 /* QApiProvider+URLSession.swift in Sources */,
 				4039BCE61F52395F00E38090 /* QLabelTableRow.swift in Sources */,
 				40CF45E31F4DE6AB004D00D8 /* QTableSection.swift in Sources */,

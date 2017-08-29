@@ -10,6 +10,6 @@ public protocol IQRouted {
     associatedtype ContainerType
 
     var router: RouterType? { get }
-    var container: ContainerType { get }
+    var container: ContainerType? { get }
 
 }

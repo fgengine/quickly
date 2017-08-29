@@ -15,9 +15,7 @@ protocol ITextFieldViewControllerRouter: IQRouter {
 class TextFieldViewController: QStaticViewController, IQRouted {
 
     public var router: ITextFieldViewControllerRouter?
-    public var container: IQContainer {
-        get { return self.router!.container }
-    }
+    public var container: AppContainer?
 
     @IBOutlet private weak var textField: QTextField!
 
