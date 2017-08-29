@@ -7,13 +7,9 @@ import UIKit
 open class QSeparatorTableCell: QTableCell< QSeparatorTableRow > {
 
     internal var separator: QView!
-    internal var separatorConstraints: [NSLayoutConstraint] = [] {
-        willSet {
-            self.contentView.removeConstraints(self.separatorConstraints)
-        }
-        didSet {
-            self.contentView.addConstraints(self.separatorConstraints)
-        }
+    internal var currentConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self.currentConstraints) }
+        didSet { self.contentView.addConstraints(self.currentConstraints) }
     }
 
     open override class func height(row: QSeparatorTableRow, width: CGFloat) -> CGFloat {
@@ -46,7 +42,7 @@ open class QSeparatorTableCell: QTableCell< QSeparatorTableRow > {
 
     private func apply(edgeInsetsRow: QEdgeInsetsTableRow) {
         self.apply(colorRow: edgeInsetsRow)
-        self.separatorConstraints = [
+        self.currentConstraints = [
             self.separator.topLayout == self.contentView.topLayout + edgeInsetsRow.edgeInsets.top,
             self.separator.leadingLayout == self.contentView.leadingLayout + edgeInsetsRow.edgeInsets.left,
             self.separator.trailingLayout == self.contentView.trailingLayout - edgeInsetsRow.edgeInsets.right,

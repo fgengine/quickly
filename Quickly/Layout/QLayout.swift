@@ -48,13 +48,13 @@ public struct QLayoutItem< T > {
         relation: NSLayoutRelation
     ) -> NSLayoutConstraint {
         return NSLayoutConstraint(
-            item: item,
-            attribute: attribute,
+            item: self.item,
+            attribute: self.attribute,
             relatedBy: relation,
             toItem: secondItem.item,
             attribute: secondItem.attribute,
             multiplier: secondItem.multiplier,
-            constant: secondItem.constant
+            constant: self.constant + secondItem.constant
         )
     }
 
@@ -63,40 +63,40 @@ public struct QLayoutItem< T > {
         relation: NSLayoutRelation
     ) -> NSLayoutConstraint {
         return NSLayoutConstraint(
-            item: item,
-            attribute: attribute,
+            item: self.item,
+            attribute: self.attribute,
             relatedBy: relation,
             toItem: nil,
             attribute: .notAnAttribute,
             multiplier: 1.0,
-            constant: constant
+            constant: self.constant
         )
     }
 
-    fileprivate func itemWithMultiplier(_ multiplier: CGFloat) -> QLayoutItem {
+    fileprivate func item(multiplier: CGFloat) -> QLayoutItem {
         return QLayoutItem(self.item, self.attribute, self.constant, multiplier)
     }
 
-    fileprivate func itemWithConstant(_ constant: CGFloat) -> QLayoutItem {
+    fileprivate func item(constant: CGFloat) -> QLayoutItem {
         return QLayoutItem(self.item, self.attribute, constant, self.multiplier)
     }
 
 }
 
 public func * < T > (lhs: QLayoutItem< T >, rhs: CGFloat) -> QLayoutItem< T > {
-    return lhs.itemWithMultiplier(lhs.multiplier * rhs)
+    return lhs.item(multiplier: lhs.multiplier * rhs)
 }
 
 public func / < T > (lhs: QLayoutItem< T >, rhs: CGFloat) -> QLayoutItem< T > {
-    return lhs.itemWithMultiplier(lhs.multiplier / rhs)
+    return lhs.item(multiplier: lhs.multiplier / rhs)
 }
 
 public func + < T > (lhs: QLayoutItem< T >, rhs: CGFloat) -> QLayoutItem< T > {
-    return lhs.itemWithConstant(lhs.constant + rhs)
+    return lhs.item(constant: lhs.constant + rhs)
 }
 
 public func - < T > (lhs: QLayoutItem< T >, rhs: CGFloat) -> QLayoutItem< T > {
-    return lhs.itemWithConstant(lhs.constant - rhs)
+    return lhs.item(constant: lhs.constant - rhs)
 }
 
 public func == < T > (lhs: QLayoutItem< T >, rhs: QLayoutItem< T >) -> NSLayoutConstraint {

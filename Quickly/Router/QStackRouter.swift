@@ -6,8 +6,7 @@ import UIKit
 
 open class QStackRouter<
     RouterType: IQRouter,
-    ContainerType: IQContainer,
-    ViewControllerType: UIViewController
+    ContainerType: IQContainer
 >: IQLocalViewControllerRouter {
 
     public weak var router: RouterType?
@@ -16,19 +15,18 @@ open class QStackRouter<
         get { return self.stackViewController }
     }
     public private(set) lazy var stackViewController: QStackViewController = self.prepareStackViewController()
-    public private(set) lazy var rootViewController: ViewControllerType = self.prepareRootViewController()
 
     public required init(container: ContainerType, router: RouterType) {
         self.container = container
         self.router = router
     }
 
-    open func prepareStackViewController() -> QStackViewController {
-        return QStackViewController(rootViewController: self.rootViewController)
+    private func prepareStackViewController() -> QStackViewController {
+        return QStackViewController(rootViewController: self.prepareRootViewController())
     }
 
-    open func prepareRootViewController() -> ViewControllerType {
-        return ViewControllerType()
+    open func prepareRootViewController() -> UIViewController {
+        fatalError("Please override prepareRootViewController()")
     }
 
 }

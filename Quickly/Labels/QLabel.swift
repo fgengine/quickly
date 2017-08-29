@@ -43,6 +43,7 @@ open class QLabel: QView {
     public var padding: CGFloat {
         set {
             self.textContainer.lineFragmentPadding = newValue
+            self.invalidateIntrinsicContentSize()
             self.setNeedsDisplay()
         }
         get {
@@ -53,6 +54,7 @@ open class QLabel: QView {
     public var numberOfLines: Int {
         set(value) {
             self.textContainer.maximumNumberOfLines = value
+            self.invalidateIntrinsicContentSize()
             self.setNeedsDisplay()
         }
         get {
@@ -63,6 +65,7 @@ open class QLabel: QView {
     public var lineBreakMode: NSLineBreakMode {
         set {
             self.textContainer.lineBreakMode = newValue
+            self.invalidateIntrinsicContentSize()
             self.setNeedsDisplay()
         }
         get {
@@ -71,7 +74,11 @@ open class QLabel: QView {
     }
     
     public var text: IQText? {
-        didSet { self.updateTextStorage() }
+        didSet {
+            self.updateTextStorage()
+            self.invalidateIntrinsicContentSize()
+            self.setNeedsDisplay()
+        }
     }
 
     internal let textContainer: NSTextContainer = NSTextContainer()
@@ -113,6 +120,8 @@ open class QLabel: QView {
         self.backgroundColor = UIColor.clear
         self.contentMode = .redraw
         self.isOpaque = false
+        self.setContentHuggingPriority(251, for: .horizontal)
+        self.setContentHuggingPriority(251, for: .vertical)
 
         self.textContainer.lineBreakMode = .byTruncatingTail
         self.textContainer.lineFragmentPadding = 0
@@ -125,7 +134,10 @@ open class QLabel: QView {
 
     open override var intrinsicContentSize: CGSize {
         get {
-            return self.sizeThatFits(CGSize(width: self.bounds.width, height: CGFloat.greatestFiniteMagnitude))
+            return self.sizeThatFits(CGSize(
+                width: CGFloat.greatestFiniteMagnitude,
+                height: CGFloat.greatestFiniteMagnitude
+            ))
         }
     }
 
@@ -164,7 +176,10 @@ open class QLabel: QView {
     open override func sizeToFit() {
         super.sizeToFit()
         
-        self.frame.size = self.sizeThatFits(CGSize(width: bounds.width, height: CGFloat.greatestFiniteMagnitude))
+        self.frame.size = self.sizeThatFits(CGSize(
+            width: CGFloat.greatestFiniteMagnitude,
+            height: CGFloat.greatestFiniteMagnitude
+        ))
     }
 
 }

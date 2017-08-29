@@ -4,6 +4,7 @@
 
 import UIKit
 
+@IBDesignable
 open class QRoundView : QView {
 
     private func updateCornerRadius() {

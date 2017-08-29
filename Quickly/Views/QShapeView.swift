@@ -10,6 +10,7 @@ public protocol IQShapeViewMesh : class {
 
 }
 
+@IBDesignable
 open class QShapeView : QView {
 
     public var model: IQShapeViewMesh? = nil {

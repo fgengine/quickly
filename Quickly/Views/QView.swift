@@ -4,6 +4,7 @@
 
 import UIKit
 
+@IBDesignable
 open class QView : UIView, IQView {
 
     public override init(frame: CGRect) {

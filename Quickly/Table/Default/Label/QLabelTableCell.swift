@@ -7,13 +7,9 @@ import UIKit
 open class QLabelTableCell: QTableCell< QLabelTableRow > {
 
     internal var label: QLabel!
-    internal var labelConstraints: [NSLayoutConstraint] = [] {
-        willSet {
-            self.contentView.removeConstraints(self.labelConstraints)
-        }
-        didSet {
-            self.contentView.addConstraints(self.labelConstraints)
-        }
+    internal var currentConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self.currentConstraints) }
+        didSet { self.contentView.addConstraints(self.currentConstraints) }
     }
 
     open override class func height(row: QLabelTableRow, width: CGFloat) -> CGFloat {
@@ -48,7 +44,7 @@ open class QLabelTableCell: QTableCell< QLabelTableRow > {
 
     private func apply(edgeInsetsRow: QEdgeInsetsTableRow) {
         self.apply(colorRow: edgeInsetsRow)
-        self.labelConstraints = [
+        self.currentConstraints = [
             self.label.topLayout == self.contentView.topLayout + edgeInsetsRow.edgeInsets.top,
             self.label.leadingLayout == self.contentView.leadingLayout + edgeInsetsRow.edgeInsets.left,
             self.label.trailingLayout == self.contentView.trailingLayout - edgeInsetsRow.edgeInsets.right,

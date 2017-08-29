@@ -6,11 +6,10 @@ import Quickly
 
 class ChoiseRouter: QStackRouter<
     AppRouter,
-    AppContainer,
-    ChoiseViewController
+    AppContainer
 > {
 
-    internal override func prepareRootViewController() -> ChoiseViewController {
+    public override func prepareRootViewController() -> UIViewController {
         let vc: ChoiseViewController = ChoiseViewController()
         vc.router = self
         return vc
@@ -30,4 +29,18 @@ extension ChoiseRouter: ILabelViewControllerRouter {
         _ = self.stackViewController.popViewController(animated: true)
     }
 
+}
+
+extension ChoiseRouter: IButtonViewControllerRouter {
+
+    func presentButtonViewController() {
+        let vc: ButtonViewController = ButtonViewController()
+        vc.router = self
+        self.stackViewController.pushViewController(vc, animated: true)
+    }
+
+    func dismiss(viewController: ButtonViewController) {
+        _ = self.stackViewController.popViewController(animated: true)
+    }
+    
 }

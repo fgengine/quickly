@@ -29,7 +29,7 @@ extension ChoiseViewController: ChoiseTableControllerDelegate {
         if let router: ChoiseRouter = self.router {
             switch row.mode {
             case .label: router.presentLabelViewController()
-            case .button: break
+            case .button: router.presentButtonViewController()
             }
         }
     }

@@ -4,6 +4,7 @@
 
 import UIKit
 
+@IBDesignable
 open class QPinCodeView: QControl {
 
     public var text: String = "" {
