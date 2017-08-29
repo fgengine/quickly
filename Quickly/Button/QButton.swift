@@ -90,7 +90,7 @@ open class QButton: QControl {
         }
         didSet {
             if let spinnerView: QSpinnerView = self.spinnerView {
-                spinnerView.translatesAutoresizingMaskIntoConstraints = true
+                spinnerView.translatesAutoresizingMaskIntoConstraints = false
                 self.contentView.addSubview(spinnerView)
             }
             self.invalidateIntrinsicContentSize()
@@ -129,13 +129,13 @@ open class QButton: QControl {
         self.imageView = QImageView(frame: self.bounds)
         self.imageView.translatesAutoresizingMaskIntoConstraints = false
         self.imageView.isUserInteractionEnabled = false
-        self.imageView.isHidden = true
+        self.imageView.alpha = 0
         self.contentView.addSubview(self.imageView)
 
         self.textLabel = QLabel(frame: self.bounds)
         self.textLabel.translatesAutoresizingMaskIntoConstraints = false
         self.textLabel.isUserInteractionEnabled = false
-        self.textLabel.isHidden = true
+        self.textLabel.alpha = 0
         self.contentView.addSubview(self.textLabel)
     }
 
@@ -199,39 +199,42 @@ open class QButton: QControl {
             width: size.width - (self.contentInsets.left + self.contentInsets.right),
             height: size.height - (self.contentInsets.top + self.contentInsets.bottom)
         )
-        let isSpinnerAnimating: Bool = self.isSpinnerAnimating()
-        if isSpinnerAnimating == true && self.spinnerPosition == .fill {
-            let spinnerSizeThatFits: CGSize = self.spinnerView!.sizeThatFits(contentSize)
-            return CGSize(
-                width: self.contentInsets.left + spinnerSizeThatFits.width + self.contentInsets.right,
-                height: self.contentInsets.top + spinnerSizeThatFits.height + self.contentInsets.bottom
-            )
-        }
-        var imageSize: CGSize
-        if isSpinnerAnimating == true && self.spinnerPosition == .image {
+        var imageSize: CGSize = CGSize.zero
+        var textSize: CGSize = CGSize.zero
+        if self.isSpinnerAnimating() == true {
             let spinnerSizeThatFits: CGSize = self.spinnerView!.sizeThatFits(contentSize)
             imageSize = CGSize(
                 width: self.imageInsets.left + spinnerSizeThatFits.width + self.imageInsets.right,
                 height: self.imageInsets.top + spinnerSizeThatFits.height + self.imageInsets.bottom
             )
-        } else if self.imageView.isHidden == false {
-            let imageSizeThatFits: CGSize = self.imageView.sizeThatFits(contentSize)
-            imageSize = CGSize(
-                width: self.imageInsets.left + imageSizeThatFits.width + self.imageInsets.right,
-                height: self.imageInsets.top + imageSizeThatFits.height + self.imageInsets.bottom
-            )
+            switch self.spinnerPosition {
+            case .fill:
+                break
+            case .image:
+                if self.textLabel.alpha > CGFloat.leastNonzeroMagnitude {
+                    let textSizeThatFits: CGSize = self.textLabel.sizeThatFits(contentSize)
+                    textSize = CGSize(
+                        width: self.textInsets.left + textSizeThatFits.width + self.textInsets.right,
+                        height: self.textInsets.top + textSizeThatFits.height + self.textInsets.bottom
+                    )
+                }
+                break
+            }
         } else {
-            imageSize = CGSize.zero
-        }
-        var textSize: CGSize
-        if self.textLabel.isHidden == false {
-            let textSizeThatFits: CGSize = self.textLabel.sizeThatFits(contentSize)
-            textSize = CGSize(
-                width: self.textInsets.left + textSizeThatFits.width + self.textInsets.right,
-                height: self.textInsets.top + textSizeThatFits.height + self.textInsets.bottom
-            )
-        } else {
-            textSize = CGSize.zero
+            if self.imageView.alpha > CGFloat.leastNonzeroMagnitude {
+                let imageSizeThatFits: CGSize = self.imageView.sizeThatFits(contentSize)
+                imageSize = CGSize(
+                    width: self.imageInsets.left + imageSizeThatFits.width + self.imageInsets.right,
+                    height: self.imageInsets.top + imageSizeThatFits.height + self.imageInsets.bottom
+                )
+            }
+            if self.textLabel.alpha > CGFloat.leastNonzeroMagnitude {
+                let textSizeThatFits: CGSize = self.textLabel.sizeThatFits(contentSize)
+                textSize = CGSize(
+                    width: self.textInsets.left + textSizeThatFits.width + self.textInsets.right,
+                    height: self.textInsets.top + textSizeThatFits.height + self.textInsets.bottom
+                )
+            }
         }
         switch self.imagePosition {
         case .top, .bottom:
@@ -299,75 +302,97 @@ open class QButton: QControl {
         self.currentConstraints = currentConstraints
 
         var contentConstraints: [NSLayoutConstraint] = []
-        let isSpinnerAnimating: Bool = self.isSpinnerAnimating()
-        let existSpinner: Bool = self.spinnerView != nil
-        let existImage: Bool = self.imageView.isHidden == false
-        let existText: Bool = self.textLabel.isHidden == false
-        if isSpinnerAnimating == true {
+        if self.isSpinnerAnimating() == true {
             switch self.spinnerPosition {
             case .fill:
                 self.updateContent(constraints: &contentConstraints, view: self.spinnerView!)
-                break
-            case .image:
-                if existText == true {
-                    switch self.imagePosition {
-                    case .top:
-                        self.updateContent(constraints: &contentConstraints,
-                                           topView: self.spinnerView!, topEdgeInsets: self.imageInsets,
-                                           bottomView: self.textLabel, bottomEdgeInsets: self.textInsets)
-                        break
-                    case .left:
-                        self.updateContent(constraints: &contentConstraints,
-                                           leftView: self.spinnerView!, leftEdgeInsets: self.imageInsets,
-                                           rightView: self.textLabel, rightEdgeInsets: self.textInsets)
-                        break
-                    case .right:
-                        self.updateContent(constraints: &contentConstraints,
-                                           leftView: self.textLabel, leftEdgeInsets: self.textInsets,
-                                           rightView: self.spinnerView!, rightEdgeInsets: self.imageInsets)
-                        break
-                    case .bottom:
-                        self.updateContent(constraints: &contentConstraints,
-                                           topView: self.textLabel, topEdgeInsets: self.textInsets,
-                                           bottomView: self.spinnerView!, bottomEdgeInsets: self.imageInsets)
-                        break
-                    }
-                } else {
-                    self.updateContent(constraints: &contentConstraints, view: self.spinnerView!)
-                }
-                break
-            }
-        } else {
-            if existImage == true && existText == true {
                 switch self.imagePosition {
                 case .top:
                     self.updateContent(constraints: &contentConstraints,
                                        topView: self.imageView, topEdgeInsets: self.imageInsets,
+                                       bottomView: self.spinnerView!, bottomEdgeInsets: UIEdgeInsets.zero)
+                    self.updateContent(constraints: &contentConstraints,
+                                       topView: self.spinnerView!, topEdgeInsets: UIEdgeInsets.zero,
                                        bottomView: self.textLabel, bottomEdgeInsets: self.textInsets)
-                    break
                 case .left:
                     self.updateContent(constraints: &contentConstraints,
                                        leftView: self.imageView, leftEdgeInsets: self.imageInsets,
+                                       rightView: self.spinnerView!, rightEdgeInsets: UIEdgeInsets.zero)
+                    self.updateContent(constraints: &contentConstraints,
+                                       leftView: self.spinnerView!, leftEdgeInsets: UIEdgeInsets.zero,
                                        rightView: self.textLabel, rightEdgeInsets: self.textInsets)
-                    break
                 case .right:
                     self.updateContent(constraints: &contentConstraints,
                                        leftView: self.textLabel, leftEdgeInsets: self.textInsets,
+                                       rightView: self.spinnerView!, rightEdgeInsets: UIEdgeInsets.zero)
+                    self.updateContent(constraints: &contentConstraints,
+                                       leftView: self.spinnerView!, leftEdgeInsets: UIEdgeInsets.zero,
                                        rightView: self.imageView, rightEdgeInsets: self.imageInsets)
-                    break
                 case .bottom:
                     self.updateContent(constraints: &contentConstraints,
                                        topView: self.textLabel, topEdgeInsets: self.textInsets,
+                                       bottomView: self.spinnerView!, bottomEdgeInsets: UIEdgeInsets.zero)
+                    self.updateContent(constraints: &contentConstraints,
+                                       topView: self.spinnerView!, topEdgeInsets: UIEdgeInsets.zero,
                                        bottomView: self.imageView, bottomEdgeInsets: self.imageInsets)
+                }
+                break
+            case .image:
+                switch self.imagePosition {
+                case .top: self.updateContent(constraints: &contentConstraints,
+                                              topView: self.spinnerView!, topEdgeInsets: self.imageInsets,
+                                              bottomView: self.textLabel, bottomEdgeInsets: self.textInsets)
+                case .left: self.updateContent(constraints: &contentConstraints,
+                                               leftView: self.spinnerView!, leftEdgeInsets: self.imageInsets,
+                                               rightView: self.textLabel, rightEdgeInsets: self.textInsets)
+                case .right: self.updateContent(constraints: &contentConstraints,
+                                                leftView: self.textLabel, leftEdgeInsets: self.textInsets,
+                                                rightView: self.spinnerView!, rightEdgeInsets: self.imageInsets)
+                case .bottom: self.updateContent(constraints: &contentConstraints,
+                                                 topView: self.textLabel, topEdgeInsets: self.textInsets,
+                                                 bottomView: self.spinnerView!, bottomEdgeInsets: self.imageInsets)
+                }
+                break
+            }
+        } else {
+            if self.spinnerView != nil {
+                switch self.spinnerPosition {
+                case .fill:
+                    contentConstraints.append(self.spinnerView!.centerXLayout == self.contentView.centerXLayout)
+                    contentConstraints.append(self.spinnerView!.centerYLayout == self.contentView.centerYLayout)
+                    break
+                case .image:
+                    if self.imageView.alpha > CGFloat.leastNonzeroMagnitude {
+                        contentConstraints.append(self.spinnerView!.centerXLayout == self.imageView.centerXLayout)
+                        contentConstraints.append(self.spinnerView!.centerYLayout == self.imageView.centerYLayout)
+                    } else {
+                        contentConstraints.append(self.spinnerView!.centerXLayout == self.contentView.centerXLayout)
+                        contentConstraints.append(self.spinnerView!.centerYLayout == self.contentView.centerYLayout)
+                    }
                     break
                 }
-            } else if existImage == true {
+            }
+            if self.imageView.alpha > CGFloat.leastNonzeroMagnitude || self.textLabel.alpha > CGFloat.leastNonzeroMagnitude {
+                switch self.imagePosition {
+                case .top: self.updateContent(constraints: &contentConstraints,
+                                              topView: self.imageView, topEdgeInsets: self.imageInsets,
+                                              bottomView: self.textLabel, bottomEdgeInsets: self.textInsets)
+                case .left: self.updateContent(constraints: &contentConstraints,
+                                               leftView: self.imageView, leftEdgeInsets: self.imageInsets,
+                                               rightView: self.textLabel, rightEdgeInsets: self.textInsets)
+                case .right: self.updateContent(constraints: &contentConstraints,
+                                                leftView: self.textLabel, leftEdgeInsets: self.textInsets,
+                                                rightView: self.imageView, rightEdgeInsets: self.imageInsets)
+                case .bottom: self.updateContent(constraints: &contentConstraints,
+                                                 topView: self.textLabel, topEdgeInsets: self.textInsets,
+                                                 bottomView: self.imageView, bottomEdgeInsets: self.imageInsets)
+                }
+            } else {
                 self.updateContent(constraints: &contentConstraints, view: self.imageView, edgeInsets: self.imageInsets)
-            } else if existText == false {
                 self.updateContent(constraints: &contentConstraints, view: self.textLabel, edgeInsets: self.textInsets)
             }
         }
-        if isSpinnerAnimating == false && existImage == false && existText == false {
+        if self.isSpinnerAnimating() == false && self.imageView.alpha <= CGFloat.leastNonzeroMagnitude && self.textLabel.alpha <= CGFloat.leastNonzeroMagnitude {
             contentConstraints.append(self.contentView.widthLayout == 0)
             contentConstraints.append(self.contentView.heightLayout == 0)
         }
@@ -389,8 +414,7 @@ open class QButton: QControl {
         if let cornerRadius: CGFloat = style.cornerRadius {
             self.layer.cornerRadius = cornerRadius
         }
-        let isSpinnerAnimating: Bool = self.isSpinnerAnimating()
-        if isSpinnerAnimating == true {
+        if self.isSpinnerAnimating() == true {
             self.isUserInteractionEnabled = false
             switch self.spinnerPosition {
             case .fill:
@@ -413,30 +437,27 @@ open class QButton: QControl {
         if let imageSource: QImageSource = style.imageSource {
             self.imageView.source = imageSource
             self.imageView.tintColor = style.imageTintColor
-            self.imageView.isHidden = false
+            self.imageView.alpha = 1
         } else {
             self.resetImageStyle()
         }
     }
 
     private func resetImageStyle() {
-        self.imageView.source = nil
-        self.imageView.tintColor = nil
-        self.imageView.isHidden = true
+        self.imageView.alpha = 0
     }
 
     private func applyTextStyle(_ style: QButtonStyle) {
         if let text: IQText = style.text {
             self.textLabel.text = text
-            self.textLabel.isHidden = false
+            self.textLabel.alpha = 1
         } else {
             self.resetTextStyle()
         }
     }
 
     private func resetTextStyle() {
-        self.textLabel.text = nil
-        self.textLabel.isHidden = true
+        self.textLabel.alpha = 0
     }
 
     private func updateContent(constraints: inout [NSLayoutConstraint], view: UIView) {
@@ -458,13 +479,19 @@ open class QButton: QControl {
         topView: UIView, topEdgeInsets: UIEdgeInsets,
         bottomView: UIView, bottomEdgeInsets: UIEdgeInsets
     ) {
-        constraints.append(topView.topLayout == self.contentView.topLayout + topEdgeInsets.top)
         constraints.append(topView.leadingLayout == self.contentView.leadingLayout + topEdgeInsets.left)
         constraints.append(topView.trailingLayout == self.contentView.trailingLayout - topEdgeInsets.right)
-        constraints.append(topView.bottomLayout == bottomView.topLayout + (topEdgeInsets.bottom + bottomEdgeInsets.top))
+        constraints.append(topView.bottomLayout == bottomView.topLayout - (topEdgeInsets.bottom + bottomEdgeInsets.top))
         constraints.append(bottomView.leadingLayout == self.contentView.leadingLayout + bottomEdgeInsets.left)
         constraints.append(bottomView.trailingLayout == self.contentView.trailingLayout - bottomEdgeInsets.right)
-        constraints.append(bottomView.bottomLayout == self.contentView.bottomLayout - bottomEdgeInsets.bottom)
+        if topView.alpha <= CGFloat.leastNonzeroMagnitude {
+            constraints.append(bottomView.topLayout == self.contentView.topLayout + bottomEdgeInsets.top)
+        } else if bottomView.alpha <= CGFloat.leastNonzeroMagnitude {
+            constraints.append(topView.bottomLayout == self.contentView.bottomLayout - topEdgeInsets.bottom)
+        } else {
+            constraints.append(topView.topLayout == self.contentView.topLayout + topEdgeInsets.top)
+            constraints.append(bottomView.bottomLayout == self.contentView.bottomLayout - bottomEdgeInsets.bottom)
+        }
     }
 
     private func updateContent(
@@ -473,12 +500,18 @@ open class QButton: QControl {
         rightView: UIView, rightEdgeInsets: UIEdgeInsets
     ) {
         constraints.append(leftView.topLayout == self.contentView.topLayout + leftEdgeInsets.top)
-        constraints.append(leftView.leadingLayout == self.contentView.leadingLayout + leftEdgeInsets.left)
-        constraints.append(leftView.trailingLayout == rightView.leadingLayout + (leftEdgeInsets.right + rightEdgeInsets.left))
-        constraints.append(leftView.bottomLayout == self.contentView.bottomLayout + leftEdgeInsets.bottom)
+        constraints.append(leftView.trailingLayout == rightView.leadingLayout - (leftEdgeInsets.right + rightEdgeInsets.left))
+        constraints.append(leftView.bottomLayout == self.contentView.bottomLayout - leftEdgeInsets.bottom)
         constraints.append(rightView.topLayout == self.contentView.topLayout + rightEdgeInsets.top)
-        constraints.append(rightView.trailingLayout == self.contentView.trailingLayout - rightEdgeInsets.right)
         constraints.append(rightView.bottomLayout == self.contentView.bottomLayout - rightEdgeInsets.bottom)
+        if leftView.alpha <= CGFloat.leastNonzeroMagnitude {
+            constraints.append(rightView.leadingLayout == self.contentView.leadingLayout + rightEdgeInsets.left)
+        } else if rightView.alpha <= CGFloat.leastNonzeroMagnitude {
+            constraints.append(leftView.trailingLayout == self.contentView.trailingLayout - leftEdgeInsets.right)
+        } else {
+            constraints.append(leftView.leadingLayout == self.contentView.leadingLayout + leftEdgeInsets.left)
+            constraints.append(rightView.trailingLayout == self.contentView.trailingLayout - rightEdgeInsets.right)
+        }
     }
 
 }

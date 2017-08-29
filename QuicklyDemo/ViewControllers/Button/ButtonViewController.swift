@@ -32,9 +32,13 @@ class ButtonViewController: QStaticViewController, IQRouted {
         highlightedStyle.color = UIColor.blue
         highlightedStyle.text = QText("Highlighted")
 
+        self.button.imageInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
+        self.button.textInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         self.button.normalStyle = normalStyle
         self.button.highlightedStyle = highlightedStyle
 
+        self.spinnerButton.imageInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
+        self.spinnerButton.textInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         self.spinnerButton.normalStyle = normalStyle
         self.spinnerButton.highlightedStyle = highlightedStyle
         self.spinnerButton.spinnerView = QSystemSpinnerView()
@@ -47,12 +51,21 @@ class ButtonViewController: QStaticViewController, IQRouted {
         case .right: self.button.imagePosition = .bottom
         case .bottom: self.button.imagePosition = .top
         }
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
+        }
     }
 
     @IBAction func pressedSpinnerButton(_ sender: Any) {
-        self.spinnerButton.startSpinner()
+        UIView.animate(withDuration: 0.2) {
+            self.spinnerButton.startSpinner()
+            self.view.layoutIfNeeded()
+        }
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
-            self.spinnerButton.stopSpinner()
+            UIView.animate(withDuration: 0.2) {
+                self.spinnerButton.stopSpinner()
+                self.view.layoutIfNeeded()
+            }
         }
     }
 
