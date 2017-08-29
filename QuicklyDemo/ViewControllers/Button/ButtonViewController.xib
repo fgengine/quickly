@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ButtonViewController" customModule="QuicklyDemo" customModuleProvider="target">
             <connections>
                 <outlet property="button" destination="1Bm-hi-Hbf" id="1cZ-Gm-Rae"/>
+                <outlet property="spinnerButton" destination="nzZ-7h-8ay" id="YGX-1F-djB"/>
                 <outlet property="view" destination="iN0-l3-epB" id="RKO-sg-IkX"/>
             </connections>
         </placeholder>
@@ -21,10 +22,17 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Bm-hi-Hbf" customClass="QButton" customModule="Quickly">
-                    <rect key="frame" x="40" y="40" width="240" height="30"/>
+                    <rect key="frame" x="40" y="40" width="240" height="16"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <action selector="pressedButton:" destination="-1" eventType="touchUpInside" id="FpT-rW-kaS"/>
+                    </connections>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nzZ-7h-8ay" customClass="QButton" customModule="Quickly">
+                    <rect key="frame" x="40" y="96" width="240" height="16"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <action selector="pressedSpinnerButton:" destination="-1" eventType="touchUpInside" id="X5L-UM-J4Q"/>
                     </connections>
                 </view>
             </subviews>
@@ -32,8 +40,11 @@
             <gestureRecognizers/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="1Bm-hi-Hbf" secondAttribute="trailing" constant="40" id="A5k-FN-CVb"/>
+                <constraint firstItem="nzZ-7h-8ay" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="40" id="C5Z-hb-xYS"/>
                 <constraint firstItem="1Bm-hi-Hbf" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="40" id="kbC-SX-auD"/>
                 <constraint firstItem="1Bm-hi-Hbf" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="40" id="rJ2-rV-d4Q"/>
+                <constraint firstItem="nzZ-7h-8ay" firstAttribute="top" secondItem="1Bm-hi-Hbf" secondAttribute="bottom" constant="40" id="yDQ-n9-ucm"/>
+                <constraint firstAttribute="trailing" secondItem="nzZ-7h-8ay" secondAttribute="trailing" constant="40" id="zKm-fV-NxN"/>
             </constraints>
             <point key="canvasLocation" x="-195" y="25"/>
         </view>

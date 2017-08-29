@@ -21,6 +21,12 @@ open class QImageView: QView {
         willSet { self.removeConstraints(self.currentConstraints) }
         didSet { self.addConstraints(self.currentConstraints) }
     }
+    
+    open override var intrinsicContentSize: CGSize {
+        get {
+            return self.imageView.intrinsicContentSize
+        }
+    }
 
     open override func setup() {
         super.setup()
@@ -33,13 +39,6 @@ open class QImageView: QView {
         self.imageView.backgroundColor = UIColor.clear
         self.imageView.contentMode = .scaleAspectFit
         self.addSubview(self.imageView)
-    }
-
-
-    open override var intrinsicContentSize: CGSize {
-        get {
-            return self.imageView.intrinsicContentSize
-        }
     }
 
     open override func sizeThatFits(_ size: CGSize) -> CGSize {
