@@ -44,3 +44,17 @@ extension ChoiseRouter: IButtonViewControllerRouter {
     }
     
 }
+
+extension ChoiseRouter: ITextFieldViewControllerRouter {
+
+    func presentTextFieldViewController() {
+        let vc: TextFieldViewController = TextFieldViewController()
+        vc.router = self
+        self.stackViewController.pushViewController(vc, animated: true)
+    }
+
+    func dismiss(viewController: TextFieldViewController) {
+        _ = self.stackViewController.popViewController(animated: true)
+    }
+    
+}

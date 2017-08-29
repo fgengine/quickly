@@ -15,7 +15,8 @@ class ChoiseViewController: QTableViewController, IQRouted {
         tc.sections = [
             QTableSection(rows: [
                 ChoiseSectionTableRow(mode: .label),
-                ChoiseSectionTableRow(mode: .button)
+                ChoiseSectionTableRow(mode: .button),
+                ChoiseSectionTableRow(mode: .textField)
             ])
         ]
         self.tableController = tc
@@ -30,6 +31,7 @@ extension ChoiseViewController: ChoiseTableControllerDelegate {
             switch row.mode {
             case .label: router.presentLabelViewController()
             case .button: router.presentButtonViewController()
+            case .textField: router.presentTextFieldViewController()
             }
         }
     }

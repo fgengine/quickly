@@ -17,10 +17,6 @@ open class QImageView: QView {
     }
 
     public private(set) var imageView: UIImageView!
-    internal var currentConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.removeConstraints(self.currentConstraints) }
-        didSet { self.addConstraints(self.currentConstraints) }
-    }
     
     open override var intrinsicContentSize: CGSize {
         get {
@@ -36,6 +32,7 @@ open class QImageView: QView {
         self.imageView = UIImageView(frame: self.bounds)
         self.imageView.translatesAutoresizingMaskIntoConstraints = false
         self.imageView.isUserInteractionEnabled = false
+        self.imageView.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
         self.imageView.backgroundColor = UIColor.clear
         self.imageView.contentMode = .scaleAspectFit
         self.addSubview(self.imageView)
@@ -47,17 +44,6 @@ open class QImageView: QView {
 
     open override func sizeToFit() {
         return self.imageView.sizeToFit()
-    }
-
-    open override func updateConstraints() {
-        var currentConstraints: [NSLayoutConstraint] = []
-        currentConstraints.append(self.imageView.topLayout == self.topLayout)
-        currentConstraints.append(self.imageView.leadingLayout == self.leadingLayout)
-        currentConstraints.append(self.imageView.trailingLayout == self.trailingLayout)
-        currentConstraints.append(self.imageView.bottomLayout == self.bottomLayout)
-        self.currentConstraints = currentConstraints
-
-        super.updateConstraints()
     }
 
 }

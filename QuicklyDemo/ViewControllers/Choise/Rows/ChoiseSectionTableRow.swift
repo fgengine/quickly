@@ -11,12 +11,14 @@ class ChoiseSectionTableRow: QLabelTableRow {
     public enum Mode {
         case label
         case button
+        case textField
 
         public var name: String {
             get {
                 switch self {
                 case .label: return "Label"
                 case .button: return "Button"
+                case .textField: return "TextField"
                 }
             }
         }

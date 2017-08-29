@@ -54,6 +54,9 @@
 		40C8F8251F55109100C75D34 /* IQSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F8231F55109100C75D34 /* IQSpinnerView.swift */; };
 		40C8F8261F55109100C75D34 /* QSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F8241F55109100C75D34 /* QSpinnerView.swift */; };
 		40C8F8281F55145D00C75D34 /* QSystemSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F8271F55145D00C75D34 /* QSystemSpinnerView.swift */; };
+		40C8F82A1F552F7400C75D34 /* QTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F8291F552F7400C75D34 /* QTextField.swift */; };
+		40C8F82E1F554E5900C75D34 /* TextFieldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F82C1F554E5900C75D34 /* TextFieldViewController.swift */; };
+		40C8F82F1F554E5900C75D34 /* TextFieldViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F82D1F554E5900C75D34 /* TextFieldViewController.xib */; };
 		40CF45B51F4DE6AB004D00D8 /* IQCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF456F1F4DE6AB004D00D8 /* IQCollectionCell.swift */; };
 		40CF45B61F4DE6AB004D00D8 /* IQCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45701F4DE6AB004D00D8 /* IQCollectionController.swift */; };
 		40CF45B71F4DE6AB004D00D8 /* IQCollectionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45711F4DE6AB004D00D8 /* IQCollectionData.swift */; };
@@ -217,6 +220,9 @@
 		40C8F8231F55109100C75D34 /* IQSpinnerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQSpinnerView.swift; sourceTree = "<group>"; };
 		40C8F8241F55109100C75D34 /* QSpinnerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSpinnerView.swift; sourceTree = "<group>"; };
 		40C8F8271F55145D00C75D34 /* QSystemSpinnerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSystemSpinnerView.swift; sourceTree = "<group>"; };
+		40C8F8291F552F7400C75D34 /* QTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTextField.swift; sourceTree = "<group>"; };
+		40C8F82C1F554E5900C75D34 /* TextFieldViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldViewController.swift; sourceTree = "<group>"; };
+		40C8F82D1F554E5900C75D34 /* TextFieldViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextFieldViewController.xib; sourceTree = "<group>"; };
 		40CF456F1F4DE6AB004D00D8 /* IQCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionCell.swift; sourceTree = "<group>"; };
 		40CF45701F4DE6AB004D00D8 /* IQCollectionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionController.swift; sourceTree = "<group>"; };
 		40CF45711F4DE6AB004D00D8 /* IQCollectionData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionData.swift; sourceTree = "<group>"; };
@@ -424,6 +430,7 @@
 				4039BCD51F522AB000E38090 /* Choise */,
 				40FBE6901F540D5C00F5194B /* Label */,
 				40FBE6971F54331C00F5194B /* Button */,
+				40C8F82B1F554E5900C75D34 /* TextField */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -534,6 +541,15 @@
 			path = SpinnerView;
 			sourceTree = "<group>";
 		};
+		40C8F82B1F554E5900C75D34 /* TextField */ = {
+			isa = PBXGroup;
+			children = (
+				40C8F82C1F554E5900C75D34 /* TextFieldViewController.swift */,
+				40C8F82D1F554E5900C75D34 /* TextFieldViewController.xib */,
+			);
+			path = TextField;
+			sourceTree = "<group>";
+		};
 		40CF456E1F4DE6AB004D00D8 /* Collection */ = {
 			isa = PBXGroup;
 			children = (
@@ -569,6 +585,7 @@
 		40CF45811F4DE6AB004D00D8 /* Fields */ = {
 			isa = PBXGroup;
 			children = (
+				40C8F8291F552F7400C75D34 /* QTextField.swift */,
 			);
 			path = Fields;
 			sourceTree = "<group>";
@@ -870,6 +887,7 @@
 				4039BCCC1F522A6400E38090 /* LaunchScreen.storyboard in Resources */,
 				4039BCC91F522A6400E38090 /* Assets.xcassets in Resources */,
 				40FBE6941F540D5C00F5194B /* LabelViewController.xib in Resources */,
+				40C8F82F1F554E5900C75D34 /* TextFieldViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -916,6 +934,7 @@
 				40CF45EA1F4DE6AB004D00D8 /* QTabGroupViewController.swift in Sources */,
 				40CF45C61F4DE6AB004D00D8 /* QJson.swift in Sources */,
 				40B8A1A81F50181900204E5A /* IQOneSource.swift in Sources */,
+				40C8F82A1F552F7400C75D34 /* QTextField.swift in Sources */,
 				40CF45CF1F4DE6AB004D00D8 /* QAppRouter.swift in Sources */,
 				40CF45E51F4DE6AB004D00D8 /* IQContentViewController.swift in Sources */,
 				40CF45D71F4DE6AB004D00D8 /* IQTableCell.swift in Sources */,
@@ -1004,6 +1023,7 @@
 				4039BCD91F522AD500E38090 /* AppRouter.swift in Sources */,
 				40FBE6931F540D5C00F5194B /* LabelViewController.swift in Sources */,
 				4039BCC21F522A6400E38090 /* AppDelegate.swift in Sources */,
+				40C8F82E1F554E5900C75D34 /* TextFieldViewController.swift in Sources */,
 				4039BCDE1F522D1100E38090 /* ChoiseViewController.swift in Sources */,
 				40FBE69A1F54331C00F5194B /* ButtonViewController.swift in Sources */,
 				4039BCE21F52314000E38090 /* ChoiseTableController.swift in Sources */,
