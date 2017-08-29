@@ -4,10 +4,7 @@
 
 import Quickly
 
-class ChoiseRouter: QStackRouter<
-    AppRouter,
-    AppContainer
-> {
+class ChoiseRouter: QStackRouter {
 
     public override func prepareRootViewController() -> UIViewController {
         let vc: ChoiseViewController = ChoiseViewController()

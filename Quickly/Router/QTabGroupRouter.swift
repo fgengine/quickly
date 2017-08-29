@@ -4,13 +4,10 @@
 
 import UIKit
 
-open class QTabGroupRouter<
-    RouterType: IQRouter,
-    ContainerType: IQContainer
->: IQLocalViewControllerRouter {
+open class QTabGroupRouter: IQViewControllerRouter {
 
-    public weak var router: RouterType?
-    public var container: ContainerType
+    public weak var router: IQRouter?
+    public var container: IQContainer
     public var viewController: UIViewController {
         get { return self.tabGroupViewController }
     }
@@ -47,7 +44,7 @@ open class QTabGroupRouter<
         }
     }
 
-    public required init(container: ContainerType, router: RouterType) {
+    public required init(container: IQContainer, router: IQRouter) {
         self.container = container
         self.router = router
     }

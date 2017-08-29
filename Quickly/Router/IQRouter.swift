@@ -9,16 +9,9 @@ public protocol IQRouter: class {
 
 public protocol IQViewControllerRouter: IQRouter {
 
+    weak var router: IQRouter? { get }
+    var container: IQContainer { get }
+
     var viewController: UIViewController { get }
-
-}
-
-public protocol IQLocalViewControllerRouter: IQViewControllerRouter {
-
-    associatedtype RouterType: IQRouter
-    associatedtype ContainerType: IQContainer
-
-    weak var router: RouterType? { get }
-    var container: ContainerType { get }
 
 }

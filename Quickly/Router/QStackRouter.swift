@@ -4,19 +4,17 @@
 
 import UIKit
 
-open class QStackRouter<
-    RouterType: IQRouter,
-    ContainerType: IQContainer
->: IQLocalViewControllerRouter {
+open class QStackRouter: IQViewControllerRouter {
 
-    public weak var router: RouterType?
-    public var container: ContainerType
+    public weak var router: IQRouter?
+    public var container: IQContainer
     public var viewController: UIViewController {
         get { return self.stackViewController }
     }
+    
     public private(set) lazy var stackViewController: QStackViewController = self.prepareStackViewController()
 
-    public required init(container: ContainerType, router: RouterType) {
+    public required init(container: IQContainer, router: IQRouter) {
         self.container = container
         self.router = router
     }
