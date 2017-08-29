@@ -486,7 +486,9 @@ open class QButton: QControl {
         constraints.append(bottomView.trailingLayout == self.contentView.trailingLayout - bottomEdgeInsets.right)
         if topView.alpha <= CGFloat.leastNonzeroMagnitude {
             constraints.append(bottomView.topLayout == self.contentView.topLayout + bottomEdgeInsets.top)
+            constraints.append(bottomView.bottomLayout == self.contentView.bottomLayout - bottomEdgeInsets.bottom)
         } else if bottomView.alpha <= CGFloat.leastNonzeroMagnitude {
+            constraints.append(topView.topLayout == self.contentView.topLayout + topEdgeInsets.top)
             constraints.append(topView.bottomLayout == self.contentView.bottomLayout - topEdgeInsets.bottom)
         } else {
             constraints.append(topView.topLayout == self.contentView.topLayout + topEdgeInsets.top)
@@ -506,7 +508,9 @@ open class QButton: QControl {
         constraints.append(rightView.bottomLayout == self.contentView.bottomLayout - rightEdgeInsets.bottom)
         if leftView.alpha <= CGFloat.leastNonzeroMagnitude {
             constraints.append(rightView.leadingLayout == self.contentView.leadingLayout + rightEdgeInsets.left)
+            constraints.append(rightView.trailingLayout == self.contentView.trailingLayout - rightEdgeInsets.right)
         } else if rightView.alpha <= CGFloat.leastNonzeroMagnitude {
+            constraints.append(leftView.leadingLayout == self.contentView.leadingLayout + leftEdgeInsets.left)
             constraints.append(leftView.trailingLayout == self.contentView.trailingLayout - leftEdgeInsets.right)
         } else {
             constraints.append(leftView.leadingLayout == self.contentView.leadingLayout + leftEdgeInsets.left)

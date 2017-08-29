@@ -27,7 +27,7 @@ class ButtonViewController: QStaticViewController, IQRouted {
         normalStyle.color = UIColor.red
         normalStyle.cornerRadius = 4
         normalStyle.text = QText("Normal")
-        normalStyle.imageSource = QImageSource("button_image")
+        // normalStyle.imageSource = QImageSource("button_image")
 
         let highlightedStyle: QButtonStyle = QButtonStyle(parent: normalStyle)
         highlightedStyle.color = UIColor.blue
