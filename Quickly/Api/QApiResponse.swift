@@ -24,18 +24,26 @@ open class QApiResponse: IQApiResponse {
             self.httpStatusCode = httpResponse.statusCode
             self.httpHeaders = httpResponse.allHeaderFields
         }
-        self.parse(data: data)
+        do {
+            try self.parse(data: data)
+        } catch let error {
+            self.parse(error: error)
+        }
     }
 
-    open func parse(data: Data) {
+    open func parse(data: Data) throws {
         if let json: QJson = QJson(data: data) {
-            self.parse(json: json)
+            do {
+                try self.parse(json: json)
+            } catch let error {
+                self.parse(error: error)
+            }
         } else {
             self.parse(error: QApiError.invalidResponse)
         }
     }
 
-    open func parse(json: QJson) {
+    open func parse(json: QJson) throws {
     }
 
     open func parse(error: Error) {
