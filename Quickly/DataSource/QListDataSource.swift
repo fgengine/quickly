@@ -20,29 +20,29 @@ open class QListDataSource<
         self.container = container
     }
     
-    public func load() {
+    public final func load() {
         if self.isLoading == false {
             self.isLoading = true
             self.onLoad()
         }
     }
 
-    public func reset() {
+    public final func reset() {
         self.cancel()
         self.onReset()
     }
     
-    public func cancel() {
+    public final func cancel() {
         if self.isLoading == true {
             self.isLoading = false
             self.onCancel()
         }
     }
     
-    internal func onLoad() {
+    open func onLoad() {
     }
 
-    internal func onFinish(data: [DataType], append: Bool) {
+    open func onFinish(data: [DataType], append: Bool) {
         self.isLoading = false
         if append == true {
             self.data.append(contentsOf: data)
@@ -52,18 +52,18 @@ open class QListDataSource<
         self.error = nil
     }
     
-    internal func onFinish(error: ErrorType) {
+    open func onFinish(error: ErrorType) {
         self.isLoading = false
         self.error = error
     }
 
-    internal func onReset() {
+    open func onReset() {
         self.canLoadMore = true
         self.data.removeAll()
         self.error = nil
     }
     
-    internal func onCancel() {
+    open func onCancel() {
     }
     
 }
