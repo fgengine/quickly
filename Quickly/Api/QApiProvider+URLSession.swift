@@ -87,7 +87,7 @@ extension QApiProvider: URLSessionTaskDelegate {
         task: URLSessionTask,
         didCompleteWithError error: Error?
     ) {
-        if let query: IQApiQuery = self.getQuery(task: task) {
+        if let query: IQApiQuery = self.removeQuery(task: task) {
             query.finish(error: error)
         }
     }
