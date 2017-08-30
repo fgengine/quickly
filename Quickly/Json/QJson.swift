@@ -13,6 +13,9 @@ public enum QJsonErrorCode : Int {
 
 public final class QJson {
 
+    public var root: Any? {
+        get { return self.impl.root }
+    }
     internal var impl: QJsonImpl
 
     public init() {

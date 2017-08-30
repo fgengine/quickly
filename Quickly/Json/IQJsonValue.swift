@@ -7,10 +7,9 @@ import Quickly.Private
 public protocol IJsonValue {
 
     static func fromJson(value: Any?) throws -> Any
-    func toJson() -> Any?
+    func toJsonValue() -> Any?
 
 }
-
 
 extension Bool: IJsonValue {
 
@@ -18,7 +17,7 @@ extension Bool: IJsonValue {
         return try QJsonImpl.toNumber(from: value)
     }
 
-    public func toJson() -> Any? {
+    public func toJsonValue() -> Any? {
         return QJsonImpl.objectFrom(boolean: self)
     }
 
@@ -30,7 +29,7 @@ extension Int: IJsonValue {
         return try QJsonImpl.toNumber(from: value).intValue
     }
 
-    public func toJson() -> Any? {
+    public func toJsonValue() -> Any? {
         return QJsonImpl.objectFrom(number: NSNumber(value: self))
     }
     
@@ -42,7 +41,7 @@ extension UInt: IJsonValue {
         return try QJsonImpl.toNumber(from: value).uintValue
     }
 
-    public func toJson() -> Any? {
+    public func toJsonValue() -> Any? {
         return QJsonImpl.objectFrom(number: NSNumber(value: self))
     }
     
@@ -54,7 +53,7 @@ extension Float: IJsonValue {
         return try QJsonImpl.toNumber(from: value).floatValue
     }
 
-    public func toJson() -> Any? {
+    public func toJsonValue() -> Any? {
         return QJsonImpl.objectFrom(number: NSNumber(value: self))
     }
     
@@ -66,7 +65,7 @@ extension Double: IJsonValue {
         return try QJsonImpl.toNumber(from: value).doubleValue
     }
 
-    public func toJson() -> Any? {
+    public func toJsonValue() -> Any? {
         return QJsonImpl.objectFrom(number: NSNumber(value: self))
     }
     
@@ -78,7 +77,7 @@ extension Decimal: IJsonValue {
         return try QJsonImpl.toDecimalNumber(from: value).decimalValue
     }
 
-    public func toJson() -> Any? {
+    public func toJsonValue() -> Any? {
         return QJsonImpl.objectFrom(decimalNumber: NSDecimalNumber(decimal: self))
     }
     
@@ -90,7 +89,7 @@ extension String: IJsonValue {
         return try QJsonImpl.toString(from: value)
     }
 
-    public func toJson() -> Any? {
+    public func toJsonValue() -> Any? {
         return QJsonImpl.objectFrom(string: self)
     }
 
@@ -102,7 +101,7 @@ extension URL: IJsonValue {
         return try QJsonImpl.toUrl(from: value)
     }
 
-    public func toJson() -> Any? {
+    public func toJsonValue() -> Any? {
         return QJsonImpl.objectFrom(url: self)
     }
     
@@ -114,7 +113,7 @@ extension Date: IJsonValue {
         return try QJsonImpl.toDate(from: value)
     }
 
-    public func toJson() -> Any? {
+    public func toJsonValue() -> Any? {
         return QJsonImpl.objectFrom(date: self)
     }
     
@@ -126,7 +125,7 @@ extension UIColor: IJsonValue {
         return try QJsonImpl.toColor(from: value)
     }
 
-    public func toJson() -> Any? {
+    public func toJsonValue() -> Any? {
         return QJsonImpl.objectFrom(color: self)
     }
     
@@ -144,7 +143,7 @@ infix operator <<<
 //
 
 public func >>> < Type: IJsonValue >(left: Type, right: (QJson, String)) {
-    if let jsonValue: Any = left.toJson() {
+    if let jsonValue: Any = left.toJsonValue() {
         right.0.set(jsonValue, forPath: right.1)
     } else {
         right.0.set(nil, forPath: right.1)
@@ -153,7 +152,7 @@ public func >>> < Type: IJsonValue >(left: Type, right: (QJson, String)) {
 
 public func >>> < Type: IJsonValue >(left: Type?, right: (QJson, String)) {
     if let safe: Type = left {
-        if let jsonValue: Any = safe.toJson() {
+        if let jsonValue: Any = safe.toJsonValue() {
             right.0.set(jsonValue, forPath: right.1)
         } else {
             right.0.set(nil, forPath: right.1)
@@ -237,7 +236,7 @@ public func <<< < Type: IJsonValue >(left: inout Type?, right: (QJson, String, T
 //
 
 public func >>> < EnumType: RawRepresentable >(left: EnumType, right: (QJson, String)) where EnumType.RawValue: IJsonValue {
-    if let jsonValue: Any = left.rawValue.toJson() {
+    if let jsonValue: Any = left.rawValue.toJsonValue() {
         right.0.set(jsonValue, forPath: right.1)
     } else {
         right.0.set(nil, forPath: right.1)
@@ -246,7 +245,7 @@ public func >>> < EnumType: RawRepresentable >(left: EnumType, right: (QJson, St
 
 public func >>> < EnumType: RawRepresentable >(left: EnumType?, right: (QJson, String)) where EnumType.RawValue: IJsonValue {
     if let safe: EnumType = left {
-        if let jsonValue: Any = safe.rawValue.toJson() {
+        if let jsonValue: Any = safe.rawValue.toJsonValue() {
             right.0.set(jsonValue, forPath: right.1)
         } else {
             right.0.set(nil, forPath: right.1)
@@ -410,7 +409,7 @@ public func <<< (left: inout Date?, right: (QJson, String, [String], Date?)) {
 
 public func >>> < ItemType: IJsonValue >(left: [ItemType], right: QJson) {
     let jsonValue: [Any] = left.flatMap { (item: ItemType) -> Any? in
-        return item.toJson()
+        return item.toJsonValue()
     }
     right.set(jsonValue)
 }
@@ -418,7 +417,7 @@ public func >>> < ItemType: IJsonValue >(left: [ItemType], right: QJson) {
 public func >>> < ItemType: IJsonValue >(left: [ItemType]?, right: QJson) {
     if let jsonArray = left {
         let jsonValue: [Any] = jsonArray.flatMap { (item: ItemType) -> Any? in
-            return item.toJson()
+            return item.toJsonValue()
         }
         right.set(jsonValue)
     } else {
@@ -428,7 +427,7 @@ public func >>> < ItemType: IJsonValue >(left: [ItemType]?, right: QJson) {
 
 public func >>> < ItemType: IJsonValue >(left: [ItemType], right: (QJson, String)) {
     let jsonValue: [Any] = left.flatMap { (item: ItemType) -> Any? in
-        return item.toJson()
+        return item.toJsonValue()
     }
     right.0.set(jsonValue, forPath: right.1)
 }
@@ -436,7 +435,7 @@ public func >>> < ItemType: IJsonValue >(left: [ItemType], right: (QJson, String
 public func >>> < ItemType: IJsonValue >(left: [ItemType]?, right: (QJson, String)) {
     if let jsonArray = left {
         let jsonValue: [Any] = jsonArray.flatMap { (item: ItemType) -> Any? in
-            return item.toJson()
+            return item.toJsonValue()
         }
         right.0.set(jsonValue, forPath: right.1)
     } else {
@@ -541,8 +540,8 @@ public func <<< < ItemType: IJsonValue >(left: inout [ItemType]?, right: (QJson,
 public func >>> < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: [KeyType: ValueType], right: QJson) {
     var jsonValue: [AnyHashable: Any] = [:]
     left.forEach { (key: KeyType, value: ValueType) in
-        if let safeKey: AnyHashable = key.toJson() as? AnyHashable {
-            if let safeValue: Any = value.toJson() {
+        if let safeKey: AnyHashable = key.toJsonValue() as? AnyHashable {
+            if let safeValue: Any = value.toJsonValue() {
                 jsonValue[safeKey] = safeValue
             }
         }
@@ -554,8 +553,8 @@ public func >>> < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: 
     if let jsonDictionary = left {
         var jsonValue: [AnyHashable: Any] = [:]
         jsonDictionary.forEach { (key: KeyType, value: ValueType) in
-            if let safeKey: AnyHashable = key.toJson() as? AnyHashable {
-                if let safeValue: Any = value.toJson() {
+            if let safeKey: AnyHashable = key.toJsonValue() as? AnyHashable {
+                if let safeValue: Any = value.toJsonValue() {
                     jsonValue[safeKey] = safeValue
                 }
             }
@@ -569,8 +568,8 @@ public func >>> < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: 
 public func >>> < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: [KeyType: ValueType], right: (QJson, String)) {
     var jsonValue: [AnyHashable: Any] = [:]
     left.forEach { (key: KeyType, value: ValueType) in
-        if let safeKey: AnyHashable = key.toJson() as? AnyHashable {
-            if let safeValue: Any = value.toJson() {
+        if let safeKey: AnyHashable = key.toJsonValue() as? AnyHashable {
+            if let safeValue: Any = value.toJsonValue() {
                 jsonValue[safeKey] = safeValue
             }
         }
@@ -582,8 +581,8 @@ public func >>> < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: 
     if let jsonDictionary = left {
         var jsonValue: [AnyHashable: Any] = [:]
         jsonDictionary.forEach { (key: KeyType, value: ValueType) in
-            if let safeKey: AnyHashable = key.toJson() as? AnyHashable {
-                if let safeValue: Any = value.toJson() {
+            if let safeKey: AnyHashable = key.toJsonValue() as? AnyHashable {
+                if let safeValue: Any = value.toJsonValue() {
                     jsonValue[safeKey] = safeValue
                 }
             }

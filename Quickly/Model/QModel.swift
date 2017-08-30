@@ -24,3 +24,21 @@ open class QModel: IQModel {
 
 }
 
+extension QModel: IJsonValue {
+
+    public static func fromJson(value: Any?) throws -> Any {
+        guard let value: Any = value else {
+            throw NSError(domain: QJsonErrorDomain, code: QJsonErrorCode.convert.rawValue, userInfo: nil)
+        }
+        return try self.init(json: QJson(root: value))
+    }
+
+    public func toJsonValue() -> Any? {
+        if let json: QJson = self.toJson() {
+            return json.root
+        }
+        return nil
+    }
+    
+}
+
