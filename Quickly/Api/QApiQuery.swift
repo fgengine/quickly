@@ -165,7 +165,7 @@ public class QApiQuery<
     public func finish(error: Error?) {
         self.task = nil
         if let error: NSError = error as NSError? {
-            if error.isUrlErrorCancelled() == true {
+            if error.isUrlErrorCancelled() == false {
                 self.parse(error: error)
             }
         } else {
