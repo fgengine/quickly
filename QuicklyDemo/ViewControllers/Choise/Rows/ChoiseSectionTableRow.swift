@@ -33,10 +33,10 @@ class ChoiseSectionTableRow: QLabelTableRow {
     public init(mode: Mode) {
         self.mode = mode
 
-        super.init(
-            text: QStyledText(mode.name, style: TextStyle.base),
-            edgeInsets: UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
-        )
+        super.init()
+
+        self.text = QStyledText(mode.name, style: TextStyle.base)
+        self.edgeInsets =  UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
     }
 
 }

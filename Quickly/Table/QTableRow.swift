@@ -12,4 +12,7 @@ open class QTableRow: IQTableRow {
     public var selectionStyle: UITableViewCellSelectionStyle = .default
     public var editingStyle: UITableViewCellEditingStyle = .none
 
+    public init() {
+    }
+
 }

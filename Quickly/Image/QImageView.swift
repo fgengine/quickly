@@ -9,6 +9,7 @@ open class QImageView: QView {
     public var source: QImageSource? {
         didSet {
             if let source: QImageSource = self.source {
+                self.imageView.contentMode = source.scale.toContentMode()
                 self.imageView.image = source.image
             } else {
                 self.imageView.image = nil

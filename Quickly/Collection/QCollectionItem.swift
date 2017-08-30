@@ -10,4 +10,7 @@ open class QCollectionItem: IQCollectionItem {
     public var canDeselect: Bool = true
     public var canMove: Bool = false
 
+    public init() {
+    }
+
 }

@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		400DDF6C1F56194300D11991 /* QImageTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400DDF6A1F56194300D11991 /* QImageTableCell.swift */; };
+		400DDF6D1F56194300D11991 /* QImageTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400DDF6B1F56194300D11991 /* QImageTableRow.swift */; };
+		400DDF701F5622EB00D11991 /* CGFloat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400DDF6E1F5622EB00D11991 /* CGFloat.swift */; };
+		400DDF711F5622EB00D11991 /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400DDF6F1F5622EB00D11991 /* CGRect.swift */; };
+		400DDF731F5623D400D11991 /* CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400DDF721F5623D400D11991 /* CGSize.swift */; };
+		400DDF761F56913100D11991 /* QButtonTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400DDF741F56913100D11991 /* QButtonTableCell.swift */; };
+		400DDF771F56913100D11991 /* QButtonTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400DDF751F56913100D11991 /* QButtonTableRow.swift */; };
 		4011E03F1F4CAD3A0056CA79 /* QuicklyTextStyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E03E1F4CAD3A0056CA79 /* QuicklyTextStyleTests.swift */; };
 		4011E0411F4CAD3A0056CA79 /* Quickly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 401829591F4C1C0A005C9949 /* Quickly.framework */; };
 		4011E04A1F4CBA6C0056CA79 /* QuicklyTextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E0491F4CBA6C0056CA79 /* QuicklyTextTests.swift */; };
@@ -29,8 +36,6 @@
 		4039BCDE1F522D1100E38090 /* ChoiseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4039BCDD1F522D1100E38090 /* ChoiseViewController.swift */; };
 		4039BCE01F522FAC00E38090 /* ChoiseRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4039BCDF1F522FAC00E38090 /* ChoiseRouter.swift */; };
 		4039BCE21F52314000E38090 /* ChoiseTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4039BCE11F52314000E38090 /* ChoiseTableController.swift */; };
-		4039BCE61F52395F00E38090 /* QLabelTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4039BCE51F52395F00E38090 /* QLabelTableRow.swift */; };
-		4039BCE81F52397300E38090 /* QLabelTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4039BCE71F52397300E38090 /* QLabelTableCell.swift */; };
 		4061E1A91F4ECDFA00AC3217 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4061E1A81F4ECDFA00AC3217 /* Error.swift */; };
 		409403551F4DEB6C008A8B90 /* QuicklyPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 409403541F4DEB6C008A8B90 /* QuicklyPrivate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		409403581F4E129F008A8B90 /* QApiProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409403571F4E129F008A8B90 /* QApiProvider.swift */; };
@@ -114,14 +119,16 @@
 		40CF45F01F4DE6AB004D00D8 /* QWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45B41F4DE6AB004D00D8 /* QWindow.swift */; };
 		40E7382C1F556AF600B192C6 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E7382B1F556AF600B192C6 /* UIDevice.swift */; };
 		40E7383A1F55847F00B192C6 /* IQViewControllerRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E738391F55847F00B192C6 /* IQViewControllerRouter.swift */; };
+		40E7384C1F5606B700B192C6 /* QLabelTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E7384A1F5606B700B192C6 /* QLabelTableCell.swift */; };
+		40E7384D1F5606B700B192C6 /* QLabelTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E7384B1F5606B700B192C6 /* QLabelTableRow.swift */; };
+		40E738541F5606C500B192C6 /* QBackgroundColorTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E7384E1F5606C500B192C6 /* QBackgroundColorTableCell.swift */; };
+		40E738551F5606C500B192C6 /* QBackgroundColorTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E7384F1F5606C500B192C6 /* QBackgroundColorTableRow.swift */; };
+		40E738561F5606C500B192C6 /* QSeparatorTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E738501F5606C500B192C6 /* QSeparatorTableCell.swift */; };
+		40E738571F5606C500B192C6 /* QSeparatorTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E738511F5606C500B192C6 /* QSeparatorTableRow.swift */; };
+		40E738581F5606C500B192C6 /* QSpaceTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E738521F5606C500B192C6 /* QSpaceTableCell.swift */; };
+		40E738591F5606C500B192C6 /* QSpaceTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E738531F5606C500B192C6 /* QSpaceTableRow.swift */; };
 		40EBC12D1F4DC40200D42A64 /* QuicklyJsonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EBC12C1F4DC40200D42A64 /* QuicklyJsonTests.swift */; };
 		40FBE67A1F5311EB00F5194B /* QLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE6791F5311EB00F5194B /* QLayout.swift */; };
-		40FBE6801F536BB600F5194B /* QSeparatorTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE67C1F536BB600F5194B /* QSeparatorTableCell.swift */; };
-		40FBE6811F536BB600F5194B /* QSeparatorTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE67D1F536BB600F5194B /* QSeparatorTableRow.swift */; };
-		40FBE6821F536BB600F5194B /* QSpaceTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE67E1F536BB600F5194B /* QSpaceTableCell.swift */; };
-		40FBE6831F536BB600F5194B /* QSpaceTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE67F1F536BB600F5194B /* QSpaceTableRow.swift */; };
-		40FBE6861F536C6000F5194B /* QColorTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE6841F536C6000F5194B /* QColorTableRow.swift */; };
-		40FBE6871F536C6000F5194B /* QEdgeInsetsTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE6851F536C6000F5194B /* QEdgeInsetsTableRow.swift */; };
 		40FBE6891F53FCA600F5194B /* Quickly.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 401829591F4C1C0A005C9949 /* Quickly.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		40FBE68C1F540A2800F5194B /* ChoiseSectionTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE68B1F540A2800F5194B /* ChoiseSectionTableRow.swift */; };
 		40FBE68F1F540AD500F5194B /* TextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE68E1F540AD500F5194B /* TextStyle.swift */; };
@@ -169,6 +176,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		400DDF6A1F56194300D11991 /* QImageTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QImageTableCell.swift; sourceTree = "<group>"; };
+		400DDF6B1F56194300D11991 /* QImageTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QImageTableRow.swift; sourceTree = "<group>"; };
+		400DDF6E1F5622EB00D11991 /* CGFloat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGFloat.swift; sourceTree = "<group>"; };
+		400DDF6F1F5622EB00D11991 /* CGRect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
+		400DDF721F5623D400D11991 /* CGSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGSize.swift; sourceTree = "<group>"; };
+		400DDF741F56913100D11991 /* QButtonTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QButtonTableCell.swift; sourceTree = "<group>"; };
+		400DDF751F56913100D11991 /* QButtonTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QButtonTableRow.swift; sourceTree = "<group>"; };
 		4011E03C1F4CAD3A0056CA79 /* QuicklyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuicklyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4011E03E1F4CAD3A0056CA79 /* QuicklyTextStyleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuicklyTextStyleTests.swift; sourceTree = "<group>"; };
 		4011E0401F4CAD3A0056CA79 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -196,8 +210,6 @@
 		4039BCDD1F522D1100E38090 /* ChoiseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChoiseViewController.swift; sourceTree = "<group>"; };
 		4039BCDF1F522FAC00E38090 /* ChoiseRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChoiseRouter.swift; sourceTree = "<group>"; };
 		4039BCE11F52314000E38090 /* ChoiseTableController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChoiseTableController.swift; sourceTree = "<group>"; };
-		4039BCE51F52395F00E38090 /* QLabelTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QLabelTableRow.swift; sourceTree = "<group>"; };
-		4039BCE71F52397300E38090 /* QLabelTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QLabelTableCell.swift; sourceTree = "<group>"; };
 		4061E1A81F4ECDFA00AC3217 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		409403541F4DEB6C008A8B90 /* QuicklyPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuicklyPrivate.h; sourceTree = "<group>"; };
 		409403571F4E129F008A8B90 /* QApiProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QApiProvider.swift; sourceTree = "<group>"; };
@@ -282,14 +294,16 @@
 		40CF45B41F4DE6AB004D00D8 /* QWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QWindow.swift; sourceTree = "<group>"; };
 		40E7382B1F556AF600B192C6 /* UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		40E738391F55847F00B192C6 /* IQViewControllerRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQViewControllerRouter.swift; sourceTree = "<group>"; };
+		40E7384A1F5606B700B192C6 /* QLabelTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QLabelTableCell.swift; sourceTree = "<group>"; };
+		40E7384B1F5606B700B192C6 /* QLabelTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QLabelTableRow.swift; sourceTree = "<group>"; };
+		40E7384E1F5606C500B192C6 /* QBackgroundColorTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QBackgroundColorTableCell.swift; sourceTree = "<group>"; };
+		40E7384F1F5606C500B192C6 /* QBackgroundColorTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QBackgroundColorTableRow.swift; sourceTree = "<group>"; };
+		40E738501F5606C500B192C6 /* QSeparatorTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSeparatorTableCell.swift; sourceTree = "<group>"; };
+		40E738511F5606C500B192C6 /* QSeparatorTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSeparatorTableRow.swift; sourceTree = "<group>"; };
+		40E738521F5606C500B192C6 /* QSpaceTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSpaceTableCell.swift; sourceTree = "<group>"; };
+		40E738531F5606C500B192C6 /* QSpaceTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSpaceTableRow.swift; sourceTree = "<group>"; };
 		40EBC12C1F4DC40200D42A64 /* QuicklyJsonTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuicklyJsonTests.swift; sourceTree = "<group>"; };
 		40FBE6791F5311EB00F5194B /* QLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QLayout.swift; sourceTree = "<group>"; };
-		40FBE67C1F536BB600F5194B /* QSeparatorTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSeparatorTableCell.swift; sourceTree = "<group>"; };
-		40FBE67D1F536BB600F5194B /* QSeparatorTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSeparatorTableRow.swift; sourceTree = "<group>"; };
-		40FBE67E1F536BB600F5194B /* QSpaceTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSpaceTableCell.swift; sourceTree = "<group>"; };
-		40FBE67F1F536BB600F5194B /* QSpaceTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSpaceTableRow.swift; sourceTree = "<group>"; };
-		40FBE6841F536C6000F5194B /* QColorTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QColorTableRow.swift; sourceTree = "<group>"; };
-		40FBE6851F536C6000F5194B /* QEdgeInsetsTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QEdgeInsetsTableRow.swift; sourceTree = "<group>"; };
 		40FBE68B1F540A2800F5194B /* ChoiseSectionTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChoiseSectionTableRow.swift; sourceTree = "<group>"; };
 		40FBE68E1F540AD500F5194B /* TextStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextStyle.swift; sourceTree = "<group>"; };
 		40FBE6911F540D5C00F5194B /* LabelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelViewController.swift; sourceTree = "<group>"; };
@@ -469,21 +483,20 @@
 		4039BCE31F52392600E38090 /* Default */ = {
 			isa = PBXGroup;
 			children = (
-				4039BCE41F52394F00E38090 /* Label */,
-				40FBE67B1F536BB600F5194B /* Other */,
-				40FBE6841F536C6000F5194B /* QColorTableRow.swift */,
-				40FBE6851F536C6000F5194B /* QEdgeInsetsTableRow.swift */,
+				40E7384E1F5606C500B192C6 /* QBackgroundColorTableCell.swift */,
+				40E7384F1F5606C500B192C6 /* QBackgroundColorTableRow.swift */,
+				40E738521F5606C500B192C6 /* QSpaceTableCell.swift */,
+				40E738531F5606C500B192C6 /* QSpaceTableRow.swift */,
+				40E738501F5606C500B192C6 /* QSeparatorTableCell.swift */,
+				40E738511F5606C500B192C6 /* QSeparatorTableRow.swift */,
+				400DDF6A1F56194300D11991 /* QImageTableCell.swift */,
+				400DDF6B1F56194300D11991 /* QImageTableRow.swift */,
+				40E7384A1F5606B700B192C6 /* QLabelTableCell.swift */,
+				40E7384B1F5606B700B192C6 /* QLabelTableRow.swift */,
+				400DDF741F56913100D11991 /* QButtonTableCell.swift */,
+				400DDF751F56913100D11991 /* QButtonTableRow.swift */,
 			);
 			path = Default;
-			sourceTree = "<group>";
-		};
-		4039BCE41F52394F00E38090 /* Label */ = {
-			isa = PBXGroup;
-			children = (
-				4039BCE51F52395F00E38090 /* QLabelTableRow.swift */,
-				4039BCE71F52397300E38090 /* QLabelTableCell.swift */,
-			);
-			path = Label;
 			sourceTree = "<group>";
 		};
 		409403561F4E125E008A8B90 /* Api */ = {
@@ -583,6 +596,9 @@
 				4061E1A81F4ECDFA00AC3217 /* Error.swift */,
 				40CF457F1F4DE6AB004D00D8 /* UIColor.swift */,
 				40E7382B1F556AF600B192C6 /* UIDevice.swift */,
+				400DDF6E1F5622EB00D11991 /* CGFloat.swift */,
+				400DDF721F5623D400D11991 /* CGSize.swift */,
+				400DDF6F1F5622EB00D11991 /* CGRect.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -693,17 +709,6 @@
 				40FBE6791F5311EB00F5194B /* QLayout.swift */,
 			);
 			path = Layout;
-			sourceTree = "<group>";
-		};
-		40FBE67B1F536BB600F5194B /* Other */ = {
-			isa = PBXGroup;
-			children = (
-				40FBE67D1F536BB600F5194B /* QSeparatorTableRow.swift */,
-				40FBE67C1F536BB600F5194B /* QSeparatorTableCell.swift */,
-				40FBE67F1F536BB600F5194B /* QSpaceTableRow.swift */,
-				40FBE67E1F536BB600F5194B /* QSpaceTableCell.swift */,
-			);
-			path = Other;
 			sourceTree = "<group>";
 		};
 		40FBE68A1F540A0A00F5194B /* Rows */ = {
@@ -918,11 +923,12 @@
 				40CF45E61F4DE6AB004D00D8 /* IQViewController.swift in Sources */,
 				40CF45EB1F4DE6AB004D00D8 /* QTableViewController.swift in Sources */,
 				40B8A1921F4F49AC00204E5A /* QApiImpl.m in Sources */,
-				40FBE6871F536C6000F5194B /* QEdgeInsetsTableRow.swift in Sources */,
 				40CF45CC1F4DE6AB004D00D8 /* IQContainer.swift in Sources */,
 				40CF45C01F4DE6AB004D00D8 /* QCollectionItem.swift in Sources */,
 				409403621F4E26D1008A8B90 /* IQApiQuery.swift in Sources */,
 				40FBE6A41F543EFD00F5194B /* QStyledText.swift in Sources */,
+				400DDF711F5622EB00D11991 /* CGRect.swift in Sources */,
+				40E738571F5606C500B192C6 /* QSeparatorTableRow.swift in Sources */,
 				4094035B1F4E12BF008A8B90 /* QApiRequest.swift in Sources */,
 				40C8F8281F55145D00C75D34 /* QSystemSpinnerView.swift in Sources */,
 				40CF45E11F4DE6AB004D00D8 /* QTableDecor.swift in Sources */,
@@ -933,17 +939,22 @@
 				40CF45E81F4DE6AB004D00D8 /* QStackViewController.swift in Sources */,
 				40CF45DD1F4DE6AB004D00D8 /* IQTableSection.swift in Sources */,
 				40B8A19B1F4F80FF00204E5A /* QModel.swift in Sources */,
+				40E738561F5606C500B192C6 /* QSeparatorTableCell.swift in Sources */,
 				40CF45BD1F4DE6AB004D00D8 /* QCollectionController.swift in Sources */,
 				40FBE6AA1F54591000F5194B /* QImageSource.swift in Sources */,
 				40B8A1A61F5012EB00204E5A /* IQListDataSource.swift in Sources */,
 				40CF45C21F4DE6AB004D00D8 /* QCollectionView.swift in Sources */,
 				40CF45EA1F4DE6AB004D00D8 /* QTabGroupViewController.swift in Sources */,
+				40E738581F5606C500B192C6 /* QSpaceTableCell.swift in Sources */,
 				40CF45C61F4DE6AB004D00D8 /* QJson.swift in Sources */,
 				40B8A1A81F50181900204E5A /* IQOneSource.swift in Sources */,
 				40C8F82A1F552F7400C75D34 /* QTextField.swift in Sources */,
+				40E7384C1F5606B700B192C6 /* QLabelTableCell.swift in Sources */,
 				40CF45CF1F4DE6AB004D00D8 /* QAppRouter.swift in Sources */,
+				400DDF701F5622EB00D11991 /* CGFloat.swift in Sources */,
 				40CF45E51F4DE6AB004D00D8 /* IQContentViewController.swift in Sources */,
 				40CF45D71F4DE6AB004D00D8 /* IQTableCell.swift in Sources */,
+				40E738591F5606C500B192C6 /* QSpaceTableRow.swift in Sources */,
 				40CF45C11F4DE6AB004D00D8 /* QCollectionSection.swift in Sources */,
 				40CF45E41F4DE6AB004D00D8 /* QTableView.swift in Sources */,
 				40FBE6A31F543EFD00F5194B /* QFormatText.swift in Sources */,
@@ -951,23 +962,26 @@
 				40CF45B51F4DE6AB004D00D8 /* IQCollectionCell.swift in Sources */,
 				40CF45E01F4DE6AB004D00D8 /* QTableData.swift in Sources */,
 				40FBE67A1F5311EB00F5194B /* QLayout.swift in Sources */,
+				400DDF6C1F56194300D11991 /* QImageTableCell.swift in Sources */,
 				40B8A19D1F4F8C0400204E5A /* IQJsonValue.swift in Sources */,
 				40FBE6A81F543F0C00F5194B /* QButtonStyle.swift in Sources */,
 				40C8F8261F55109100C75D34 /* QSpinnerView.swift in Sources */,
 				40B8A1A41F5012DB00204E5A /* QListDataSource.swift in Sources */,
 				40CF45C41F4DE6AB004D00D8 /* UIColor.swift in Sources */,
 				40CF45CB1F4DE6AB004D00D8 /* QLinkLabel.swift in Sources */,
-				40FBE6861F536C6000F5194B /* QColorTableRow.swift in Sources */,
+				40E7384D1F5606B700B192C6 /* QLabelTableRow.swift in Sources */,
 				40CF45DF1F4DE6AB004D00D8 /* QTableController.swift in Sources */,
 				40CF45B61F4DE6AB004D00D8 /* IQCollectionController.swift in Sources */,
 				402F1FB61F4EF525007625CA /* QApiError.swift in Sources */,
 				40CF45BE1F4DE6AB004D00D8 /* QCollectionData.swift in Sources */,
 				40CF45CD1F4DE6AB004D00D8 /* IQRouted.swift in Sources */,
+				40E738541F5606C500B192C6 /* QBackgroundColorTableCell.swift in Sources */,
 				4039BCB51F516F1B00E38090 /* QButton.swift in Sources */,
 				40CF45BF1F4DE6AB004D00D8 /* QCollectionDecor.swift in Sources */,
 				40CF45BB1F4DE6AB004D00D8 /* IQCollectionSection.swift in Sources */,
 				40CF45C91F4DE6AB004D00D8 /* QKeychain.swift in Sources */,
 				40CF45CE1F4DE6AB004D00D8 /* IQRouter.swift in Sources */,
+				400DDF6D1F56194300D11991 /* QImageTableRow.swift in Sources */,
 				40FBE6A51F543EFD00F5194B /* QText.swift in Sources */,
 				40CF45E21F4DE6AB004D00D8 /* QTableRow.swift in Sources */,
 				40CF45BA1F4DE6AB004D00D8 /* IQCollectionReuse.swift in Sources */,
@@ -983,36 +997,34 @@
 				40CF45F01F4DE6AB004D00D8 /* QWindow.swift in Sources */,
 				40CF45BC1F4DE6AB004D00D8 /* QCollectionCell.swift in Sources */,
 				409403601F4E2663008A8B90 /* QApiQuery.swift in Sources */,
-				40FBE6831F536BB600F5194B /* QSpaceTableRow.swift in Sources */,
 				402F1FB01F4EE0AB007625CA /* IQApiRequest.swift in Sources */,
 				40CF45D01F4DE6AB004D00D8 /* QStackRouter.swift in Sources */,
+				40E738551F5606C500B192C6 /* QBackgroundColorTableRow.swift in Sources */,
 				40CF45EC1F4DE6AB004D00D8 /* IQView.swift in Sources */,
-				40FBE6801F536BB600F5194B /* QSeparatorTableCell.swift in Sources */,
 				40CF45DB1F4DE6AB004D00D8 /* IQTableReuse.swift in Sources */,
-				40FBE6821F536BB600F5194B /* QSpaceTableCell.swift in Sources */,
 				40CF45E91F4DE6AB004D00D8 /* QStaticViewController.swift in Sources */,
 				402F1FB21F4EE0F8007625CA /* IQApiResponse.swift in Sources */,
 				40CF45D11F4DE6AB004D00D8 /* QTabGroupRouter.swift in Sources */,
 				40E7383A1F55847F00B192C6 /* IQViewControllerRouter.swift in Sources */,
 				4094035E1F4E2645008A8B90 /* QApiProvider+URLSession.swift in Sources */,
-				4039BCE61F52395F00E38090 /* QLabelTableRow.swift in Sources */,
+				400DDF731F5623D400D11991 /* CGSize.swift in Sources */,
 				40CF45E31F4DE6AB004D00D8 /* QTableSection.swift in Sources */,
 				40CF45C31F4DE6AB004D00D8 /* AttributedString.swift in Sources */,
-				4039BCE81F52397300E38090 /* QLabelTableCell.swift in Sources */,
 				402F1FBA1F4F380B007625CA /* QApiProvider+Internal.swift in Sources */,
 				40CF45C51F4DE6AB004D00D8 /* String.swift in Sources */,
 				40CF45DA1F4DE6AB004D00D8 /* IQTableDecor.swift in Sources */,
-				40FBE6811F536BB600F5194B /* QSeparatorTableRow.swift in Sources */,
 				40CF45DC1F4DE6AB004D00D8 /* IQTableRow.swift in Sources */,
 				40B8A1A11F4FA3C800204E5A /* IQDataSource.swift in Sources */,
 				4061E1A91F4ECDFA00AC3217 /* Error.swift in Sources */,
 				4039BCB71F516F5900E38090 /* QControl.swift in Sources */,
 				40B8A1991F4F806A00204E5A /* IQModel.swift in Sources */,
+				400DDF761F56913100D11991 /* QButtonTableCell.swift in Sources */,
 				40CF45C81F4DE6AB004D00D8 /* QJsonImpl.m in Sources */,
 				40CF45B91F4DE6AB004D00D8 /* IQCollectionItem.swift in Sources */,
 				40C8F8251F55109100C75D34 /* IQSpinnerView.swift in Sources */,
 				40CF45D91F4DE6AB004D00D8 /* IQTableData.swift in Sources */,
 				409403581F4E129F008A8B90 /* QApiProvider.swift in Sources */,
+				400DDF771F56913100D11991 /* QButtonTableRow.swift in Sources */,
 				40FBE6A61F543EFD00F5194B /* QTextStyle.swift in Sources */,
 				40B8A1AB1F50736C00204E5A /* QTimer.swift in Sources */,
 				40CF45DE1F4DE6AB004D00D8 /* QTableCell.swift in Sources */,
