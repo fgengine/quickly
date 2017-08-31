@@ -28,19 +28,18 @@ public enum QImageSourceScale: Int {
 
 public class QImageSource {
 
-    public var scale: QImageSourceScale
     public var size: CGSize
     public var image: UIImage?
     public var url: URL?
+    public var renderingMode: UIImageRenderingMode = .automatic
+    public var scale: QImageSourceScale = .aspectFit
 
-    public init(_ image: UIImage, scale: QImageSourceScale = .aspectFit) {
-        self.scale = scale
+    public init(_ image: UIImage) {
         self.size = image.size
         self.image = image
     }
 
-    public init(_ imageNamed: String, scale: QImageSourceScale = .aspectFit) {
-        self.scale = scale
+    public init(_ imageNamed: String) {
         if let image: UIImage = UIImage(named: imageNamed) {
             self.size = image.size
             self.image = image
@@ -49,8 +48,7 @@ public class QImageSource {
         }
     }
 
-    public init(_ url: URL, size: CGSize, scale: QImageSourceScale = .aspectFit) {
-        self.scale = scale
+    public init(_ url: URL, size: CGSize) {
         self.size = size
         self.url = url
     }
