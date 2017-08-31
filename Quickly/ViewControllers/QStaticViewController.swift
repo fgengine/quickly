@@ -17,7 +17,7 @@ open class QStaticViewController : UIViewController, IQContentViewController {
     }
     open var supportedOrientationMask: UIInterfaceOrientationMask = .portrait
     open var navigationBarHidden: Bool = false
-    open var toolbarHidden: Bool = false
+    open var toolbarHidden: Bool = true
     open var isAppeared: Bool = false
 
     public init() {
