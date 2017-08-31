@@ -29,22 +29,25 @@ public final class QJson {
     public init?(data: Data) {
         if let impl: QJsonImpl = QJsonImpl(data: data) {
             self.impl = impl
+        } else {
+            return nil
         }
-        return nil
     }
 
     public init?(string: String) {
         if let impl: QJsonImpl = QJsonImpl(string: string) {
             self.impl = impl
+        } else {
+            return nil
         }
-        return nil
     }
 
     public init?(string: String, encoding: UInt) {
         if let impl: QJsonImpl = QJsonImpl(string: string, encoding: encoding) {
             self.impl = impl
+        } else {
+            return nil
         }
-        return nil
     }
 
     public func saveAsData() -> Data? {
