@@ -4,7 +4,17 @@
 
 import UIKit
 
+public protocol QButtonTableCellDelegate: IQTableCellDelegate {
+
+    func pressedButton(_ row: QButtonTableRow)
+
+}
+
 open class QButtonTableCell< RowType: QButtonTableRow >: QBackgroundColorTableCell< RowType > {
+
+    public weak var buttonTableDelegate: QButtonTableCellDelegate? {
+        get{ return self.tableDelegate as? QButtonTableCellDelegate }
+    }
 
     internal var button: QButton!
     internal var currentConstraints: [NSLayoutConstraint] = [] {
@@ -21,6 +31,7 @@ open class QButtonTableCell< RowType: QButtonTableRow >: QBackgroundColorTableCe
 
         self.button = QButton(frame: self.contentView.bounds)
         self.button.translatesAutoresizingMaskIntoConstraints = false
+        self.button.addTarget(self, action: #selector(self.pressedButton(_:)), for: .touchUpInside)
         self.contentView.addSubview(self.button)
     }
 
@@ -81,6 +92,15 @@ open class QButtonTableCell< RowType: QButtonTableRow >: QBackgroundColorTableCe
             self.button.stopSpinner()
         }
 
+    }
+
+    @objc private func pressedButton(_ sender: Any) {
+        guard let row: RowType = self.row else {
+            return
+        }
+        if let buttonTableDelegate: QButtonTableCellDelegate = self.buttonTableDelegate {
+            buttonTableDelegate.pressedButton(row as QButtonTableRow)
+        }
     }
 
 }
