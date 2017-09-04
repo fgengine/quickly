@@ -7,11 +7,6 @@ import UIKit
 @IBDesignable
 open class QRoundView : QView {
 
-    private func updateCornerRadius() {
-        let boundsSize: CGSize = self.bounds.integral.size
-        self.layer.cornerRadius = ceil(min(boundsSize.width - 1, boundsSize.height - 1) / 2)
-    }
-
     open override func setup() {
         super.setup()
 
@@ -24,6 +19,11 @@ open class QRoundView : QView {
 
     open override var bounds: CGRect {
         didSet { self.updateCornerRadius() }
+    }
+
+    private func updateCornerRadius() {
+        let boundsSize: CGSize = self.bounds.integral.size
+        self.layer.cornerRadius = ceil(min(boundsSize.width - 1, boundsSize.height - 1) / 2)
     }
 
 }

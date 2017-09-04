@@ -7,7 +7,10 @@ import UIKit
 @IBDesignable
 open class QTextField : QView {
 
-    @IBInspectable public weak var delegate: UITextFieldDelegate?
+    @IBInspectable public weak var delegate: UITextFieldDelegate? {
+        set(value) { self.textField.delegate = value }
+        get { return self.textField.delegate }
+    }
 
     public var textInsets: UIEdgeInsets {
         set(value) { self.textField.insets = value }

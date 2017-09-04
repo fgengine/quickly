@@ -49,6 +49,7 @@ open class QImageTableCell< RowType: QImageTableRow >: QBackgroundColorTableCell
             self.pictureView.bottomLayout == self.contentView.bottomLayout - imageRow.edgeInsets.bottom
         ]
 
+        self.pictureView.roundCorners = imageRow.roundCorners
         self.pictureView.source = imageRow.source
     }
 

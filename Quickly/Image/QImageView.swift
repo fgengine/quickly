@@ -6,6 +6,9 @@ import UIKit
 
 open class QImageView: QView {
 
+    public var roundCorners: Bool = false {
+        didSet { self.updateCornerRadius() }
+    }
     public var source: QImageSource? {
         didSet {
             guard let source: QImageSource = self.source, let image: UIImage = source.image else {
@@ -18,6 +21,14 @@ open class QImageView: QView {
     }
 
     public private(set) var imageView: UIImageView!
+
+    open override var frame: CGRect {
+        didSet { self.updateCornerRadius() }
+    }
+
+    open override var bounds: CGRect {
+        didSet { self.updateCornerRadius() }
+    }
     
     open override var intrinsicContentSize: CGSize {
         get {
@@ -44,6 +55,13 @@ open class QImageView: QView {
 
     open override func sizeToFit() {
         return self.imageView.sizeToFit()
+    }
+
+    private func updateCornerRadius() {
+        if self.roundCorners == true {
+            let boundsSize: CGSize = self.bounds.integral.size
+            self.layer.cornerRadius = ceil(min(boundsSize.width - 1, boundsSize.height - 1) / 2)
+        }
     }
 
 }
