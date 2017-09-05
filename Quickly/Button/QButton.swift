@@ -79,6 +79,7 @@ open class QButton: QControl {
     public private(set) var contentView: QView!
     public private(set) var imageView: QImageView!
     public private(set) var textLabel: QLabel!
+    public private(set) var tapGesture: UITapGestureRecognizer!
     public var spinnerPosition: QButtonSpinnerPosition = .fill {
         didSet { self.applyStyle() }
     }
@@ -117,7 +118,7 @@ open class QButton: QControl {
 
     open override func setup() {
         super.setup()
-        
+
         self.backgroundColor = UIColor.clear
 
         self.contentView = QView(frame: self.bounds)
@@ -137,6 +138,10 @@ open class QButton: QControl {
         self.textLabel.isUserInteractionEnabled = false
         self.textLabel.alpha = 0
         self.contentView.addSubview(self.textLabel)
+
+        self.tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.gestureHandler(_:)))
+        self.tapGesture.delegate = self
+        self.addGestureRecognizer(self.tapGesture)
     }
 
     public func currentStyle() -> QButtonStyle? {
@@ -478,7 +483,7 @@ open class QButton: QControl {
         constraints: inout [NSLayoutConstraint],
         topView: UIView, topEdgeInsets: UIEdgeInsets,
         bottomView: UIView, bottomEdgeInsets: UIEdgeInsets
-    ) {
+        ) {
         constraints.append(topView.leadingLayout == self.contentView.leadingLayout + topEdgeInsets.left)
         constraints.append(topView.trailingLayout == self.contentView.trailingLayout - topEdgeInsets.right)
         constraints.append(topView.bottomLayout == bottomView.topLayout - (topEdgeInsets.bottom + bottomEdgeInsets.top))
@@ -500,7 +505,7 @@ open class QButton: QControl {
         constraints: inout [NSLayoutConstraint],
         leftView: UIView, leftEdgeInsets: UIEdgeInsets,
         rightView: UIView, rightEdgeInsets: UIEdgeInsets
-    ) {
+        ) {
         constraints.append(leftView.topLayout == self.contentView.topLayout + leftEdgeInsets.top)
         constraints.append(leftView.trailingLayout == rightView.leadingLayout - (leftEdgeInsets.right + rightEdgeInsets.left))
         constraints.append(leftView.bottomLayout == self.contentView.bottomLayout - leftEdgeInsets.bottom)
@@ -516,6 +521,22 @@ open class QButton: QControl {
             constraints.append(leftView.leadingLayout == self.contentView.leadingLayout + leftEdgeInsets.left)
             constraints.append(rightView.trailingLayout == self.contentView.trailingLayout - rightEdgeInsets.right)
         }
+    }
+
+    @objc private func gestureHandler(_ sender: Any) {
+        self.sendActions(for: .touchUpInside)
+    }
+
+}
+
+extension QButton: UIGestureRecognizerDelegate {
+
+    open override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if self.tapGesture == gestureRecognizer {
+            let location: CGPoint = self.tapGesture.location(in: self)
+            return self.bounds.contains(location)
+        }
+        return false
     }
 
 }
