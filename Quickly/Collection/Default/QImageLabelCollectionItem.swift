@@ -4,13 +4,12 @@
 
 import UIKit
 
-open class QImageLabelTableRow: QBackgroundColorTableRow {
+open class QImageLabelCollectionItem: QBackgroundColorCollectionItem {
 
     public var edgeInsets: UIEdgeInsets = UIEdgeInsets.zero
     public var spacing: CGFloat = 0
 
     public var imageSource: QImageSource?
-    public var imageWidth: CGFloat = 96
     public var imageRoundCorners: Bool = false
 
     public var text: IQText?

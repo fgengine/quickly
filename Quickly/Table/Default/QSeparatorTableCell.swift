@@ -26,23 +26,23 @@ open class QSeparatorTableCell< RowType: QSeparatorTableRow >: QBackgroundColorT
 
     open override func set(row: RowType) {
         super.set(row: row)
-        self.apply(separatorRow: row)
+        self.apply(row: row)
     }
 
     open override func update(row: RowType) {
         super.update(row: row)
-        self.apply(separatorRow: row)
+        self.apply(row: row)
     }
 
-    private func apply(separatorRow: QSeparatorTableRow) {
+    private func apply(row: QSeparatorTableRow) {
         self.currentConstraints = [
-            self.separator.topLayout == self.contentView.topLayout + separatorRow.edgeInsets.top,
-            self.separator.leadingLayout == self.contentView.leadingLayout + separatorRow.edgeInsets.left,
-            self.separator.trailingLayout == self.contentView.trailingLayout - separatorRow.edgeInsets.right,
-            self.separator.bottomLayout == self.contentView.bottomLayout - separatorRow.edgeInsets.bottom
+            self.separator.topLayout == self.contentView.topLayout + row.edgeInsets.top,
+            self.separator.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left,
+            self.separator.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right,
+            self.separator.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom
         ]
 
-        self.separator.backgroundColor = separatorRow.color
+        self.separator.backgroundColor = row.color
     }
     
 }

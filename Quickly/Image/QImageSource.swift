@@ -9,6 +9,14 @@ public enum QImageSourceScale: Int {
     case aspectFit
     case aspectFill
 
+    public func toContentMode() -> UIViewContentMode {
+        switch self {
+        case .stretch: return UIViewContentMode.scaleToFill
+        case .aspectFit: return UIViewContentMode.scaleAspectFit
+        case .aspectFill: return UIViewContentMode.scaleAspectFill
+        }
+    }
+
     public func rect(bounds: CGRect, size: CGSize) -> CGRect {
         switch self {
         case .stretch: return CGRect(x: bounds.origin.x, y: bounds.origin.y, width: size.width, height: size.height)
@@ -17,11 +25,11 @@ public enum QImageSourceScale: Int {
         }
     }
 
-    public func toContentMode() -> UIViewContentMode {
+    public func size(available: CGSize, size: CGSize) -> CGSize {
         switch self {
-        case .stretch: return UIViewContentMode.scaleToFill
-        case .aspectFit: return UIViewContentMode.scaleAspectFit
-        case .aspectFill: return UIViewContentMode.scaleAspectFill
+        case .stretch: return available
+        case .aspectFit: return size.aspectFit(bounds: CGRect(origin: CGPoint.zero, size: available)).size
+        case .aspectFill: return available
         }
     }
 }
@@ -55,6 +63,10 @@ public class QImageSource {
 
     public func rect(bounds: CGRect) -> CGRect {
         return self.scale.rect(bounds: bounds, size: self.size)
+    }
+
+    public func size(available: CGSize) -> CGSize {
+        return self.scale.size(available: available, size: self.size)
     }
 
 }

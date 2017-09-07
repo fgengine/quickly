@@ -17,10 +17,10 @@ open class QImageTableCell< RowType: QImageTableRow >: QBackgroundColorTableCell
             return 0
         }
         let availableWidth: CGFloat = width - (row.edgeInsets.left + row.edgeInsets.right)
-        let imageRect: CGRect = source.rect(bounds: CGRect(
-            x: 0, y: 0, width: availableWidth, height: availableWidth
+        let imageSize: CGSize = source.size(available: CGSize(
+            width: availableWidth, height: availableWidth
         ))
-        return row.edgeInsets.top + imageRect.integral.height + row.edgeInsets.bottom
+        return row.edgeInsets.top + imageSize.height + row.edgeInsets.bottom
     }
 
     open override func setup() {
@@ -33,24 +33,24 @@ open class QImageTableCell< RowType: QImageTableRow >: QBackgroundColorTableCell
 
     open override func set(row: RowType) {
         super.set(row: row)
-        self.apply(imageRow: row)
+        self.apply(row: row)
     }
 
     open override func update(row: RowType) {
         super.update(row: row)
-        self.apply(imageRow: row)
+        self.apply(row: row)
     }
 
-    private func apply(imageRow: QImageTableRow) {
+    private func apply(row: QImageTableRow) {
         self.currentConstraints = [
-            self.pictureView.topLayout == self.contentView.topLayout + imageRow.edgeInsets.top,
-            self.pictureView.leadingLayout == self.contentView.leadingLayout + imageRow.edgeInsets.left,
-            self.pictureView.trailingLayout == self.contentView.trailingLayout - imageRow.edgeInsets.right,
-            self.pictureView.bottomLayout == self.contentView.bottomLayout - imageRow.edgeInsets.bottom
+            self.pictureView.topLayout == self.contentView.topLayout + row.edgeInsets.top,
+            self.pictureView.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left,
+            self.pictureView.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right,
+            self.pictureView.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom
         ]
 
-        self.pictureView.roundCorners = imageRow.roundCorners
-        self.pictureView.source = imageRow.source
+        self.pictureView.roundCorners = row.roundCorners
+        self.pictureView.source = row.source
     }
 
 }

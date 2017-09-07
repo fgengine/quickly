@@ -37,36 +37,36 @@ open class QTwoLabelTableCell< RowType: QTwoLabelTableRow >: QBackgroundColorTab
 
     open override func set(row: RowType) {
         super.set(row: row)
-        self.apply(labelRow: row)
+        self.apply(row: row)
     }
 
     open override func update(row: RowType) {
         super.update(row: row)
-        self.apply(labelRow: row)
+        self.apply(row: row)
     }
 
-    private func apply(labelRow: QTwoLabelTableRow) {
+    private func apply(row: QTwoLabelTableRow) {
         self.currentConstraints = [
-            self.primaryLabel.topLayout == self.contentView.topLayout + labelRow.edgeInsets.top,
-            self.primaryLabel.leadingLayout == self.contentView.leadingLayout + labelRow.edgeInsets.left,
-            self.primaryLabel.trailingLayout == self.contentView.trailingLayout - labelRow.edgeInsets.right,
-            self.primaryLabel.bottomLayout == self.secondaryLabel.topLayout - labelRow.spacing,
-            self.secondaryLabel.leadingLayout == self.contentView.leadingLayout + labelRow.edgeInsets.left,
-            self.secondaryLabel.trailingLayout == self.contentView.trailingLayout - labelRow.edgeInsets.right,
-            self.secondaryLabel.bottomLayout == self.contentView.bottomLayout - labelRow.edgeInsets.bottom
+            self.primaryLabel.topLayout == self.contentView.topLayout + row.edgeInsets.top,
+            self.primaryLabel.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left,
+            self.primaryLabel.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right,
+            self.primaryLabel.bottomLayout == self.secondaryLabel.topLayout - row.spacing,
+            self.secondaryLabel.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left,
+            self.secondaryLabel.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right,
+            self.secondaryLabel.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom
         ]
 
-        self.primaryLabel.contentAlignment = labelRow.primaryContentAlignment
-        self.primaryLabel.padding = labelRow.primaryPadding
-        self.primaryLabel.numberOfLines = labelRow.primaryNumberOfLines
-        self.primaryLabel.lineBreakMode = labelRow.primaryLineBreakMode
-        self.primaryLabel.text = labelRow.primaryText
+        self.primaryLabel.contentAlignment = row.primaryContentAlignment
+        self.primaryLabel.padding = row.primaryPadding
+        self.primaryLabel.numberOfLines = row.primaryNumberOfLines
+        self.primaryLabel.lineBreakMode = row.primaryLineBreakMode
+        self.primaryLabel.text = row.primaryText
 
-        self.secondaryLabel.contentAlignment = labelRow.secondaryContentAlignment
-        self.secondaryLabel.padding = labelRow.secondaryPadding
-        self.secondaryLabel.numberOfLines = labelRow.secondaryNumberOfLines
-        self.secondaryLabel.lineBreakMode = labelRow.secondaryLineBreakMode
-        self.secondaryLabel.text = labelRow.secondaryText
+        self.secondaryLabel.contentAlignment = row.secondaryContentAlignment
+        self.secondaryLabel.padding = row.secondaryPadding
+        self.secondaryLabel.numberOfLines = row.secondaryNumberOfLines
+        self.secondaryLabel.lineBreakMode = row.secondaryLineBreakMode
+        self.secondaryLabel.text = row.secondaryText
     }
 
 }

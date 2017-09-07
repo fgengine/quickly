@@ -31,27 +31,27 @@ open class QLabelTableCell< RowType: QLabelTableRow >: QBackgroundColorTableCell
 
     open override func set(row: RowType) {
         super.set(row: row)
-        self.apply(labelRow: row)
+        self.apply(row: row)
     }
 
     open override func update(row: RowType) {
         super.update(row: row)
-        self.apply(labelRow: row)
+        self.apply(row: row)
     }
 
-    private func apply(labelRow: QLabelTableRow) {
+    private func apply(row: QLabelTableRow) {
         self.currentConstraints = [
-            self.label.topLayout == self.contentView.topLayout + labelRow.edgeInsets.top,
-            self.label.leadingLayout == self.contentView.leadingLayout + labelRow.edgeInsets.left,
-            self.label.trailingLayout == self.contentView.trailingLayout - labelRow.edgeInsets.right,
-            self.label.bottomLayout == self.contentView.bottomLayout - labelRow.edgeInsets.bottom
+            self.label.topLayout == self.contentView.topLayout + row.edgeInsets.top,
+            self.label.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left,
+            self.label.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right,
+            self.label.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom
         ]
 
-        self.label.contentAlignment = labelRow.contentAlignment
-        self.label.padding = labelRow.padding
-        self.label.numberOfLines = labelRow.numberOfLines
-        self.label.lineBreakMode = labelRow.lineBreakMode
-        self.label.text = labelRow.text
+        self.label.contentAlignment = row.contentAlignment
+        self.label.padding = row.padding
+        self.label.numberOfLines = row.numberOfLines
+        self.label.lineBreakMode = row.lineBreakMode
+        self.label.text = row.text
     }
 
 }

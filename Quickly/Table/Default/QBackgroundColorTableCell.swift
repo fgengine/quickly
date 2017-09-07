@@ -8,16 +8,17 @@ open class QBackgroundColorTableCell< RowType: QBackgroundColorTableRow >: QTabl
 
     open override func set(row: RowType) {
         super.set(row: row)
-        self.apply(backgroundColorRow: row)
+        self.apply(row: row)
     }
 
     open override func update(row: RowType) {
         super.update(row: row)
-        self.apply(backgroundColorRow: row)
+        self.apply(row: row)
     }
 
-    private func apply(backgroundColorRow: QBackgroundColorTableRow) {
-        if let backgroundColor: UIColor = backgroundColorRow.backgroundColor {
+    private func apply(row: QBackgroundColorTableRow) {
+        if let backgroundColor: UIColor = row.backgroundColor {
+            self.backgroundColor = backgroundColor
             self.contentView.backgroundColor = backgroundColor
         }
     }
