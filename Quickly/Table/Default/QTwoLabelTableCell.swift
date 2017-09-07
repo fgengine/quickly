@@ -8,9 +8,9 @@ open class QTwoLabelTableCell< RowType: QTwoLabelTableRow >: QBackgroundColorTab
 
     internal var primaryLabel: QLabel!
     internal var secondaryLabel: QLabel!
-    internal var currentConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.currentConstraints) }
-        didSet { self.contentView.addConstraints(self.currentConstraints) }
+    internal var selfConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self.selfConstraints) }
+        didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
     open override class func height(row: RowType, width: CGFloat) -> CGFloat {
@@ -46,7 +46,7 @@ open class QTwoLabelTableCell< RowType: QTwoLabelTableRow >: QBackgroundColorTab
     }
 
     private func apply(row: QTwoLabelTableRow) {
-        self.currentConstraints = [
+        self.selfConstraints = [
             self.primaryLabel.topLayout == self.contentView.topLayout + row.edgeInsets.top,
             self.primaryLabel.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left,
             self.primaryLabel.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right,

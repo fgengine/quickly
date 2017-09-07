@@ -7,9 +7,9 @@ import UIKit
 open class QImageTableCell< RowType: QImageTableRow >: QBackgroundColorTableCell< RowType > {
 
     internal var pictureView: QImageView!
-    internal var currentConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.currentConstraints) }
-        didSet { self.contentView.addConstraints(self.currentConstraints) }
+    internal var selfConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self.selfConstraints) }
+        didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
     open override class func height(row: RowType, width: CGFloat) -> CGFloat {
@@ -42,7 +42,7 @@ open class QImageTableCell< RowType: QImageTableRow >: QBackgroundColorTableCell
     }
 
     private func apply(row: QImageTableRow) {
-        self.currentConstraints = [
+        self.selfConstraints = [
             self.pictureView.topLayout == self.contentView.topLayout + row.edgeInsets.top,
             self.pictureView.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left,
             self.pictureView.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right,

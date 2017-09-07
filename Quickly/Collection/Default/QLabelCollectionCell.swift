@@ -7,9 +7,9 @@ import UIKit
 open class QLabelCollectionCell< ItemType: QLabelCollectionItem >: QBackgroundColorCollectionCell< ItemType > {
 
     internal var label: QLabel!
-    internal var currentConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.currentConstraints) }
-        didSet { self.contentView.addConstraints(self.currentConstraints) }
+    internal var selfConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self.selfConstraints) }
+        didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
     open override class func size(item: ItemType, size: CGSize) -> CGSize {
@@ -43,7 +43,7 @@ open class QLabelCollectionCell< ItemType: QLabelCollectionItem >: QBackgroundCo
     }
 
     private func apply(item: QLabelCollectionItem) {
-        self.currentConstraints = [
+        self.selfConstraints = [
             self.label.topLayout == self.contentView.topLayout + item.edgeInsets.top,
             self.label.leadingLayout == self.contentView.leadingLayout + item.edgeInsets.left,
             self.label.trailingLayout == self.contentView.trailingLayout - item.edgeInsets.right,

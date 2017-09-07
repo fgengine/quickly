@@ -7,9 +7,9 @@ import UIKit
 open class QSeparatorCollectionCell< ItemType: QSeparatorCollectionItem >: QBackgroundColorCollectionCell< ItemType > {
 
     internal var separator: QView!
-    internal var currentConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.currentConstraints) }
-        didSet { self.contentView.addConstraints(self.currentConstraints) }
+    internal var selfConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self.selfConstraints) }
+        didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
     open override class func size(item: ItemType, size: CGSize) -> CGSize {
@@ -45,7 +45,7 @@ open class QSeparatorCollectionCell< ItemType: QSeparatorCollectionItem >: QBack
     }
 
     private func apply(item: QSeparatorCollectionItem) {
-        self.currentConstraints = [
+        self.selfConstraints = [
             self.separator.topLayout == self.contentView.topLayout + item.edgeInsets.top,
             self.separator.leadingLayout == self.contentView.leadingLayout + item.edgeInsets.left,
             self.separator.trailingLayout == self.contentView.trailingLayout - item.edgeInsets.right,

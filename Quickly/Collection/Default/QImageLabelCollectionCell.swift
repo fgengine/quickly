@@ -8,9 +8,13 @@ open class QImageLabelCollectionCell< ItemType: QImageLabelCollectionItem >: QBa
 
     internal var pictureView: QImageView!
     internal var label: QLabel!
-    internal var currentConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.currentConstraints) }
-        didSet { self.contentView.addConstraints(self.currentConstraints) }
+    internal var pictureConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.pictureView.removeConstraints(self.pictureConstraints) }
+        didSet { self.pictureView.addConstraints(self.pictureConstraints) }
+    }
+    internal var selfConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self.selfConstraints) }
+        didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
     open override class func size(item: ItemType, size: CGSize) -> CGSize {
@@ -51,16 +55,32 @@ open class QImageLabelCollectionCell< ItemType: QImageLabelCollectionItem >: QBa
     }
 
     private func apply(item: QImageLabelCollectionItem) {
-        self.currentConstraints = [
+        var selfConstraints: [NSLayoutConstraint] = [
             self.pictureView.topLayout == self.contentView.topLayout + item.edgeInsets.top,
-            self.pictureView.leadingLayout == self.contentView.leadingLayout + item.edgeInsets.left,
-            self.pictureView.trailingLayout == self.label.leadingLayout - item.edgeInsets.right,
             self.pictureView.bottomLayout == self.label.topLayout - item.edgeInsets.bottom,
 
             self.label.leadingLayout == self.contentView.leadingLayout + item.edgeInsets.left,
             self.label.trailingLayout == self.contentView.trailingLayout - item.edgeInsets.right,
             self.label.bottomLayout == self.contentView.bottomLayout - item.edgeInsets.bottom
         ]
+        var pictureConstraints: [NSLayoutConstraint] = []
+        if item.imageCentering == true {
+            selfConstraints.append(contentsOf: [
+                self.pictureView.leadingLayout >= self.contentView.leadingLayout + item.edgeInsets.left,
+                self.pictureView.trailingLayout <= self.contentView.leadingLayout - item.edgeInsets.right,
+                self.pictureView.centerXLayout <= self.contentView.centerXLayout,
+            ])
+            pictureConstraints.append(contentsOf: [
+                self.pictureView.widthLayout == self.pictureView.heightLayout * (self.pictureView.frame.width / self.pictureView.frame.height)
+            ])
+        } else {
+            selfConstraints.append(contentsOf: [
+                self.pictureView.leadingLayout == self.contentView.leadingLayout + item.edgeInsets.left,
+                self.pictureView.trailingLayout == self.contentView.leadingLayout - item.edgeInsets.right,
+            ])
+        }
+        self.selfConstraints = selfConstraints
+        self.pictureConstraints = pictureConstraints
 
         self.pictureView.roundCorners = item.imageRoundCorners
         self.pictureView.source = item.imageSource

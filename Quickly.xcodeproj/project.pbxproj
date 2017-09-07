@@ -122,15 +122,15 @@
 		40CF45E51F4DE6AB004D00D8 /* IQContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45A81F4DE6AB004D00D8 /* IQContentViewController.swift */; };
 		40CF45E61F4DE6AB004D00D8 /* IQViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45A91F4DE6AB004D00D8 /* IQViewController.swift */; };
 		40CF45E71F4DE6AB004D00D8 /* QCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45AA1F4DE6AB004D00D8 /* QCollectionViewController.swift */; };
-		40CF45E81F4DE6AB004D00D8 /* QStackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45AB1F4DE6AB004D00D8 /* QStackViewController.swift */; };
 		40CF45E91F4DE6AB004D00D8 /* QStaticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45AC1F4DE6AB004D00D8 /* QStaticViewController.swift */; };
-		40CF45EA1F4DE6AB004D00D8 /* QTabGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45AD1F4DE6AB004D00D8 /* QTabGroupViewController.swift */; };
 		40CF45EB1F4DE6AB004D00D8 /* QTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45AE1F4DE6AB004D00D8 /* QTableViewController.swift */; };
 		40CF45EC1F4DE6AB004D00D8 /* IQView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45B01F4DE6AB004D00D8 /* IQView.swift */; };
 		40CF45ED1F4DE6AB004D00D8 /* QPinCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45B11F4DE6AB004D00D8 /* QPinCodeView.swift */; };
 		40CF45EE1F4DE6AB004D00D8 /* QRoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45B21F4DE6AB004D00D8 /* QRoundView.swift */; };
 		40CF45EF1F4DE6AB004D00D8 /* QView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45B31F4DE6AB004D00D8 /* QView.swift */; };
 		40CF45F01F4DE6AB004D00D8 /* QWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45B41F4DE6AB004D00D8 /* QWindow.swift */; };
+		40E10B5A1F617ECB008E5A7F /* QStackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E10B571F617ECB008E5A7F /* QStackViewController.swift */; };
+		40E10B5B1F617ECB008E5A7F /* QTabGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E10B591F617ECB008E5A7F /* QTabGroupViewController.swift */; };
 		40E7382C1F556AF600B192C6 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E7382B1F556AF600B192C6 /* UIDevice.swift */; };
 		40E7383A1F55847F00B192C6 /* IQViewControllerRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E738391F55847F00B192C6 /* IQViewControllerRouter.swift */; };
 		40E7384C1F5606B700B192C6 /* QLabelTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E7384A1F5606B700B192C6 /* QLabelTableCell.swift */; };
@@ -223,7 +223,7 @@
 		402F1FB91F4F380B007625CA /* QApiProvider+Internal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QApiProvider+Internal.swift"; sourceTree = "<group>"; };
 		402F1FBB1F4F446F007625CA /* QApiImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QApiImpl.h; sourceTree = "<group>"; };
 		402F1FBC1F4F446F007625CA /* QApiImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QApiImpl.m; sourceTree = "<group>"; };
-		4039BCB41F516F1B00E38090 /* QButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QButton.swift; sourceTree = "<group>"; };
+		4039BCB41F516F1B00E38090 /* QButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = QButton.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4039BCB61F516F5900E38090 /* QControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QControl.swift; sourceTree = "<group>"; };
 		4039BCB91F51B20900E38090 /* QImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QImageView.swift; sourceTree = "<group>"; };
 		4039BCBF1F522A6300E38090 /* QuicklyDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuicklyDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -311,15 +311,15 @@
 		40CF45A81F4DE6AB004D00D8 /* IQContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQContentViewController.swift; sourceTree = "<group>"; };
 		40CF45A91F4DE6AB004D00D8 /* IQViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQViewController.swift; sourceTree = "<group>"; };
 		40CF45AA1F4DE6AB004D00D8 /* QCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCollectionViewController.swift; sourceTree = "<group>"; };
-		40CF45AB1F4DE6AB004D00D8 /* QStackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QStackViewController.swift; sourceTree = "<group>"; };
 		40CF45AC1F4DE6AB004D00D8 /* QStaticViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QStaticViewController.swift; sourceTree = "<group>"; };
-		40CF45AD1F4DE6AB004D00D8 /* QTabGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTabGroupViewController.swift; sourceTree = "<group>"; };
 		40CF45AE1F4DE6AB004D00D8 /* QTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTableViewController.swift; sourceTree = "<group>"; };
 		40CF45B01F4DE6AB004D00D8 /* IQView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQView.swift; sourceTree = "<group>"; };
 		40CF45B11F4DE6AB004D00D8 /* QPinCodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QPinCodeView.swift; sourceTree = "<group>"; };
 		40CF45B21F4DE6AB004D00D8 /* QRoundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRoundView.swift; sourceTree = "<group>"; };
 		40CF45B31F4DE6AB004D00D8 /* QView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QView.swift; sourceTree = "<group>"; };
 		40CF45B41F4DE6AB004D00D8 /* QWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QWindow.swift; sourceTree = "<group>"; };
+		40E10B571F617ECB008E5A7F /* QStackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QStackViewController.swift; sourceTree = "<group>"; };
+		40E10B591F617ECB008E5A7F /* QTabGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTabGroupViewController.swift; sourceTree = "<group>"; };
 		40E7382B1F556AF600B192C6 /* UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		40E738391F55847F00B192C6 /* IQViewControllerRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQViewControllerRouter.swift; sourceTree = "<group>"; };
 		40E7384A1F5606B700B192C6 /* QLabelTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QLabelTableCell.swift; sourceTree = "<group>"; };
@@ -728,12 +728,12 @@
 		40CF45A71F4DE6AB004D00D8 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				40E10B561F617ECB008E5A7F /* Stack */,
+				40E10B581F617ECB008E5A7F /* TabGroup */,
 				40CF45A91F4DE6AB004D00D8 /* IQViewController.swift */,
 				40CF45A81F4DE6AB004D00D8 /* IQContentViewController.swift */,
 				40CF45AA1F4DE6AB004D00D8 /* QCollectionViewController.swift */,
-				40CF45AB1F4DE6AB004D00D8 /* QStackViewController.swift */,
 				40CF45AC1F4DE6AB004D00D8 /* QStaticViewController.swift */,
-				40CF45AD1F4DE6AB004D00D8 /* QTabGroupViewController.swift */,
 				40CF45AE1F4DE6AB004D00D8 /* QTableViewController.swift */,
 			);
 			path = ViewControllers;
@@ -751,6 +751,22 @@
 				40CF45B11F4DE6AB004D00D8 /* QPinCodeView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		40E10B561F617ECB008E5A7F /* Stack */ = {
+			isa = PBXGroup;
+			children = (
+				40E10B571F617ECB008E5A7F /* QStackViewController.swift */,
+			);
+			path = Stack;
+			sourceTree = "<group>";
+		};
+		40E10B581F617ECB008E5A7F /* TabGroup */ = {
+			isa = PBXGroup;
+			children = (
+				40E10B591F617ECB008E5A7F /* QTabGroupViewController.swift */,
+			);
+			path = TabGroup;
 			sourceTree = "<group>";
 		};
 		40FBE6781F5311E000F5194B /* Layout */ = {
@@ -971,6 +987,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				40CF45E61F4DE6AB004D00D8 /* IQViewController.swift in Sources */,
+				40E10B5B1F617ECB008E5A7F /* QTabGroupViewController.swift in Sources */,
 				40CF45EB1F4DE6AB004D00D8 /* QTableViewController.swift in Sources */,
 				40B8A1921F4F49AC00204E5A /* QApiImpl.m in Sources */,
 				40CF45CC1F4DE6AB004D00D8 /* IQContainer.swift in Sources */,
@@ -989,7 +1006,6 @@
 				4006EDB51F61363E0050AD91 /* QImageLabelCollectionCell.swift in Sources */,
 				40CF45EF1F4DE6AB004D00D8 /* QView.swift in Sources */,
 				40CF45CA1F4DE6AB004D00D8 /* QLabel.swift in Sources */,
-				40CF45E81F4DE6AB004D00D8 /* QStackViewController.swift in Sources */,
 				40CF45DD1F4DE6AB004D00D8 /* IQTableSection.swift in Sources */,
 				40B8A19B1F4F80FF00204E5A /* QModel.swift in Sources */,
 				40E738561F5606C500B192C6 /* QSeparatorTableCell.swift in Sources */,
@@ -999,7 +1015,6 @@
 				4006EDB21F61363E0050AD91 /* QBackgroundColorCollectionItem.swift in Sources */,
 				40B8A1A61F5012EB00204E5A /* IQListDataSource.swift in Sources */,
 				40CF45C21F4DE6AB004D00D8 /* QCollectionView.swift in Sources */,
-				40CF45EA1F4DE6AB004D00D8 /* QTabGroupViewController.swift in Sources */,
 				40E738581F5606C500B192C6 /* QSpaceTableCell.swift in Sources */,
 				40CF45C61F4DE6AB004D00D8 /* QJson.swift in Sources */,
 				40B8A1A81F50181900204E5A /* IQOneDataSource.swift in Sources */,
@@ -1039,6 +1054,7 @@
 				40CF45BF1F4DE6AB004D00D8 /* QCollectionDecor.swift in Sources */,
 				40CF45BB1F4DE6AB004D00D8 /* IQCollectionSection.swift in Sources */,
 				40CF45C91F4DE6AB004D00D8 /* QKeychain.swift in Sources */,
+				40E10B5A1F617ECB008E5A7F /* QStackViewController.swift in Sources */,
 				40CF45CE1F4DE6AB004D00D8 /* IQRouter.swift in Sources */,
 				400DDF6D1F56194300D11991 /* QImageTableRow.swift in Sources */,
 				40FBE6A51F543EFD00F5194B /* QText.swift in Sources */,

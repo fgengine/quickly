@@ -11,6 +11,7 @@ open class QImageLabelCollectionItem: QBackgroundColorCollectionItem {
 
     public var imageSource: QImageSource?
     public var imageRoundCorners: Bool = false
+    public var imageCentering: Bool = true
 
     public var text: IQText?
     public var textContentAlignment: QLabel.ContentAlignment = .left

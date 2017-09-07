@@ -98,9 +98,9 @@ open class QButton: QControl {
             self.setNeedsUpdateConstraints()
         }
     }
-    internal var currentConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.removeConstraints(self.currentConstraints) }
-        didSet { self.addConstraints(self.currentConstraints) }
+    internal var selfConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.removeConstraints(self.selfConstraints) }
+        didSet { self.addConstraints(self.selfConstraints) }
     }
     internal var contentConstraints: [NSLayoutConstraint] = [] {
         willSet { self.contentView.removeConstraints(self.contentConstraints) }
@@ -265,46 +265,46 @@ open class QButton: QControl {
     }
 
     open override func updateConstraints() {
-        var currentConstraints: [NSLayoutConstraint] = []
+        var selfConstraints: [NSLayoutConstraint] = []
         switch self.contentHorizontalAlignment {
         case .fill:
-            currentConstraints.append(self.contentView.leadingLayout == self.leadingLayout + self.contentInsets.left)
-            currentConstraints.append(self.contentView.trailingLayout == self.trailingLayout - self.contentInsets.right)
+            selfConstraints.append(self.contentView.leadingLayout == self.leadingLayout + self.contentInsets.left)
+            selfConstraints.append(self.contentView.trailingLayout == self.trailingLayout - self.contentInsets.right)
             break
         case .left:
-            currentConstraints.append(self.contentView.leadingLayout == self.leadingLayout + self.contentInsets.left)
-            currentConstraints.append(self.contentView.trailingLayout <= self.trailingLayout - self.contentInsets.right)
+            selfConstraints.append(self.contentView.leadingLayout == self.leadingLayout + self.contentInsets.left)
+            selfConstraints.append(self.contentView.trailingLayout <= self.trailingLayout - self.contentInsets.right)
             break
         case .center:
-            currentConstraints.append(self.contentView.centerXLayout == self.centerXLayout)
-            currentConstraints.append(self.contentView.leadingLayout >= self.leadingLayout + self.contentInsets.left)
-            currentConstraints.append(self.contentView.trailingLayout <= self.trailingLayout - self.contentInsets.right)
+            selfConstraints.append(self.contentView.centerXLayout == self.centerXLayout)
+            selfConstraints.append(self.contentView.leadingLayout >= self.leadingLayout + self.contentInsets.left)
+            selfConstraints.append(self.contentView.trailingLayout <= self.trailingLayout - self.contentInsets.right)
             break
         case .right:
-            currentConstraints.append(self.contentView.leadingLayout >= self.leadingLayout + self.contentInsets.left)
-            currentConstraints.append(self.contentView.trailingLayout == self.trailingLayout - self.contentInsets.right)
+            selfConstraints.append(self.contentView.leadingLayout >= self.leadingLayout + self.contentInsets.left)
+            selfConstraints.append(self.contentView.trailingLayout == self.trailingLayout - self.contentInsets.right)
             break
         }
         switch self.contentVerticalAlignment {
         case .fill:
-            currentConstraints.append(self.contentView.topLayout == self.topLayout + self.contentInsets.top)
-            currentConstraints.append(self.contentView.bottomLayout == self.bottomLayout - self.contentInsets.bottom)
+            selfConstraints.append(self.contentView.topLayout == self.topLayout + self.contentInsets.top)
+            selfConstraints.append(self.contentView.bottomLayout == self.bottomLayout - self.contentInsets.bottom)
             break
         case .top:
-            currentConstraints.append(self.contentView.topLayout == self.topLayout + self.contentInsets.top)
-            currentConstraints.append(self.contentView.bottomLayout <= self.bottomLayout - self.contentInsets.bottom)
+            selfConstraints.append(self.contentView.topLayout == self.topLayout + self.contentInsets.top)
+            selfConstraints.append(self.contentView.bottomLayout <= self.bottomLayout - self.contentInsets.bottom)
             break
         case .center:
-            currentConstraints.append(self.contentView.centerYLayout == self.centerYLayout)
-            currentConstraints.append(self.contentView.topLayout >= self.topLayout + self.contentInsets.top)
-            currentConstraints.append(self.contentView.bottomLayout <= self.bottomLayout - self.contentInsets.bottom)
+            selfConstraints.append(self.contentView.centerYLayout == self.centerYLayout)
+            selfConstraints.append(self.contentView.topLayout >= self.topLayout + self.contentInsets.top)
+            selfConstraints.append(self.contentView.bottomLayout <= self.bottomLayout - self.contentInsets.bottom)
             break
         case .bottom:
-            currentConstraints.append(self.contentView.topLayout >= self.topLayout + self.contentInsets.top)
-            currentConstraints.append(self.contentView.bottomLayout == self.bottomLayout - self.contentInsets.bottom)
+            selfConstraints.append(self.contentView.topLayout >= self.topLayout + self.contentInsets.top)
+            selfConstraints.append(self.contentView.bottomLayout == self.bottomLayout - self.contentInsets.bottom)
             break
         }
-        self.currentConstraints = currentConstraints
+        self.selfConstraints = selfConstraints
 
         var contentConstraints: [NSLayoutConstraint] = []
         if self.isSpinnerAnimating() == true {
