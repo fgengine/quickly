@@ -12,7 +12,7 @@ open class QImageCollectionCell< ItemType: QImageCollectionItem >: QBackgroundCo
         didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
-    open override class func size(item: ItemType, size: CGSize) -> CGSize {
+    open override class func size(item: ItemType, layout: UICollectionViewLayout, size: CGSize) -> CGSize {
         guard let source: QImageSource = item.source else {
             return CGSize.zero
         }

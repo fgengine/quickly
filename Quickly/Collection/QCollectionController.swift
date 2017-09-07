@@ -366,7 +366,7 @@ extension QCollectionController: UICollectionViewDelegateFlowLayout {
         ) -> CGSize {
         let item: IQCollectionItem = self.item(indexPath: indexPath)
         if let cellClass: IQCollectionCell.Type = self.cellClass(item: item) {
-            return cellClass.size(any: item, size: collectionView.frame.size)
+            return cellClass.size(any: item, layout: collectionViewLayout, size: collectionView.frame.size)
         }
         return CGSize.zero
     }
@@ -405,7 +405,7 @@ extension QCollectionController: UICollectionViewDelegateFlowLayout {
     ) -> CGSize {
         if let data: IQCollectionData = self.header(index: section) {
             if let decorClass: IQCollectionDecor.Type = self.decorClass(data: data) {
-                return decorClass.size(any: data, size: collectionView.frame.size)
+                return decorClass.size(any: data, layout: collectionViewLayout, size: collectionView.frame.size)
             }
         }
         return CGSize.zero
@@ -418,7 +418,7 @@ extension QCollectionController: UICollectionViewDelegateFlowLayout {
         ) -> CGSize {
         if let data: IQCollectionData = self.footer(index: section) {
             if let decorClass: IQCollectionDecor.Type = self.decorClass(data: data) {
-                return decorClass.size(any: data, size: collectionView.frame.size)
+                return decorClass.size(any: data, layout: collectionViewLayout, size: collectionView.frame.size)
             }
         }
         return CGSize.zero

@@ -17,7 +17,7 @@ open class QImageLabelCollectionCell< ItemType: QImageLabelCollectionItem >: QBa
         didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
-    open override class func size(item: ItemType, size: CGSize) -> CGSize {
+    open override class func size(item: ItemType, layout: UICollectionViewLayout, size: CGSize) -> CGSize {
         guard let imageSource: QImageSource = item.imageSource, let text: IQText = item.text else {
             return CGSize.zero
         }

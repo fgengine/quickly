@@ -12,7 +12,7 @@ open class QSeparatorCollectionCell< ItemType: QSeparatorCollectionItem >: QBack
         didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
-    open override class func size(item: ItemType, size: CGSize) -> CGSize {
+    open override class func size(item: ItemType, layout: UICollectionViewLayout, size: CGSize) -> CGSize {
         let separatorSize: CGFloat = (1 / UIScreen.main.scale)
         switch item.axis {
         case .horizontal: return CGSize(

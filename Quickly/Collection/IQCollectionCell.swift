@@ -44,7 +44,7 @@ public protocol IQTypedCollectionCell: IQCollectionCell {
 
     var item: ItemType? { get }
 
-    static func size(item: ItemType, size: CGSize) -> CGSize
+    static func size(item: ItemType, layout: UICollectionViewLayout, size: CGSize) -> CGSize
 
     func set(item: ItemType)
     func update(item: ItemType)
@@ -57,8 +57,8 @@ extension IQTypedCollectionCell {
         return any is ItemType
     }
 
-    public static func size(any: Any, size: CGSize) -> CGSize {
-        return self.size(item: any as! ItemType, size: size)
+    public static func size(any: Any, layout: UICollectionViewLayout, size: CGSize) -> CGSize {
+        return self.size(item: any as! ItemType, layout: layout, size: size)
     }
 
     public func set(any: Any) {

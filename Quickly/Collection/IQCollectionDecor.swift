@@ -42,7 +42,7 @@ public protocol IQTypedCollectionDecor: IQCollectionDecor {
 
     associatedtype DataType: IQCollectionData
 
-    static func size(data: DataType, size: CGSize) -> CGSize
+    static func size(data: DataType, layout: UICollectionViewLayout, size: CGSize) -> CGSize
 
     func set(data: DataType)
     func update(data: DataType)
@@ -55,8 +55,8 @@ extension IQTypedCollectionDecor {
         return any is DataType
     }
 
-    public static func size(any: Any, size: CGSize) -> CGSize {
-        return self.size(data: any as! DataType, size: size)
+    public static func size(any: Any, layout: UICollectionViewLayout, size: CGSize) -> CGSize {
+        return self.size(data: any as! DataType, layout: layout, size: size)
     }
 
     public func set(any: Any) {
