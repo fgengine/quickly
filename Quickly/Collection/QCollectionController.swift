@@ -45,7 +45,7 @@ open class QCollectionController: NSObject, IQCollectionController, CollectionCe
         })
     }
 
-    public func configure() {
+    open func configure() {
         if let collectionView: UICollectionView = self.collectionView {
             for type: IQCollectionDecor.Type in self.decors {
                 type.register(collectionView: collectionView, kind: UICollectionElementKindSectionHeader)
@@ -363,10 +363,11 @@ extension QCollectionController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
-        ) -> CGSize {
+    ) -> CGSize {
+        let section: IQCollectionSection = self.section(index: indexPath.section)
         let item: IQCollectionItem = self.item(indexPath: indexPath)
         if let cellClass: IQCollectionCell.Type = self.cellClass(item: item) {
-            return cellClass.size(any: item, layout: collectionViewLayout, size: collectionView.frame.size)
+            return cellClass.size(any: item, layout: collectionViewLayout, section: section, size: collectionView.frame.size)
         }
         return CGSize.zero
     }
@@ -401,11 +402,12 @@ extension QCollectionController: UICollectionViewDelegateFlowLayout {
     public func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
-        referenceSizeForHeaderInSection section: Int
-    ) -> CGSize {
-        if let data: IQCollectionData = self.header(index: section) {
+        referenceSizeForHeaderInSection sectionIndex: Int
+        ) -> CGSize {
+        let section: IQCollectionSection = self.section(index: sectionIndex)
+        if let data: IQCollectionData = section.header {
             if let decorClass: IQCollectionDecor.Type = self.decorClass(data: data) {
-                return decorClass.size(any: data, layout: collectionViewLayout, size: collectionView.frame.size)
+                return decorClass.size(any: data, layout: collectionViewLayout, section: section, size: collectionView.frame.size)
             }
         }
         return CGSize.zero
@@ -414,11 +416,12 @@ extension QCollectionController: UICollectionViewDelegateFlowLayout {
     public func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
-        referenceSizeForFooterInSection section: Int
-        ) -> CGSize {
-        if let data: IQCollectionData = self.footer(index: section) {
+        referenceSizeForFooterInSection sectionIndex: Int
+    ) -> CGSize {
+        let section: IQCollectionSection = self.section(index: sectionIndex)
+        if let data: IQCollectionData = section.footer {
             if let decorClass: IQCollectionDecor.Type = self.decorClass(data: data) {
-                return decorClass.size(any: data, layout: collectionViewLayout, size: collectionView.frame.size)
+                return decorClass.size(any: data, layout: collectionViewLayout, section: section, size: collectionView.frame.size)
             }
         }
         return CGSize.zero

@@ -46,7 +46,7 @@ open class QTableController: NSObject, IQTableController, IQTableCellDelegate, I
         })
     }
 
-    public func configure() {
+    open func configure() {
         if let tableView: UITableView = self.tableView {
             for type: IQTableDecor.Type in self.decors {
                 type.register(tableView: tableView)

@@ -69,7 +69,7 @@ public struct QLayoutItem< T > {
             toItem: nil,
             attribute: .notAnAttribute,
             multiplier: 1.0,
-            constant: self.constant
+            constant: self.constant + constant
         )
     }
 

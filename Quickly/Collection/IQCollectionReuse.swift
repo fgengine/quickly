@@ -11,7 +11,7 @@ public protocol IQCollectionReuse: class {
     static func currentNibName() -> String
     static func currentNibBundle() -> Bundle
 
-    static func size(any: Any, layout: UICollectionViewLayout, size: CGSize) -> CGSize
+    static func size(any: Any, layout: UICollectionViewLayout, section: IQCollectionSection, size: CGSize) -> CGSize
 
     static func using(any: Any) -> Bool
 

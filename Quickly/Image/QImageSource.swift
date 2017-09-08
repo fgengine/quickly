@@ -18,20 +18,27 @@ public enum QImageSourceScale: Int {
     }
 
     public func rect(bounds: CGRect, size: CGSize) -> CGRect {
-        switch self {
-        case .stretch: return CGRect(x: bounds.origin.x, y: bounds.origin.y, width: size.width, height: size.height)
-        case .aspectFit: return size.aspectFit(bounds: bounds)
-        case .aspectFill: return size.aspectFill(bounds: bounds)
+        if size.width > CGFloat.leastNonzeroMagnitude && size.height > CGFloat.leastNonzeroMagnitude {
+            switch self {
+            case .stretch: return CGRect(x: bounds.origin.x, y: bounds.origin.y, width: size.width, height: size.height)
+            case .aspectFit: return size.aspectFit(bounds: bounds)
+            case .aspectFill: return size.aspectFill(bounds: bounds)
+            }
         }
+        return bounds
     }
 
     public func size(available: CGSize, size: CGSize) -> CGSize {
-        switch self {
-        case .stretch: return available
-        case .aspectFit: return size.aspectFit(bounds: CGRect(origin: CGPoint.zero, size: available)).size
-        case .aspectFill: return available
+        if size.width > CGFloat.leastNonzeroMagnitude && size.height > CGFloat.leastNonzeroMagnitude {
+            switch self {
+            case .stretch: return available
+            case .aspectFit: return size.aspectFit(bounds: CGRect(origin: CGPoint.zero, size: available)).size
+            case .aspectFill: return available
+            }
         }
+        return size
     }
+
 }
 
 public class QImageSource {

@@ -30,7 +30,7 @@ open class QCollectionCell<
     public weak var collectionDelegate: CollectionCellDelegate? = nil
     public var item: Type? = nil
 
-    open class func size(item: Type, layout: UICollectionViewLayout, size: CGSize) -> CGSize {
+    open class func size(item: Type, layout: UICollectionViewLayout, section: IQCollectionSection, size: CGSize) -> CGSize {
         return CGSize.zero
     }
 
