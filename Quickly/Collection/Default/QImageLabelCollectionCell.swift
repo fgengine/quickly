@@ -75,8 +75,8 @@ open class QImageLabelCollectionCell< ItemType: QImageLabelCollectionItem >: QBa
         if item.imageCentering == true {
             selfConstraints.append(contentsOf: [
                 self.pictureView.leadingLayout >= self.contentView.leadingLayout + item.edgeInsets.left,
-                self.pictureView.trailingLayout <= self.contentView.leadingLayout - item.edgeInsets.right,
-                self.pictureView.centerXLayout <= self.contentView.centerXLayout,
+                self.pictureView.trailingLayout <= self.contentView.trailingLayout - item.edgeInsets.right,
+                self.pictureView.centerXLayout == self.contentView.centerXLayout
             ])
             pictureConstraints.append(contentsOf: [
                 self.pictureView.widthLayout == item.imageSize.width,
@@ -85,7 +85,7 @@ open class QImageLabelCollectionCell< ItemType: QImageLabelCollectionItem >: QBa
         } else {
             selfConstraints.append(contentsOf: [
                 self.pictureView.leadingLayout == self.contentView.leadingLayout + item.edgeInsets.left,
-                self.pictureView.trailingLayout == self.contentView.leadingLayout - item.edgeInsets.right,
+                self.pictureView.trailingLayout == self.contentView.trailingLayout - item.edgeInsets.right
             ])
         }
         self.selfConstraints = selfConstraints
