@@ -27,9 +27,12 @@ open class QImageLabelCollectionCell< ItemType: QImageLabelCollectionItem >: QBa
             return CGSize.zero
         }
         let availableWidth: CGFloat = size.width - (item.edgeInsets.left + item.edgeInsets.right)
-        let imageSize: CGSize = imageSource.size(available: CGSize(
-            width: availableWidth, height: availableWidth
-        ))
+        var imageSize: CGSize = item.imageSize
+        if item.imageCentering == false {
+            imageSize = imageSource.size(available: CGSize(
+                width: availableWidth, height: availableWidth
+            ))
+        }
         let textSize: CGSize = text.size(width: availableWidth)
         return CGSize(
             width: item.edgeInsets.left + max(imageSize.width, textSize.width) + item.edgeInsets.right,
@@ -76,7 +79,8 @@ open class QImageLabelCollectionCell< ItemType: QImageLabelCollectionItem >: QBa
                 self.pictureView.centerXLayout <= self.contentView.centerXLayout,
             ])
             pictureConstraints.append(contentsOf: [
-                self.pictureView.widthLayout == self.pictureView.heightLayout * (self.pictureView.frame.width / self.pictureView.frame.height)
+                self.pictureView.widthLayout == item.imageSize.width,
+                self.pictureView.heightLayout == item.imageSize.height
             ])
         } else {
             selfConstraints.append(contentsOf: [
