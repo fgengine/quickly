@@ -11,6 +11,19 @@ open class QTextField : QView {
         set(value) { self.textField.delegate = value }
         get { return self.textField.delegate }
     }
+    public var validator: IQInputValidator? {
+        willSet { self.textField.delegate = nil }
+        didSet {
+            self.textField.delegate = self.proxy
+            if let validator: IQInputValidator = self.validator {
+                self.isValid = validator.validate(self.unformatText)
+            } else {
+                self.isValid = true
+            }
+        }
+    }
+    public private(set) var isValid: Bool = true
+    public var formatter: IQStringFormatter?
 
     public var textInsets: UIEdgeInsets {
         set(value) { self.textField.insets = value }
@@ -38,9 +51,33 @@ open class QTextField : QView {
             self.textField.defaultTextAttributes = attributes
         }
     }
-    public var text: String? {
+    public var text: String {
         set(value) { self.textField.text = value }
-        get { return self.textField.text }
+        get {
+            if let text: String = self.textField.text {
+                return text
+            }
+            return ""
+        }
+    }
+    public var unformatText: String {
+        set(value) {
+            if let formatter: IQStringFormatter = self.formatter {
+                self.textField.text = formatter.format(value)
+            } else {
+                self.textField.text = value
+            }
+        }
+        get {
+            if let text: String = self.textField.text {
+                if let formatter: IQStringFormatter = self.formatter {
+                    return formatter.unformat(text)
+                } else {
+                    return text
+                }
+            }
+            return ""
+        }
     }
     public var placeholder: IQText? {
         set(value) {
@@ -72,6 +109,7 @@ open class QTextField : QView {
         get { return self.textField.isEditing }
     }
 
+    public private(set) var proxy: ProxyDelegate!
     public private(set) var textField: Field!
 
     open override var intrinsicContentSize: CGSize {
@@ -95,8 +133,11 @@ open class QTextField : QView {
 
         self.backgroundColor = UIColor.clear
 
+        self.proxy = ProxyDelegate(field: self)
+
         self.textField = Field(frame: self.bounds)
         self.textField.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
+        self.textField.delegate = self.proxy
         self.addSubview(self.textField)
     }
 
@@ -106,6 +147,100 @@ open class QTextField : QView {
 
     open override func sizeToFit() {
         return self.textField.sizeToFit()
+    }
+
+    public class ProxyDelegate: NSObject, UITextFieldDelegate {
+
+        public weak var field: QTextField?
+        public var delegate: UITextFieldDelegate? = nil {
+            didSet {
+                if let delegate: UITextFieldDelegate = self.delegate {
+                    self.canDidEndEditing = delegate.responds(to: #selector(UITextFieldDelegate.textFieldDidEndEditing(_:)))
+                    self.canShouldChangeCharacters = delegate.responds(to: #selector(UITextFieldDelegate.textField(_:shouldChangeCharactersIn:replacementString:)))
+                } else {
+                    self.canDidEndEditing = false
+                    self.canShouldChangeCharacters = false
+                }
+            }
+        }
+        private var canDidEndEditing: Bool = false
+        private var canShouldChangeCharacters: Bool = false
+
+        public init(field: QTextField?) {
+            self.field = field
+            super.init()
+        }
+
+        public override func responds(to selector: Selector!) -> Bool {
+            if super.responds(to: selector) {
+                return true
+            }
+            if let delegate: UITextFieldDelegate = self.delegate {
+                return delegate.responds(to: selector)
+            }
+            return false
+        }
+
+        public override func forwardingTarget(for selector: Selector!) -> Any? {
+            if super.responds(to: selector) {
+                return self
+            }
+            if let delegate: UITextFieldDelegate = self.delegate {
+                if delegate.responds(to: selector) {
+                    return delegate
+                }
+            }
+            return nil
+        }
+
+        public func textFieldDidEndEditing(_ textField: UITextField) {
+            if self.canDidEndEditing == true {
+                self.delegate!.textFieldDidEndEditing!(textField)
+            }
+            if let field: QTextField = self.field {
+                if let validator: IQInputValidator = field.validator {
+                    field.isValid = validator.validate(field.unformatText)
+                } else {
+                    field.isValid = true
+                }
+            }
+        }
+
+        public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+            if self.canShouldChangeCharacters == true {
+                if self.delegate!.textField!(textField, shouldChangeCharactersIn:range, replacementString: string) == false {
+                    return false
+                }
+            }
+            guard let field: QTextField = self.field else {
+                return true
+            }
+            var text: String = self.composed(textField.text, replacement: string, range: range)
+            if let formatter: IQStringFormatter = field.formatter {
+                text = formatter.unformat(text)
+            }
+            if let validator: IQInputValidator = field.validator {
+                field.isValid = validator.validate(text)
+            } else {
+                field.isValid = true
+            }
+            if field.isValid == true {
+                if let formatter: IQStringFormatter = field.formatter {
+                    textField.text = formatter.format(text)
+                } else {
+                    textField.text = text
+                }
+            }
+            return false
+        }
+
+        private func composed(_ string: String?, replacement: String, range: NSRange) -> String {
+            guard let nsString: NSString = string as NSString? else {
+                return ""
+            }
+            return nsString.replacingCharacters(in: range, with: replacement)
+        }
+
     }
 
     public class Field: UITextField {
@@ -119,7 +254,7 @@ open class QTextField : QView {
         open override func editingRect(forBounds bounds: CGRect) -> CGRect {
             return UIEdgeInsetsInsetRect(bounds, self.insets)
         }
-
+        
     }
     
 }
