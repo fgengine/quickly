@@ -11,6 +11,7 @@ open class QTextField : QView {
         set(value) { self.textField.delegate = value }
         get { return self.textField.delegate }
     }
+    public var requireValidator: Bool = true
     public var validator: IQInputValidator? {
         willSet { self.textField.delegate = nil }
         didSet {
@@ -224,7 +225,7 @@ open class QTextField : QView {
             } else {
                 field.isValid = true
             }
-            if field.isValid == true {
+            if field.isValid == true || field.requireValidator == false {
                 if let formatter: IQStringFormatter = field.formatter {
                     textField.text = formatter.format(text)
                 } else {

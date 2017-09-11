@@ -34,8 +34,9 @@ class TextFieldViewController: QStaticViewController, IQRouted {
         self.textField.textStyle = textStyle
         self.textField.typingStyle = typingStyle
         self.textField.placeholder = QText("TextField")
+        self.textField.requireValidator = false
         self.textField.validator = QInputValidator(
-            validator: try! QRegularExpressionStringValidator(pattern: "[0-9]*")
+            validator: try! QRegularExpressionStringValidator(pattern: "^\\d{10}$")
         )
         self.textField.formatter = QCardNumberStringFormatter()
     }
