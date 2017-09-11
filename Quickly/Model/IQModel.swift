@@ -6,7 +6,7 @@ import Foundation
 
 public protocol IQModel {
 
-    static func from(json: QJson) throws -> Self
+    static func from(json: QJson) throws -> IQModel?
 
     init(json: QJson) throws
 

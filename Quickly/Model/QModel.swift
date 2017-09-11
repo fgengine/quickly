@@ -6,7 +6,7 @@ import Foundation
 
 open class QModel: IQModel {
 
-    open class func from(json: QJson) throws -> Self {
+    open class func from(json: QJson) throws -> IQModel? {
         return try self.init(json: json)
     }
 
@@ -34,7 +34,10 @@ extension QModel: IJsonValue {
         guard let value: Any = value else {
             throw NSError(domain: QJsonErrorDomain, code: QJsonErrorCode.convert.rawValue, userInfo: nil)
         }
-        return try self.from(json: QJson(root: value))
+        guard let model: IQModel = try self.from(json: QJson(root: value)) else {
+            throw NSError(domain: QJsonErrorDomain, code: QJsonErrorCode.convert.rawValue, userInfo: nil)
+        }
+        return model
     }
 
     public func toJsonValue() -> Any? {
