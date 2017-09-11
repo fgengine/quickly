@@ -12,6 +12,13 @@ open class QCollectionController: NSObject, IQCollectionController, CollectionCe
         }
     }
     public var sections: [IQCollectionSection] = []
+    public var items: [IQCollectionItem] {
+        get {
+            return self.sections.flatMap({ (section: IQCollectionSection) -> [IQCollectionItem] in
+                return section.items
+            })
+        }
+    }
     public var canMove: Bool = true
     private var decors: [IQCollectionDecor.Type]
     private var cells: [IQCollectionCell.Type]

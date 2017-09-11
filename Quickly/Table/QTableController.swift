@@ -11,7 +11,14 @@ open class QTableController: NSObject, IQTableController, IQTableCellDelegate, I
             self.configure()
         }
     }
-    public var sections: [ITableSection] = []
+    public var sections: [IQTableSection] = []
+    public var rows: [IQTableRow] {
+        get {
+            return self.sections.flatMap({ (section: IQTableSection) -> [IQTableRow] in
+                return section.rows
+            })
+        }
+    }
     public var canEdit: Bool = true
     public var canMove: Bool = true
     private var decors: [IQTableDecor.Type]
@@ -58,12 +65,12 @@ open class QTableController: NSObject, IQTableController, IQTableCellDelegate, I
         self.reload()
     }
 
-    public func section(index: Int) -> ITableSection {
+    public func section(index: Int) -> IQTableSection {
         return self.sections[index]
     }
 
-    public func index(section: ITableSection) -> Int? {
-        return self.sections.index { (existSection: ITableSection) -> Bool in
+    public func index(section: IQTableSection) -> Int? {
+        return self.sections.index { (existSection: IQTableSection) -> Bool in
             return existSection === section
         }
     }
@@ -73,7 +80,7 @@ open class QTableController: NSObject, IQTableController, IQTableCellDelegate, I
     }
 
     public func index(header: IQTableData) -> Int? {
-        return self.sections.index(where: { (existSection: ITableSection) -> Bool in
+        return self.sections.index(where: { (existSection: IQTableSection) -> Bool in
             return existSection.header === header
         })
     }
@@ -83,7 +90,7 @@ open class QTableController: NSObject, IQTableController, IQTableCellDelegate, I
     }
 
     public func index(footer: IQTableData) -> Int? {
-        return self.sections.index(where: { (existSection: ITableSection) -> Bool in
+        return self.sections.index(where: { (existSection: IQTableSection) -> Bool in
             return existSection.footer === footer
         })
     }
@@ -93,7 +100,7 @@ open class QTableController: NSObject, IQTableController, IQTableCellDelegate, I
     }
 
     public func row(predicate: (IQTableRow) -> Bool) -> IQTableRow? {
-        for section: ITableSection in self.sections {
+        for section: IQTableSection in self.sections {
             for row: IQTableRow in section.rows {
                 if predicate(row) {
                     return row
@@ -105,7 +112,7 @@ open class QTableController: NSObject, IQTableController, IQTableCellDelegate, I
 
     public func indexPath(row: IQTableRow) -> IndexPath? {
         var sectionIndex: Int = 0
-        for existSection: ITableSection in self.sections {
+        for existSection: IQTableSection in self.sections {
             var cellIndex: Int = 0
             for existRow: IQTableRow in existSection.rows {
                 if existRow === row {
@@ -120,7 +127,7 @@ open class QTableController: NSObject, IQTableController, IQTableCellDelegate, I
 
     public func indexPath(predicate: (IQTableRow) -> Bool) -> IndexPath? {
         var sectionIndex: Int = 0
-        for existSection: ITableSection in self.sections {
+        for existSection: IQTableSection in self.sections {
             var cellIndex: Int = 0
             for existRow: IQTableRow in existSection.rows {
                 if predicate(existRow) {
@@ -260,7 +267,7 @@ extension QTableController: UITableViewDataSource {
         _ tableView: UITableView,
         numberOfRowsInSection index: Int
     ) -> Int {
-        let section: ITableSection = self.section(index: index)
+        let section: IQTableSection = self.section(index: index)
         if section.hidden == true {
             return 0
         }
@@ -279,7 +286,7 @@ extension QTableController: UITableViewDataSource {
         _ tableView: UITableView,
         canEditRowAt indexPath: IndexPath
     ) -> Bool {
-        let section: ITableSection = self.section(index: indexPath.section)
+        let section: IQTableSection = self.section(index: indexPath.section)
         if section.canEdit == false {
             return false;
         }
@@ -291,7 +298,7 @@ extension QTableController: UITableViewDataSource {
         _ tableView: UITableView,
         canMoveRowAt indexPath: IndexPath
     ) -> Bool {
-        let section: ITableSection = self.section(index: indexPath.section)
+        let section: IQTableSection = self.section(index: indexPath.section)
         if section.canMove == false {
             return false;
         }

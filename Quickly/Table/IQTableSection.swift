@@ -4,7 +4,7 @@
 
 import UIKit
 
-public protocol ITableSection: class {
+public protocol IQTableSection: class {
 
     var canEdit: Bool { get }
     var canMove: Bool { get }

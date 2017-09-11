@@ -8,6 +8,7 @@ public protocol IQCollectionController: UICollectionViewDataSource, UICollection
 
     weak var collectionView: UICollectionView? { set get }
     var sections: [IQCollectionSection] { set get }
+    var items: [IQCollectionItem] { get }
     var canMove: Bool { get }
 
     func configure()

@@ -4,7 +4,7 @@
 
 import UIKit
 
-open class QTableSection: ITableSection {
+open class QTableSection: IQTableSection {
 
     public var canEdit: Bool = true
     public var canMove: Bool = true

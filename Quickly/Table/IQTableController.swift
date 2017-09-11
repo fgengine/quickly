@@ -7,14 +7,15 @@ import UIKit
 public protocol IQTableController: UITableViewDataSource, UITableViewDelegate {
 
     weak var tableView: UITableView? { set get }
-    var sections: [ITableSection] { set get }
+    var sections: [IQTableSection] { set get }
+    var rows: [IQTableRow] { get }
     var canEdit: Bool { get }
     var canMove: Bool { get }
 
     func configure()
 
-    func section(index: Int) -> ITableSection
-    func index(section: ITableSection) -> Int?
+    func section(index: Int) -> IQTableSection
+    func index(section: IQTableSection) -> Int?
 
     func header(index: Int) -> IQTableData?
     func index(header: IQTableData) -> Int?
