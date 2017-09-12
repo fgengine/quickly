@@ -110,8 +110,8 @@ open class QButton: QControl {
     open override var intrinsicContentSize: CGSize {
         get {
             return self.sizeThatFits(CGSize(
-                width: CGFloat.greatestFiniteMagnitude,
-                height: CGFloat.greatestFiniteMagnitude
+                width: Const.defaultSize,
+                height: Const.defaultSize
             ))
         }
     }
@@ -227,7 +227,7 @@ open class QButton: QControl {
             }
         } else {
             if self.imageView.alpha > CGFloat.leastNonzeroMagnitude {
-                let imageSizeThatFits: CGSize = self.imageView.sizeThatFits(contentSize)
+                let imageSizeThatFits: CGSize = self.imageView.sizeThatFits(CGSize.zero)
                 imageSize = CGSize(
                     width: self.imageInsets.left + imageSizeThatFits.width + self.imageInsets.right,
                     height: self.imageInsets.top + imageSizeThatFits.height + self.imageInsets.bottom
@@ -256,12 +256,12 @@ open class QButton: QControl {
     }
 
     open override func sizeToFit() {
-        super.sizeToFit()
-
-        self.frame.size = self.sizeThatFits(CGSize(
-            width: CGFloat.greatestFiniteMagnitude,
-            height: CGFloat.greatestFiniteMagnitude
+        var frame: CGRect = self.frame
+        frame.size = self.sizeThatFits(CGSize(
+            width: Const.defaultSize,
+            height: Const.defaultSize
         ))
+        self.frame = frame
     }
 
     open override func updateConstraints() {
@@ -525,6 +525,12 @@ open class QButton: QControl {
 
     @objc private func gestureHandler(_ sender: Any) {
         self.sendActions(for: .touchUpInside)
+    }
+
+    private struct Const {
+
+        static let defaultSize: CGFloat = 1024 * 1024
+
     }
 
 }

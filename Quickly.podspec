@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'Quickly'
-  s.version = '0.0.42'
+  s.version = '0.0.43'
   s.homepage = 'https://github.com/fgengine/quickly'
   s.summary = 'Quickly for iOS'
   s.license = { :type => 'MIT', :file => 'LICENSE' }

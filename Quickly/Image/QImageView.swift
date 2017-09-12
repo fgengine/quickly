@@ -33,6 +33,7 @@ open class QImageView: QView, IQImageLoaderTarget {
             } else {
                 self.imageView.image = nil
             }
+            self.invalidateIntrinsicContentSize()
         }
     }
     public var filter: IQImageLoaderFilter?
@@ -51,7 +52,10 @@ open class QImageView: QView, IQImageLoaderTarget {
     
     open override var intrinsicContentSize: CGSize {
         get {
-            return self.imageView.intrinsicContentSize
+            if let source: QImageSource = self.source {
+                return source.size(available: self.bounds.size)
+            }
+            return CGSize.zero
         }
     }
 
@@ -63,26 +67,24 @@ open class QImageView: QView, IQImageLoaderTarget {
         self.backgroundColor = UIColor.clear
 
         self.imageView = UIImageView(frame: self.bounds)
-        self.imageView.translatesAutoresizingMaskIntoConstraints = true
+        self.imageView.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
         self.imageView.isUserInteractionEnabled = false
         self.imageView.backgroundColor = UIColor.clear
         self.imageView.contentMode = .scaleAspectFit
         self.addSubview(self.imageView)
-
-        self.addConstraints([
-            self.imageView.topLayout == self.topLayout,
-            self.imageView.leadingLayout == self.leadingLayout,
-            self.imageView.trailingLayout == self.trailingLayout,
-            self.imageView.bottomLayout == self.bottomLayout
-        ])
     }
 
     open override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return self.imageView.sizeThatFits(size)
+        if let source: QImageSource = self.source {
+            return source.size(available: size)
+        }
+        return CGSize.zero
     }
 
     open override func sizeToFit() {
-        return self.imageView.sizeToFit()
+        var frame: CGRect = self.frame
+        frame.size = self.sizeThatFits(frame.size)
+        self.frame = frame
     }
 
     private func updateCornerRadius() {
@@ -94,6 +96,7 @@ open class QImageView: QView, IQImageLoaderTarget {
 
     open func imageLoader(_ imageLoader: QImageLoader, cacheImage: UIImage) {
         self.imageView.image = cacheImage
+        self.invalidateIntrinsicContentSize()
         self.isDownloading = false
     }
 
@@ -102,6 +105,7 @@ open class QImageView: QView, IQImageLoaderTarget {
 
     open func imageLoader(_ imageLoader: QImageLoader, downloadImage: UIImage) {
         self.imageView.image = downloadImage
+        self.invalidateIntrinsicContentSize()
         self.isDownloading = false
     }
 
