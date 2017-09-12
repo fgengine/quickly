@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 
 //! Project version number for Quickly.
 FOUNDATION_EXPORT double QuicklyVersionNumber;

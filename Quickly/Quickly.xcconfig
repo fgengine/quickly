@@ -1,0 +1,5 @@
+//
+//  Quickly
+//
+
+MODULEMAP_FILE= $(SRCROOT)/Quickly/Quickly.modulemap

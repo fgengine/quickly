@@ -117,10 +117,28 @@ open class QApiProvider: NSObject, IQApiProvider {
         response: ResponseType,
         completed: @escaping QApiQuery< RequestType, ResponseType >.CompleteClosure
     ) -> QApiQuery< RequestType, ResponseType > {
+        return self.send(
+            request: request,
+            response: response,
+            queue: DispatchQueue.main,
+            completed: completed
+        )
+    }
+
+    public func send<
+        RequestType: IQApiRequest,
+        ResponseType: IQApiResponse
+    >(
+        request: RequestType,
+        response: ResponseType,
+        queue: DispatchQueue,
+        completed: @escaping QApiQuery< RequestType, ResponseType >.CompleteClosure
+    ) -> QApiQuery< RequestType, ResponseType > {
         let query: QApiQuery< RequestType, ResponseType > = QApiQuery< RequestType, ResponseType >(
             provider: self,
             request: request,
             response: response,
+            queue: queue,
             completed: completed
         )
         self.send(query: query)
@@ -136,10 +154,30 @@ open class QApiProvider: NSObject, IQApiProvider {
         download: @escaping QApiQuery< RequestType, ResponseType >.ProgressClosure,
         completed: @escaping QApiQuery< RequestType, ResponseType >.CompleteClosure
     ) -> QApiQuery< RequestType, ResponseType > {
+        return self.send(
+            request: request,
+            response: response,
+            queue: DispatchQueue.main,
+            download: download,
+            completed: completed
+        )
+    }
+
+    public func send<
+        RequestType: IQApiRequest,
+        ResponseType: IQApiResponse
+    >(
+        request: RequestType,
+        response: ResponseType,
+        queue: DispatchQueue,
+        download: @escaping QApiQuery< RequestType, ResponseType >.ProgressClosure,
+        completed: @escaping QApiQuery< RequestType, ResponseType >.CompleteClosure
+    ) -> QApiQuery< RequestType, ResponseType > {
         let query: QApiQuery< RequestType, ResponseType > = QApiQuery< RequestType, ResponseType >(
             provider: self,
             request: request,
             response: response,
+            queue: queue,
             download: download,
             completed: completed
         )
@@ -156,10 +194,30 @@ open class QApiProvider: NSObject, IQApiProvider {
         upload: @escaping QApiQuery< RequestType, ResponseType >.ProgressClosure,
         completed: @escaping QApiQuery< RequestType, ResponseType >.CompleteClosure
     ) -> QApiQuery< RequestType, ResponseType > {
+        return self.send(
+            request: request,
+            response: response,
+            queue: DispatchQueue.main,
+            upload: upload,
+            completed: completed
+        )
+    }
+
+    public func send<
+        RequestType: IQApiRequest,
+        ResponseType: IQApiResponse
+    >(
+        request: RequestType,
+        response: ResponseType,
+        queue: DispatchQueue,
+        upload: @escaping QApiQuery< RequestType, ResponseType >.ProgressClosure,
+        completed: @escaping QApiQuery< RequestType, ResponseType >.CompleteClosure
+    ) -> QApiQuery< RequestType, ResponseType > {
         let query: QApiQuery< RequestType, ResponseType > = QApiQuery< RequestType, ResponseType >(
             provider: self,
             request: request,
             response: response,
+            queue: queue,
             upload: upload,
             completed: completed
         )

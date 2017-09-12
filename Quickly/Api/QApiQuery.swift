@@ -18,6 +18,7 @@ public class QApiQuery<
 
     public private(set) var request: RequestType
     public private(set) var response: ResponseType
+    public private(set) var queue: DispatchQueue
     public private(set) var downloadProgress: Progress = Progress()
     public private(set) var download: ProgressClosure?
     public private(set) var uploadProgress: Progress = Progress()
@@ -31,12 +32,14 @@ public class QApiQuery<
         provider: IQApiProvider,
         request: RequestType,
         response: ResponseType,
+        queue: DispatchQueue,
         completed: @escaping CompleteClosure
     ) {
         self.createAt = Date()
         self.provider = provider
         self.request = request
         self.response = response
+        self.queue = queue
         self.completed = completed
     }
 
@@ -44,6 +47,7 @@ public class QApiQuery<
         provider: IQApiProvider,
         request: RequestType,
         response: ResponseType,
+        queue: DispatchQueue,
         download: @escaping ProgressClosure,
         completed: @escaping CompleteClosure
     ) {
@@ -51,6 +55,7 @@ public class QApiQuery<
             provider: provider,
             request: request,
             response: response,
+            queue: queue,
             completed: completed
         )
 
@@ -61,6 +66,7 @@ public class QApiQuery<
         provider: IQApiProvider,
         request: RequestType,
         response: ResponseType,
+        queue: DispatchQueue,
         upload: @escaping ProgressClosure,
         completed: @escaping CompleteClosure
     ) {
@@ -68,6 +74,7 @@ public class QApiQuery<
             provider: provider,
             request: request,
             response: response,
+            queue: queue,
             completed: completed
         )
 
@@ -114,7 +121,7 @@ public class QApiQuery<
         self.uploadProgress.totalUnitCount = totalBytes
         self.uploadProgress.completedUnitCount = bytes
         if let upload: ProgressClosure = self.upload {
-            DispatchQueue.main.async {
+            self.queue.async {
                 upload(self.uploadProgress)
             }
         }
@@ -124,7 +131,7 @@ public class QApiQuery<
         self.downloadProgress.totalUnitCount = totalBytes
         self.downloadProgress.completedUnitCount = bytes
         if let download: ProgressClosure = self.download {
-            DispatchQueue.main.async {
+            self.queue.async {
                 download(self.downloadProgress)
             }
         }
@@ -134,7 +141,7 @@ public class QApiQuery<
         self.downloadProgress.totalUnitCount = totalBytes
         self.downloadProgress.completedUnitCount = bytes
         if let download: ProgressClosure = self.download {
-            DispatchQueue.main.async {
+            self.queue.async {
                 download(self.downloadProgress)
             }
         }
@@ -192,7 +199,7 @@ public class QApiQuery<
         } else {
             if(abs(self.createAt.timeIntervalSinceNow) <= self.request.retries) {
                 self.response.reset()
-                DispatchQueue.main.asyncAfter(deadline: .now() + self.request.delay, execute: {
+                self.queue.asyncAfter(deadline: .now() + self.request.delay, execute: {
                     self.provider.send(query: self)
                 })
             } else {
@@ -205,7 +212,7 @@ public class QApiQuery<
         if (self.request.isLogging == true) || (self.provider.isLogging == true) {
             print("\(self.request) \(self.response)")
         }
-        DispatchQueue.main.async {
+        self.queue.async {
             self.completed(self.request, self.response)
         }
     }

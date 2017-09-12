@@ -38,6 +38,66 @@ public extension String {
 
 public extension String {
 
+    public var md2: String? {
+        if let data: Data = self.data(using: .utf8) {
+            return data.md2.hexString
+        }
+        return nil
+    }
+
+    public var md4: String? {
+        if let data: Data = self.data(using: .utf8) {
+            return data.md4.hexString
+        }
+        return nil
+    }
+
+    public var md5: String? {
+        if let data: Data = self.data(using: .utf8) {
+            return data.md5.hexString
+        }
+        return nil
+    }
+
+    public var sha1: String? {
+        if let data: Data = self.data(using: .utf8) {
+            return data.sha1.hexString
+        }
+        return nil
+    }
+
+    public var sha224: String? {
+        if let data: Data = self.data(using: .utf8) {
+            return data.sha224.hexString
+        }
+        return nil
+    }
+
+    public var sha256: String? {
+        if let data: Data = self.data(using: .utf8) {
+            return data.sha256.hexString
+        }
+        return nil
+    }
+
+    public var sha384: String? {
+        if let data: Data = self.data(using: .utf8) {
+            return data.sha384.hexString
+        }
+        return nil
+    }
+    
+    public var sha512: String? {
+        if let data: Data = self.data(using: .utf8) {
+            return data.sha512.hexString
+        }
+        return nil
+    }
+
+}
+
+public extension String {
+
     public func components(pairSeparatedBy: String, valueSeparatedBy: String) -> [String: Any] {
         var components: [String: Any] = [:]
         for keyValuePair: String in self.components(separatedBy: pairSeparatedBy) {

@@ -141,6 +141,13 @@
 		40CF45F01F4DE6AB004D00D8 /* QWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45B41F4DE6AB004D00D8 /* QWindow.swift */; };
 		40E10B5A1F617ECB008E5A7F /* QStackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E10B571F617ECB008E5A7F /* QStackViewController.swift */; };
 		40E10B5B1F617ECB008E5A7F /* QTabGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E10B591F617ECB008E5A7F /* QTabGroupViewController.swift */; };
+		40E2D6011F67850600B954E4 /* QImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E2D5FD1F67850600B954E4 /* QImageCache.swift */; };
+		40E2D6021F67850600B954E4 /* QImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E2D5FE1F67850600B954E4 /* QImageLoader.swift */; };
+		40E2D6031F67850600B954E4 /* QImageRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E2D5FF1F67850600B954E4 /* QImageRequest.swift */; };
+		40E2D6041F67850600B954E4 /* QImageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E2D6001F67850600B954E4 /* QImageResponse.swift */; };
+		40E2D6061F6785F300B954E4 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E2D6051F6785F300B954E4 /* Data.swift */; };
+		40E2D6171F67D22E00B954E4 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E2D6151F67D22E00B954E4 /* ImageViewController.swift */; };
+		40E2D6181F67D22E00B954E4 /* ImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40E2D6161F67D22E00B954E4 /* ImageViewController.xib */; };
 		40E7382C1F556AF600B192C6 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E7382B1F556AF600B192C6 /* UIDevice.swift */; };
 		40E7383A1F55847F00B192C6 /* IQViewControllerRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E738391F55847F00B192C6 /* IQViewControllerRouter.swift */; };
 		40E7384C1F5606B700B192C6 /* QLabelTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E7384A1F5606B700B192C6 /* QLabelTableCell.swift */; };
@@ -277,7 +284,6 @@
 		40B8A1A51F5012EB00204E5A /* IQListDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQListDataSource.swift; sourceTree = "<group>"; };
 		40B8A1A71F50181900204E5A /* IQOneDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQOneDataSource.swift; sourceTree = "<group>"; };
 		40B8A1AA1F50736C00204E5A /* QTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTimer.swift; sourceTree = "<group>"; };
-		40C6FC5E1F4DDFDB0004B3E1 /* Quickly.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = Quickly.modulemap; sourceTree = "<group>"; };
 		40C8F81C1F550EA500C75D34 /* Quickly.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = Quickly.podspec; sourceTree = "<group>"; };
 		40C8F8231F55109100C75D34 /* IQSpinnerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQSpinnerView.swift; sourceTree = "<group>"; };
 		40C8F8241F55109100C75D34 /* QSpinnerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSpinnerView.swift; sourceTree = "<group>"; };
@@ -340,6 +346,15 @@
 		40CF45B41F4DE6AB004D00D8 /* QWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QWindow.swift; sourceTree = "<group>"; };
 		40E10B571F617ECB008E5A7F /* QStackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QStackViewController.swift; sourceTree = "<group>"; };
 		40E10B591F617ECB008E5A7F /* QTabGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTabGroupViewController.swift; sourceTree = "<group>"; };
+		40E2D5FD1F67850600B954E4 /* QImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QImageCache.swift; sourceTree = "<group>"; };
+		40E2D5FE1F67850600B954E4 /* QImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QImageLoader.swift; sourceTree = "<group>"; };
+		40E2D5FF1F67850600B954E4 /* QImageRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QImageRequest.swift; sourceTree = "<group>"; };
+		40E2D6001F67850600B954E4 /* QImageResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QImageResponse.swift; sourceTree = "<group>"; };
+		40E2D6051F6785F300B954E4 /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		40E2D6091F678D3100B954E4 /* Quickly.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = Quickly.modulemap; sourceTree = "<group>"; };
+		40E2D60E1F678E7E00B954E4 /* Quickly.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Quickly.xcconfig; sourceTree = "<group>"; };
+		40E2D6151F67D22E00B954E4 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
+		40E2D6161F67D22E00B954E4 /* ImageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageViewController.xib; sourceTree = "<group>"; };
 		40E7382B1F556AF600B192C6 /* UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		40E738391F55847F00B192C6 /* IQViewControllerRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQViewControllerRouter.swift; sourceTree = "<group>"; };
 		40E7384A1F5606B700B192C6 /* QLabelTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QLabelTableCell.swift; sourceTree = "<group>"; };
@@ -492,7 +507,8 @@
 				40CF45A71F4DE6AB004D00D8 /* ViewControllers */,
 				4018295C1F4C1C0A005C9949 /* Quickly.h */,
 				409403541F4DEB6C008A8B90 /* QuicklyPrivate.h */,
-				40C6FC5E1F4DDFDB0004B3E1 /* Quickly.modulemap */,
+				40E2D60E1F678E7E00B954E4 /* Quickly.xcconfig */,
+				40E2D6091F678D3100B954E4 /* Quickly.modulemap */,
 				4018295D1F4C1C0A005C9949 /* Info.plist */,
 			);
 			path = Quickly;
@@ -512,6 +528,10 @@
 			children = (
 				4039BCB91F51B20900E38090 /* QImageView.swift */,
 				40FBE6A91F54591000F5194B /* QImageSource.swift */,
+				40E2D5FD1F67850600B954E4 /* QImageCache.swift */,
+				40E2D5FE1F67850600B954E4 /* QImageLoader.swift */,
+				40E2D5FF1F67850600B954E4 /* QImageRequest.swift */,
+				40E2D6001F67850600B954E4 /* QImageResponse.swift */,
 			);
 			path = Image;
 			sourceTree = "<group>";
@@ -538,6 +558,7 @@
 				40FBE6901F540D5C00F5194B /* Label */,
 				40FBE6971F54331C00F5194B /* Button */,
 				40C8F82B1F554E5900C75D34 /* TextField */,
+				40E2D6141F67D22E00B954E4 /* Image */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -695,6 +716,7 @@
 		40CF457D1F4DE6AB004D00D8 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				40E2D6051F6785F300B954E4 /* Data.swift */,
 				40CF45801F4DE6AB004D00D8 /* String.swift */,
 				40CF457E1F4DE6AB004D00D8 /* NSAttributedString.swift */,
 				4061E1A81F4ECDFA00AC3217 /* NSError.swift */,
@@ -821,6 +843,15 @@
 				40E10B591F617ECB008E5A7F /* QTabGroupViewController.swift */,
 			);
 			path = TabGroup;
+			sourceTree = "<group>";
+		};
+		40E2D6141F67D22E00B954E4 /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				40E2D6151F67D22E00B954E4 /* ImageViewController.swift */,
+				40E2D6161F67D22E00B954E4 /* ImageViewController.xib */,
+			);
+			path = Image;
 			sourceTree = "<group>";
 		};
 		40FBE6781F5311E000F5194B /* Layout */ = {
@@ -1018,6 +1049,7 @@
 				4039BCCC1F522A6400E38090 /* LaunchScreen.storyboard in Resources */,
 				4039BCC91F522A6400E38090 /* Assets.xcassets in Resources */,
 				40FBE6941F540D5C00F5194B /* LabelViewController.xib in Resources */,
+				40E2D6181F67D22E00B954E4 /* ImageViewController.xib in Resources */,
 				40C8F82F1F554E5900C75D34 /* TextFieldViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1053,6 +1085,7 @@
 				40E738571F5606C500B192C6 /* QSeparatorTableRow.swift in Sources */,
 				4094035B1F4E12BF008A8B90 /* QApiRequest.swift in Sources */,
 				4006EDB81F61363E0050AD91 /* QLabelCollectionItem.swift in Sources */,
+				40E2D6061F6785F300B954E4 /* Data.swift in Sources */,
 				40C8F8281F55145D00C75D34 /* QSystemSpinnerView.swift in Sources */,
 				40CF45E11F4DE6AB004D00D8 /* QTableDecor.swift in Sources */,
 				4039BCBA1F51B20900E38090 /* QImageView.swift in Sources */,
@@ -1064,6 +1097,7 @@
 				40CF45DD1F4DE6AB004D00D8 /* IQTableSection.swift in Sources */,
 				40B8A19B1F4F80FF00204E5A /* QModel.swift in Sources */,
 				40134F041F63129E009F81A6 /* QCardNumberStringFormatter.swift in Sources */,
+				40E2D6041F67850600B954E4 /* QImageResponse.swift in Sources */,
 				40E738561F5606C500B192C6 /* QSeparatorTableCell.swift in Sources */,
 				40CF45BD1F4DE6AB004D00D8 /* QCollectionController.swift in Sources */,
 				4006EDB71F61363E0050AD91 /* QLabelCollectionCell.swift in Sources */,
@@ -1084,6 +1118,7 @@
 				40CF45E51F4DE6AB004D00D8 /* IQContentViewController.swift in Sources */,
 				40CF45D71F4DE6AB004D00D8 /* IQTableCell.swift in Sources */,
 				40E738591F5606C500B192C6 /* QSpaceTableRow.swift in Sources */,
+				40E2D6011F67850600B954E4 /* QImageCache.swift in Sources */,
 				40CF45C11F4DE6AB004D00D8 /* QCollectionSection.swift in Sources */,
 				40CF45E41F4DE6AB004D00D8 /* QTableView.swift in Sources */,
 				40FBE6A31F543EFD00F5194B /* QFormatText.swift in Sources */,
@@ -1098,6 +1133,7 @@
 				40C8F8261F55109100C75D34 /* QSpinnerView.swift in Sources */,
 				4006EDBC1F61363E0050AD91 /* QSpaceCollectionItem.swift in Sources */,
 				4006EDB31F61363E0050AD91 /* QImageCollectionCell.swift in Sources */,
+				40E2D6021F67850600B954E4 /* QImageLoader.swift in Sources */,
 				40CF45C41F4DE6AB004D00D8 /* UIColor.swift in Sources */,
 				40979EC71F62CA680003ED1C /* QNumberStringValidator.swift in Sources */,
 				40CF45CB1F4DE6AB004D00D8 /* QLinkLabel.swift in Sources */,
@@ -1169,6 +1205,7 @@
 				409403581F4E129F008A8B90 /* QApiProvider.swift in Sources */,
 				400DDF771F56913100D11991 /* QButtonTableRow.swift in Sources */,
 				40FBE6A61F543EFD00F5194B /* QTextStyle.swift in Sources */,
+				40E2D6031F67850600B954E4 /* QImageRequest.swift in Sources */,
 				40134EF61F62D16C009F81A6 /* QCharacterSetStringValidator.swift in Sources */,
 				40B8A1AB1F50736C00204E5A /* QTimer.swift in Sources */,
 				40CF45DE1F4DE6AB004D00D8 /* QTableCell.swift in Sources */,
@@ -1186,6 +1223,7 @@
 				4039BCE01F522FAC00E38090 /* ChoiseRouter.swift in Sources */,
 				4039BCD91F522AD500E38090 /* AppRouter.swift in Sources */,
 				40FBE6931F540D5C00F5194B /* LabelViewController.swift in Sources */,
+				40E2D6171F67D22E00B954E4 /* ImageViewController.swift in Sources */,
 				4039BCC21F522A6400E38090 /* AppDelegate.swift in Sources */,
 				40C8F82E1F554E5900C75D34 /* TextFieldViewController.swift in Sources */,
 				4039BCDE1F522D1100E38090 /* ChoiseViewController.swift in Sources */,
@@ -1247,6 +1285,7 @@
 		};
 		4018295F1F4C1C0A005C9949 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 40E2D60E1F678E7E00B954E4 /* Quickly.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
@@ -1334,6 +1373,7 @@
 		};
 		401829601F4C1C0A005C9949 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 40E2D60E1F678E7E00B954E4 /* Quickly.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
@@ -1423,7 +1463,6 @@
 				INFOPLIST_FILE = Quickly/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "$(SRCROOT)/Quickly/Quickly.modulemap";
 				PRODUCT_BUNDLE_IDENTIFIER = org.fgengine.Quickly;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1444,7 +1483,6 @@
 				INFOPLIST_FILE = Quickly/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "$(SRCROOT)/Quickly/Quickly.modulemap";
 				PRODUCT_BUNDLE_IDENTIFIER = org.fgengine.Quickly;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

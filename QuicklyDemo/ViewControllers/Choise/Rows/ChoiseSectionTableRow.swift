@@ -12,6 +12,7 @@ class ChoiseSectionTableRow: QLabelTableRow {
         case label
         case button
         case textField
+        case image
 
         public var name: String {
             get {
@@ -19,6 +20,7 @@ class ChoiseSectionTableRow: QLabelTableRow {
                 case .label: return "Label"
                 case .button: return "Button"
                 case .textField: return "TextField"
+                case .image: return "Image"
                 }
             }
         }

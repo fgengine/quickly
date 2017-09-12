@@ -58,3 +58,17 @@ extension ChoiseRouter: ITextFieldViewControllerRouter {
     }
     
 }
+
+extension ChoiseRouter: IImageViewControllerRouter {
+
+    func presentImageViewController() {
+        let vc: ImageViewController = ImageViewController()
+        vc.router = self
+        self.stackViewController.pushViewController(vc, animated: true)
+    }
+
+    func dismiss(viewController: ImageViewController) {
+        _ = self.stackViewController.popViewController(animated: true)
+    }
+    
+}
