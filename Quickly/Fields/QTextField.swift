@@ -231,6 +231,8 @@ open class QTextField : QView {
                 } else {
                     textField.text = text
                 }
+                textField.sendActions(for: .editingChanged)
+                NotificationCenter.default.post(name: NSNotification.Name.UITextFieldTextDidChange, object: textField)
             }
             return false
         }
