@@ -88,6 +88,7 @@
 		40C8F82F1F554E5900C75D34 /* TextFieldViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F82D1F554E5900C75D34 /* TextFieldViewController.xib */; };
 		40C94A0A1F69362A00439961 /* QNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C94A081F69362A00439961 /* QNavigationController.swift */; };
 		40C94A0B1F69362A00439961 /* QTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C94A091F69362A00439961 /* QTabBarController.swift */; };
+		40C94A271F69514500439961 /* QObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C94A261F69514500439961 /* QObserver.swift */; };
 		40CF45B51F4DE6AB004D00D8 /* IQCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF456F1F4DE6AB004D00D8 /* IQCollectionCell.swift */; };
 		40CF45B61F4DE6AB004D00D8 /* IQCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45701F4DE6AB004D00D8 /* IQCollectionController.swift */; };
 		40CF45B71F4DE6AB004D00D8 /* IQCollectionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45711F4DE6AB004D00D8 /* IQCollectionData.swift */; };
@@ -293,6 +294,7 @@
 		40C8F82D1F554E5900C75D34 /* TextFieldViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextFieldViewController.xib; sourceTree = "<group>"; };
 		40C94A081F69362A00439961 /* QNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QNavigationController.swift; sourceTree = "<group>"; };
 		40C94A091F69362A00439961 /* QTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTabBarController.swift; sourceTree = "<group>"; };
+		40C94A261F69514500439961 /* QObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QObserver.swift; sourceTree = "<group>"; };
 		40CF456F1F4DE6AB004D00D8 /* IQCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionCell.swift; sourceTree = "<group>"; };
 		40CF45701F4DE6AB004D00D8 /* IQCollectionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionController.swift; sourceTree = "<group>"; };
 		40CF45711F4DE6AB004D00D8 /* IQCollectionData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionData.swift; sourceTree = "<group>"; };
@@ -489,6 +491,7 @@
 				40CF45861F4DE6AB004D00D8 /* Keychain */,
 				40CF45821F4DE6AB004D00D8 /* Json */,
 				40B8A1971F4F805F00204E5A /* Model */,
+				40C94A251F69514500439961 /* Observer */,
 				409403561F4E125E008A8B90 /* Api */,
 				40B8A19E1F4FA3C800204E5A /* DataSource */,
 				40CF458B1F4DE6AB004D00D8 /* Router */,
@@ -689,6 +692,14 @@
 				40C8F82D1F554E5900C75D34 /* TextFieldViewController.xib */,
 			);
 			path = TextField;
+			sourceTree = "<group>";
+		};
+		40C94A251F69514500439961 /* Observer */ = {
+			isa = PBXGroup;
+			children = (
+				40C94A261F69514500439961 /* QObserver.swift */,
+			);
+			path = Observer;
 			sourceTree = "<group>";
 		};
 		40CF456E1F4DE6AB004D00D8 /* Collection */ = {
@@ -1181,6 +1192,7 @@
 				4061E1A91F4ECDFA00AC3217 /* NSError.swift in Sources */,
 				4039BCB71F516F5900E38090 /* QControl.swift in Sources */,
 				40B8A1991F4F806A00204E5A /* IQModel.swift in Sources */,
+				40C94A271F69514500439961 /* QObserver.swift in Sources */,
 				400DDF761F56913100D11991 /* QButtonTableCell.swift in Sources */,
 				40CF45C81F4DE6AB004D00D8 /* QJsonImpl.m in Sources */,
 				40CF45B91F4DE6AB004D00D8 /* IQCollectionItem.swift in Sources */,
