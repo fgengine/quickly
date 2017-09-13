@@ -4,21 +4,31 @@
 
 import UIKit
 
-open class QStackViewController : UINavigationController, IQViewController {
+open class QTabBarController : UITabBarController, IQViewController {
 
-    public init() {
+    open var currentViewController: UIViewController? {
+        set(value) {
+            var selectedIndex: Int = 0
+            if let currentViewController: UIViewController = value {
+                if let viewControllers: [UIViewController] = self.viewControllers {
+                    if let index: Int = viewControllers.index(of: currentViewController) {
+                        selectedIndex = index
+                    }
+                }
+            }
+            self.selectedIndex = selectedIndex
+        }
+        get {
+            if let viewControllers: [UIViewController] = self.viewControllers {
+                return viewControllers[self.selectedIndex]
+            }
+            return nil
+        }
+    }
+
+    public init(viewControllers: [UIViewController]) {
         super.init(nibName: nil, bundle: nil)
-        self.setup()
-    }
-
-    public override init(rootViewController: UIViewController) {
-        super.init(rootViewController: rootViewController)
-        self.setup()
-    }
-
-    public override init(navigationBarClass: AnyClass?, toolbarClass: AnyClass?) {
-        super.init(navigationBarClass: navigationBarClass, toolbarClass: toolbarClass)
-        self.setup()
+        self.viewControllers = viewControllers
     }
 
     public override init(nibName: String?, bundle: Bundle?) {
@@ -31,12 +41,12 @@ open class QStackViewController : UINavigationController, IQViewController {
         self.setup()
     }
 
-    public func setup() {
+    open func setup() {
     }
 
     open override var prefersStatusBarHidden: Bool {
         get {
-            if let viewController: UIViewController = self.topViewController {
+            if let viewController: UIViewController = self.currentViewController {
                 return viewController.prefersStatusBarHidden
             }
             return super.prefersStatusBarHidden
@@ -45,7 +55,7 @@ open class QStackViewController : UINavigationController, IQViewController {
 
     open override var preferredStatusBarStyle: UIStatusBarStyle {
         get {
-            if let viewController: UIViewController = self.topViewController {
+            if let viewController: UIViewController = self.currentViewController {
                 return viewController.preferredStatusBarStyle
             }
             return super.preferredStatusBarStyle
@@ -54,7 +64,7 @@ open class QStackViewController : UINavigationController, IQViewController {
 
     open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
         get {
-            if let viewController: UIViewController = self.topViewController {
+            if let viewController: UIViewController = self.currentViewController {
                 return viewController.preferredStatusBarUpdateAnimation
             }
             return super.preferredStatusBarUpdateAnimation
@@ -63,7 +73,7 @@ open class QStackViewController : UINavigationController, IQViewController {
 
     open override var shouldAutorotate: Bool {
         get {
-            if let viewController: UIViewController = self.topViewController {
+            if let viewController: UIViewController = self.currentViewController {
                 return viewController.shouldAutorotate
             }
             return super.shouldAutorotate
@@ -72,7 +82,7 @@ open class QStackViewController : UINavigationController, IQViewController {
 
     open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         get {
-            if let viewController: UIViewController = self.topViewController {
+            if let viewController: UIViewController = self.currentViewController {
                 return viewController.supportedInterfaceOrientations
             }
             return super.supportedInterfaceOrientations

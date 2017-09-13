@@ -4,7 +4,7 @@
 
 import Quickly
 
-class ChoiseRouter: QStackRouter<
+class ChoiseRouter: QNavigationRouter<
     AppContainer,
     AppRouter
 > {
@@ -22,11 +22,11 @@ extension ChoiseRouter: ILabelViewControllerRouter {
     func presentLabelViewController() {
         let vc: LabelViewController = LabelViewController()
         vc.router = self
-        self.stackViewController.pushViewController(vc, animated: true)
+        self.navigationController.pushViewController(vc, animated: true)
     }
 
     func dismiss(viewController: LabelViewController) {
-        _ = self.stackViewController.popViewController(animated: true)
+        _ = self.navigationController.popViewController(animated: true)
     }
 
 }
@@ -36,11 +36,11 @@ extension ChoiseRouter: IButtonViewControllerRouter {
     func presentButtonViewController() {
         let vc: ButtonViewController = ButtonViewController()
         vc.router = self
-        self.stackViewController.pushViewController(vc, animated: true)
+        self.navigationController.pushViewController(vc, animated: true)
     }
 
     func dismiss(viewController: ButtonViewController) {
-        _ = self.stackViewController.popViewController(animated: true)
+        _ = self.navigationController.popViewController(animated: true)
     }
     
 }
@@ -50,11 +50,11 @@ extension ChoiseRouter: ITextFieldViewControllerRouter {
     func presentTextFieldViewController() {
         let vc: TextFieldViewController = TextFieldViewController()
         vc.router = self
-        self.stackViewController.pushViewController(vc, animated: true)
+        self.navigationController.pushViewController(vc, animated: true)
     }
 
     func dismiss(viewController: TextFieldViewController) {
-        _ = self.stackViewController.popViewController(animated: true)
+        _ = self.navigationController.popViewController(animated: true)
     }
     
 }
@@ -64,11 +64,11 @@ extension ChoiseRouter: IImageViewControllerRouter {
     func presentImageViewController() {
         let vc: ImageViewController = ImageViewController()
         vc.router = self
-        self.stackViewController.pushViewController(vc, animated: true)
+        self.navigationController.pushViewController(vc, animated: true)
     }
 
     func dismiss(viewController: ImageViewController) {
-        _ = self.stackViewController.popViewController(animated: true)
+        _ = self.navigationController.popViewController(animated: true)
     }
     
 }

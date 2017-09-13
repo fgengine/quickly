@@ -4,7 +4,7 @@
 
 import UIKit
 
-open class QTabGroupRouter<
+open class QTabBarRouter<
     ContainerType: IQContainer,
     RouterType: IQRouter
 >: IQViewControllerRouter {
@@ -12,12 +12,12 @@ open class QTabGroupRouter<
     public var container: ContainerType
     public weak var router: RouterType?
     public var viewController: UIViewController {
-        get { return self.tabGroupViewController }
+        get { return self.tabBarController }
     }
-    public private(set) lazy var tabGroupViewController: QTabGroupViewController = self.prepareTabGroupViewController()
+    public private(set) lazy var tabBarController: QTabBarController = self.prepareTabBarController()
     public var routers: [IQViewControllerRouter] = [] {
         didSet {
-            self.tabGroupViewController.viewControllers = self.routers.flatMap({ (router: IQViewControllerRouter) -> UIViewController? in
+            self.tabBarController.viewControllers = self.routers.flatMap({ (router: IQViewControllerRouter) -> UIViewController? in
                 return router.viewController
             })
             if self.routers.count > 0 {
@@ -40,9 +40,9 @@ open class QTabGroupRouter<
     public var currentRouter: IQViewControllerRouter? = nil {
         didSet {
             if let currentRouter: IQViewControllerRouter = self.currentRouter {
-                self.tabGroupViewController.currentViewController = currentRouter.viewController
+                self.tabBarController.currentViewController = currentRouter.viewController
             } else {
-                self.tabGroupViewController.currentViewController = nil
+                self.tabBarController.currentViewController = nil
             }
         }
     }
@@ -52,8 +52,8 @@ open class QTabGroupRouter<
         self.router = router
     }
 
-    open func prepareTabGroupViewController() -> QTabGroupViewController {
-        return QTabGroupViewController()
+    open func prepareTabBarController() -> QTabBarController {
+        return QTabBarController()
     }
 
 }

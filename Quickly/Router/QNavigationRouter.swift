@@ -4,7 +4,7 @@
 
 import UIKit
 
-open class QStackRouter<
+open class QNavigationRouter<
     ContainerType: IQContainer,
     RouterType: IQRouter
 >: IQViewControllerRouter {
@@ -12,18 +12,18 @@ open class QStackRouter<
     public var container: ContainerType
     public weak var router: RouterType?
     public var viewController: UIViewController {
-        get { return self.stackViewController }
+        get { return self.navigationController }
     }
     
-    public private(set) lazy var stackViewController: QStackViewController = self.prepareStackViewController()
+    public private(set) lazy var navigationController: QNavigationController = self.prepareNavigationController()
 
     public required init(container: ContainerType, router: RouterType) {
         self.container = container
         self.router = router
     }
 
-    private func prepareStackViewController() -> QStackViewController {
-        return QStackViewController(rootViewController: self.prepareRootViewController())
+    private func prepareNavigationController() -> QNavigationController {
+        return QNavigationController(rootViewController: self.prepareRootViewController())
     }
 
     open func prepareRootViewController() -> UIViewController {
