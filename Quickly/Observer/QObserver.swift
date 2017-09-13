@@ -4,49 +4,31 @@
 
 import Foundation
 
-public protocol IQObserver: class {
-}
+public class QObserver< T > {
 
-public class QObserver< T: IQObserver > {
-
-    private var items: [WeakRef]
+    private var items: Set< UnsafeMutableRawPointer >
 
     public init() {
         self.items = []
     }
 
     public func add(_ observer: T) {
-        if self.items.index(where: { $0 === observer }) == nil {
-            self.items.append(WeakRef(observer))
-        }
+        let object: AnyObject = observer as AnyObject
+        self.items.insert(Unmanaged.passUnretained(object).toOpaque())
     }
 
     public func remove(_ observer: T) {
-        if let index = self.items.index(where: { $0.value === observer }) {
-            self.items.remove(at: index)
-        }
+        let object: AnyObject = observer as AnyObject
+        self.items.remove(Unmanaged.passUnretained(object).toOpaque())
     }
 
     public func notify(_ closure: (_ observer: T) -> Void) {
-        self.items.forEach { (weakRef: WeakRef) in
-            if let observer: T = weakRef.value {
+        self.items.forEach { (pointer: UnsafeMutableRawPointer) in
+            let object: AnyObject = Unmanaged.fromOpaque(pointer).takeUnretainedValue()
+            if let observer: T = object as? T {
                 closure(observer)
             }
         }
-    }
-
-    public func compact() {
-        self.items = self.items.filter { $0.value != nil }
-    }
-
-    private class WeakRef {
-
-        public private(set) weak var value: T?
-
-        public init(_ value: T) {
-            self.value = value
-        }
-        
     }
 
 }

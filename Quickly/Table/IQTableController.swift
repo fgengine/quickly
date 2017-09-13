@@ -29,6 +29,10 @@ public protocol IQTableController: UITableViewDataSource, UITableViewDelegate {
     func indexPath(row: IQTableRow) -> IndexPath?
     func indexPath(predicate: (IQTableRow) -> Bool) -> IndexPath?
 
+    func header(data: IQTableData) -> IQTableDecor?
+    func footer(data: IQTableData) -> IQTableDecor?
+    func cell(row: IQTableRow) -> IQTableCell?
+
     func dequeue(data: IQTableData) -> IQTableDecor?
     func dequeue(row: IQTableRow) -> IQTableCell?
 

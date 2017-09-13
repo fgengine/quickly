@@ -140,6 +140,36 @@ open class QTableController: NSObject, IQTableController, IQTableCellDelegate, I
         return nil
     }
 
+    public func header(data: IQTableData) -> IQTableDecor? {
+        guard let tableView: UITableView = self.tableView else {
+            return nil
+        }
+        guard let index: Int = self.index(header: data) else {
+            return nil
+        }
+        return tableView.headerView(forSection: index) as? IQTableDecor
+    }
+
+    public func footer(data: IQTableData) -> IQTableDecor? {
+        guard let tableView: UITableView = self.tableView else {
+            return nil
+        }
+        guard let index: Int = self.index(footer: data) else {
+            return nil
+        }
+        return tableView.footerView(forSection: index) as? IQTableDecor
+    }
+
+    public func cell(row: IQTableRow) -> IQTableCell? {
+        guard let tableView: UITableView = self.tableView else {
+            return nil
+        }
+        guard let indexPath: IndexPath = self.indexPath(row: row) else {
+            return nil
+        }
+        return tableView.cellForRow(at: indexPath) as? IQTableCell
+    }
+
     public func dequeue(data: IQTableData) -> IQTableDecor? {
         guard let tableView: UITableView = self.tableView else {
             return nil
