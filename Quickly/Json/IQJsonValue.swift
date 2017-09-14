@@ -379,11 +379,35 @@ public func <<< (left: inout Date!, right: (QJson, String, String)) throws {
     left = try right.0.date(at: right.1, formats: [right.2])
 }
 
-public func <<< (left: inout Date?, right: (QJson, String, String, Date?)) {
+public func <<< (left: inout Date?, right: (QJson, String, String)) {
     if let date: Date = try? right.0.date(at: right.1, formats: [right.2]) {
         left = date
     } else {
         left = nil
+    }
+}
+
+public func <<< (left: inout Date, right: (QJson, String, String, Date)) {
+    if let date: Date = try? right.0.date(at: right.1, formats: [right.2]) {
+        left = date
+    } else {
+        left = right.3
+    }
+}
+
+public func <<< (left: inout Date!, right: (QJson, String, String, Date)) {
+    if let date: Date = try? right.0.date(at: right.1, formats: [right.2]) {
+        left = date
+    } else {
+        left = right.3
+    }
+}
+
+public func <<< (left: inout Date?, right: (QJson, String, String, Date?)) {
+    if let date: Date = try? right.0.date(at: right.1, formats: [right.2]) {
+        left = date
+    } else {
+        left = right.3
     }
 }
 
@@ -395,11 +419,35 @@ public func <<< (left: inout Date!, right: (QJson, String, [String])) throws {
     left = try right.0.date(at: right.1, formats: right.2)
 }
 
-public func <<< (left: inout Date?, right: (QJson, String, [String], Date?)) {
+public func <<< (left: inout Date?, right: (QJson, String, [String])) {
     if let date: Date = try? right.0.date(at: right.1, formats: right.2) {
         left = date
     } else {
         left = nil
+    }
+}
+
+public func <<< (left: inout Date, right: (QJson, String, [String], Date)) {
+    if let date: Date = try? right.0.date(at: right.1, formats: right.2) {
+        left = date
+    } else {
+        left = right.3
+    }
+}
+
+public func <<< (left: inout Date!, right: (QJson, String, [String], Date)) {
+    if let date: Date = try? right.0.date(at: right.1, formats: right.2) {
+        left = date
+    } else {
+        left = right.3
+    }
+}
+
+public func <<< (left: inout Date?, right: (QJson, String, [String], Date?)) {
+    if let date: Date = try? right.0.date(at: right.1, formats: right.2) {
+        left = date
+    } else {
+        left = right.3
     }
 }
 
