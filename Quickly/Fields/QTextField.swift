@@ -7,6 +7,9 @@ import UIKit
 @IBDesignable
 open class QTextField : QView {
 
+    public typealias ShouldClosure = (_ textField: QTextField) -> Bool
+    public typealias Closure = (_ textField: QTextField) -> Void
+
     @IBInspectable public weak var delegate: UITextFieldDelegate? {
         set(value) { self.textField.delegate = value }
         get { return self.textField.delegate }
@@ -110,6 +113,16 @@ open class QTextField : QView {
         get { return self.textField.isEditing }
     }
 
+    public var onShouldBeginEditing: ShouldClosure?
+    public var onBeginEdititing: Closure?
+    public var onEdititing: Closure?
+    public var onShouldEndEditing: ShouldClosure?
+    public var onEndEdititing: Closure?
+    public var onShouldClear: ShouldClosure?
+    public var onPressedClear: Closure?
+    public var onShouldReturn: ShouldClosure?
+    public var onPressedReturn: Closure?
+
     public private(set) var proxy: ProxyDelegate!
     public private(set) var textField: Field!
 
@@ -154,18 +167,34 @@ open class QTextField : QView {
 
         public weak var field: QTextField?
         public var delegate: UITextFieldDelegate? = nil {
+            willSet {
+                self.canShouldBeginEditing = false
+                self.canDidBeginEditing = false
+                self.canShouldEndEditing = false
+                self.canDidEndEditing = false
+                self.canShouldChangeCharacters = false
+                self.canShouldClear = false
+                self.canShouldReturn = false
+            }
             didSet {
                 if let delegate: UITextFieldDelegate = self.delegate {
+                    self.canShouldBeginEditing = delegate.responds(to: #selector(UITextFieldDelegate.textFieldShouldBeginEditing(_:)))
+                    self.canDidBeginEditing = delegate.responds(to: #selector(UITextFieldDelegate.textFieldDidBeginEditing(_:)))
+                    self.canShouldEndEditing = delegate.responds(to: #selector(UITextFieldDelegate.textFieldShouldEndEditing(_:)))
                     self.canDidEndEditing = delegate.responds(to: #selector(UITextFieldDelegate.textFieldDidEndEditing(_:)))
                     self.canShouldChangeCharacters = delegate.responds(to: #selector(UITextFieldDelegate.textField(_:shouldChangeCharactersIn:replacementString:)))
-                } else {
-                    self.canDidEndEditing = false
-                    self.canShouldChangeCharacters = false
+                    self.canShouldClear = delegate.responds(to: #selector(UITextFieldDelegate.textFieldShouldClear(_:)))
+                    self.canShouldReturn = delegate.responds(to: #selector(UITextFieldDelegate.textFieldShouldClear(_:)))
                 }
             }
         }
+        private var canShouldBeginEditing: Bool = false
+        private var canDidBeginEditing: Bool = false
+        private var canShouldEndEditing: Bool = false
         private var canDidEndEditing: Bool = false
         private var canShouldChangeCharacters: Bool = false
+        private var canShouldClear: Bool = false
+        private var canShouldReturn: Bool = false
 
         public init(field: QTextField?) {
             self.field = field
@@ -194,15 +223,52 @@ open class QTextField : QView {
             return nil
         }
 
+        public func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+            if self.canShouldBeginEditing == true {
+                if self.delegate!.textFieldShouldBeginEditing!(textField) == false {
+                    return false
+                }
+            }
+            if let field: QTextField = self.field {
+                if let closure: ShouldClosure = field.onShouldBeginEditing {
+                    return closure(field)
+                }
+            }
+            return true
+        }
+
+        public func textFieldDidBeginEditing(_ textField: UITextField) {
+            if self.canDidBeginEditing == true {
+                self.delegate!.textFieldDidBeginEditing!(textField)
+            }
+            if let field: QTextField = self.field {
+                if let closure: Closure = field.onBeginEdititing {
+                    return closure(field)
+                }
+            }
+        }
+
+        public func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+            if self.canShouldEndEditing == true {
+                if self.delegate!.textFieldShouldEndEditing!(textField) == false {
+                    return false
+                }
+            }
+            if let field: QTextField = self.field {
+                if let closure: ShouldClosure = field.onShouldEndEditing {
+                    return closure(field)
+                }
+            }
+            return true
+        }
+
         public func textFieldDidEndEditing(_ textField: UITextField) {
             if self.canDidEndEditing == true {
                 self.delegate!.textFieldDidEndEditing!(textField)
             }
             if let field: QTextField = self.field {
-                if let validator: IQInputValidator = field.validator {
-                    field.isValid = validator.validate(field.unformatText)
-                } else {
-                    field.isValid = true
+                if let closure: Closure = field.onEndEdititing {
+                    return closure(field)
                 }
             }
         }
@@ -233,8 +299,39 @@ open class QTextField : QView {
                 }
                 textField.sendActions(for: .editingChanged)
                 NotificationCenter.default.post(name: NSNotification.Name.UITextFieldTextDidChange, object: textField)
+                if let closure: Closure = field.onEdititing {
+                    closure(field)
+                }
             }
             return false
+        }
+
+        public func textFieldShouldClear(_ textField: UITextField) -> Bool {
+            if self.canShouldEndEditing == true {
+                if self.delegate!.textFieldShouldClear!(textField) == false {
+                    return false
+                }
+            }
+            if let field: QTextField = self.field {
+                if let closure: ShouldClosure = field.onShouldClear {
+                    return closure(field)
+                }
+            }
+            return true
+        }
+
+        public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            if self.canShouldEndEditing == true {
+                if self.delegate!.textFieldShouldReturn!(textField) == false {
+                    return false
+                }
+            }
+            if let field: QTextField = self.field {
+                if let closure: ShouldClosure = field.onShouldReturn {
+                    return closure(field)
+                }
+            }
+            return true
         }
 
         private func composed(_ string: String?, replacement: String, range: NSRange) -> String {
