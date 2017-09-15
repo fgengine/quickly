@@ -10,6 +10,9 @@ open class QModel: IQModel {
         return try self.init(json: json)
     }
 
+    public init() {
+    }
+
     public required init(json: QJson) throws {
         try self.from(json: json)
     }
