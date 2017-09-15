@@ -53,7 +53,7 @@ open class QImageView: QView, IQImageLoaderTarget {
     open override var intrinsicContentSize: CGSize {
         get {
             if let source: QImageSource = self.source {
-                return source.size(available: self.bounds.size)
+                return source.size(available: CGSize.zero)
             }
             return CGSize.zero
         }

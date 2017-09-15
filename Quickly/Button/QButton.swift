@@ -468,8 +468,10 @@ open class QButton: QControl {
     private func updateContent(constraints: inout [NSLayoutConstraint], view: UIView) {
         constraints.append(view.topLayout == self.contentView.topLayout)
         constraints.append(view.leadingLayout == self.contentView.leadingLayout)
-        constraints.append(view.trailingLayout == self.contentView.trailingLayout)
-        constraints.append(view.bottomLayout == self.contentView.bottomLayout)
+        constraints.append(view.trailingLayout <= self.contentView.trailingLayout)
+        constraints.append(view.bottomLayout <= self.contentView.bottomLayout)
+        constraints.append(view.centerXLayout == self.contentView.centerXLayout)
+        constraints.append(view.centerYLayout == self.contentView.centerYLayout)
     }
 
     private func updateContent(constraints: inout [NSLayoutConstraint], view: UIView, edgeInsets: UIEdgeInsets) {
@@ -477,18 +479,20 @@ open class QButton: QControl {
         constraints.append(view.leadingLayout == self.contentView.leadingLayout + edgeInsets.left)
         constraints.append(view.trailingLayout == self.contentView.trailingLayout - edgeInsets.right)
         constraints.append(view.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom)
+        constraints.append(view.centerXLayout == self.contentView.centerXLayout)
+        constraints.append(view.centerYLayout == self.contentView.centerYLayout)
     }
 
     private func updateContent(
         constraints: inout [NSLayoutConstraint],
         topView: UIView, topEdgeInsets: UIEdgeInsets,
         bottomView: UIView, bottomEdgeInsets: UIEdgeInsets
-        ) {
-        constraints.append(topView.leadingLayout == self.contentView.leadingLayout + topEdgeInsets.left)
-        constraints.append(topView.trailingLayout == self.contentView.trailingLayout - topEdgeInsets.right)
+    ) {
+        constraints.append(topView.leadingLayout >= self.contentView.leadingLayout + topEdgeInsets.left)
+        constraints.append(topView.trailingLayout <= self.contentView.trailingLayout - topEdgeInsets.right)
         constraints.append(topView.bottomLayout == bottomView.topLayout - (topEdgeInsets.bottom + bottomEdgeInsets.top))
-        constraints.append(bottomView.leadingLayout == self.contentView.leadingLayout + bottomEdgeInsets.left)
-        constraints.append(bottomView.trailingLayout == self.contentView.trailingLayout - bottomEdgeInsets.right)
+        constraints.append(bottomView.leadingLayout >= self.contentView.leadingLayout + bottomEdgeInsets.left)
+        constraints.append(bottomView.trailingLayout <= self.contentView.trailingLayout - bottomEdgeInsets.right)
         if topView.alpha <= CGFloat.leastNonzeroMagnitude {
             constraints.append(bottomView.topLayout == self.contentView.topLayout + bottomEdgeInsets.top)
             constraints.append(bottomView.bottomLayout == self.contentView.bottomLayout - bottomEdgeInsets.bottom)
@@ -499,18 +503,20 @@ open class QButton: QControl {
             constraints.append(topView.topLayout == self.contentView.topLayout + topEdgeInsets.top)
             constraints.append(bottomView.bottomLayout == self.contentView.bottomLayout - bottomEdgeInsets.bottom)
         }
+        constraints.append(topView.centerXLayout == self.contentView.centerXLayout)
+        constraints.append(bottomView.centerXLayout == self.contentView.centerXLayout)
     }
 
     private func updateContent(
         constraints: inout [NSLayoutConstraint],
         leftView: UIView, leftEdgeInsets: UIEdgeInsets,
         rightView: UIView, rightEdgeInsets: UIEdgeInsets
-        ) {
-        constraints.append(leftView.topLayout == self.contentView.topLayout + leftEdgeInsets.top)
+    ) {
+        constraints.append(leftView.topLayout >= self.contentView.topLayout + leftEdgeInsets.top)
         constraints.append(leftView.trailingLayout == rightView.leadingLayout - (leftEdgeInsets.right + rightEdgeInsets.left))
-        constraints.append(leftView.bottomLayout == self.contentView.bottomLayout - leftEdgeInsets.bottom)
-        constraints.append(rightView.topLayout == self.contentView.topLayout + rightEdgeInsets.top)
-        constraints.append(rightView.bottomLayout == self.contentView.bottomLayout - rightEdgeInsets.bottom)
+        constraints.append(leftView.bottomLayout <= self.contentView.bottomLayout - leftEdgeInsets.bottom)
+        constraints.append(rightView.topLayout >= self.contentView.topLayout + rightEdgeInsets.top)
+        constraints.append(rightView.bottomLayout <= self.contentView.bottomLayout - rightEdgeInsets.bottom)
         if leftView.alpha <= CGFloat.leastNonzeroMagnitude {
             constraints.append(rightView.leadingLayout == self.contentView.leadingLayout + rightEdgeInsets.left)
             constraints.append(rightView.trailingLayout == self.contentView.trailingLayout - rightEdgeInsets.right)
@@ -521,6 +527,8 @@ open class QButton: QControl {
             constraints.append(leftView.leadingLayout == self.contentView.leadingLayout + leftEdgeInsets.left)
             constraints.append(rightView.trailingLayout == self.contentView.trailingLayout - rightEdgeInsets.right)
         }
+        constraints.append(leftView.centerYLayout == self.contentView.centerYLayout)
+        constraints.append(rightView.centerYLayout == self.contentView.centerYLayout)
     }
 
     @objc private func gestureHandler(_ sender: Any) {

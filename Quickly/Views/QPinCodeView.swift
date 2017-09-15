@@ -66,7 +66,9 @@ open class QPinCodeView: QControl {
     }
 
     public func append(number: Int) {
-        self.text.append(String(number))
+        if self.isFilled == false {
+            self.text.append(String(number))
+        }
     }
 
     public func removeLast() {
