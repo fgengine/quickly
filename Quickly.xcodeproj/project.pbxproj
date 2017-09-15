@@ -76,9 +76,6 @@
 		40B8A1991F4F806A00204E5A /* IQModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B8A1981F4F806A00204E5A /* IQModel.swift */; };
 		40B8A19B1F4F80FF00204E5A /* QModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B8A19A1F4F80FF00204E5A /* QModel.swift */; };
 		40B8A19D1F4F8C0400204E5A /* IQJsonValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B8A19C1F4F8C0400204E5A /* IQJsonValue.swift */; };
-		40B8A1A11F4FA3C800204E5A /* IQDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B8A19F1F4FA3C800204E5A /* IQDataSource.swift */; };
-		40B8A1A61F5012EB00204E5A /* IQListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B8A1A51F5012EB00204E5A /* IQListDataSource.swift */; };
-		40B8A1A81F50181900204E5A /* IQOneDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B8A1A71F50181900204E5A /* IQOneDataSource.swift */; };
 		40B8A1AB1F50736C00204E5A /* QTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B8A1AA1F50736C00204E5A /* QTimer.swift */; };
 		40C8F8251F55109100C75D34 /* IQSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F8231F55109100C75D34 /* IQSpinnerView.swift */; };
 		40C8F8261F55109100C75D34 /* QSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F8241F55109100C75D34 /* QSpinnerView.swift */; };
@@ -281,9 +278,6 @@
 		40B8A1981F4F806A00204E5A /* IQModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQModel.swift; sourceTree = "<group>"; };
 		40B8A19A1F4F80FF00204E5A /* QModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QModel.swift; sourceTree = "<group>"; };
 		40B8A19C1F4F8C0400204E5A /* IQJsonValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQJsonValue.swift; sourceTree = "<group>"; };
-		40B8A19F1F4FA3C800204E5A /* IQDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQDataSource.swift; sourceTree = "<group>"; };
-		40B8A1A51F5012EB00204E5A /* IQListDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQListDataSource.swift; sourceTree = "<group>"; };
-		40B8A1A71F50181900204E5A /* IQOneDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQOneDataSource.swift; sourceTree = "<group>"; };
 		40B8A1AA1F50736C00204E5A /* QTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTimer.swift; sourceTree = "<group>"; };
 		40C8F81C1F550EA500C75D34 /* Quickly.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = Quickly.podspec; sourceTree = "<group>"; };
 		40C8F8231F55109100C75D34 /* IQSpinnerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQSpinnerView.swift; sourceTree = "<group>"; };
@@ -493,7 +487,6 @@
 				40B8A1971F4F805F00204E5A /* Model */,
 				40C94A251F69514500439961 /* Observer */,
 				409403561F4E125E008A8B90 /* Api */,
-				40B8A19E1F4FA3C800204E5A /* DataSource */,
 				40CF458B1F4DE6AB004D00D8 /* Router */,
 				40B8A1A91F50736C00204E5A /* Timer */,
 				40FBE69C1F543EFD00F5194B /* Text */,
@@ -655,16 +648,6 @@
 				40B8A19A1F4F80FF00204E5A /* QModel.swift */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		40B8A19E1F4FA3C800204E5A /* DataSource */ = {
-			isa = PBXGroup;
-			children = (
-				40B8A19F1F4FA3C800204E5A /* IQDataSource.swift */,
-				40B8A1A71F50181900204E5A /* IQOneDataSource.swift */,
-				40B8A1A51F5012EB00204E5A /* IQListDataSource.swift */,
-			);
-			path = DataSource;
 			sourceTree = "<group>";
 		};
 		40B8A1A91F50736C00204E5A /* Timer */ = {
@@ -1099,11 +1082,9 @@
 				40134F031F63129E009F81A6 /* QCardExpirationDateStringFormatter.swift in Sources */,
 				40FBE6AA1F54591000F5194B /* QImageSource.swift in Sources */,
 				4006EDB21F61363E0050AD91 /* QBackgroundColorCollectionItem.swift in Sources */,
-				40B8A1A61F5012EB00204E5A /* IQListDataSource.swift in Sources */,
 				40CF45C21F4DE6AB004D00D8 /* QCollectionView.swift in Sources */,
 				40E738581F5606C500B192C6 /* QSpaceTableCell.swift in Sources */,
 				40CF45C61F4DE6AB004D00D8 /* QJson.swift in Sources */,
-				40B8A1A81F50181900204E5A /* IQOneDataSource.swift in Sources */,
 				40C8F82A1F552F7400C75D34 /* QTextField.swift in Sources */,
 				40E7384C1F5606B700B192C6 /* QLabelTableCell.swift in Sources */,
 				4006EDB61F61363E0050AD91 /* QImageLabelCollectionItem.swift in Sources */,
@@ -1188,7 +1169,6 @@
 				40CF45DA1F4DE6AB004D00D8 /* IQTableDecor.swift in Sources */,
 				40134F021F63129E009F81A6 /* IQStringFormatter.swift in Sources */,
 				40CF45DC1F4DE6AB004D00D8 /* IQTableRow.swift in Sources */,
-				40B8A1A11F4FA3C800204E5A /* IQDataSource.swift in Sources */,
 				4061E1A91F4ECDFA00AC3217 /* NSError.swift in Sources */,
 				4039BCB71F516F5900E38090 /* QControl.swift in Sources */,
 				40B8A1991F4F806A00204E5A /* IQModel.swift in Sources */,

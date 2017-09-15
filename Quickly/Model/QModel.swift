@@ -21,7 +21,7 @@ open class QModel: IQModel {
     }
 
     public final func toJson() -> QJson? {
-        let json = QJson()
+        let json: QJson = QJson()
         self.toJson(json: json)
         return json
     }
@@ -52,3 +52,36 @@ extension QModel: IJsonValue {
     
 }
 
+public func >>> < Type: IJsonValue & IQModel >(left: Type, right: QJson) {
+    if let json: QJson = left.toJson() {
+        if let dict: [AnyHashable: Any] = json.dictionary() {
+            right.set(dict)
+        }
+    }
+}
+
+public func <<< < Type: IJsonValue & IQModel >(left: inout Type, right: QJson) throws {
+    guard let model: IQModel = try Type.from(json: right) else {
+        throw NSError(domain: QJsonErrorDomain, code: QJsonErrorCode.convert.rawValue, userInfo: nil)
+    }
+    left = model as! Type
+}
+
+public func <<< < Type: IJsonValue & IQModel >(left: inout Type!, right: QJson) throws {
+    guard let model: IQModel = try Type.from(json: right) else {
+        throw NSError(domain: QJsonErrorDomain, code: QJsonErrorCode.convert.rawValue, userInfo: nil)
+    }
+    left = model as! Type
+}
+
+public func <<< < Type: IJsonValue & IQModel >(left: inout Type?, right: QJson) {
+    if let model: IQModel? = try? Type.from(json: right) {
+        if let model: IQModel = model {
+            left = model as? Type
+        } else {
+            left = nil
+        }
+    } else {
+        left = nil
+    }
+}
