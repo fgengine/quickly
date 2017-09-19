@@ -107,6 +107,12 @@ open class QButton: QControl {
         didSet { self.contentView.addConstraints(self.contentConstraints) }
     }
 
+    open override var frame: CGRect {
+        didSet { self.invalidateIntrinsicContentSize() }
+    }
+    open override var bounds: CGRect {
+        didSet { self.invalidateIntrinsicContentSize() }
+    }
     open override var intrinsicContentSize: CGSize {
         get {
             return self.sizeThatFits(CGSize(
@@ -137,6 +143,7 @@ open class QButton: QControl {
         self.textLabel.translatesAutoresizingMaskIntoConstraints = false
         self.textLabel.isUserInteractionEnabled = false
         self.textLabel.alpha = 0
+        self.textLabel.numberOfLines = 0
         self.contentView.addSubview(self.textLabel)
 
         self.tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.gestureHandler(_:)))
@@ -196,6 +203,17 @@ open class QButton: QControl {
                 self.setNeedsUpdateConstraints()
                 self.applyStyle()
             }
+        }
+    }
+
+    open override func invalidateIntrinsicContentSize() {
+        super.invalidateIntrinsicContentSize()
+
+        if let imageView: QImageView = self.imageView {
+            imageView.invalidateIntrinsicContentSize()
+        }
+        if let textLabel: QLabel = self.textLabel {
+            textLabel.preferredMaxLayoutWidth = self.bounds.width
         }
     }
 

@@ -39,7 +39,6 @@ open class QLabel: QView {
             self.setNeedsDisplay()
         }
     }
-
     public var padding: CGFloat {
         set {
             self.textContainer.lineFragmentPadding = newValue
@@ -50,7 +49,6 @@ open class QLabel: QView {
             return self.textContainer.lineFragmentPadding
         }
     }
-
     public var numberOfLines: Int {
         set(value) {
             self.textContainer.maximumNumberOfLines = value
@@ -61,7 +59,6 @@ open class QLabel: QView {
             return self.textContainer.maximumNumberOfLines
         }
     }
-
     public var lineBreakMode: NSLineBreakMode {
         set {
             self.textContainer.lineBreakMode = newValue
@@ -72,7 +69,6 @@ open class QLabel: QView {
             return self.textContainer.lineBreakMode
         }
     }
-    
     public var text: IQText? {
         didSet {
             self.updateTextStorage()
@@ -80,11 +76,57 @@ open class QLabel: QView {
             self.setNeedsDisplay()
         }
     }
+    public var preferredMaxLayoutWidth: CGFloat = 0 {
+        didSet {
+            self.invalidateIntrinsicContentSize()
+            self.setNeedsDisplay()
+        }
+    }
+    open override var frame: CGRect {
+        didSet { self.invalidateIntrinsicContentSize() }
+    }
+    open override var bounds: CGRect {
+        didSet { self.invalidateIntrinsicContentSize() }
+    }
+    open override var intrinsicContentSize: CGSize {
+        get {
+            return self.sizeThatFits(CGSize(
+                width: self.currentPreferredMaxLayoutWidth(),
+                height: CGFloat.greatestFiniteMagnitude
+            ))
+        }
+    }
 
     internal let textContainer: NSTextContainer = NSTextContainer()
     internal let layoutManager: NSLayoutManager = NSLayoutManager()
     internal let textStorage: NSTextStorage = NSTextStorage()
 
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.setContentHuggingPriority(251, for: .horizontal)
+        self.setContentHuggingPriority(251, for: .vertical)
+    }
+
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    open override func setup() {
+        super.setup()
+
+        self.backgroundColor = UIColor.clear
+        self.contentMode = .redraw
+        self.isOpaque = false
+
+        self.textContainer.lineBreakMode = .byTruncatingTail
+        self.textContainer.lineFragmentPadding = 0
+        self.textContainer.maximumNumberOfLines = 1
+
+        self.layoutManager.addTextContainer(self.textContainer)
+
+        self.textStorage.addLayoutManager(self.layoutManager)
+    }
+    
     public func characterIndex(point: CGPoint) -> String.Index? {
         let viewRect: CGRect = self.bounds
         let textSize: CGSize = self.layoutManager.usedRect(for: self.textContainer).integral.size
@@ -104,41 +146,6 @@ open class QLabel: QView {
             return string.index(string.startIndex, offsetBy: index)
         }
         return nil
-    }
-
-    internal func updateTextStorage() {
-        if let text: IQText = self.text {
-            self.textStorage.setAttributedString(text.attributed)
-        } else {
-            self.textStorage.deleteAllCharacters()
-        }
-    }
-    
-    open override func setup() {
-        super.setup()
-
-        self.backgroundColor = UIColor.clear
-        self.contentMode = .redraw
-        self.isOpaque = false
-        self.setContentHuggingPriority(251, for: .horizontal)
-        self.setContentHuggingPriority(251, for: .vertical)
-
-        self.textContainer.lineBreakMode = .byTruncatingTail
-        self.textContainer.lineFragmentPadding = 0
-        self.textContainer.maximumNumberOfLines = 1
-
-        self.layoutManager.addTextContainer(self.textContainer)
-
-        self.textStorage.addLayoutManager(self.layoutManager)
-    }
-
-    open override var intrinsicContentSize: CGSize {
-        get {
-            return self.sizeThatFits(CGSize(
-                width: numberOfLines == 1 ? CGFloat.greatestFiniteMagnitude : bounds.width,
-                height: CGFloat.greatestFiniteMagnitude
-            ))
-        }
     }
 
     open override func layoutSubviews() {
@@ -177,9 +184,27 @@ open class QLabel: QView {
         super.sizeToFit()
         
         self.frame.size = self.sizeThatFits(CGSize(
-            width: numberOfLines == 1 ? CGFloat.greatestFiniteMagnitude : bounds.width,
+            width: self.currentPreferredMaxLayoutWidth(),
             height: CGFloat.greatestFiniteMagnitude
         ))
+    }
+
+    internal func currentPreferredMaxLayoutWidth() -> CGFloat {
+        let maxLayoutWidth: CGFloat = self.preferredMaxLayoutWidth
+        if maxLayoutWidth > CGFloat.leastNonzeroMagnitude {
+            return maxLayoutWidth
+        }
+        if self.numberOfLines == 1 {
+            return CGFloat.greatestFiniteMagnitude
+        }
+        return self.bounds.width
+    }
+    internal func updateTextStorage() {
+        if let text: IQText = self.text {
+            self.textStorage.setAttributedString(text.attributed)
+        } else {
+            self.textStorage.deleteAllCharacters()
+        }
     }
 
 }

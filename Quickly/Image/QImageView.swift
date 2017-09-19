@@ -39,17 +39,14 @@ open class QImageView: QView, IQImageLoaderTarget {
     public var filter: IQImageLoaderFilter?
     public private(set) var isDownloading: Bool = false
     public var loader: QImageLoader?
-
     public private(set) var imageView: UIImageView!
 
     open override var frame: CGRect {
         didSet { self.updateCornerRadius() }
     }
-
     open override var bounds: CGRect {
         didSet { self.updateCornerRadius() }
     }
-    
     open override var intrinsicContentSize: CGSize {
         get {
             if let source: QImageSource = self.source {

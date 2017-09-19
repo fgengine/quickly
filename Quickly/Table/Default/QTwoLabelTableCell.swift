@@ -28,6 +28,8 @@ open class QTwoLabelTableCell< RowType: QTwoLabelTableRow >: QBackgroundColorTab
 
         self.primaryLabel = QLabel(frame: self.contentView.bounds)
         self.primaryLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.primaryLabel.setContentHuggingPriority(252, for: .horizontal)
+        self.primaryLabel.setContentHuggingPriority(252, for: .vertical)
         self.contentView.addSubview(self.primaryLabel)
 
         self.secondaryLabel = QLabel(frame: self.contentView.bounds)

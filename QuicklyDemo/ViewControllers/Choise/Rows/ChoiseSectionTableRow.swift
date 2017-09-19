@@ -4,7 +4,7 @@
 
 import Quickly
 
-class ChoiseSectionTableRow: QLabelTableRow {
+class ChoiseSectionTableRow: QTwoLabelTableRow {
 
     // MARK: Enum
 
@@ -24,6 +24,16 @@ class ChoiseSectionTableRow: QLabelTableRow {
                 }
             }
         }
+        public var detail: String {
+            get {
+                switch self {
+                case .label: return "Pressed to open the QLabel component demonstration screen"
+                case .button: return "Pressed to open the QButton component demonstration screen"
+                case .textField: return "Pressed to open the QTextField component demonstration screen"
+                case .image: return "Pressed to open the QImageView component demonstration screen"
+                }
+            }
+        }
     }
 
     // MARK: Public property
@@ -37,7 +47,8 @@ class ChoiseSectionTableRow: QLabelTableRow {
 
         super.init()
 
-        self.text = QStyledText(mode.name, style: TextStyle.base)
+        self.primaryText = QStyledText(mode.name, style: TextStyle.title)
+        self.secondaryText = QStyledText(mode.detail, style: TextStyle.subtitle)
         self.edgeInsets =  UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
     }
 

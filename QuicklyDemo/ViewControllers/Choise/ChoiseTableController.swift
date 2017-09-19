@@ -18,7 +18,7 @@ class ChoiseTableController: QTableController {
         self.delegate = delegate
 
         super.init(cells: [
-            QLabelTableCell.self
+            QTwoLabelTableCell.self
         ])
     }
 
