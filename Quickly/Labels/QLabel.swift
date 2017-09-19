@@ -125,7 +125,7 @@ open class QLabel: QView {
 
         self.textContainer.lineBreakMode = .byTruncatingTail
         self.textContainer.lineFragmentPadding = 0
-        self.textContainer.maximumNumberOfLines = 0
+        self.textContainer.maximumNumberOfLines = 1
 
         self.layoutManager.addTextContainer(self.textContainer)
 
@@ -135,7 +135,7 @@ open class QLabel: QView {
     open override var intrinsicContentSize: CGSize {
         get {
             return self.sizeThatFits(CGSize(
-                width: CGFloat.greatestFiniteMagnitude,
+                width: numberOfLines == 1 ? CGFloat.greatestFiniteMagnitude : bounds.width,
                 height: CGFloat.greatestFiniteMagnitude
             ))
         }
@@ -177,7 +177,7 @@ open class QLabel: QView {
         super.sizeToFit()
         
         self.frame.size = self.sizeThatFits(CGSize(
-            width: CGFloat.greatestFiniteMagnitude,
+            width: numberOfLines == 1 ? CGFloat.greatestFiniteMagnitude : bounds.width,
             height: CGFloat.greatestFiniteMagnitude
         ))
     }
