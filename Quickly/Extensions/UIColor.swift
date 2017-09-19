@@ -28,6 +28,18 @@ public extension UIColor {
         return self.random(alpha: 1.0)
     }
 
+    public func hexString() -> String? {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        if self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) == true {
+            return String.init(format: "#%02X%02X%02X%02X", Int(red * 255.0), Int(green * 255.0), Int(blue * 255.0), Int(alpha * 255.0))
+        } else {
+            return nil
+        }
+    }
+
     public static func random(alpha: CGFloat) -> UIColor {
         let randomRed: CGFloat = CGFloat(drand48())
         let randomGreen: CGFloat = CGFloat(drand48())

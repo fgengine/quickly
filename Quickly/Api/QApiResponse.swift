@@ -61,10 +61,52 @@ open class QApiResponse: IQApiResponse {
 
 }
 
-extension QApiResponse: CustomStringConvertible {
+extension QApiResponse: IQDebug {
 
-    public var description: String {
-        return ""
+    open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+        let baseIndent: Int = indent + 1
+        let nextIndent: Int = baseIndent + 1
+
+        if headerIndent > 0 {
+            buffer.append(String(repeating: "\t", count: headerIndent))
+        }
+        buffer.append("<\(String(describing: self))\n")
+
+        if let url: URL = self.url {
+            var debug: String = String()
+            url.debugString(&debug, 0, nextIndent, baseIndent)
+            QDebugString("Url: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+        }
+        if let mimeType: String = self.mimeType {
+            var debug: String = String()
+            mimeType.debugString(&debug, 0, nextIndent, baseIndent)
+            QDebugString("MimeType: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+        }
+        if let textEncodingName: String = self.textEncodingName {
+            var debug: String = String()
+            textEncodingName.debugString(&debug, 0, nextIndent, baseIndent)
+            QDebugString("TextEncodingName: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+        }
+        if let httpStatusCode: Int = self.httpStatusCode {
+            var debug: String = String()
+            httpStatusCode.debugString(&debug, 0, nextIndent, baseIndent)
+            QDebugString("HttpStatusCode: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+        }
+        if let httpHeaders: [AnyHashable: Any] = self.httpHeaders {
+            var debug: String = String()
+            httpHeaders.debugString(&debug, 0, nextIndent, baseIndent)
+            QDebugString("HttpHeaders: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+        }
+        if let error: IQDebug = self.error as IQDebug? {
+            var debug: String = String()
+            error.debugString(&debug, 0, nextIndent, baseIndent)
+            QDebugString("error: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+        }
+
+        if footerIndent > 0 {
+            buffer.append(String(repeating: "\t", count: footerIndent))
+        }
+        buffer.append(">")
     }
     
 }

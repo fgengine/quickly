@@ -74,7 +74,7 @@ public final class QJson {
         return self.impl.dictionary()
     }
 
-    public func isRootArray() -> Bool {
+    public func isArray() -> Bool {
         return self.impl.isArray()
     }
 
@@ -223,6 +223,25 @@ public final class QJson {
 
     public func color(at: String) throws -> UIColor {
         return try self.impl.color(at: at)
+    }
+
+}
+
+extension QJson: IQDebug {
+
+    open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+        if self.isArray() == true {
+            let array: NSArray = self.root! as! NSArray
+            array.debugString(&buffer, headerIndent, indent, footerIndent)
+        } else if self.isDictionary() == true {
+            let dictionary: NSDictionary = self.root! as! NSDictionary
+            dictionary.debugString(&buffer, headerIndent, indent, footerIndent)
+        } else {
+            if headerIndent > 0 {
+                buffer.append(String(repeating: "\t", count: headerIndent))
+            }
+            buffer.append("<QJson>")
+        }
     }
 
 }

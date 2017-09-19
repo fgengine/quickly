@@ -24,6 +24,11 @@ class QuicklyJsonTests: XCTestCase {
        ])
     }
 
+    func testDebugJson() {
+        let json: QJson = self.fakeJson()
+        print(json.debugString())
+    }
+
     func testSimpleGetJson() {
         let json: QJson = self.fakeJson()
         XCTAssert(try json.boolean(at: "bool") == true)

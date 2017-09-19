@@ -264,3 +264,48 @@ open class QApiProvider: NSObject, IQApiProvider {
     }
     
 }
+
+extension QApiProvider: IQDebug {
+
+    open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+        let baseIndent: Int = indent + 1
+        let nextIndent: Int = baseIndent + 1
+
+        if headerIndent > 0 {
+            buffer.append(String(repeating: "\t", count: headerIndent))
+        }
+        buffer.append("<\(String(describing: self))\n")
+
+        if let baseUrl: URL = self.baseUrl {
+            var debug: String = String()
+            baseUrl.debugString(&debug, 0, nextIndent, baseIndent)
+            QDebugString("BaseUrl: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+        }
+        if self.urlParams.count > 0 {
+            var debug: String = String()
+            self.urlParams.debugString(&debug, 0, nextIndent, baseIndent)
+            QDebugString("UrlParams: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+        }
+        if self.headers.count > 0 {
+            var debug: String = String()
+            self.headers.debugString(&debug, 0, nextIndent, baseIndent)
+            QDebugString("Headers: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+        }
+        if let bodyParams: [String: Any] = self.bodyParams {
+            var debug: String = String()
+            bodyParams.debugString(&debug, 0, nextIndent, baseIndent)
+            QDebugString("BodyParams: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+        }
+        if self.allowInvalidCertificates == true {
+            var debug: String = String()
+            self.allowInvalidCertificates.debugString(&debug, 0, nextIndent, baseIndent)
+            QDebugString("AllowInvalidCertificates: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+        }
+
+        if footerIndent > 0 {
+            buffer.append(String(repeating: "\t", count: footerIndent))
+        }
+        buffer.append(">")
+    }
+    
+}
