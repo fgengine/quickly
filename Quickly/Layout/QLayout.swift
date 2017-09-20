@@ -61,7 +61,7 @@ public struct QLayoutItem< T > {
     fileprivate func constrain(
         _ constant: CGFloat,
         relation: NSLayoutRelation
-    ) -> NSLayoutConstraint {
+        ) -> NSLayoutConstraint {
         return NSLayoutConstraint(
             item: self.item,
             attribute: self.attribute,
@@ -214,19 +214,19 @@ public extension UIView {
 public extension UIViewController {
 
     public var topLayoutGuideTopLayout: QLayoutItem< QQLayoutAxisY > {
-        return QLayoutItem(topLayoutGuide, .top)
+        return QLayoutItem(self.topLayoutGuide, .top)
     }
 
     public var topLayoutGuideBottomLayout: QLayoutItem< QQLayoutAxisY > {
-        return QLayoutItem(topLayoutGuide, .bottom)
+        return QLayoutItem(self.topLayoutGuide, .bottom)
     }
 
     public var bottomLayoutGuideTopLayout: QLayoutItem< QQLayoutAxisY > {
-        return QLayoutItem(bottomLayoutGuide, .top)
+        return QLayoutItem(self.bottomLayoutGuide, .top)
     }
 
     public var bottomLayoutGuideBottomLayout: QLayoutItem< QQLayoutAxisY > {
-        return QLayoutItem(bottomLayoutGuide, .bottom)
+        return QLayoutItem(self.bottomLayoutGuide, .bottom)
     }
 
 }
@@ -239,15 +239,7 @@ precedencegroup QLayoutPriorityPrecedence {
 infix operator ~ : QLayoutPriorityPrecedence
 
 public func ~ (lhs: NSLayoutConstraint, rhs: UILayoutPriority) -> NSLayoutConstraint {
-    let constraint: NSLayoutConstraint = NSLayoutConstraint(
-        item: lhs.firstItem ?? nil,
-        attribute: lhs.firstAttribute,
-        relatedBy: lhs.relation,
-        toItem: lhs.secondItem ?? nil,
-        attribute: lhs.secondAttribute,
-        multiplier: lhs.multiplier,
-        constant: lhs.constant
-    )
-    constraint.priority = rhs
-    return constraint
+    lhs.priority = rhs
+    return lhs
 }
+

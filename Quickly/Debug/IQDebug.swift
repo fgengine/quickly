@@ -30,7 +30,7 @@ public extension IQDebug {
         }
         buffer.append("\(self)")
     }
-    
+
 }
 
 public func QDebugString(_ value: IQDebug) -> String {
@@ -58,6 +58,8 @@ extension UInt64: IQDebug {}
 extension Float: IQDebug {}
 extension Double: IQDebug {}
 extension String: IQDebug {}
+extension NSString: IQDebug {}
+extension NSNumber: IQDebug {}
 extension URL: IQDebug {}
 extension NSURL: IQDebug {}
 
@@ -95,7 +97,7 @@ extension NSData: IQDebug {
         }
         buffer.append("<Data \(self.length) bytes>")
     }
-    
+
 }
 
 extension CGPoint: IQDebug {
@@ -154,7 +156,7 @@ extension UIImage: IQDebug {
         }
         buffer.append("<UIImage width: \(self.size.width) height: \(self.size.height)>")
     }
-    
+
 }
 
 extension NSError: IQDebug {
@@ -168,7 +170,7 @@ extension NSError: IQDebug {
 
 }
 
-extension Array {
+extension Array: IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         let baseIndent: Int = indent + 1
@@ -199,7 +201,7 @@ extension Array {
 
 }
 
-extension NSArray {
+extension NSArray: IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         let baseIndent: Int = indent + 1
@@ -227,10 +229,10 @@ extension NSArray {
         }
         buffer.append("]")
     }
-    
+
 }
 
-extension Dictionary {
+extension Dictionary: IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         let baseIndent: Int = indent + 1
@@ -264,10 +266,10 @@ extension Dictionary {
         }
         buffer.append("}")
     }
-    
+
 }
 
-extension NSDictionary {
+extension NSDictionary: IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         let baseIndent: Int = indent + 1
@@ -301,5 +303,6 @@ extension NSDictionary {
         }
         buffer.append("}")
     }
-    
+
 }
+
