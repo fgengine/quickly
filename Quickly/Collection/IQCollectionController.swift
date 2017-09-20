@@ -4,7 +4,7 @@
 
 import UIKit
 
-public protocol IQCollectionController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+public protocol IQCollectionController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     weak var collectionView: UICollectionView? { set get }
     var sections: [IQCollectionSection] { set get }

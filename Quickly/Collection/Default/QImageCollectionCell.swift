@@ -50,12 +50,12 @@ open class QImageCollectionCell< ItemType: QImageCollectionItem >: QBackgroundCo
     }
 
     private func apply(item: QImageCollectionItem) {
-        self.selfConstraints = [
-            self.pictureView.topLayout == self.contentView.topLayout + item.edgeInsets.top,
-            self.pictureView.leadingLayout == self.contentView.leadingLayout + item.edgeInsets.left,
-            self.pictureView.trailingLayout == self.contentView.trailingLayout - item.edgeInsets.right,
-            self.pictureView.bottomLayout == self.contentView.bottomLayout - item.edgeInsets.bottom
-        ]
+        var selfConstraints: [NSLayoutConstraint] = []
+        selfConstraints.append(self.pictureView.topLayout == self.contentView.topLayout + item.edgeInsets.top)
+        selfConstraints.append(self.pictureView.leadingLayout == self.contentView.leadingLayout + item.edgeInsets.left)
+        selfConstraints.append(self.pictureView.trailingLayout == self.contentView.trailingLayout - item.edgeInsets.right)
+        selfConstraints.append(self.pictureView.bottomLayout == self.contentView.bottomLayout - item.edgeInsets.bottom)
+        self.selfConstraints = selfConstraints
 
         self.pictureView.roundCorners = item.roundCorners
         self.pictureView.source = item.source

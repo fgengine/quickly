@@ -141,8 +141,12 @@ public extension String {
     }
 
     public func nsRange(from range: Range< String.Index >) -> NSRange {
-        let from: String.UTF16View.Index = range.lowerBound.samePosition(in: utf16)
-        let to: String.UTF16View.Index = range.upperBound.samePosition(in: utf16)
+        guard
+            let from: String.UTF16View.Index = range.lowerBound.samePosition(in: utf16),
+            let to: String.UTF16View.Index = range.upperBound.samePosition(in: utf16)
+            else {
+                return NSRange()
+        }
         return NSRange(
             location: utf16.distance(from: utf16.startIndex, to: from),
             length: utf16.distance(from: from, to: to)

@@ -50,12 +50,12 @@ open class QSeparatorCollectionCell< ItemType: QSeparatorCollectionItem >: QBack
     }
 
     private func apply(item: QSeparatorCollectionItem) {
-        self.selfConstraints = [
-            self.separator.topLayout == self.contentView.topLayout + item.edgeInsets.top,
-            self.separator.leadingLayout == self.contentView.leadingLayout + item.edgeInsets.left,
-            self.separator.trailingLayout == self.contentView.trailingLayout - item.edgeInsets.right,
-            self.separator.bottomLayout == self.contentView.bottomLayout - item.edgeInsets.bottom
-        ]
+        var selfConstraints: [NSLayoutConstraint] = []
+        selfConstraints.append(self.separator.topLayout == self.contentView.topLayout + item.edgeInsets.top)
+        selfConstraints.append(self.separator.leadingLayout == self.contentView.leadingLayout + item.edgeInsets.left)
+        selfConstraints.append(self.separator.trailingLayout == self.contentView.trailingLayout - item.edgeInsets.right)
+        selfConstraints.append(self.separator.bottomLayout == self.contentView.bottomLayout - item.edgeInsets.bottom)
+        self.selfConstraints = selfConstraints
 
         self.separator.backgroundColor = item.color
     }

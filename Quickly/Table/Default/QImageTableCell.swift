@@ -42,12 +42,12 @@ open class QImageTableCell< RowType: QImageTableRow >: QBackgroundColorTableCell
     }
 
     private func apply(row: QImageTableRow) {
-        self.selfConstraints = [
-            self.pictureView.topLayout == self.contentView.topLayout + row.edgeInsets.top,
-            self.pictureView.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left,
-            self.pictureView.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right,
-            self.pictureView.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom
-        ]
+        var selfConstraints: [NSLayoutConstraint] = []
+        selfConstraints.append(self.pictureView.topLayout == self.contentView.topLayout + row.edgeInsets.top)
+        selfConstraints.append(self.pictureView.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
+        selfConstraints.append(self.pictureView.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
+        selfConstraints.append(self.pictureView.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
+        self.selfConstraints = selfConstraints
 
         self.pictureView.roundCorners = row.roundCorners
         self.pictureView.source = row.source

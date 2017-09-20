@@ -4,7 +4,7 @@
 
 import Foundation
 
-public class QTimer {
+public class QTimer: NSObject {
 
     public typealias Closure = (_ timer: QTimer) -> Void
 
@@ -126,7 +126,7 @@ public class QTimer {
         }
     }
 
-    @objc private func handler(_ sender: Any) {
+    @IBAction private func handler(_ sender: Any) {
         if self.isDelaying == true {
             self.isDelaying = false
             if let closure: Closure = self.onStarted {

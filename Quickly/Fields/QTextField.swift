@@ -39,20 +39,22 @@ open class QTextField : QView {
     }
     public var textStyle: QTextStyle? {
         didSet {
-            var attributes: [String: Any] = [:]
+            var attributes: [NSAttributedStringKey: Any] = [:]
             if let textStyle: QTextStyle = self.textStyle {
                 attributes = textStyle.attributes
-                self.textField.font = attributes[NSFontAttributeName] as? UIFont
-                self.textField.textColor = attributes[NSForegroundColorAttributeName] as? UIColor
+                self.textField.font = attributes[.font] as? UIFont
+                self.textField.textColor = attributes[.foregroundColor] as? UIColor
             } else {
                 if let font: UIFont = self.textField.font {
-                    attributes[NSFontAttributeName] = font
+                    attributes[.font] = font
                 }
                 if let textColor: UIColor = self.textField.textColor {
-                    attributes[NSForegroundColorAttributeName] = textColor
+                    attributes[.foregroundColor] = textColor
                 }
             }
-            self.textField.defaultTextAttributes = attributes
+            self.textField.defaultTextAttributes = Dictionary(uniqueKeysWithValues:
+                attributes.lazy.map { ($0.key.rawValue, $0.value) }
+            )
         }
     }
     public var text: String {
@@ -102,7 +104,9 @@ open class QTextField : QView {
         didSet {
             if let typingStyle: QTextStyle = self.typingStyle {
                 self.textField.allowsEditingTextAttributes = true
-                self.textField.typingAttributes = typingStyle.attributes
+                self.textField.typingAttributes = Dictionary(uniqueKeysWithValues:
+                    typingStyle.attributes.lazy.map { ($0.key.rawValue, $0.value) }
+                )
             } else {
                 self.textField.allowsEditingTextAttributes = false
                 self.textField.typingAttributes = nil

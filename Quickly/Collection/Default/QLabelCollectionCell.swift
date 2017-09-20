@@ -48,12 +48,12 @@ open class QLabelCollectionCell< ItemType: QLabelCollectionItem >: QBackgroundCo
     }
 
     private func apply(item: QLabelCollectionItem) {
-        self.selfConstraints = [
-            self.label.topLayout == self.contentView.topLayout + item.edgeInsets.top,
-            self.label.leadingLayout == self.contentView.leadingLayout + item.edgeInsets.left,
-            self.label.trailingLayout == self.contentView.trailingLayout - item.edgeInsets.right,
-            self.label.bottomLayout == self.contentView.bottomLayout - item.edgeInsets.bottom
-        ]
+        var selfConstraints: [NSLayoutConstraint] = []
+        selfConstraints.append(self.label.topLayout == self.contentView.topLayout + item.edgeInsets.top)
+        selfConstraints.append(self.label.leadingLayout == self.contentView.leadingLayout + item.edgeInsets.left)
+        selfConstraints.append(self.label.trailingLayout == self.contentView.trailingLayout - item.edgeInsets.right)
+        selfConstraints.append(self.label.bottomLayout == self.contentView.bottomLayout - item.edgeInsets.bottom)
+        self.selfConstraints = selfConstraints
 
         self.label.contentAlignment = item.contentAlignment
         self.label.padding = item.padding

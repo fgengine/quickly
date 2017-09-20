@@ -26,13 +26,13 @@ public struct QQLayoutDimension {
 
 public struct QLayoutItem< T > {
 
-    public let item: AnyObject
+    public let item: Any
     public let attribute: NSLayoutAttribute
     public let constant: CGFloat
     public let multiplier: CGFloat
 
     public init(
-        _ item: AnyObject,
+        _ item: Any,
         _ attribute: NSLayoutAttribute,
         _ constant: CGFloat = 0,
         _ multiplier: CGFloat = 1
@@ -240,10 +240,10 @@ infix operator ~ : QLayoutPriorityPrecedence
 
 public func ~ (lhs: NSLayoutConstraint, rhs: UILayoutPriority) -> NSLayoutConstraint {
     let constraint: NSLayoutConstraint = NSLayoutConstraint(
-        item: lhs.firstItem,
+        item: lhs.firstItem as Any,
         attribute: lhs.firstAttribute,
         relatedBy: lhs.relation,
-        toItem: lhs.secondItem,
+        toItem: lhs.secondItem as Any,
         attribute: lhs.secondAttribute,
         multiplier: lhs.multiplier,
         constant: lhs.constant

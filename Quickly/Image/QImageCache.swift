@@ -186,7 +186,10 @@ public class QImageCache {
         return DispatchQueue(label: self.name, attributes: .concurrent)
     }
 
-    @objc private func didReceiveMemoryWarning(_ notification: NSNotification) {
+    @IBAction private func didReceiveMemoryWarning(_ notification: NSNotification) {
+        self.queue.sync {
+            self.memory.removeAll()
+        }
     }
 
 }

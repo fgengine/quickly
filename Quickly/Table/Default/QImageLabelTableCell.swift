@@ -48,16 +48,15 @@ open class QImageLabelTableCell< RowType: QImageLabelTableRow >: QBackgroundColo
     }
 
     private func apply(row: QImageLabelTableRow) {
-        self.selfConstraints = [
-            self.pictureView.topLayout == self.contentView.topLayout + row.edgeInsets.top,
-            self.pictureView.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left,
-            self.pictureView.trailingLayout == self.label.leadingLayout - row.spacing,
-            self.pictureView.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom,
-
-            self.label.topLayout == self.contentView.topLayout + row.edgeInsets.top,
-            self.label.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right,
-            self.label.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom
-        ]
+        var selfConstraints: [NSLayoutConstraint] = []
+        selfConstraints.append(self.pictureView.topLayout == self.contentView.topLayout + row.edgeInsets.top)
+        selfConstraints.append(self.pictureView.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
+        selfConstraints.append(self.pictureView.trailingLayout == self.label.leadingLayout - row.spacing)
+        selfConstraints.append(self.pictureView.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
+        selfConstraints.append(self.label.topLayout == self.contentView.topLayout + row.edgeInsets.top)
+        selfConstraints.append(self.label.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
+        selfConstraints.append(self.label.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
+        self.selfConstraints = selfConstraints
 
         self.pictureView.roundCorners = row.imageRoundCorners
         self.pictureView.source = row.imageSource

@@ -585,7 +585,7 @@ public func <<< < ItemType: IJsonValue >(left: inout [ItemType]?, right: (QJson,
 // MARK: Dictionary
 //
 
-public func >>> < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: [KeyType: ValueType], right: QJson) {
+public func >>> < KeyType: IJsonValue, ValueType: IJsonValue >(left: [KeyType: ValueType], right: QJson) {
     var jsonValue: [AnyHashable: Any] = [:]
     left.forEach { (key: KeyType, value: ValueType) in
         if let safeKey: AnyHashable = key.toJsonValue() as? AnyHashable {
@@ -597,7 +597,7 @@ public func >>> < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: 
     right.set(jsonValue)
 }
 
-public func >>> < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: [KeyType: ValueType]?, right: QJson) {
+public func >>> < KeyType: IJsonValue, ValueType: IJsonValue >(left: [KeyType: ValueType]?, right: QJson) {
     if let jsonDictionary = left {
         var jsonValue: [AnyHashable: Any] = [:]
         jsonDictionary.forEach { (key: KeyType, value: ValueType) in
@@ -613,7 +613,7 @@ public func >>> < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: 
     }
 }
 
-public func >>> < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: [KeyType: ValueType], right: (QJson, String)) {
+public func >>> < KeyType: IJsonValue, ValueType: IJsonValue >(left: [KeyType: ValueType], right: (QJson, String)) {
     var jsonValue: [AnyHashable: Any] = [:]
     left.forEach { (key: KeyType, value: ValueType) in
         if let safeKey: AnyHashable = key.toJsonValue() as? AnyHashable {
@@ -625,7 +625,7 @@ public func >>> < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: 
     right.0.set(jsonValue, forPath: right.1)
 }
 
-public func >>> < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: [KeyType: ValueType]?, right: (QJson, String)) {
+public func >>> < KeyType: IJsonValue, ValueType: IJsonValue >(left: [KeyType: ValueType]?, right: (QJson, String)) {
     if let jsonDictionary = left {
         var jsonValue: [AnyHashable: Any] = [:]
         jsonDictionary.forEach { (key: KeyType, value: ValueType) in
@@ -641,7 +641,7 @@ public func >>> < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: 
     }
 }
 
-public func <<< < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: inout [KeyType: ValueType], right: QJson) {
+public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyType: ValueType], right: QJson) {
     if let sourceDictionary = right.dictionary() {
         var result: [KeyType: ValueType] = [:]
         sourceDictionary.forEach({ (key: AnyHashable, value: Any) in
@@ -661,7 +661,7 @@ public func <<< < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: 
     }
 }
 
-public func <<< < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: inout [KeyType: ValueType]!, right: QJson) {
+public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyType: ValueType]!, right: QJson) {
     if let sourceDictionary = right.dictionary() {
         var result: [KeyType: ValueType] = [:]
         sourceDictionary.forEach({ (key: AnyHashable, value: Any) in
@@ -681,7 +681,7 @@ public func <<< < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: 
     }
 }
 
-public func <<< < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: inout [KeyType: ValueType]?, right: QJson) {
+public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyType: ValueType]?, right: QJson) {
     if let sourceDictionary = right.dictionary() {
         var result: [KeyType: ValueType] = [:]
         sourceDictionary.forEach({ (key: AnyHashable, value: Any) in
@@ -701,7 +701,7 @@ public func <<< < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: 
     }
 }
 
-public func <<< < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: inout [KeyType: ValueType], right: (QJson, String)) {
+public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyType: ValueType], right: (QJson, String)) {
     if let dictionary: [AnyHashable: Any]? = try? right.0.dictionary(at: right.1) {
         if let sourceDictionary: [AnyHashable: Any] = dictionary {
             var result: [KeyType: ValueType] = [:]
@@ -725,7 +725,7 @@ public func <<< < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: 
     }
 }
 
-public func <<< < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: inout [KeyType: ValueType]!, right: (QJson, String)) {
+public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyType: ValueType]!, right: (QJson, String)) {
     if let dictionary: [AnyHashable: Any]? = try? right.0.dictionary(at: right.1) {
         if let sourceDictionary: [AnyHashable: Any] = dictionary {
             var result: [KeyType: ValueType] = [:]
@@ -749,7 +749,7 @@ public func <<< < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: 
     }
 }
 
-public func <<< < KeyType: IJsonValue & Hashable, ValueType: IJsonValue >(left: inout [KeyType: ValueType]?, right: (QJson, String)) {
+public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyType: ValueType]?, right: (QJson, String)) {
     if let dictionary: [AnyHashable: Any]? = try? right.0.dictionary(at: right.1) {
         if let sourceDictionary: [AnyHashable: Any] = dictionary {
             var result: [KeyType: ValueType] = [:]

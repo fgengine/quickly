@@ -28,8 +28,8 @@ open class QTwoLabelTableCell< RowType: QTwoLabelTableRow >: QBackgroundColorTab
 
         self.primaryLabel = QLabel(frame: self.contentView.bounds)
         self.primaryLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.primaryLabel.setContentHuggingPriority(252, for: .horizontal)
-        self.primaryLabel.setContentHuggingPriority(252, for: .vertical)
+        self.primaryLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 252), for: .horizontal)
+        self.primaryLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 252), for: .vertical)
         self.contentView.addSubview(self.primaryLabel)
 
         self.secondaryLabel = QLabel(frame: self.contentView.bounds)
@@ -48,15 +48,15 @@ open class QTwoLabelTableCell< RowType: QTwoLabelTableRow >: QBackgroundColorTab
     }
 
     private func apply(row: QTwoLabelTableRow) {
-        self.selfConstraints = [
-            self.primaryLabel.topLayout == self.contentView.topLayout + row.edgeInsets.top,
-            self.primaryLabel.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left,
-            self.primaryLabel.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right,
-            self.primaryLabel.bottomLayout == self.secondaryLabel.topLayout - row.spacing,
-            self.secondaryLabel.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left,
-            self.secondaryLabel.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right,
-            self.secondaryLabel.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom
-        ]
+        var selfConstraints: [NSLayoutConstraint] = []
+        selfConstraints.append(self.primaryLabel.topLayout == self.contentView.topLayout + row.edgeInsets.top)
+        selfConstraints.append(self.primaryLabel.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
+        selfConstraints.append(self.primaryLabel.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
+        selfConstraints.append(self.primaryLabel.bottomLayout == self.secondaryLabel.topLayout - row.spacing)
+        selfConstraints.append(self.secondaryLabel.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
+        selfConstraints.append(self.secondaryLabel.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
+        selfConstraints.append(self.secondaryLabel.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
+        self.selfConstraints = selfConstraints
 
         self.primaryLabel.contentAlignment = row.primaryContentAlignment
         self.primaryLabel.padding = row.primaryPadding

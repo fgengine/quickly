@@ -24,7 +24,7 @@ open class QLinkLabel: QLabel {
             self.isHighlighted = false
         }
 
-        public func attributes() -> [String: Any] {
+        public func attributes() -> [NSAttributedStringKey: Any] {
             if self.isHighlighted == true {
                 if let highlight: QTextStyle = self.highlight {
                     return highlight.attributes
@@ -87,7 +87,7 @@ open class QLinkLabel: QLabel {
         self.updateTextStorage()
     }
 
-    @objc private func handlePressGesture(_ gesture: UILongPressGestureRecognizer) {
+    @IBAction private func handlePressGesture(_ gesture: UILongPressGestureRecognizer) {
         var needUpdate: Bool = false
         let point: CGPoint = gesture.location(in: self)
         if let charecterIndex: String.Index = self.characterIndex(point: point) {
@@ -142,7 +142,7 @@ open class QLinkLabel: QLabel {
         for link: Link in self.links {
             let stringRange: Range< String.Index > = stringRange.clamped(to: link.range)
             let nsRange: NSRange = string.nsRange(from: stringRange)
-            let attributes: [String: Any] = link.attributes()
+            let attributes: [NSAttributedStringKey: Any] = link.attributes()
             self.textStorage.setAttributes(attributes, range: nsRange)
         }
     }

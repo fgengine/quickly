@@ -40,12 +40,12 @@ open class QLabelTableCell< RowType: QLabelTableRow >: QBackgroundColorTableCell
     }
 
     private func apply(row: QLabelTableRow) {
-        self.selfConstraints = [
-            self.label.topLayout == self.contentView.topLayout + row.edgeInsets.top,
-            self.label.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left,
-            self.label.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right,
-            self.label.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom
-        ]
+        var selfConstraints: [NSLayoutConstraint] = []
+        selfConstraints.append(self.label.topLayout == self.contentView.topLayout + row.edgeInsets.top)
+        selfConstraints.append(self.label.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
+        selfConstraints.append(self.label.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
+        selfConstraints.append(self.label.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
+        self.selfConstraints = selfConstraints
 
         self.label.contentAlignment = row.contentAlignment
         self.label.padding = row.padding

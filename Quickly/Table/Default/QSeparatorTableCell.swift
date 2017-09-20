@@ -35,12 +35,12 @@ open class QSeparatorTableCell< RowType: QSeparatorTableRow >: QBackgroundColorT
     }
 
     private func apply(row: QSeparatorTableRow) {
-        self.selfConstraints = [
-            self.separator.topLayout == self.contentView.topLayout + row.edgeInsets.top,
-            self.separator.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left,
-            self.separator.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right,
-            self.separator.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom
-        ]
+        var selfConstraints: [NSLayoutConstraint] = []
+        selfConstraints.append(self.separator.topLayout == self.contentView.topLayout + row.edgeInsets.top)
+        selfConstraints.append(self.separator.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
+        selfConstraints.append(self.separator.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
+        selfConstraints.append(self.separator.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
+        self.selfConstraints = selfConstraints
 
         self.separator.backgroundColor = row.color
     }

@@ -284,43 +284,43 @@ open class QButton: QControl {
 
     open override func updateConstraints() {
         var selfConstraints: [NSLayoutConstraint] = []
-        switch self.contentHorizontalAlignment {
-        case .fill:
+        let horizontalAlignment: UIControlContentHorizontalAlignment = self.contentHorizontalAlignment
+        if horizontalAlignment == .fill {
             selfConstraints.append(self.contentView.leadingLayout == self.leadingLayout + self.contentInsets.left)
             selfConstraints.append(self.contentView.trailingLayout == self.trailingLayout - self.contentInsets.right)
-            break
-        case .left:
+        } else if horizontalAlignment == .left {
             selfConstraints.append(self.contentView.leadingLayout == self.leadingLayout + self.contentInsets.left)
             selfConstraints.append(self.contentView.trailingLayout <= self.trailingLayout - self.contentInsets.right)
-            break
-        case .center:
+        } else if horizontalAlignment == .center {
             selfConstraints.append(self.contentView.centerXLayout == self.centerXLayout)
             selfConstraints.append(self.contentView.leadingLayout >= self.leadingLayout + self.contentInsets.left)
             selfConstraints.append(self.contentView.trailingLayout <= self.trailingLayout - self.contentInsets.right)
-            break
-        case .right:
+        } else if horizontalAlignment == .right {
             selfConstraints.append(self.contentView.leadingLayout >= self.leadingLayout + self.contentInsets.left)
             selfConstraints.append(self.contentView.trailingLayout == self.trailingLayout - self.contentInsets.right)
-            break
+        } else if #available(iOS 11.0, *) {
+            if horizontalAlignment == .leading {
+                selfConstraints.append(self.contentView.leadingLayout == self.leadingLayout + self.contentInsets.left)
+                selfConstraints.append(self.contentView.trailingLayout <= self.trailingLayout - self.contentInsets.right)
+            } else if horizontalAlignment == .trailing {
+                selfConstraints.append(self.contentView.leadingLayout >= self.leadingLayout + self.contentInsets.left)
+                selfConstraints.append(self.contentView.trailingLayout == self.trailingLayout - self.contentInsets.right)
+            }
         }
-        switch self.contentVerticalAlignment {
-        case .fill:
+        let verticalAlignment: UIControlContentVerticalAlignment = self.contentVerticalAlignment
+        if verticalAlignment == .fill {
             selfConstraints.append(self.contentView.topLayout == self.topLayout + self.contentInsets.top)
             selfConstraints.append(self.contentView.bottomLayout == self.bottomLayout - self.contentInsets.bottom)
-            break
-        case .top:
+        } else if verticalAlignment == .top {
             selfConstraints.append(self.contentView.topLayout == self.topLayout + self.contentInsets.top)
             selfConstraints.append(self.contentView.bottomLayout <= self.bottomLayout - self.contentInsets.bottom)
-            break
-        case .center:
+        } else if verticalAlignment == .center {
             selfConstraints.append(self.contentView.centerYLayout == self.centerYLayout)
             selfConstraints.append(self.contentView.topLayout >= self.topLayout + self.contentInsets.top)
             selfConstraints.append(self.contentView.bottomLayout <= self.bottomLayout - self.contentInsets.bottom)
-            break
-        case .bottom:
+        } else if verticalAlignment == .bottom {
             selfConstraints.append(self.contentView.topLayout >= self.topLayout + self.contentInsets.top)
             selfConstraints.append(self.contentView.bottomLayout == self.bottomLayout - self.contentInsets.bottom)
-            break
         }
         self.selfConstraints = selfConstraints
 
@@ -549,7 +549,7 @@ open class QButton: QControl {
         constraints.append(rightView.centerYLayout == self.contentView.centerYLayout)
     }
 
-    @objc private func gestureHandler(_ sender: Any) {
+    @IBAction private func gestureHandler(_ sender: Any) {
         self.sendActions(for: .touchUpInside)
     }
 
@@ -572,3 +572,4 @@ extension QButton: UIGestureRecognizerDelegate {
     }
 
 }
+

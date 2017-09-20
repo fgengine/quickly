@@ -64,12 +64,12 @@ open class QButtonTableCell< RowType: QButtonTableRow >: QBackgroundColorTableCe
     }
 
     private func apply(row: QButtonTableRow) {
-        self.selfConstraints = [
-            self.button.topLayout == self.contentView.topLayout + row.edgeInsets.top,
-            self.button.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left,
-            self.button.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right,
-            self.button.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom
-        ]
+        var selfConstraints: [NSLayoutConstraint] = []
+        selfConstraints.append(self.button.topLayout == self.contentView.topLayout + row.edgeInsets.top)
+        selfConstraints.append(self.button.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
+        selfConstraints.append(self.button.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
+        selfConstraints.append(self.button.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
+        self.selfConstraints = selfConstraints
 
         self.button.contentHorizontalAlignment = row.contentHorizontalAlignment
         self.button.contentVerticalAlignment = row.contentVerticalAlignment
@@ -94,7 +94,7 @@ open class QButtonTableCell< RowType: QButtonTableRow >: QBackgroundColorTableCe
 
     }
 
-    @objc private func pressedButton(_ sender: Any) {
+    @IBAction private func pressedButton(_ sender: Any) {
         guard let row: RowType = self.row else {
             return
         }

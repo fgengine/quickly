@@ -376,7 +376,7 @@ public class QTextStyle {
         didSet { self.setNeedRebuildAttributes() }
     }
 
-    public var attributes: [String: Any] {
+    public var attributes: [NSAttributedStringKey: Any] {
         get {
             if self._rebuildAttributes == true {
                 self._rebuildAttributes = false
@@ -386,7 +386,7 @@ public class QTextStyle {
         }
     }
     private var _rebuildAttributes: Bool = true
-    private var _attributes: [String: Any] = [:]
+    private var _attributes: [NSAttributedStringKey: Any] = [:]
 
     public init() {
     }
@@ -449,34 +449,34 @@ public class QTextStyle {
         }
     }
 
-    private func rebuildAttributes() -> [String: Any] {
-        var attributes: [String: Any] = [:]
+    private func rebuildAttributes() -> [NSAttributedStringKey: Any] {
+        var attributes: [NSAttributedStringKey: Any] = [:]
         if let font: UIFont = self.font {
-            attributes[NSFontAttributeName] = font
+            attributes[.font] = font
         }
         if let color: UIColor = self.color {
-            attributes[NSForegroundColorAttributeName] = color
+            attributes[.foregroundColor] = color
         }
         if let backgroundColor: UIColor = self.backgroundColor {
-            attributes[NSBackgroundColorAttributeName] = backgroundColor
+            attributes[.backgroundColor] = backgroundColor
         }
         if let strikeColor: UIColor = self.strikeColor {
-            attributes[NSStrokeColorAttributeName] = strikeColor
+            attributes[.strokeColor] = strikeColor
         }
         if let strikeColor: UIColor = self.strikeColor {
-            attributes[NSStrokeColorAttributeName] = strikeColor
+            attributes[.strokeColor] = strikeColor
         }
         if let strikeWidth: Float = self.strikeWidth {
-            attributes[NSStrokeWidthAttributeName] = NSNumber(value: strikeWidth)
+            attributes[.strokeWidth] = NSNumber(value: strikeWidth)
         }
         if let strikeThrough: Int = self.strikeThrough {
-            attributes[NSStrikethroughStyleAttributeName] = NSNumber(value: strikeThrough)
+            attributes[.strikethroughStyle] = NSNumber(value: strikeThrough)
         }
         if let underlineColor: UIColor = self.underlineColor {
-            attributes[NSUnderlineColorAttributeName] = underlineColor
+            attributes[.underlineColor] = underlineColor
         }
         if let underlineStyle: NSUnderlineStyle = self.underlineStyle {
-            attributes[NSUnderlineStyleAttributeName] = NSNumber(value: underlineStyle.rawValue)
+            attributes[.underlineStyle] = NSNumber(value: underlineStyle.rawValue)
         }
         if #available(iOS 6.0, *) {
             let shadow = NSShadow()
@@ -489,22 +489,22 @@ public class QTextStyle {
             if let shadowBlurRadius: Float = self.shadowBlurRadius {
                 shadow.shadowBlurRadius = CGFloat(shadowBlurRadius)
             }
-            attributes[NSShadowAttributeName] = shadow
+            attributes[.shadow] = shadow
         }
         if let ligature: Int = self.ligature {
-            attributes[NSLigatureAttributeName] = NSNumber(value: ligature)
+            attributes[.ligature] = NSNumber(value: ligature)
         }
         if let kerning: Float = self.kerning {
-            attributes[NSKernAttributeName] = NSNumber(value: kerning)
+            attributes[.kern] = NSNumber(value: kerning)
         }
         if let baselineOffset: Float = self.baselineOffset {
-            attributes[NSBaselineOffsetAttributeName] = NSNumber(value: baselineOffset)
+            attributes[.baselineOffset] = NSNumber(value: baselineOffset)
         }
         if let obliqueness: Float = self.obliqueness {
-            attributes[NSObliquenessAttributeName] = NSNumber(value: obliqueness)
+            attributes[.obliqueness] = NSNumber(value: obliqueness)
         }
         if let expansion: Float = self.expansion {
-            attributes[NSExpansionAttributeName] = NSNumber(value: expansion)
+            attributes[.expansion] = NSNumber(value: expansion)
         }
         let paragraphStyle = NSMutableParagraphStyle()
         if let lineSpacing: Float = self.lineSpacing {
@@ -546,7 +546,7 @@ public class QTextStyle {
         if let hyphenationFactor: Float = self.hyphenationFactor {
             paragraphStyle.hyphenationFactor = hyphenationFactor
         }
-        attributes[NSParagraphStyleAttributeName] = paragraphStyle
+        attributes[.paragraphStyle] = paragraphStyle
         return attributes
     }
 

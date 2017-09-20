@@ -14,20 +14,20 @@ public class QText: IQText {
 
     public init(_ text: String, font: UIFont) {
         self.attributed = NSAttributedString(string: text, attributes: [
-            NSFontAttributeName: font
+            .font: font
         ])
     }
 
     public init(_ text: String, color: UIColor) {
         self.attributed = NSAttributedString(string: text, attributes: [
-            NSForegroundColorAttributeName: color
+            .foregroundColor: color
         ])
     }
 
     public init(_ text: String, font: UIFont, color: UIColor) {
         self.attributed = NSAttributedString(string: text, attributes: [
-            NSFontAttributeName: font,
-            NSForegroundColorAttributeName: color
+            .font: font,
+            .foregroundColor: color
         ])
     }
 

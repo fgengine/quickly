@@ -14,7 +14,7 @@ public enum QKeychainAccessOptions {
     case accessibleWhenPasscodeSetThisDeviceOnly
     case accessibleAlwaysThisDeviceOnly
 
-    static var defaultOption: QKeychainAccessOptions {
+    public static var defaultOption: QKeychainAccessOptions {
         return .accessibleWhenUnlocked
     }
 
