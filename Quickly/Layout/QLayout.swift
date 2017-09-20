@@ -240,10 +240,10 @@ infix operator ~ : QLayoutPriorityPrecedence
 
 public func ~ (lhs: NSLayoutConstraint, rhs: UILayoutPriority) -> NSLayoutConstraint {
     let constraint: NSLayoutConstraint = NSLayoutConstraint(
-        item: lhs.firstItem as Any,
+        item: lhs.firstItem ?? nil,
         attribute: lhs.firstAttribute,
         relatedBy: lhs.relation,
-        toItem: lhs.secondItem as Any,
+        toItem: lhs.secondItem ?? nil,
         attribute: lhs.secondAttribute,
         multiplier: lhs.multiplier,
         constant: lhs.constant
