@@ -268,8 +268,7 @@ open class QApiProvider: NSObject, IQApiProvider {
 extension QApiProvider: IQDebug {
 
     open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-        let baseIndent: Int = indent + 1
-        let nextIndent: Int = baseIndent + 1
+        let nextIndent: Int = indent + 1
 
         if headerIndent > 0 {
             buffer.append(String(repeating: "\t", count: headerIndent))
@@ -278,28 +277,28 @@ extension QApiProvider: IQDebug {
 
         if let baseUrl: URL = self.baseUrl {
             var debug: String = String()
-            baseUrl.debugString(&debug, 0, nextIndent, baseIndent)
-            QDebugString("BaseUrl: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            baseUrl.debugString(&debug, 0, nextIndent, indent)
+            QDebugString("BaseUrl: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if self.urlParams.count > 0 {
             var debug: String = String()
-            self.urlParams.debugString(&debug, 0, nextIndent, baseIndent)
-            QDebugString("UrlParams: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            self.urlParams.debugString(&debug, 0, nextIndent, indent)
+            QDebugString("UrlParams: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if self.headers.count > 0 {
             var debug: String = String()
-            self.headers.debugString(&debug, 0, nextIndent, baseIndent)
-            QDebugString("Headers: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            self.headers.debugString(&debug, 0, nextIndent, indent)
+            QDebugString("Headers: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if let bodyParams: [String: Any] = self.bodyParams {
             var debug: String = String()
-            bodyParams.debugString(&debug, 0, nextIndent, baseIndent)
-            QDebugString("BodyParams: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            bodyParams.debugString(&debug, 0, nextIndent, indent)
+            QDebugString("BodyParams: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if self.allowInvalidCertificates == true {
             var debug: String = String()
-            self.allowInvalidCertificates.debugString(&debug, 0, nextIndent, baseIndent)
-            QDebugString("AllowInvalidCertificates: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            self.allowInvalidCertificates.debugString(&debug, 0, nextIndent, indent)
+            QDebugString("AllowInvalidCertificates: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
 
         if footerIndent > 0 {

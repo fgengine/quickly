@@ -20,7 +20,7 @@ public extension IQDebug {
 
     public func debugString() -> String {
         var buffer: String = String()
-        self.debugString(&buffer, 0, 0, 0)
+        self.debugString(&buffer, 0, 1, 0)
         return buffer
     }
 
@@ -66,6 +66,50 @@ extension NSURL: IQDebug {}
 //
 // MARK: Extension IQDebug
 //
+
+extension Optional: IQDebug {
+
+    public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+        switch self {
+        case .none:
+            if headerIndent > 0 {
+                buffer.append(String(repeating: "\t", count: headerIndent))
+            }
+            buffer.append("nil")
+            break
+        case .some(let value):
+            if let debugValue: IQDebug = value as? IQDebug {
+                debugValue.debugString(&buffer, 0, indent, footerIndent)
+            } else {
+                buffer.append("\(value)")
+            }
+            break
+        }
+    }
+
+}
+
+extension ImplicitlyUnwrappedOptional: IQDebug {
+
+    public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+        switch self {
+        case .none:
+            if headerIndent > 0 {
+                buffer.append(String(repeating: "\t", count: headerIndent))
+            }
+            buffer.append("nil")
+            break
+        case .some(let value):
+            if let debugValue: IQDebug = value as? IQDebug {
+                debugValue.debugString(&buffer, 0, indent, footerIndent)
+            } else {
+                buffer.append("\(value)")
+            }
+            break
+        }
+    }
+
+}
 
 extension Bool: IQDebug {
 
@@ -173,8 +217,7 @@ extension NSError: IQDebug {
 extension Array: IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-        let baseIndent: Int = indent + 1
-        let nextIndent: Int = baseIndent + 1
+        let nextIndent: Int = indent + 1
 
         if headerIndent > 0 {
             buffer.append(String(repeating: "\t", count: headerIndent))
@@ -183,10 +226,10 @@ extension Array: IQDebug {
 
         self.forEach({ (element) in
             if let debugElement: IQDebug = element as? IQDebug {
-                debugElement.debugString(&buffer, baseIndent, nextIndent, baseIndent)
+                debugElement.debugString(&buffer, indent, nextIndent, indent)
             } else {
-                if baseIndent > 0 {
-                    buffer.append(String(repeating: "\t", count: baseIndent))
+                if indent > 0 {
+                    buffer.append(String(repeating: "\t", count: indent))
                 }
                 buffer.append("\(element)")
             }
@@ -204,8 +247,7 @@ extension Array: IQDebug {
 extension NSArray: IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-        let baseIndent: Int = indent + 1
-        let nextIndent: Int = baseIndent + 1
+        let nextIndent: Int = indent + 1
 
         if headerIndent > 0 {
             buffer.append(String(repeating: "\t", count: headerIndent))
@@ -214,10 +256,10 @@ extension NSArray: IQDebug {
 
         self.forEach({ (element) in
             if let debugElement: IQDebug = element as? IQDebug {
-                debugElement.debugString(&buffer, baseIndent, nextIndent, baseIndent)
+                debugElement.debugString(&buffer, indent, nextIndent, indent)
             } else {
-                if baseIndent > 0 {
-                    buffer.append(String(repeating: "\t", count: baseIndent))
+                if indent > 0 {
+                    buffer.append(String(repeating: "\t", count: indent))
                 }
                 buffer.append("\(element)")
             }
@@ -235,8 +277,7 @@ extension NSArray: IQDebug {
 extension Dictionary: IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-        let baseIndent: Int = indent + 1
-        let nextIndent: Int = baseIndent + 1
+        let nextIndent: Int = indent + 1
 
         if headerIndent > 0 {
             buffer.append(String(repeating: "\t", count: headerIndent))
@@ -245,16 +286,16 @@ extension Dictionary: IQDebug {
 
         self.forEach({ (key, value) in
             if let debugKey: IQDebug = key as? IQDebug {
-                debugKey.debugString(&buffer, baseIndent, nextIndent, 0)
+                debugKey.debugString(&buffer, indent, nextIndent, 0)
             } else {
-                if baseIndent > 0 {
-                    buffer.append(String(repeating: "\t", count: baseIndent))
+                if indent > 0 {
+                    buffer.append(String(repeating: "\t", count: indent))
                 }
                 buffer.append("\(key)")
             }
             buffer.append(" : ")
             if let debugValue: IQDebug = value as? IQDebug {
-                debugValue.debugString(&buffer, 0, nextIndent, baseIndent)
+                debugValue.debugString(&buffer, 0, nextIndent, indent)
             } else {
                 buffer.append("\(value)")
             }
@@ -272,8 +313,7 @@ extension Dictionary: IQDebug {
 extension NSDictionary: IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-        let baseIndent: Int = indent + 1
-        let nextIndent: Int = baseIndent + 1
+        let nextIndent: Int = indent + 1
 
         if headerIndent > 0 {
             buffer.append(String(repeating: "\t", count: headerIndent))
@@ -282,16 +322,16 @@ extension NSDictionary: IQDebug {
 
         self.forEach({ (key, value) in
             if let debugKey: IQDebug = key as? IQDebug {
-                debugKey.debugString(&buffer, baseIndent, nextIndent, 0)
+                debugKey.debugString(&buffer, indent, nextIndent, 0)
             } else {
-                if baseIndent > 0 {
-                    buffer.append(String(repeating: "\t", count: baseIndent))
+                if indent > 0 {
+                    buffer.append(String(repeating: "\t", count: indent))
                 }
                 buffer.append("\(key)")
             }
             buffer.append(" : ")
             if let debugValue: IQDebug = value as? IQDebug {
-                debugValue.debugString(&buffer, 0, nextIndent, baseIndent)
+                debugValue.debugString(&buffer, 0, nextIndent, indent)
             } else {
                 buffer.append("\(value)")
             }

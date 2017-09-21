@@ -222,8 +222,7 @@ public class QApiQuery<
 extension QApiQuery: IQDebug {
 
     open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-        let baseIndent: Int = indent + 1
-        let nextIndent: Int = baseIndent + 1
+        let nextIndent: Int = indent + 1
 
         if headerIndent > 0 {
             buffer.append(String(repeating: "\t", count: headerIndent))
@@ -232,34 +231,34 @@ extension QApiQuery: IQDebug {
 
         if let provider: IQDebug = self.provider as? IQDebug {
             var debug: String = String()
-            provider.debugString(&debug, 0, nextIndent, baseIndent)
-            QDebugString("Provider: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            provider.debugString(&debug, 0, nextIndent, indent)
+            QDebugString("Provider: \(debug)\n", &buffer, indent, nextIndent, indent)
         } else {
-            QDebugString("Provider: \(self.provider)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            QDebugString("Provider: \(self.provider)\n", &buffer, indent, nextIndent, indent)
         }
         if let request: IQDebug = self.request as? IQDebug {
             var debug: String = String()
-            request.debugString(&debug, 0, nextIndent, baseIndent)
-            QDebugString("Request: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            request.debugString(&debug, 0, nextIndent, indent)
+            QDebugString("Request: \(debug)\n", &buffer, indent, nextIndent, indent)
         } else {
-            QDebugString("Request: \(self.request)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            QDebugString("Request: \(self.request)\n", &buffer, indent, nextIndent, indent)
         }
-        QDebugString("CreateAt: \(self.createAt)\n", &buffer, baseIndent, nextIndent, baseIndent)
+        QDebugString("CreateAt: \(self.createAt)\n", &buffer, indent, nextIndent, indent)
         if let response: IQDebug = self.response as? IQDebug {
             var debug: String = String()
-            response.debugString(&debug, 0, nextIndent, baseIndent)
-            QDebugString("Response: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            response.debugString(&debug, 0, nextIndent, indent)
+            QDebugString("Response: \(debug)\n", &buffer, indent, nextIndent, indent)
         } else {
-            QDebugString("Response: \(self.response)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            QDebugString("Response: \(self.response)\n", &buffer, indent, nextIndent, indent)
         }
         if let receivedData: Data = self.receivedData {
             var debug: String = String()
             if let json: QJson = QJson(data: receivedData) {
-                json.debugString(&debug, 0, nextIndent, baseIndent)
+                json.debugString(&debug, 0, nextIndent, indent)
             } else {
-                receivedData.debugString(&debug, 0, nextIndent, baseIndent)
+                receivedData.debugString(&debug, 0, nextIndent, indent)
             }
-            QDebugString("Received: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            QDebugString("Received: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
 
         if footerIndent > 0 {

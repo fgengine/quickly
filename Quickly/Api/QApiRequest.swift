@@ -289,69 +289,68 @@ open class QApiRequest: IQApiRequest {
 extension QApiRequest: IQDebug {
 
     open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-        let baseIndent: Int = indent + 1
-        let nextIndent: Int = baseIndent + 1
+        let nextIndent: Int = indent + 1
 
         if headerIndent > 0 {
             buffer.append(String(repeating: "\t", count: headerIndent))
         }
         buffer.append("<\(String(describing: self))\n")
 
-        QDebugString("Method: \(self.method)\n", &buffer, baseIndent, nextIndent, baseIndent)
+        QDebugString("Method: \(self.method)\n", &buffer, indent, nextIndent, indent)
         if let url: URL = self.url {
             var debug: String = String()
-            url.debugString(&debug, 0, nextIndent, baseIndent)
-            QDebugString("Url: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            url.debugString(&debug, 0, nextIndent, indent)
+            QDebugString("Url: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if let urlPart: String = self.urlPart {
             var debug: String = String()
-            urlPart.debugString(&debug, 0, nextIndent, baseIndent)
-            QDebugString("UrlPart: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            urlPart.debugString(&debug, 0, nextIndent, indent)
+            QDebugString("UrlPart: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if self.urlParams.count > 0 {
             var debug: String = String()
-            self.urlParams.debugString(&debug, 0, nextIndent, baseIndent)
-            QDebugString("UrlParams: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            self.urlParams.debugString(&debug, 0, nextIndent, indent)
+            QDebugString("UrlParams: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if self.headers.count > 0 {
             var debug: String = String()
-            self.headers.debugString(&debug, 0, nextIndent, baseIndent)
-            QDebugString("Headers: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            self.headers.debugString(&debug, 0, nextIndent, indent)
+            QDebugString("Headers: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if let bodyData: Data = self.bodyData {
             var debug: String = String()
             if let json: QJson = QJson(data: bodyData) {
-                json.debugString(&debug, 0, nextIndent, baseIndent)
+                json.debugString(&debug, 0, nextIndent, indent)
             } else {
-                bodyData.debugString(&debug, 0, nextIndent, baseIndent)
+                bodyData.debugString(&debug, 0, nextIndent, indent)
             }
-            QDebugString("Body: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            QDebugString("Body: \(debug)\n", &buffer, indent, nextIndent, indent)
         } else {
             if let bodyParams: [String: Any] = self.bodyParams {
                 var debug: String = String()
-                bodyParams.debugString(&debug, 0, nextIndent, baseIndent)
-                QDebugString("BodyParams: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+                bodyParams.debugString(&debug, 0, nextIndent, indent)
+                QDebugString("BodyParams: \(debug)\n", &buffer, indent, nextIndent, indent)
             }
             if let uploadItems: [QApiRequestUploadItem] = self.uploadItems {
                 var debug: String = String()
-                uploadItems.debugString(&debug, 0, nextIndent, baseIndent)
-                QDebugString("UploadItems: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+                uploadItems.debugString(&debug, 0, nextIndent, indent)
+                QDebugString("UploadItems: \(debug)\n", &buffer, indent, nextIndent, indent)
             }
         }
         if self.timeout > TimeInterval.leastNonzeroMagnitude {
             var debug: String = String()
-            self.timeout.debugString(&debug, 0, nextIndent, baseIndent)
-            QDebugString("Timeout: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            self.timeout.debugString(&debug, 0, nextIndent, indent)
+            QDebugString("Timeout: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if self.retries > TimeInterval.leastNonzeroMagnitude {
             var debug: String = String()
-            self.retries.debugString(&debug, 0, nextIndent, baseIndent)
-            QDebugString("Retries: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            self.retries.debugString(&debug, 0, nextIndent, indent)
+            QDebugString("Retries: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if self.delay > TimeInterval.leastNonzeroMagnitude {
             var debug: String = String()
-            self.delay.debugString(&debug, 0, nextIndent, baseIndent)
-            QDebugString("Delay: \(debug)\n", &buffer, baseIndent, nextIndent, baseIndent)
+            self.delay.debugString(&debug, 0, nextIndent, indent)
+            QDebugString("Delay: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
 
         if footerIndent > 0 {
@@ -381,18 +380,17 @@ open class QApiRequestUploadItem {
 extension QApiRequestUploadItem: IQDebug {
 
     open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-        let baseIndent: Int = indent + 1
-        let nextIndent: Int = baseIndent + 1
+        let nextIndent: Int = indent + 1
 
         if headerIndent > 0 {
             buffer.append(String(repeating: "\t", count: headerIndent))
         }
         buffer.append("<\(String(describing: self))\n")
 
-        QDebugString("Name: \(self.name)\n", &buffer, baseIndent, nextIndent, baseIndent)
-        QDebugString("Filename: \(self.filename)\n", &buffer, baseIndent, nextIndent, baseIndent)
-        QDebugString("Mimetype: \(self.mimetype)\n", &buffer, baseIndent, nextIndent, baseIndent)
-        QDebugString("Fata: \(self.data)\n", &buffer, baseIndent, nextIndent, baseIndent)
+        QDebugString("Name: \(self.name)\n", &buffer, indent, nextIndent, indent)
+        QDebugString("Filename: \(self.filename)\n", &buffer, indent, nextIndent, indent)
+        QDebugString("Mimetype: \(self.mimetype)\n", &buffer, indent, nextIndent, indent)
+        QDebugString("Fata: \(self.data)\n", &buffer, indent, nextIndent, indent)
 
         if footerIndent > 0 {
             buffer.append(String(repeating: "\t", count: footerIndent))

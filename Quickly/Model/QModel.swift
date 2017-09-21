@@ -31,6 +31,38 @@ open class QModel: IQModel {
 
 }
 
+extension QModel: IQDebug {
+
+    open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+        let nextIndent: Int = indent + 1
+
+        if headerIndent > 0 {
+            buffer.append(String(repeating: "\t", count: headerIndent))
+        }
+        buffer.append("<\(String(describing: self))\n")
+
+        let mirror: Mirror = Mirror(reflecting: self)
+        for (label, value) in mirror.children {
+            guard let label: String = label else {
+                continue
+            }
+            var debug: String = String()
+            if let debugValue: IQDebug = value as? IQDebug {
+                debugValue.debugString(&debug, 0, nextIndent, indent)
+            } else {
+                debug.append("\(value)")
+            }
+            QDebugString("\(label) : \(debug)\n", &buffer, indent, nextIndent, indent)
+        }
+
+        if footerIndent > 0 {
+            buffer.append(String(repeating: "\t", count: footerIndent))
+        }
+        buffer.append(">")
+    }
+
+}
+
 extension QModel: IJsonValue {
 
     public static func fromJson(value: Any?) throws -> Any {
