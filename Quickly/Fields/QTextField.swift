@@ -27,7 +27,22 @@ open class QTextField : QView {
         }
     }
     public private(set) var isValid: Bool = true
-    public var formatter: IQStringFormatter?
+    public var formatter: IQStringFormatter? {
+        willSet {
+            if let formatter: IQStringFormatter = self.formatter {
+                if let text: String = self.textField.text {
+                    self.textField.text = formatter.unformat(text)
+                }
+            }
+        }
+        didSet {
+            if let formatter: IQStringFormatter = self.formatter {
+                if let text: String = self.textField.text {
+                    self.textField.text = formatter.format(text)
+                }
+            }
+        }
+    }
 
     public var textInsets: UIEdgeInsets {
         set(value) { self.textField.insets = value }
@@ -286,20 +301,26 @@ open class QTextField : QView {
             guard let field: QTextField = self.field else {
                 return true
             }
-            var text: String = self.composed(textField.text, replacement: string, range: range)
+            let origin: String = textField.text ?? ""
+            var text: String = origin
             if let formatter: IQStringFormatter = field.formatter {
                 text = formatter.unformat(text)
             }
+            text = self.composed(origin, text, string, range)
             if let validator: IQInputValidator = field.validator {
                 field.isValid = validator.validate(text)
             } else {
                 field.isValid = true
             }
             if field.isValid == true || field.requireValidator == false {
+                let location: UITextPosition? = textField.position(from: textField.beginningOfDocument, offset: range.location + string.characters.count)
                 if let formatter: IQStringFormatter = field.formatter {
                     textField.text = formatter.format(text)
                 } else {
                     textField.text = text
+                }
+                if let location: UITextPosition = location {
+                    textField.selectedTextRange = textField.textRange(from: location, to: location)
                 }
                 textField.sendActions(for: .editingChanged)
                 NotificationCenter.default.post(name: NSNotification.Name.UITextFieldTextDidChange, object: textField)
@@ -338,11 +359,14 @@ open class QTextField : QView {
             return true
         }
 
-        private func composed(_ string: String?, replacement: String, range: NSRange) -> String {
-            guard let nsString: NSString = string as NSString? else {
+        private func composed(_ origin: String, _ text: String, _ replacement: String, _ range: NSRange) -> String {
+            guard var stringRange: Range< String.Index > = origin.range(from: range) else {
                 return ""
             }
-            return nsString.replacingCharacters(in: range, with: replacement)
+            let diff: Int = origin.characters.count - text.characters.count
+            let lower: String.Index = origin.index(stringRange.lowerBound, offsetBy: -diff)
+            let upper: String.Index = origin.index(stringRange.upperBound, offsetBy: -diff)
+            return text.replacingCharacters(in: Range< String.Index >(uncheckedBounds: (lower, upper)), with: replacement)
         }
 
     }

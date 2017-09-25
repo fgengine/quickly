@@ -44,8 +44,11 @@ public extension String {
         let maskCharacters: String.CharacterView = mask.characters
         var selfIndex: String.Index = characters.startIndex
         var maskIndex: String.Index = mask.startIndex
-        while selfIndex < selfCharacters.endIndex && maskIndex < maskCharacters.endIndex {
+        while maskIndex < maskCharacters.endIndex {
             if maskCharacters[maskIndex] == "#" {
+                if selfIndex >= selfCharacters.endIndex {
+                    break
+                }
                 result.append(selfCharacters[selfIndex])
                 selfIndex = selfCharacters.index(selfIndex, offsetBy: 1)
             } else {
