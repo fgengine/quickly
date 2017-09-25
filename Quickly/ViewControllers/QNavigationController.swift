@@ -78,5 +78,19 @@ open class QNavigationController : UINavigationController, IQViewController {
             return super.supportedInterfaceOrientations
         }
     }
+    
+    open func removeViewController(_ viewController: UIViewController, animated: Bool) {
+        if let topViewController: UIViewController = self.topViewController {
+            if viewController != topViewController {
+                var viewControllers: [UIViewController] = self.viewControllers
+                if let index: Int = viewControllers.index(of: viewController) {
+                    viewControllers.remove(at: index)
+                    self.setViewControllers(viewControllers, animated: false)
+                }
+            } else {
+                _ = self.popViewController(animated: animated)
+            }
+        }
+    }
 
 }
