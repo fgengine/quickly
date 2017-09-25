@@ -38,6 +38,28 @@ public extension String {
 
 public extension String {
 
+    public func applyMask(mask: String) -> String {
+        var result: String = String()
+        let selfCharacters: String.CharacterView = self.characters
+        let maskCharacters: String.CharacterView = mask.characters
+        var selfIndex: String.Index = characters.startIndex
+        var maskIndex: String.Index = mask.startIndex
+        while selfIndex < selfCharacters.endIndex && maskIndex < maskCharacters.endIndex {
+            if maskCharacters[maskIndex] == "#" {
+                result.append(selfCharacters[selfIndex])
+                selfIndex = selfCharacters.index(selfIndex, offsetBy: 1)
+            } else {
+                result.append(maskCharacters[maskIndex])
+            }
+            maskIndex = maskCharacters.index(maskIndex, offsetBy: 1)
+        }
+        return result
+    }
+
+}
+
+public extension String {
+
     public var md2: String? {
         if let data: Data = self.data(using: .utf8) {
             return data.md2.hexString
