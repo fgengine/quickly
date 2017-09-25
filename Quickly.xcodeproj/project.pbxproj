@@ -37,6 +37,7 @@
 		40134F031F63129E009F81A6 /* QCardExpirationDateStringFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40134F001F63129E009F81A6 /* QCardExpirationDateStringFormatter.swift */; };
 		40134F041F63129E009F81A6 /* QCardNumberStringFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40134F011F63129E009F81A6 /* QCardNumberStringFormatter.swift */; };
 		4018295E1F4C1C0A005C9949 /* Quickly.h in Headers */ = {isa = PBXBuildFile; fileRef = 4018295C1F4C1C0A005C9949 /* Quickly.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		402B99111F799FED004DFF24 /* QPhoneStringFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402B99101F799FED004DFF24 /* QPhoneStringFormatter.swift */; };
 		402D43491F7194B000EAA69C /* IQDebug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402D43481F7194B000EAA69C /* IQDebug.swift */; };
 		402F1FB01F4EE0AB007625CA /* IQApiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402F1FAF1F4EE0AB007625CA /* IQApiRequest.swift */; };
 		402F1FB21F4EE0F8007625CA /* IQApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402F1FB11F4EE0F8007625CA /* IQApiResponse.swift */; };
@@ -239,6 +240,7 @@
 		401829591F4C1C0A005C9949 /* Quickly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Quickly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4018295C1F4C1C0A005C9949 /* Quickly.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Quickly.h; sourceTree = "<group>"; };
 		4018295D1F4C1C0A005C9949 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		402B99101F799FED004DFF24 /* QPhoneStringFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QPhoneStringFormatter.swift; sourceTree = "<group>"; };
 		402D43481F7194B000EAA69C /* IQDebug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQDebug.swift; sourceTree = "<group>"; };
 		402F1FAF1F4EE0AB007625CA /* IQApiRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQApiRequest.swift; sourceTree = "<group>"; };
 		402F1FB11F4EE0F8007625CA /* IQApiResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQApiResponse.swift; sourceTree = "<group>"; };
@@ -451,6 +453,7 @@
 			isa = PBXGroup;
 			children = (
 				40134EFF1F63129E009F81A6 /* IQStringFormatter.swift */,
+				402B99101F799FED004DFF24 /* QPhoneStringFormatter.swift */,
 				40134F011F63129E009F81A6 /* QCardNumberStringFormatter.swift */,
 				40134F001F63129E009F81A6 /* QCardExpirationDateStringFormatter.swift */,
 			);
@@ -1126,6 +1129,7 @@
 				40979EC71F62CA680003ED1C /* QNumberStringValidator.swift in Sources */,
 				40CF45CB1F4DE6AB004D00D8 /* QLinkLabel.swift in Sources */,
 				40E7384D1F5606B700B192C6 /* QLabelTableRow.swift in Sources */,
+				402B99111F799FED004DFF24 /* QPhoneStringFormatter.swift in Sources */,
 				40CF45DF1F4DE6AB004D00D8 /* QTableController.swift in Sources */,
 				40CF45B61F4DE6AB004D00D8 /* IQCollectionController.swift in Sources */,
 				402F1FB61F4EF525007625CA /* QApiError.swift in Sources */,

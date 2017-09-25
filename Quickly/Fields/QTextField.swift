@@ -31,14 +31,32 @@ open class QTextField : QView {
         willSet {
             if let formatter: IQStringFormatter = self.formatter {
                 if let text: String = self.textField.text {
-                    self.textField.text = formatter.unformat(text)
+                    var caret: Int
+                    if let selected: UITextRange = self.textField.selectedTextRange {
+                        caret = self.textField.offset(from: selected.end, to: selected.end)
+                    } else {
+                        caret = text.characters.count
+                    }
+                    self.textField.text = formatter.unformat(text, caret: &caret)
+                    if let position: UITextPosition = self.textField.position(from: self.textField.beginningOfDocument, offset: caret) {
+                        self.textField.selectedTextRange = self.textField.textRange(from: position, to: position)
+                    }
                 }
             }
         }
         didSet {
             if let formatter: IQStringFormatter = self.formatter {
                 if let text: String = self.textField.text {
-                    self.textField.text = formatter.format(text)
+                    var caret: Int
+                    if let selected: UITextRange = self.textField.selectedTextRange {
+                        caret = self.textField.offset(from: selected.end, to: selected.end)
+                    } else {
+                        caret = text.characters.count
+                    }
+                    self.textField.text = formatter.format(text, caret: &caret)
+                    if let position: UITextPosition = self.textField.position(from: self.textField.beginningOfDocument, offset: caret) {
+                        self.textField.selectedTextRange = self.textField.textRange(from: position, to: position)
+                    }
                 }
             }
         }
@@ -84,20 +102,41 @@ open class QTextField : QView {
     public var unformatText: String {
         set(value) {
             if let formatter: IQStringFormatter = self.formatter {
-                self.textField.text = formatter.format(value)
+                var caret: Int
+                if let selected: UITextRange = self.textField.selectedTextRange {
+                    caret = self.textField.offset(from: selected.end, to: selected.end)
+                } else {
+                    caret = text.characters.count
+                }
+                self.textField.text = formatter.format(value, caret: &caret)
+                if let position: UITextPosition = self.textField.position(from: self.textField.beginningOfDocument, offset: caret) {
+                    self.textField.selectedTextRange = self.textField.textRange(from: position, to: position)
+                }
             } else {
                 self.textField.text = value
             }
         }
         get {
+            var result: String
             if let text: String = self.textField.text {
                 if let formatter: IQStringFormatter = self.formatter {
-                    return formatter.unformat(text)
+                    var caret: Int
+                    if let selected: UITextRange = self.textField.selectedTextRange {
+                        caret = self.textField.offset(from: selected.end, to: selected.end)
+                    } else {
+                        caret = text.characters.count
+                    }
+                    result = formatter.unformat(text, caret: &caret)
+                    if let position: UITextPosition = self.textField.position(from: self.textField.beginningOfDocument, offset: caret) {
+                        self.textField.selectedTextRange = self.textField.textRange(from: position, to: position)
+                    }
                 } else {
-                    return text
+                    result = text
                 }
+            } else {
+                result = ""
             }
-            return ""
+            return result
         }
     }
     public var placeholder: IQText? {
@@ -149,16 +188,6 @@ open class QTextField : QView {
         get {
             return self.textField.intrinsicContentSize
         }
-    }
-
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.setup()
-    }
-
-    public required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.setup()
     }
 
     open override func setup() {
@@ -301,23 +330,31 @@ open class QTextField : QView {
             guard let field: QTextField = self.field else {
                 return true
             }
-            let origin: String = textField.text ?? ""
-            var text: String = origin
-            if let formatter: IQStringFormatter = field.formatter {
-                text = formatter.unformat(text)
+            var caret: Int = range.location + max(range.length, string.characters.count)
+            var text: String = textField.text ?? ""
+            if let textRange: Range< String.Index > = text.range(from: range) {
+                text = text.replacingCharacters(in: textRange, with: string)
             }
-            text = self.composed(origin, text, string, range)
+            var unformat: String
+            if let formatter: IQStringFormatter = field.formatter {
+                unformat = formatter.unformat(text, caret: &caret)
+            } else {
+                unformat = text
+            }
             if let validator: IQInputValidator = field.validator {
-                field.isValid = validator.validate(text)
+                field.isValid = validator.validate(unformat)
             } else {
                 field.isValid = true
             }
             if field.isValid == true || field.requireValidator == false {
-                let location: UITextPosition? = textField.position(from: textField.beginningOfDocument, offset: range.location + string.characters.count)
+                var location: UITextPosition?
                 if let formatter: IQStringFormatter = field.formatter {
-                    textField.text = formatter.format(text)
+                    let format: String = formatter.format(unformat, caret: &caret)
+                    location = textField.position(from: textField.beginningOfDocument, offset: caret)
+                    textField.text = format
                 } else {
-                    textField.text = text
+                    location = textField.position(from: textField.beginningOfDocument, offset: caret)
+                    textField.text = unformat
                 }
                 if let location: UITextPosition = location {
                     textField.selectedTextRange = textField.textRange(from: location, to: location)
@@ -359,16 +396,6 @@ open class QTextField : QView {
             return true
         }
 
-        private func composed(_ origin: String, _ text: String, _ replacement: String, _ range: NSRange) -> String {
-            guard var stringRange: Range< String.Index > = origin.range(from: range) else {
-                return ""
-            }
-            let diff: Int = origin.characters.count - text.characters.count
-            let lower: String.Index = origin.index(stringRange.lowerBound, offsetBy: -diff)
-            let upper: String.Index = origin.index(stringRange.upperBound, offsetBy: -diff)
-            return text.replacingCharacters(in: Range< String.Index >(uncheckedBounds: (lower, upper)), with: replacement)
-        }
-
     }
 
     public class Field: UITextField {
@@ -382,9 +409,9 @@ open class QTextField : QView {
         open override func editingRect(forBounds bounds: CGRect) -> CGRect {
             return UIEdgeInsetsInsetRect(bounds, self.insets)
         }
-        
+
     }
-    
+
 }
 
 extension QTextField: UITextInputTraits {
@@ -436,3 +463,4 @@ extension QTextField: UITextInputTraits {
     }
 
 }
+

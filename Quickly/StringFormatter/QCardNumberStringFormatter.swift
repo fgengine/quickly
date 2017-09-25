@@ -9,23 +9,38 @@ public class QCardNumberStringFormatter: IQStringFormatter {
     public init() {
     }
 
-    public func format(_ string: String) -> String {
-        var result: String = String()
-        var index: Int = 0
-        while index < string.characters.count {
-            let stringIndex: String.Index = string.characters.index(string.startIndex, offsetBy: index)
-            let character: Character = string[stringIndex]
-            if index != 0 && index % 4 == 0 {
-                result.append(" ")
+    public func format(_ unformat: String, caret: inout Int) -> String {
+        var format: String = String()
+        var unformatOffset: Int = 0
+        while unformatOffset < unformat.characters.count {
+            let unformatIndex: String.Index = unformat.characters.index(unformat.startIndex, offsetBy: unformatOffset)
+            let unformatCharacter: Character = unformat[unformatIndex]
+            if unformatOffset != 0 && unformatOffset % 4 == 0 {
+                format.append(" ")
             }
-            result.append(character)
-            index += 1
+            format.append(unformatCharacter)
+            unformatOffset += 1
         }
-        return result
+        caret = self.formatDifferenceCaret(
+            unformat: unformat,
+            format: format,
+            formatPrefix: 0,
+            formatSuffix: 0,
+            caret: caret
+        )
+        return format
     }
 
-    public func unformat(_ string: String) -> String {
-        return string.replacingOccurrences(of: " ", with: "")
+    public func unformat(_ format: String, caret: inout Int) -> String {
+        let unformat: String = format.replacingOccurrences(of: " ", with: "")
+        caret = self.unformatDifferenceCaret(
+            unformat: unformat,
+            format: format,
+            formatPrefix: 0,
+            formatSuffix: 0,
+            caret: caret
+        )
+        return unformat
     }
 
 }

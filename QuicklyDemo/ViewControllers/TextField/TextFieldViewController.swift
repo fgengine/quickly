@@ -34,11 +34,11 @@ class TextFieldViewController: QStaticViewController, IQRouted {
         self.textField.textStyle = textStyle
         self.textField.typingStyle = typingStyle
         self.textField.placeholder = QText("TextField")
-        self.textField.requireValidator = false
+        self.textField.requireValidator = true
         self.textField.validator = QInputValidator(
-            validator: try! QRegularExpressionStringValidator(pattern: "^\\d{10}$")
+            validator: try! QRegularExpressionStringValidator(pattern: "^\\d{0,10}$")
         )
-        self.textField.formatter = QCardNumberStringFormatter()
+        self.textField.formatter = QPhoneStringFormatter(prefix: "+7 ", mask: "(###) ###-##-##")
     }
 
 }

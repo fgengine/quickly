@@ -42,19 +42,36 @@ public extension String {
         var result: String = String()
         let selfCharacters: String.CharacterView = self.characters
         let maskCharacters: String.CharacterView = mask.characters
-        var selfIndex: String.Index = characters.startIndex
         var maskIndex: String.Index = mask.startIndex
-        while maskIndex < maskCharacters.endIndex {
-            if maskCharacters[maskIndex] == "#" {
-                if selfIndex >= selfCharacters.endIndex {
-                    break
+        let maskEndIndex: String.Index = mask.endIndex
+        if selfCharacters.count > 0 {
+            var selfIndex: String.Index = characters.startIndex
+            let selfEndIndex: String.Index = characters.endIndex
+            while maskIndex < maskEndIndex {
+                if maskCharacters[maskIndex] == "#" {
+                    result.append(selfCharacters[selfIndex])
+                    selfIndex = selfCharacters.index(selfIndex, offsetBy: 1)
+                    if selfIndex >= selfEndIndex {
+                        break
+                    }
+                } else {
+                    result.append(maskCharacters[maskIndex])
                 }
+                maskIndex = maskCharacters.index(maskIndex, offsetBy: 1)
+            }
+            while selfIndex < selfEndIndex {
                 result.append(selfCharacters[selfIndex])
                 selfIndex = selfCharacters.index(selfIndex, offsetBy: 1)
-            } else {
-                result.append(maskCharacters[maskIndex])
             }
-            maskIndex = maskCharacters.index(maskIndex, offsetBy: 1)
+        } else {
+            while maskIndex < maskEndIndex {
+                if maskCharacters[maskIndex] != "#" {
+                    result.append(maskCharacters[maskIndex])
+                } else {
+                    break
+                }
+                maskIndex = maskCharacters.index(maskIndex, offsetBy: 1)
+            }
         }
         return result
     }
