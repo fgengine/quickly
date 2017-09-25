@@ -4,7 +4,7 @@
 
 import Foundation
 
-public class QPhoneStringFormatter: IQStringFormatter {
+open class QPhoneStringFormatter: IQStringFormatter {
 
     public var prefix: String {
         didSet { self.fullMask = self.prepareFullMask() }

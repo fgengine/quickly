@@ -4,7 +4,7 @@
 
 import Foundation
 
-public class QCardNumberStringFormatter: IQStringFormatter {
+open class QCardNumberStringFormatter: IQStringFormatter {
 
     public init() {
     }

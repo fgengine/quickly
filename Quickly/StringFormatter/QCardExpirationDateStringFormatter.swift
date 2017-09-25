@@ -4,7 +4,7 @@
 
 import Foundation
 
-public class QCardExpirationDateStringFormatter: IQStringFormatter {
+open class QCardExpirationDateStringFormatter: IQStringFormatter {
 
     public init() {
     }
