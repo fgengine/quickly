@@ -33,7 +33,7 @@ open class QTextField : QView {
                 if let text: String = self.textField.text {
                     var caret: Int
                     if let selected: UITextRange = self.textField.selectedTextRange {
-                        caret = self.textField.offset(from: selected.end, to: selected.end)
+                        caret = self.textField.offset(from: self.textField.beginningOfDocument, to: selected.end)
                     } else {
                         caret = text.characters.count
                     }
@@ -49,7 +49,7 @@ open class QTextField : QView {
                 if let text: String = self.textField.text {
                     var caret: Int
                     if let selected: UITextRange = self.textField.selectedTextRange {
-                        caret = self.textField.offset(from: selected.end, to: selected.end)
+                        caret = self.textField.offset(from: self.textField.beginningOfDocument, to: selected.end)
                     } else {
                         caret = text.characters.count
                     }
@@ -104,7 +104,7 @@ open class QTextField : QView {
             if let formatter: IQStringFormatter = self.formatter {
                 var caret: Int
                 if let selected: UITextRange = self.textField.selectedTextRange {
-                    caret = self.textField.offset(from: selected.end, to: selected.end)
+                    caret = self.textField.offset(from: self.textField.beginningOfDocument, to: selected.end)
                 } else {
                     caret = text.characters.count
                 }
@@ -120,16 +120,7 @@ open class QTextField : QView {
             var result: String
             if let text: String = self.textField.text {
                 if let formatter: IQStringFormatter = self.formatter {
-                    var caret: Int
-                    if let selected: UITextRange = self.textField.selectedTextRange {
-                        caret = self.textField.offset(from: selected.end, to: selected.end)
-                    } else {
-                        caret = text.characters.count
-                    }
-                    result = formatter.unformat(text, caret: &caret)
-                    if let position: UITextPosition = self.textField.position(from: self.textField.beginningOfDocument, offset: caret) {
-                        self.textField.selectedTextRange = self.textField.textRange(from: position, to: position)
-                    }
+                    result = formatter.unformat(text)
                 } else {
                     result = text
                 }

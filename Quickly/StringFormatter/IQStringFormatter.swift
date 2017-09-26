@@ -7,6 +7,7 @@ import Foundation
 public protocol IQStringFormatter {
 
     func format(_ unformat: String, caret: inout Int) -> String
+    func unformat(_ format: String) -> String
     func unformat(_ format: String, caret: inout Int) -> String
 
 }

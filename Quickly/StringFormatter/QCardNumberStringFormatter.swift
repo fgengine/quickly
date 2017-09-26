@@ -31,8 +31,12 @@ open class QCardNumberStringFormatter: IQStringFormatter {
         return format
     }
 
+    public func unformat(_ format: String) -> String {
+        return format.replacingOccurrences(of: " ", with: "")
+    }
+
     public func unformat(_ format: String, caret: inout Int) -> String {
-        let unformat: String = format.replacingOccurrences(of: " ", with: "")
+        let unformat: String = self.unformat(format)
         caret = self.unformatDifferenceCaret(
             unformat: unformat,
             format: format,
