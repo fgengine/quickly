@@ -30,7 +30,7 @@ open class QAmountStringFormatter: IQStringFormatter {
         )
     }
 
-    public func format(_ unformat: String, caret: inout Int) -> String {
+    public func format(_ unformat: String) -> String {
         var format: String = String()
         let parts: [String] = unformat.components(separatedBy: self.decimalSeparator)
         if parts.count == 2 {
@@ -87,6 +87,11 @@ open class QAmountStringFormatter: IQStringFormatter {
                 format.append(unformat)
             }
         }
+        return format
+    }
+
+    public func format(_ unformat: String, caret: inout Int) -> String {
+        let format: String = self.format(unformat)
         caret = self.formatDifferenceCaret(
             unformat: unformat,
             format: format,

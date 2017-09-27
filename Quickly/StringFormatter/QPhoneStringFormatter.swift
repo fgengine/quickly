@@ -18,8 +18,12 @@ open class QPhoneStringFormatter: IQStringFormatter {
         self.decimalDigitsSet = CharacterSet.decimalDigits.inverted
     }
 
+    public func format(_ unformat: String) -> String {
+        return unformat.applyMask(mask: self.fullMask)
+    }
+
     public func format(_ unformat: String, caret: inout Int) -> String {
-        let format: String = unformat.applyMask(mask: self.fullMask)
+        let format: String = self.format(unformat)
         caret = self.formatDifferenceCaret(
             unformat: unformat,
             format: format,

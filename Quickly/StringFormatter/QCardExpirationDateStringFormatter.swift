@@ -9,7 +9,7 @@ open class QCardExpirationDateStringFormatter: IQStringFormatter {
     public init() {
     }
 
-    public func format(_ unformat: String, caret: inout Int) -> String {
+    public func format(_ unformat: String) -> String {
         var format: String = String()
         var unformatOffset: Int = 0
         while unformatOffset < unformat.characters.count {
@@ -21,6 +21,11 @@ open class QCardExpirationDateStringFormatter: IQStringFormatter {
             }
             unformatOffset += 1
         }
+        return format
+    }
+
+    public func format(_ unformat: String, caret: inout Int) -> String {
+        let format: String = self.format(unformat)
         caret = self.formatDifferenceCaret(
             unformat: unformat,
             format: format,
