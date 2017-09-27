@@ -36,9 +36,9 @@ class TextFieldViewController: QStaticViewController, IQRouted {
         self.textField.placeholder = QText("TextField")
         self.textField.requireValidator = true
         self.textField.validator = QInputValidator(
-            validator: try! QRegularExpressionStringValidator(pattern: "^\\d{0,10}$")
+            validator: try! QAmountStringValidator(maximumSimbol: 10, locale: Locale.current, maximumDecimalSimbol: 2)
         )
-        self.textField.formatter = QPhoneStringFormatter(prefix: "+7 ", mask: "(###) ###-##-##")
+        self.textField.formatter = QAmountStringFormatter(locale: Locale.current)
     }
 
 }

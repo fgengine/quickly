@@ -10,7 +10,6 @@ open class QRegularExpressionStringValidator: QLengthStringValidator {
 
     public init(expression: NSRegularExpression) {
         self.expression = expression
-
         super.init()
     }
 

@@ -15,14 +15,12 @@ open class QNumberStringValidator: QLengthStringValidator {
     public override init() {
         self.formatter = NumberFormatter()
         self.formatter.generatesDecimalNumbers = true
-
         super.init()
     }
 
     public init(formatter: NumberFormatter) {
         self.formatter = formatter
         self.formatter.generatesDecimalNumbers = true
-
         super.init()
     }
 

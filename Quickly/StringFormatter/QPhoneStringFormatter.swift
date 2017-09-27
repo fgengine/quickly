@@ -6,20 +6,16 @@ import Foundation
 
 open class QPhoneStringFormatter: IQStringFormatter {
 
-    public var prefix: String {
-        didSet { self.fullMask = self.prepareFullMask() }
-    }
-    public var mask: String {
-        didSet { self.fullMask = self.prepareFullMask() }
-    }
-    public var characterSet: CharacterSet
-    private var fullMask: String!
+    public let prefix: String
+    public let mask: String
+    public let decimalDigitsSet: CharacterSet
+    private let fullMask: String!
 
     public init(prefix: String, mask: String) {
         self.prefix = prefix
         self.mask = mask
-        self.characterSet = CharacterSet.decimalDigits.inverted
-        self.fullMask = self.prepareFullMask()
+        self.fullMask = "\(self.prefix)\(self.mask)"
+        self.decimalDigitsSet = CharacterSet.decimalDigits.inverted
     }
 
     public func format(_ unformat: String, caret: inout Int) -> String {
@@ -39,12 +35,12 @@ open class QPhoneStringFormatter: IQStringFormatter {
         if self.prefix.characters.count > 0 {
             let startIndex: String.Index = format.startIndex
             let endIndex: String.Index = format.index(startIndex, offsetBy: self.prefix.characters.count)
-            let range: Range< String.Index > = startIndex..<endIndex
+            let range: Range< String.Index > = startIndex ..< endIndex
             unformat = format.replacingCharacters(in: range, with: "")
         } else {
             unformat = format
         }
-        return unformat.components(separatedBy: self.characterSet).joined()
+        return unformat.remove(self.decimalDigitsSet)
     }
 
     public func unformat(_ format: String, caret: inout Int) -> String {
@@ -57,10 +53,6 @@ open class QPhoneStringFormatter: IQStringFormatter {
             caret: caret
         )
         return unformat
-    }
-
-    private func prepareFullMask() -> String {
-        return "\(self.prefix)\(self.mask)"
     }
 
 }

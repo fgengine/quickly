@@ -10,7 +10,6 @@ open class QCharacterSetStringValidator: QLengthStringValidator {
 
     public init(characterSet: CharacterSet) {
         self.characterSet = characterSet
-
         super.init()
     }
 

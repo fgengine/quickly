@@ -38,6 +38,14 @@ public extension String {
 
 public extension String {
 
+    public func remove(_ characterSet: CharacterSet) -> String {
+        return self.components(separatedBy: characterSet).joined()
+    }
+
+}
+
+public extension String {
+
     public func applyMask(mask: String) -> String {
         var result: String = String()
         let selfCharacters: String.CharacterView = self.characters
