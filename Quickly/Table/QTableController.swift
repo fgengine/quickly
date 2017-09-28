@@ -211,6 +211,16 @@ open class QTableController: NSObject, IQTableController, IQTableCellDelegate, I
         tableView.endUpdates()
     }
 
+    public func scroll(row: IQTableRow, scroll: UITableViewScrollPosition, animated: Bool) {
+        guard let tableView: UITableView = self.tableView else {
+            return
+        }
+        guard let indexPath: IndexPath = self.indexPath(row: row) else {
+            return
+        }
+        tableView.scrollToRow(at: indexPath, at: scroll, animated: animated)
+    }
+
     public func isSelected(row: IQTableRow) -> Bool {
         guard let tableView: UITableView = self.tableView else {
             return false

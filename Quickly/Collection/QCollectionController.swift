@@ -174,6 +174,16 @@ open class QCollectionController: NSObject, IQCollectionController, CollectionCe
         collectionView.performBatchUpdates(updates, completion: completion)
     }
 
+    public func scroll(item: IQCollectionItem, scroll: UICollectionViewScrollPosition, animated: Bool) {
+        guard let collectionView: UICollectionView = self.collectionView else {
+            return
+        }
+        guard let indexPath: IndexPath = self.indexPath(item: item) else {
+            return
+        }
+        collectionView.scrollToItem(at: indexPath, at: scroll, animated: animated)
+    }
+
     public func isSelected(item: IQCollectionItem) -> Bool {
         guard let collectionView: UICollectionView = self.collectionView else {
             return false

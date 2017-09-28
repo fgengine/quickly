@@ -34,6 +34,8 @@ public protocol IQCollectionController: UICollectionViewDataSource, UICollection
     func reload()
 
     func performBatchUpdates(_ updates: (() -> Void)?, completion: ((Bool) -> Void)?)
+    
+    func scroll(item: IQCollectionItem, scroll: UICollectionViewScrollPosition, animated: Bool)
 
     func isSelected(item: IQCollectionItem) -> Bool
     func select(item: IQCollectionItem, scroll: UICollectionViewScrollPosition, animated: Bool)

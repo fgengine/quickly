@@ -41,6 +41,8 @@ public protocol IQTableController: UITableViewDataSource, UITableViewDelegate {
     func beginUpdates()
     func endUpdates()
 
+    func scroll(row: IQTableRow, scroll: UITableViewScrollPosition, animated: Bool)
+
     func isSelected(row: IQTableRow) -> Bool
     func select(row: IQTableRow, scroll: UITableViewScrollPosition, animated: Bool)
     func deselect(row: IQTableRow, animated: Bool)
