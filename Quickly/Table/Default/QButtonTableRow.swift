@@ -24,6 +24,8 @@ open class QButtonTableRow: QBackgroundColorTableRow {
     public var spinnerPosition: QButtonSpinnerPosition = .fill
     public var spinnerView: QSpinnerView?
 
+    public var isSelected: Bool = false
+    public var isEnabled: Bool = true
     public var isSpinnerAnimating: Bool = false
 
 }

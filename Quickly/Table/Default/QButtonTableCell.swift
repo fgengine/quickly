@@ -83,6 +83,8 @@ open class QButtonTableCell< RowType: QButtonTableRow >: QBackgroundColorTableCe
         self.button.selectedStyle = row.selectedStyle
         self.button.selectedHighlightedStyle = row.selectedHighlightedStyle
         self.button.selectedDisabledStyle = row.selectedDisabledStyle
+        self.button.isSelected = row.isSelected
+        self.button.isEnabled = row.isEnabled
         self.button.spinnerPosition = row.spinnerPosition
         self.button.spinnerView = row.spinnerView
 
