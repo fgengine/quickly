@@ -366,8 +366,12 @@ open class QTextField : QView {
                 }
             }
             if let field: QTextField = self.field {
-                if let closure: ShouldClosure = field.onShouldClear {
-                    return closure(field)
+                if let shouldClosure: ShouldClosure = field.onShouldClear, let pressedClosure: Closure = field.onPressedClear {
+                    if shouldClosure(field) == true {
+                        pressedClosure(field)
+                    }
+                } else if let pressedClosure: Closure = field.onPressedClear {
+                    pressedClosure(field)
                 }
             }
             return true
@@ -380,8 +384,12 @@ open class QTextField : QView {
                 }
             }
             if let field: QTextField = self.field {
-                if let closure: ShouldClosure = field.onShouldReturn {
-                    return closure(field)
+                if let shouldClosure: ShouldClosure = field.onShouldReturn, let pressedClosure: Closure = field.onPressedReturn {
+                    if shouldClosure(field) == true {
+                        pressedClosure(field)
+                    }
+                } else if let pressedClosure: Closure = field.onPressedReturn {
+                    pressedClosure(field)
                 }
             }
             return true
