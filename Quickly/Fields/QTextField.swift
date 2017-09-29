@@ -360,7 +360,7 @@ open class QTextField : QView {
         }
 
         public func textFieldShouldClear(_ textField: UITextField) -> Bool {
-            if self.canShouldEndEditing == true {
+            if self.canShouldClear == true {
                 if self.delegate!.textFieldShouldClear!(textField) == false {
                     return false
                 }
@@ -374,7 +374,7 @@ open class QTextField : QView {
         }
 
         public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            if self.canShouldEndEditing == true {
+            if self.canShouldReturn == true {
                 if self.delegate!.textFieldShouldReturn!(textField) == false {
                     return false
                 }
