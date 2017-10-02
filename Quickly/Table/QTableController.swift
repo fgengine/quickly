@@ -396,7 +396,7 @@ extension QTableController: UITableViewDelegate {
         if let cellClass = self.cellClass(row: row) {
             return cellClass.height(any: row, width: tableView.frame.size.width)
         }
-        return UITableViewAutomaticDimension
+        return 0
     }
 
     public func tableView(
@@ -408,7 +408,7 @@ extension QTableController: UITableViewDelegate {
                 return decorClass.height(any: data, width: tableView.frame.size.width)
             }
         }
-        return UITableViewAutomaticDimension
+        return 0
     }
 
     public func tableView(
@@ -420,7 +420,7 @@ extension QTableController: UITableViewDelegate {
                 return decorClass.height(any: data, width: tableView.frame.size.width)
             }
         }
-        return UITableViewAutomaticDimension
+        return 0
     }
 
     public func tableView(

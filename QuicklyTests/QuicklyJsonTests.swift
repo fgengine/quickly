@@ -76,6 +76,16 @@ class QuicklyJsonTests: XCTestCase {
     }
 
     func testSimpleSetJson() {
+        let json: QJson = QJson()
+        "USD" >>> (json, "RUR")
+
+        var existReguiredString: String = ""
+        do {
+            try existReguiredString <<< (json, "RUR")
+            XCTAssert(existReguiredString == "USD")
+        } catch let error as NSError {
+            XCTFail("")
+        }
     }
     
 }
