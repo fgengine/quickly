@@ -220,30 +220,10 @@ public class QImageLoader {
         }
 
         public func add(target: IQImageLoaderTarget) {
-            if let loader: QImageLoader = self.loader {
-                loader.syncQueue.sync {
-                    self._add(target: target)
-                }
-            } else {
-                self._add(target: target)
-            }
-        }
-
-        private func _add(target: IQImageLoaderTarget) {
             self.targets.append(target)
         }
 
         public func remove(target: IQImageLoaderTarget) {
-            if let loader: QImageLoader = self.loader {
-                loader.syncQueue.sync {
-                    self._remove(target: target)
-                }
-            } else {
-                self._remove(target: target)
-            }
-        }
-
-        private func _remove(target: IQImageLoaderTarget) {
             let index: Int? = self.targets.index { (existTarget: IQImageLoaderTarget) -> Bool in
                 return target === existTarget
             }
@@ -253,16 +233,6 @@ public class QImageLoader {
         }
 
         public func contains(target: IQImageLoaderTarget) -> Bool {
-            if let loader: QImageLoader = self.loader {
-                return loader.syncQueue.sync {
-                    return self._contains(target: target)
-                }
-            } else {
-                return self._contains(target: target)
-            }
-        }
-
-        private func _contains(target: IQImageLoaderTarget) -> Bool {
             let index: Int? = self.targets.index { (existTarget: IQImageLoaderTarget) -> Bool in
                 return target === existTarget
             }

@@ -22,6 +22,8 @@ open class QImageView: QView, IQImageLoaderTarget {
             if let source: QImageSource = self.source {
                 if let image: UIImage = source.image {
                     self.imageView.image = image.withRenderingMode(source.renderingMode)
+                } else {
+                    self.imageView.image = nil
                 }
                 if let url: URL = source.url {
                     if let loader: QImageLoader = self.loader {
@@ -60,7 +62,7 @@ open class QImageView: QView, IQImageLoaderTarget {
         super.setup()
 
         self.loader = QImageLoader.shared
-        
+
         self.backgroundColor = UIColor.clear
 
         self.imageView = UIImageView(frame: self.bounds)
@@ -111,3 +113,4 @@ open class QImageView: QView, IQImageLoaderTarget {
     }
 
 }
+
