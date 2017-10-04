@@ -159,24 +159,22 @@ open class QLabel: QView {
         let textSize: CGSize = self.layoutManager.usedRect(for: self.textContainer).integral.size
         let textOffset: CGPoint = self.contentAlignment.point(size: viewRect.size, textSize: textSize)
         let textRange: NSRange = self.layoutManager.glyphRange(for: self.textContainer)
-
         self.layoutManager.drawBackground(forGlyphRange: textRange, at: textOffset)
         self.layoutManager.drawGlyphs(forGlyphRange: textRange, at: textOffset)
     }
 
     open override func sizeThatFits(_ size: CGSize) -> CGSize {
+        if self.textStorage.length < 1 {
+            return CGSize.zero
+        }
         let textContainer: NSTextContainer = NSTextContainer(size: size)
         textContainer.lineBreakMode = self.textContainer.lineBreakMode
         textContainer.lineFragmentPadding = self.textContainer.lineFragmentPadding
-
         let layoutManager: NSLayoutManager = NSLayoutManager()
         layoutManager.addTextContainer(textContainer)
-
         let textStorage: NSTextStorage = NSTextStorage(attributedString: self.textStorage)
         textStorage.addLayoutManager(layoutManager)
-
         let frame: CGRect = layoutManager.usedRect(for: textContainer)
-
         return frame.integral.size
     }
     
