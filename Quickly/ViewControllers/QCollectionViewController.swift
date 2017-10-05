@@ -155,10 +155,14 @@ open class QCollectionViewController : UICollectionViewController, IQContentView
                 return true
             }
             if let collectionController: IQCollectionController = self.collectionController {
-                return collectionController.responds(to: selector)
+                if collectionController.responds(to: selector) {
+                    return true
+                }
             }
             if let viewController: QCollectionViewController = self.viewController {
-                return viewController.responds(to: selector)
+                if viewController.responds(to: selector) {
+                    return true
+                }
             }
             return false
         }

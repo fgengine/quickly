@@ -154,10 +154,14 @@ open class QTableViewController : UITableViewController, IQContentViewController
                 return true
             }
             if let tableController: IQTableController = self.tableController {
-                return tableController.responds(to: selector)
+                if tableController.responds(to: selector) {
+                    return true
+                }
             }
             if let viewController: QTableViewController = self.viewController {
-                return viewController.responds(to: selector)
+                if viewController.responds(to: selector) {
+                    return true
+                }
             }
             return false
         }

@@ -23,7 +23,7 @@ class ChoiseViewController: QTableViewController, IQRouted {
         ]
         self.tableController = tc
     }
-
+    
 }
 
 extension ChoiseViewController: ChoiseTableControllerDelegate {
