@@ -31,8 +31,12 @@ open class QImageView: QView, IQImageLoaderTarget {
                         self.isDownloading = true
                     }
                 }
+                self.backgroundColor = source.backgroundColor
+                self.tintColor = source.tintColor
             } else {
                 self.image = nil
+                self.backgroundColor = UIColor.clear
+                self.tintColor = nil
             }
         }
     }

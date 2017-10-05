@@ -47,29 +47,59 @@ public class QImageSource {
     public var image: UIImage?
     public var size: CGSize
     public var url: URL?
-    public var renderingMode: UIImageRenderingMode = .automatic
-    public var scale: QImageSourceScale = .aspectFit
+    public var renderingMode: UIImageRenderingMode
+    public var scale: QImageSourceScale
+    public var backgroundColor: UIColor
+    public var tintColor: UIColor?
 
-    public init(_ image: UIImage, scale: QImageSourceScale = .aspectFit) {
-        self.size = image.size
+    public init(
+        _ image: UIImage,
+        renderingMode: UIImageRenderingMode = .automatic,
+        scale: QImageSourceScale = .aspectFit,
+        backgroundColor: UIColor = UIColor.clear,
+        tintColor: UIColor? = nil
+    ) {
         self.image = image
+        self.size = image.size
+        self.renderingMode = renderingMode
         self.scale = scale
+        self.backgroundColor = backgroundColor
+        self.tintColor = tintColor
     }
 
-    public init(_ imageNamed: String, scale: QImageSourceScale = .aspectFit) {
+    public init(
+        _ imageNamed: String,
+        renderingMode: UIImageRenderingMode = .automatic,
+        scale: QImageSourceScale = .aspectFit,
+        backgroundColor: UIColor = UIColor.clear,
+        tintColor: UIColor? = nil
+    ) {
         if let image: UIImage = UIImage(named: imageNamed) {
-            self.size = image.size
             self.image = image
-            self.scale = scale
+            self.size = image.size
         } else {
             self.size = CGSize.zero
         }
+        self.renderingMode = renderingMode
+        self.scale = scale
+        self.backgroundColor = backgroundColor
+        self.tintColor = tintColor
     }
 
-    public init(_ url: URL, size: CGSize, scale: QImageSourceScale = .aspectFit) {
+    public init(
+        _ url: URL,
+        size: CGSize,
+        renderingMode: UIImageRenderingMode = .automatic,
+        scale: QImageSourceScale = .aspectFit,
+        backgroundColor: UIColor = UIColor.clear,
+        tintColor: UIColor? = nil
+    ) {
         self.size = size
         self.url = url
+        self.renderingMode = renderingMode
         self.scale = scale
+        self.backgroundColor = backgroundColor
+        self.tintColor = tintColor
     }
 
     public func rect(bounds: CGRect, image: UIImage? = nil) -> CGRect {
