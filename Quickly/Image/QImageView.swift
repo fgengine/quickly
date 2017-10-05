@@ -71,6 +71,7 @@ open class QImageView: QView, IQImageLoaderTarget {
         self.loader = QImageLoader.shared
 
         self.backgroundColor = UIColor.clear
+        self.clipsToBounds = true
     }
     
     open override func draw(_ rect: CGRect) {
