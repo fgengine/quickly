@@ -21,9 +21,9 @@ open class QImageView: QView, IQImageLoaderTarget {
         didSet {
             if let source: QImageSource = self.source {
                 if let image: UIImage = source.image {
-                    self.imageView.image = image.withRenderingMode(source.renderingMode)
+                    self.image = image.withRenderingMode(source.renderingMode)
                 } else {
-                    self.imageView.image = nil
+                    self.image = nil
                 }
                 if let url: URL = source.url {
                     if let loader: QImageLoader = self.loader {
@@ -31,17 +31,20 @@ open class QImageView: QView, IQImageLoaderTarget {
                         self.isDownloading = true
                     }
                 }
-                self.imageView.contentMode = source.scale.toContentMode()
             } else {
-                self.imageView.image = nil
+                self.image = nil
             }
-            self.invalidateIntrinsicContentSize()
         }
     }
     public var filter: IQImageLoaderFilter?
     public private(set) var isDownloading: Bool = false
     public var loader: QImageLoader?
-    public private(set) var imageView: UIImageView!
+    public private(set) var image: UIImage? {
+        didSet {
+            self.invalidateIntrinsicContentSize()
+            self.setNeedsDisplay()
+        }
+    }
 
     open override var frame: CGRect {
         didSet { self.updateCornerRadius() }
@@ -64,13 +67,17 @@ open class QImageView: QView, IQImageLoaderTarget {
         self.loader = QImageLoader.shared
 
         self.backgroundColor = UIColor.clear
-
-        self.imageView = UIImageView(frame: self.bounds)
-        self.imageView.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
-        self.imageView.isUserInteractionEnabled = false
-        self.imageView.backgroundColor = UIColor.clear
-        self.imageView.contentMode = .scaleAspectFit
-        self.addSubview(self.imageView)
+    }
+    
+    open override func draw(_ rect: CGRect) {
+        guard let image: UIImage = self.image else {
+            return
+        }
+        if let source: QImageSource = self.source {
+            image.draw(in: source.rect(bounds: self.bounds, image: image))
+        } else {
+            image.draw(in: self.bounds)
+        }
     }
 
     open override func sizeThatFits(_ size: CGSize) -> CGSize {
@@ -94,8 +101,7 @@ open class QImageView: QView, IQImageLoaderTarget {
     }
 
     open func imageLoader(_ imageLoader: QImageLoader, cacheImage: UIImage) {
-        self.imageView.image = cacheImage
-        self.invalidateIntrinsicContentSize()
+        self.image = cacheImage
         self.isDownloading = false
     }
 
@@ -103,8 +109,7 @@ open class QImageView: QView, IQImageLoaderTarget {
     }
 
     open func imageLoader(_ imageLoader: QImageLoader, downloadImage: UIImage) {
-        self.imageView.image = downloadImage
-        self.invalidateIntrinsicContentSize()
+        self.image = downloadImage
         self.isDownloading = false
     }
 

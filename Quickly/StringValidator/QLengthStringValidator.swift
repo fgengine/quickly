@@ -8,6 +8,9 @@ open class QLengthStringValidator: IQStringValidator {
 
     public var minimumLength: Int = 0
     public var maximumLength: Int?
+    
+    public init() {
+    }
 
     public func validate(_ string: String, complete: Bool) -> Bool {
         var valid: Bool = true

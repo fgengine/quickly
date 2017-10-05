@@ -24,7 +24,8 @@ class ImageViewController: QStaticViewController, IQRouted {
 
         self.imageView.source = QImageSource(
             URL(string: "http://globus-ltd.ru/images/testing.jpg")!,
-            size: CGSize(width: 100, height: 100)
+            size: CGSize(width: 100, height: 100),
+            scale: .originOrAspectFit
         )
     }
 
