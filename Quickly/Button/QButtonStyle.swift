@@ -58,16 +58,6 @@ public class QButtonStyle {
     }
     private var _imageSource: QImageSource?
 
-    public var imageTintColor: UIColor? {
-        set(value) { self._imageTintColor = value }
-        get {
-            if let value: UIColor = self._imageTintColor { return value }
-            if let parent: QButtonStyle = self.parent { return parent.imageTintColor }
-            return nil
-        }
-    }
-    private var _imageTintColor: UIColor?
-
     public var text: IQText? {
         set(value) { self._text = value }
         get {

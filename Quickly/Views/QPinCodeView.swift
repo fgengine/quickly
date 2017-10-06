@@ -7,40 +7,35 @@ import UIKit
 @IBDesignable
 open class QPinCodeView: QControl {
 
-    public var text: String = "" {
+    @IBInspectable public var text: String = "" {
         didSet {
             self.setNeedsDisplay()
         }
     }
-
-    public var length: Int = 4 {
-        didSet {
-            self.invalidateIntrinsicContentSize()
-            self.setNeedsDisplay()
-        }
-    }
-
-    public var color: UIColor = UIColor.black {
-        didSet {
-            self.setNeedsDisplay()
-        }
-    }
-
-    public var diameter: CGFloat = 16.0 {
+    @IBInspectable public var length: Int = 4 {
         didSet {
             self.invalidateIntrinsicContentSize()
             self.setNeedsDisplay()
         }
     }
-
-    public var spacing: CGFloat = 16.0 {
+    @IBInspectable public var color: UIColor = UIColor.black {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+    @IBInspectable public var diameter: CGFloat = 16.0 {
         didSet {
             self.invalidateIntrinsicContentSize()
             self.setNeedsDisplay()
         }
     }
-
-    public var thickness: CGFloat = 1.0 {
+    @IBInspectable public var spacing: CGFloat = 16.0 {
+        didSet {
+            self.invalidateIntrinsicContentSize()
+            self.setNeedsDisplay()
+        }
+    }
+    @IBInspectable public var thickness: CGFloat = 1.0 {
         didSet {
             self.invalidateIntrinsicContentSize()
             self.setNeedsDisplay()

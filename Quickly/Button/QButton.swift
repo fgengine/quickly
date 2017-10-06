@@ -34,7 +34,7 @@ open class QButton: QControl {
     open override var contentVerticalAlignment: UIControlContentVerticalAlignment {
         didSet { self.setNeedsUpdateConstraints() }
     }
-    public var contentInsets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8) {
+    @IBInspectable public var contentInsets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8) {
         didSet {
             self.invalidateIntrinsicContentSize()
             self.setNeedsUpdateConstraints()
@@ -46,13 +46,13 @@ open class QButton: QControl {
             self.setNeedsUpdateConstraints()
         }
     }
-    public var imageInsets: UIEdgeInsets = UIEdgeInsets.zero {
+    @IBInspectable public var imageInsets: UIEdgeInsets = UIEdgeInsets.zero {
         didSet {
             self.invalidateIntrinsicContentSize()
             self.setNeedsUpdateConstraints()
         }
     }
-    public var textInsets: UIEdgeInsets = UIEdgeInsets.zero {
+    @IBInspectable public var textInsets: UIEdgeInsets = UIEdgeInsets.zero {
         didSet {
             self.invalidateIntrinsicContentSize()
             self.setNeedsUpdateConstraints()
@@ -150,6 +150,18 @@ open class QButton: QControl {
         self.tapGesture.delegate = self
         self.addGestureRecognizer(self.tapGesture)
     }
+
+    #if TARGET_INTERFACE_BUILDER
+
+    open override func prepareForInterfaceBuilder() {
+        let style: QButtonStyle = QButtonStyle()
+        style.color = UIColor.blue
+        style.text = QText("QButton")
+        style.cornerRadius = 4
+        self.normalStyle = style
+    }
+
+    #endif
 
     public func currentStyle() -> QButtonStyle? {
         if self.isEnabled == false {
@@ -459,7 +471,6 @@ open class QButton: QControl {
     private func applyImageStyle(_ style: QButtonStyle) {
         if let imageSource: QImageSource = style.imageSource {
             self.imageView.source = imageSource
-            self.imageView.tintColor = style.imageTintColor
             self.imageView.alpha = 1
         } else {
             self.resetImageStyle()

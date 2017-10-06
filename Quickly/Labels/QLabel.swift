@@ -33,7 +33,7 @@ open class QLabel: QView {
             }
         }
     }
-
+    
     public var contentAlignment: ContentAlignment = .left {
         didSet {
             self.setNeedsDisplay()
@@ -49,7 +49,7 @@ open class QLabel: QView {
             return self.textContainer.lineFragmentPadding
         }
     }
-    public var numberOfLines: Int {
+    @IBInspectable public var numberOfLines: Int {
         set(value) {
             self.textContainer.maximumNumberOfLines = value
             self.invalidateIntrinsicContentSize()
@@ -126,7 +126,15 @@ open class QLabel: QView {
 
         self.textStorage.addLayoutManager(self.layoutManager)
     }
+
+    #if TARGET_INTERFACE_BUILDER
     
+    open override func prepareForInterfaceBuilder() {
+        self.textStorage.setAttributedString(NSAttributedString(string: "QLabel"))
+    }
+
+    #endif
+
     public func characterIndex(point: CGPoint) -> String.Index? {
         let viewRect: CGRect = self.bounds
         let textSize: CGSize = self.layoutManager.usedRect(for: self.textContainer).integral.size
@@ -197,6 +205,7 @@ open class QLabel: QView {
         }
         return self.bounds.width
     }
+
     internal func updateTextStorage() {
         if let text: IQText = self.text {
             self.textStorage.setAttributedString(text.attributed)

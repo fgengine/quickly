@@ -79,17 +79,33 @@ open class QImageView: QView, IQImageLoaderTarget {
             return
         }
         if let context: CGContext = UIGraphicsGetCurrentContext() {
-            if let tintColor: UIColor = self.tintColor {
-                context.setFillColor(tintColor.cgColor)
-            }
             var imageRect: CGRect
+            let bounds: CGRect = self.bounds
             if let source: QImageSource = self.source {
-                imageRect = source.rect(bounds: self.bounds, image: image)
+                imageRect = source.rect(bounds: bounds, image: image)
             } else {
                 imageRect = self.bounds
             }
-            if let cgImage: CGImage = image.cgImage {
-                context.draw(cgImage, in: imageRect)
+            context.translateBy(x: 0, y: bounds.height)
+            context.scaleBy(x: 1.0, y: -1.0)
+            switch image.renderingMode {
+            case .automatic, .alwaysOriginal:
+                if let cgImage: CGImage = image.cgImage {
+                    context.draw(cgImage, in: imageRect)
+                }
+            case .alwaysTemplate:
+                if let tintColor: UIColor = self.tintColor {
+                    if let tintImage: UIImage = image.tintImage(tintColor) {
+                        if let cgTintImage: CGImage = tintImage.cgImage {
+                            context.draw(cgTintImage, in: imageRect)
+                        }
+                    }
+                } else {
+                    if let cgImage: CGImage = image.cgImage {
+                        context.draw(cgImage, in: imageRect)
+                    }
+                }
+                break
             }
         }
     }

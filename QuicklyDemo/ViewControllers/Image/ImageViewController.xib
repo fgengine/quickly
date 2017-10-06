@@ -22,7 +22,6 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qaE-0E-qgg" customClass="QImageView" customModule="Quickly">
                     <rect key="frame" x="40" y="40" width="240" height="200"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="200" id="p9f-ec-X43"/>
                     </constraints>

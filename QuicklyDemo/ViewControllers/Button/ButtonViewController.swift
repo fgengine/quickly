@@ -23,20 +23,24 @@ class ButtonViewController: QStaticViewController, IQRouted {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let imageSource: QImageSource = QImageSource("button_image")
-        imageSource.renderingMode = .alwaysTemplate
-
         let normalStyle: QButtonStyle = QButtonStyle()
         normalStyle.color = UIColor.red
         normalStyle.cornerRadius = 4
         normalStyle.text = QText("Normal", color: UIColor.black)
-        normalStyle.imageSource = imageSource
-        normalStyle.imageTintColor = UIColor.black
+        normalStyle.imageSource = QImageSource(
+            "button_image",
+            renderingMode: .alwaysTemplate,
+            tintColor: UIColor.black
+        )
 
         let highlightedStyle: QButtonStyle = QButtonStyle(parent: normalStyle)
         highlightedStyle.color = UIColor.blue
         highlightedStyle.text = QText("Highlighted", color: UIColor.white)
-        highlightedStyle.imageTintColor = UIColor.white
+        highlightedStyle.imageSource = QImageSource(
+            "button_image",
+            renderingMode: .alwaysTemplate,
+            tintColor: UIColor.white
+        )
 
         self.button.imageInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         self.button.textInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
