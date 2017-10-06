@@ -78,10 +78,19 @@ open class QImageView: QView, IQImageLoaderTarget {
         guard let image: UIImage = self.image else {
             return
         }
-        if let source: QImageSource = self.source {
-            image.draw(in: source.rect(bounds: self.bounds, image: image))
-        } else {
-            image.draw(in: self.bounds)
+        if let context: CGContext = UIGraphicsGetCurrentContext() {
+            if let tintColor: UIColor = self.tintColor {
+                context.setFillColor(tintColor.cgColor)
+            }
+            var imageRect: CGRect
+            if let source: QImageSource = self.source {
+                imageRect = source.rect(bounds: self.bounds, image: image)
+            } else {
+                imageRect = self.bounds
+            }
+            if let cgImage: CGImage = image.cgImage {
+                context.draw(cgImage, in: imageRect)
+            }
         }
     }
 

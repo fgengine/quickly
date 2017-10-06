@@ -15,13 +15,13 @@ extension UIView: QLayoutTarget {
 extension UILayoutGuide: QLayoutTarget {
 }
 
-public struct QQLayoutAxisX {
+public struct QLayoutAxisX {
 }
 
-public struct QQLayoutAxisY {
+public struct QLayoutAxisY {
 }
 
-public struct QQLayoutDimension {
+public struct QLayoutDimension {
 }
 
 public struct QLayoutItem< T > {
@@ -103,7 +103,7 @@ public func == < T > (lhs: QLayoutItem< T >, rhs: QLayoutItem< T >) -> NSLayoutC
     return lhs.constrain(rhs, relation: .equal)
 }
 
-public func == (lhs: QLayoutItem< QQLayoutDimension >, rhs: CGFloat) -> NSLayoutConstraint {
+public func == (lhs: QLayoutItem< QLayoutDimension >, rhs: CGFloat) -> NSLayoutConstraint {
     return lhs.constrain(rhs, relation: .equal)
 }
 
@@ -111,7 +111,7 @@ public func >= < T > (lhs: QLayoutItem< T >, rhs: QLayoutItem< T >) -> NSLayoutC
     return lhs.constrain(rhs, relation: .greaterThanOrEqual)
 }
 
-public func >= (lhs: QLayoutItem< QQLayoutDimension >, rhs: CGFloat) -> NSLayoutConstraint {
+public func >= (lhs: QLayoutItem< QLayoutDimension >, rhs: CGFloat) -> NSLayoutConstraint {
     return lhs.constrain(rhs, relation: .greaterThanOrEqual)
 }
 
@@ -119,49 +119,49 @@ public func <= < T > (lhs: QLayoutItem< T >, rhs: QLayoutItem< T >) -> NSLayoutC
     return lhs.constrain(rhs, relation: .lessThanOrEqual)
 }
 
-public func <= (lhs: QLayoutItem< QQLayoutDimension >, rhs: CGFloat) -> NSLayoutConstraint {
+public func <= (lhs: QLayoutItem< QLayoutDimension >, rhs: CGFloat) -> NSLayoutConstraint {
     return lhs.constrain(rhs, relation: .lessThanOrEqual)
 }
 
 public extension QLayoutTarget {
 
-    public var leftLayout: QLayoutItem< QQLayoutAxisX > {
+    public var leftLayout: QLayoutItem< QLayoutAxisX > {
         return QLayoutItem(self, .left)
     }
 
-    public var rightLayout: QLayoutItem< QQLayoutAxisX > {
+    public var rightLayout: QLayoutItem< QLayoutAxisX > {
         return QLayoutItem(self, .right)
     }
 
-    public var topLayout: QLayoutItem< QQLayoutAxisY > {
+    public var topLayout: QLayoutItem< QLayoutAxisY > {
         return QLayoutItem(self, .top)
     }
 
-    public var bottomLayout: QLayoutItem< QQLayoutAxisY > {
+    public var bottomLayout: QLayoutItem< QLayoutAxisY > {
         return QLayoutItem(self, .bottom)
     }
 
-    public var leadingLayout: QLayoutItem< QQLayoutAxisX > {
+    public var leadingLayout: QLayoutItem< QLayoutAxisX > {
         return QLayoutItem(self, .leading)
     }
 
-    public var trailingLayout: QLayoutItem< QQLayoutAxisX > {
+    public var trailingLayout: QLayoutItem< QLayoutAxisX > {
         return QLayoutItem(self, .trailing)
     }
 
-    public var widthLayout: QLayoutItem< QQLayoutDimension > {
+    public var widthLayout: QLayoutItem< QLayoutDimension > {
         return QLayoutItem(self, .width)
     }
 
-    public var heightLayout: QLayoutItem< QQLayoutDimension > {
+    public var heightLayout: QLayoutItem< QLayoutDimension > {
         return QLayoutItem(self, .height)
     }
 
-    public var centerXLayout: QLayoutItem< QQLayoutAxisX > {
+    public var centerXLayout: QLayoutItem< QLayoutAxisX > {
         return QLayoutItem(self, .centerX)
     }
 
-    public var centerYLayout: QLayoutItem< QQLayoutAxisY > {
+    public var centerYLayout: QLayoutItem< QLayoutAxisY > {
         return QLayoutItem(self, .centerY)
     }
 
@@ -169,43 +169,43 @@ public extension QLayoutTarget {
 
 public extension UIView {
 
-    public var firstBaselineLayout: QLayoutItem< QQLayoutAxisY > {
+    public var firstBaselineLayout: QLayoutItem< QLayoutAxisY > {
         return QLayoutItem(self, .firstBaseline)
     }
 
-    public var lastBaselineLayout: QLayoutItem< QQLayoutAxisY > {
+    public var lastBaselineLayout: QLayoutItem< QLayoutAxisY > {
         return QLayoutItem(self, .lastBaseline)
     }
 
-    public var leftMarginLayout: QLayoutItem< QQLayoutAxisX > {
+    public var leftMarginLayout: QLayoutItem< QLayoutAxisX > {
         return QLayoutItem(self, .leftMargin)
     }
 
-    public var rightMarginLayout: QLayoutItem< QQLayoutAxisX > {
+    public var rightMarginLayout: QLayoutItem< QLayoutAxisX > {
         return QLayoutItem(self, .rightMargin)
     }
 
-    public var topMarginLayout: QLayoutItem< QQLayoutAxisY > {
+    public var topMarginLayout: QLayoutItem< QLayoutAxisY > {
         return QLayoutItem(self, .topMargin)
     }
 
-    public var bottomMarginLayout: QLayoutItem< QQLayoutAxisY > {
+    public var bottomMarginLayout: QLayoutItem< QLayoutAxisY > {
         return QLayoutItem(self, .bottomMargin)
     }
 
-    public var leadingMarginLayout: QLayoutItem< QQLayoutAxisX > {
+    public var leadingMarginLayout: QLayoutItem< QLayoutAxisX > {
         return QLayoutItem(self, .leadingMargin)
     }
 
-    public var trailingMarginLayout: QLayoutItem< QQLayoutAxisX > {
+    public var trailingMarginLayout: QLayoutItem< QLayoutAxisX > {
         return QLayoutItem(self, .trailingMargin)
     }
 
-    public var centerXMarginLayout: QLayoutItem< QQLayoutAxisX > {
+    public var centerXMarginLayout: QLayoutItem< QLayoutAxisX > {
         return QLayoutItem(self, .centerXWithinMargins)
     }
 
-    public var centerYMarginLayout: QLayoutItem< QQLayoutAxisY > {
+    public var centerYMarginLayout: QLayoutItem< QLayoutAxisY > {
         return QLayoutItem(self, .centerYWithinMargins)
     }
 
@@ -213,19 +213,19 @@ public extension UIView {
 
 public extension UIViewController {
 
-    public var topLayoutGuideTopLayout: QLayoutItem< QQLayoutAxisY > {
+    public var topLayoutGuideTopLayout: QLayoutItem< QLayoutAxisY > {
         return QLayoutItem(self.topLayoutGuide, .top)
     }
 
-    public var topLayoutGuideBottomLayout: QLayoutItem< QQLayoutAxisY > {
+    public var topLayoutGuideBottomLayout: QLayoutItem< QLayoutAxisY > {
         return QLayoutItem(self.topLayoutGuide, .bottom)
     }
 
-    public var bottomLayoutGuideTopLayout: QLayoutItem< QQLayoutAxisY > {
+    public var bottomLayoutGuideTopLayout: QLayoutItem< QLayoutAxisY > {
         return QLayoutItem(self.bottomLayoutGuide, .top)
     }
 
-    public var bottomLayoutGuideBottomLayout: QLayoutItem< QQLayoutAxisY > {
+    public var bottomLayoutGuideBottomLayout: QLayoutItem< QLayoutAxisY > {
         return QLayoutItem(self.bottomLayoutGuide, .bottom)
     }
 
