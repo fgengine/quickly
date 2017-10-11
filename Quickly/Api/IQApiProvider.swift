@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 public protocol IQApiProvider: class {
 
     var baseUrl: URL? { get }

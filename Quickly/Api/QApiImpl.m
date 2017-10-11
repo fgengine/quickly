@@ -2,7 +2,6 @@
 //  Quickly
 //
 
-
 #import "QApiImpl.h"
 
 #import <CommonCrypto/CommonHMAC.h>

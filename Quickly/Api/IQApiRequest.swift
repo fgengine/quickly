@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 public protocol IQApiRequest: class {
 
     var timeout: TimeInterval { get }

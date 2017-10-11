@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 public class QObserver< T > {
 
     private var items: Set< UnsafeMutableRawPointer >

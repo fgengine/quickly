@@ -83,7 +83,7 @@ class QuicklyJsonTests: XCTestCase {
         do {
             try existReguiredString <<< (json, "RUR")
             XCTAssert(existReguiredString == "USD")
-        } catch let error as NSError {
+        } catch let error {
             XCTFail("")
         }
     }

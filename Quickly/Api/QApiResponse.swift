@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 open class QApiResponse: IQApiResponse {
 
     public private(set) var url: URL?
@@ -32,7 +30,7 @@ open class QApiResponse: IQApiResponse {
     }
 
     open func parse(data: Data) throws {
-        if let json: QJson = QJson(data: data) {
+        if let json: QJson = QJson(basePath: "", data: data) {
             do {
                 try self.parse(json: json)
             } catch let error {

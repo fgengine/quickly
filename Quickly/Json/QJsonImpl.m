@@ -5,7 +5,9 @@
 
 #import "QJsonImpl.h"
 
-NSString* QJsonImplErrorDomain = @"QJsonImplErrorDomain";
+NSErrorDomain QJsonImplErrorDomain = @"QJsonImplErrorDomain";
+
+NSString* QJsonImplErrorPathKey = @"QJsonImplErrorPathKey";
 
 static NSString* QJsonImplPathSeparator = @".";
 static NSString* QJsonImplPathIndexPattern = @"^\\[\\d+\\]$";
@@ -19,43 +21,49 @@ static NSString* QJsonImplPathIndexPattern = @"^\\[\\d+\\]$";
 NSNumber* QJsonImplBoolFromString(NSString* string);
 NSNumber* QJsonImplNumberFromString(NSString* string);
 NSDecimalNumber* QJsonImplDecimalNumberFromString(NSString* string);
-NSString* QJsonImplStringFromColor(UIColor* color);
-UIColor* QJsonImplColorFromString(NSString* string);
+NSString* QJsonImplStringFromColor(QJsonColor* color);
+QJsonColor* QJsonImplColorFromString(NSString* string);
 
 @implementation QJsonImpl
 
+@synthesize basePath = _basePath;
 @synthesize root = _root;
 
-- (instancetype)init {
-    return [super init];
-}
-
-- (instancetype)initWithRoot:(id)root {
+- (instancetype)initWithBasePath:(NSString*)basePath {
     self = [super init];
     if(self != nil) {
+        _basePath = basePath;
+    }
+    return self;
+}
+
+- (instancetype)initWithBasePath:(NSString*)basePath root:(id)root {
+    self = [super init];
+    if(self != nil) {
+        _basePath = basePath;
         _root = root;
     }
     return self;
 }
 
-- (instancetype)initWithData:(NSData*)data {
-    id rootObject = [NSJSONSerialization JSONObjectWithData:data options:(NSJSONReadingOptions)0 error:nil];
-    if(rootObject == nil) {
+- (instancetype)initWithBasePath:(NSString*)basePath data:(NSData*)data {
+    id root = [NSJSONSerialization JSONObjectWithData:data options:(NSJSONReadingOptions)0 error:nil];
+    if(root == nil) {
         return nil;
     }
-    return [self initWithRoot:rootObject];
+    return [self initWithBasePath:basePath root:root];
 }
 
-- (instancetype)initWithString:(NSString*)string {
-    return [self initWithString:string encoding:NSUTF8StringEncoding];
+- (instancetype)initWithBasePath:(NSString*)basePath string:(NSString*)string {
+    return [self initWithBasePath:basePath string:string encoding:NSUTF8StringEncoding];
 }
 
-- (instancetype)initWithString:(NSString*)string encoding:(NSStringEncoding)encoding {
+- (instancetype)initWithBasePath:(NSString*)basePath string:(NSString*)string encoding:(NSStringEncoding)encoding {
     NSData* data = [string dataUsingEncoding:encoding];
     if(data == nil) {
         return nil;
     }
-    return [self initWithData:data];
+    return [self initWithBasePath:basePath data:data];
 }
 
 - (NSData*)saveAsData {
@@ -164,7 +172,7 @@ UIColor* QJsonImplColorFromString(NSString* string);
     return [self setObject:[QJsonImpl objectFromDate:date format:format] forPath:path];
 }
 
-- (BOOL)setColor:(UIColor*)color forPath:(NSString*)path {
+- (BOOL)setColor:(QJsonColor*)color forPath:(NSString*)path {
     return [self setObject:[QJsonImpl objectFromColor:color] forPath:path];
 }
 
@@ -183,7 +191,7 @@ UIColor* QJsonImplColorFromString(NSString* string);
         result = _root;
     }
     if((result == nil) && (error != nil)) {
-        *error = [NSError errorWithDomain:QJsonImplErrorDomain code:QJsonImplErrorCodeNotFound userInfo:nil];
+        *error = [QJsonImpl notFoundError:[QJsonImpl preparePath:_basePath path:path]];
     }
     return result;
 }
@@ -197,7 +205,7 @@ UIColor* QJsonImplColorFromString(NSString* string);
         return object;
     }
     if(error != nil) {
-        *error = [NSError errorWithDomain:QJsonImplErrorDomain code:QJsonImplErrorCodeConvert userInfo:nil];
+        *error = [QJsonImpl convertError:[QJsonImpl preparePath:_basePath path:path]];
     }
     return nil;
 }
@@ -211,7 +219,7 @@ UIColor* QJsonImplColorFromString(NSString* string);
         return object;
     }
     if(error != nil) {
-        *error = [NSError errorWithDomain:QJsonImplErrorDomain code:QJsonImplErrorCodeConvert userInfo:nil];
+        *error = [QJsonImpl convertError:[QJsonImpl preparePath:_basePath path:path]];
     }
     return nil;
 }
@@ -221,7 +229,7 @@ UIColor* QJsonImplColorFromString(NSString* string);
     if(object == nil) {
         return nil;
     }
-    return [QJsonImpl numberFromObject:object error:error];
+    return [QJsonImpl numberFromObject:object forPath:path error:error];
 }
 
 - (NSDecimalNumber*)decimalNumberAtPath:(NSString*)path error:(NSError* __autoreleasing *)error {
@@ -229,7 +237,7 @@ UIColor* QJsonImplColorFromString(NSString* string);
     if(object == nil) {
         return nil;
     }
-    return [QJsonImpl decimalNumberFromObject:object error:error];
+    return [QJsonImpl decimalNumberFromObject:object forPath:path error:error];
 }
 
 - (NSString*)stringAtPath:(NSString*)path error:(NSError* __autoreleasing *)error {
@@ -237,7 +245,7 @@ UIColor* QJsonImplColorFromString(NSString* string);
     if(object == nil) {
         return nil;
     }
-    return [QJsonImpl stringFromObject:object error:error];
+    return [QJsonImpl stringFromObject:object forPath:path error:error];
 }
 
 - (NSURL*)urlAtPath:(NSString*)path error:(NSError* __autoreleasing *)error {
@@ -245,7 +253,7 @@ UIColor* QJsonImplColorFromString(NSString* string);
     if(object == nil) {
         return nil;
     }
-    return [QJsonImpl urlFromObject:object error:error];
+    return [QJsonImpl urlFromObject:object forPath:path error:error];
 }
 
 - (NSDate*)dateAtPath:(NSString*)path error:(NSError* __autoreleasing *)error {
@@ -253,7 +261,7 @@ UIColor* QJsonImplColorFromString(NSString* string);
     if(object == nil) {
         return nil;
     }
-    return [QJsonImpl dateFromObject:object error:error];
+    return [QJsonImpl dateFromObject:object forPath:path error:error];
 }
 
 - (NSDate*)dateAtPath:(NSString*)path formats:(NSArray< NSString* >*)formats error:(NSError* __autoreleasing *)error {
@@ -261,15 +269,15 @@ UIColor* QJsonImplColorFromString(NSString* string);
     if(object == nil) {
         return nil;
     }
-    return [QJsonImpl dateFromObject:object formats:formats error:error];
+    return [QJsonImpl dateFromObject:object forPath:path formats:formats error:error];
 }
 
-- (UIColor*)colorAtPath:(NSString*)path error:(NSError* __autoreleasing *)error {
+- (QJsonColor*)colorAtPath:(NSString*)path error:(NSError* __autoreleasing *)error {
     id object = [self objectAtPath:path error:error];
     if(object == nil) {
         return nil;
     }
-    return [QJsonImpl colorFromObject:object error:error];
+    return [QJsonImpl colorFromObject:object forPath:path error:error];
 }
 
 + (id)objectFromBoolean:(BOOL)value {
@@ -324,14 +332,14 @@ UIColor* QJsonImplColorFromString(NSString* string);
     return [formatter stringFromDate:date];
 }
 
-+ (id)objectFromColor:(UIColor*)color {
++ (id)objectFromColor:(QJsonColor*)color {
     if(color == nil) {
         return nil;
     }
     return QJsonImplStringFromColor(color);
 }
 
-+ (NSNumber*)numberFromObject:(id)object error:(NSError* __autoreleasing *)error {
++ (NSNumber*)numberFromObject:(id)object forPath:(NSString*)path error:(NSError* __autoreleasing *)error {
     NSNumber* number = nil;
     if([object isKindOfClass:NSNumber.class] == YES) {
         number = object;
@@ -342,12 +350,12 @@ UIColor* QJsonImplColorFromString(NSString* string);
         }
     }
     if((number == nil) && (error != nil)) {
-        *error = [NSError errorWithDomain:QJsonImplErrorDomain code:QJsonImplErrorCodeConvert userInfo:nil];
+        *error = [self convertError:path];
     }
     return number;
 }
 
-+ (NSDecimalNumber*)decimalNumberFromObject:(id)object error:(NSError* __autoreleasing *)error {
++ (NSDecimalNumber*)decimalNumberFromObject:(id)object forPath:(NSString*)path error:(NSError* __autoreleasing *)error {
     NSDecimalNumber* decimalNumber = nil;
     if([object isKindOfClass:NSNumber.class] == YES) {
         decimalNumber = [NSDecimalNumber decimalNumberWithString:[object stringValue]];
@@ -357,12 +365,12 @@ UIColor* QJsonImplColorFromString(NSString* string);
         decimalNumber = QJsonImplDecimalNumberFromString((NSString*)object);
     }
     if((decimalNumber == nil) && (error != nil)) {
-        *error = [NSError errorWithDomain:QJsonImplErrorDomain code:QJsonImplErrorCodeConvert userInfo:nil];
+        *error = [self convertError:path];
     }
     return decimalNumber;
 }
 
-+ (NSString*)stringFromObject:(id)object error:(NSError* __autoreleasing *)error {
++ (NSString*)stringFromObject:(id)object forPath:(NSString*)path error:(NSError* __autoreleasing *)error {
     NSString* string = nil;
     if([object isKindOfClass:NSString.class] == YES) {
         string = object;
@@ -370,23 +378,23 @@ UIColor* QJsonImplColorFromString(NSString* string);
         string = [object stringValue];
     }
     if((string == nil) && (error != nil)) {
-        *error = [NSError errorWithDomain:QJsonImplErrorDomain code:QJsonImplErrorCodeConvert userInfo:nil];
+        *error = [self convertError:path];
     }
     return string;
 }
 
-+ (NSURL*)urlFromObject:(id)object error:(NSError* __autoreleasing *)error {
++ (NSURL*)urlFromObject:(id)object forPath:(NSString*)path error:(NSError* __autoreleasing *)error {
     NSURL* url = nil;
     if([object isKindOfClass:NSString.class] == YES) {
         url = [NSURL URLWithString:object];
     }
     if((url == nil) && (error != nil)) {
-        *error = [NSError errorWithDomain:QJsonImplErrorDomain code:QJsonImplErrorCodeConvert userInfo:nil];
+        *error = [self convertError:path];
     }
     return url;
 }
 
-+ (NSDate*)dateFromObject:(id)object error:(NSError* __autoreleasing *)error {
++ (NSDate*)dateFromObject:(id)object forPath:(NSString*)path error:(NSError* __autoreleasing *)error {
     NSDate* date = nil;
     if([object isKindOfClass:NSNumber.class] == YES) {
         date = [NSDate dateWithTimeIntervalSince1970:[object unsignedLongValue]];
@@ -397,12 +405,12 @@ UIColor* QJsonImplColorFromString(NSString* string);
         }
     }
     if((date == nil) && (error != nil)) {
-        *error = [NSError errorWithDomain:QJsonImplErrorDomain code:QJsonImplErrorCodeConvert userInfo:nil];
+        *error = [self convertError:path];
     }
     return date;
 }
 
-+ (NSDate*)dateFromObject:(id)object formats:(NSArray< NSString* > *)formats error:(NSError* __autoreleasing *)error {
++ (NSDate*)dateFromObject:(id)object forPath:(NSString*)path formats:(NSArray< NSString* > *)formats error:(NSError* __autoreleasing *)error {
     NSDate* date = nil;
     if([object isKindOfClass:NSString.class] == YES) {
         NSDateFormatter* dateFormatter = [NSDateFormatter new];
@@ -424,20 +432,61 @@ UIColor* QJsonImplColorFromString(NSString* string);
         date = [NSDate dateWithTimeIntervalSince1970:[object unsignedLongValue]];
     }
     if((date == nil) && (error != nil)) {
-        *error = [NSError errorWithDomain:QJsonImplErrorDomain code:QJsonImplErrorCodeConvert userInfo:nil];
+        *error = [self convertError:path];
     }
     return date;
 }
 
-+ (UIColor*)colorFromObject:(id)object error:(NSError* __autoreleasing *)error {
-    UIColor* color = nil;
++ (QJsonColor*)colorFromObject:(id)object forPath:(NSString*)path error:(NSError* __autoreleasing *)error {
+    QJsonColor* color = nil;
     if([object isKindOfClass:NSString.class] == YES) {
         color = QJsonImplColorFromString(object);
     }
     if((color == nil) && (error != nil)) {
-        *error = [NSError errorWithDomain:QJsonImplErrorDomain code:QJsonImplErrorCodeConvert userInfo:nil];
+        *error = [self convertError:path];
     }
     return color;
+}
+
++ (NSError*)notFoundError:(NSString*)path {
+    return [self _error:QJsonImplErrorCodeNotFound path:path];
+}
+
++ (NSError*)convertError:(NSString*)path {
+    return [self _error:QJsonImplErrorCodeConvert path:path];
+}
+
++ (NSString*)preparePath:(NSString*)path {
+    return path;
+}
+
++ (NSString*)preparePath:(NSString*)path index:(NSInteger)index {
+    return [NSString stringWithFormat:@"%@[%d]", path, (int)index];
+}
+
++ (NSString*)preparePath:(NSString*)path key:(id)key {
+    return [NSString stringWithFormat:@"%@.%@", path, key];
+}
+
++ (NSString*)preparePath:(NSString*)basePath path:(NSString*)path {
+    if(basePath.length > 0) {
+        return [NSString stringWithFormat:@"%@.%@", basePath, path];
+    }
+    return path;
+}
+
++ (NSString*)preparePath:(NSString*)basePath path:(NSString*)path index:(NSInteger)index {
+    if(basePath.length > 0) {
+        return [NSString stringWithFormat:@"%@.%@[%d]", basePath, path, (int)index];
+    }
+    return [NSString stringWithFormat:@"%@[%d]", path, (int)index];
+}
+
++ (NSString*)preparePath:(NSString*)basePath path:(NSString*)path key:(id)key {
+    if(basePath.length > 0) {
+        return [NSString stringWithFormat:@"%@.%@.%@", basePath, path, key];
+    }
+    return [NSString stringWithFormat:@"%@.%@", path, key];
 }
 
 - (NSArray*)_paths:(NSString*)path {
@@ -644,6 +693,13 @@ UIColor* QJsonImplColorFromString(NSString* string);
     return result;
 }
 
++ (NSError*)_error:(QJsonImplErrorCode)code path:(NSString*)path {
+    NSDictionary* userInfo = @{
+        QJsonImplErrorPathKey: path
+    };
+    return [NSError errorWithDomain:QJsonImplErrorDomain code:code userInfo:userInfo];
+}
+
 @end
 
 NSNumber* QJsonImplBoolFromString(NSString* string) {
@@ -699,13 +755,13 @@ NSDecimalNumber* QJsonImplDecimalNumberFromString(NSString* string) {
     return decimalNumber;
 }
 
-NSString* QJsonImplStringFromColor(UIColor* color) {
+NSString* QJsonImplStringFromColor(QJsonColor* color) {
     CGFloat r, g, b, a;
     [color getRed:&r green:&g blue:&b alpha:&a];
     return [NSString stringWithFormat:@"#%02X%02X%02X%02X", (int)(255 * r), (int)(255 * g), (int)(255 * b), (int)(255 * a)];
 }
 
-UIColor* QJsonImplColorFromString(NSString* string) {
+QJsonColor* QJsonImplColorFromString(NSString* string) {
     static NSCharacterSet* characterSet = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -738,8 +794,8 @@ UIColor* QJsonImplColorFromString(NSString* string) {
         default:
             break;
     }
-    return [UIColor colorWithRed:(CGFloat)(r) / (CGFloat)(255.0)
-                           green:(CGFloat)(g) / (CGFloat)(255.0)
-                            blue:(CGFloat)(b) / (CGFloat)(255.0)
-                           alpha:(CGFloat)(a) / (CGFloat)(255.0)];
+    return [QJsonColor colorWithRed:(CGFloat)(r) / (CGFloat)(255.0)
+                              green:(CGFloat)(g) / (CGFloat)(255.0)
+                               blue:(CGFloat)(b) / (CGFloat)(255.0)
+                              alpha:(CGFloat)(a) / (CGFloat)(255.0)];
 }

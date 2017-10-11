@@ -2,7 +2,6 @@
 //  Quickly
 //
 
-import Foundation
 import Security
 
 public enum QKeychainAccessOptions {

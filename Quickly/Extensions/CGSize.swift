@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import UIKit
-
 public extension CGSize {
 
     public func lerp(_ to: CGSize, progress: CGFloat) -> CGSize {

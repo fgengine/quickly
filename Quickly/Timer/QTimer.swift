@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 public class QTimer: NSObject {
 
     public typealias Closure = (_ timer: QTimer) -> Void

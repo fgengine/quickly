@@ -2,18 +2,30 @@
 //  Quickly
 //
 
-
-import UIKit
+#if os(macOS)
+    import AppKit
+#elseif os(iOS)
+    import UIKit
+#endif
 
 public protocol QLayoutTarget: AnyObject {
 }
 
-extension UIView: QLayoutTarget {
-}
+#if os(macOS)
 
-@available(iOS 9.0, *)
-extension UILayoutGuide: QLayoutTarget {
-}
+    extension NSView: QLayoutTarget {
+    }
+
+#elseif os(iOS)
+
+    extension UIView: QLayoutTarget {
+    }
+
+    @available(iOS 9.0, *)
+    extension UILayoutGuide: QLayoutTarget {
+    }
+
+#endif
 
 public struct QLayoutAxisX {
 }
@@ -27,13 +39,13 @@ public struct QLayoutDimension {
 public struct QLayoutItem< T > {
 
     public let item: Any
-    public let attribute: NSLayoutAttribute
+    public let attribute: QPlatformLayoutAttribute
     public let constant: CGFloat
     public let multiplier: CGFloat
 
     public init(
         _ item: Any,
-        _ attribute: NSLayoutAttribute,
+        _ attribute: QPlatformLayoutAttribute,
         _ constant: CGFloat = 0,
         _ multiplier: CGFloat = 1
     ) {
@@ -45,7 +57,7 @@ public struct QLayoutItem< T > {
 
     fileprivate func constrain(
         _ secondItem: QLayoutItem,
-        relation: NSLayoutRelation
+        relation: QPlatformLayoutRelation
     ) -> NSLayoutConstraint {
         return NSLayoutConstraint(
             item: self.item,
@@ -60,8 +72,8 @@ public struct QLayoutItem< T > {
 
     fileprivate func constrain(
         _ constant: CGFloat,
-        relation: NSLayoutRelation
-        ) -> NSLayoutConstraint {
+        relation: QPlatformLayoutRelation
+    ) -> NSLayoutConstraint {
         return NSLayoutConstraint(
             item: self.item,
             attribute: self.attribute,
@@ -167,69 +179,78 @@ public extension QLayoutTarget {
 
 }
 
-public extension UIView {
+#if os(macOS)
 
-    public var firstBaselineLayout: QLayoutItem< QLayoutAxisY > {
-        return QLayoutItem(self, .firstBaseline)
+
+
+#elseif os(iOS)
+
+    public extension UIView {
+
+        public var firstBaselineLayout: QLayoutItem< QLayoutAxisY > {
+            return QLayoutItem(self, .firstBaseline)
+        }
+
+        public var lastBaselineLayout: QLayoutItem< QLayoutAxisY > {
+            return QLayoutItem(self, .lastBaseline)
+        }
+
+        public var leftMarginLayout: QLayoutItem< QLayoutAxisX > {
+            return QLayoutItem(self, .leftMargin)
+        }
+
+        public var rightMarginLayout: QLayoutItem< QLayoutAxisX > {
+            return QLayoutItem(self, .rightMargin)
+        }
+
+        public var topMarginLayout: QLayoutItem< QLayoutAxisY > {
+            return QLayoutItem(self, .topMargin)
+        }
+
+        public var bottomMarginLayout: QLayoutItem< QLayoutAxisY > {
+            return QLayoutItem(self, .bottomMargin)
+        }
+
+        public var leadingMarginLayout: QLayoutItem< QLayoutAxisX > {
+            return QLayoutItem(self, .leadingMargin)
+        }
+
+        public var trailingMarginLayout: QLayoutItem< QLayoutAxisX > {
+            return QLayoutItem(self, .trailingMargin)
+        }
+
+        public var centerXMarginLayout: QLayoutItem< QLayoutAxisX > {
+            return QLayoutItem(self, .centerXWithinMargins)
+        }
+
+        public var centerYMarginLayout: QLayoutItem< QLayoutAxisY > {
+            return QLayoutItem(self, .centerYWithinMargins)
+        }
+
     }
 
-    public var lastBaselineLayout: QLayoutItem< QLayoutAxisY > {
-        return QLayoutItem(self, .lastBaseline)
+    public extension UIViewController {
+
+        public var topLayoutGuideTopLayout: QLayoutItem< QLayoutAxisY > {
+            return QLayoutItem(self.topLayoutGuide, .top)
+        }
+
+        public var topLayoutGuideBottomLayout: QLayoutItem< QLayoutAxisY > {
+            return QLayoutItem(self.topLayoutGuide, .bottom)
+        }
+
+        public var bottomLayoutGuideTopLayout: QLayoutItem< QLayoutAxisY > {
+            return QLayoutItem(self.bottomLayoutGuide, .top)
+        }
+
+        public var bottomLayoutGuideBottomLayout: QLayoutItem< QLayoutAxisY > {
+            return QLayoutItem(self.bottomLayoutGuide, .bottom)
+        }
+
     }
 
-    public var leftMarginLayout: QLayoutItem< QLayoutAxisX > {
-        return QLayoutItem(self, .leftMargin)
-    }
+#endif
 
-    public var rightMarginLayout: QLayoutItem< QLayoutAxisX > {
-        return QLayoutItem(self, .rightMargin)
-    }
-
-    public var topMarginLayout: QLayoutItem< QLayoutAxisY > {
-        return QLayoutItem(self, .topMargin)
-    }
-
-    public var bottomMarginLayout: QLayoutItem< QLayoutAxisY > {
-        return QLayoutItem(self, .bottomMargin)
-    }
-
-    public var leadingMarginLayout: QLayoutItem< QLayoutAxisX > {
-        return QLayoutItem(self, .leadingMargin)
-    }
-
-    public var trailingMarginLayout: QLayoutItem< QLayoutAxisX > {
-        return QLayoutItem(self, .trailingMargin)
-    }
-
-    public var centerXMarginLayout: QLayoutItem< QLayoutAxisX > {
-        return QLayoutItem(self, .centerXWithinMargins)
-    }
-
-    public var centerYMarginLayout: QLayoutItem< QLayoutAxisY > {
-        return QLayoutItem(self, .centerYWithinMargins)
-    }
-
-}
-
-public extension UIViewController {
-
-    public var topLayoutGuideTopLayout: QLayoutItem< QLayoutAxisY > {
-        return QLayoutItem(self.topLayoutGuide, .top)
-    }
-
-    public var topLayoutGuideBottomLayout: QLayoutItem< QLayoutAxisY > {
-        return QLayoutItem(self.topLayoutGuide, .bottom)
-    }
-
-    public var bottomLayoutGuideTopLayout: QLayoutItem< QLayoutAxisY > {
-        return QLayoutItem(self.bottomLayoutGuide, .top)
-    }
-
-    public var bottomLayoutGuideBottomLayout: QLayoutItem< QLayoutAxisY > {
-        return QLayoutItem(self.bottomLayoutGuide, .bottom)
-    }
-
-}
 
 precedencegroup QLayoutPriorityPrecedence {
     lowerThan: ComparisonPrecedence
@@ -238,7 +259,7 @@ precedencegroup QLayoutPriorityPrecedence {
 
 infix operator ~ : QLayoutPriorityPrecedence
 
-public func ~ (lhs: NSLayoutConstraint, rhs: UILayoutPriority) -> NSLayoutConstraint {
+public func ~ (lhs: NSLayoutConstraint, rhs: QPlatformLayoutPriority) -> NSLayoutConstraint {
     lhs.priority = rhs
     return lhs
 }

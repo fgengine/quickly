@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 public class QApiQuery<
     RequestType: IQApiRequest,
     ResponseType: IQApiResponse
@@ -253,7 +251,7 @@ extension QApiQuery: IQDebug {
         }
         if let receivedData: Data = self.receivedData {
             var debug: String = String()
-            if let json: QJson = QJson(data: receivedData) {
+            if let json: QJson = QJson(basePath: "", data: receivedData) {
                 json.debugString(&debug, 0, nextIndent, indent)
             } else {
                 receivedData.debugString(&debug, 0, nextIndent, indent)

@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 public extension String {
 
     public static func localized(_ key: String) -> String {

@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 public protocol IQApiQuery: class {
 
     var task: URLSessionTask? { get }

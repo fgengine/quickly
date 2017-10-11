@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 open class QApiProvider: NSObject, IQApiProvider {
 
     public var baseUrl: URL? = nil

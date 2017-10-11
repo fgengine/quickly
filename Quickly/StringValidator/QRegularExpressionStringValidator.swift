@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 open class QRegularExpressionStringValidator: QLengthStringValidator {
 
     public var expression: NSRegularExpression

@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 open class QCardExpirationDateStringFormatter: IQStringFormatter {
 
     public init() {

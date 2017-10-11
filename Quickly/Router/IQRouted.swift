@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import UIKit
-
 public protocol IQRouted {
 
     associatedtype RouterType

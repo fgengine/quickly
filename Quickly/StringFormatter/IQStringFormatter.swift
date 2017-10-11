@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 public protocol IQStringFormatter {
 
     func format(_ unformat: String) -> String

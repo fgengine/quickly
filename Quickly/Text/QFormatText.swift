@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import UIKit
-
 public class QFormatText: QText {
 
     public init(_ text: String, style: QTextStyle, parts: [String: IQText]) {

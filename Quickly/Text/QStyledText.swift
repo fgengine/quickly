@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import UIKit
-
 public class QStyledText: QText {
 
     public init(_ text: String, style: QTextStyle) {

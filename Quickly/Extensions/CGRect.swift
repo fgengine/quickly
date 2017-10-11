@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import UIKit
-
 public extension CGRect {
 
     public func lerp(_ to: CGRect, progress: CGFloat) -> CGRect {

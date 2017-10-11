@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 open class QPhoneStringFormatter: IQStringFormatter {
 
     public let prefix: String

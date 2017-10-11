@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 public protocol IQModel {
 
     static func from(json: QJson) throws -> IQModel?

@@ -13,21 +13,46 @@ public enum QJsonErrorCode : Int {
 
 public final class QJson {
 
+    #if os(macOS)
+    public typealias Color = NSColor
+    #elseif os(iOS)
+    public typealias Color = UIColor
+    #endif
+
+    public var basePath: String {
+        get { return self.impl.basePath }
+    }
     public var root: Any? {
         get { return self.impl.root }
     }
     internal var impl: QJsonImpl
 
     public init() {
-        self.impl = QJsonImpl()
+        self.impl = QJsonImpl(basePath: "")
+    }
+
+    public init(basePath: String) {
+        self.impl = QJsonImpl(basePath: basePath)
     }
 
     public init(root: Any) {
-        self.impl = QJsonImpl(root: root)
+        self.impl = QJsonImpl(basePath: "", root: root)
+    }
+
+    public init(basePath: String, root: Any) {
+        self.impl = QJsonImpl(basePath: basePath, root: root)
     }
 
     public init?(data: Data) {
-        if let impl: QJsonImpl = QJsonImpl(data: data) {
+        if let impl: QJsonImpl = QJsonImpl(basePath: "", data: data) {
+            self.impl = impl
+        } else {
+            return nil
+        }
+    }
+
+    public init?(basePath: String, data: Data) {
+        if let impl: QJsonImpl = QJsonImpl(basePath: basePath, data: data) {
             self.impl = impl
         } else {
             return nil
@@ -35,7 +60,15 @@ public final class QJson {
     }
 
     public init?(string: String) {
-        if let impl: QJsonImpl = QJsonImpl(string: string) {
+        if let impl: QJsonImpl = QJsonImpl(basePath: "", string: string) {
+            self.impl = impl
+        } else {
+            return nil
+        }
+    }
+
+    public init?(basePath: String, string: String) {
+        if let impl: QJsonImpl = QJsonImpl(basePath: basePath, string: string) {
             self.impl = impl
         } else {
             return nil
@@ -43,7 +76,15 @@ public final class QJson {
     }
 
     public init?(string: String, encoding: UInt) {
-        if let impl: QJsonImpl = QJsonImpl(string: string, encoding: encoding) {
+        if let impl: QJsonImpl = QJsonImpl(basePath: "", string: string, encoding: encoding) {
+            self.impl = impl
+        } else {
+            return nil
+        }
+    }
+
+    public init?(basePath: String, string: String, encoding: UInt) {
+        if let impl: QJsonImpl = QJsonImpl(basePath: basePath, string: string, encoding: encoding) {
             self.impl = impl
         } else {
             return nil
@@ -161,7 +202,7 @@ public final class QJson {
     }
 
     @discardableResult
-    public func set(_ value: UIColor?, forPath path: String) -> Bool {
+    public func set(_ value: Color?, forPath path: String) -> Bool {
         return self.impl.set(color: value, forPath: path)
     }
 
@@ -221,7 +262,7 @@ public final class QJson {
         return try self.impl.date(at: at, formats: formats)
     }
 
-    public func color(at: String) throws -> UIColor {
+    public func color(at: String) throws -> Color {
         return try self.impl.color(at: at)
     }
 

@@ -2,9 +2,21 @@
 //  Quickly
 //
 
-import UIKit
+#if os(macOS)
+    import AppKit
+#elseif os(iOS)
+    import UIKit
+#endif
 
 public class QTextStyle {
+
+    #if os(macOS)
+        public typealias Font = NSFont
+        public typealias Color = NSColor
+    #elseif os(iOS)
+        public typealias Font = UIFont
+        public typealias Color = UIColor
+    #endif
 
     public var parent: QTextStyle? {
         set(value) {
@@ -28,51 +40,51 @@ public class QTextStyle {
 
     public private(set) var children: [QTextStyle] = []
 
-    public var font: UIFont? {
+    public var font: Font? {
         set(value) { self._font = value }
         get {
-            if let value: UIFont = self._font { return value }
+            if let value: Font = self._font { return value }
             if let parent: QTextStyle = self._parent { return parent.font }
             return nil
         }
     }
-    private var _font: UIFont? {
+    private var _font: Font? {
         didSet { self.setNeedRebuildAttributes() }
     }
 
-    public var color: UIColor? {
+    public var color: Color? {
         set(value) { self._color = value }
         get {
-            if let value: UIColor = self._color { return value }
+            if let value: Color = self._color { return value }
             if let parent: QTextStyle = self._parent { return parent.color }
             return nil
         }
     }
-    private var _color: UIColor? {
+    private var _color: Color? {
         didSet { self.setNeedRebuildAttributes() }
     }
 
-    public var backgroundColor: UIColor? {
+    public var backgroundColor: Color? {
         set(value) { self._backgroundColor = value }
         get {
-            if let value: UIColor = self._backgroundColor { return value }
+            if let value: Color = self._backgroundColor { return value }
             if let parent: QTextStyle = self._parent { return parent.backgroundColor }
             return nil
         }
     }
-    private var _backgroundColor: UIColor? {
+    private var _backgroundColor: Color? {
         didSet { self.setNeedRebuildAttributes() }
     }
 
-    public var strikeColor: UIColor? {
+    public var strikeColor: Color? {
         set(value) { self._strikeColor = value }
         get {
-            if let value: UIColor = self._strikeColor { return value }
+            if let value: Color = self._strikeColor { return value }
             if let parent: QTextStyle = self._parent { return parent.strikeColor }
             return nil
         }
     }
-    private var _strikeColor: UIColor? {
+    private var _strikeColor: Color? {
         didSet { self.setNeedRebuildAttributes() }
     }
 
@@ -100,15 +112,15 @@ public class QTextStyle {
         didSet { self.setNeedRebuildAttributes() }
     }
 
-    public var underlineColor: UIColor? {
+    public var underlineColor: Color? {
         set(value) { self._underlineColor = value }
         get {
-            if let value: UIColor = self._underlineColor { return value }
+            if let value: Color = self._underlineColor { return value }
             if let parent: QTextStyle = self._parent { return parent.underlineColor }
             return nil
         }
     }
-    private var _underlineColor: UIColor? {
+    private var _underlineColor: Color? {
         didSet { self.setNeedRebuildAttributes() }
     }
 
@@ -148,15 +160,15 @@ public class QTextStyle {
         didSet { self.setNeedRebuildAttributes() }
     }
 
-    public var shadowColor: UIColor? {
+    public var shadowColor: Color? {
         set(value) { self._shadowColor = value }
         get {
-            if let value: UIColor = self._shadowColor { return value }
+            if let value: Color = self._shadowColor { return value }
             if let parent: QTextStyle = self._parent { return parent.shadowColor }
             return nil
         }
     }
-    private var _shadowColor: UIColor? {
+    private var _shadowColor: Color? {
         didSet { self.setNeedRebuildAttributes() }
     }
 
@@ -292,15 +304,15 @@ public class QTextStyle {
         didSet { self.setNeedRebuildAttributes() }
     }
 
-    public var lineBreakMode: NSLineBreakMode? {
+    public var lineBreakMode: QPlatformLineBreakMode? {
         set(value) { self._lineBreakMode = value }
         get {
-            if let value: NSLineBreakMode = self._lineBreakMode { return value }
+            if let value: QPlatformLineBreakMode = self._lineBreakMode { return value }
             if let parent: QTextStyle = self._parent { return parent.lineBreakMode }
             return nil
         }
     }
-    private var _lineBreakMode: NSLineBreakMode? {
+    private var _lineBreakMode: QPlatformLineBreakMode? {
         didSet { self.setNeedRebuildAttributes() }
     }
 
@@ -451,19 +463,19 @@ public class QTextStyle {
 
     private func rebuildAttributes() -> [NSAttributedStringKey: Any] {
         var attributes: [NSAttributedStringKey: Any] = [:]
-        if let font: UIFont = self.font {
+        if let font: Font = self.font {
             attributes[.font] = font
         }
-        if let color: UIColor = self.color {
+        if let color: Color = self.color {
             attributes[.foregroundColor] = color
         }
-        if let backgroundColor: UIColor = self.backgroundColor {
+        if let backgroundColor: Color = self.backgroundColor {
             attributes[.backgroundColor] = backgroundColor
         }
-        if let strikeColor: UIColor = self.strikeColor {
+        if let strikeColor: Color = self.strikeColor {
             attributes[.strokeColor] = strikeColor
         }
-        if let strikeColor: UIColor = self.strikeColor {
+        if let strikeColor: Color = self.strikeColor {
             attributes[.strokeColor] = strikeColor
         }
         if let strikeWidth: Float = self.strikeWidth {
@@ -472,7 +484,7 @@ public class QTextStyle {
         if let strikeThrough: Int = self.strikeThrough {
             attributes[.strikethroughStyle] = NSNumber(value: strikeThrough)
         }
-        if let underlineColor: UIColor = self.underlineColor {
+        if let underlineColor: Color = self.underlineColor {
             attributes[.underlineColor] = underlineColor
         }
         if let underlineStyle: NSUnderlineStyle = self.underlineStyle {
@@ -480,7 +492,7 @@ public class QTextStyle {
         }
         if #available(iOS 6.0, *) {
             let shadow = NSShadow()
-            if let shadowColor: UIColor = self.shadowColor {
+            if let shadowColor: Color = self.shadowColor {
                 shadow.shadowColor = shadowColor
             }
             if let shadowOffset: CGSize = self.shadowOffset {
@@ -525,7 +537,7 @@ public class QTextStyle {
         if let tailIndent: Float = self.tailIndent {
             paragraphStyle.tailIndent = CGFloat(tailIndent)
         }
-        if let lineBreakMode: NSLineBreakMode = self.lineBreakMode {
+        if let lineBreakMode: QPlatformLineBreakMode = self.lineBreakMode {
             paragraphStyle.lineBreakMode = lineBreakMode
         }
         if let minimumLineHeight: Float = self.minimumLineHeight {

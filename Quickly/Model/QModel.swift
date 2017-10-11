@@ -2,12 +2,15 @@
 //  Quickly
 //
 
-import Foundation
+import Quickly.Private
 
 open class QModel: IQModel {
 
     open class func from(json: QJson) throws -> IQModel? {
-        return try self.init(json: json)
+        if json.isDictionary() == true {
+            return try self.init(json: json)
+        }
+        return nil
     }
 
     public init() {
@@ -21,7 +24,7 @@ open class QModel: IQModel {
     }
 
     public final func toJson() -> QJson? {
-        let json: QJson = QJson()
+        let json: QJson = QJson(basePath: "")
         self.toJson(json: json)
         return json
     }
@@ -65,12 +68,13 @@ extension QModel: IQDebug {
 
 extension QModel: IJsonValue {
 
-    public static func fromJson(value: Any?) throws -> Any {
+    public static func fromJson(value: Any?, at: String) throws -> Any {
         guard let value: Any = value else {
-            throw NSError(domain: QJsonErrorDomain, code: QJsonErrorCode.convert.rawValue, userInfo: nil)
+            throw QJsonImpl.convertError(at: at)
         }
-        guard let model: IQModel = try self.from(json: QJson(root: value)) else {
-            throw NSError(domain: QJsonErrorDomain, code: QJsonErrorCode.convert.rawValue, userInfo: nil)
+        let maybeModel: IQModel? = try self.from(json: QJson(basePath: at, root: value))
+        guard let model: IQModel = maybeModel else {
+            throw QJsonImpl.convertError(at: at)
         }
         return model
     }
@@ -93,26 +97,16 @@ public func >>> < Type: IJsonValue & IQModel >(left: Type, right: QJson) {
 }
 
 public func <<< < Type: IJsonValue & IQModel >(left: inout Type, right: QJson) throws {
-    guard let model: IQModel = try Type.from(json: right) else {
-        throw NSError(domain: QJsonErrorDomain, code: QJsonErrorCode.convert.rawValue, userInfo: nil)
-    }
-    left = model as! Type
+    left = try Type.from(json: right) as! Type
 }
 
 public func <<< < Type: IJsonValue & IQModel >(left: inout Type!, right: QJson) throws {
-    guard let model: IQModel = try Type.from(json: right) else {
-        throw NSError(domain: QJsonErrorDomain, code: QJsonErrorCode.convert.rawValue, userInfo: nil)
-    }
-    left = model as! Type
+    left = try Type.from(json: right) as! Type
 }
 
 public func <<< < Type: IJsonValue & IQModel >(left: inout Type?, right: QJson) {
     if let model: IQModel? = try? Type.from(json: right) {
-        if let model: IQModel = model {
-            left = model as? Type
-        } else {
-            left = nil
-        }
+        left = model as? Type
     } else {
         left = nil
     }

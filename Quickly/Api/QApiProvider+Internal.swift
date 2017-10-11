@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 extension QApiProvider {
 
     internal func set(query: IQApiQuery) {

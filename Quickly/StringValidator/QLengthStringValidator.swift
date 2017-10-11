@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 open class QLengthStringValidator: IQStringValidator {
 
     public var minimumLength: Int = 0

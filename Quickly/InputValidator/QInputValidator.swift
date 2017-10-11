@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 public class QInputValidator: IQInputValidator {
 
     public var validator: IQStringValidator

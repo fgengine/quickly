@@ -2,8 +2,11 @@
 //  Quickly
 //
 
-import Foundation
-import UIKit
+#if os(macOS)
+    import AppKit
+#elseif os(iOS)
+    import UIKit
+#endif
 
 //
 // MARK: IQDebug
@@ -177,31 +180,39 @@ extension CGRect: IQDebug {
 
 }
 
-extension UIColor: IQDebug {
+#if os(macOS)
 
-    public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-        if headerIndent > 0 {
-            buffer.append(String(repeating: "\t", count: headerIndent))
+
+
+#elseif os(iOS)
+
+    extension UIColor: IQDebug {
+
+        public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+            if headerIndent > 0 {
+                buffer.append(String(repeating: "\t", count: headerIndent))
+            }
+            if let hexString: String = self.hexString() {
+                buffer.append("<UIColor \(hexString)>")
+            } else {
+                buffer.append("<UIColor>")
+            }
         }
-        if let hexString: String = self.hexString() {
-            buffer.append("<UIColor \(hexString)>")
-        } else {
-            buffer.append("<UIColor>")
-        }
+
     }
 
-}
+    extension UIImage: IQDebug {
 
-extension UIImage: IQDebug {
-
-    public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-        if headerIndent > 0 {
-            buffer.append(String(repeating: "\t", count: headerIndent))
+        public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+            if headerIndent > 0 {
+                buffer.append(String(repeating: "\t", count: headerIndent))
+            }
+            buffer.append("<UIImage width: \(self.size.width) height: \(self.size.height)>")
         }
-        buffer.append("<UIImage width: \(self.size.width) height: \(self.size.height)>")
+
     }
 
-}
+#endif
 
 extension NSError: IQDebug {
 

@@ -2,10 +2,8 @@
 //  Quickly
 //
 
-import UIKit
-
 @IBDesignable
-open class QView : UIView, IQView {
+open class QView : QPlatformView, IQView {
 
     public override init(frame: CGRect) {
         super.init(frame: frame)

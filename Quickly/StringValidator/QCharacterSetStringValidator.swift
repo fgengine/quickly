@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 open class QCharacterSetStringValidator: QLengthStringValidator {
 
     public var characterSet: CharacterSet

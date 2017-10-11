@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 open class QApiRequest: IQApiRequest {
 
     public var method: String
@@ -319,7 +317,7 @@ extension QApiRequest: IQDebug {
         }
         if let bodyData: Data = self.bodyData {
             var debug: String = String()
-            if let json: QJson = QJson(data: bodyData) {
+            if let json: QJson = QJson(basePath: "", data: bodyData) {
                 json.debugString(&debug, 0, nextIndent, indent)
             } else {
                 bodyData.debugString(&debug, 0, nextIndent, indent)

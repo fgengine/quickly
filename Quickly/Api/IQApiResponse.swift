@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 public protocol IQApiResponse: class {
 
     var error: Error? { get }

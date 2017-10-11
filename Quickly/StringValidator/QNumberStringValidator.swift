@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Foundation
-
 open class QNumberStringValidator: QLengthStringValidator {
 
     open var formatter: NumberFormatter {
