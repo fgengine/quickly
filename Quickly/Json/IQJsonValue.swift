@@ -119,6 +119,18 @@ extension Date: IJsonValue {
     
 }
 
+extension CGFloat: IJsonValue {
+    
+    public static func fromJson(value: Any?, at: String) throws -> Any {
+        return try self.NativeType.fromJson(value: value, at: at)
+    }
+    
+    public func toJsonValue() -> Any? {
+        return self.native.toJsonValue()
+    }
+    
+}
+
 #if os(macOS)
 
     extension NSColor: IJsonValue {

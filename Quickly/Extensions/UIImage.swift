@@ -4,8 +4,6 @@
 
 #if os(iOS)
 
-    import UIKit
-
     public extension UIImage {
 
         public func tintImage(_ color: UIColor) -> UIImage? {

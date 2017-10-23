@@ -2,7 +2,6 @@
 //  Quickly
 //
 
-import Foundation
 #if os(macOS)
     import QuicklyCryptoMacOS
 #elseif os(iOS)

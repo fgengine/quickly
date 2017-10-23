@@ -18,12 +18,6 @@ static NSString* QJsonImplPathIndexPattern = @"^\\[\\d+\\]$";
 
 @end
 
-NSNumber* QJsonImplBoolFromString(NSString* string);
-NSNumber* QJsonImplNumberFromString(NSString* string);
-NSDecimalNumber* QJsonImplDecimalNumberFromString(NSString* string);
-NSString* QJsonImplStringFromColor(QJsonColor* color);
-QJsonColor* QJsonImplColorFromString(NSString* string);
-
 @implementation QJsonImpl
 
 @synthesize basePath = _basePath;
@@ -761,7 +755,7 @@ NSString* QJsonImplStringFromColor(QJsonColor* color) {
     return [NSString stringWithFormat:@"#%02X%02X%02X%02X", (int)(255 * r), (int)(255 * g), (int)(255 * b), (int)(255 * a)];
 }
 
-QJsonColor* QJsonImplColorFromString(NSString* string) {
+BOOL QJsonImplColorComponentsFromString(NSString* string, CGFloat* r, CGFloat* g, CGFloat* b, CGFloat* a) {
     static NSCharacterSet* characterSet = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -770,32 +764,41 @@ QJsonColor* QJsonImplColorFromString(NSString* string) {
     NSString* colorString = [string stringByTrimmingCharactersInSet:characterSet];
     unsigned hex = 0;
     [[NSScanner scannerWithString:colorString] scanHexInt:&hex];
-    UInt8 r = 255, g = 255, b = 255, a = 255;
     switch (colorString.length) {
         case 2:
-            r = g = b = (UInt8)(hex & 0xFF);
-            break;
+            *r = *g = *b = (CGFloat)((UInt8)(hex & 0xFF)) / (CGFloat)(255.0);
+            *a = 1;
+            return YES;
         case 3:
-            r = (UInt8)((hex >> 8) * 17);
-            g = (UInt8)(((hex >> 4) & 0xF) * 17);
-            b = (UInt8)((hex & 0xF) * 17);
-            break;
+            *r = (CGFloat)((UInt8)((hex >> 8) * 17)) / (CGFloat)(255.0);
+            *g = (CGFloat)((UInt8)(((hex >> 4) & 0xF) * 17)) / (CGFloat)(255.0);
+            *b = (CGFloat)((UInt8)((hex & 0xF) * 17)) / (CGFloat)(255.0);
+            *a = 1;
+            return YES;
         case 6:
-            r = (UInt8)(hex >> 16);
-            g = (UInt8)((hex >> 8) & 0xFF);
-            b = (UInt8)(hex & 0xFF);
-            break;
+            *r = (CGFloat)((UInt8)(hex >> 16)) / (CGFloat)(255.0);
+            *g = (CGFloat)((UInt8)((hex >> 8) & 0xFF)) / (CGFloat)(255.0);
+            *b = (CGFloat)((UInt8)(hex & 0xFF)) / (CGFloat)(255.0);
+            *a = 1;
+            return YES;
         case 8:
-            r = (UInt8)((hex >> 24) & 0xFF);
-            g = (UInt8)((hex >> 16) & 0xFF);
-            b = (UInt8)((hex >> 8) & 0xFF);
-            a = (UInt8)(hex & 0xFF);
-            break;
+            *r = (CGFloat)((UInt8)((hex >> 24) & 0xFF)) / (CGFloat)(255.0);
+            *g = (CGFloat)((UInt8)((hex >> 16) & 0xFF)) / (CGFloat)(255.0);
+            *b = (CGFloat)((UInt8)((hex >> 8) & 0xFF)) / (CGFloat)(255.0);
+            *a = (CGFloat)((UInt8)(hex & 0xFF)) / (CGFloat)(255.0);
+            return YES;
         default:
-            break;
+            return NO;
     }
-    return [QJsonColor colorWithRed:(CGFloat)(r) / (CGFloat)(255.0)
-                              green:(CGFloat)(g) / (CGFloat)(255.0)
-                               blue:(CGFloat)(b) / (CGFloat)(255.0)
-                              alpha:(CGFloat)(a) / (CGFloat)(255.0)];
+}
+
+QJsonColor* QJsonImplColorFromString(NSString* string) {
+    CGFloat r = 1, g = 1, b = 1, a = 1;
+    if(QJsonImplColorComponentsFromString(string, &r, &g, &b, &a) == NO) {
+        return nil;
+    }
+    return [QJsonColor colorWithRed:r
+                              green:g
+                               blue:b
+                              alpha:a];
 }

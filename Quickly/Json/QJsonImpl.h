@@ -102,3 +102,11 @@ typedef NS_ENUM(NSInteger, QJsonImplErrorCode) {
 + (nonnull NSString*)preparePath:(nonnull NSString*)basePath path:(nonnull NSString*)path key:(nonnull id)key NS_SWIFT_NAME(prepare(basePath:path:key:));
 
 @end
+
+NSNumber* _Nullable QJsonImplBoolFromString(NSString* _Nonnull string);
+NSNumber* _Nullable QJsonImplNumberFromString(NSString* _Nonnull string);
+NSDecimalNumber* _Nullable QJsonImplDecimalNumberFromString(NSString* _Nonnull string);
+NSString* _Nullable QJsonImplStringFromColor(QJsonColor* _Nonnull color);
+BOOL QJsonImplColorComponentsFromString(NSString* _Nonnull string, CGFloat* _Nonnull r, CGFloat* _Nonnull g, CGFloat* _Nonnull b, CGFloat* _Nonnull a);
+QJsonColor* _Nullable QJsonImplColorFromString(NSString* _Nonnull string);
+NSString* _Nullable QJsonImplColorToString(QJsonColor* _Nonnull color);

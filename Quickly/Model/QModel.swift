@@ -17,7 +17,27 @@ open class QModel: IQModel {
     }
 
     public required init(json: QJson) throws {
-        try self.from(json: json)
+        #if DEBUG
+            do {
+                try self.from(json: json)
+            } catch let error as NSError {
+                switch error.domain {
+                case QJsonErrorDomain:
+                    if let path: Any = error.userInfo[QJsonErrorPathKey] {
+                        print("QModel::\(String(describing: self)) invalid parse from JSON in path '\(path)'")
+                    } else {
+                        print("QModel::\(String(describing: self)) invalid parse from JSON")
+                    }
+                    break
+                default: break
+                }
+                throw error
+            } catch let error {
+                throw error
+            }
+        #else
+            try self.from(json: json)
+        #endif
     }
 
     open func from(json: QJson) throws {

@@ -5,6 +5,7 @@
 import Quickly.Private
 
 public let QJsonErrorDomain: String = QJsonImplErrorDomain
+public let QJsonErrorPathKey: String = QJsonImplErrorPathKey
 
 public enum QJsonErrorCode : Int {
     case notFound
