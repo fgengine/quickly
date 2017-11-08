@@ -9,7 +9,7 @@ open class QApiProvider: NSObject, IQApiProvider {
     public var headers: [String: String] = [:]
     public var bodyParams: [String: Any]?
     public var allowInvalidCertificates: Bool = true
-    public var localCertificateUrl: URL? = nil
+    public var localCertificateUrls: [URL] = []
     public var isLogging: Bool = false
 
     public private(set) lazy var session: URLSession = self.prepareSession()

@@ -25,6 +25,7 @@ public class QApiQuery<
 
     internal var receivedResponse: URLResponse?
     internal var receivedData: Data?
+    internal var canceled: Bool = false
 
     public init(
         provider: IQApiProvider,
@@ -112,6 +113,7 @@ public class QApiQuery<
             self.task = nil
             self.receivedResponse = nil
             self.receivedData = nil
+            self.canceled = true
         }
     }
 
@@ -170,7 +172,7 @@ public class QApiQuery<
     public func finish(error: Error?) {
         self.task = nil
         if let error: NSError = error as NSError? {
-            if error.isUrlErrorCancelled() == false {
+            if self.canceled == false {
                 self.parse(error: error)
             }
         } else {

@@ -10,8 +10,8 @@ open class QCardNumberStringFormatter: IQStringFormatter {
     public func format(_ unformat: String) -> String {
         var format: String = String()
         var unformatOffset: Int = 0
-        while unformatOffset < unformat.characters.count {
-            let unformatIndex: String.Index = unformat.characters.index(unformat.startIndex, offsetBy: unformatOffset)
+        while unformatOffset < unformat.count {
+            let unformatIndex: String.Index = unformat.index(unformat.startIndex, offsetBy: unformatOffset)
             let unformatCharacter: Character = unformat[unformatIndex]
             if unformatOffset != 0 && unformatOffset % 4 == 0 {
                 format.append(" ")

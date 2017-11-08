@@ -57,7 +57,7 @@
         }
 
         public var isFilled: Bool {
-            return self.text.characters.count == self.length
+            return self.text.count == self.length
         }
 
         public func append(number: Int) {
@@ -102,7 +102,7 @@
                 context.setStrokeColor(self.color.cgColor)
                 context.setLineWidth(self.thickness)
                 for i in 0 ..< self.length {
-                    self.drawDot(context, origin: origin, filled: i < self.text.characters.count)
+                    self.drawDot(context, origin: origin, filled: i < self.text.count)
                     origin.x += self.diameter + self.spacing
                 }
             }

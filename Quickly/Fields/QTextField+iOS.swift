@@ -35,7 +35,7 @@
                         if let selected: UITextRange = self.textField.selectedTextRange {
                             caret = self.textField.offset(from: self.textField.beginningOfDocument, to: selected.end)
                         } else {
-                            caret = text.characters.count
+                            caret = text.count
                         }
                         self.textField.text = formatter.unformat(text, caret: &caret)
                         if let position: UITextPosition = self.textField.position(from: self.textField.beginningOfDocument, offset: caret) {
@@ -51,7 +51,7 @@
                         if let selected: UITextRange = self.textField.selectedTextRange {
                             caret = self.textField.offset(from: self.textField.beginningOfDocument, to: selected.end)
                         } else {
-                            caret = text.characters.count
+                            caret = text.count
                         }
                         self.textField.text = formatter.format(text, caret: &caret)
                         if let position: UITextPosition = self.textField.position(from: self.textField.beginningOfDocument, offset: caret) {
@@ -106,7 +106,7 @@
                     if let selected: UITextRange = self.textField.selectedTextRange {
                         caret = self.textField.offset(from: self.textField.beginningOfDocument, to: selected.end)
                     } else {
-                        caret = text.characters.count
+                        caret = text.count
                     }
                     self.textField.text = formatter.format(value, caret: &caret)
                     if let position: UITextPosition = self.textField.position(from: self.textField.beginningOfDocument, offset: caret) {
@@ -321,7 +321,7 @@
                 guard let field: QTextField = self.field else {
                     return true
                 }
-                var caret: Int = range.location + max(range.length, string.characters.count)
+                var caret: Int = range.location + max(range.length, string.count)
                 var text: String = textField.text ?? ""
                 if let textRange: Range< String.Index > = text.range(from: range) {
                     text = text.replacingCharacters(in: textRange, with: string)

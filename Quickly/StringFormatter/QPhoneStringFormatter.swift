@@ -25,7 +25,7 @@ open class QPhoneStringFormatter: IQStringFormatter {
         caret = self.formatDifferenceCaret(
             unformat: unformat,
             format: format,
-            formatPrefix: self.prefix.characters.count,
+            formatPrefix: self.prefix.count,
             formatSuffix: 0,
             caret: caret
         )
@@ -34,9 +34,9 @@ open class QPhoneStringFormatter: IQStringFormatter {
 
     public func unformat(_ format: String) -> String {
         var unformat: String
-        if self.prefix.characters.count > 0 {
+        if self.prefix.count > 0 {
             let startIndex: String.Index = format.startIndex
-            let endIndex: String.Index = format.index(startIndex, offsetBy: self.prefix.characters.count)
+            let endIndex: String.Index = format.index(startIndex, offsetBy: self.prefix.count)
             let range: Range< String.Index > = startIndex ..< endIndex
             unformat = format.replacingCharacters(in: range, with: "")
         } else {
@@ -50,7 +50,7 @@ open class QPhoneStringFormatter: IQStringFormatter {
         caret = self.unformatDifferenceCaret(
             unformat: unformat,
             format: format,
-            formatPrefix: self.prefix.characters.count,
+            formatPrefix: self.prefix.count,
             formatSuffix: 0,
             caret: caret
         )

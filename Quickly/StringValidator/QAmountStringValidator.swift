@@ -12,7 +12,7 @@ open class QAmountStringValidator: QRegularExpressionStringValidator {
         var patterns: [String] = []
         patterns.append("^0$")
         patterns.append("^[1-9][0-9]{0,\(maximumSimbol - 1)}$")
-        if decimalSeparator.characters.count > 0 && maximumDecimalSimbol > 0 {
+        if decimalSeparator.count > 0 && maximumDecimalSimbol > 0 {
             patterns.append("^0\\\(decimalSeparator)[0-9]{0,\(maximumDecimalSimbol)}$")
             patterns.append("^[1-9][0-9]{0,\(maximumSimbol - 1)}\\\(decimalSeparator)[0-9]{0,\(maximumDecimalSimbol)}$")
         }
@@ -32,7 +32,7 @@ open class QAmountStringValidator: QRegularExpressionStringValidator {
     }
 
     public override func validate(_ string: String, complete: Bool) -> Bool {
-        if string.characters.count > 0 {
+        if string.count > 0 {
             return super.validate(string, complete: complete)
         }
         return true

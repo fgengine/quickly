@@ -13,11 +13,11 @@ open class QLengthStringValidator: IQStringValidator {
     public func validate(_ string: String, complete: Bool) -> Bool {
         var valid: Bool = true
         if complete == true {
-            valid = (string.characters.count >= self.minimumLength)
+            valid = (string.count >= self.minimumLength)
         }
         if valid == true {
             if let maximumLength: Int = self.maximumLength {
-                valid = (string.characters.count <= maximumLength)
+                valid = (string.count <= maximumLength)
             }
         }
         return valid

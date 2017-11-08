@@ -10,8 +10,8 @@ open class QCardExpirationDateStringFormatter: IQStringFormatter {
     public func format(_ unformat: String) -> String {
         var format: String = String()
         var unformatOffset: Int = 0
-        while unformatOffset < unformat.characters.count {
-            let unformatIndex: String.Index = unformat.characters.index(unformat.startIndex, offsetBy: unformatOffset)
+        while unformatOffset < unformat.count {
+            let unformatIndex: String.Index = unformat.index(unformat.startIndex, offsetBy: unformatOffset)
             let unformatCharacter: Character = unformat[unformatIndex]
             format.append(unformatCharacter)
             if unformatOffset == 1 {

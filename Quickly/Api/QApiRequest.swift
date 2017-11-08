@@ -152,7 +152,7 @@ open class QApiRequest: IQApiRequest {
         flatParams.forEach({ (key: String, value: Any) in
             let encodeKey: String = self.encode(urlKey: key)
             let encodeValue: String = self.encode(value: value)
-            if result.characters.count > 0 {
+            if result.count > 0 {
                 result.append("&\(encodeKey)=\(encodeValue)")
             } else {
                 result.append("\(encodeKey)=\(encodeValue)")
@@ -224,7 +224,7 @@ open class QApiRequest: IQApiRequest {
                 flatParams.forEach({ (key: String, value: Any) in
                     let encodeKey: String = self.encode(urlKey: key)
                     let encodeValue: String = self.encode(value: value)
-                    if paramsString.characters.count > 0 {
+                    if paramsString.count > 0 {
                         paramsString.append("&\(encodeKey)=\(encodeValue)")
                     } else {
                         paramsString.append("\(encodeKey)=\(encodeValue)")
@@ -268,7 +268,7 @@ open class QApiRequest: IQApiRequest {
         var string: String = urlKey
         if self.trimArraySymbolsUrlParams == true {
             if let regexp: NSRegularExpression = try? NSRegularExpression(pattern: "\\[[0-9]+\\]", options: []) {
-                string = regexp.stringByReplacingMatches(in: string, options: [], range: NSRange(location: 0, length: string.characters.count), withTemplate: "")
+                string = regexp.stringByReplacingMatches(in: string, options: [], range: NSRange(location: 0, length: string.count), withTemplate: "")
             }
         }
         return self.encode(value: string)

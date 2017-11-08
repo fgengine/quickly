@@ -46,37 +46,35 @@ public extension String {
 
     public func applyMask(mask: String) -> String {
         var result: String = String()
-        let selfCharacters: String.CharacterView = self.characters
-        let maskCharacters: String.CharacterView = mask.characters
         var maskIndex: String.Index = mask.startIndex
         let maskEndIndex: String.Index = mask.endIndex
-        if selfCharacters.count > 0 {
-            var selfIndex: String.Index = characters.startIndex
-            let selfEndIndex: String.Index = characters.endIndex
+        if self.count > 0 {
+            var selfIndex: String.Index = self.startIndex
+            let selfEndIndex: String.Index = self.endIndex
             while maskIndex < maskEndIndex {
-                if maskCharacters[maskIndex] == "#" {
-                    result.append(selfCharacters[selfIndex])
-                    selfIndex = selfCharacters.index(selfIndex, offsetBy: 1)
+                if mask[maskIndex] == "#" {
+                    result.append(self[selfIndex])
+                    selfIndex = self.index(selfIndex, offsetBy: 1)
                     if selfIndex >= selfEndIndex {
                         break
                     }
                 } else {
-                    result.append(maskCharacters[maskIndex])
+                    result.append(mask[maskIndex])
                 }
-                maskIndex = maskCharacters.index(maskIndex, offsetBy: 1)
+                maskIndex = mask.index(maskIndex, offsetBy: 1)
             }
             while selfIndex < selfEndIndex {
-                result.append(selfCharacters[selfIndex])
-                selfIndex = selfCharacters.index(selfIndex, offsetBy: 1)
+                result.append(self[selfIndex])
+                selfIndex = self.index(selfIndex, offsetBy: 1)
             }
         } else {
             while maskIndex < maskEndIndex {
-                if maskCharacters[maskIndex] != "#" {
-                    result.append(maskCharacters[maskIndex])
+                if mask[maskIndex] != "#" {
+                    result.append(mask[maskIndex])
                 } else {
                     break
                 }
-                maskIndex = maskCharacters.index(maskIndex, offsetBy: 1)
+                maskIndex = mask.index(maskIndex, offsetBy: 1)
             }
         }
         return result

@@ -21,21 +21,19 @@ public extension IQStringFormatter {
         caret: Int
     ) -> Int {
         var result: Int = caret
-        if unformat.characters.count > 0 {
-            let formatCharacters: String.CharacterView = format.characters
-            let unformatCharacters: String.CharacterView = unformat.characters
-            var formatIndex: String.Index = formatCharacters.index(formatCharacters.startIndex, offsetBy: formatPrefix)
-            let formatEndIndex: String.Index = formatCharacters.index(formatCharacters.endIndex, offsetBy: -formatSuffix)
-            var unformatIndex: String.Index = unformatCharacters.startIndex
-            let unformatEndIndex: String.Index = unformatCharacters.endIndex
+        if unformat.count > 0 {
+            var formatIndex: String.Index = format.index(format.startIndex, offsetBy: formatPrefix)
+            let formatEndIndex: String.Index = format.index(format.endIndex, offsetBy: -formatSuffix)
+            var unformatIndex: String.Index = unformat.startIndex
+            let unformatEndIndex: String.Index = unformat.endIndex
             var formatOffset: Int = formatPrefix
             var unformatOffset: Int = 0
             while formatIndex < formatEndIndex {
-                let formatCharacter: Character = formatCharacters[formatIndex]
+                let formatCharacter: Character = format[formatIndex]
                 if unformatIndex < unformatEndIndex {
-                    let unformatCharacter: Character = unformatCharacters[unformatIndex]
+                    let unformatCharacter: Character = unformat[unformatIndex]
                     if formatCharacter == unformatCharacter {
-                        unformatIndex = unformatCharacters.index(unformatIndex, offsetBy: 1)
+                        unformatIndex = unformat.index(unformatIndex, offsetBy: 1)
                         unformatOffset += 1
                     } else {
                         formatOffset += 1
@@ -43,7 +41,7 @@ public extension IQStringFormatter {
                 } else {
                     formatOffset += 1
                 }
-                formatIndex = formatCharacters.index(formatIndex, offsetBy: 1)
+                formatIndex = format.index(formatIndex, offsetBy: 1)
                 if formatOffset + unformatOffset >= caret {
                     break
                 }
@@ -65,21 +63,19 @@ public extension IQStringFormatter {
         caret: Int
     ) -> Int {
         var result: Int = caret
-        if unformat.characters.count > 0 {
-            let formatCharacters: String.CharacterView = format.characters
-            let unformatCharacters: String.CharacterView = unformat.characters
-            var formatIndex: String.Index = formatCharacters.index(formatCharacters.startIndex, offsetBy: formatPrefix)
-            let formatEndIndex: String.Index = formatCharacters.index(formatCharacters.endIndex, offsetBy: -formatSuffix)
-            var unformatIndex: String.Index = unformatCharacters.startIndex
-            let unformatEndIndex: String.Index = unformatCharacters.endIndex
+        if unformat.count > 0 {
+            var formatIndex: String.Index = format.index(format.startIndex, offsetBy: formatPrefix)
+            let formatEndIndex: String.Index = format.index(format.endIndex, offsetBy: -formatSuffix)
+            var unformatIndex: String.Index = unformat.startIndex
+            let unformatEndIndex: String.Index = unformat.endIndex
             var formatOffset: Int = formatPrefix
             var unformatOffset: Int = 0
             while formatIndex < formatEndIndex {
-                let formatCharacter: Character = formatCharacters[formatIndex]
+                let formatCharacter: Character = format[formatIndex]
                 if unformatIndex < unformatEndIndex {
-                    let unformatCharacter: Character = unformatCharacters[unformatIndex]
+                    let unformatCharacter: Character = unformat[unformatIndex]
                     if formatCharacter == unformatCharacter {
-                        unformatIndex = unformatCharacters.index(unformatIndex, offsetBy: 1)
+                        unformatIndex = unformat.index(unformatIndex, offsetBy: 1)
                         unformatOffset += 1
                     } else {
                         formatOffset += 1
@@ -87,7 +83,7 @@ public extension IQStringFormatter {
                 } else {
                     formatOffset += 1
                 }
-                formatIndex = formatCharacters.index(formatIndex, offsetBy: 1)
+                formatIndex = format.index(formatIndex, offsetBy: 1)
                 if unformatOffset >= caret {
                     break
                 }
@@ -96,7 +92,7 @@ public extension IQStringFormatter {
                 result += formatOffset
             }
         } else {
-            result = format.characters.count
+            result = format.count
         }
         return result
     }

@@ -20,12 +20,26 @@ extension QApiProvider: URLSessionDelegate {
         didReceive challenge: URLAuthenticationChallenge,
         completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Swift.Void
     )  {
-        let authenticationChallenge: QApiImplAuthenticationChallenge = QApiImplAuthenticationChallenge(
-            localCertificateUrl: self.localCertificateUrl,
+        for localCertificateUrl: URL in self.localCertificateUrls {
+            let challenge: QApiImplAuthenticationChallenge = QApiImplAuthenticationChallenge(
+                localCertificateUrl: localCertificateUrl,
+                allowInvalidCertificates: self.allowInvalidCertificates,
+                challenge: challenge
+            )
+            switch challenge.disposition {
+            case .cancelAuthenticationChallenge:
+                break
+            case .useCredential, .performDefaultHandling, .rejectProtectionSpace:
+                completionHandler(challenge.disposition, challenge.credential)
+                return
+            }
+        }
+        let challenge: QApiImplAuthenticationChallenge = QApiImplAuthenticationChallenge(
+            localCertificateUrl: nil,
             allowInvalidCertificates: self.allowInvalidCertificates,
             challenge: challenge
         )
-        completionHandler(authenticationChallenge.disposition, authenticationChallenge.credential)
+        completionHandler(challenge.disposition, challenge.credential)
     }
 
 }
@@ -48,12 +62,26 @@ extension QApiProvider: URLSessionTaskDelegate {
         didReceive challenge: URLAuthenticationChallenge,
         completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Swift.Void
     ) {
-        let authenticationChallenge: QApiImplAuthenticationChallenge = QApiImplAuthenticationChallenge(
-            localCertificateUrl: self.localCertificateUrl,
+        for localCertificateUrl: URL in self.localCertificateUrls {
+            let challenge: QApiImplAuthenticationChallenge = QApiImplAuthenticationChallenge(
+                localCertificateUrl: localCertificateUrl,
+                allowInvalidCertificates: self.allowInvalidCertificates,
+                challenge: challenge
+            )
+            switch challenge.disposition {
+            case .cancelAuthenticationChallenge:
+                break
+            case .useCredential, .performDefaultHandling, .rejectProtectionSpace:
+                completionHandler(challenge.disposition, challenge.credential)
+                return
+            }
+        }
+        let challenge: QApiImplAuthenticationChallenge = QApiImplAuthenticationChallenge(
+            localCertificateUrl: nil,
             allowInvalidCertificates: self.allowInvalidCertificates,
             challenge: challenge
         )
-        completionHandler(authenticationChallenge.disposition, authenticationChallenge.credential)
+        completionHandler(challenge.disposition, challenge.credential)
     }
 
     public func urlSession(

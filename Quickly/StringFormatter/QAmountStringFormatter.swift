@@ -33,7 +33,7 @@ open class QAmountStringFormatter: IQStringFormatter {
         let parts: [String] = unformat.components(separatedBy: self.decimalSeparator)
         if parts.count == 2 {
             let firstPart: String = parts.first!
-            let firstPartLength: Int = firstPart.characters.count
+            let firstPartLength: Int = firstPart.count
             if firstPartLength > self.numberOfGrouping {
                 var firstPartIndex: String.Index = firstPart.startIndex
                 let numberOfGroups = firstPartLength / self.numberOfGrouping
@@ -60,7 +60,7 @@ open class QAmountStringFormatter: IQStringFormatter {
             format.append(self.decimalSeparator)
             format.append(parts.last!)
         } else {
-            let unformatLength: Int = unformat.characters.count
+            let unformatLength: Int = unformat.count
             if unformatLength > self.numberOfGrouping {
                 var unformatIndex: String.Index = unformat.startIndex
                 let numberOfGroups = unformatLength / self.numberOfGrouping
