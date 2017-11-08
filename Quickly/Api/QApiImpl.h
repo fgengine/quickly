@@ -9,8 +9,8 @@
 @property(nonatomic, readonly) NSURLSessionAuthChallengeDisposition disposition;
 @property(nonatomic, nullable, readonly) NSURLCredential* credential;
 
-- (nonnull instancetype)initWithLocalCertificateUrl:(nullable NSURL*)localCertificateUrl
-                           allowInvalidCertificates:(BOOL)allowInvalidCertificates
-                                          challenge:(nonnull NSURLAuthenticationChallenge*)challenge;
+- (nonnull instancetype)initWithLocalCertificateUrls:(nonnull NSArray< NSURL* >*)localCertificateUrls
+                            allowInvalidCertificates:(BOOL)allowInvalidCertificates
+                                           challenge:(nonnull NSURLAuthenticationChallenge*)challenge;
 
 @end

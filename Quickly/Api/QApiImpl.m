@@ -20,72 +20,94 @@ static NSString* QApiImplSHA256(NSData* data) {
 @synthesize disposition = _disposition;
 @synthesize credential = _credential;
 
-- (instancetype)initWithLocalCertificateUrl:(NSURL*)localCertificateUrl
-                   allowInvalidCertificates:(BOOL)allowInvalidCertificates
-                                  challenge:(NSURLAuthenticationChallenge*)challenge {
+- (instancetype)initWithLocalCertificateUrls:(NSArray< NSURL* >*)localCertificateUrls
+                    allowInvalidCertificates:(BOOL)allowInvalidCertificates
+                                   challenge:(NSURLAuthenticationChallenge*)challenge {
     self = [super init];
     if(self != nil) {
-        SecTrustRef serverTrust = challenge.protectionSpace.serverTrust;
-        if(localCertificateUrl != nil) {
-            SecCertificateRef localCertificate = NULL;
-            SecTrustResultType serverTrustResult = kSecTrustResultOtherError;
-            NSData* data = [NSData dataWithContentsOfURL:localCertificateUrl];
-            if(data != nil) {
-                CFDataRef cfData = (__bridge_retained CFDataRef)data;
-                localCertificate = SecCertificateCreateWithData(NULL, cfData);
-                if(localCertificate != NULL) {
-                    CFArrayRef cfCertArray = CFArrayCreate(NULL, (void*)&localCertificate, 1, NULL);
-                    if(cfCertArray != NULL) {
-                        SecTrustSetAnchorCertificates(serverTrust, cfCertArray);
-                        SecTrustEvaluate(serverTrust, &serverTrustResult);
-                        if(serverTrustResult == kSecTrustResultRecoverableTrustFailure) {
-                            CFDataRef cfErrorData = SecTrustCopyExceptions(serverTrust);
-                            SecTrustSetExceptions(serverTrust, cfErrorData);
-                            SecTrustEvaluate(serverTrust, &serverTrustResult);
-                            CFRelease(cfErrorData);
-                        }
-                        CFRelease(cfCertArray);
-                    }
+        if(localCertificateUrls.count > 0) {
+            for (NSURL* localCertificateUrl in localCertificateUrls) {
+                [self __setupLocalCertificateUrl:localCertificateUrl
+                        allowInvalidCertificates:allowInvalidCertificates
+                                       challenge:challenge];
+                if(_disposition != NSURLSessionAuthChallengeCancelAuthenticationChallenge) {
+                    break;
                 }
-                CFRelease(cfData);
             }
-            if((serverTrustResult == kSecTrustResultUnspecified) || (serverTrustResult == kSecTrustResultProceed)) {
-                SecCertificateRef serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, 0);
-                if(serverCertificate != NULL) {
-                    NSString* serverHash = nil;
-                    NSData* serverCertificateData = (__bridge_transfer NSData*)SecCertificateCopyData(serverCertificate);
-                    if(serverCertificateData != nil) {
-                        serverHash = QApiImplSHA256(serverCertificateData);
-                    }
-                    NSString* localHash = nil;
-                    NSData* localCertificateData = (__bridge_transfer NSData*)SecCertificateCopyData(localCertificate);
-                    if(localCertificateData != nil) {
-                        localHash = QApiImplSHA256(localCertificateData);
-                    }
-                    if((localHash != nil) && ([serverHash isEqualToString:localHash] == YES)) {
-                        _credential = [NSURLCredential credentialForTrust:serverTrust];
-                    } else {
-                        _disposition = NSURLSessionAuthChallengeCancelAuthenticationChallenge;
-                    }
-                } else {
-                    _disposition = NSURLSessionAuthChallengeCancelAuthenticationChallenge;
-                }
-            } else {
-                _disposition = NSURLSessionAuthChallengeCancelAuthenticationChallenge;
-            }
-            if(localCertificate != NULL) {
-                CFRelease(localCertificate);
-            }
-        } else if(allowInvalidCertificates == NO) {
-            _credential = [NSURLCredential credentialForTrust:serverTrust];
         } else {
-            _disposition = NSURLSessionAuthChallengePerformDefaultHandling;
-        }
-        if(_credential != nil) {
-            _disposition = NSURLSessionAuthChallengeUseCredential;
+            [self __setupLocalCertificateUrl:nil
+                    allowInvalidCertificates:allowInvalidCertificates
+                                   challenge:challenge];
         }
     }
     return self;
+}
+
+- (void)__setupLocalCertificateUrl:(NSURL*)localCertificateUrl
+          allowInvalidCertificates:(BOOL)allowInvalidCertificates
+                         challenge:(NSURLAuthenticationChallenge*)challenge {
+    SecTrustRef serverTrust = challenge.protectionSpace.serverTrust;
+    if(localCertificateUrl != nil) {
+        SecCertificateRef localCertificate = NULL;
+        SecTrustResultType serverTrustResult = kSecTrustResultOtherError;
+        NSData* data = [NSData dataWithContentsOfURL:localCertificateUrl];
+        if(data != nil) {
+            CFDataRef cfData = (__bridge_retained CFDataRef)data;
+            localCertificate = SecCertificateCreateWithData(NULL, cfData);
+            if(localCertificate != NULL) {
+                CFArrayRef cfCertArray = CFArrayCreate(NULL, (void*)&localCertificate, 1, NULL);
+                if(cfCertArray != NULL) {
+                    SecTrustSetAnchorCertificates(serverTrust, cfCertArray);
+                    SecTrustEvaluate(serverTrust, &serverTrustResult);
+                    if(serverTrustResult == kSecTrustResultRecoverableTrustFailure) {
+                        CFDataRef cfErrorData = SecTrustCopyExceptions(serverTrust);
+                        SecTrustSetExceptions(serverTrust, cfErrorData);
+                        SecTrustEvaluate(serverTrust, &serverTrustResult);
+                        CFRelease(cfErrorData);
+                    }
+                    CFRelease(cfCertArray);
+                }
+            }
+            CFRelease(cfData);
+        }
+        if((serverTrustResult == kSecTrustResultUnspecified) || (serverTrustResult == kSecTrustResultProceed)) {
+            SecCertificateRef serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, 0);
+            if(serverCertificate != NULL) {
+                NSString* serverHash = nil;
+                NSData* serverCertificateData = (__bridge_transfer NSData*)SecCertificateCopyData(serverCertificate);
+                if(serverCertificateData != nil) {
+                    serverHash = QApiImplSHA256(serverCertificateData);
+                }
+                NSString* localHash = nil;
+                NSData* localCertificateData = (__bridge_transfer NSData*)SecCertificateCopyData(localCertificate);
+                if(localCertificateData != nil) {
+                    localHash = QApiImplSHA256(localCertificateData);
+                }
+                if((localHash != nil) && ([serverHash isEqualToString:localHash] == YES)) {
+                    _disposition = NSURLSessionAuthChallengeUseCredential;
+                    _credential = [NSURLCredential credentialForTrust:serverTrust];
+                } else {
+                    _disposition = NSURLSessionAuthChallengeCancelAuthenticationChallenge;
+                    _credential = nil;
+                }
+            } else {
+                _disposition = NSURLSessionAuthChallengeCancelAuthenticationChallenge;
+                _credential = nil;
+            }
+        } else {
+            _disposition = NSURLSessionAuthChallengeCancelAuthenticationChallenge;
+            _credential = nil;
+        }
+        if(localCertificate != NULL) {
+            CFRelease(localCertificate);
+        }
+    } else if(allowInvalidCertificates == NO) {
+        _disposition = NSURLSessionAuthChallengeUseCredential;
+        _credential = [NSURLCredential credentialForTrust:serverTrust];
+    } else {
+        _disposition = NSURLSessionAuthChallengePerformDefaultHandling;
+        _credential = nil;
+    }
 }
 
 @end
