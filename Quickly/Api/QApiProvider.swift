@@ -107,7 +107,7 @@ open class QApiProvider: NSObject, IQApiProvider {
         }
     }
 
-    public func send<
+    open func send<
         RequestType: IQApiRequest,
         ResponseType: IQApiResponse
     >(
@@ -123,7 +123,7 @@ open class QApiProvider: NSObject, IQApiProvider {
         )
     }
 
-    public func send<
+    open func send<
         RequestType: IQApiRequest,
         ResponseType: IQApiResponse
     >(
@@ -143,7 +143,7 @@ open class QApiProvider: NSObject, IQApiProvider {
         return query
     }
 
-    public func send<
+    open func send<
         RequestType: IQApiRequest,
         ResponseType: IQApiResponse
     >(
@@ -161,7 +161,7 @@ open class QApiProvider: NSObject, IQApiProvider {
         )
     }
 
-    public func send<
+    open func send<
         RequestType: IQApiRequest,
         ResponseType: IQApiResponse
     >(
@@ -183,7 +183,7 @@ open class QApiProvider: NSObject, IQApiProvider {
         return query
     }
 
-    public func send<
+    open func send<
         RequestType: IQApiRequest,
         ResponseType: IQApiResponse
     >(
@@ -201,7 +201,7 @@ open class QApiProvider: NSObject, IQApiProvider {
         )
     }
 
-    public func send<
+    open func send<
         RequestType: IQApiRequest,
         ResponseType: IQApiResponse
     >(
@@ -223,7 +223,7 @@ open class QApiProvider: NSObject, IQApiProvider {
         return query
     }
 
-    public func send(query: IQApiQuery) {
+    open func send(query: IQApiQuery) {
         if query.prepare(session: self.session) == true {
             self.set(query: query)
             query.resume()
