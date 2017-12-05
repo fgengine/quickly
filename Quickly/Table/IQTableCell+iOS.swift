@@ -11,7 +11,7 @@
 
         weak var tableDelegate: IQTableCellDelegate? { set get }
 
-        static func dequeue(tableView: UITableView) -> UITableViewCell?
+        static func dequeue(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell?
 
         func configure()
 
@@ -30,8 +30,11 @@
             }
         }
 
-        public static func dequeue(tableView: UITableView) -> UITableViewCell? {
-            return tableView.dequeueReusableCell(withIdentifier: self.reuseIdentifier())
+        public static func dequeue(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell? {
+            return tableView.dequeueReusableCell(
+                withIdentifier: self.reuseIdentifier(),
+                for: indexPath
+            )
         }
 
     }

@@ -183,14 +183,14 @@
             return decorClass.dequeue(tableView: tableView) as? IQTableDecor
         }
 
-        public func dequeue(row: IQTableRow) -> IQTableCell? {
+        public func dequeue(row: IQTableRow, indexPath: IndexPath) -> IQTableCell? {
             guard let tableView: UITableView = self.tableView else {
                 return nil
             }
             guard let cellClass: IQTableCell.Type = self.cellClass(row: row) else {
                 return nil
             }
-            return cellClass.dequeue(tableView: tableView) as? IQTableCell
+            return cellClass.dequeue(tableView: tableView, indexPath: indexPath) as? IQTableCell
         }
 
         public func reload() {
@@ -322,7 +322,7 @@
             cellForRowAt indexPath: IndexPath
         ) -> UITableViewCell {
             let row: IQTableRow = self.row(indexPath: indexPath)
-            let cell: IQTableCell? = self.dequeue(row: row)
+            let cell: IQTableCell? = self.dequeue(row: row, indexPath: indexPath)
             cell?.tableDelegate = self
             cell?.set(any: row)
             return cell as! UITableViewCell
