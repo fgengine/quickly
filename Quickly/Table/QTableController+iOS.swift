@@ -61,6 +61,9 @@
                 for type: IQTableCell.Type in self.cells {
                     type.register(tableView: tableView)
                 }
+                tableView.estimatedRowHeight = 44
+                tableView.estimatedSectionHeaderHeight = 44
+                tableView.estimatedSectionFooterHeight = 44
             }
             self.reload()
         }
@@ -319,7 +322,10 @@
             cellForRowAt indexPath: IndexPath
         ) -> UITableViewCell {
             let row: IQTableRow = self.row(indexPath: indexPath)
-            return self.dequeue(row: row) as! UITableViewCell
+            let cell: IQTableCell? = self.dequeue(row: row)
+            cell?.tableDelegate = self
+            cell?.set(any: row)
+            return cell as! UITableViewCell
         }
 
         public func tableView(
@@ -349,44 +355,6 @@
     }
 
     extension QTableController: UITableViewDelegate {
-
-        public func tableView(
-            _ tableView: UITableView,
-            willDisplay cell: UITableViewCell,
-            forRowAt indexPath: IndexPath
-        ) {
-            if let tableCell: IQTableCell = cell as? IQTableCell {
-                let row: IQTableRow = self.row(indexPath: indexPath)
-                tableCell.tableDelegate = self
-                tableCell.set(any: row)
-            }
-        }
-
-        public func tableView(
-            _ tableView: UITableView,
-            willDisplayHeaderView view: UIView,
-            forSection section: Int
-        ) {
-            if let data: IQTableData = self.header(index: section) {
-                if let decorView: IQTableDecor = view as? IQTableDecor {
-                    decorView.tableDelegate = self
-                    decorView.set(any: data)
-                }
-            }
-        }
-
-        public func tableView(
-            _ tableView: UITableView,
-            willDisplayFooterView view: UIView,
-            forSection section: Int
-        ) {
-            if let data: IQTableData = self.footer(index: section) {
-                if let decorView: IQTableDecor = view as? IQTableDecor {
-                    decorView.tableDelegate = self
-                    decorView.set(any: data)
-                }
-            }
-        }
 
         public func tableView(
             _ tableView: UITableView,
@@ -429,7 +397,12 @@
         ) -> UIView? {
             if let data: IQTableData = self.header(index: section) {
                 if let decorClass: IQTableDecor.Type = self.decorClass(data: data) {
-                    return decorClass.dequeue(tableView: tableView)
+                    let view = decorClass.dequeue(tableView: tableView)
+                    if let decorView: IQTableDecor = view as? IQTableDecor {
+                        decorView.tableDelegate = self
+                        decorView.set(any: data)
+                    }
+                    return view
                 }
             }
             return nil
@@ -441,7 +414,12 @@
         ) -> UIView? {
             if let data: IQTableData = self.footer(index: section) {
                 if let decorClass: IQTableDecor.Type = self.decorClass(data: data) {
-                    return decorClass.dequeue(tableView: tableView)
+                    let view = decorClass.dequeue(tableView: tableView)
+                    if let decorView: IQTableDecor = view as? IQTableDecor {
+                        decorView.tableDelegate = self
+                        decorView.set(any: data)
+                    }
+                    return view
                 }
             }
             return nil
