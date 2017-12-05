@@ -34,7 +34,7 @@
         func cell(row: IQTableRow) -> IQTableCell?
 
         func dequeue(data: IQTableData) -> IQTableDecor?
-        func dequeue(row: IQTableRow) -> IQTableCell?
+        func dequeue(row: IQTableRow, indexPath: IndexPath) -> IQTableCell?
 
         func reload()
 
