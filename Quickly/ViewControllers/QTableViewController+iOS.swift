@@ -6,7 +6,10 @@
 
     import UIKit
 
-    open class QTableViewController : UITableViewController, IQContentViewController {
+    open class QTableViewController : UIViewController, IQContentViewController {
+
+        open var tableView: UITableView!
+        open var tableTopConstraint: NSLayoutConstraint!
 
         public var tableController: IQTableController? {
             set(value) {
@@ -52,12 +55,7 @@
         }
 
         public init() {
-            super.init(style: .plain)
-            self.setup()
-        }
-
-        public override init(style: UITableViewStyle) {
-            super.init(style: style)
+            super.init(nibName: nil, bundle: nil)
             self.setup()
         }
 
@@ -71,9 +69,26 @@
             self.setup()
         }
 
+        open override func viewDidLoad() {
+            super.viewDidLoad()
+            self.view.addSubview(self.tableView)
+            if #available(iOS 9.0, *) {
+                self.tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+                self.tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+
+                self.tableTopConstraint = self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor)
+                self.tableTopConstraint.isActive = true
+                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+            }
+        }
+
         open func setup() {
             self.edgesForExtendedLayout = []
             self.automaticallyAdjustsScrollViewInsets = false
+
+            self.tableView = UITableView()
+            tableView.backgroundColor = .white
+            tableView.translatesAutoresizingMaskIntoConstraints = false
         }
 
         open func triggeredRefreshControl() {
