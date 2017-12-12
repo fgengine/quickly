@@ -122,6 +122,10 @@
             self.isAppeared = false
         }
 
+        open func scrollViewDidScroll(_ scrollView: UIScrollView) {
+            // implemnt me if needed
+        }
+
         private class Proxy: NSObject, UITableViewDataSource, UITableViewDelegate {
 
             public weak var viewController: QTableViewController?
@@ -200,6 +204,12 @@
                 return nil
             }
 
+            // почему-то этот метод (а видимо и все сейчаство UIScrollViewDelegate) не пролетает через forwardingTarget
+            // поэтому приходится это делать вручную *facepalm* предположения?!
+            func scrollViewDidScroll(_ scrollView: UIScrollView) {
+                viewController?.scrollViewDidScroll(scrollView)
+            }
+
             public func tableView(
                 _ tableView: UITableView,
                 numberOfRowsInSection index: Int
@@ -225,3 +235,4 @@
     }
 
 #endif
+
