@@ -893,3 +893,90 @@ public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyT
         left = nil
     }
 }
+
+public func <<< < KeyType: RawRepresentable, ValueType: IJsonValue >(left: inout [KeyType: ValueType], right: (QJson, String)) where KeyType.RawValue: IJsonValue {
+    let maybeMaybeSource: [AnyHashable: Any]?? = try? right.0.dictionary(at: right.1)
+    if let maybeSource: [AnyHashable: Any]? = maybeMaybeSource, let source: [AnyHashable: Any] = maybeSource {
+        var result: [KeyType: ValueType] = [:]
+        source.forEach({ (key: AnyHashable, value: Any) in
+            let path: String = QJsonImpl.prepare(basePath: right.0.basePath, path: right.1, key: key)
+            let maybeJsonKey: KeyType?
+            if let rawValue = (try? KeyType.RawValue.fromJson(value: key, at: path)) as? KeyType.RawValue, let key = KeyType(rawValue: rawValue) {
+                maybeJsonKey = key
+            } else {
+                maybeJsonKey = nil
+            }
+            if let jsonKey: Any = maybeJsonKey {
+                if let safeKey: KeyType = jsonKey as? KeyType {
+                    let maybeJsonValue: Any? = try? ValueType.fromJson(value: value, at: path)
+                    if let jsonValue: Any = maybeJsonValue {
+                        if let safeValue: ValueType = jsonValue as? ValueType {
+                            result[safeKey] = safeValue
+                        }
+                    }
+                }
+            }
+        })
+        left = result
+    } else {
+        left = [:]
+    }
+}
+
+public func <<< < KeyType: RawRepresentable, ValueType: IJsonValue >(left: inout [KeyType: ValueType]!, right: (QJson, String)) where KeyType.RawValue: IJsonValue {
+    let maybeMaybeSource: [AnyHashable: Any]?? = try? right.0.dictionary(at: right.1)
+    if let maybeSource: [AnyHashable: Any]? = maybeMaybeSource, let source: [AnyHashable: Any] = maybeSource {
+        var result: [KeyType: ValueType] = [:]
+        source.forEach({ (key: AnyHashable, value: Any) in
+            let path: String = QJsonImpl.prepare(basePath: right.0.basePath, path: right.1, key: key)
+            let maybeJsonKey: KeyType?
+            if let rawValue = (try? KeyType.RawValue.fromJson(value: key, at: path)) as? KeyType.RawValue, let key = KeyType(rawValue: rawValue) {
+                maybeJsonKey = key
+            } else {
+                maybeJsonKey = nil
+            }
+            if let jsonKey: Any = maybeJsonKey {
+                if let safeKey: KeyType = jsonKey as? KeyType {
+                    let maybeJsonValue: Any? = try? ValueType.fromJson(value: value, at: path)
+                    if let jsonValue: Any = maybeJsonValue {
+                        if let safeValue: ValueType = jsonValue as? ValueType {
+                            result[safeKey] = safeValue
+                        }
+                    }
+                }
+            }
+        })
+        left = result
+    } else {
+        left = [:]
+    }
+}
+
+public func <<< < KeyType: RawRepresentable, ValueType: IJsonValue >(left: inout [KeyType: ValueType]?, right: (QJson, String)) where KeyType.RawValue: IJsonValue {
+    let maybeMaybeSource: [AnyHashable: Any]?? = try? right.0.dictionary(at: right.1)
+    if let maybeSource: [AnyHashable: Any]? = maybeMaybeSource, let source: [AnyHashable: Any] = maybeSource {
+        var result: [KeyType: ValueType] = [:]
+        source.forEach({ (key: AnyHashable, value: Any) in
+            let path: String = QJsonImpl.prepare(basePath: right.0.basePath, path: right.1, key: key)
+            let maybeJsonKey: KeyType?
+            if let rawValue = (try? KeyType.RawValue.fromJson(value: key, at: path)) as? KeyType.RawValue, let key = KeyType(rawValue: rawValue) {
+                maybeJsonKey = key
+            } else {
+                maybeJsonKey = nil
+            }
+            if let jsonKey: Any = maybeJsonKey {
+                if let safeKey: KeyType = jsonKey as? KeyType {
+                    let maybeJsonValue: Any? = try? ValueType.fromJson(value: value, at: path)
+                    if let jsonValue: Any = maybeJsonValue {
+                        if let safeValue: ValueType = jsonValue as? ValueType {
+                            result[safeKey] = safeValue
+                        }
+                    }
+                }
+            }
+        })
+        left = result
+    } else {
+        left = [:]
+    }
+}
