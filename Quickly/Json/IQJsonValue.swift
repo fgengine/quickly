@@ -762,7 +762,7 @@ public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyT
         var result: [KeyType: ValueType] = [:]
         source.forEach({ (key: AnyHashable, value: Any) in
             let path: String = QJsonImpl.prepare(path: right.basePath, key: key)
-            let maybeJsonKey: Any? = try? KeyType.fromJson(value: value, at: path)
+            let maybeJsonKey: Any? = try? KeyType.fromJson(value: key, at: path)
             if let jsonKey: Any = maybeJsonKey {
                 if let safeKey: KeyType = jsonKey as? KeyType {
                     let maybeJsonValue: Any? = try? ValueType.fromJson(value: value, at: path)
@@ -785,7 +785,7 @@ public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyT
         var result: [KeyType: ValueType] = [:]
         source.forEach({ (key: AnyHashable, value: Any) in
             let path: String = QJsonImpl.prepare(path: right.basePath, key: key)
-            let maybeJsonKey: Any? = try? KeyType.fromJson(value: value, at: path)
+            let maybeJsonKey: Any? = try? KeyType.fromJson(value: key, at: path)
             if let jsonKey: Any = maybeJsonKey {
                 if let safeKey: KeyType = jsonKey as? KeyType {
                     let maybeJsonValue: Any? = try? ValueType.fromJson(value: value, at: path)
@@ -808,7 +808,7 @@ public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyT
         var result: [KeyType: ValueType] = [:]
         source.forEach({ (key: AnyHashable, value: Any) in
             let path: String = QJsonImpl.prepare(path: right.basePath, key: key)
-            let maybeJsonKey: Any? = try? KeyType.fromJson(value: value, at: path)
+            let maybeJsonKey: Any? = try? KeyType.fromJson(value: key, at: path)
             if let jsonKey: Any = maybeJsonKey {
                 if let safeKey: KeyType = jsonKey as? KeyType {
                     let maybeJsonValue: Any? = try? ValueType.fromJson(value: value, at: path)
