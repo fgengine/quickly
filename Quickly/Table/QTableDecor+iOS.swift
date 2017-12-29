@@ -6,13 +6,13 @@
 
     open class QTableDecor<
         Type: IQTableData
-    >: UIView, IQView, IQTypedTableDecor {
+    >: UITableViewHeaderFooterView, IQView, IQTypedTableDecor {
 
         public weak var tableDelegate: IQTableDecorDelegate? = nil
         public var data: Type? = nil
 
-        public override init(frame: CGRect) {
-            super.init(frame: frame)
+        public override init(reuseIdentifier: String?) {
+            super.init(reuseIdentifier: reuseIdentifier)
             self.setup()
             self.configure()
         }
