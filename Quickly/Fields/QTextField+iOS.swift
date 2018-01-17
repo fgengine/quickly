@@ -321,7 +321,7 @@
                 guard let field: QTextField = self.field else {
                     return true
                 }
-                var caret: Int = range.location + max(range.length, string.count)
+                var caret: Int = range.location + string.count
                 var text: String = textField.text ?? ""
                 if let textRange: Range< String.Index > = text.range(from: range) {
                     text = text.replacingCharacters(in: textRange, with: string)
