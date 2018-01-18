@@ -142,17 +142,21 @@
         public func dequeue(data: IQCollectionData, kind: String, indexPath: IndexPath) -> IQCollectionDecor? {
             guard
                 let collectionView: UICollectionView = self.collectionView,
-                let decorClass: IQCollectionDecor.Type = self.decorClass(data: data)
+                let decorClass: IQCollectionDecor.Type = self.decorClass(data: data),
+                let decorView: IQCollectionDecor = decorClass.dequeue(collectionView: collectionView, kind: kind, indexPath: indexPath) as? IQCollectionDecor
                 else { return nil }
-            return decorClass.dequeue(collectionView: collectionView, kind: kind, indexPath: indexPath) as? IQCollectionDecor
+            decorView.collectionDelegate = self
+            return decorView
         }
 
         public func dequeue(item: IQCollectionItem, indexPath: IndexPath) -> IQCollectionCell? {
             guard
                 let collectionView: UICollectionView = self.collectionView,
-                let cellClass: IQCollectionCell.Type = self.cellClass(item: item)
+                let cellClass: IQCollectionCell.Type = self.cellClass(item: item),
+                let cellView: IQCollectionCell = cellClass.dequeue(collectionView: collectionView, indexPath: indexPath) as? IQCollectionCell
                 else { return nil }
-            return cellClass.dequeue(collectionView: collectionView, indexPath: indexPath) as? IQCollectionCell
+            cellView.collectionDelegate = self
+            return cellView
         }
 
         public func reload() {
@@ -370,7 +374,6 @@
         ) {
             if let collectionCell: IQCollectionCell = cell as? IQCollectionCell {
                 let item: IQCollectionItem = self.item(indexPath: indexPath)
-                collectionCell.collectionDelegate = self
                 collectionCell.set(any: item)
             }
         }
@@ -389,7 +392,6 @@
             }
             if let safeData: IQCollectionData = data {
                 if let collectionDecor: IQCollectionDecor = view as? IQCollectionDecor {
-                    collectionDecor.collectionDelegate = self
                     collectionDecor.set(any: safeData)
                 }
             }

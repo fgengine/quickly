@@ -8,6 +8,10 @@
         Type: IQTableRow
     >: UITableViewCell, IQView, IQTypedTableCell {
 
+        open class func currentNibName() -> String {
+            return String(describing: self.classForCoder())
+        }
+
         public override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
             super.init(style: style, reuseIdentifier: reuseIdentifier)
             self.setup()

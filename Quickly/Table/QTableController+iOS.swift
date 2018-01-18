@@ -9,6 +9,24 @@
         public weak var tableView: UITableView? = nil {
             didSet { self.configure() }
         }
+        public var rowHeight: CGFloat {
+            didSet { if let tableView: UITableView = self.tableView { tableView.rowHeight = self.rowHeight } }
+        }
+        public var sectionHeaderHeight: CGFloat {
+            didSet { if let tableView: UITableView = self.tableView { tableView.sectionHeaderHeight = self.sectionHeaderHeight } }
+        }
+        public var sectionFooterHeight: CGFloat {
+            didSet { if let tableView: UITableView = self.tableView { tableView.sectionFooterHeight = self.sectionFooterHeight } }
+        }
+        public var estimatedRowHeight: CGFloat {
+            didSet { if let tableView: UITableView = self.tableView { tableView.estimatedRowHeight = self.estimatedRowHeight } }
+        }
+        public var estimatedSectionHeaderHeight: CGFloat {
+            didSet { if let tableView: UITableView = self.tableView { tableView.estimatedSectionHeaderHeight = self.estimatedSectionHeaderHeight } }
+        }
+        public var estimatedSectionFooterHeight: CGFloat {
+            didSet { if let tableView: UITableView = self.tableView { tableView.estimatedSectionFooterHeight = self.estimatedSectionFooterHeight } }
+        }
         public var sections: [IQTableSection] = [] {
             willSet { self.unbindSections() }
             didSet { self.bindSections() }
@@ -40,6 +58,13 @@
         public init(
             cells: [IQTableCell.Type]
         ) {
+            self.rowHeight = UITableViewAutomaticDimension
+            self.sectionHeaderHeight = UITableViewAutomaticDimension
+            self.sectionFooterHeight = UITableViewAutomaticDimension
+            self.estimatedRowHeight = UITableViewAutomaticDimension
+            self.estimatedSectionHeaderHeight = UITableViewAutomaticDimension
+            self.estimatedSectionFooterHeight = UITableViewAutomaticDimension
+
             self.decors = []
             self.cells = cells
             super.init()
@@ -49,6 +74,13 @@
             decors: [IQTableDecor.Type],
             cells: [IQTableCell.Type]
         ) {
+            self.rowHeight = UITableViewAutomaticDimension
+            self.sectionHeaderHeight = UITableViewAutomaticDimension
+            self.sectionFooterHeight = UITableViewAutomaticDimension
+            self.estimatedRowHeight = UITableViewAutomaticDimension
+            self.estimatedSectionHeaderHeight = UITableViewAutomaticDimension
+            self.estimatedSectionFooterHeight = UITableViewAutomaticDimension
+
             self.decors = decors
             self.cells = cells
             super.init()
@@ -74,6 +106,12 @@
                 for type: IQTableCell.Type in self.cells {
                     type.register(tableView: tableView)
                 }
+                tableView.rowHeight = self.rowHeight
+                tableView.sectionHeaderHeight = self.sectionHeaderHeight
+                tableView.sectionFooterHeight = self.sectionFooterHeight
+                tableView.estimatedRowHeight = self.estimatedRowHeight
+                tableView.estimatedSectionHeaderHeight = self.estimatedSectionHeaderHeight
+                tableView.estimatedSectionFooterHeight = self.estimatedSectionFooterHeight
             }
             self.reload()
         }
@@ -165,17 +203,21 @@
         public func dequeue(data: IQTableData) -> IQTableDecor? {
             guard
                 let tableView: UITableView = self.tableView,
-                let decorClass: IQTableDecor.Type = self.decorClass(data: data)
+                let decorClass: IQTableDecor.Type = self.decorClass(data: data),
+                let decorView: IQTableDecor = decorClass.dequeue(tableView: tableView) as? IQTableDecor
                 else { return nil }
-            return decorClass.dequeue(tableView: tableView) as? IQTableDecor
+            decorView.tableDelegate = self
+            return decorView
         }
 
-        public func dequeue(row: IQTableRow) -> IQTableCell? {
+        public func dequeue(row: IQTableRow, indexPath: IndexPath) -> IQTableCell? {
             guard
                 let tableView: UITableView = self.tableView,
-                let cellClass: IQTableCell.Type = self.cellClass(row: row)
+                let cellClass: IQTableCell.Type = self.cellClass(row: row),
+                let tableCell: IQTableCell = cellClass.dequeue(tableView: tableView, indexPath: indexPath) as? IQTableCell
                 else { return nil }
-            return cellClass.dequeue(tableView: tableView) as? IQTableCell
+            tableCell.tableDelegate = self;
+            return tableCell
         }
 
         public func reload() {
@@ -363,7 +405,7 @@
             cellForRowAt indexPath: IndexPath
         ) -> UITableViewCell {
             let row: IQTableRow = self.row(indexPath: indexPath)
-            return self.dequeue(row: row) as! UITableViewCell
+            return self.dequeue(row: row, indexPath: indexPath) as! UITableViewCell
         }
 
         public func tableView(
@@ -401,7 +443,6 @@
         ) {
             if let tableCell: IQTableCell = cell as? IQTableCell {
                 let row: IQTableRow = self.row(indexPath: indexPath)
-                tableCell.tableDelegate = self
                 tableCell.set(any: row)
             }
         }
@@ -413,7 +454,6 @@
         ) {
             if let data: IQTableData = self.header(index: section) {
                 if let decorView: IQTableDecor = view as? IQTableDecor {
-                    decorView.tableDelegate = self
                     decorView.set(any: data)
                 }
             }
@@ -426,7 +466,6 @@
         ) {
             if let data: IQTableData = self.footer(index: section) {
                 if let decorView: IQTableDecor = view as? IQTableDecor {
-                    decorView.tableDelegate = self
                     decorView.set(any: data)
                 }
             }
