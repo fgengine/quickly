@@ -23,9 +23,8 @@ public class QObserver< T > {
     public func notify(_ closure: (_ observer: T) -> Void) {
         self.items.forEach { (pointer: UnsafeMutableRawPointer) in
             let object: AnyObject = Unmanaged.fromOpaque(pointer).takeUnretainedValue()
-            if let observer: T = object as? T {
-                closure(observer)
-            }
+            let observer: T = object as! T
+            closure(observer)
         }
     }
 

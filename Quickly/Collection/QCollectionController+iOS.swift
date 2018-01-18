@@ -11,11 +11,25 @@
                 self.configure()
             }
         }
-        public var sections: [IQCollectionSection] = []
+        public var sections: [IQCollectionSection] = [] {
+            willSet { self.unbindSections() }
+            didSet { self.bindSections() }
+        }
         public var items: [IQCollectionItem] {
             get {
                 return self.sections.flatMap({ (section: IQCollectionSection) -> [IQCollectionItem] in
                     return section.items
+                })
+            }
+        }
+        public var selectedItems: [IQCollectionItem] {
+            get {
+                guard
+                    let collectionView: UICollectionView = self.collectionView,
+                    let selectedIndexPaths: [IndexPath] = collectionView.indexPathsForSelectedItems
+                    else { return [] }
+                return selectedIndexPaths.flatMap({ (indexPath: IndexPath) -> IQCollectionItem? in
+                    return self.sections[indexPath.section].items[indexPath.item]
                 })
             }
         }
@@ -111,155 +125,188 @@
         }
 
         public func indexPath(item: IQCollectionItem) -> IndexPath? {
-            var sectionIndex: Int = 0
-            for existSection: IQCollectionSection in self.sections {
-                var itemIndex: Int = 0
-                for existItem: IQCollectionItem in existSection.items {
-                    if existItem === item {
-                        return IndexPath.init(item: itemIndex, section: sectionIndex)
-                    }
-                    itemIndex += 1
-                }
-                sectionIndex += 1
-            }
-            return nil
+            return item.indexPath
         }
 
         public func indexPath(predicate: (IQCollectionItem) -> Bool) -> IndexPath? {
-            var sectionIndex: Int = 0
             for existSection: IQCollectionSection in self.sections {
-                var itemIndex: Int = 0
                 for existItem: IQCollectionItem in existSection.items {
                     if predicate(existItem) == true {
-                        return IndexPath(item: itemIndex, section: sectionIndex)
+                        return existItem.indexPath
                     }
-                    itemIndex += 1
                 }
-                sectionIndex += 1
             }
             return nil
         }
 
         public func dequeue(data: IQCollectionData, kind: String, indexPath: IndexPath) -> IQCollectionDecor? {
-            guard let collectionView: UICollectionView = self.collectionView else {
-                return nil
-            }
-            guard let decorClass: IQCollectionDecor.Type = self.decorClass(data: data) else {
-                return nil
-            }
+            guard
+                let collectionView: UICollectionView = self.collectionView,
+                let decorClass: IQCollectionDecor.Type = self.decorClass(data: data)
+                else { return nil }
             return decorClass.dequeue(collectionView: collectionView, kind: kind, indexPath: indexPath) as? IQCollectionDecor
         }
 
         public func dequeue(item: IQCollectionItem, indexPath: IndexPath) -> IQCollectionCell? {
-            guard let collectionView: UICollectionView = self.collectionView else {
-                return nil
-            }
-            guard let cellClass: IQCollectionCell.Type = self.cellClass(item: item) else {
-                return nil
-            }
+            guard
+                let collectionView: UICollectionView = self.collectionView,
+                let cellClass: IQCollectionCell.Type = self.cellClass(item: item)
+                else { return nil }
             return cellClass.dequeue(collectionView: collectionView, indexPath: indexPath) as? IQCollectionCell
         }
 
         public func reload() {
-            guard let collectionView: UICollectionView = self.collectionView else {
-                return
-            }
+            guard let collectionView: UICollectionView = self.collectionView else { return }
             collectionView.reloadData()
         }
 
         public func performBatchUpdates(_ updates: (() -> Void)?, completion: ((Bool) -> Void)? = nil) {
-            guard let collectionView: UICollectionView = self.collectionView else {
-                return
-            }
+            guard let collectionView: UICollectionView = self.collectionView else { return }
             collectionView.performBatchUpdates(updates, completion: completion)
+        }
+        
+        public func insertSection(_ sections: [IQCollectionSection], index: Int) {
+            self.sections.insert(contentsOf: sections, at: index)
+            self.rebindSections(from: index, to: self.sections.endIndex)
+            var indexSet: IndexSet = IndexSet()
+            for section: IQCollectionSection in self.sections {
+                if let sectionIndex: Int = section.index {
+                    indexSet.insert(sectionIndex)
+                }
+            }
+            if indexSet.count > 0 {
+                if let collectionView: UICollectionView = self.collectionView {
+                    collectionView.insertSections(indexSet)
+                }
+            }
+        }
+        
+        public func deleteSection(_ sections: [IQCollectionSection]) {
+            var indexSet: IndexSet = IndexSet()
+            for section: IQCollectionSection in self.sections {
+                if let index: Int = self.sections.index(where: { (existSection: IQCollectionSection) -> Bool in
+                    return (existSection === section)
+                }) {
+                    indexSet.insert(index)
+                }
+            }
+            if indexSet.count > 0 {
+                for index: Int in indexSet.reversed() {
+                    let section: IQCollectionSection = self.sections[index]
+                    self.sections.remove(at: index)
+                    section.unbind()
+                }
+                self.rebindSections(from: indexSet.first!, to: self.sections.endIndex)
+                if let collectionView: UICollectionView = self.collectionView {
+                    collectionView.deleteSections(indexSet)
+                }
+            }
+        }
+        
+        public func reloadSection(_ sections: [IQCollectionSection]) {
+            var indexSet: IndexSet = IndexSet()
+            for section: IQCollectionSection in self.sections {
+                if let index: Int = self.sections.index(where: { (existSection: IQCollectionSection) -> Bool in
+                    return (existSection === section)
+                }) {
+                    indexSet.insert(index)
+                }
+            }
+            if indexSet.count > 0 {
+                if let collectionView: UICollectionView = self.collectionView {
+                    collectionView.reloadSections(indexSet)
+                }
+            }
         }
 
         public func scroll(item: IQCollectionItem, scroll: UICollectionViewScrollPosition, animated: Bool) {
-            guard let collectionView: UICollectionView = self.collectionView else {
-                return
-            }
-            guard let indexPath: IndexPath = self.indexPath(item: item) else {
-                return
-            }
+            guard
+                let collectionView: UICollectionView = self.collectionView,
+                let indexPath: IndexPath = self.indexPath(item: item)
+                else { return }
             collectionView.scrollToItem(at: indexPath, at: scroll, animated: animated)
         }
 
         public func isSelected(item: IQCollectionItem) -> Bool {
-            guard let collectionView: UICollectionView = self.collectionView else {
-                return false
-            }
-            guard let selectedIndexPaths: [IndexPath] = collectionView.indexPathsForSelectedItems else {
-                return false
-            }
-            if let indexPath: IndexPath = self.indexPath(item: item) {
-                return selectedIndexPaths.contains(indexPath)
-            }
-            return false
+            guard
+                let collectionView: UICollectionView = self.collectionView,
+                let selectedIndexPaths: [IndexPath] = collectionView.indexPathsForSelectedItems,
+                let indexPath: IndexPath = self.indexPath(item: item)
+                else { return false }
+            return selectedIndexPaths.contains(indexPath)
         }
 
         public func select(item: IQCollectionItem, scroll: UICollectionViewScrollPosition, animated: Bool) {
-            guard let collectionView: UICollectionView = self.collectionView else {
-                return
-            }
-            guard let indexPath: IndexPath = self.indexPath(item: item) else {
-                return
-            }
+            guard
+                let collectionView: UICollectionView = self.collectionView,
+                let indexPath: IndexPath = self.indexPath(item: item)
+                else { return }
             collectionView.selectItem(at: indexPath, animated: animated, scrollPosition: scroll)
         }
 
         public func deselect(item: IQCollectionItem, animated: Bool) {
-            guard let collectionView: UICollectionView = self.collectionView else {
-                return
-            }
-            guard let indexPath: IndexPath = self.indexPath(item: item) else {
-                return
-            }
+            guard
+                let collectionView: UICollectionView = self.collectionView,
+                let indexPath: IndexPath = self.indexPath(item: item)
+                else { return }
             collectionView.deselectItem(at: indexPath, animated: animated)
         }
 
         public func update(header: IQCollectionData, kind: String) {
             if #available(iOS 9.0, *) {
-                guard let collectionView: UICollectionView = self.collectionView else {
-                    return
-                }
-                guard let index: Int = self.index(header: header) else {
-                    return
-                }
-                guard let decor: IQCollectionDecor = collectionView.supplementaryView(forElementKind: UICollectionElementKindSectionHeader, at: IndexPath(item: 0, section: index)) as? IQCollectionDecor else {
-                    return
-                }
+                guard
+                    let collectionView: UICollectionView = self.collectionView,
+                    let index: Int = self.index(header: header),
+                    let decor: IQCollectionDecor = collectionView.supplementaryView(forElementKind: UICollectionElementKindSectionHeader, at: IndexPath(item: 0, section: index)) as? IQCollectionDecor
+                    else { return }
                 decor.update(any: header)
             }
         }
 
         public func update(footer: IQCollectionData, kind: String) {
             if #available(iOS 9.0, *) {
-                guard let collectionView: UICollectionView = self.collectionView else {
-                    return
-                }
-                guard let index = self.index(footer: footer) else {
-                    return
-                }
-                guard let decor: IQCollectionDecor = collectionView.supplementaryView(forElementKind: UICollectionElementKindSectionFooter, at: IndexPath(item: 0, section: index)) as? IQCollectionDecor else {
-                    return
-                }
+                guard
+                    let collectionView: UICollectionView = self.collectionView,
+                    let index = self.index(footer: footer),
+                    let decor: IQCollectionDecor = collectionView.supplementaryView(forElementKind: UICollectionElementKindSectionFooter, at: IndexPath(item: 0, section: index)) as? IQCollectionDecor
+                    else { return }
                 decor.update(any: footer)
             }
         }
 
         public func update(item: IQCollectionItem) {
-            guard let collectionView: UICollectionView = self.collectionView else {
-                return
-            }
-            guard let indexPath: IndexPath = self.indexPath(item: item) else {
-                return
-            }
-            guard let cell: IQCollectionCell = collectionView.cellForItem(at: indexPath) as? IQCollectionCell else {
-                return
-            }
+            guard
+                let collectionView: UICollectionView = self.collectionView,
+                let indexPath: IndexPath = self.indexPath(item: item),
+                let cell: IQCollectionCell = collectionView.cellForItem(at: indexPath) as? IQCollectionCell
+                else { return }
             cell.update(any: item)
         }
 
+    }
+    
+    extension QCollectionController {
+        
+        private func bindSections() {
+            var sectionIndex: Int = 0
+            for section: IQCollectionSection in self.sections {
+                section.bind(self, sectionIndex)
+                sectionIndex += 1
+            }
+        }
+        
+        private func rebindSections(from: Int, to: Int) {
+            for index: Int in from..<to {
+                self.sections[index].rebind(index)
+            }
+        }
+        
+        private func unbindSections() {
+            for section: IQCollectionSection in self.sections {
+                section.unbind()
+            }
+        }
+        
     }
 
     extension QCollectionController: UICollectionViewDataSource {

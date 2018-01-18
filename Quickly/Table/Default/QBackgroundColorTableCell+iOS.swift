@@ -21,6 +21,13 @@
                 self.backgroundColor = backgroundColor
                 self.contentView.backgroundColor = backgroundColor
             }
+            if let selectedBackgroundColor: UIColor = row.selectedBackgroundColor {
+                let view: UIView = UIView(frame: self.bounds)
+                view.backgroundColor = selectedBackgroundColor
+                self.selectedBackgroundView = view
+            } else {
+                self.selectedBackgroundView = nil
+            }
         }
 
     }

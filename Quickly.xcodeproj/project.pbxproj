@@ -418,7 +418,7 @@
 		4039BCB41F516F1B00E38090 /* QButton+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "QButton+iOS.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4039BCB61F516F5900E38090 /* QControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QControl.swift; sourceTree = "<group>"; };
 		4039BCB91F51B20900E38090 /* QImageView+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QImageView+iOS.swift"; sourceTree = "<group>"; };
-		4039BCBF1F522A6300E38090 /* QuicklyDemo+iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "QuicklyDemo+iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4039BCBF1F522A6300E38090 /* QuicklyDemo+iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "QuicklyDemo+iOS.app"; path = QuicklyDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4039BCC11F522A6400E38090 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4039BCC81F522A6400E38090 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4039BCCB1F522A6400E38090 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };

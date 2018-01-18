@@ -7,11 +7,12 @@
     open class QTableController: NSObject, IQTableController, IQTableCellDelegate, IQTableDecorDelegate {
 
         public weak var tableView: UITableView? = nil {
-            didSet {
-                self.configure()
-            }
+            didSet { self.configure() }
         }
-        public var sections: [IQTableSection] = []
+        public var sections: [IQTableSection] = [] {
+            willSet { self.unbindSections() }
+            didSet { self.bindSections() }
+        }
         public var rows: [IQTableRow] {
             get {
                 return self.sections.flatMap({ (section: IQTableSection) -> [IQTableRow] in
@@ -19,8 +20,20 @@
                 })
             }
         }
+        public var selectedRows: [IQTableRow] {
+            get {
+                guard
+                    let tableView: UITableView = self.tableView,
+                    let selectedIndexPaths: [IndexPath] = tableView.indexPathsForSelectedRows
+                    else { return [] }
+                return selectedIndexPaths.flatMap({ (indexPath: IndexPath) -> IQTableRow? in
+                    return self.sections[indexPath.section].rows[indexPath.row]
+                })
+            }
+        }
         public var canEdit: Bool = true
         public var canMove: Bool = true
+        public private(set) var isUpdating: Bool = false
         private var decors: [IQTableDecor.Type]
         private var cells: [IQTableCell.Type]
 
@@ -70,9 +83,7 @@
         }
 
         public func index(section: IQTableSection) -> Int? {
-            return self.sections.index { (existSection: IQTableSection) -> Bool in
-                return existSection === section
-            }
+            return section.index
         }
 
         public func header(index: Int) -> IQTableData? {
@@ -80,9 +91,10 @@
         }
 
         public func index(header: IQTableData) -> Int? {
-            return self.sections.index(where: { (existSection: IQTableSection) -> Bool in
-                return existSection.header === header
-            })
+            guard let section: IQTableSection = header.section else {
+                return nil
+            }
+            return section.index
         }
 
         public func footer(index: Int) -> IQTableData? {
@@ -90,9 +102,10 @@
         }
 
         public func index(footer: IQTableData) -> Int? {
-            return self.sections.index(where: { (existSection: IQTableSection) -> Bool in
-                return existSection.footer === footer
-            })
+            guard let section: IQTableSection = footer.section else {
+                return nil
+            }
+            return section.index
         }
 
         public func row(indexPath: IndexPath) -> IQTableRow {
@@ -111,186 +124,217 @@
         }
 
         public func indexPath(row: IQTableRow) -> IndexPath? {
-            var sectionIndex: Int = 0
-            for existSection: IQTableSection in self.sections {
-                var cellIndex: Int = 0
-                for existRow: IQTableRow in existSection.rows {
-                    if existRow === row {
-                        return IndexPath(row: cellIndex, section: sectionIndex)
-                    }
-                    cellIndex += 1
-                }
-                sectionIndex += 1
-            }
-            return nil
+            return row.indexPath
         }
 
         public func indexPath(predicate: (IQTableRow) -> Bool) -> IndexPath? {
-            var sectionIndex: Int = 0
             for existSection: IQTableSection in self.sections {
-                var cellIndex: Int = 0
                 for existRow: IQTableRow in existSection.rows {
                     if predicate(existRow) {
-                        return IndexPath(row: cellIndex, section: sectionIndex)
+                        return existRow.indexPath
                     }
-                    cellIndex += 1
                 }
-                sectionIndex += 1
             }
             return nil
         }
 
         public func header(data: IQTableData) -> IQTableDecor? {
-            guard let tableView: UITableView = self.tableView else {
-                return nil
-            }
-            guard let index: Int = self.index(header: data) else {
-                return nil
-            }
+            guard
+                let tableView: UITableView = self.tableView,
+                let index: Int = self.index(header: data)
+                else { return nil }
             return tableView.headerView(forSection: index) as? IQTableDecor
         }
 
         public func footer(data: IQTableData) -> IQTableDecor? {
-            guard let tableView: UITableView = self.tableView else {
-                return nil
-            }
-            guard let index: Int = self.index(footer: data) else {
-                return nil
-            }
+            guard
+                let tableView: UITableView = self.tableView,
+                let index: Int = self.index(footer: data)
+                else { return nil }
             return tableView.footerView(forSection: index) as? IQTableDecor
         }
 
         public func cell(row: IQTableRow) -> IQTableCell? {
-            guard let tableView: UITableView = self.tableView else {
-                return nil
-            }
-            guard let indexPath: IndexPath = self.indexPath(row: row) else {
-                return nil
-            }
+            guard
+                let tableView: UITableView = self.tableView,
+                let indexPath: IndexPath = self.indexPath(row: row)
+                else { return nil }
             return tableView.cellForRow(at: indexPath) as? IQTableCell
         }
 
         public func dequeue(data: IQTableData) -> IQTableDecor? {
-            guard let tableView: UITableView = self.tableView else {
-                return nil
-            }
-            guard let decorClass: IQTableDecor.Type = self.decorClass(data: data) else {
-                return nil
-            }
+            guard
+                let tableView: UITableView = self.tableView,
+                let decorClass: IQTableDecor.Type = self.decorClass(data: data)
+                else { return nil }
             return decorClass.dequeue(tableView: tableView) as? IQTableDecor
         }
 
         public func dequeue(row: IQTableRow) -> IQTableCell? {
-            guard let tableView: UITableView = self.tableView else {
-                return nil
-            }
-            guard let cellClass: IQTableCell.Type = self.cellClass(row: row) else {
-                return nil
-            }
+            guard
+                let tableView: UITableView = self.tableView,
+                let cellClass: IQTableCell.Type = self.cellClass(row: row)
+                else { return nil }
             return cellClass.dequeue(tableView: tableView) as? IQTableCell
         }
 
         public func reload() {
-            guard let tableView: UITableView = self.tableView else {
-                return
-            }
+            guard let tableView: UITableView = self.tableView else { return }
             tableView.reloadData()
         }
 
         public func beginUpdates() {
-            guard let tableView: UITableView = self.tableView else {
-                return
+            if self.isUpdating == false {
+                guard let tableView: UITableView = self.tableView else { return }
+                self.isUpdating = true
+                tableView.beginUpdates()
             }
-            tableView.beginUpdates()
+        }
+
+        public func insertSection(_ sections: [IQTableSection], index: Int, with animation: UITableViewRowAnimation) {
+            self.sections.insert(contentsOf: sections, at: index)
+            self.rebindSections(from: index, to: self.sections.endIndex)
+            var indexSet: IndexSet = IndexSet()
+            for section: IQTableSection in self.sections {
+                if let sectionIndex: Int = section.index {
+                    indexSet.insert(sectionIndex)
+                }
+            }
+            if indexSet.count > 0 {
+                if let tableView: UITableView = self.tableView {
+                    tableView.insertSections(indexSet, with: animation)
+                }
+            }
+        }
+
+        public func deleteSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation) {
+            var indexSet: IndexSet = IndexSet()
+            for section: IQTableSection in self.sections {
+                if let index: Int = self.sections.index(where: { (existSection: IQTableSection) -> Bool in
+                    return (existSection === section)
+                }) {
+                    indexSet.insert(index)
+                }
+            }
+            if indexSet.count > 0 {
+                for index: Int in indexSet.reversed() {
+                    let section: IQTableSection = self.sections[index]
+                    self.sections.remove(at: index)
+                    section.unbind()
+                }
+                self.rebindSections(from: indexSet.first!, to: self.sections.endIndex)
+                if let tableView: UITableView = self.tableView {
+                    tableView.deleteSections(indexSet, with: animation)
+                }
+            }
+        }
+
+        public func reloadSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation) {
+            var indexSet: IndexSet = IndexSet()
+            for section: IQTableSection in self.sections {
+                if let index: Int = self.sections.index(where: { (existSection: IQTableSection) -> Bool in
+                    return (existSection === section)
+                }) {
+                    indexSet.insert(index)
+                }
+            }
+            if indexSet.count > 0 {
+                if let tableView: UITableView = self.tableView {
+                    tableView.reloadSections(indexSet, with: animation)
+                }
+            }
         }
 
         public func endUpdates() {
-            guard let tableView: UITableView = self.tableView else {
-                return
+            if self.isUpdating == true {
+                guard let tableView: UITableView = self.tableView else { return }
+                tableView.endUpdates()
+                self.isUpdating = false
             }
-            tableView.endUpdates()
         }
 
         public func scroll(row: IQTableRow, scroll: UITableViewScrollPosition, animated: Bool) {
-            guard let tableView: UITableView = self.tableView else {
-                return
-            }
-            guard let indexPath: IndexPath = self.indexPath(row: row) else {
-                return
-            }
+            guard
+                let tableView: UITableView = self.tableView,
+                let indexPath: IndexPath = self.indexPath(row: row)
+                else { return }
             tableView.scrollToRow(at: indexPath, at: scroll, animated: animated)
         }
 
         public func isSelected(row: IQTableRow) -> Bool {
-            guard let tableView: UITableView = self.tableView else {
-                return false
-            }
-            guard let selectedIndexPaths: [IndexPath] = tableView.indexPathsForSelectedRows else {
-                return false
-            }
-            if let indexPath: IndexPath = self.indexPath(row: row) {
-                return selectedIndexPaths.contains(indexPath)
-            }
-            return false
+            guard
+                let tableView: UITableView = self.tableView,
+                let indexPath: IndexPath = self.indexPath(row: row),
+                let selectedIndexPaths: [IndexPath] = tableView.indexPathsForSelectedRows
+                else { return false }
+            return selectedIndexPaths.contains(indexPath)
         }
 
         public func select(row: IQTableRow, scroll: UITableViewScrollPosition, animated: Bool) {
-            guard let tableView: UITableView = self.tableView else {
-                return
-            }
-            guard let indexPath: IndexPath = self.indexPath(row: row) else {
-                return
-            }
+            guard
+                let tableView: UITableView = self.tableView,
+                let indexPath: IndexPath = self.indexPath(row: row)
+                else { return }
             tableView.selectRow(at: indexPath, animated: animated, scrollPosition: scroll)
         }
 
         public func deselect(row: IQTableRow, animated: Bool) {
-            guard let tableView: UITableView = self.tableView else {
-                return
-            }
-            guard let indexPath: IndexPath = self.indexPath(row: row) else {
-                return
-            }
+            guard
+                let tableView: UITableView = self.tableView,
+                let indexPath: IndexPath = self.indexPath(row: row)
+                else { return }
             tableView.deselectRow(at: indexPath, animated: animated)
         }
 
         public func update(header: IQTableData) {
-            guard let tableView: UITableView = self.tableView else {
-                return
-            }
-            guard let index: Int = self.index(header: header) else {
-                return
-            }
-            guard let decorView: IQTableDecor = tableView.headerView(forSection: index) as? IQTableDecor else {
-                return
-            }
+            guard
+                let tableView: UITableView = self.tableView,
+                let index: Int = self.index(header: header),
+                let decorView: IQTableDecor = tableView.headerView(forSection: index) as? IQTableDecor
+                else { return }
             decorView.update(any: header)
         }
 
         public func update(footer: IQTableData) {
-            guard let tableView: UITableView = self.tableView else {
-                return
-            }
-            guard let index: Int = self.index(footer: footer) else {
-                return
-            }
-            guard let decorView: IQTableDecor = tableView.footerView(forSection: index) as? IQTableDecor else {
-                return
-            }
+            guard
+                let tableView: UITableView = self.tableView,
+                let index: Int = self.index(footer: footer),
+                let decorView: IQTableDecor = tableView.headerView(forSection: index) as? IQTableDecor
+                else { return }
             decorView.update(any: footer)
         }
 
         public func update(row: IQTableRow) {
-            guard let tableView: UITableView = self.tableView else {
-                return
-            }
-            guard let indexPath: IndexPath = self.indexPath(row: row) else {
-                return
-            }
-            guard let cell: IQTableCell = tableView.cellForRow(at: indexPath) as? IQTableCell else {
-                return
-            }
+            guard
+                let tableView: UITableView = self.tableView,
+                let indexPath: IndexPath = self.indexPath(row: row),
+                let cell: IQTableCell = tableView.cellForRow(at: indexPath) as? IQTableCell
+                else { return }
             cell.update(any: row)
+        }
+
+    }
+
+    extension QTableController {
+
+        private func bindSections() {
+            var sectionIndex: Int = 0
+            for section: IQTableSection in self.sections {
+                section.bind(self, sectionIndex)
+                sectionIndex += 1
+            }
+        }
+
+        private func rebindSections(from: Int, to: Int) {
+            for index: Int in from..<to {
+                self.sections[index].rebind(index)
+            }
+        }
+
+        private func unbindSections() {
+            for section: IQTableSection in self.sections {
+                section.unbind()
+            }
         }
 
     }

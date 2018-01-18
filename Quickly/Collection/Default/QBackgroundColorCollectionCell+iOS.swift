@@ -20,6 +20,13 @@
             if let backgroundColor: UIColor = item.backgroundColor {
                 self.backgroundColor = backgroundColor
             }
+            if let selectedBackgroundColor: UIColor = item.selectedBackgroundColor {
+                let view: UIView = UIView(frame: self.bounds)
+                view.backgroundColor = selectedBackgroundColor
+                self.selectedBackgroundView = view
+            } else {
+                self.selectedBackgroundView = nil
+            }
         }
 
     }

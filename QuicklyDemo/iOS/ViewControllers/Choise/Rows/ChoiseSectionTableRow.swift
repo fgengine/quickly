@@ -47,6 +47,7 @@ class ChoiseSectionTableRow: QTwoLabelTableRow {
 
         super.init()
 
+        self.selectedBackgroundColor = UIColor(white: 0, alpha: 0.1)
         self.primaryText = QStyledText(mode.name, style: TextStyle.title)
         self.secondaryText = QStyledText(mode.detail, style: TextStyle.subtitle)
         self.edgeInsets =  UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)

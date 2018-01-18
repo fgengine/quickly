@@ -9,8 +9,10 @@
         weak var tableView: UITableView? { set get }
         var sections: [IQTableSection] { set get }
         var rows: [IQTableRow] { get }
+        var selectedRows: [IQTableRow] { get }
         var canEdit: Bool { get }
         var canMove: Bool { get }
+        var isUpdating: Bool { get }
 
         func configure()
 
@@ -39,6 +41,16 @@
         func reload()
 
         func beginUpdates()
+        func prependSection(_ section: IQTableSection, with animation: UITableViewRowAnimation)
+        func prependSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation)
+        func appendSection(_ section: IQTableSection, with animation: UITableViewRowAnimation)
+        func appendSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation)
+        func insertSection(_ section: IQTableSection, index: Int, with animation: UITableViewRowAnimation)
+        func insertSection(_ sections: [IQTableSection], index: Int, with animation: UITableViewRowAnimation)
+        func deleteSection(_ section: IQTableSection, with animation: UITableViewRowAnimation)
+        func deleteSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation)
+        func reloadSection(_ section: IQTableSection, with animation: UITableViewRowAnimation)
+        func reloadSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation)
         func endUpdates()
 
         func scroll(row: IQTableRow, scroll: UITableViewScrollPosition, animated: Bool)
@@ -50,6 +62,38 @@
         func update(header: IQTableData)
         func update(footer: IQTableData)
         func update(row: IQTableRow)
+
+    }
+
+    public extension IQTableController {
+
+        public func prependSection(_ section: IQTableSection, with animation: UITableViewRowAnimation) {
+            self.insertSection([ section ], index: self.sections.startIndex, with: animation)
+        }
+
+        public func prependSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation) {
+            self.insertSection(sections, index: self.sections.startIndex, with: animation)
+        }
+
+        public func appendSection(_ section: IQTableSection, with animation: UITableViewRowAnimation) {
+            self.insertSection([ section ], index: self.sections.endIndex, with: animation)
+        }
+
+        public func appendSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation) {
+            self.insertSection(sections, index: self.sections.endIndex, with: animation)
+        }
+
+        public func insertSection(_ section: IQTableSection, index: Int, with animation: UITableViewRowAnimation) {
+            self.insertSection([ section ], index: index, with: animation)
+        }
+
+        public func deleteSection(_ section: IQTableSection, with animation: UITableViewRowAnimation) {
+            self.deleteSection([ section ], with: animation)
+        }
+
+        public func reloadSection(_ section: IQTableSection, with animation: UITableViewRowAnimation) {
+            self.reloadSection([ section ], with: animation)
+        }
 
     }
 
