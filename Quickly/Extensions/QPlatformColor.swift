@@ -50,4 +50,19 @@ public extension QPlatformColor {
         return QPlatformColor(red: r, green: g, blue: b, alpha: alpha)
     }
 
+    public func lerp(_ to: QPlatformColor, progress: CGFloat) -> QPlatformColor {
+        var selfR: CGFloat = 0, toR: CGFloat = 0
+        var selfG: CGFloat = 0, toG: CGFloat = 0
+        var selfB: CGFloat = 0, toB: CGFloat = 0
+        var selfA: CGFloat = 0, toA: CGFloat = 0
+        self.getRed(&selfR, green: &selfG, blue: &selfB, alpha: &selfA)
+        to.getRed(&toR, green: &toG, blue: &toB, alpha: &toA)
+        return QPlatformColor(
+            red: selfR.lerp(toR, progress: progress),
+            green: selfG.lerp(toG, progress: progress),
+            blue: selfB.lerp(toB, progress: progress),
+            alpha: selfA.lerp(toA, progress: progress)
+        )
+    }
+
 }

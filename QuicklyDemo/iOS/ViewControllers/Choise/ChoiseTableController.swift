@@ -13,6 +13,7 @@ protocol ChoiseTableControllerDelegate: class {
 class ChoiseTableController: QTableController {
 
     public weak var delegate: ChoiseTableControllerDelegate?
+    public var section: IQTableSection?
 
     public init(_ delegate: ChoiseTableControllerDelegate) {
         self.delegate = delegate
@@ -20,8 +21,16 @@ class ChoiseTableController: QTableController {
         super.init(cells: [
             QTwoLabelTableCell.self
         ])
+        self.sections = [
+            QTableSection(rows: [
+                ChoiseSectionTableRow(mode: .label),
+                ChoiseSectionTableRow(mode: .button),
+                ChoiseSectionTableRow(mode: .textField),
+                ChoiseSectionTableRow(mode: .image)
+            ])
+        ]
     }
-
+    
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let delegate: ChoiseTableControllerDelegate = self.delegate {
             let row: IQTableRow = self.row(indexPath: indexPath)

@@ -4,9 +4,14 @@
 
 #if os(iOS)
 
-    import UIKit
+    open class QTabBarController : UITabBarController, IQBaseViewController {
 
-    open class QTabBarController : UITabBarController, IQViewController {
+        private lazy var proxy: Proxy = Proxy(viewController: self)
+
+        open override weak var delegate: UITabBarControllerDelegate? {
+            set(value) { self.proxy.delegate = value }
+            get { return self.proxy.delegate }
+        }
 
         open var currentViewController: UIViewController? {
             set(value) {
@@ -44,6 +49,7 @@
         }
 
         open func setup() {
+            super.delegate = self.proxy
         }
 
         open override var prefersStatusBarHidden: Bool {
@@ -89,6 +95,76 @@
                 }
                 return super.supportedInterfaceOrientations
             }
+        }
+
+        open func willPresent(animated: Bool) {
+        }
+
+        open func didPresent(animated: Bool) {
+        }
+
+        open func willDismiss(animated: Bool) {
+        }
+
+        open func didDismiss(animated: Bool) {
+        }
+
+        private class Proxy: NSObject, UITabBarControllerDelegate {
+
+            public weak var viewController: QTabBarController?
+            public weak var delegate: UITabBarControllerDelegate?
+            private var previousViewController: UIViewController?
+
+            public init(viewController: QTabBarController?) {
+                self.viewController = viewController
+                super.init()
+            }
+
+            public override func responds(to selector: Selector!) -> Bool {
+                if super.responds(to: selector) {
+                    return true
+                }
+                if let delegate: UITabBarControllerDelegate = self.delegate {
+                    if delegate.responds(to: selector) {
+                        return true
+                    }
+                }
+                return false
+            }
+
+            public override func forwardingTarget(for selector: Selector!) -> Any? {
+                if super.responds(to: selector) {
+                    return self
+                }
+                if let delegate: UITabBarControllerDelegate = self.delegate {
+                    if delegate.responds(to: selector) {
+                        return delegate
+                    }
+                }
+                return nil
+            }
+
+            public func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+                if self.previousViewController != viewController {
+                    if let pvc: UIViewController = self.previousViewController {
+                        self.previousViewController = pvc
+                        if let vc: IQBaseViewController = pvc as? IQBaseViewController {
+                            vc.willDismiss(animated: false)
+                            vc.didDismiss(animated: false)
+                        }
+                    }
+                    if let vc: IQBaseViewController = viewController as? IQBaseViewController {
+                        vc.willPresent(animated: false)
+                        vc.didPresent(animated: false)
+                    }
+                }
+                if let delegate: UITabBarControllerDelegate = self.delegate {
+                    if let selector = delegate.tabBarController(_:didSelect:) {
+                        selector(tabBarController, viewController)
+                    }
+                }
+            }
+
         }
 
     }

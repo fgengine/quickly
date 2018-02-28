@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QStaticViewController : QPlatformViewController, IQContentViewController {
+open class QStaticViewController : QPlatformViewController, IQViewController {
 
     #if os(macOS)
 
@@ -160,5 +160,17 @@ open class QStaticViewController : QPlatformViewController, IQContentViewControl
         }
 
     #endif
+
+    open func willPresent(animated: Bool) {
+    }
+
+    open func didPresent(animated: Bool) {
+    }
+
+    open func willDismiss(animated: Bool) {
+    }
+
+    open func didDismiss(animated: Bool) {
+    }
 
 }

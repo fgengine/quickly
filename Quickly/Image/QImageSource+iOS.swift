@@ -58,7 +58,7 @@
             scale: QImageSourceScale = .aspectFit,
             backgroundColor: UIColor = UIColor.clear,
             tintColor: UIColor? = nil
-            ) {
+        ) {
             self.image = image
             self.size = image.size
             self.renderingMode = renderingMode
@@ -73,7 +73,7 @@
             scale: QImageSourceScale = .aspectFit,
             backgroundColor: UIColor = UIColor.clear,
             tintColor: UIColor? = nil
-            ) {
+        ) {
             if let image: UIImage = UIImage(named: imageNamed) {
                 self.image = image
                 self.size = image.size
@@ -93,7 +93,7 @@
             scale: QImageSourceScale = .aspectFit,
             backgroundColor: UIColor = UIColor.clear,
             tintColor: UIColor? = nil
-            ) {
+        ) {
             self.size = size
             self.url = url
             self.renderingMode = renderingMode

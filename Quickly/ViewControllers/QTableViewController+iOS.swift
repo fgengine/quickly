@@ -4,9 +4,7 @@
 
 #if os(iOS)
 
-    import UIKit
-
-    open class QTableViewController : UITableViewController, IQContentViewController {
+    open class QTableViewController : UITableViewController, IQViewController {
 
         public var tableController: IQTableController? {
             set(value) {
@@ -105,6 +103,18 @@
         open override func viewDidDisappear(_ animated: Bool) {
             super.viewDidDisappear(animated)
             self.isAppeared = false
+        }
+
+        open func willPresent(animated: Bool) {
+        }
+
+        open func didPresent(animated: Bool) {
+        }
+
+        open func willDismiss(animated: Bool) {
+        }
+
+        open func didDismiss(animated: Bool) {
         }
 
         private class Proxy: NSObject, UITableViewDataSource, UITableViewDelegate {

@@ -8,20 +8,14 @@ class ChoiseViewController: QTableViewController, IQRouted {
 
     public var router: ChoiseRouter?
     public var container: AppContainer?
+    public var choiseTableController: ChoiseTableController! {
+        get { return self.tableController as! ChoiseTableController }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let tc: ChoiseTableController = ChoiseTableController(self)
-        tc.sections = [
-            QTableSection(rows: [
-                ChoiseSectionTableRow(mode: .label),
-                ChoiseSectionTableRow(mode: .button),
-                ChoiseSectionTableRow(mode: .textField),
-                ChoiseSectionTableRow(mode: .image)
-            ])
-        ]
-        self.tableController = tc
+        self.tableController = ChoiseTableController(self)
     }
     
 }

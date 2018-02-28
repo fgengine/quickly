@@ -4,9 +4,14 @@
 
 #if os(iOS)
 
-    import UIKit
+    open class QNavigationController : UINavigationController, IQBaseViewController {
 
-    open class QNavigationController : UINavigationController, IQViewController {
+        private lazy var proxy: Proxy = Proxy(viewController: self)
+
+        open override weak var delegate: UINavigationControllerDelegate? {
+            set(value) { self.proxy.delegate = value }
+            get { return (self.proxy.delegate != nil) ? self.proxy.delegate : self.proxy }
+        }
 
         public init() {
             super.init(nibName: nil, bundle: nil)
@@ -34,6 +39,7 @@
         }
 
         public func setup() {
+            super.delegate = self.proxy
         }
 
         open override var prefersStatusBarHidden: Bool {
@@ -81,6 +87,18 @@
             }
         }
 
+        open func willPresent(animated: Bool) {
+        }
+
+        open func didPresent(animated: Bool) {
+        }
+
+        open func willDismiss(animated: Bool) {
+        }
+
+        open func didDismiss(animated: Bool) {
+        }
+
         open func removeViewController(_ viewController: UIViewController, animated: Bool) {
             if let topViewController: UIViewController = self.topViewController {
                 if viewController != topViewController {
@@ -93,6 +111,75 @@
                     _ = self.popViewController(animated: animated)
                 }
             }
+        }
+
+        private class Proxy: NSObject, UINavigationControllerDelegate {
+
+            public weak var viewController: QNavigationController?
+            public weak var delegate: UINavigationControllerDelegate?
+            private var previousViewController: UIViewController?
+
+            public init(viewController: QNavigationController?) {
+                self.viewController = viewController
+            }
+
+            public override func responds(to selector: Selector!) -> Bool {
+                if super.responds(to: selector) {
+                    return true
+                }
+                if let delegate: UINavigationControllerDelegate = self.delegate {
+                    if delegate.responds(to: selector) {
+                        return true
+                    }
+                }
+                return false
+            }
+
+            public override func forwardingTarget(for selector: Selector!) -> Any? {
+                if super.responds(to: selector) {
+                    return self
+                }
+                if let delegate: UINavigationControllerDelegate = self.delegate {
+                    if delegate.responds(to: selector) {
+                        return delegate
+                    }
+                }
+                return nil
+            }
+
+            public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+                if self.previousViewController != viewController {
+                    if let vc: IQBaseViewController = self.previousViewController as? IQBaseViewController {
+                        vc.willDismiss(animated: animated)
+                    }
+                    if let vc: IQBaseViewController = viewController as? IQBaseViewController {
+                        vc.didPresent(animated: animated)
+                    }
+                }
+                if let delegate: UINavigationControllerDelegate = self.delegate {
+                    if let selector = delegate.navigationController(_:willShow:animated:) {
+                        selector(navigationController, viewController, animated)
+                    }
+                }
+            }
+
+            public func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+                if self.previousViewController != viewController {
+                    if let vc: IQBaseViewController = self.previousViewController as? IQBaseViewController {
+                        vc.didDismiss(animated: animated)
+                    }
+                    self.previousViewController = viewController
+                    if let vc: IQBaseViewController = viewController as? IQBaseViewController {
+                        vc.didPresent(animated: animated)
+                    }
+                }
+                if let delegate: UINavigationControllerDelegate = self.delegate {
+                    if let selector = delegate.navigationController(_:didShow:animated:) {
+                        selector(navigationController, viewController, animated)
+                    }
+                }
+            }
+
         }
 
     }

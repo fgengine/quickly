@@ -21,9 +21,7 @@
         }
 
         open override class var layerClass: AnyClass {
-            get {
-                return CAShapeLayer.self
-            }
+            get { return CAShapeLayer.self }
         }
 
         open override func layoutSubviews() {
