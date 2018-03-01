@@ -104,9 +104,6 @@ open class QStaticViewController : QPlatformViewController, IQViewController {
     }
 
     open func setup() {
-        #if os(iOS)
-            self.edgesForExtendedLayout = []
-        #endif
     }
 
     #if os(iOS)

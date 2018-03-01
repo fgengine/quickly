@@ -70,8 +70,6 @@
         }
 
         open func setup() {
-            self.edgesForExtendedLayout = []
-            self.automaticallyAdjustsScrollViewInsets = false
         }
 
         open func setNavigationBarHidden(_ hidden: Bool, animated: Bool) {

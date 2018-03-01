@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13196"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13771"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -22,7 +23,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DHZ-qe-oz1" customClass="QRoundView" customModule="Quickly">
-                    <rect key="frame" x="28" y="18" width="4" height="4"/>
+                    <rect key="frame" x="28" y="164" width="4" height="4"/>
                     <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="4" id="fgM-Xk-DaT"/>
@@ -30,11 +31,11 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VrJ-lI-GSc" customClass="QLabel" customModule="Quickly">
-                    <rect key="frame" x="40" y="20" width="240" height="14"/>
+                    <rect key="frame" x="40" y="155" width="240" height="14"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sdA-rq-OTe" customClass="QRoundView" customModule="Quickly">
-                    <rect key="frame" x="288" y="32.5" width="4" height="4"/>
+                    <rect key="frame" x="288" y="164.5" width="4" height="4"/>
                     <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="4" id="EI2-mo-qA9"/>
@@ -45,7 +46,7 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <gestureRecognizers/>
             <constraints>
-                <constraint firstItem="VrJ-lI-GSc" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" id="7mt-7V-Hek"/>
+                <constraint firstItem="VrJ-lI-GSc" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" multiplier="1/2" constant="20" id="7mt-7V-Hek"/>
                 <constraint firstItem="VrJ-lI-GSc" firstAttribute="leading" secondItem="DHZ-qe-oz1" secondAttribute="trailing" constant="8" id="MG4-DG-NM6"/>
                 <constraint firstItem="VrJ-lI-GSc" firstAttribute="firstBaseline" secondItem="DHZ-qe-oz1" secondAttribute="centerY" id="QqK-AD-YM1"/>
                 <constraint firstAttribute="trailing" secondItem="VrJ-lI-GSc" secondAttribute="trailing" constant="40" id="Vtv-bG-fZE"/>
@@ -53,7 +54,7 @@
                 <constraint firstItem="sdA-rq-OTe" firstAttribute="leading" secondItem="VrJ-lI-GSc" secondAttribute="trailing" constant="8" id="n8o-fp-RFP"/>
                 <constraint firstItem="VrJ-lI-GSc" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="40" id="wCl-Gv-i4d"/>
             </constraints>
-            <point key="canvasLocation" x="85" y="39"/>
+            <point key="canvasLocation" x="188" y="47"/>
         </view>
     </objects>
 </document>

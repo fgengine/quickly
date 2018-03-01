@@ -183,7 +183,13 @@
         }
 
         private func prepareDispatchQueue() -> DispatchQueue {
-            return DispatchQueue(label: self.name, attributes: .concurrent)
+            return DispatchQueue(
+                label: self.name,
+                qos: .background,
+                attributes: .concurrent,
+                autoreleaseFrequency: .inherit,
+                target: nil
+            )
         }
 
         @IBAction private func didReceiveMemoryWarning(_ notification: NSNotification) {
