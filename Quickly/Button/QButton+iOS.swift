@@ -154,11 +154,11 @@
         #if TARGET_INTERFACE_BUILDER
 
         open override func prepareForInterfaceBuilder() {
-        let style: QButtonStyle = QButtonStyle()
-        style.color = UIColor.blue
-        style.text = QText("QButton")
-        style.cornerRadius = 4
-        self.normalStyle = style
+            let style: QButtonStyle = QButtonStyle()
+            style.color = UIColor.blue
+            style.text = QText("QButton")
+            style.cornerRadius = 4
+            self.normalStyle = style
         }
 
         #endif
@@ -516,7 +516,7 @@
             constraints: inout [NSLayoutConstraint],
             topView: UIView, topEdgeInsets: UIEdgeInsets,
             bottomView: UIView, bottomEdgeInsets: UIEdgeInsets
-            ) {
+        ) {
             constraints.append(topView.leadingLayout >= self.contentView.leadingLayout + topEdgeInsets.left)
             constraints.append(topView.trailingLayout <= self.contentView.trailingLayout - topEdgeInsets.right)
             constraints.append(topView.bottomLayout == bottomView.topLayout - (topEdgeInsets.bottom + bottomEdgeInsets.top))
@@ -540,7 +540,7 @@
             constraints: inout [NSLayoutConstraint],
             leftView: UIView, leftEdgeInsets: UIEdgeInsets,
             rightView: UIView, rightEdgeInsets: UIEdgeInsets
-            ) {
+        ) {
             constraints.append(leftView.topLayout >= self.contentView.topLayout + leftEdgeInsets.top)
             constraints.append(leftView.trailingLayout == rightView.leadingLayout - (leftEdgeInsets.right + rightEdgeInsets.left))
             constraints.append(leftView.bottomLayout <= self.contentView.bottomLayout - leftEdgeInsets.bottom)

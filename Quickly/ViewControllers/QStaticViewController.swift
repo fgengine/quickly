@@ -6,45 +6,45 @@ open class QStaticViewController : QPlatformViewController, IQViewController {
 
     #if os(macOS)
 
-        @IBOutlet open var rootView: QPlatformView? {
-            set(view) { if let view: QPlatformView = view { self.view = view } }
-            get { return self.view }
-        }
+    @IBOutlet open var rootView: QPlatformView? {
+        set(view) { if let view: QPlatformView = view { self.view = view } }
+        get { return self.view }
+    }
 
     #elseif os(iOS)
 
-        open var statusBarHidden: Bool = false {
-            didSet { self.setNeedsStatusBarAppearanceUpdate() }
-        }
-        open var statusBarStyle: UIStatusBarStyle = .default {
-            didSet { self.setNeedsStatusBarAppearanceUpdate() }
-        }
-        open var statusBarAnimation: UIStatusBarAnimation = .fade {
-            didSet { self.setNeedsStatusBarAppearanceUpdate() }
-        }
-        open var supportedOrientationMask: UIInterfaceOrientationMask = .portrait
-        open var navigationBarHidden: Bool = false
-        open var toolbarHidden: Bool = true
+    open var statusBarHidden: Bool = false {
+        didSet { self.setNeedsStatusBarAppearanceUpdate() }
+    }
+    open var statusBarStyle: UIStatusBarStyle = .default {
+        didSet { self.setNeedsStatusBarAppearanceUpdate() }
+    }
+    open var statusBarAnimation: UIStatusBarAnimation = .fade {
+        didSet { self.setNeedsStatusBarAppearanceUpdate() }
+    }
+    open var supportedOrientationMask: UIInterfaceOrientationMask = .portrait
+    open var navigationBarHidden: Bool = false
+    open var toolbarHidden: Bool = true
 
-        open override var prefersStatusBarHidden: Bool {
-            get { return self.statusBarHidden }
-        }
+    open override var prefersStatusBarHidden: Bool {
+        get { return self.statusBarHidden }
+    }
 
-        open override var preferredStatusBarStyle: UIStatusBarStyle {
-            get { return self.statusBarStyle }
-        }
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        get { return self.statusBarStyle }
+    }
 
-        open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
-            get { return self.statusBarAnimation }
-        }
+    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        get { return self.statusBarAnimation }
+    }
 
-        open override var shouldAutorotate: Bool {
-            get { return true }
-        }
+    open override var shouldAutorotate: Bool {
+        get { return true }
+    }
 
-        open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-            get { return self.supportedOrientationMask }
-        }
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        get { return self.supportedOrientationMask }
+    }
 
     #endif
 
@@ -57,17 +57,17 @@ open class QStaticViewController : QPlatformViewController, IQViewController {
 
     #if os(macOS)
 
-        public override init(nibName: NSNib.Name?, bundle: Bundle?) {
-            super.init(nibName: nibName, bundle: bundle)
-            self.setup()
-        }
+    public override init(nibName: NSNib.Name?, bundle: Bundle?) {
+        super.init(nibName: nibName, bundle: bundle)
+        self.setup()
+    }
 
     #elseif os(iOS)
 
-        public override init(nibName: String?, bundle: Bundle?) {
-            super.init(nibName: nibName, bundle: bundle)
-            self.setup()
-        }
+    public override init(nibName: String?, bundle: Bundle?) {
+        super.init(nibName: nibName, bundle: bundle)
+        self.setup()
+    }
 
     #endif
 
@@ -78,21 +78,21 @@ open class QStaticViewController : QPlatformViewController, IQViewController {
 
     #if os(macOS)
 
-        open func currentNibName() -> NSNib.Name {
-            if let nibName: NSNib.Name = self.nibName {
-                return nibName
-            }
-            return NSNib.Name(rawValue: String(describing: self.classForCoder))
+    open func currentNibName() -> NSNib.Name {
+        if let nibName: NSNib.Name = self.nibName {
+            return nibName
         }
+        return NSNib.Name(rawValue: String(describing: self.classForCoder))
+    }
 
     #elseif os(iOS)
 
-        open func currentNibName() -> String {
-            if let nibName: String = self.nibName {
-                return nibName
-            }
-            return String(describing: self.classForCoder)
+    open func currentNibName() -> String {
+        if let nibName: String = self.nibName {
+            return nibName
         }
+        return String(describing: self.classForCoder)
+    }
 
     #endif
 
@@ -108,19 +108,19 @@ open class QStaticViewController : QPlatformViewController, IQViewController {
 
     #if os(iOS)
 
-        open func setNavigationBarHidden(_ hidden: Bool, animated: Bool) {
-            if let navigationController: UINavigationController = self.navigationController {
-                navigationController.setNavigationBarHidden(hidden, animated: animated)
-            }
-            self.navigationBarHidden = hidden
+    open func setNavigationBarHidden(_ hidden: Bool, animated: Bool) {
+        if let navigationController: UINavigationController = self.navigationController {
+            navigationController.setNavigationBarHidden(hidden, animated: animated)
         }
+        self.navigationBarHidden = hidden
+    }
 
-        open func setToolbarHidden(_ hidden: Bool, animated: Bool) {
-            if let navigationController: UINavigationController = self.navigationController {
-                navigationController.setToolbarHidden(hidden, animated: animated)
-            }
-            self.toolbarHidden = hidden
+    open func setToolbarHidden(_ hidden: Bool, animated: Bool) {
+        if let navigationController: UINavigationController = self.navigationController {
+            navigationController.setToolbarHidden(hidden, animated: animated)
         }
+        self.toolbarHidden = hidden
+    }
 
     #endif
 
@@ -159,15 +159,27 @@ open class QStaticViewController : QPlatformViewController, IQViewController {
     #endif
 
     open func willPresent(animated: Bool) {
+        #if DEBUG
+            print("\(NSStringFromClass(self.classForCoder)).willPresent(animated: \(animated))")
+        #endif
     }
 
     open func didPresent(animated: Bool) {
+        #if DEBUG
+            print("\(NSStringFromClass(self.classForCoder)).didPresent(animated: \(animated))")
+        #endif
     }
 
     open func willDismiss(animated: Bool) {
+        #if DEBUG
+            print("\(NSStringFromClass(self.classForCoder)).willDismiss(animated: \(animated))")
+        #endif
     }
 
     open func didDismiss(animated: Bool) {
+        #if DEBUG
+            print("\(NSStringFromClass(self.classForCoder)).didDismiss(animated: \(animated))")
+        #endif
     }
 
 }

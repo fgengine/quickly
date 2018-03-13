@@ -8,13 +8,16 @@ open class QWindow : QPlatformWindow, IQView {
 
         open override var contentViewController: NSViewController? {
             willSet {
-                if let vc: IQBaseViewController = super.contentViewController as? IQBaseViewController {
+                guard let contentViewController: UIViewController = super.contentViewController else { return }
+                if let vc: IQBaseViewController = contentViewController as? IQBaseViewController {
                     vc.willDismiss(animated: false)
                     vc.didDismiss(animated: false)
                 }
             }
             didSet {
-                if let vc: IQBaseViewController = super.contentViewController as? IQBaseViewController {
+                guard let contentViewController: UIViewController = super.contentViewController else { return }
+                contentViewController.loadViewIfNeeded()
+                if let vc: IQBaseViewController = contentViewController as? IQBaseViewController {
                     vc.willPresent(animated: false)
                     vc.didPresent(animated: false)
                 }
@@ -25,13 +28,16 @@ open class QWindow : QPlatformWindow, IQView {
 
         open override var rootViewController: UIViewController? {
             willSet {
-                if let vc: IQBaseViewController = super.rootViewController as? IQBaseViewController {
+                guard let rootViewController: UIViewController = super.rootViewController else { return }
+                if let vc: IQBaseViewController = rootViewController as? IQBaseViewController {
                     vc.willDismiss(animated: false)
                     vc.didDismiss(animated: false)
                 }
             }
             didSet {
-                if let vc: IQBaseViewController = super.rootViewController as? IQBaseViewController {
+                guard let rootViewController: UIViewController = super.rootViewController else { return }
+                rootViewController.loadViewIfNeeded()
+                if let vc: IQBaseViewController = rootViewController as? IQBaseViewController {
                     vc.willPresent(animated: false)
                     vc.didPresent(animated: false)
                 }

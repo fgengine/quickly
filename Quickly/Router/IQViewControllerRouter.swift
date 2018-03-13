@@ -4,6 +4,8 @@
 
 public protocol IQViewControllerRouter: IQRouter {
 
-    var viewController: QPlatformViewController { get }
+    typealias ViewControllerType = QPlatformViewController & IQBaseViewController
+
+    var viewController: ViewControllerType { get }
     
 }

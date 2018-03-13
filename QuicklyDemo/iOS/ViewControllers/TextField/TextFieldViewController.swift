@@ -7,17 +7,26 @@ import Quickly
 
 protocol ITextFieldViewControllerRouter: IQRouter {
 
-    func presentTextFieldViewController()
     func dismiss(viewController: TextFieldViewController)
     
 }
 
 class TextFieldViewController: QStaticViewController, IQRouted {
 
-    public var router: ITextFieldViewControllerRouter?
-    public var container: AppContainer?
+    public var router: ITextFieldViewControllerRouter
+    public var container: AppContainer
 
     @IBOutlet private weak var textField: QTextField!
+
+    public init(router: ITextFieldViewControllerRouter, container: AppContainer) {
+        self.router = router
+        self.container = container
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    public required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -37,10 +37,10 @@
 		40134F031F63129E009F81A6 /* QCardExpirationDateStringFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40134F001F63129E009F81A6 /* QCardExpirationDateStringFormatter.swift */; };
 		40134F041F63129E009F81A6 /* QCardNumberStringFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40134F011F63129E009F81A6 /* QCardNumberStringFormatter.swift */; };
 		4018295E1F4C1C0A005C9949 /* Quickly.h in Headers */ = {isa = PBXBuildFile; fileRef = 4018295C1F4C1C0A005C9949 /* Quickly.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		401A3DC6203A285400BE81EF /* IQDialogContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401A3DC4203A285400BE81EF /* IQDialogContainerViewController.swift */; };
-		401A3DC7203A285400BE81EF /* IQDialogContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401A3DC4203A285400BE81EF /* IQDialogContainerViewController.swift */; };
-		401A3DC8203A285400BE81EF /* IQPushContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401A3DC5203A285400BE81EF /* IQPushContainerViewController.swift */; };
-		401A3DC9203A285400BE81EF /* IQPushContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401A3DC5203A285400BE81EF /* IQPushContainerViewController.swift */; };
+		40190029204D66AB00608B4F /* QMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40190028204D66AB00608B4F /* QMainViewController.swift */; };
+		4019002A204D66AB00608B4F /* QMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40190028204D66AB00608B4F /* QMainViewController.swift */; };
+		4019002C204D885B00608B4F /* QPushContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4019002B204D885B00608B4F /* QPushContainerViewController.swift */; };
+		4019002D204D885B00608B4F /* QPushContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4019002B204D885B00608B4F /* QPushContainerViewController.swift */; };
 		402315361F7B9FD3001B0AF7 /* QAmountStringFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402315351F7B9FD2001B0AF7 /* QAmountStringFormatter.swift */; };
 		40239D441F7BC90A002C4B9A /* QAmountStringValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40239D431F7BC90A002C4B9A /* QAmountStringValidator.swift */; };
 		402B99111F799FED004DFF24 /* QPhoneStringFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402B99101F799FED004DFF24 /* QPhoneStringFormatter.swift */; };
@@ -62,6 +62,8 @@
 		4039BCDE1F522D1100E38090 /* ChoiseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4039BCDD1F522D1100E38090 /* ChoiseViewController.swift */; };
 		4039BCE01F522FAC00E38090 /* ChoiseRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4039BCDF1F522FAC00E38090 /* ChoiseRouter.swift */; };
 		4039BCE21F52314000E38090 /* ChoiseTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4039BCE11F52314000E38090 /* ChoiseTableController.swift */; };
+		403EBD5520567042004CCB29 /* DialogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 403EBD5320567042004CCB29 /* DialogViewController.xib */; };
+		403EBD5620567042004CCB29 /* DialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403EBD5420567042004CCB29 /* DialogViewController.swift */; };
 		403FE0611F8EA51600596124 /* QJsonImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = 40CF45841F4DE6AB004D00D8 /* QJsonImpl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		403FE0621F8EA51600596124 /* QApiImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = 402F1FBB1F4F446F007625CA /* QApiImpl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		403FE0631F8EA51600596124 /* QuicklyPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 409403541F4DEB6C008A8B90 /* QuicklyPrivate.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -209,8 +211,22 @@
 		403FE1051F8EA83800596124 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403FE1041F8EA83800596124 /* AppDelegate.swift */; };
 		403FE1071F8EA83800596124 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 403FE1061F8EA83800596124 /* Assets.xcassets */; };
 		403FE10A1F8EA83800596124 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 403FE1081F8EA83800596124 /* MainMenu.xib */; };
-		405A490D201F19020001D684 /* QTranslucentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405A490C201F19020001D684 /* QTranslucentView.swift */; };
-		405A490E201F19020001D684 /* QTranslucentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405A490C201F19020001D684 /* QTranslucentView.swift */; };
+		40407179205688B300F6ECC2 /* UIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40407178205688B300F6ECC2 /* UIControl.swift */; };
+		4040717A205688B300F6ECC2 /* UIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40407178205688B300F6ECC2 /* UIControl.swift */; };
+		4040717E20568C2800F6ECC2 /* ConfirmDialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4040717C20568C2800F6ECC2 /* ConfirmDialogViewController.swift */; };
+		4040717F20568C2800F6ECC2 /* ConfirmDialogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4040717D20568C2800F6ECC2 /* ConfirmDialogViewController.xib */; };
+		4040718120569F4600F6ECC2 /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4040718020569F4500F6ECC2 /* CGPoint.swift */; };
+		4040718220569F4600F6ECC2 /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4040718020569F4500F6ECC2 /* CGPoint.swift */; };
+		4057FFEE205027DC004F3EDB /* IQDialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4057FFEA205027DB004F3EDB /* IQDialogViewController.swift */; };
+		4057FFEF205027DC004F3EDB /* IQDialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4057FFEA205027DB004F3EDB /* IQDialogViewController.swift */; };
+		4057FFF0205027DC004F3EDB /* QDialogContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4057FFEB205027DB004F3EDB /* QDialogContainerViewController.swift */; };
+		4057FFF1205027DC004F3EDB /* QDialogContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4057FFEB205027DB004F3EDB /* QDialogContainerViewController.swift */; };
+		4057FFF2205027DC004F3EDB /* QDialogViewControllerAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4057FFEC205027DB004F3EDB /* QDialogViewControllerAnimation.swift */; };
+		4057FFF3205027DC004F3EDB /* QDialogViewControllerAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4057FFEC205027DB004F3EDB /* QDialogViewControllerAnimation.swift */; };
+		4057FFF4205027DC004F3EDB /* QDialogBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4057FFED205027DB004F3EDB /* QDialogBackgroundView.swift */; };
+		4057FFF5205027DC004F3EDB /* QDialogBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4057FFED205027DB004F3EDB /* QDialogBackgroundView.swift */; };
+		405A490D201F19020001D684 /* QTransparentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405A490C201F19020001D684 /* QTransparentView.swift */; };
+		405A490E201F19020001D684 /* QTransparentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405A490C201F19020001D684 /* QTransparentView.swift */; };
 		406101651F8D728A00A5463E /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406101641F8D728900A5463E /* Platform.swift */; };
 		406101681F8D79A700A5463E /* QFontInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406101671F8D798F00A5463E /* QFontInfo.swift */; };
 		4061016A1F8DFEEF00A5463E /* QuicklyModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406101691F8DFEEE00A5463E /* QuicklyModelTests.swift */; };
@@ -225,6 +241,8 @@
 		40979EC21F62C88A0003ED1C /* IQStringValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40979EBD1F62C88A0003ED1C /* IQStringValidator.swift */; };
 		40979EC31F62C88A0003ED1C /* QLengthStringValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40979EBE1F62C88A0003ED1C /* QLengthStringValidator.swift */; };
 		40979EC71F62CA680003ED1C /* QNumberStringValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40979EC61F62CA680003ED1C /* QNumberStringValidator.swift */; };
+		40A4314F2050A30000139937 /* QInvisibleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A4314E2050A30000139937 /* QInvisibleView.swift */; };
+		40A431502050A30000139937 /* QInvisibleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A4314E2050A30000139937 /* QInvisibleView.swift */; };
 		40AB6EB31F5D617E00B9387C /* QTwoLabelTableCell+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB6EB11F5D617E00B9387C /* QTwoLabelTableCell+iOS.swift */; };
 		40AB6EB41F5D617E00B9387C /* QTwoLabelTableRow+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB6EB21F5D617E00B9387C /* QTwoLabelTableRow+iOS.swift */; };
 		40AB6EB71F5D901300B9387C /* QImageLabelTableCell+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AB6EB51F5D901300B9387C /* QImageLabelTableCell+iOS.swift */; };
@@ -238,9 +256,9 @@
 		40B8A1AB1F50736C00204E5A /* QTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B8A1AA1F50736C00204E5A /* QTimer.swift */; };
 		40BFA8482018AFDE00E41933 /* IQPushViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40BFA8472018AFDE00E41933 /* IQPushViewController.swift */; };
 		40BFA8492018AFDE00E41933 /* IQPushViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40BFA8472018AFDE00E41933 /* IQPushViewController.swift */; };
-		40BFA84B2018B00400E41933 /* IQDialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40BFA84A2018B00400E41933 /* IQDialogViewController.swift */; };
-		40BFA84C2018B00400E41933 /* IQDialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40BFA84A2018B00400E41933 /* IQDialogViewController.swift */; };
 		40BFDAE61F87B8EE00ECED22 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40BFDAE51F87B8EE00ECED22 /* UIImage.swift */; };
+		40C08C24205086D50016EF7D /* QDialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C08C23205086D50016EF7D /* QDialogViewController.swift */; };
+		40C08C25205086D50016EF7D /* QDialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C08C23205086D50016EF7D /* QDialogViewController.swift */; };
 		40C8F8251F55109100C75D34 /* IQSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F8231F55109100C75D34 /* IQSpinnerView.swift */; };
 		40C8F8261F55109100C75D34 /* QSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F8241F55109100C75D34 /* QSpinnerView.swift */; };
 		40C8F8281F55145D00C75D34 /* QSystemSpinnerView+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F8271F55145D00C75D34 /* QSystemSpinnerView+iOS.swift */; };
@@ -307,6 +325,10 @@
 		40E2D6061F6785F300B954E4 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E2D6051F6785F300B954E4 /* Data.swift */; };
 		40E2D6171F67D22E00B954E4 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E2D6151F67D22E00B954E4 /* ImageViewController.swift */; };
 		40E2D6181F67D22E00B954E4 /* ImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40E2D6161F67D22E00B954E4 /* ImageViewController.xib */; };
+		40E52945204E7F1F002EDB0A /* IQAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E52944204E7F1F002EDB0A /* IQAnimation.swift */; };
+		40E52946204E7F1F002EDB0A /* IQAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E52944204E7F1F002EDB0A /* IQAnimation.swift */; };
+		40E52948204E9466002EDB0A /* QBlurView+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E52947204E9466002EDB0A /* QBlurView+iOS.swift */; };
+		40E52949204E9466002EDB0A /* QBlurView+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E52947204E9466002EDB0A /* QBlurView+iOS.swift */; };
 		40E7382C1F556AF600B192C6 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E7382B1F556AF600B192C6 /* UIDevice.swift */; };
 		40E7383A1F55847F00B192C6 /* IQViewControllerRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E738391F55847F00B192C6 /* IQViewControllerRouter.swift */; };
 		40E7384C1F5606B700B192C6 /* QLabelTableCell+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E7384A1F5606B700B192C6 /* QLabelTableCell+iOS.swift */; };
@@ -408,8 +430,8 @@
 		401829591F4C1C0A005C9949 /* Quickly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Quickly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4018295C1F4C1C0A005C9949 /* Quickly.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Quickly.h; sourceTree = "<group>"; };
 		4018295D1F4C1C0A005C9949 /* Quickly+iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Quickly+iOS.plist"; sourceTree = "<group>"; };
-		401A3DC4203A285400BE81EF /* IQDialogContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQDialogContainerViewController.swift; sourceTree = "<group>"; };
-		401A3DC5203A285400BE81EF /* IQPushContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQPushContainerViewController.swift; sourceTree = "<group>"; };
+		40190028204D66AB00608B4F /* QMainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QMainViewController.swift; sourceTree = "<group>"; };
+		4019002B204D885B00608B4F /* QPushContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QPushContainerViewController.swift; sourceTree = "<group>"; };
 		402315351F7B9FD2001B0AF7 /* QAmountStringFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QAmountStringFormatter.swift; sourceTree = "<group>"; };
 		40239D431F7BC90A002C4B9A /* QAmountStringValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QAmountStringValidator.swift; sourceTree = "<group>"; };
 		402B99101F799FED004DFF24 /* QPhoneStringFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QPhoneStringFormatter.swift; sourceTree = "<group>"; };
@@ -434,6 +456,8 @@
 		4039BCDD1F522D1100E38090 /* ChoiseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChoiseViewController.swift; sourceTree = "<group>"; };
 		4039BCDF1F522FAC00E38090 /* ChoiseRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChoiseRouter.swift; sourceTree = "<group>"; };
 		4039BCE11F52314000E38090 /* ChoiseTableController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChoiseTableController.swift; sourceTree = "<group>"; };
+		403EBD5320567042004CCB29 /* DialogViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DialogViewController.xib; sourceTree = "<group>"; };
+		403EBD5420567042004CCB29 /* DialogViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogViewController.swift; sourceTree = "<group>"; };
 		403FE0FA1F8EA51600596124 /* Quickly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Quickly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		403FE0FB1F8EA51700596124 /* Quickly+macOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Quickly+macOS.plist"; path = "/Users/fgengine/Projects/Quickly/Quickly/Quickly+macOS.plist"; sourceTree = "<absolute>"; };
 		403FE1021F8EA83700596124 /* QuicklyDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuicklyDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -442,7 +466,15 @@
 		403FE1091F8EA83800596124 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		403FE10B1F8EA83800596124 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		403FE10C1F8EA83800596124 /* Quickly.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Quickly.entitlements; sourceTree = "<group>"; };
-		405A490C201F19020001D684 /* QTranslucentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTranslucentView.swift; sourceTree = "<group>"; };
+		40407178205688B300F6ECC2 /* UIControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIControl.swift; sourceTree = "<group>"; };
+		4040717C20568C2800F6ECC2 /* ConfirmDialogViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmDialogViewController.swift; sourceTree = "<group>"; };
+		4040717D20568C2800F6ECC2 /* ConfirmDialogViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfirmDialogViewController.xib; sourceTree = "<group>"; };
+		4040718020569F4500F6ECC2 /* CGPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGPoint.swift; sourceTree = "<group>"; };
+		4057FFEA205027DB004F3EDB /* IQDialogViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQDialogViewController.swift; sourceTree = "<group>"; };
+		4057FFEB205027DB004F3EDB /* QDialogContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QDialogContainerViewController.swift; sourceTree = "<group>"; };
+		4057FFEC205027DB004F3EDB /* QDialogViewControllerAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QDialogViewControllerAnimation.swift; sourceTree = "<group>"; };
+		4057FFED205027DB004F3EDB /* QDialogBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QDialogBackgroundView.swift; sourceTree = "<group>"; };
+		405A490C201F19020001D684 /* QTransparentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTransparentView.swift; sourceTree = "<group>"; };
 		406101641F8D728900A5463E /* Platform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
 		406101671F8D798F00A5463E /* QFontInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QFontInfo.swift; sourceTree = "<group>"; };
 		406101691F8DFEEE00A5463E /* QuicklyModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuicklyModelTests.swift; sourceTree = "<group>"; };
@@ -457,6 +489,7 @@
 		40979EBD1F62C88A0003ED1C /* IQStringValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQStringValidator.swift; sourceTree = "<group>"; };
 		40979EBE1F62C88A0003ED1C /* QLengthStringValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QLengthStringValidator.swift; sourceTree = "<group>"; };
 		40979EC61F62CA680003ED1C /* QNumberStringValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QNumberStringValidator.swift; sourceTree = "<group>"; };
+		40A4314E2050A30000139937 /* QInvisibleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QInvisibleView.swift; sourceTree = "<group>"; };
 		40AB6EB11F5D617E00B9387C /* QTwoLabelTableCell+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QTwoLabelTableCell+iOS.swift"; sourceTree = "<group>"; };
 		40AB6EB21F5D617E00B9387C /* QTwoLabelTableRow+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QTwoLabelTableRow+iOS.swift"; sourceTree = "<group>"; };
 		40AB6EB51F5D901300B9387C /* QImageLabelTableCell+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QImageLabelTableCell+iOS.swift"; sourceTree = "<group>"; };
@@ -468,8 +501,8 @@
 		40B8A19C1F4F8C0400204E5A /* IQJsonValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQJsonValue.swift; sourceTree = "<group>"; };
 		40B8A1AA1F50736C00204E5A /* QTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTimer.swift; sourceTree = "<group>"; };
 		40BFA8472018AFDE00E41933 /* IQPushViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQPushViewController.swift; sourceTree = "<group>"; };
-		40BFA84A2018B00400E41933 /* IQDialogViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQDialogViewController.swift; sourceTree = "<group>"; };
 		40BFDAE51F87B8EE00ECED22 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		40C08C23205086D50016EF7D /* QDialogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QDialogViewController.swift; sourceTree = "<group>"; };
 		40C8F81C1F550EA500C75D34 /* Quickly.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = Quickly.podspec; sourceTree = "<group>"; };
 		40C8F8231F55109100C75D34 /* IQSpinnerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQSpinnerView.swift; sourceTree = "<group>"; };
 		40C8F8241F55109100C75D34 /* QSpinnerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSpinnerView.swift; sourceTree = "<group>"; };
@@ -539,6 +572,8 @@
 		40E2D60E1F678E7E00B954E4 /* Quickly.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Quickly.xcconfig; sourceTree = "<group>"; };
 		40E2D6151F67D22E00B954E4 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		40E2D6161F67D22E00B954E4 /* ImageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageViewController.xib; sourceTree = "<group>"; };
+		40E52944204E7F1F002EDB0A /* IQAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQAnimation.swift; sourceTree = "<group>"; };
+		40E52947204E9466002EDB0A /* QBlurView+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QBlurView+iOS.swift"; sourceTree = "<group>"; };
 		40E7382B1F556AF600B192C6 /* UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		40E738391F55847F00B192C6 /* IQViewControllerRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQViewControllerRouter.swift; sourceTree = "<group>"; };
 		40E7384A1F5606B700B192C6 /* QLabelTableCell+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QLabelTableCell+iOS.swift"; sourceTree = "<group>"; };
@@ -710,6 +745,7 @@
 				40CF45811F4DE6AB004D00D8 /* Fields */,
 				4039BCB31F516EF500E38090 /* Button */,
 				40CF45AF1F4DE6AB004D00D8 /* Views */,
+				40E52943204E7F0E002EDB0A /* Animation */,
 				40CF45A71F4DE6AB004D00D8 /* ViewControllers */,
 				406101661F8D797A00A5463E /* Other */,
 				406101641F8D728900A5463E /* Platform.swift */,
@@ -770,6 +806,7 @@
 				40FBE6971F54331C00F5194B /* Button */,
 				40C8F82B1F554E5900C75D34 /* TextField */,
 				40E2D6141F67D22E00B954E4 /* Image */,
+				403EBD5220567042004CCB29 /* Dialog */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -824,6 +861,16 @@
 			path = Default;
 			sourceTree = "<group>";
 		};
+		403EBD5220567042004CCB29 /* Dialog */ = {
+			isa = PBXGroup;
+			children = (
+				4040717B20568C2800F6ECC2 /* Confirm */,
+				403EBD5420567042004CCB29 /* DialogViewController.swift */,
+				403EBD5320567042004CCB29 /* DialogViewController.xib */,
+			);
+			path = Dialog;
+			sourceTree = "<group>";
+		};
 		403FE0FC1F8EA61200596124 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -849,6 +896,27 @@
 				403FE10C1F8EA83800596124 /* Quickly.entitlements */,
 			);
 			path = macOS;
+			sourceTree = "<group>";
+		};
+		4040717B20568C2800F6ECC2 /* Confirm */ = {
+			isa = PBXGroup;
+			children = (
+				4040717C20568C2800F6ECC2 /* ConfirmDialogViewController.swift */,
+				4040717D20568C2800F6ECC2 /* ConfirmDialogViewController.xib */,
+			);
+			path = Confirm;
+			sourceTree = "<group>";
+		};
+		4057FFE9205027DB004F3EDB /* Dialog */ = {
+			isa = PBXGroup;
+			children = (
+				4057FFEA205027DB004F3EDB /* IQDialogViewController.swift */,
+				4057FFEB205027DB004F3EDB /* QDialogContainerViewController.swift */,
+				4057FFEC205027DB004F3EDB /* QDialogViewControllerAnimation.swift */,
+				4057FFED205027DB004F3EDB /* QDialogBackgroundView.swift */,
+				40C08C23205086D50016EF7D /* QDialogViewController.swift */,
+			);
+			path = Dialog;
 			sourceTree = "<group>";
 		};
 		406101661F8D797A00A5463E /* Other */ = {
@@ -965,9 +1033,11 @@
 				40CF45801F4DE6AB004D00D8 /* String.swift */,
 				40CF457E1F4DE6AB004D00D8 /* NSAttributedString.swift */,
 				4061E1A81F4ECDFA00AC3217 /* NSError.swift */,
+				40407178205688B300F6ECC2 /* UIControl.swift */,
 				40BFDAE51F87B8EE00ECED22 /* UIImage.swift */,
 				40E7382B1F556AF600B192C6 /* UIDevice.swift */,
 				400DDF6E1F5622EB00D11991 /* CGFloat.swift */,
+				4040718020569F4500F6ECC2 /* CGPoint.swift */,
 				400DDF721F5623D400D11991 /* CGSize.swift */,
 				400DDF6F1F5622EB00D11991 /* CGRect.swift */,
 				40CF457F1F4DE6AB004D00D8 /* QPlatformColor.swift */,
@@ -1048,11 +1118,11 @@
 		40CF45A71F4DE6AB004D00D8 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				4057FFE9205027DB004F3EDB /* Dialog */,
 				40CF45A91F4DE6AB004D00D8 /* IQViewController.swift */,
-				401A3DC5203A285400BE81EF /* IQPushContainerViewController.swift */,
 				40BFA8472018AFDE00E41933 /* IQPushViewController.swift */,
-				401A3DC4203A285400BE81EF /* IQDialogContainerViewController.swift */,
-				40BFA84A2018B00400E41933 /* IQDialogViewController.swift */,
+				40190028204D66AB00608B4F /* QMainViewController.swift */,
+				4019002B204D885B00608B4F /* QPushContainerViewController.swift */,
 				40C94A081F69362A00439961 /* QNavigationController+iOS.swift */,
 				40C94A091F69362A00439961 /* QTabBarController+iOS.swift */,
 				40CF45AC1F4DE6AB004D00D8 /* QStaticViewController.swift */,
@@ -1068,11 +1138,13 @@
 				40CF45B01F4DE6AB004D00D8 /* IQView.swift */,
 				40CF45B41F4DE6AB004D00D8 /* QWindow.swift */,
 				40CF45B31F4DE6AB004D00D8 /* QView.swift */,
-				405A490C201F19020001D684 /* QTranslucentView.swift */,
+				40A4314E2050A30000139937 /* QInvisibleView.swift */,
+				405A490C201F19020001D684 /* QTransparentView.swift */,
 				4039BCB61F516F5900E38090 /* QControl.swift */,
 				40CF45B21F4DE6AB004D00D8 /* QRoundView+iOS.swift */,
 				40B8A1951F4F6BED00204E5A /* QShapeView+iOS.swift */,
 				40CF45B11F4DE6AB004D00D8 /* QPinCodeView+iOS.swift */,
+				40E52947204E9466002EDB0A /* QBlurView+iOS.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1084,6 +1156,14 @@
 				40E2D6161F67D22E00B954E4 /* ImageViewController.xib */,
 			);
 			path = Image;
+			sourceTree = "<group>";
+		};
+		40E52943204E7F0E002EDB0A /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				40E52944204E7F1F002EDB0A /* IQAnimation.swift */,
+			);
+			path = Animation;
 			sourceTree = "<group>";
 		};
 		40EC449A1F983D40005233F1 /* Frameworks */ = {
@@ -1342,10 +1422,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				403EBD5520567042004CCB29 /* DialogViewController.xib in Resources */,
 				40FBE69B1F54331C00F5194B /* ButtonViewController.xib in Resources */,
 				4039BCCC1F522A6400E38090 /* LaunchScreen.storyboard in Resources */,
 				4039BCC91F522A6400E38090 /* Assets.xcassets in Resources */,
 				40FBE6941F540D5C00F5194B /* LabelViewController.xib in Resources */,
+				4040717F20568C2800F6ECC2 /* ConfirmDialogViewController.xib in Resources */,
 				40E2D6181F67D22E00B954E4 /* ImageViewController.xib in Resources */,
 				40C8F82F1F554E5900C75D34 /* TextFieldViewController.xib in Resources */,
 			);
@@ -1386,6 +1468,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4019002D204D885B00608B4F /* QPushContainerViewController.swift in Sources */,
 				40134EFD1F62DC75009F81A6 /* QInputValidator.swift in Sources */,
 				40CF45E61F4DE6AB004D00D8 /* IQViewController.swift in Sources */,
 				40CF45EB1F4DE6AB004D00D8 /* QTableViewController+iOS.swift in Sources */,
@@ -1395,6 +1478,7 @@
 				40FBE6A41F543EFD00F5194B /* QStyledText.swift in Sources */,
 				400DDF711F5622EB00D11991 /* CGRect.swift in Sources */,
 				40E738571F5606C500B192C6 /* QSeparatorTableRow+iOS.swift in Sources */,
+				4057FFF5205027DC004F3EDB /* QDialogBackgroundView.swift in Sources */,
 				406101651F8D728A00A5463E /* Platform.swift in Sources */,
 				4094035B1F4E12BF008A8B90 /* QApiRequest.swift in Sources */,
 				4006EDB81F61363E0050AD91 /* QLabelCollectionItem+iOS.swift in Sources */,
@@ -1403,7 +1487,6 @@
 				40CF45E11F4DE6AB004D00D8 /* QTableDecor+iOS.swift in Sources */,
 				4039BCBA1F51B20900E38090 /* QImageView+iOS.swift in Sources */,
 				40CF45E71F4DE6AB004D00D8 /* QCollectionViewController+iOS.swift in Sources */,
-				401A3DC9203A285400BE81EF /* IQPushContainerViewController.swift in Sources */,
 				4006EDB91F61363E0050AD91 /* QSeparatorCollectionCell+iOS.swift in Sources */,
 				40C94A0A1F69362A00439961 /* QNavigationController+iOS.swift in Sources */,
 				4006EDB51F61363E0050AD91 /* QImageLabelCollectionCell+iOS.swift in Sources */,
@@ -1411,14 +1494,16 @@
 				40CF45CA1F4DE6AB004D00D8 /* QLabel+iOS.swift in Sources */,
 				40CF45DD1F4DE6AB004D00D8 /* IQTableSection+iOS.swift in Sources */,
 				40B8A19B1F4F80FF00204E5A /* QModel.swift in Sources */,
+				4019002A204D66AB00608B4F /* QMainViewController.swift in Sources */,
 				40134F041F63129E009F81A6 /* QCardNumberStringFormatter.swift in Sources */,
 				40E2D6041F67850600B954E4 /* QImageResponse+iOS.swift in Sources */,
 				40E738561F5606C500B192C6 /* QSeparatorTableCell+iOS.swift in Sources */,
 				40CF45BD1F4DE6AB004D00D8 /* QCollectionController+iOS.swift in Sources */,
 				4006EDB71F61363E0050AD91 /* QLabelCollectionCell+iOS.swift in Sources */,
-				405A490E201F19020001D684 /* QTranslucentView.swift in Sources */,
+				405A490E201F19020001D684 /* QTransparentView.swift in Sources */,
 				40134F031F63129E009F81A6 /* QCardExpirationDateStringFormatter.swift in Sources */,
 				40FBE6AA1F54591000F5194B /* QImageSource+iOS.swift in Sources */,
+				4057FFF3205027DC004F3EDB /* QDialogViewControllerAnimation.swift in Sources */,
 				4006EDB21F61363E0050AD91 /* QBackgroundColorCollectionItem+iOS.swift in Sources */,
 				40CF45C21F4DE6AB004D00D8 /* QCollectionView+iOS.swift in Sources */,
 				40E738581F5606C500B192C6 /* QSpaceTableCell+iOS.swift in Sources */,
@@ -1445,21 +1530,24 @@
 				400DDF6C1F56194300D11991 /* QImageTableCell+iOS.swift in Sources */,
 				40B8A19D1F4F8C0400204E5A /* IQJsonValue.swift in Sources */,
 				40FBE6A81F543F0C00F5194B /* QButtonStyle+iOS.swift in Sources */,
+				40E52946204E7F1F002EDB0A /* IQAnimation.swift in Sources */,
 				40C8F8261F55109100C75D34 /* QSpinnerView.swift in Sources */,
 				4006EDBC1F61363E0050AD91 /* QSpaceCollectionItem+iOS.swift in Sources */,
 				4006EDB31F61363E0050AD91 /* QImageCollectionCell+iOS.swift in Sources */,
+				4040718220569F4600F6ECC2 /* CGPoint.swift in Sources */,
 				40E2D6021F67850600B954E4 /* QImageLoader+iOS.swift in Sources */,
 				40CF45C41F4DE6AB004D00D8 /* QPlatformColor.swift in Sources */,
 				40979EC71F62CA680003ED1C /* QNumberStringValidator.swift in Sources */,
 				40CF45CB1F4DE6AB004D00D8 /* QLinkLabel+iOS.swift in Sources */,
 				40E7384D1F5606B700B192C6 /* QLabelTableRow+iOS.swift in Sources */,
+				40A431502050A30000139937 /* QInvisibleView.swift in Sources */,
 				402B99111F799FED004DFF24 /* QPhoneStringFormatter.swift in Sources */,
 				40CF45DF1F4DE6AB004D00D8 /* QTableController+iOS.swift in Sources */,
 				40CF45B61F4DE6AB004D00D8 /* IQCollectionController+iOS.swift in Sources */,
 				402F1FB61F4EF525007625CA /* QApiError.swift in Sources */,
 				40CF45BE1F4DE6AB004D00D8 /* QCollectionData+iOS.swift in Sources */,
-				40BFA84C2018B00400E41933 /* IQDialogViewController.swift in Sources */,
 				40AB6EB71F5D901300B9387C /* QImageLabelTableCell+iOS.swift in Sources */,
+				40C08C25205086D50016EF7D /* QDialogViewController.swift in Sources */,
 				40134EFB1F62DAE3009F81A6 /* IQInputValidator.swift in Sources */,
 				40E738541F5606C500B192C6 /* QBackgroundColorTableCell+iOS.swift in Sources */,
 				4039BCB51F516F1B00E38090 /* QButton+iOS.swift in Sources */,
@@ -1494,6 +1582,7 @@
 				402F1FB01F4EE0AB007625CA /* IQApiRequest.swift in Sources */,
 				40CF45D01F4DE6AB004D00D8 /* QNavigationRouter+iOS.swift in Sources */,
 				40E738551F5606C500B192C6 /* QBackgroundColorTableRow+iOS.swift in Sources */,
+				40E52949204E9466002EDB0A /* QBlurView+iOS.swift in Sources */,
 				40CF45EC1F4DE6AB004D00D8 /* IQView.swift in Sources */,
 				40979EC31F62C88A0003ED1C /* QLengthStringValidator.swift in Sources */,
 				4006EDBB1F61363E0050AD91 /* QSpaceCollectionCell+iOS.swift in Sources */,
@@ -1505,13 +1594,15 @@
 				4094035E1F4E2645008A8B90 /* QApiProvider+URLSession.swift in Sources */,
 				400DDF731F5623D400D11991 /* CGSize.swift in Sources */,
 				4006EDBA1F61363E0050AD91 /* QSeparatorCollectionItem+iOS.swift in Sources */,
+				4040717A205688B300F6ECC2 /* UIControl.swift in Sources */,
 				40CF45E31F4DE6AB004D00D8 /* QTableSection+iOS.swift in Sources */,
+				4057FFEF205027DC004F3EDB /* IQDialogViewController.swift in Sources */,
 				40CF45C31F4DE6AB004D00D8 /* NSAttributedString.swift in Sources */,
 				402F1FBA1F4F380B007625CA /* QApiProvider+Internal.swift in Sources */,
 				40CF45C51F4DE6AB004D00D8 /* String.swift in Sources */,
+				4057FFF1205027DC004F3EDB /* QDialogContainerViewController.swift in Sources */,
 				40134EF81F62D20C009F81A6 /* QRegularExpressionStringValidator.swift in Sources */,
 				40CF45DA1F4DE6AB004D00D8 /* IQTableDecor+iOS.swift in Sources */,
-				401A3DC7203A285400BE81EF /* IQDialogContainerViewController.swift in Sources */,
 				40134F021F63129E009F81A6 /* IQStringFormatter.swift in Sources */,
 				40CF45DC1F4DE6AB004D00D8 /* IQTableRow+iOS.swift in Sources */,
 				4061E1A91F4ECDFA00AC3217 /* NSError.swift in Sources */,
@@ -1541,11 +1632,13 @@
 				40FBE68F1F540AD500F5194B /* TextStyle.swift in Sources */,
 				4039BCDC1F522B2C00E38090 /* AppContainer.swift in Sources */,
 				40FBE68C1F540A2800F5194B /* ChoiseSectionTableRow.swift in Sources */,
+				4040717E20568C2800F6ECC2 /* ConfirmDialogViewController.swift in Sources */,
 				4039BCE01F522FAC00E38090 /* ChoiseRouter.swift in Sources */,
 				4039BCD91F522AD500E38090 /* AppRouter.swift in Sources */,
 				40FBE6931F540D5C00F5194B /* LabelViewController.swift in Sources */,
 				40E2D6171F67D22E00B954E4 /* ImageViewController.swift in Sources */,
 				4039BCC21F522A6400E38090 /* AppDelegate.swift in Sources */,
+				403EBD5620567042004CCB29 /* DialogViewController.swift in Sources */,
 				40C8F82E1F554E5900C75D34 /* TextFieldViewController.swift in Sources */,
 				4039BCDE1F522D1100E38090 /* ChoiseViewController.swift in Sources */,
 				40FBE69A1F54331C00F5194B /* ButtonViewController.swift in Sources */,
@@ -1557,6 +1650,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4019002C204D885B00608B4F /* QPushContainerViewController.swift in Sources */,
 				403FE0661F8EA51600596124 /* QInputValidator.swift in Sources */,
 				403FE0671F8EA51600596124 /* IQViewController.swift in Sources */,
 				403FE0681F8EA51600596124 /* QTableViewController+iOS.swift in Sources */,
@@ -1566,6 +1660,7 @@
 				403FE06D1F8EA51600596124 /* QStyledText.swift in Sources */,
 				403FE06E1F8EA51600596124 /* CGRect.swift in Sources */,
 				403FE06F1F8EA51600596124 /* QSeparatorTableRow+iOS.swift in Sources */,
+				4057FFF4205027DC004F3EDB /* QDialogBackgroundView.swift in Sources */,
 				403FE0701F8EA51600596124 /* Platform.swift in Sources */,
 				403FE0711F8EA51600596124 /* QApiRequest.swift in Sources */,
 				403FE0721F8EA51600596124 /* QLabelCollectionItem+iOS.swift in Sources */,
@@ -1574,7 +1669,6 @@
 				403FE0751F8EA51600596124 /* QTableDecor+iOS.swift in Sources */,
 				403FE0761F8EA51600596124 /* QImageView+iOS.swift in Sources */,
 				403FE0771F8EA51600596124 /* QCollectionViewController+iOS.swift in Sources */,
-				401A3DC8203A285400BE81EF /* IQPushContainerViewController.swift in Sources */,
 				403FE0781F8EA51600596124 /* QSeparatorCollectionCell+iOS.swift in Sources */,
 				403FE0791F8EA51600596124 /* QNavigationController+iOS.swift in Sources */,
 				403FE07A1F8EA51600596124 /* QImageLabelCollectionCell+iOS.swift in Sources */,
@@ -1582,14 +1676,16 @@
 				403FE07C1F8EA51600596124 /* QLabel+iOS.swift in Sources */,
 				403FE07D1F8EA51600596124 /* IQTableSection+iOS.swift in Sources */,
 				403FE07E1F8EA51600596124 /* QModel.swift in Sources */,
+				40190029204D66AB00608B4F /* QMainViewController.swift in Sources */,
 				403FE07F1F8EA51600596124 /* QCardNumberStringFormatter.swift in Sources */,
 				403FE0801F8EA51600596124 /* QImageResponse+iOS.swift in Sources */,
 				403FE0811F8EA51600596124 /* QSeparatorTableCell+iOS.swift in Sources */,
 				403FE0821F8EA51600596124 /* QCollectionController+iOS.swift in Sources */,
 				403FE0831F8EA51600596124 /* QLabelCollectionCell+iOS.swift in Sources */,
-				405A490D201F19020001D684 /* QTranslucentView.swift in Sources */,
+				405A490D201F19020001D684 /* QTransparentView.swift in Sources */,
 				403FE0841F8EA51600596124 /* QCardExpirationDateStringFormatter.swift in Sources */,
 				403FE0851F8EA51600596124 /* QImageSource+iOS.swift in Sources */,
+				4057FFF2205027DC004F3EDB /* QDialogViewControllerAnimation.swift in Sources */,
 				403FE0861F8EA51600596124 /* QBackgroundColorCollectionItem+iOS.swift in Sources */,
 				403FE0871F8EA51600596124 /* QCollectionView+iOS.swift in Sources */,
 				403FE0881F8EA51600596124 /* QSpaceTableCell+iOS.swift in Sources */,
@@ -1616,21 +1712,24 @@
 				403FE09E1F8EA51600596124 /* QImageTableCell+iOS.swift in Sources */,
 				403FE09F1F8EA51600596124 /* IQJsonValue.swift in Sources */,
 				403FE0A01F8EA51600596124 /* QButtonStyle+iOS.swift in Sources */,
+				40E52945204E7F1F002EDB0A /* IQAnimation.swift in Sources */,
 				403FE0A11F8EA51600596124 /* QSpinnerView.swift in Sources */,
 				403FE0A21F8EA51600596124 /* QSpaceCollectionItem+iOS.swift in Sources */,
 				403FE0A31F8EA51600596124 /* QImageCollectionCell+iOS.swift in Sources */,
+				4040718120569F4600F6ECC2 /* CGPoint.swift in Sources */,
 				403FE0A41F8EA51600596124 /* QImageLoader+iOS.swift in Sources */,
 				403FE0A51F8EA51600596124 /* QPlatformColor.swift in Sources */,
 				403FE0A61F8EA51600596124 /* QNumberStringValidator.swift in Sources */,
 				403FE0A71F8EA51600596124 /* QLinkLabel+iOS.swift in Sources */,
 				403FE0A81F8EA51600596124 /* QLabelTableRow+iOS.swift in Sources */,
+				40A4314F2050A30000139937 /* QInvisibleView.swift in Sources */,
 				403FE0A91F8EA51600596124 /* QPhoneStringFormatter.swift in Sources */,
 				403FE0AA1F8EA51600596124 /* QTableController+iOS.swift in Sources */,
 				403FE0AB1F8EA51600596124 /* IQCollectionController+iOS.swift in Sources */,
 				403FE0AC1F8EA51600596124 /* QApiError.swift in Sources */,
 				403FE0AD1F8EA51600596124 /* QCollectionData+iOS.swift in Sources */,
-				40BFA84B2018B00400E41933 /* IQDialogViewController.swift in Sources */,
 				403FE0AE1F8EA51600596124 /* QImageLabelTableCell+iOS.swift in Sources */,
+				40C08C24205086D50016EF7D /* QDialogViewController.swift in Sources */,
 				403FE0AF1F8EA51600596124 /* IQInputValidator.swift in Sources */,
 				403FE0B11F8EA51600596124 /* QBackgroundColorTableCell+iOS.swift in Sources */,
 				403FE0B21F8EA51600596124 /* QButton+iOS.swift in Sources */,
@@ -1665,6 +1764,7 @@
 				403FE0CE1F8EA51600596124 /* IQApiRequest.swift in Sources */,
 				403FE0CF1F8EA51600596124 /* QNavigationRouter+iOS.swift in Sources */,
 				403FE0D01F8EA51600596124 /* QBackgroundColorTableRow+iOS.swift in Sources */,
+				40E52948204E9466002EDB0A /* QBlurView+iOS.swift in Sources */,
 				403FE0D11F8EA51600596124 /* IQView.swift in Sources */,
 				403FE0D21F8EA51600596124 /* QLengthStringValidator.swift in Sources */,
 				403FE0D31F8EA51600596124 /* QSpaceCollectionCell+iOS.swift in Sources */,
@@ -1676,13 +1776,15 @@
 				403FE0D91F8EA51600596124 /* QApiProvider+URLSession.swift in Sources */,
 				403FE0DA1F8EA51600596124 /* CGSize.swift in Sources */,
 				403FE0DB1F8EA51600596124 /* QSeparatorCollectionItem+iOS.swift in Sources */,
+				40407179205688B300F6ECC2 /* UIControl.swift in Sources */,
 				403FE0DC1F8EA51600596124 /* QTableSection+iOS.swift in Sources */,
+				4057FFEE205027DC004F3EDB /* IQDialogViewController.swift in Sources */,
 				403FE0DD1F8EA51600596124 /* NSAttributedString.swift in Sources */,
 				403FE0DE1F8EA51600596124 /* QApiProvider+Internal.swift in Sources */,
 				403FE0DF1F8EA51600596124 /* String.swift in Sources */,
+				4057FFF0205027DC004F3EDB /* QDialogContainerViewController.swift in Sources */,
 				403FE0E01F8EA51600596124 /* QRegularExpressionStringValidator.swift in Sources */,
 				403FE0E11F8EA51600596124 /* IQTableDecor+iOS.swift in Sources */,
-				401A3DC6203A285400BE81EF /* IQDialogContainerViewController.swift in Sources */,
 				403FE0E21F8EA51600596124 /* IQStringFormatter.swift in Sources */,
 				403FE0E31F8EA51600596124 /* IQTableRow+iOS.swift in Sources */,
 				403FE0E41F8EA51600596124 /* NSError.swift in Sources */,

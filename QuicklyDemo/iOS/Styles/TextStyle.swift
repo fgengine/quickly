@@ -20,4 +20,11 @@ struct TextStyle {
         return style
     }()
 
+    static let link: QTextStyle = {
+        let style: QTextStyle = QTextStyle()
+        style.font = UIFont.systemFont(ofSize: UIFont.systemFontSize)
+        style.color = UIColor.blue
+        return style
+    }()
+
 }

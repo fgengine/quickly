@@ -11,7 +11,7 @@
 
         public var container: ContainerType
         public weak var router: RouterType?
-        public var viewController: UIViewController {
+        public var viewController: IQViewControllerRouter.ViewControllerType {
             get { return self.navigationController }
         }
 

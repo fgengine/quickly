@@ -8,7 +8,7 @@ public protocol IQPushViewController : IQBaseViewController {
 
 }
 
-public extension IQPushViewController {
+public extension IQPushViewController where Self: QPlatformViewController {
 
     public func dismiss(animated: Bool, completion: (() -> Swift.Void)?) {
         guard let pushContainerViewController: IQPushContainerViewController = self.pushContainerViewController else {
@@ -16,5 +16,16 @@ public extension IQPushViewController {
         }
         pushContainerViewController.dismiss(pushViewController: self, animated: animated, completion: completion)
     }
+
+}
+
+public protocol IQPushContainerViewController : IQBaseViewController {
+
+    typealias ViewControllerType = QPlatformViewController & IQPushViewController
+
+    var pushViewControllers: [ViewControllerType] { get }
+
+    func present(pushViewController: ViewControllerType, animated: Bool, completion: (() -> Swift.Void)?)
+    func dismiss(pushViewController: ViewControllerType, animated: Bool, completion: (() -> Swift.Void)?)
 
 }

@@ -3,15 +3,7 @@
 //
 
 @IBDesignable
-open class QTranslucentView : QView {
-
-    open override func setup() {
-        super.setup()
-
-        #if os(iOS)
-            self.backgroundColor = QPlatformColor.clear
-        #endif
-    }
+open class QTransparentView : QInvisibleView {
 
     #if os(macOS)
     #elseif os(iOS)

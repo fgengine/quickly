@@ -26,28 +26,15 @@ open class QAppRouter<
         }
     #endif
     public lazy var window: QWindow? = self.prepareWindow()
+    public lazy var mainViewController: QMainViewController = self.prepareMainViewController()
     public var currentRouter: IQViewControllerRouter? = nil {
         didSet {
+            if let currentRouter: IQViewControllerRouter = self.currentRouter {
+                self.mainViewController.contentViewController = currentRouter.viewController
+            } else {
+                self.mainViewController.contentViewController = nil
+            }
             if let window: QWindow = self.window {
-                #if os(macOS)
-                    let frame: NSRect = window.frame
-                #endif
-                if let currentRouter: IQViewControllerRouter = self.currentRouter {
-                    #if os(macOS)
-                        window.contentViewController = currentRouter.viewController
-                    #elseif os(iOS)
-                        window.rootViewController = currentRouter.viewController
-                    #endif
-                } else {
-                    #if os(macOS)
-                        window.contentViewController = nil
-                    #elseif os(iOS)
-                        window.rootViewController = nil
-                    #endif
-                }
-                #if os(macOS)
-                    window.setFrame(frame, display: true)
-                #endif
                 #if os(macOS)
                     if window.isMainWindow == false {
                         window.makeKeyAndOrderFront(self)
@@ -85,15 +72,28 @@ open class QAppRouter<
                 let centerRect: NSRect = NSRect(x: 0, y: 0, width: frameRect.width, height: frameRect.height)
                 contentRect = QWindow.contentRect(forFrameRect: centerRect, styleMask: self.windowStyleMask)
             }
-            return QWindow(
+            let window: QWindow = QWindow(
                 contentRect: contentRect,
                 styleMask: self.windowStyleMask,
                 backing: .buffered,
                 defer: true
             )
+            return window
         #elseif os(iOS)
             return QWindow(frame: UIScreen.main.bounds)
         #endif
+    }
+
+    private func prepareMainViewController() -> QMainViewController {
+        let vc: QMainViewController = QMainViewController()
+        if let window: QWindow = self.window {
+            #if os(macOS)
+                window.contentViewController = vc
+            #elseif os(iOS)
+                window.rootViewController = vc
+            #endif
+        }
+        return vc
     }
 
 }

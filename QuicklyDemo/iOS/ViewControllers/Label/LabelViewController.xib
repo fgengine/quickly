@@ -14,6 +14,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LabelViewController" customModule="QuicklyDemo" customModuleProvider="target">
             <connections>
                 <outlet property="label" destination="VrJ-lI-GSc" id="FY6-pC-db0"/>
+                <outlet property="linkLabel" destination="H4b-4k-qLd" id="DaI-jm-YKr"/>
                 <outlet property="view" destination="iN0-l3-epB" id="RKO-sg-IkX"/>
             </connections>
         </placeholder>
@@ -42,15 +43,22 @@
                         <constraint firstAttribute="width" constant="4" id="sI7-3m-C0w"/>
                     </constraints>
                 </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H4b-4k-qLd" customClass="QLinkLabel" customModule="Quickly">
+                    <rect key="frame" x="40" y="177" width="240" height="14"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <gestureRecognizers/>
             <constraints>
                 <constraint firstItem="VrJ-lI-GSc" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" multiplier="1/2" constant="20" id="7mt-7V-Hek"/>
+                <constraint firstItem="H4b-4k-qLd" firstAttribute="leading" secondItem="VrJ-lI-GSc" secondAttribute="leading" id="Lt4-Nq-uIO"/>
                 <constraint firstItem="VrJ-lI-GSc" firstAttribute="leading" secondItem="DHZ-qe-oz1" secondAttribute="trailing" constant="8" id="MG4-DG-NM6"/>
                 <constraint firstItem="VrJ-lI-GSc" firstAttribute="firstBaseline" secondItem="DHZ-qe-oz1" secondAttribute="centerY" id="QqK-AD-YM1"/>
                 <constraint firstAttribute="trailing" secondItem="VrJ-lI-GSc" secondAttribute="trailing" constant="40" id="Vtv-bG-fZE"/>
+                <constraint firstItem="H4b-4k-qLd" firstAttribute="trailing" secondItem="VrJ-lI-GSc" secondAttribute="trailing" id="WL2-l4-HfI"/>
                 <constraint firstItem="sdA-rq-OTe" firstAttribute="centerY" secondItem="VrJ-lI-GSc" secondAttribute="baseline" id="csf-uQ-lCW"/>
+                <constraint firstItem="H4b-4k-qLd" firstAttribute="top" secondItem="VrJ-lI-GSc" secondAttribute="bottom" constant="8" id="ghl-nb-Wh3"/>
                 <constraint firstItem="sdA-rq-OTe" firstAttribute="leading" secondItem="VrJ-lI-GSc" secondAttribute="trailing" constant="8" id="n8o-fp-RFP"/>
                 <constraint firstItem="VrJ-lI-GSc" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="40" id="wCl-Gv-i4d"/>
             </constraints>

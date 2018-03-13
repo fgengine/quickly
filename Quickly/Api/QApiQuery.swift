@@ -244,6 +244,7 @@ extension QApiQuery: IQDebug {
             QDebugString("Request: \(self.request)\n", &buffer, indent, nextIndent, indent)
         }
         QDebugString("CreateAt: \(self.createAt)\n", &buffer, indent, nextIndent, indent)
+        QDebugString("Duration: \(-self.createAt.timeIntervalSinceNow) s\n", &buffer, indent, nextIndent, indent)
         if let response: IQDebug = self.response as? IQDebug {
             var debug: String = String()
             response.debugString(&debug, 0, nextIndent, indent)

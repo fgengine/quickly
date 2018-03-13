@@ -4,14 +4,6 @@
 
 public protocol IQBaseViewController : class {
 
-    var isViewLoaded: Bool { get }
-
-    #if os(macOS)
-    var view: NSView { set get }
-    #elseif os(iOS)
-    var view: UIView! { set get }
-    #endif
-
     func setup()
 
     func willPresent(animated: Bool)

@@ -98,15 +98,27 @@
         }
 
         open func willPresent(animated: Bool) {
+            #if DEBUG
+                print("\(NSStringFromClass(self.classForCoder)).willPresent(animated: \(animated))")
+            #endif
         }
 
         open func didPresent(animated: Bool) {
+            #if DEBUG
+                print("\(NSStringFromClass(self.classForCoder)).didPresent(animated: \(animated))")
+            #endif
         }
 
         open func willDismiss(animated: Bool) {
+            #if DEBUG
+                print("\(NSStringFromClass(self.classForCoder)).willDismiss(animated: \(animated))")
+            #endif
         }
 
         open func didDismiss(animated: Bool) {
+            #if DEBUG
+                print("\(NSStringFromClass(self.classForCoder)).didDismiss(animated: \(animated))")
+            #endif
         }
 
         private class Proxy: NSObject, UITabBarControllerDelegate {
