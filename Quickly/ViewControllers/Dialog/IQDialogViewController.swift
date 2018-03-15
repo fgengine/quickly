@@ -63,14 +63,15 @@ public protocol IQDialogViewController : IQBaseViewController {
     weak var containerViewController: ContainerViewControllerType? { set get }
 
     var contentViewController: ContentViewControllerType { set get }
-    var contentWidthBehaviour: QDialogViewControllerSizeBehaviour { set get }
-    var contentHeightBehaviour: QDialogViewControllerSizeBehaviour { set get }
-    var contentVerticalAlignment: QDialogViewControllerVerticalAlignment { set get }
-    var contentHorizontalAlignment: QDialogViewControllerHorizontalAlignment { set get }
+    var widthBehaviour: QDialogViewControllerSizeBehaviour { set get }
+    var heightBehaviour: QDialogViewControllerSizeBehaviour { set get }
+    var verticalAlignment: QDialogViewControllerVerticalAlignment { set get }
+    var horizontalAlignment: QDialogViewControllerHorizontalAlignment { set get }
+    var presentAnimation: IQDialogViewControllerFixedAnimation? { get }
+    var dismissAnimation: IQDialogViewControllerFixedAnimation? { get }
+    var interactiveDismissAnimation: IQDialogViewControllerInteractiveAnimation? { get }
 
-    var presentAnimation: IQDialogViewControllerFixedAnimation? { set get }
-    var dismissAnimation: IQDialogViewControllerFixedAnimation? { set get }
-    var interactiveDismissAnimation: IQDialogViewControllerInteractiveAnimation? { set get }
+    func dismissDialog(animated: Bool, completion: (() -> Swift.Void)?)
 
 }
 
@@ -118,8 +119,6 @@ public protocol IQDialogContainerBackgroundView : class {
     typealias ViewControllerType = QPlatformViewController & IQDialogViewController
 
     weak var containerViewController: ContainerViewControllerType? { set get }
-
-    init(_ containerViewController: ContainerViewControllerType)
 
     func presentDialog(viewController: ViewControllerType, isFirst: Bool, animated: Bool)
     func dismissDialog(viewController: ViewControllerType, isLast: Bool, animated: Bool)

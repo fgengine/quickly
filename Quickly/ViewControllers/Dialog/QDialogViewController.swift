@@ -13,27 +13,27 @@ open class QDialogViewController : QPlatformViewController, IQDialogViewControll
         willSet { self._disappearViewController() }
         didSet { self._appearViewController() }
     }
-    open var contentWidthBehaviour: QDialogViewControllerSizeBehaviour = .fit(min: 0, max: 0) {
+    open var widthBehaviour: QDialogViewControllerSizeBehaviour = .fit(min: 0, max: 0) {
         didSet { self._relayoutContentViewController() }
     }
-    open var contentHeightBehaviour: QDialogViewControllerSizeBehaviour = .fit(min: 0, max: 0) {
+    open var heightBehaviour: QDialogViewControllerSizeBehaviour = .fit(min: 0, max: 0) {
         didSet { self._relayoutContentViewController() }
     }
-    open var contentVerticalAlignment: QDialogViewControllerVerticalAlignment = .center(offset: 0) {
+    open var verticalAlignment: QDialogViewControllerVerticalAlignment = .center(offset: 0) {
         didSet { self._relayoutContentViewController() }
     }
-    open var contentHorizontalAlignment: QDialogViewControllerHorizontalAlignment = .center(offset: 0) {
+    open var horizontalAlignment: QDialogViewControllerHorizontalAlignment = .center(offset: 0) {
         didSet { self._relayoutContentViewController() }
     }
-    private var contentLayoutConstraints: [NSLayoutConstraint] = []
-    private var contentSizeConstraints: [NSLayoutConstraint] = []
+    open var presentAnimation: IQDialogViewControllerFixedAnimation?
+    open var dismissAnimation: IQDialogViewControllerFixedAnimation?
+    open var interactiveDismissAnimation: IQDialogViewControllerInteractiveAnimation?
     #if os(iOS)
     open lazy var tapGesture: UITapGestureRecognizer = self._prepareTapGesture()
     #endif
 
-    open var presentAnimation: IQDialogViewControllerFixedAnimation?
-    open var dismissAnimation: IQDialogViewControllerFixedAnimation?
-    open var interactiveDismissAnimation: IQDialogViewControllerInteractiveAnimation?
+    private var contentLayoutConstraints: [NSLayoutConstraint] = []
+    private var contentSizeConstraints: [NSLayoutConstraint] = []
 
     public init(contentViewController: ContentViewControllerType) {
         self.contentViewController = contentViewController
@@ -50,7 +50,9 @@ open class QDialogViewController : QPlatformViewController, IQDialogViewControll
 
     open override func loadView() {
         self.view = QInvisibleView()
-        self.view.addGestureRecognizer(self.tapGesture)
+        #if os(iOS)
+            self.view.addGestureRecognizer(self.tapGesture)
+        #endif
 
         self._appearViewController()
     }
@@ -134,7 +136,7 @@ open class QDialogViewController : QPlatformViewController, IQDialogViewControll
     }
 
     private func _layoutContentViewController() {
-        switch self.contentWidthBehaviour {
+        switch self.widthBehaviour {
         case .fit(let min, let max):
             if min > CGFloat.leastNonzeroMagnitude || max > CGFloat.leastNonzeroMagnitude {
                 if min == max {
@@ -146,7 +148,7 @@ open class QDialogViewController : QPlatformViewController, IQDialogViewControll
             }
             break
         case .fill(let before, let after):
-            switch self.contentHorizontalAlignment {
+            switch self.horizontalAlignment {
             case .center(let offset):
                 self.contentLayoutConstraints.append(self.contentViewController.view.leadingLayout == self.view.leadingLayout + (before + offset))
                 self.contentLayoutConstraints.append(self.view.trailingLayout == self.contentViewController.view.trailingLayout + (after - offset))
@@ -158,7 +160,7 @@ open class QDialogViewController : QPlatformViewController, IQDialogViewControll
             }
             break
         }
-        switch self.contentHeightBehaviour {
+        switch self.heightBehaviour {
         case .fit(let min, let max):
             if min > CGFloat.leastNonzeroMagnitude || max > CGFloat.leastNonzeroMagnitude {
                 if min == max {
@@ -170,7 +172,7 @@ open class QDialogViewController : QPlatformViewController, IQDialogViewControll
             }
             break
         case .fill(let before, let after):
-            switch self.contentVerticalAlignment {
+            switch self.verticalAlignment {
             case .center(let offset):
                 self.contentLayoutConstraints.append(self.contentViewController.view.topLayout == self.view.topLayout + (before + offset))
                 self.contentLayoutConstraints.append(self.view.bottomLayout == self.contentViewController.view.bottomLayout + (after - offset))
@@ -182,7 +184,7 @@ open class QDialogViewController : QPlatformViewController, IQDialogViewControll
             }
             break
         }
-        switch self.contentHorizontalAlignment {
+        switch self.horizontalAlignment {
         case .left(let offset):
             self.contentLayoutConstraints.append(self.contentViewController.view.leadingLayout == self.view.leadingLayout + offset)
             break
@@ -193,7 +195,7 @@ open class QDialogViewController : QPlatformViewController, IQDialogViewControll
             self.contentLayoutConstraints.append(self.contentViewController.view.trailingLayout == self.view.trailingLayout + offset)
             break
         }
-        switch self.contentVerticalAlignment {
+        switch self.verticalAlignment {
         case .top(let offset):
             self.contentLayoutConstraints.append(self.contentViewController.view.topLayout == self.view.topLayout + offset)
             break
@@ -222,16 +224,20 @@ open class QDialogViewController : QPlatformViewController, IQDialogViewControll
 
 }
 
-extension QDialogViewController : UIGestureRecognizerDelegate {
+#if os(iOS)
 
-    open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if self.view.point(inside: gestureRecognizer.location(in: self.view), with: nil) == false {
-            return false
+    extension QDialogViewController : UIGestureRecognizerDelegate {
+
+        open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+            if self.view.point(inside: gestureRecognizer.location(in: self.view), with: nil) == false {
+                return false
+            }
+            if self.contentViewController.view.point(inside: gestureRecognizer.location(in: self.contentViewController.view), with: nil) == true {
+                return false
+            }
+            return true
         }
-        if self.contentViewController.view.point(inside: gestureRecognizer.location(in: self.contentViewController.view), with: nil) == true {
-            return false
-        }
-        return true
+
     }
 
-}
+#endif

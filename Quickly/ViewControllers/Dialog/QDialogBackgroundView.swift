@@ -2,25 +2,35 @@
 //  Quickly
 //
 
-open class QDialogBackgroundView : QBlurView, IQDialogContainerBackgroundView {
+open class QDialogBackgroundView : QView, IQDialogContainerBackgroundView {
 
     public typealias ContainerViewControllerType = IQDialogContainerBackgroundView.ContainerViewControllerType
     public typealias ViewControllerType = IQDialogContainerBackgroundView.ViewControllerType
 
     open weak var containerViewController: ContainerViewControllerType?
 
-    public required init(_ containerViewController: IQDialogContainerBackgroundView.ContainerViewControllerType) {
-        self.containerViewController = containerViewController
-        super.init(blurRadius: Const.hiddenBlurRadius)
+    public init(backgroundColor: QPlatformColor) {
+        super.init(frame: CGRect())
+        #if os(macOS)
+            self.wantsLayer = true
+            self.layer!.backgroundColor = backgroundColor.cgColor
+        #elseif os(iOS)
+            self.backgroundColor = backgroundColor
+        #endif
     }
 
     public required init?(coder: NSCoder) {
-        super.init(coder: coder)
+        fatalError("init(coder:) has not been implemented")
     }
 
     open override func setup() {
         super.setup()
 
+        #if os(macOS)
+            self.alphaValue = Const.hiddenAlpha
+        #elseif os(iOS)
+            self.alpha = Const.hiddenAlpha
+        #endif
         self.isHidden = true
     }
 
@@ -28,13 +38,23 @@ open class QDialogBackgroundView : QBlurView, IQDialogContainerBackgroundView {
         if isFirst == true {
             self.isHidden = false
             if animated == true {
-                #if os(iOS)
+                #if os(macOS)
+                    NSAnimationContext.runAnimationGroup({ (context: NSAnimationContext) in
+                        context.duration = Const.duration
+
+                        self.animator().alphaValue = Const.visibleAlpha
+                    })
+                #elseif os(iOS)
                     UIView.animate(withDuration: Const.duration, animations: {
-                        self.blurRadius = Const.visibleBlurRadius
+                        self.alpha = Const.visibleAlpha
                     })
                 #endif
             } else {
-                self.blurRadius = Const.visibleBlurRadius
+                #if os(macOS)
+                    self.alphaValue = Const.visibleAlpha
+                #elseif os(iOS)
+                    self.alpha = Const.visibleAlpha
+                #endif
             }
         }
     }
@@ -42,15 +62,28 @@ open class QDialogBackgroundView : QBlurView, IQDialogContainerBackgroundView {
     public func dismissDialog(viewController: ViewControllerType, isLast: Bool, animated: Bool) {
         if isLast == true {
             if animated == true {
-                #if os(iOS)
+                #if os(macOS)
+                    NSAnimationContext.runAnimationGroup({ (context: NSAnimationContext) in
+                        context.duration = Const.duration
+
+                        self.animator().alphaValue = Const.hiddenAlpha
+                    }, completionHandler: {
+                        self.alphaValue = Const.hiddenAlpha
+                        self.isHidden = true
+                    })
+                #elseif os(iOS)
                     UIView.animate(withDuration: Const.duration, animations: {
-                        self.blurRadius = Const.hiddenBlurRadius
+                        self.alpha = Const.hiddenAlpha
                     }, completion: { (_) in
                         self.isHidden = true
                     })
                 #endif
             } else {
-                self.blurRadius = Const.hiddenBlurRadius
+                #if os(macOS)
+                    self.alphaValue = Const.hiddenAlpha
+                #elseif os(iOS)
+                    self.alpha = Const.hiddenAlpha
+                #endif
                 self.isHidden = true
             }
         }
@@ -59,8 +92,8 @@ open class QDialogBackgroundView : QBlurView, IQDialogContainerBackgroundView {
     private struct Const {
 
         static let duration: TimeInterval = 0.25
-        static let hiddenBlurRadius: CGFloat = 0
-        static let visibleBlurRadius: CGFloat = 20
+        static let hiddenAlpha: CGFloat = 0
+        static let visibleAlpha: CGFloat = 1
 
     }
 

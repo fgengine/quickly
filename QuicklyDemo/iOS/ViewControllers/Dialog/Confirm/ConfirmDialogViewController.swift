@@ -30,7 +30,7 @@ class ConfirmDialogViewController: QStaticViewController, IQDialogContentViewCon
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         self.view.layer.cornerRadius = 4
@@ -57,7 +57,7 @@ class ConfirmDialogViewController: QStaticViewController, IQDialogContentViewCon
         self.router.dismiss(viewController: self)
     }
 
-    @objc func pressedClose(_ sender: Any) {
+    @objc private func pressedClose(_ sender: Any) {
         self.router.dismiss(viewController: self)
     }
 

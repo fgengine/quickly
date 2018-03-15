@@ -208,7 +208,7 @@
             public func tableView(
                 _ tableView: UITableView,
                 numberOfRowsInSection index: Int
-                ) -> Int {
+            ) -> Int {
                 if let tableController: IQTableController = self.tableController {
                     return tableController.tableView(tableView, numberOfRowsInSection: index)
                 }
@@ -218,7 +218,7 @@
             public func tableView(
                 _ tableView: UITableView,
                 cellForRowAt indexPath: IndexPath
-                ) -> UITableViewCell {
+            ) -> UITableViewCell {
                 if let tableController: IQTableController = self.tableController {
                     return tableController.tableView(tableView, cellForRowAt: indexPath)
                 }

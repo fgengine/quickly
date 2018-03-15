@@ -181,7 +181,17 @@ public extension QLayoutTarget {
 
 #if os(macOS)
 
+    public extension NSView {
 
+        public var firstBaselineLayout: QLayoutItem< QLayoutAxisY > {
+            return QLayoutItem(self, .firstBaseline)
+        }
+
+        public var lastBaselineLayout: QLayoutItem< QLayoutAxisY > {
+            return QLayoutItem(self, .lastBaseline)
+        }
+
+    }
 
 #elseif os(iOS)
 

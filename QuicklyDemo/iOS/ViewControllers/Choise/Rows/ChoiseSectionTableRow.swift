@@ -14,6 +14,7 @@ class ChoiseSectionTableRow: QTwoLabelTableRow {
         case textField
         case image
         case dialog
+        case push
 
         public var name: String {
             get {
@@ -23,6 +24,7 @@ class ChoiseSectionTableRow: QTwoLabelTableRow {
                 case .textField: return "TextField"
                 case .image: return "Image"
                 case .dialog: return "Dialog"
+                case .push: return "Push"
                 }
             }
         }
@@ -34,6 +36,7 @@ class ChoiseSectionTableRow: QTwoLabelTableRow {
                 case .textField: return "Pressed to open the QTextField component demonstration screen"
                 case .image: return "Pressed to open the QImageView component demonstration screen"
                 case .dialog: return "Pressed to open the QDialogViewController component demonstration screen"
+                case .push: return "Pressed to open the QPushViewController component demonstration screen"
                 }
             }
         }

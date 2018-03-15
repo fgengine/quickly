@@ -11,6 +11,7 @@ protocol IChoiseViewControllerRouter: IQRouter {
     func presentTextFieldViewController()
     func presentImageViewController()
     func presentDialogViewController()
+    func presentPushViewController()
 
 }
 
@@ -50,6 +51,7 @@ extension ChoiseViewController: ChoiseTableControllerDelegate {
         case .textField: self.router.presentTextFieldViewController()
         case .image: self.router.presentImageViewController()
         case .dialog: self.router.presentDialogViewController()
+        case .push: self.router.presentPushViewController()
         }
     }
     

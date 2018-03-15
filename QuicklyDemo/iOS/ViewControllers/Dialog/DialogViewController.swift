@@ -29,7 +29,7 @@ class DialogViewController: QStaticViewController, IQRouted {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         let normalStyle: QButtonStyle = QButtonStyle()
@@ -48,7 +48,7 @@ class DialogViewController: QStaticViewController, IQRouted {
         self.showDialogButton.addTouchUpInside(self, action: #selector(self.pressedShowDialog(_:)))
     }
 
-    @objc func pressedShowDialog(_ sender: Any) {
+    @objc private func pressedShowDialog(_ sender: Any) {
         self.router.presentConfirmDialog()
     }
 

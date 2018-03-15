@@ -13,13 +13,13 @@ open class QMainViewController : QPlatformViewController, IQBaseViewController {
             guard let vc: ContentViewControllerType = self.contentViewController, self.isViewLoaded == true else { return }
             vc.willDismiss(animated: false)
             vc.didDismiss(animated: false)
-            self.disappearViewController(vc)
+            self._disappearViewController(vc)
         }
         didSet {
             guard let vc: ContentViewControllerType = self.contentViewController, self.isViewLoaded == true else { return }
             vc.willPresent(animated: false)
             vc.didPresent(animated: false)
-            self.appearViewController(contentViewController: vc)
+            self._appearViewController(contentViewController: vc)
         }
     }
     open var pushContainerViewController: PushContainerViewControllerType? {
@@ -27,13 +27,13 @@ open class QMainViewController : QPlatformViewController, IQBaseViewController {
             guard let vc: PushContainerViewControllerType = self.pushContainerViewController, self.isViewLoaded == true else { return }
             vc.willDismiss(animated: false)
             vc.didDismiss(animated: false)
-            self.disappearViewController(vc)
+            self._disappearViewController(vc)
         }
         didSet {
             guard let vc: PushContainerViewControllerType = self.pushContainerViewController, self.isViewLoaded == true else { return }
             vc.willPresent(animated: false)
             vc.didPresent(animated: false)
-            self.appearViewController(pushContainerViewController: vc)
+            self._appearViewController(pushContainerViewController: vc)
         }
     }
     open var dialogContainerViewController: DialogContainerViewControllerType? {
@@ -41,13 +41,13 @@ open class QMainViewController : QPlatformViewController, IQBaseViewController {
             guard let vc: DialogContainerViewControllerType = self.dialogContainerViewController, self.isViewLoaded == true else { return }
             vc.willDismiss(animated: false)
             vc.didDismiss(animated: false)
-            self.disappearViewController(vc)
+            self._disappearViewController(vc)
         }
         didSet {
             guard let vc: DialogContainerViewControllerType = self.dialogContainerViewController, self.isViewLoaded == true else { return }
             vc.willPresent(animated: false)
             vc.didPresent(animated: false)
-            self.appearViewController(dialogContainerViewController: vc)
+            self._appearViewController(dialogContainerViewController: vc)
         }
     }
 
@@ -79,30 +79,31 @@ open class QMainViewController : QPlatformViewController, IQBaseViewController {
         self.view = QTransparentView()
 
         if let vc: ContentViewControllerType = self.contentViewController {
-            self.appearViewController(contentViewController: vc)
+            self._appearViewController(contentViewController: vc)
         }
         if let vc: PushContainerViewControllerType = self.pushContainerViewController {
-            self.appearViewController(pushContainerViewController: vc)
+            self._appearViewController(pushContainerViewController: vc)
         }
         if let vc: DialogContainerViewControllerType = self.dialogContainerViewController {
-            self.appearViewController(dialogContainerViewController: vc)
+            self._appearViewController(dialogContainerViewController: vc)
         }
     }
+
+    #if os(macOS)
+
+    open override func viewDidLayout() {
+        super.viewDidLayout()
+        self._layoutViewControllers(self.view.bounds)
+    }
+
+    #elseif os(iOS)
 
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
-        let bounds: CGRect = self.view.bounds
-        if let vc: ContentViewControllerType = self.contentViewController {
-            vc.view.frame = bounds
-        }
-        if let vc: PushContainerViewControllerType = self.pushContainerViewController {
-            vc.view.frame = bounds
-        }
-        if let vc: DialogContainerViewControllerType = self.dialogContainerViewController {
-            vc.view.frame = bounds
-        }
+        self._layoutViewControllers(self.view.bounds)
     }
+
+    #endif
 
     open func willPresent(animated: Bool) {
         #if DEBUG
@@ -164,13 +165,29 @@ open class QMainViewController : QPlatformViewController, IQBaseViewController {
         }
     }
 
-    private func appearViewController(contentViewController: ContentViewControllerType) {
+    private func _appearViewController(contentViewController: ContentViewControllerType) {
         self.addChildViewController(contentViewController)
         contentViewController.view.frame = self.view.bounds
-        if let vc: PushContainerViewControllerType = self.pushContainerViewController {
-            self.view.insertSubview(contentViewController.view, belowSubview: vc.view)
-        } else if let vc: DialogContainerViewControllerType = self.dialogContainerViewController {
-            self.view.insertSubview(contentViewController.view, belowSubview: vc.view)
+        if let vc: DialogContainerViewControllerType = self.dialogContainerViewController {
+            if vc.view.superview == self.view {
+                #if os(macOS)
+                    self.view.addSubview(contentViewController.view, positioned: .below, relativeTo: vc.view)
+                #elseif os(iOS)
+                    self.view.insertSubview(contentViewController.view, belowSubview: vc.view)
+                #endif
+            } else {
+                self.view.addSubview(contentViewController.view)
+            }
+        } else if let vc: PushContainerViewControllerType = self.pushContainerViewController {
+            if vc.view.superview == self.view {
+                #if os(macOS)
+                    self.view.addSubview(contentViewController.view, positioned: .below, relativeTo: vc.view)
+                #elseif os(iOS)
+                    self.view.insertSubview(contentViewController.view, belowSubview: vc.view)
+                #endif
+            } else {
+                self.view.addSubview(contentViewController.view)
+            }
         } else {
             self.view.addSubview(contentViewController.view)
         }
@@ -179,13 +196,29 @@ open class QMainViewController : QPlatformViewController, IQBaseViewController {
         #endif
     }
 
-    private func appearViewController(pushContainerViewController: PushContainerViewControllerType) {
+    private func _appearViewController(pushContainerViewController: PushContainerViewControllerType) {
         self.addChildViewController(pushContainerViewController)
         pushContainerViewController.view.frame = self.view.bounds
         if let vc: DialogContainerViewControllerType = self.dialogContainerViewController {
-            self.view.insertSubview(pushContainerViewController.view, aboveSubview: vc.view)
+            if vc.view.superview == self.view {
+                #if os(macOS)
+                    self.view.addSubview(pushContainerViewController.view, positioned: .above, relativeTo: vc.view)
+                #elseif os(iOS)
+                    self.view.insertSubview(pushContainerViewController.view, aboveSubview: vc.view)
+                #endif
+            } else {
+                self.view.addSubview(pushContainerViewController.view)
+            }
         } else if let vc: ContentViewControllerType = self.contentViewController {
-            self.view.insertSubview(pushContainerViewController.view, aboveSubview: vc.view)
+            if vc.view.superview == self.view {
+                #if os(macOS)
+                    self.view.addSubview(pushContainerViewController.view, positioned: .above, relativeTo: vc.view)
+                #elseif os(iOS)
+                    self.view.insertSubview(pushContainerViewController.view, aboveSubview: vc.view)
+                #endif
+            } else {
+                self.view.addSubview(pushContainerViewController.view)
+            }
         } else {
             self.view.addSubview(pushContainerViewController.view)
         }
@@ -194,13 +227,29 @@ open class QMainViewController : QPlatformViewController, IQBaseViewController {
         #endif
     }
 
-    private func appearViewController(dialogContainerViewController: DialogContainerViewControllerType) {
+    private func _appearViewController(dialogContainerViewController: DialogContainerViewControllerType) {
         self.addChildViewController(dialogContainerViewController)
         dialogContainerViewController.view.frame = self.view.bounds
         if let vc: PushContainerViewControllerType = self.pushContainerViewController {
-            self.view.insertSubview(dialogContainerViewController.view, belowSubview: vc.view)
+            if vc.view.superview == self.view {
+                #if os(macOS)
+                    self.view.addSubview(dialogContainerViewController.view, positioned: .below, relativeTo: vc.view)
+                #elseif os(iOS)
+                    self.view.insertSubview(dialogContainerViewController.view, belowSubview: vc.view)
+                #endif
+            } else {
+                self.view.addSubview(dialogContainerViewController.view)
+            }
         } else if let vc: ContentViewControllerType = self.contentViewController {
-            self.view.insertSubview(dialogContainerViewController.view, aboveSubview: vc.view)
+            if vc.view.superview == self.view {
+                #if os(macOS)
+                    self.view.addSubview(dialogContainerViewController.view, positioned: .above, relativeTo: vc.view)
+                #elseif os(iOS)
+                    self.view.insertSubview(dialogContainerViewController.view, belowSubview: vc.view)
+                #endif
+            } else {
+                self.view.addSubview(dialogContainerViewController.view)
+            }
         } else {
             self.view.addSubview(dialogContainerViewController.view)
         }
@@ -209,12 +258,24 @@ open class QMainViewController : QPlatformViewController, IQBaseViewController {
         #endif
     }
 
-    private func disappearViewController(_ viewController: QPlatformViewController) {
+    private func _disappearViewController(_ viewController: QPlatformViewController) {
         #if os(iOS)
             viewController.willMove(toParentViewController: nil)
         #endif
         viewController.view.removeFromSuperview()
         viewController.removeFromParentViewController()
+    }
+
+    private func _layoutViewControllers(_ bounds: CGRect) {
+        if let vc: ContentViewControllerType = self.contentViewController {
+            vc.view.frame = bounds
+        }
+        if let vc: PushContainerViewControllerType = self.pushContainerViewController {
+            vc.view.frame = bounds
+        }
+        if let vc: DialogContainerViewControllerType = self.dialogContainerViewController {
+            vc.view.frame = bounds
+        }
     }
 
 }

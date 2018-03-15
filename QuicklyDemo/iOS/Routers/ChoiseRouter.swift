@@ -43,6 +43,11 @@ extension ChoiseRouter: IChoiseViewControllerRouter {
         self.navigationController.pushViewController(vc, animated: true)
     }
 
+    public func presentPushViewController() {
+        let vc: PushViewController = PushViewController(router: self, container: self.container)
+        self.navigationController.pushViewController(vc, animated: true)
+    }
+
 }
 
 extension ChoiseRouter: ILabelViewControllerRouter {
@@ -97,6 +102,31 @@ extension ChoiseRouter: IConfirmDialogViewControllerRouter {
     public func dismiss(viewController: ConfirmDialogViewController) {
         if let router: AppRouter = self.router {
             router.dismissDialog(viewController)
+        }
+    }
+
+}
+
+extension ChoiseRouter: IPushViewControllerRouter {
+
+    public func presentConfirmPush() {
+        if let router: AppRouter = self.router {
+            let vc: ConfirmPushViewController = ConfirmPushViewController(router: self, container: self.container)
+            router.presentPush(vc, displayTime: 7)
+        }
+    }
+
+    public func dismiss(viewController: PushViewController) {
+        self.navigationController.removeViewController(viewController, animated: true)
+    }
+
+}
+
+extension ChoiseRouter: IConfirmPushViewControllerRouter {
+
+    public func dismiss(viewController: ConfirmPushViewController) {
+        if let router: AppRouter = self.router {
+            router.dismissPush(viewController)
         }
     }
 

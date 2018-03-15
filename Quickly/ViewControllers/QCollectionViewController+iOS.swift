@@ -209,7 +209,7 @@
             public func collectionView(
                 _ collectionView: UICollectionView,
                 numberOfItemsInSection index: Int
-                ) -> Int {
+            ) -> Int {
                 if let collectionController: IQCollectionController = self.collectionController {
                     return collectionController.collectionView(collectionView, numberOfItemsInSection: index)
                 }
@@ -220,7 +220,7 @@
             public func collectionView(
                 _ collectionView: UICollectionView,
                 cellForItemAt indexPath: IndexPath
-                ) -> UICollectionViewCell {
+            ) -> UICollectionViewCell {
                 if let collectionController: IQCollectionController = self.collectionController {
                     return collectionController.collectionView(collectionView, cellForItemAt: indexPath)
                 }

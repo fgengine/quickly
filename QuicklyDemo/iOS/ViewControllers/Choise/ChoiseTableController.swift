@@ -27,7 +27,8 @@ class ChoiseTableController: QTableController {
                 ChoiseSectionTableRow(mode: .button),
                 ChoiseSectionTableRow(mode: .textField),
                 ChoiseSectionTableRow(mode: .image),
-                ChoiseSectionTableRow(mode: .dialog)
+                ChoiseSectionTableRow(mode: .dialog),
+                ChoiseSectionTableRow(mode: .push)
             ])
         ]
     }

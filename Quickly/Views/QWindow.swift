@@ -8,15 +8,17 @@ open class QWindow : QPlatformWindow, IQView {
 
         open override var contentViewController: NSViewController? {
             willSet {
-                guard let contentViewController: UIViewController = super.contentViewController else { return }
+                guard let contentViewController: NSViewController = super.contentViewController else { return }
                 if let vc: IQBaseViewController = contentViewController as? IQBaseViewController {
                     vc.willDismiss(animated: false)
                     vc.didDismiss(animated: false)
                 }
             }
             didSet {
-                guard let contentViewController: UIViewController = super.contentViewController else { return }
-                contentViewController.loadViewIfNeeded()
+                guard let contentViewController: NSViewController = super.contentViewController else { return }
+                if contentViewController.isViewLoaded == false {
+                    contentViewController.loadView()
+                }
                 if let vc: IQBaseViewController = contentViewController as? IQBaseViewController {
                     vc.willPresent(animated: false)
                     vc.didPresent(animated: false)
