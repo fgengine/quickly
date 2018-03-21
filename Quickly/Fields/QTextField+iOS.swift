@@ -11,14 +11,14 @@
         public typealias Closure = (_ textField: QTextField) -> Void
 
         @IBInspectable public weak var delegate: UITextFieldDelegate? {
-            set(value) { self.textField.delegate = value }
-            get { return self.textField.delegate }
+            set(value) { self.field.delegate = value }
+            get { return self.field.delegate }
         }
         public var requireValidator: Bool = true
         public var validator: IQInputValidator? {
-            willSet { self.textField.delegate = nil }
+            willSet { self.field.delegate = nil }
             didSet {
-                self.textField.delegate = self.proxy
+                self.field.delegate = self.proxy
                 if let validator: IQInputValidator = self.validator {
                     self.isValid = validator.validate(self.unformatText)
                 } else {
@@ -30,32 +30,32 @@
         public var formatter: IQStringFormatter? {
             willSet {
                 if let formatter: IQStringFormatter = self.formatter {
-                    if let text: String = self.textField.text {
+                    if let text: String = self.field.text {
                         var caret: Int
-                        if let selected: UITextRange = self.textField.selectedTextRange {
-                            caret = self.textField.offset(from: self.textField.beginningOfDocument, to: selected.end)
+                        if let selected: UITextRange = self.field.selectedTextRange {
+                            caret = self.field.offset(from: self.field.beginningOfDocument, to: selected.end)
                         } else {
                             caret = text.count
                         }
-                        self.textField.text = formatter.unformat(text, caret: &caret)
-                        if let position: UITextPosition = self.textField.position(from: self.textField.beginningOfDocument, offset: caret) {
-                            self.textField.selectedTextRange = self.textField.textRange(from: position, to: position)
+                        self.field.text = formatter.unformat(text, caret: &caret)
+                        if let position: UITextPosition = self.field.position(from: self.field.beginningOfDocument, offset: caret) {
+                            self.field.selectedTextRange = self.field.textRange(from: position, to: position)
                         }
                     }
                 }
             }
             didSet {
                 if let formatter: IQStringFormatter = self.formatter {
-                    if let text: String = self.textField.text {
+                    if let text: String = self.field.text {
                         var caret: Int
-                        if let selected: UITextRange = self.textField.selectedTextRange {
-                            caret = self.textField.offset(from: self.textField.beginningOfDocument, to: selected.end)
+                        if let selected: UITextRange = self.field.selectedTextRange {
+                            caret = self.field.offset(from: self.field.beginningOfDocument, to: selected.end)
                         } else {
                             caret = text.count
                         }
-                        self.textField.text = formatter.format(text, caret: &caret)
-                        if let position: UITextPosition = self.textField.position(from: self.textField.beginningOfDocument, offset: caret) {
-                            self.textField.selectedTextRange = self.textField.textRange(from: position, to: position)
+                        self.field.text = formatter.format(text, caret: &caret)
+                        if let position: UITextPosition = self.field.position(from: self.field.beginningOfDocument, offset: caret) {
+                            self.field.selectedTextRange = self.field.textRange(from: position, to: position)
                         }
                     }
                 }
@@ -63,37 +63,37 @@
         }
 
         public var textInsets: UIEdgeInsets {
-            set(value) { self.textField.insets = value }
-            get { return self.textField.insets }
+            set(value) { self.field.insets = value }
+            get { return self.field.insets }
         }
         public var textAlignment: NSTextAlignment {
-            set(value) { self.textField.textAlignment = value }
-            get { return self.textField.textAlignment }
+            set(value) { self.field.textAlignment = value }
+            get { return self.field.textAlignment }
         }
         public var textStyle: QTextStyle? {
             didSet {
                 var attributes: [NSAttributedStringKey: Any] = [:]
                 if let textStyle: QTextStyle = self.textStyle {
                     attributes = textStyle.attributes
-                    self.textField.font = attributes[.font] as? UIFont
-                    self.textField.textColor = attributes[.foregroundColor] as? UIColor
+                    self.field.font = attributes[.font] as? UIFont
+                    self.field.textColor = attributes[.foregroundColor] as? UIColor
                 } else {
-                    if let font: UIFont = self.textField.font {
+                    if let font: UIFont = self.field.font {
                         attributes[.font] = font
                     }
-                    if let textColor: UIColor = self.textField.textColor {
+                    if let textColor: UIColor = self.field.textColor {
                         attributes[.foregroundColor] = textColor
                     }
                 }
-                self.textField.defaultTextAttributes = Dictionary(uniqueKeysWithValues:
+                self.field.defaultTextAttributes = Dictionary(uniqueKeysWithValues:
                     attributes.lazy.map { ($0.key.rawValue, $0.value) }
                 )
             }
         }
         public var text: String {
-            set(value) { self.textField.text = value }
+            set(value) { self.field.text = value }
             get {
-                if let text: String = self.textField.text {
+                if let text: String = self.field.text {
                     return text
                 }
                 return ""
@@ -103,22 +103,22 @@
             set(value) {
                 if let formatter: IQStringFormatter = self.formatter {
                     var caret: Int
-                    if let selected: UITextRange = self.textField.selectedTextRange {
-                        caret = self.textField.offset(from: self.textField.beginningOfDocument, to: selected.end)
+                    if let selected: UITextRange = self.field.selectedTextRange {
+                        caret = self.field.offset(from: self.field.beginningOfDocument, to: selected.end)
                     } else {
                         caret = text.count
                     }
-                    self.textField.text = formatter.format(value, caret: &caret)
-                    if let position: UITextPosition = self.textField.position(from: self.textField.beginningOfDocument, offset: caret) {
-                        self.textField.selectedTextRange = self.textField.textRange(from: position, to: position)
+                    self.field.text = formatter.format(value, caret: &caret)
+                    if let position: UITextPosition = self.field.position(from: self.field.beginningOfDocument, offset: caret) {
+                        self.field.selectedTextRange = self.field.textRange(from: position, to: position)
                     }
                 } else {
-                    self.textField.text = value
+                    self.field.text = value
                 }
             }
             get {
                 var result: String
-                if let text: String = self.textField.text {
+                if let text: String = self.field.text {
                     if let formatter: IQStringFormatter = self.formatter {
                         result = formatter.unformat(text)
                     } else {
@@ -133,13 +133,13 @@
         public var placeholder: IQText? {
             set(value) {
                 if let text: IQText = value {
-                    self.textField.attributedPlaceholder = text.attributed
+                    self.field.attributedPlaceholder = text.attributed
                 } else {
-                    self.textField.attributedPlaceholder = nil
+                    self.field.attributedPlaceholder = nil
                 }
             }
             get {
-                if let attributed: NSAttributedString = self.textField.attributedPlaceholder {
+                if let attributed: NSAttributedString = self.field.attributedPlaceholder {
                     return QText(attributed)
                 }
                 return nil
@@ -148,18 +148,18 @@
         public var typingStyle: QTextStyle? {
             didSet {
                 if let typingStyle: QTextStyle = self.typingStyle {
-                    self.textField.allowsEditingTextAttributes = true
-                    self.textField.typingAttributes = Dictionary(uniqueKeysWithValues:
+                    self.field.allowsEditingTextAttributes = true
+                    self.field.typingAttributes = Dictionary(uniqueKeysWithValues:
                         typingStyle.attributes.lazy.map { ($0.key.rawValue, $0.value) }
                     )
                 } else {
-                    self.textField.allowsEditingTextAttributes = false
-                    self.textField.typingAttributes = nil
+                    self.field.allowsEditingTextAttributes = false
+                    self.field.typingAttributes = nil
                 }
             }
         }
         public var isEditing: Bool {
-            get { return self.textField.isEditing }
+            get { return self.field.isEditing }
         }
 
         public var onShouldBeginEditing: ShouldClosure?
@@ -173,11 +173,11 @@
         public var onPressedReturn: Closure?
 
         public private(set) var proxy: ProxyDelegate!
-        public private(set) var textField: Field!
+        public private(set) var field: Field!
 
         open override var intrinsicContentSize: CGSize {
             get {
-                return self.textField.intrinsicContentSize
+                return self.field.intrinsicContentSize
             }
         }
 
@@ -188,18 +188,18 @@
 
             self.proxy = ProxyDelegate(field: self)
 
-            self.textField = Field(frame: self.bounds)
-            self.textField.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
-            self.textField.delegate = self.proxy
-            self.addSubview(self.textField)
+            self.field = Field(frame: self.bounds)
+            self.field.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
+            self.field.delegate = self.proxy
+            self.addSubview(self.field)
         }
 
         open override func sizeThatFits(_ size: CGSize) -> CGSize {
-            return self.textField.sizeThatFits(size)
+            return self.field.sizeThatFits(size)
         }
 
         open override func sizeToFit() {
-            return self.textField.sizeToFit()
+            return self.field.sizeToFit()
         }
 
         public class ProxyDelegate: NSObject, UITextFieldDelegate {
@@ -416,49 +416,49 @@
     extension QTextField: UITextInputTraits {
 
         public var autocapitalizationType: UITextAutocapitalizationType {
-            set(value) { self.textField.autocapitalizationType = value }
-            get { return self.textField.autocapitalizationType }
+            set(value) { self.field.autocapitalizationType = value }
+            get { return self.field.autocapitalizationType }
         }
 
         public var autocorrectionType: UITextAutocorrectionType {
-            set(value) { self.textField.autocorrectionType = value }
-            get { return self.textField.autocorrectionType }
+            set(value) { self.field.autocorrectionType = value }
+            get { return self.field.autocorrectionType }
         }
 
         public var spellCheckingType: UITextSpellCheckingType {
-            set(value) { self.textField.spellCheckingType = value }
-            get { return self.textField.spellCheckingType }
+            set(value) { self.field.spellCheckingType = value }
+            get { return self.field.spellCheckingType }
         }
 
         public var keyboardType: UIKeyboardType {
-            set(value) { self.textField.keyboardType = value }
-            get { return self.textField.keyboardType }
+            set(value) { self.field.keyboardType = value }
+            get { return self.field.keyboardType }
         }
 
         public var keyboardAppearance: UIKeyboardAppearance {
-            set(value) { self.textField.keyboardAppearance = value }
-            get { return self.textField.keyboardAppearance }
+            set(value) { self.field.keyboardAppearance = value }
+            get { return self.field.keyboardAppearance }
         }
 
         public var returnKeyType: UIReturnKeyType {
-            set(value) { self.textField.returnKeyType = value }
-            get { return self.textField.returnKeyType }
+            set(value) { self.field.returnKeyType = value }
+            get { return self.field.returnKeyType }
         }
 
         public var enablesReturnKeyAutomatically: Bool {
-            set(value) { self.textField.enablesReturnKeyAutomatically = value }
-            get { return self.textField.enablesReturnKeyAutomatically }
+            set(value) { self.field.enablesReturnKeyAutomatically = value }
+            get { return self.field.enablesReturnKeyAutomatically }
         }
 
         public var isSecureTextEntry: Bool {
-            set(value) { self.textField.isSecureTextEntry = value }
-            get { return self.textField.isSecureTextEntry }
+            set(value) { self.field.isSecureTextEntry = value }
+            get { return self.field.isSecureTextEntry }
         }
 
         @available(iOS 10.0, *)
         public var textContentType: UITextContentType! {
-            set(value) { self.textField.textContentType = value }
-            get { return self.textField.textContentType }
+            set(value) { self.field.textContentType = value }
+            get { return self.field.textContentType }
         }
 
     }

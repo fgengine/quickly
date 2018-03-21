@@ -16,11 +16,14 @@ class TextFieldViewController: QStaticViewController, IQRouted {
     public var router: ITextFieldViewControllerRouter
     public var container: AppContainer
 
+    private var keyboard: QKeyboard
+
     @IBOutlet private weak var textField: QTextField!
 
     public init(router: ITextFieldViewControllerRouter, container: AppContainer) {
         self.router = router
         self.container = container
+        self.keyboard = QKeyboard()
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -48,6 +51,46 @@ class TextFieldViewController: QStaticViewController, IQRouted {
             validator: try! QAmountStringValidator(maximumSimbol: 10, locale: Locale.current, maximumDecimalSimbol: 2)
         )
         self.textField.formatter = QAmountStringFormatter(locale: Locale.current)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        self.keyboard.addObserver(self)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        self.textField.field.becomeFirstResponder()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        self.view.endEditing(false)
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        self.keyboard.removeObserver(self)
+    }
+
+}
+
+extension TextFieldViewController : QKeyboardObserver {
+
+    func willShowKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
+    }
+
+    func didShowKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
+    }
+
+    func willHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
+    }
+
+    func didHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
     }
 
 }
