@@ -29,7 +29,7 @@
             let availableWidth: CGFloat = size.width - (item.edgeInsets.left + item.edgeInsets.right)
             var imageSize: CGSize = item.imageSize
             if item.imageCentering == false {
-                imageSize = imageSource.size(available: CGSize(
+                imageSize = imageSource.size(CGSize(
                     width: availableWidth, height: availableWidth
                 ))
             }

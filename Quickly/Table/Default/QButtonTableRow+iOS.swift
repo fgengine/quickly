@@ -6,9 +6,9 @@
 
     open class QButtonTableRow: QBackgroundColorTableRow {
 
-        public var height: CGFloat = 44
         public var edgeInsets: UIEdgeInsets = UIEdgeInsets.zero
 
+        public var height: CGFloat = 44
         public var contentHorizontalAlignment: UIControlContentHorizontalAlignment = .center
         public var contentVerticalAlignment: UIControlContentVerticalAlignment = .center
         public var contentInsets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
@@ -23,7 +23,6 @@
         public var selectedDisabledStyle: QButtonStyle?
         public var spinnerPosition: QButtonSpinnerPosition = .fill
         public var spinnerView: QSpinnerView?
-
         public var isSelected: Bool = false
         public var isEnabled: Bool = true
         public var isSpinnerAnimating: Bool = false

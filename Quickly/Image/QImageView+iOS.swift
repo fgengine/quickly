@@ -59,7 +59,7 @@
         open override var intrinsicContentSize: CGSize {
             get {
                 if let source: QImageSource = self.source {
-                    return source.size(available: CGSize.zero)
+                    return source.size(CGSize.zero)
                 }
                 return CGSize.zero
             }
@@ -82,7 +82,7 @@
                 var imageRect: CGRect
                 let bounds: CGRect = self.bounds
                 if let source: QImageSource = self.source {
-                    imageRect = source.rect(bounds: bounds, image: image)
+                    imageRect = source.rect(bounds, image: image)
                 } else {
                     imageRect = self.bounds
                 }
@@ -112,7 +112,7 @@
 
         open override func sizeThatFits(_ size: CGSize) -> CGSize {
             if let source: QImageSource = self.source {
-                return source.size(available: size)
+                return source.size(size)
             }
             return CGSize.zero
         }

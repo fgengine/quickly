@@ -8,8 +8,8 @@
         Type: IQTableData
     >: UITableViewHeaderFooterView, IQView, IQTypedTableDecor {
 
-        public weak var tableDelegate: IQTableDecorDelegate? = nil
-        public var data: Type? = nil
+        open weak var tableDelegate: IQTableDecorDelegate? = nil
+        open var data: Type? = nil
 
         public override init(reuseIdentifier: String?) {
             super.init(reuseIdentifier: reuseIdentifier)

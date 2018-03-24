@@ -4,20 +4,21 @@
 
 #if os(iOS)
 
-    open class QImageTableCell< RowType: QImageTableRow >: QBackgroundColorTableCell< RowType > {
+    public class QImageTableCell< RowType: QImageTableRow >: QBackgroundColorTableCell< RowType > {
 
-        internal var pictureView: QImageView!
-        internal var selfConstraints: [NSLayoutConstraint] = [] {
+        private var _image: QImageView!
+        
+        private var selfConstraints: [NSLayoutConstraint] = [] {
             willSet { self.contentView.removeConstraints(self.selfConstraints) }
             didSet { self.contentView.addConstraints(self.selfConstraints) }
         }
 
         open override class func height(row: RowType, width: CGFloat) -> CGFloat {
-            guard let source: QImageSource = row.source else {
-                return 0
-            }
+            guard
+                let imageSource: QImageSource = row.imageSource
+                else { return 0 }
             let availableWidth: CGFloat = width - (row.edgeInsets.left + row.edgeInsets.right)
-            let imageSize: CGSize = source.size(available: CGSize(
+            let imageSize: CGSize = imageSource.size(CGSize(
                 width: availableWidth, height: availableWidth
             ))
             return row.edgeInsets.top + imageSize.height + row.edgeInsets.bottom
@@ -26,9 +27,9 @@
         open override func setup() {
             super.setup()
 
-            self.pictureView = QImageView(frame: self.contentView.bounds)
-            self.pictureView.translatesAutoresizingMaskIntoConstraints = false
-            self.contentView.addSubview(self.pictureView)
+            self._image = QImageView(frame: self.contentView.bounds)
+            self._image.translatesAutoresizingMaskIntoConstraints = false
+            self.contentView.addSubview(self._image)
         }
 
         open override func set(row: RowType) {
@@ -43,14 +44,15 @@
 
         private func apply(row: QImageTableRow) {
             var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self.pictureView.topLayout == self.contentView.topLayout + row.edgeInsets.top)
-            selfConstraints.append(self.pictureView.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
-            selfConstraints.append(self.pictureView.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
-            selfConstraints.append(self.pictureView.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
+            selfConstraints.append(self._image.topLayout == self.contentView.topLayout + row.edgeInsets.top)
+            selfConstraints.append(self._image.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
+            selfConstraints.append(self._image.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
+            selfConstraints.append(self._image.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
             self.selfConstraints = selfConstraints
 
-            self.pictureView.roundCorners = row.roundCorners
-            self.pictureView.source = row.source
+            self._image.layer.cornerRadius = row.imageCornerRadius
+            self._image.roundCorners = row.imageRoundCorners
+            self._image.source = row.imageSource
         }
 
     }

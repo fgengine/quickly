@@ -4,10 +4,11 @@
 
 #if os(iOS)
 
-    open class QSeparatorTableCell< RowType: QSeparatorTableRow >: QBackgroundColorTableCell< RowType > {
+    public class QSeparatorTableCell< RowType: QSeparatorTableRow >: QBackgroundColorTableCell< RowType > {
 
-        internal var separator: QView!
-        internal var selfConstraints: [NSLayoutConstraint] = [] {
+        private var _separator: QView!
+        
+        private var selfConstraints: [NSLayoutConstraint] = [] {
             willSet { self.contentView.removeConstraints(self.selfConstraints) }
             didSet { self.contentView.addConstraints(self.selfConstraints) }
         }
@@ -19,9 +20,9 @@
         open override func setup() {
             super.setup()
 
-            self.separator = QView(frame: self.contentView.bounds)
-            self.separator.translatesAutoresizingMaskIntoConstraints = false
-            self.contentView.addSubview(self.separator)
+            self._separator = QView(frame: self.contentView.bounds)
+            self._separator.translatesAutoresizingMaskIntoConstraints = false
+            self.contentView.addSubview(self._separator)
         }
 
         open override func set(row: RowType) {
@@ -36,13 +37,13 @@
 
         private func apply(row: QSeparatorTableRow) {
             var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self.separator.topLayout == self.contentView.topLayout + row.edgeInsets.top)
-            selfConstraints.append(self.separator.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
-            selfConstraints.append(self.separator.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
-            selfConstraints.append(self.separator.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
+            selfConstraints.append(self._separator.topLayout == self.contentView.topLayout + row.edgeInsets.top)
+            selfConstraints.append(self._separator.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
+            selfConstraints.append(self._separator.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
+            selfConstraints.append(self._separator.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
             self.selfConstraints = selfConstraints
 
-            self.separator.backgroundColor = row.color
+            self._separator.backgroundColor = row.color
         }
 
     }

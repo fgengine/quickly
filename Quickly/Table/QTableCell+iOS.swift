@@ -8,8 +8,15 @@
         Type: IQTableRow
     >: UITableViewCell, IQView, IQTypedTableCell {
 
+        open weak var tableDelegate: IQTableCellDelegate? = nil
+        open var row: Type? = nil
+
         open class func currentNibName() -> String {
             return String(describing: self.classForCoder())
+        }
+
+        open class func height(row: Type, width: CGFloat) -> CGFloat {
+            return UITableViewAutomaticDimension
         }
 
         public override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -29,13 +36,6 @@
         override open func awakeFromNib() {
             super.awakeFromNib()
             self.configure()
-        }
-
-        public weak var tableDelegate: IQTableCellDelegate? = nil
-        public var row: Type? = nil
-
-        open class func height(row: Type, width: CGFloat) -> CGFloat {
-            return UITableViewAutomaticDimension
         }
 
         open func configure() {

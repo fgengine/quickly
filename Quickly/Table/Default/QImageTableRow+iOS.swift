@@ -8,8 +8,9 @@
 
         public var edgeInsets: UIEdgeInsets = UIEdgeInsets.zero
 
-        public var source: QImageSource?
-        public var roundCorners: Bool = false
+        public var imageSource: QImageSource?
+        public var imageCornerRadius: CGFloat = 0
+        public var imageRoundCorners: Bool = false
 
     }
 

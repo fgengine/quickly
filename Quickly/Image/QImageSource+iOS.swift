@@ -12,7 +12,7 @@
         case originOrAspectFit
         case originOrAspectFill
 
-        public func rect(bounds: CGRect, size: CGSize) -> CGRect? {
+        public func rect(_ bounds: CGRect, size: CGSize) -> CGRect? {
             guard bounds.width > CGFloat.leastNonzeroMagnitude && bounds.height > CGFloat.leastNonzeroMagnitude else {
                 return nil
             }
@@ -33,9 +33,9 @@
             }
         }
 
-        public func size(available: CGSize, size: CGSize) -> CGSize? {
+        public func size(_ available: CGSize, size: CGSize) -> CGSize? {
             let bounds: CGRect = CGRect(x: 0, y: 0, width: available.width, height: available.height)
-            guard let rect: CGRect = self.rect(bounds: bounds, size: size) else {
+            guard let rect: CGRect = self.rect(bounds, size: size) else {
                 return nil
             }
             return rect.integral.size
@@ -102,27 +102,27 @@
             self.tintColor = tintColor
         }
 
-        public func rect(bounds: CGRect, image: UIImage? = nil) -> CGRect {
+        public func rect(_ bounds: CGRect, image: UIImage? = nil) -> CGRect {
             var size: CGSize
             if let image: UIImage = image {
                 size = image.size
             } else {
                 size = self.size
             }
-            guard let scaleRect: CGRect = self.scale.rect(bounds: bounds, size: size) else {
+            guard let scaleRect: CGRect = self.scale.rect(bounds, size: size) else {
                 return bounds
             }
             return scaleRect
         }
 
-        public func size(available: CGSize, image: UIImage? = nil) -> CGSize {
+        public func size(_ available: CGSize, image: UIImage? = nil) -> CGSize {
             var size: CGSize
             if let image: UIImage = image {
                 size = image.size
             } else {
                 size = self.size
             }
-            guard let scaleSize: CGSize = self.scale.size(available: available, size: size) else {
+            guard let scaleSize: CGSize = self.scale.size(available, size: size) else {
                 return self.size
             }
             return scaleSize

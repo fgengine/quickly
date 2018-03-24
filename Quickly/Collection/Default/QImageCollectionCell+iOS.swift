@@ -22,7 +22,7 @@
                 return CGSize.zero
             }
             let availableWidth: CGFloat = size.width - (item.edgeInsets.left + item.edgeInsets.right)
-            let imageSize: CGSize = source.size(available: CGSize(
+            let imageSize: CGSize = source.size(CGSize(
                 width: availableWidth, height: availableWidth
             ))
             return CGSize(
