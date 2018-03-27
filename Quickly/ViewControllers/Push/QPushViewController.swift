@@ -7,8 +7,34 @@ open class QPushViewController : QPlatformViewController, IQPushViewController {
     public typealias ContainerViewControllerType = IQPushViewController.ContainerViewControllerType
     public typealias ContentViewControllerType = IQPushViewController.ContentViewControllerType
 
+    #if os(iOS)
+    open override var prefersStatusBarHidden: Bool {
+        get {
+            return self.contentViewController.prefersStatusBarHidden
+        }
+    }
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        get {
+            return self.contentViewController.preferredStatusBarStyle
+        }
+    }
+    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        get {
+            return self.contentViewController.preferredStatusBarUpdateAnimation
+        }
+    }
+    open override var shouldAutorotate: Bool {
+        get {
+            return self.contentViewController.shouldAutorotate
+        }
+    }
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        get {
+            return self.contentViewController.supportedInterfaceOrientations
+        }
+    }
+    #endif
     open weak var containerViewController: ContainerViewControllerType?
-
     open var contentViewController: ContentViewControllerType {
         willSet { self._disappearViewController() }
         didSet { self._appearViewController() }
@@ -100,6 +126,24 @@ open class QPushViewController : QPlatformViewController, IQPushViewController {
             print("\(NSStringFromClass(self.classForCoder)).didDismiss(animated: \(animated))")
         #endif
         self.contentViewController.didDismiss(animated: animated)
+    }
+
+    open func beginInteractiveDismiss() {
+        if let timer: QTimer = self.timer {
+            timer.pause()
+        }
+    }
+
+    open func cancelInteractiveDismiss() {
+        if let timer: QTimer = self.timer {
+            timer.resume()
+        }
+    }
+
+    open func funishInteractiveDismiss() {
+        if let timer: QTimer = self.timer {
+            timer.stop()
+        }
     }
 
     #if os(iOS)

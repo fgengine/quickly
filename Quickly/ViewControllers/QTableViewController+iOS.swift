@@ -75,20 +75,6 @@
         open func triggeredRefreshControl() {
         }
 
-        open func setNavigationBarHidden(_ hidden: Bool, animated: Bool) {
-            if let navigationController: UINavigationController = self.navigationController {
-                navigationController.setNavigationBarHidden(hidden, animated: animated)
-            }
-            self.navigationBarHidden = hidden
-        }
-
-        open func setToolbarHidden(_ hidden: Bool, animated: Bool) {
-            if let navigationController: UINavigationController = self.navigationController {
-                navigationController.setToolbarHidden(hidden, animated: animated)
-            }
-            self.toolbarHidden = hidden
-        }
-
         open override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
             self.isAppeared = true
@@ -125,6 +111,20 @@
             #if DEBUG
                 print("\(NSStringFromClass(self.classForCoder)).didDismiss(animated: \(animated))")
             #endif
+        }
+
+        open func setNavigationBarHidden(_ hidden: Bool, animated: Bool) {
+            if let navigationController: UINavigationController = self.navigationController {
+                navigationController.setNavigationBarHidden(hidden, animated: animated)
+            }
+            self.navigationBarHidden = hidden
+        }
+
+        open func setToolbarHidden(_ hidden: Bool, animated: Bool) {
+            if let navigationController: UINavigationController = self.navigationController {
+                navigationController.setToolbarHidden(hidden, animated: animated)
+            }
+            self.toolbarHidden = hidden
         }
 
         private class Proxy: NSObject, UITableViewDataSource, UITableViewDelegate {

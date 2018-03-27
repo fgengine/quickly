@@ -8,6 +8,60 @@ open class QMainViewController : QPlatformViewController, IQBaseViewController {
     public typealias PushContainerViewControllerType = QPlatformViewController & IQBaseViewController & IQPushContainerViewController
     public typealias DialogContainerViewControllerType = QPlatformViewController & IQBaseViewController & IQDialogContainerViewController
 
+    #if os(iOS)
+    open override var prefersStatusBarHidden: Bool {
+        get {
+            guard
+                let cvc: ContentViewControllerType = self.contentViewController
+                else { return super.prefersStatusBarHidden }
+            guard
+                let dvc: DialogContainerViewControllerType = self.dialogContainerViewController,
+                let cdvc: DialogContainerViewControllerType.ViewControllerType = dvc.currentViewController
+                else { return cvc.prefersStatusBarHidden }
+            return cdvc.prefersStatusBarHidden
+        }
+    }
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        get {
+            guard
+                let cvc: ContentViewControllerType = self.contentViewController
+                else { return super.preferredStatusBarStyle }
+            guard
+                let dvc: DialogContainerViewControllerType = self.dialogContainerViewController,
+                let cdvc: DialogContainerViewControllerType.ViewControllerType = dvc.currentViewController
+                else { return cvc.preferredStatusBarStyle }
+            return cdvc.preferredStatusBarStyle
+        }
+    }
+    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        get {
+            guard
+                let cvc: ContentViewControllerType = self.contentViewController
+                else { return super.preferredStatusBarUpdateAnimation }
+            guard
+                let dvc: DialogContainerViewControllerType = self.dialogContainerViewController,
+                let cdvc: DialogContainerViewControllerType.ViewControllerType = dvc.currentViewController
+                else { return cvc.preferredStatusBarUpdateAnimation }
+            return cdvc.preferredStatusBarUpdateAnimation
+        }
+    }
+    open override var shouldAutorotate: Bool {
+        get {
+            guard
+                let cvc: ContentViewControllerType = self.contentViewController
+                else { return super.shouldAutorotate }
+            return cvc.shouldAutorotate
+        }
+    }
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        get {
+            guard
+                let cvc: ContentViewControllerType = self.contentViewController
+                else { return super.supportedInterfaceOrientations }
+            return cvc.supportedInterfaceOrientations
+        }
+    }
+    #endif
     open var contentViewController: ContentViewControllerType? {
         willSet {
             guard let vc: ContentViewControllerType = self.contentViewController, self.isViewLoaded == true else { return }
@@ -16,6 +70,11 @@ open class QMainViewController : QPlatformViewController, IQBaseViewController {
             self._disappearViewController(vc)
         }
         didSet {
+            #if os(iOS)
+                defer {
+                    self.setNeedsStatusBarAppearanceUpdate()
+                }
+            #endif
             guard let vc: ContentViewControllerType = self.contentViewController, self.isViewLoaded == true else { return }
             vc.willPresent(animated: false)
             vc.didPresent(animated: false)
@@ -30,6 +89,11 @@ open class QMainViewController : QPlatformViewController, IQBaseViewController {
             self._disappearViewController(vc)
         }
         didSet {
+            #if os(iOS)
+                defer {
+                    self.setNeedsStatusBarAppearanceUpdate()
+                }
+            #endif
             guard let vc: PushContainerViewControllerType = self.pushContainerViewController, self.isViewLoaded == true else { return }
             vc.willPresent(animated: false)
             vc.didPresent(animated: false)
@@ -44,6 +108,11 @@ open class QMainViewController : QPlatformViewController, IQBaseViewController {
             self._disappearViewController(vc)
         }
         didSet {
+            #if os(iOS)
+                defer {
+                    self.setNeedsStatusBarAppearanceUpdate()
+                }
+            #endif
             guard let vc: DialogContainerViewControllerType = self.dialogContainerViewController, self.isViewLoaded == true else { return }
             vc.willPresent(animated: false)
             vc.didPresent(animated: false)

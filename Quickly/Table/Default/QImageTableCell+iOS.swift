@@ -8,6 +8,8 @@
 
         private var _image: QImageView!
         
+        private var currentEdgeInsets: UIEdgeInsets?
+        
         private var selfConstraints: [NSLayoutConstraint] = [] {
             willSet { self.contentView.removeConstraints(self.selfConstraints) }
             didSet { self.contentView.addConstraints(self.selfConstraints) }
@@ -43,12 +45,16 @@
         }
 
         private func apply(row: QImageTableRow) {
-            var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self._image.topLayout == self.contentView.topLayout + row.edgeInsets.top)
-            selfConstraints.append(self._image.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
-            selfConstraints.append(self._image.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
-            selfConstraints.append(self._image.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
-            self.selfConstraints = selfConstraints
+            if self.currentEdgeInsets != row.edgeInsets {
+                self.currentEdgeInsets = row.edgeInsets
+
+                var selfConstraints: [NSLayoutConstraint] = []
+                selfConstraints.append(self._image.topLayout == self.contentView.topLayout + row.edgeInsets.top)
+                selfConstraints.append(self._image.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
+                selfConstraints.append(self._image.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
+                selfConstraints.append(self._image.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
+                self.selfConstraints = selfConstraints
+            }
 
             self._image.layer.cornerRadius = row.imageCornerRadius
             self._image.roundCorners = row.imageRoundCorners

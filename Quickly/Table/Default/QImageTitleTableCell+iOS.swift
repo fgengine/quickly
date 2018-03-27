@@ -8,6 +8,9 @@
 
         private var _image: QImageView!
         private var _labelTitle: QLabel!
+
+        private var currentEdgeInsets: UIEdgeInsets?
+        private var currentImageWidth: CGFloat?
         
         private var selfConstraints: [NSLayoutConstraint] = [] {
             willSet { self.contentView.removeConstraints(self.selfConstraints) }
@@ -58,19 +61,26 @@
         }
 
         private func apply(row: QImageTitleTableRow) {
-            var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self._image.topLayout == self.contentView.topLayout + row.edgeInsets.top)
-            selfConstraints.append(self._image.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
-            selfConstraints.append(self._image.trailingLayout == self._labelTitle.leadingLayout - row.imageSpacing)
-            selfConstraints.append(self._image.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
-            selfConstraints.append(self._labelTitle.topLayout == self.contentView.topLayout + row.edgeInsets.top)
-            selfConstraints.append(self._labelTitle.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
-            selfConstraints.append(self._labelTitle.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
-            self.selfConstraints = selfConstraints
+            if self.currentEdgeInsets != row.edgeInsets {
+                self.currentEdgeInsets = row.edgeInsets
 
-            var imageConstraints: [NSLayoutConstraint] = []
-            imageConstraints.append(self._image.widthLayout == row.imageWidth)
-            self.selfConstraints = imageConstraints
+                var selfConstraints: [NSLayoutConstraint] = []
+                selfConstraints.append(self._image.topLayout == self.contentView.topLayout + row.edgeInsets.top)
+                selfConstraints.append(self._image.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
+                selfConstraints.append(self._image.trailingLayout == self._labelTitle.leadingLayout - row.imageSpacing)
+                selfConstraints.append(self._image.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
+                selfConstraints.append(self._labelTitle.topLayout == self.contentView.topLayout + row.edgeInsets.top)
+                selfConstraints.append(self._labelTitle.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
+                selfConstraints.append(self._labelTitle.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
+                self.selfConstraints = selfConstraints
+            }
+            if self.currentImageWidth != row.imageWidth {
+                self.currentImageWidth = row.imageWidth
+
+                var imageConstraints: [NSLayoutConstraint] = []
+                imageConstraints.append(self._image.widthLayout == row.imageWidth)
+                self.imageConstraints = imageConstraints
+            }
 
             self._image.layer.cornerRadius = row.imageCornerRadius
             self._image.roundCorners = row.imageRoundCorners

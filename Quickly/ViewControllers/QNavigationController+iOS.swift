@@ -12,6 +12,46 @@
             set(value) { self.proxy.delegate = value }
             get { return (self.proxy.delegate != nil) ? self.proxy.delegate : self.proxy }
         }
+        open override var prefersStatusBarHidden: Bool {
+            get {
+                if let viewController: UIViewController = self.topViewController {
+                    return viewController.prefersStatusBarHidden
+                }
+                return super.prefersStatusBarHidden
+            }
+        }
+        open override var preferredStatusBarStyle: UIStatusBarStyle {
+            get {
+                if let viewController: UIViewController = self.topViewController {
+                    return viewController.preferredStatusBarStyle
+                }
+                return super.preferredStatusBarStyle
+            }
+        }
+        open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+            get {
+                if let viewController: UIViewController = self.topViewController {
+                    return viewController.preferredStatusBarUpdateAnimation
+                }
+                return super.preferredStatusBarUpdateAnimation
+            }
+        }
+        open override var shouldAutorotate: Bool {
+            get {
+                if let viewController: UIViewController = self.topViewController {
+                    return viewController.shouldAutorotate
+                }
+                return super.shouldAutorotate
+            }
+        }
+        open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+            get {
+                if let viewController: UIViewController = self.topViewController {
+                    return viewController.supportedInterfaceOrientations
+                }
+                return super.supportedInterfaceOrientations
+            }
+        }
 
         public init() {
             super.init(nibName: nil, bundle: nil)
@@ -40,51 +80,6 @@
 
         public func setup() {
             super.delegate = self.proxy
-        }
-
-        open override var prefersStatusBarHidden: Bool {
-            get {
-                if let viewController: UIViewController = self.topViewController {
-                    return viewController.prefersStatusBarHidden
-                }
-                return super.prefersStatusBarHidden
-            }
-        }
-
-        open override var preferredStatusBarStyle: UIStatusBarStyle {
-            get {
-                if let viewController: UIViewController = self.topViewController {
-                    return viewController.preferredStatusBarStyle
-                }
-                return super.preferredStatusBarStyle
-            }
-        }
-
-        open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
-            get {
-                if let viewController: UIViewController = self.topViewController {
-                    return viewController.preferredStatusBarUpdateAnimation
-                }
-                return super.preferredStatusBarUpdateAnimation
-            }
-        }
-
-        open override var shouldAutorotate: Bool {
-            get {
-                if let viewController: UIViewController = self.topViewController {
-                    return viewController.shouldAutorotate
-                }
-                return super.shouldAutorotate
-            }
-        }
-
-        open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-            get {
-                if let viewController: UIViewController = self.topViewController {
-                    return viewController.supportedInterfaceOrientations
-                }
-                return super.supportedInterfaceOrientations
-            }
         }
 
         open func willPresent(animated: Bool) {

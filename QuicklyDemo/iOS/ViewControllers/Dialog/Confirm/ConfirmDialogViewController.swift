@@ -30,6 +30,12 @@ class ConfirmDialogViewController: QStaticViewController, IQDialogContentViewCon
         fatalError("init(coder:) has not been implemented")
     }
 
+    public override func setup() {
+        super.setup()
+
+        self.statusBarStyle = .lightContent
+    }
+
     public override func viewDidLoad() {
         super.viewDidLoad()
 

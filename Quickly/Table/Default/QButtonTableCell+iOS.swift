@@ -17,6 +17,8 @@
         }
 
         private var _button: QButton!
+        
+        private var currentEdgeInsets: UIEdgeInsets?
 
         private var selfConstraints: [NSLayoutConstraint] = [] {
             willSet { self.contentView.removeConstraints(self.selfConstraints) }
@@ -51,45 +53,47 @@
         }
 
         public func startSpinner() {
-            if let row: RowType = self.row {
-                row.isSpinnerAnimating = true
-                self._button.startSpinner()
-            }
+            guard let row: RowType = self.row else { return }
+            row.buttonIsSpinnerAnimating = true
+            self._button.startSpinner()
         }
 
         public func stopSpinner() {
-            if let row: RowType = self.row {
-                row.isSpinnerAnimating = false
-                self._button.stopSpinner()
-            }
+            guard let row: RowType = self.row else { return }
+            row.buttonIsSpinnerAnimating = false
+            self._button.stopSpinner()
         }
 
         private func apply(row: QButtonTableRow) {
-            var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self._button.topLayout == self.contentView.topLayout + row.edgeInsets.top)
-            selfConstraints.append(self._button.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
-            selfConstraints.append(self._button.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
-            selfConstraints.append(self._button.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
-            self.selfConstraints = selfConstraints
+            if self.currentEdgeInsets != row.edgeInsets {
+                self.currentEdgeInsets = row.edgeInsets
+                
+                var selfConstraints: [NSLayoutConstraint] = []
+                selfConstraints.append(self._button.topLayout == self.contentView.topLayout + row.edgeInsets.top)
+                selfConstraints.append(self._button.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
+                selfConstraints.append(self._button.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
+                selfConstraints.append(self._button.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
+                self.selfConstraints = selfConstraints
+            }
 
-            self._button.contentHorizontalAlignment = row.contentHorizontalAlignment
-            self._button.contentVerticalAlignment = row.contentVerticalAlignment
-            self._button.contentInsets = row.contentInsets
-            self._button.imagePosition = row.imagePosition
-            self._button.imageInsets = row.imageInsets
-            self._button.textInsets = row.textInsets
-            self._button.normalStyle = row.normalStyle
-            self._button.highlightedStyle = row.highlightedStyle
-            self._button.disabledStyle = row.disabledStyle
-            self._button.selectedStyle = row.selectedStyle
-            self._button.selectedHighlightedStyle = row.selectedHighlightedStyle
-            self._button.selectedDisabledStyle = row.selectedDisabledStyle
-            self._button.isSelected = row.isSelected
-            self._button.isEnabled = row.isEnabled
-            self._button.spinnerPosition = row.spinnerPosition
-            self._button.spinnerView = row.spinnerView
+            self._button.contentHorizontalAlignment = row.buttonContentHorizontalAlignment
+            self._button.contentVerticalAlignment = row.buttonContentVerticalAlignment
+            self._button.contentInsets = row.buttonContentInsets
+            self._button.imagePosition = row.buttonImagePosition
+            self._button.imageInsets = row.buttonImageInsets
+            self._button.textInsets = row.buttonTextInsets
+            self._button.normalStyle = row.buttonNormalStyle
+            self._button.highlightedStyle = row.buttonHighlightedStyle
+            self._button.disabledStyle = row.buttonDisabledStyle
+            self._button.selectedStyle = row.buttonSelectedStyle
+            self._button.selectedHighlightedStyle = row.buttonSelectedHighlightedStyle
+            self._button.selectedDisabledStyle = row.buttonSelectedDisabledStyle
+            self._button.isSelected = row.buttonIsSelected
+            self._button.isEnabled = row.buttonIsEnabled
+            self._button.spinnerPosition = row.buttonSpinnerPosition
+            self._button.spinnerView = row.buttonSpinnerView
 
-            if row.isSpinnerAnimating == true {
+            if row.buttonIsSpinnerAnimating == true {
                 self._button.startSpinner()
             } else {
                 self._button.stopSpinner()
@@ -99,12 +103,8 @@
 
         @objc
         private func pressedButton(_ sender: Any) {
-            guard let row: RowType = self.row else {
-                return
-            }
-            if let delegate: QButtonTableCellDelegate = self.buttonTableDelegate {
-                delegate.pressedButton(row as QButtonTableRow)
-            }
+            guard let delegate: QButtonTableCellDelegate = self.buttonTableDelegate, let row: RowType = self.row else { return }
+            delegate.pressedButton(row as QButtonTableRow)
         }
 
     }

@@ -7,8 +7,34 @@ open class QDialogViewController : QPlatformViewController, IQDialogViewControll
     public typealias ContainerViewControllerType = IQDialogViewController.ContainerViewControllerType
     public typealias ContentViewControllerType = IQDialogViewController.ContentViewControllerType
 
+    #if os(iOS)
+    open override var prefersStatusBarHidden: Bool {
+        get {
+            return self.contentViewController.prefersStatusBarHidden
+        }
+    }
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        get {
+            return self.contentViewController.preferredStatusBarStyle
+        }
+    }
+    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        get {
+            return self.contentViewController.preferredStatusBarUpdateAnimation
+        }
+    }
+    open override var shouldAutorotate: Bool {
+        get {
+            return self.contentViewController.shouldAutorotate
+        }
+    }
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        get {
+            return self.contentViewController.supportedInterfaceOrientations
+        }
+    }
+    #endif
     open weak var containerViewController: ContainerViewControllerType?
-
     open var contentViewController: ContentViewControllerType {
         willSet { self._disappearViewController() }
         didSet { self._appearViewController() }

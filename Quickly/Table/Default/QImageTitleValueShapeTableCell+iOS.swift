@@ -4,10 +4,11 @@
 
 #if os(iOS)
 
-    public class QImageTitleShapeTableCell< RowType: QImageTitleShapeTableRow >: QBackgroundColorTableCell< RowType > {
+    public class QImageTitleValueShapeTableCell< RowType: QImageTitleValueShapeTableRow >: QBackgroundColorTableCell< RowType > {
 
         private var _image: QImageView!
         private var _labelTitle: QLabel!
+        private var _labelValue: QLabel!
         private var _shape: QShapeView!
 
         private var currentEdgeInsets: UIEdgeInsets?
@@ -31,14 +32,16 @@
             guard
                 let imageSource: QImageSource = row.imageSource,
                 let titleText: IQText = row.titleText,
+                let valueText: IQText = row.valueText,
                 let shapeModel: IQShapeModel = row.shapeModel
                 else { return 0 }
             let availableWidth: CGFloat = width - (row.edgeInsets.left + row.edgeInsets.right)
             let imageSize: CGSize = imageSource.size(CGSize(
                 width: row.imageWidth, height: availableWidth
             ))
-            let titleTextSize: CGSize = titleText.size(width: availableWidth - (imageSize.width + row.imageSpacing + shapeModel.size.width + row.shapeSpacing))
-            return row.edgeInsets.top + max(imageSize.height, titleTextSize.height, shapeModel.size.height) + row.edgeInsets.bottom
+            let valueTextSize: CGSize = valueText.size(width: availableWidth - (imageSize.width + row.imageSpacing))
+            let titleTextSize: CGSize = titleText.size(width: availableWidth - (imageSize.width + row.imageSpacing + valueTextSize.width + row.titleSpacing))
+            return row.edgeInsets.top + max(imageSize.height, titleTextSize.height, valueTextSize.height, shapeModel.size.height) + row.edgeInsets.bottom
         }
 
         open override func setup() {
@@ -46,8 +49,8 @@
 
             self._image = QImageView(frame: self.contentView.bounds)
             self._image.translatesAutoresizingMaskIntoConstraints = false
-            self._image.setContentHuggingPriority(UILayoutPriority(rawValue: 252), for: .horizontal)
-            self._image.setContentHuggingPriority(UILayoutPriority(rawValue: 252), for: .vertical)
+            self._image.setContentHuggingPriority(UILayoutPriority(rawValue: 254), for: .horizontal)
+            self._image.setContentHuggingPriority(UILayoutPriority(rawValue: 254), for: .vertical)
             self.contentView.addSubview(self._image)
 
             self._labelTitle = QLabel(frame: self.contentView.bounds)
@@ -55,6 +58,12 @@
             self._labelTitle.setContentHuggingPriority(UILayoutPriority(rawValue: 251), for: .horizontal)
             self._labelTitle.setContentHuggingPriority(UILayoutPriority(rawValue: 251), for: .vertical)
             self.contentView.addSubview(self._labelTitle)
+
+            self._labelValue = QLabel(frame: self.contentView.bounds)
+            self._labelValue.translatesAutoresizingMaskIntoConstraints = false
+            self._labelValue.setContentHuggingPriority(UILayoutPriority(rawValue: 252), for: .horizontal)
+            self._labelValue.setContentHuggingPriority(UILayoutPriority(rawValue: 252), for: .vertical)
+            self.contentView.addSubview(self._labelValue)
 
             self._shape = QShapeView(frame: self.contentView.bounds)
             self._shape.translatesAutoresizingMaskIntoConstraints = false
@@ -73,7 +82,7 @@
             self.apply(row: row)
         }
 
-        private func apply(row: QImageTitleShapeTableRow) {
+        private func apply(row: QImageTitleValueShapeTableRow) {
             if self.currentEdgeInsets != row.edgeInsets {
                 self.currentEdgeInsets = row.edgeInsets
 
@@ -83,10 +92,13 @@
                 selfConstraints.append(self._image.trailingLayout == self._labelTitle.leadingLayout - row.imageSpacing)
                 selfConstraints.append(self._image.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
                 selfConstraints.append(self._labelTitle.topLayout == self.contentView.topLayout + row.edgeInsets.top)
+                selfConstraints.append(self._labelTitle.trailingLayout == self._labelValue.leadingLayout - row.titleSpacing)
                 selfConstraints.append(self._labelTitle.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
+                selfConstraints.append(self._labelValue.topLayout == self.contentView.topLayout + row.edgeInsets.top)
+                selfConstraints.append(self._labelValue.trailingLayout == self._shape.leadingLayout - row.shapeSpacing)
+                selfConstraints.append(self._labelValue.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
                 selfConstraints.append(self._shape.topLayout == self.contentView.topLayout + row.edgeInsets.top)
                 selfConstraints.append(self._shape.leadingLayout == self._labelTitle.trailingLayout + row.shapeSpacing)
-                selfConstraints.append(self._shape.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
                 selfConstraints.append(self._shape.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
                 self.selfConstraints = selfConstraints
             }
@@ -114,6 +126,12 @@
             self._labelTitle.numberOfLines = row.titleNumberOfLines
             self._labelTitle.lineBreakMode = row.titleLineBreakMode
             self._labelTitle.text = row.titleText
+
+            self._labelValue.contentAlignment = row.valueContentAlignment
+            self._labelValue.padding = row.valuePadding
+            self._labelValue.numberOfLines = row.valueNumberOfLines
+            self._labelValue.lineBreakMode = row.valueLineBreakMode
+            self._labelValue.text = row.valueText
 
             self._shape.model = row.shapeModel
         }

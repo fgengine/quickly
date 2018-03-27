@@ -9,6 +9,8 @@
         private var _labelTitle: QLabel!
         private var _labelValue: QLabel!
 
+        private var currentEdgeInsets: UIEdgeInsets?
+
         private var selfConstraints: [NSLayoutConstraint] = [] {
             willSet { self.contentView.removeConstraints(self.selfConstraints) }
             didSet { self.contentView.addConstraints(self.selfConstraints) }
@@ -52,15 +54,19 @@
         }
 
         private func apply(row: QTitleValueTableRow) {
-            var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self._labelTitle.topLayout == self.contentView.topLayout + row.edgeInsets.top)
-            selfConstraints.append(self._labelTitle.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
-            selfConstraints.append(self._labelTitle.trailingLayout == self._labelValue.leadingLayout - row.titleSpacing)
-            selfConstraints.append(self._labelTitle.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
-            selfConstraints.append(self._labelValue.topLayout == self.contentView.topLayout + row.edgeInsets.top)
-            selfConstraints.append(self._labelValue.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
-            selfConstraints.append(self._labelValue.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
-            self.selfConstraints = selfConstraints
+            if self.currentEdgeInsets != row.edgeInsets {
+                self.currentEdgeInsets = row.edgeInsets
+
+                var selfConstraints: [NSLayoutConstraint] = []
+                selfConstraints.append(self._labelTitle.topLayout == self.contentView.topLayout + row.edgeInsets.top)
+                selfConstraints.append(self._labelTitle.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
+                selfConstraints.append(self._labelTitle.trailingLayout == self._labelValue.leadingLayout - row.titleSpacing)
+                selfConstraints.append(self._labelTitle.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
+                selfConstraints.append(self._labelValue.topLayout == self.contentView.topLayout + row.edgeInsets.top)
+                selfConstraints.append(self._labelValue.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
+                selfConstraints.append(self._labelValue.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
+                self.selfConstraints = selfConstraints
+            }
 
             self._labelTitle.contentAlignment = row.titleContentAlignment
             self._labelTitle.padding = row.titlePadding

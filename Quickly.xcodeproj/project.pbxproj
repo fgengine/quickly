@@ -57,6 +57,26 @@
 		402F1FB61F4EF525007625CA /* QApiError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402F1FB51F4EF525007625CA /* QApiError.swift */; };
 		402F1FBA1F4F380B007625CA /* QApiProvider+Internal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402F1FB91F4F380B007625CA /* QApiProvider+Internal.swift */; };
 		402F1FBD1F4F446F007625CA /* QApiImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = 402F1FBB1F4F446F007625CA /* QApiImpl.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4030A73B2067C25900326D5A /* QImageTitleValueTableRow+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A7392067C25800326D5A /* QImageTitleValueTableRow+iOS.swift */; };
+		4030A73C2067C25900326D5A /* QImageTitleValueTableRow+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A7392067C25800326D5A /* QImageTitleValueTableRow+iOS.swift */; };
+		4030A73D2067C25900326D5A /* QImageTitleValueTableCell+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A73A2067C25900326D5A /* QImageTitleValueTableCell+iOS.swift */; };
+		4030A73E2067C25900326D5A /* QImageTitleValueTableCell+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A73A2067C25900326D5A /* QImageTitleValueTableCell+iOS.swift */; };
+		4030A7412067C62C00326D5A /* QImageTitleDetailTableRow+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A73F2067C62C00326D5A /* QImageTitleDetailTableRow+iOS.swift */; };
+		4030A7422067C62C00326D5A /* QImageTitleDetailTableRow+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A73F2067C62C00326D5A /* QImageTitleDetailTableRow+iOS.swift */; };
+		4030A7432067C62C00326D5A /* QImageTitleDetailTableCell+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A7402067C62C00326D5A /* QImageTitleDetailTableCell+iOS.swift */; };
+		4030A7442067C62C00326D5A /* QImageTitleDetailTableCell+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A7402067C62C00326D5A /* QImageTitleDetailTableCell+iOS.swift */; };
+		4030A7492067E55200326D5A /* QImageTitleValueShapeTableCell+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A7452067E55100326D5A /* QImageTitleValueShapeTableCell+iOS.swift */; };
+		4030A74A2067E55200326D5A /* QImageTitleValueShapeTableCell+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A7452067E55100326D5A /* QImageTitleValueShapeTableCell+iOS.swift */; };
+		4030A74B2067E55200326D5A /* QImageTitleDetailShapeTableCell+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A7462067E55100326D5A /* QImageTitleDetailShapeTableCell+iOS.swift */; };
+		4030A74C2067E55200326D5A /* QImageTitleDetailShapeTableCell+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A7462067E55100326D5A /* QImageTitleDetailShapeTableCell+iOS.swift */; };
+		4030A74D2067E55200326D5A /* QImageTitleDetailShapeTableRow+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A7472067E55100326D5A /* QImageTitleDetailShapeTableRow+iOS.swift */; };
+		4030A74E2067E55200326D5A /* QImageTitleDetailShapeTableRow+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A7472067E55100326D5A /* QImageTitleDetailShapeTableRow+iOS.swift */; };
+		4030A74F2067E55200326D5A /* QImageTitleValueShapeTableRow+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A7482067E55100326D5A /* QImageTitleValueShapeTableRow+iOS.swift */; };
+		4030A7502067E55200326D5A /* QImageTitleValueShapeTableRow+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A7482067E55100326D5A /* QImageTitleValueShapeTableRow+iOS.swift */; };
+		4030A7532068D51000326D5A /* QTextFieldTableRow+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A7512068D51000326D5A /* QTextFieldTableRow+iOS.swift */; };
+		4030A7542068D51000326D5A /* QTextFieldTableRow+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A7512068D51000326D5A /* QTextFieldTableRow+iOS.swift */; };
+		4030A7552068D51000326D5A /* QTextFieldTableCell+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A7522068D51000326D5A /* QTextFieldTableCell+iOS.swift */; };
+		4030A7562068D51000326D5A /* QTextFieldTableCell+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4030A7522068D51000326D5A /* QTextFieldTableCell+iOS.swift */; };
 		4039BCB51F516F1B00E38090 /* QButton+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4039BCB41F516F1B00E38090 /* QButton+iOS.swift */; };
 		4039BCB71F516F5900E38090 /* QControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4039BCB61F516F5900E38090 /* QControl.swift */; };
 		4039BCBA1F51B20900E38090 /* QImageView+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4039BCB91F51B20900E38090 /* QImageView+iOS.swift */; };
@@ -480,6 +500,16 @@
 		402F1FB91F4F380B007625CA /* QApiProvider+Internal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QApiProvider+Internal.swift"; sourceTree = "<group>"; };
 		402F1FBB1F4F446F007625CA /* QApiImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QApiImpl.h; sourceTree = "<group>"; };
 		402F1FBC1F4F446F007625CA /* QApiImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QApiImpl.m; sourceTree = "<group>"; };
+		4030A7392067C25800326D5A /* QImageTitleValueTableRow+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QImageTitleValueTableRow+iOS.swift"; sourceTree = "<group>"; };
+		4030A73A2067C25900326D5A /* QImageTitleValueTableCell+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QImageTitleValueTableCell+iOS.swift"; sourceTree = "<group>"; };
+		4030A73F2067C62C00326D5A /* QImageTitleDetailTableRow+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QImageTitleDetailTableRow+iOS.swift"; sourceTree = "<group>"; };
+		4030A7402067C62C00326D5A /* QImageTitleDetailTableCell+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QImageTitleDetailTableCell+iOS.swift"; sourceTree = "<group>"; };
+		4030A7452067E55100326D5A /* QImageTitleValueShapeTableCell+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QImageTitleValueShapeTableCell+iOS.swift"; sourceTree = "<group>"; };
+		4030A7462067E55100326D5A /* QImageTitleDetailShapeTableCell+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QImageTitleDetailShapeTableCell+iOS.swift"; sourceTree = "<group>"; };
+		4030A7472067E55100326D5A /* QImageTitleDetailShapeTableRow+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QImageTitleDetailShapeTableRow+iOS.swift"; sourceTree = "<group>"; };
+		4030A7482067E55100326D5A /* QImageTitleValueShapeTableRow+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QImageTitleValueShapeTableRow+iOS.swift"; sourceTree = "<group>"; };
+		4030A7512068D51000326D5A /* QTextFieldTableRow+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QTextFieldTableRow+iOS.swift"; sourceTree = "<group>"; };
+		4030A7522068D51000326D5A /* QTextFieldTableCell+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QTextFieldTableCell+iOS.swift"; sourceTree = "<group>"; };
 		4039BCB41F516F1B00E38090 /* QButton+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "QButton+iOS.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4039BCB61F516F5900E38090 /* QControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QControl.swift; sourceTree = "<group>"; };
 		4039BCB91F51B20900E38090 /* QImageView+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QImageView+iOS.swift"; sourceTree = "<group>"; };
@@ -922,8 +952,16 @@
 				400DDF6B1F56194300D11991 /* QImageTableRow+iOS.swift */,
 				40AB6EB51F5D901300B9387C /* QImageTitleTableCell+iOS.swift */,
 				40AB6EB61F5D901300B9387C /* QImageTitleTableRow+iOS.swift */,
+				4030A7402067C62C00326D5A /* QImageTitleDetailTableCell+iOS.swift */,
+				4030A73F2067C62C00326D5A /* QImageTitleDetailTableRow+iOS.swift */,
+				4030A73A2067C25900326D5A /* QImageTitleValueTableCell+iOS.swift */,
+				4030A7392067C25800326D5A /* QImageTitleValueTableRow+iOS.swift */,
 				40A97EC02063A7E300594DE2 /* QImageTitleShapeTableCell+iOS.swift */,
 				40A97EC12063A7E300594DE2 /* QImageTitleShapeTableRow+iOS.swift */,
+				4030A7462067E55100326D5A /* QImageTitleDetailShapeTableCell+iOS.swift */,
+				4030A7472067E55100326D5A /* QImageTitleDetailShapeTableRow+iOS.swift */,
+				4030A7452067E55100326D5A /* QImageTitleValueShapeTableCell+iOS.swift */,
+				4030A7482067E55100326D5A /* QImageTitleValueShapeTableRow+iOS.swift */,
 				40E7384A1F5606B700B192C6 /* QLabelTableCell+iOS.swift */,
 				40E7384B1F5606B700B192C6 /* QLabelTableRow+iOS.swift */,
 				403DD6C32065E3480065A1AB /* QTitleDetailTableCell+iOS.swift */,
@@ -932,10 +970,12 @@
 				403DD6C12065E3470065A1AB /* QTitleValueTableRow+iOS.swift */,
 				40A97EC62063B85A00594DE2 /* QTitleDetailShapeTableCell+iOS.swift */,
 				40A97EC72063B85A00594DE2 /* QTitleDetailShapeTableRow+iOS.swift */,
-				403DD6B5206463040065A1AB /* QTitleButtonTableCell+iOS.swift */,
-				403DD6B6206463050065A1AB /* QTitleButtonTableRow+iOS.swift */,
 				400DDF741F56913100D11991 /* QButtonTableCell+iOS.swift */,
 				400DDF751F56913100D11991 /* QButtonTableRow+iOS.swift */,
+				403DD6B5206463040065A1AB /* QTitleButtonTableCell+iOS.swift */,
+				403DD6B6206463050065A1AB /* QTitleButtonTableRow+iOS.swift */,
+				4030A7522068D51000326D5A /* QTextFieldTableCell+iOS.swift */,
+				4030A7512068D51000326D5A /* QTextFieldTableRow+iOS.swift */,
 			);
 			path = Default;
 			sourceTree = "<group>";
@@ -1590,9 +1630,12 @@
 				40CF45EB1F4DE6AB004D00D8 /* QTableViewController+iOS.swift in Sources */,
 				40B8A1921F4F49AC00204E5A /* QApiImpl.m in Sources */,
 				40CF45C01F4DE6AB004D00D8 /* QCollectionItem+iOS.swift in Sources */,
+				4030A74A2067E55200326D5A /* QImageTitleValueShapeTableCell+iOS.swift in Sources */,
+				4030A7502067E55200326D5A /* QImageTitleValueShapeTableRow+iOS.swift in Sources */,
 				409403621F4E26D1008A8B90 /* IQApiQuery.swift in Sources */,
 				40DC144F206007870013F281 /* QDialogBackgroundView.swift in Sources */,
 				40FBE6A41F543EFD00F5194B /* QStyledText.swift in Sources */,
+				4030A73C2067C25900326D5A /* QImageTitleValueTableRow+iOS.swift in Sources */,
 				400DDF711F5622EB00D11991 /* CGRect.swift in Sources */,
 				40E738571F5606C500B192C6 /* QSeparatorTableRow+iOS.swift in Sources */,
 				4057FFF5205027DC004F3EDB /* QDialogBlurBackgroundView+iOS.swift in Sources */,
@@ -1622,6 +1665,7 @@
 				405A490E201F19020001D684 /* QTransparentView.swift in Sources */,
 				40134F031F63129E009F81A6 /* QCardExpirationDateStringFormatter.swift in Sources */,
 				40FBE6AA1F54591000F5194B /* QImageSource+iOS.swift in Sources */,
+				4030A74E2067E55200326D5A /* QImageTitleDetailShapeTableRow+iOS.swift in Sources */,
 				403DD6CC2065E3480065A1AB /* QTitleDetailTableRow+iOS.swift in Sources */,
 				4057FFF3205027DC004F3EDB /* QDialogViewControllerAnimation.swift in Sources */,
 				4006EDB21F61363E0050AD91 /* QBackgroundColorCollectionItem+iOS.swift in Sources */,
@@ -1673,11 +1717,13 @@
 				40CF45BE1F4DE6AB004D00D8 /* QCollectionData+iOS.swift in Sources */,
 				40AB6EB71F5D901300B9387C /* QImageTitleTableCell+iOS.swift in Sources */,
 				40C08C25205086D50016EF7D /* QDialogViewController.swift in Sources */,
+				4030A7422067C62C00326D5A /* QImageTitleDetailTableRow+iOS.swift in Sources */,
 				4070B6AD206297BB00B568A9 /* QKeyboard+iOS.swift in Sources */,
 				40134EFB1F62DAE3009F81A6 /* IQInputValidator.swift in Sources */,
 				40E738541F5606C500B192C6 /* QBackgroundColorTableCell+iOS.swift in Sources */,
 				4039BCB51F516F1B00E38090 /* QButton+iOS.swift in Sources */,
 				40CF45BF1F4DE6AB004D00D8 /* QCollectionDecor+iOS.swift in Sources */,
+				4030A74C2067E55200326D5A /* QImageTitleDetailShapeTableCell+iOS.swift in Sources */,
 				40BFA8492018AFDE00E41933 /* IQPushViewController.swift in Sources */,
 				40CF45BB1F4DE6AB004D00D8 /* IQCollectionSection+iOS.swift in Sources */,
 				40CF45C91F4DE6AB004D00D8 /* QKeychain.swift in Sources */,
@@ -1713,6 +1759,7 @@
 				40CF45EC1F4DE6AB004D00D8 /* IQView.swift in Sources */,
 				40979EC31F62C88A0003ED1C /* QLengthStringValidator.swift in Sources */,
 				4006EDBB1F61363E0050AD91 /* QSpaceCollectionCell+iOS.swift in Sources */,
+				4030A7442067C62C00326D5A /* QImageTitleDetailTableCell+iOS.swift in Sources */,
 				40CF45DB1F4DE6AB004D00D8 /* IQTableReuse+iOS.swift in Sources */,
 				40CF45E91F4DE6AB004D00D8 /* QStaticViewController.swift in Sources */,
 				402F1FB21F4EE0F8007625CA /* IQApiResponse.swift in Sources */,
@@ -1745,9 +1792,12 @@
 				40CF45D91F4DE6AB004D00D8 /* IQTableData+iOS.swift in Sources */,
 				409403581F4E129F008A8B90 /* QApiProvider.swift in Sources */,
 				400DDF771F56913100D11991 /* QButtonTableRow+iOS.swift in Sources */,
+				4030A7542068D51000326D5A /* QTextFieldTableRow+iOS.swift in Sources */,
+				4030A73E2067C25900326D5A /* QImageTitleValueTableCell+iOS.swift in Sources */,
 				40FBE6A61F543EFD00F5194B /* QTextStyle.swift in Sources */,
 				40E2D6031F67850600B954E4 /* QImageRequest+iOS.swift in Sources */,
 				403DD6CA2065E3480065A1AB /* QTitleDetailTableCell+iOS.swift in Sources */,
+				4030A7562068D51000326D5A /* QTextFieldTableCell+iOS.swift in Sources */,
 				40134EF61F62D16C009F81A6 /* QCharacterSetStringValidator.swift in Sources */,
 				40B8A1AB1F50736C00204E5A /* QTimer.swift in Sources */,
 				40CF45DE1F4DE6AB004D00D8 /* QTableCell+iOS.swift in Sources */,
@@ -1788,9 +1838,12 @@
 				403FE0681F8EA51600596124 /* QTableViewController+iOS.swift in Sources */,
 				403FE0691F8EA51600596124 /* QApiImpl.m in Sources */,
 				403FE06B1F8EA51600596124 /* QCollectionItem+iOS.swift in Sources */,
+				4030A7492067E55200326D5A /* QImageTitleValueShapeTableCell+iOS.swift in Sources */,
+				4030A74F2067E55200326D5A /* QImageTitleValueShapeTableRow+iOS.swift in Sources */,
 				403FE06C1F8EA51600596124 /* IQApiQuery.swift in Sources */,
 				40DC144E206007870013F281 /* QDialogBackgroundView.swift in Sources */,
 				403FE06D1F8EA51600596124 /* QStyledText.swift in Sources */,
+				4030A73B2067C25900326D5A /* QImageTitleValueTableRow+iOS.swift in Sources */,
 				403FE06E1F8EA51600596124 /* CGRect.swift in Sources */,
 				403FE06F1F8EA51600596124 /* QSeparatorTableRow+iOS.swift in Sources */,
 				4057FFF4205027DC004F3EDB /* QDialogBlurBackgroundView+iOS.swift in Sources */,
@@ -1820,6 +1873,7 @@
 				405A490D201F19020001D684 /* QTransparentView.swift in Sources */,
 				403FE0841F8EA51600596124 /* QCardExpirationDateStringFormatter.swift in Sources */,
 				403FE0851F8EA51600596124 /* QImageSource+iOS.swift in Sources */,
+				4030A74D2067E55200326D5A /* QImageTitleDetailShapeTableRow+iOS.swift in Sources */,
 				403DD6CB2065E3480065A1AB /* QTitleDetailTableRow+iOS.swift in Sources */,
 				4057FFF2205027DC004F3EDB /* QDialogViewControllerAnimation.swift in Sources */,
 				403FE0861F8EA51600596124 /* QBackgroundColorCollectionItem+iOS.swift in Sources */,
@@ -1871,11 +1925,13 @@
 				403FE0AD1F8EA51600596124 /* QCollectionData+iOS.swift in Sources */,
 				403FE0AE1F8EA51600596124 /* QImageTitleTableCell+iOS.swift in Sources */,
 				40C08C24205086D50016EF7D /* QDialogViewController.swift in Sources */,
+				4030A7412067C62C00326D5A /* QImageTitleDetailTableRow+iOS.swift in Sources */,
 				4070B6AC206297BB00B568A9 /* QKeyboard+iOS.swift in Sources */,
 				403FE0AF1F8EA51600596124 /* IQInputValidator.swift in Sources */,
 				403FE0B11F8EA51600596124 /* QBackgroundColorTableCell+iOS.swift in Sources */,
 				403FE0B21F8EA51600596124 /* QButton+iOS.swift in Sources */,
 				403FE0B31F8EA51600596124 /* QCollectionDecor+iOS.swift in Sources */,
+				4030A74B2067E55200326D5A /* QImageTitleDetailShapeTableCell+iOS.swift in Sources */,
 				40BFA8482018AFDE00E41933 /* IQPushViewController.swift in Sources */,
 				403FE0B41F8EA51600596124 /* IQCollectionSection+iOS.swift in Sources */,
 				403FE0B51F8EA51600596124 /* QKeychain.swift in Sources */,
@@ -1911,6 +1967,7 @@
 				403FE0D11F8EA51600596124 /* IQView.swift in Sources */,
 				403FE0D21F8EA51600596124 /* QLengthStringValidator.swift in Sources */,
 				403FE0D31F8EA51600596124 /* QSpaceCollectionCell+iOS.swift in Sources */,
+				4030A7432067C62C00326D5A /* QImageTitleDetailTableCell+iOS.swift in Sources */,
 				403FE0D41F8EA51600596124 /* IQTableReuse+iOS.swift in Sources */,
 				403FE0D51F8EA51600596124 /* QStaticViewController.swift in Sources */,
 				403FE0D61F8EA51600596124 /* IQApiResponse.swift in Sources */,
@@ -1943,9 +2000,12 @@
 				403FE0EC1F8EA51600596124 /* IQTableData+iOS.swift in Sources */,
 				403FE0ED1F8EA51600596124 /* QApiProvider.swift in Sources */,
 				403FE0EE1F8EA51600596124 /* QButtonTableRow+iOS.swift in Sources */,
+				4030A7532068D51000326D5A /* QTextFieldTableRow+iOS.swift in Sources */,
+				4030A73D2067C25900326D5A /* QImageTitleValueTableCell+iOS.swift in Sources */,
 				403FE0EF1F8EA51600596124 /* QTextStyle.swift in Sources */,
 				403FE0F01F8EA51600596124 /* QImageRequest+iOS.swift in Sources */,
 				403DD6C92065E3480065A1AB /* QTitleDetailTableCell+iOS.swift in Sources */,
+				4030A7552068D51000326D5A /* QTextFieldTableCell+iOS.swift in Sources */,
 				403FE0F11F8EA51600596124 /* QCharacterSetStringValidator.swift in Sources */,
 				403FE0F21F8EA51600596124 /* QTimer.swift in Sources */,
 				403FE0F31F8EA51600596124 /* QTableCell+iOS.swift in Sources */,

@@ -158,6 +158,10 @@
                 }
             }
         }
+        public var isEnabled: Bool {
+            set(value) { self.field.isEnabled = value }
+            get { return self.field.isEnabled }
+        }
         public var isEditing: Bool {
             get { return self.field.isEditing }
         }

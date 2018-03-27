@@ -72,20 +72,6 @@
         open func setup() {
         }
 
-        open func setNavigationBarHidden(_ hidden: Bool, animated: Bool) {
-            if let navigationController: UINavigationController = self.navigationController {
-                navigationController.setNavigationBarHidden(hidden, animated: animated)
-            }
-            self.navigationBarHidden = hidden
-        }
-
-        open func setToolbarHidden(_ hidden: Bool, animated: Bool) {
-            if let navigationController: UINavigationController = self.navigationController {
-                navigationController.setToolbarHidden(hidden, animated: animated)
-            }
-            self.toolbarHidden = hidden
-        }
-
         open override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
             self.isAppeared = true
@@ -98,6 +84,20 @@
         open override func viewDidDisappear(_ animated: Bool) {
             super.viewDidDisappear(animated)
             self.isAppeared = false
+        }
+
+        open func setNavigationBarHidden(_ hidden: Bool, animated: Bool) {
+            if let navigationController: UINavigationController = self.navigationController {
+                navigationController.setNavigationBarHidden(hidden, animated: animated)
+            }
+            self.navigationBarHidden = hidden
+        }
+
+        open func setToolbarHidden(_ hidden: Bool, animated: Bool) {
+            if let navigationController: UINavigationController = self.navigationController {
+                navigationController.setToolbarHidden(hidden, animated: animated)
+            }
+            self.toolbarHidden = hidden
         }
 
         open func willPresent(animated: Bool) {

@@ -39,6 +39,10 @@ public protocol IQPushViewController : IQBaseViewController {
     var dismissAnimation: IQPushViewControllerFixedAnimation? { get }
     var interactiveDismissAnimation: IQPushViewControllerInteractiveAnimation? { get }
 
+    func beginInteractiveDismiss()
+    func cancelInteractiveDismiss()
+    func funishInteractiveDismiss()
+
     func dismissPush(animated: Bool, completion: (() -> Swift.Void)?)
 
 }

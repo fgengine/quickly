@@ -47,9 +47,9 @@ open class QPushViewControllerPresentAnimation : QPushViewControllerAnimation {
                 })
             #endif
         } else {
+            self.viewController.state = .show
             self.viewController.willPresent(animated: animated)
             self.viewController.didPresent(animated: animated)
-            self.viewController.state = .show
             self.viewController = nil
             complete(true)
         }
