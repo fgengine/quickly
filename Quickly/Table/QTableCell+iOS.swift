@@ -4,12 +4,10 @@
 
 #if os(iOS)
 
-    open class QTableCell<
-        Type: IQTableRow
-    >: UITableViewCell, IQView, IQTypedTableCell {
+    open class QTableCell< Type: IQTableRow > : UITableViewCell, IQTypedTableCell {
 
-        open weak var tableDelegate: IQTableCellDelegate? = nil
-        open var row: Type? = nil
+        open weak var tableDelegate: IQTableCellDelegate?
+        open var row: Type?
 
         open class func currentNibName() -> String {
             return String(describing: self.classForCoder())

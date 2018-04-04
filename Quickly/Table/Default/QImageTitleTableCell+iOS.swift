@@ -4,12 +4,13 @@
 
 #if os(iOS)
 
-    public class QImageTitleTableCell< RowType: QImageTitleTableRow >: QBackgroundColorTableCell< RowType > {
+    open class QImageTitleTableCell< RowType: QImageTitleTableRow >: QBackgroundColorTableCell< RowType > {
 
         private var _image: QImageView!
         private var _labelTitle: QLabel!
 
         private var currentEdgeInsets: UIEdgeInsets?
+        private var currentImageSpacing: CGFloat?
         private var currentImageWidth: CGFloat?
         
         private var selfConstraints: [NSLayoutConstraint] = [] {
@@ -22,15 +23,9 @@
         }
 
         open override class func height(row: RowType, width: CGFloat) -> CGFloat {
-            guard
-                let imageSource: QImageSource = row.imageSource,
-                let titleText: IQText = row.titleText
-                else { return 0 }
-            let availableWidth: CGFloat = width - (row.edgeInsets.left + row.edgeInsets.right)
-            let imageSize: CGSize = imageSource.size(CGSize(
-                width: row.imageWidth, height: availableWidth
-            ))
-            let titleTextSize: CGSize = titleText.size(width: availableWidth - (imageSize.width + row.imageSpacing))
+            let availableWidth = width - (row.edgeInsets.left + row.edgeInsets.right)
+            let imageSize = row.image.source.size(CGSize(width: row.imageWidth, height: availableWidth))
+            let titleTextSize = row.title.text.size(width: availableWidth - (row.imageWidth + row.imageSpacing))
             return row.edgeInsets.top + max(imageSize.height, titleTextSize.height) + row.edgeInsets.bottom
         }
 
@@ -61,8 +56,9 @@
         }
 
         private func apply(row: QImageTitleTableRow) {
-            if self.currentEdgeInsets != row.edgeInsets {
+            if self.currentEdgeInsets != row.edgeInsets || self.currentImageSpacing != row.imageSpacing {
                 self.currentEdgeInsets = row.edgeInsets
+                self.currentImageSpacing = row.imageSpacing
 
                 var selfConstraints: [NSLayoutConstraint] = []
                 selfConstraints.append(self._image.topLayout == self.contentView.topLayout + row.edgeInsets.top)
@@ -81,16 +77,8 @@
                 imageConstraints.append(self._image.widthLayout == row.imageWidth)
                 self.imageConstraints = imageConstraints
             }
-
-            self._image.layer.cornerRadius = row.imageCornerRadius
-            self._image.roundCorners = row.imageRoundCorners
-            self._image.source = row.imageSource
-
-            self._labelTitle.contentAlignment = row.titleContentAlignment
-            self._labelTitle.padding = row.titlePadding
-            self._labelTitle.numberOfLines = row.titleNumberOfLines
-            self._labelTitle.lineBreakMode = row.titleLineBreakMode
-            self._labelTitle.text = row.titleText
+            row.image.apply(target: self._image)
+            row.title.apply(target: self._labelTitle)
         }
 
     }

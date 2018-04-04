@@ -44,9 +44,9 @@ public extension QPlatformColor {
     }
 
     public static func random(alpha: CGFloat) -> QPlatformColor {
-        let r: CGFloat = CGFloat(drand48())
-        let g: CGFloat = CGFloat(drand48())
-        let b: CGFloat = CGFloat(drand48())
+        let r = CGFloat(drand48())
+        let g = CGFloat(drand48())
+        let b = CGFloat(drand48())
         return QPlatformColor(red: r, green: g, blue: b, alpha: alpha)
     }
 

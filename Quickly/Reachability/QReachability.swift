@@ -128,7 +128,7 @@ public class QReachability {
     }
 
     private func isRunningOnDevice() -> Bool {
-        #if (arch(i386) || arch(x86_64)) && os(iOS)
+        #if targetEnvironment(simulator)
             return false
         #else
             return true
@@ -184,7 +184,7 @@ public class QReachability {
     }
 
     fileprivate func changed() {
-        var flags: SCNetworkReachabilityFlags = SCNetworkReachabilityFlags()
+        var flags = SCNetworkReachabilityFlags()
         if SCNetworkReachabilityGetFlags(self.reachability, &flags) == true {
             if self.previousFlags != flags {
                 self.previousFlags = self.currentFlags

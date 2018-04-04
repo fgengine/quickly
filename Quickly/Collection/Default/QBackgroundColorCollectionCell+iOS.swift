@@ -17,11 +17,11 @@
         }
 
         private func apply(item: QBackgroundColorCollectionItem) {
-            if let backgroundColor: UIColor = item.backgroundColor {
+            if let backgroundColor = item.backgroundColor {
                 self.backgroundColor = backgroundColor
             }
-            if let selectedBackgroundColor: UIColor = item.selectedBackgroundColor {
-                let view: UIView = UIView(frame: self.bounds)
+            if let selectedBackgroundColor = item.selectedBackgroundColor {
+                let view = UIView(frame: self.bounds)
                 view.backgroundColor = selectedBackgroundColor
                 self.selectedBackgroundView = view
             } else {

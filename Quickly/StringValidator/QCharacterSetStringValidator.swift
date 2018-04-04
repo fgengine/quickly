@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QCharacterSetStringValidator: QLengthStringValidator {
+open class QCharacterSetStringValidator : QLengthStringValidator {
 
     public var characterSet: CharacterSet
 
@@ -12,7 +12,7 @@ open class QCharacterSetStringValidator: QLengthStringValidator {
     }
 
     public override func validate(_ string: String, complete: Bool) -> Bool {
-        var valid: Bool = super.validate(string, complete: complete)
+        var valid = super.validate(string, complete: complete)
         if valid == true {
             valid = self.characterSet.isSuperset(of: CharacterSet(charactersIn: string))
         }

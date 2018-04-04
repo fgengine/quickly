@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QObserver< T > {
+public final class QObserver< T > {
 
     private var items: Set< UnsafeMutableRawPointer >
 
@@ -11,20 +11,17 @@ public class QObserver< T > {
     }
 
     public func add(_ observer: T) {
-        let object: AnyObject = observer as AnyObject
-        self.items.insert(Unmanaged.passUnretained(object).toOpaque())
+        self.items.insert(Unmanaged.passUnretained(observer as AnyObject).toOpaque())
     }
 
     public func remove(_ observer: T) {
-        let object: AnyObject = observer as AnyObject
-        self.items.remove(Unmanaged.passUnretained(object).toOpaque())
+        self.items.remove(Unmanaged.passUnretained(observer as AnyObject).toOpaque())
     }
 
     public func notify(_ closure: (_ observer: T) -> Void) {
         self.items.forEach { (pointer: UnsafeMutableRawPointer) in
             let object: AnyObject = Unmanaged.fromOpaque(pointer).takeUnretainedValue()
-            let observer: T = object as! T
-            closure(observer)
+            closure(object as! T)
         }
     }
 

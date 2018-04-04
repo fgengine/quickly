@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public protocol IQApiResponse: class {
+public protocol IQApiResponse : class {
 
     var error: Error? { get }
 

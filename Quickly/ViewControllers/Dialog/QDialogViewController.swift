@@ -114,7 +114,7 @@ open class QDialogViewController : QPlatformViewController, IQDialogViewControll
     #if os(iOS)
 
     private func _prepareTapGesture() -> UITapGestureRecognizer {
-        let gesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self._tapGestureHandler(_:)))
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(self._tapGestureHandler(_:)))
         gesture.delegate = self
         return gesture
     }
@@ -255,10 +255,12 @@ open class QDialogViewController : QPlatformViewController, IQDialogViewControll
     extension QDialogViewController : UIGestureRecognizerDelegate {
 
         open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-            if self.view.point(inside: gestureRecognizer.location(in: self.view), with: nil) == false {
+            let location = gestureRecognizer.location(in: self.view)
+            if self.view.point(inside: location, with: nil) == false {
                 return false
             }
-            if self.contentViewController.view.point(inside: gestureRecognizer.location(in: self.contentViewController.view), with: nil) == true {
+            let contentLocation = gestureRecognizer.location(in: self.contentViewController.view)
+            if self.contentViewController.view.point(inside: contentLocation, with: nil) == true {
                 return false
             }
             return true

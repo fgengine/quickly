@@ -12,7 +12,7 @@ class QuicklyModelTests: XCTestCase {
         var child: ChildModel?
         
         override class func from(json: QJson) throws -> IQModel? {
-            var value: String = ""
+            var value = ""
             try value <<< (json, "type")
             switch value {
             case "A": return try SubRootModel(json: json)
@@ -31,12 +31,12 @@ class QuicklyModelTests: XCTestCase {
 
     class ChildModel: QModel {
 
-        var value: String = ""
+        var value = ""
         
         override class func from(json: QJson) throws -> IQModel? {
             var value: String?
             value <<< (json, "value")
-            guard let _: String = value else {
+            guard let _ = value else {
                 return try ChildModel(json: json)
             }
             return try super.from(json: json)
@@ -49,7 +49,7 @@ class QuicklyModelTests: XCTestCase {
     }
 
     func testModel() {
-        let json: QJson = QJson(basePath: "", string:
+        let json = QJson(basePath: "", string:
             "[ { \"type\" : \"A\", \"child\": \"1\" } ]"
         )!
         var models: [RootModel]!

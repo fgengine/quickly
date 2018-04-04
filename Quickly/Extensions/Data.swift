@@ -27,7 +27,7 @@
 public extension Data {
 
     public var hexString: String {
-        var string: String = String()
+        var string = String()
         self.enumerateBytes { pointer, index, _ in
             for i in index ..< pointer.count {
                 string += String(format: "%02x", pointer[i])

@@ -43,12 +43,12 @@ class ConfirmDialogViewController: QStaticViewController, IQDialogContentViewCon
 
         self.imageView.source = QImageSource("dialog_confirm")
 
-        let normalStyle: QButtonStyle = QButtonStyle()
+        let normalStyle = QButtonStyle()
         normalStyle.color = UIColor.lightGray
         normalStyle.cornerRadius = 4
         normalStyle.text = QText("Close", color: UIColor.black)
 
-        let highlightedStyle: QButtonStyle = QButtonStyle(parent: normalStyle)
+        let highlightedStyle = QButtonStyle(parent: normalStyle)
         highlightedStyle.color = UIColor.darkGray
         highlightedStyle.text = QText("Close", color: UIColor.black)
 

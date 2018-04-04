@@ -14,7 +14,7 @@
 
     }
 
-    public class QKeyboardAnimationInfo {
+    public final class QKeyboardAnimationInfo {
 
         public let beginFrame: CGRect
         public let endFrame: CGRect
@@ -24,11 +24,11 @@
 
         public init?(_ userInfo: [ AnyHashable: Any ]) {
             guard
-                let beginFrameValue: NSValue = userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue,
-                let endFrameValue: NSValue = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue,
-                let durationValue: NSNumber = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber,
-                let curveValue: NSNumber = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber,
-                let localValue: NSNumber = userInfo[UIKeyboardIsLocalUserInfoKey] as? NSNumber
+                let beginFrameValue = userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue,
+                let endFrameValue = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue,
+                let durationValue = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber,
+                let curveValue = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber,
+                let localValue = userInfo[UIKeyboardIsLocalUserInfoKey] as? NSNumber
                 else { return nil }
             self.beginFrame = beginFrameValue.cgRectValue
             self.endFrame = endFrameValue.cgRectValue
@@ -39,7 +39,7 @@
 
     }
 
-    public class QKeyboard {
+    public final class QKeyboard {
 
         private var observer: QObserver< QKeyboardObserver >
 
@@ -77,8 +77,8 @@
         @objc
         private func willShow(_ notification: Notification) {
             guard
-                let notificationInfo: [ AnyHashable: Any ] = notification.userInfo,
-                let animationInfo: QKeyboardAnimationInfo = QKeyboardAnimationInfo(notificationInfo)
+                let notificationInfo = notification.userInfo,
+                let animationInfo = QKeyboardAnimationInfo(notificationInfo)
                 else { return }
             self.observer.notify({ (observer: QKeyboardObserver) in
                 observer.willShowKeyboard(self, animationInfo: animationInfo)
@@ -88,8 +88,8 @@
         @objc
         private func didShow(_ notification: Notification) {
             guard
-                let notificationInfo: [ AnyHashable: Any ] = notification.userInfo,
-                let animationInfo: QKeyboardAnimationInfo = QKeyboardAnimationInfo(notificationInfo)
+                let notificationInfo = notification.userInfo,
+                let animationInfo = QKeyboardAnimationInfo(notificationInfo)
                 else { return }
             self.observer.notify({ (observer: QKeyboardObserver) in
                 observer.didShowKeyboard(self, animationInfo: animationInfo)
@@ -99,8 +99,8 @@
         @objc
         private func willHide(_ notification: Notification) {
             guard
-                let notificationInfo: [ AnyHashable: Any ] = notification.userInfo,
-                let animationInfo: QKeyboardAnimationInfo = QKeyboardAnimationInfo(notificationInfo)
+                let notificationInfo = notification.userInfo,
+                let animationInfo = QKeyboardAnimationInfo(notificationInfo)
                 else { return }
             self.observer.notify({ (observer: QKeyboardObserver) in
                 observer.willHideKeyboard(self, animationInfo: animationInfo)
@@ -110,8 +110,8 @@
         @objc
         private func didHide(_ notification: Notification) {
             guard
-                let notificationInfo: [ AnyHashable: Any ] = notification.userInfo,
-                let animationInfo: QKeyboardAnimationInfo = QKeyboardAnimationInfo(notificationInfo)
+                let notificationInfo = notification.userInfo,
+                let animationInfo = QKeyboardAnimationInfo(notificationInfo)
                 else { return }
             self.observer.notify({ (observer: QKeyboardObserver) in
                 observer.didHideKeyboard(self, animationInfo: animationInfo)

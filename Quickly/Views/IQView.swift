@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public protocol IQView {
+public protocol IQView : class {
 
     func setup()
     

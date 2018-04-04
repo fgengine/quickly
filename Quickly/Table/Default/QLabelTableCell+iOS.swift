@@ -4,7 +4,7 @@
 
 #if os(iOS)
 
-    public class QLabelTableCell< RowType: QLabelTableRow >: QBackgroundColorTableCell< RowType > {
+    open class QLabelTableCell< RowType: QLabelTableRow >: QBackgroundColorTableCell< RowType > {
 
         private var _label: QLabel!
         
@@ -16,11 +16,8 @@
         }
 
         open override class func height(row: RowType, width: CGFloat) -> CGFloat {
-            guard
-                let text: IQText = row.labelText
-                else { return 0 }
-            let availableWidth: CGFloat = width - (row.edgeInsets.left + row.edgeInsets.right)
-            let textSize: CGSize = text.size(width: availableWidth)
+            let availableWidth = width - (row.edgeInsets.left + row.edgeInsets.right)
+            let textSize = row.label.text.size(width: availableWidth)
             return row.edgeInsets.top + textSize.height + row.edgeInsets.bottom
         }
 
@@ -53,12 +50,7 @@
                 selfConstraints.append(self._label.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
                 self.selfConstraints = selfConstraints
             }
-
-            self._label.contentAlignment = row.labelContentAlignment
-            self._label.padding = row.labelPadding
-            self._label.numberOfLines = row.labelNumberOfLines
-            self._label.lineBreakMode = row.labelLineBreakMode
-            self._label.text = row.labelText
+            row.label.apply(target: self._label)
         }
 
     }

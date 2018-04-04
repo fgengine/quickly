@@ -9,7 +9,7 @@
         public var collectionController: IQCollectionController? {
             set(value) {
                 self.proxy.collectionController = value
-                if let collectionController: IQCollectionController = value {
+                if let collectionController = value {
                     collectionController.reload()
                 }
             }
@@ -75,7 +75,7 @@
         open override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
             self.isAppeared = true
-            if let navigationController: UINavigationController = self.navigationController {
+            if let navigationController = self.navigationController {
                 navigationController.isNavigationBarHidden = self.navigationBarHidden
                 navigationController.isToolbarHidden = self.toolbarHidden
             }
@@ -87,14 +87,14 @@
         }
 
         open func setNavigationBarHidden(_ hidden: Bool, animated: Bool) {
-            if let navigationController: UINavigationController = self.navigationController {
+            if let navigationController = self.navigationController {
                 navigationController.setNavigationBarHidden(hidden, animated: animated)
             }
             self.navigationBarHidden = hidden
         }
 
         open func setToolbarHidden(_ hidden: Bool, animated: Bool) {
-            if let navigationController: UINavigationController = self.navigationController {
+            if let navigationController = self.navigationController {
                 navigationController.setToolbarHidden(hidden, animated: animated)
             }
             self.toolbarHidden = hidden
@@ -138,7 +138,7 @@
             }
 
             deinit {
-                if let collectionController: IQCollectionController = self.collectionController {
+                if let collectionController = self.collectionController {
                     collectionController.collectionView = nil
                 }
             }
@@ -153,7 +153,7 @@
                     if let collectionView = viewController.collectionView {
                         collectionView.delegate = self
                         collectionView.dataSource = self
-                        if let collectionController: IQCollectionController = self.collectionController {
+                        if let collectionController = self.collectionController {
                             collectionController.collectionView = collectionView
                         }
                     }
@@ -167,7 +167,7 @@
                         collectionView.dataSource = nil
                     }
                 }
-                if let collectionController: IQCollectionController = self.collectionController {
+                if let collectionController = self.collectionController {
                     collectionController.collectionView = nil
                 }
             }
@@ -176,12 +176,12 @@
                 if super.responds(to: selector) {
                     return true
                 }
-                if let collectionController: IQCollectionController = self.collectionController {
+                if let collectionController = self.collectionController {
                     if collectionController.responds(to: selector) {
                         return true
                     }
                 }
-                if let viewController: QCollectionViewController = self.viewController {
+                if let viewController = self.viewController {
                     if viewController.responds(to: selector) {
                         return true
                     }
@@ -193,12 +193,12 @@
                 if super.responds(to: selector) {
                     return self
                 }
-                if let collectionController: IQCollectionController = self.collectionController {
+                if let collectionController = self.collectionController {
                     if collectionController.responds(to: selector) {
                         return collectionController
                     }
                 }
-                if let viewController: QCollectionViewController = self.viewController {
+                if let viewController = self.viewController {
                     if viewController.responds(to: selector) {
                         return viewController
                     }
@@ -210,7 +210,7 @@
                 _ collectionView: UICollectionView,
                 numberOfItemsInSection index: Int
             ) -> Int {
-                if let collectionController: IQCollectionController = self.collectionController {
+                if let collectionController = self.collectionController {
                     return collectionController.collectionView(collectionView, numberOfItemsInSection: index)
                 }
                 return 0
@@ -221,7 +221,7 @@
                 _ collectionView: UICollectionView,
                 cellForItemAt indexPath: IndexPath
             ) -> UICollectionViewCell {
-                if let collectionController: IQCollectionController = self.collectionController {
+                if let collectionController = self.collectionController {
                     return collectionController.collectionView(collectionView, cellForItemAt: indexPath)
                 }
                 return UICollectionViewCell()

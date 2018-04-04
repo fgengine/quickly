@@ -4,7 +4,7 @@
 
 #if os(iOS)
 
-    public class QImageRequest: QApiRequest {
+    public class QImageRequest : QApiRequest {
 
         public init(url: URL) {
             super.init(method: "GET")

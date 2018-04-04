@@ -4,7 +4,7 @@
 
 #if os(iOS)
 
-    public protocol QTextFieldTableCellDelegate: IQTableCellDelegate {
+    public protocol QTextFieldTableCellDelegate : IQTableCellDelegate {
 
         func shouldBeginEditing(_ row: QTextFieldTableRow) -> Bool
         func beginEdititing(_ row: QTextFieldTableRow)
@@ -18,7 +18,7 @@
 
     }
 
-    public class QTextFieldTableCell< RowType: QTextFieldTableRow >: QBackgroundColorTableCell< RowType > {
+    open class QTextFieldTableCell< RowType: QTextFieldTableRow >: QBackgroundColorTableCell< RowType > {
 
         open weak var textFieldTableDelegate: QTextFieldTableCellDelegate? {
             get{ return self.tableDelegate as? QTextFieldTableCellDelegate }
@@ -34,7 +34,7 @@
         }
 
         open override class func height(row: RowType, width: CGFloat) -> CGFloat {
-            return row.edgeInsets.top + row.height + row.edgeInsets.bottom
+            return row.edgeInsets.top + row.fieldHeight + row.edgeInsets.bottom
         }
 
         open override func setup() {
@@ -102,82 +102,62 @@
                 selfConstraints.append(self._textField.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
                 self.selfConstraints = selfConstraints
             }
-
-            self._textField.validator = row.fieldValidator
-            self._textField.requireValidator = row.fieldRequireValidator
-            self._textField.formatter = row.fieldFormatter
-            self._textField.textInsets = row.fieldTextInsets
-            self._textField.textAlignment = row.fieldTextAlignment
-            self._textField.textStyle = row.fieldTextStyle
+            row.field.apply(target: self._textField)
             self._textField.unformatText = row.fieldText
-            self._textField.placeholder = row.fieldPlaceholder
-            self._textField.typingStyle = row.fieldTypingStyle
-            self._textField.autocapitalizationType = row.fieldAutocapitalizationType
-            self._textField.autocorrectionType = row.fieldAutocorrectionType
-            self._textField.spellCheckingType = row.fieldSpellCheckingType
-            self._textField.keyboardType = row.fieldKeyboardType
-            self._textField.keyboardAppearance = row.fieldKeyboardAppearance
-            self._textField.returnKeyType = row.fieldReturnKeyType
-            self._textField.enablesReturnKeyAutomatically = row.fieldEnablesReturnKeyAutomatically
-            self._textField.isSecureTextEntry = row.fieldIsSecureTextEntry
-            if #available(iOS 10.0, *) {
-                self._textField.textContentType = row.fieldTextContentType
-            }
-            self._textField.isEnabled = row.fieldIsEnabled
         }
 
         private func shouldBeginEditing() -> Bool {
-            guard let row: RowType = self.row, let delegate: QTextFieldTableCellDelegate = self.textFieldTableDelegate else { return true }
+            guard let row = self.row, let delegate = self.textFieldTableDelegate else { return true }
             return delegate.shouldBeginEditing(row as QTextFieldTableRow)
         }
 
         private func beginEdititing() {
-            guard let row: RowType = self.row else { return }
+            guard let row = self.row else { return }
             row.fieldIsEditing = self._textField.isEditing
-            guard let delegate: QTextFieldTableCellDelegate = self.textFieldTableDelegate else { return }
+            guard let delegate = self.textFieldTableDelegate else { return }
             return delegate.beginEdititing(row as QTextFieldTableRow)
         }
 
         private func edititing() {
-            guard let row: RowType = self.row else { return }
+            guard let row = self.row else { return }
             row.fieldIsValid = self._textField.isValid
             row.fieldText = self._textField.unformatText
-            guard let delegate: QTextFieldTableCellDelegate = self.textFieldTableDelegate else { return }
+            guard let delegate = self.textFieldTableDelegate else { return }
             return delegate.edititing(row as QTextFieldTableRow)
         }
 
         private func shouldEndEditing() -> Bool {
-            guard let row: RowType = self.row, let delegate: QTextFieldTableCellDelegate = self.textFieldTableDelegate else { return true }
+            guard let row = self.row, let delegate = self.textFieldTableDelegate else { return true }
             return delegate.shouldEndEditing(row as QTextFieldTableRow)
         }
 
         private func endEdititing() {
-            guard let row: RowType = self.row else { return }
+            guard let row = self.row else { return }
             row.fieldIsEditing = self._textField.isEditing
-            guard let delegate: QTextFieldTableCellDelegate = self.textFieldTableDelegate else { return }
+            guard let delegate = self.textFieldTableDelegate else { return }
             return delegate.endEdititing(row as QTextFieldTableRow)
         }
 
         private func shouldClear() -> Bool {
-            guard let row: RowType = self.row, let delegate: QTextFieldTableCellDelegate = self.textFieldTableDelegate else { return true }
+            guard let row = self.row, let delegate = self.textFieldTableDelegate else { return true }
             return delegate.shouldClear(row as QTextFieldTableRow)
         }
 
         private func pressedClear() {
-            guard let row: RowType = self.row else { return }
+            guard let row = self.row else { return }
             row.fieldIsValid = self._textField.isValid
             row.fieldText = self._textField.unformatText
-            guard let delegate: QTextFieldTableCellDelegate = self.textFieldTableDelegate else { return }
+            guard let delegate = self.textFieldTableDelegate else { return }
             return delegate.endEdititing(row as QTextFieldTableRow)
         }
 
         private func shouldReturn() -> Bool {
-            guard let row: RowType = self.row, let delegate: QTextFieldTableCellDelegate = self.textFieldTableDelegate else { return true }
+            guard let row = self.row, let delegate = self.textFieldTableDelegate else { return true }
             return delegate.shouldClear(row as QTextFieldTableRow)
         }
 
         private func pressedReturn() {
-            guard let row: RowType = self.row, let delegate: QTextFieldTableCellDelegate = self.textFieldTableDelegate else { return }
+            guard let row = self.row, let delegate = self.textFieldTableDelegate else { return }
             delegate.pressedReturn(row as QTextFieldTableRow)
         }
 

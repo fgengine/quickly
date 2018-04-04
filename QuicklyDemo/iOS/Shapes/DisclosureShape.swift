@@ -14,15 +14,13 @@ class DisclosureShape : QShapeModel {
         self.lineJoin = .round
     }
 
-    override func prepare(_ bounds: CGRect) -> UIBezierPath? {
-        let path: UIBezierPath = UIBezierPath()
-        path.move(to: CGPoint(x: 0, y: 0))
-        path.addLine(to: CGPoint(x: self.size.width, y: self.size.height / 2))
-        path.addLine(to: CGPoint(x: 0, y: self.size.height))
-        path.apply(CGAffineTransform(
-            translationX: ((bounds.width - self.size.width) / 2),
-            y: ((bounds.height - self.size.height) / 2)
-        ))
+    public override func make() -> UIBezierPath? {
+        let size2 = CGSize(width: self.size.width / 2, height: self.size.height / 2)
+
+        let path = UIBezierPath()
+        path.move(to: CGPoint(x: -size2.width, y: -size2.height))
+        path.addLine(to: CGPoint(x: size2.width, y: 0))
+        path.addLine(to: CGPoint(x: -size2.width, y: size2.height))
         return path
     }
 

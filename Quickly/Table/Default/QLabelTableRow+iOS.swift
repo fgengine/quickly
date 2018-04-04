@@ -4,16 +4,19 @@
 
 #if os(iOS)
 
-    open class QLabelTableRow: QBackgroundColorTableRow {
+    open class QLabelTableRow : QBackgroundColorTableRow {
 
-        public var edgeInsets: UIEdgeInsets = UIEdgeInsets.zero
+        public var edgeInsets: UIEdgeInsets
 
-        public var labelText: IQText?
-        public var labelContentAlignment: QLabel.ContentAlignment = .left
-        public var labelPadding: CGFloat = 0
-        public var labelNumberOfLines: Int = 0
-        public var labelLineBreakMode: NSLineBreakMode = .byWordWrapping
+        public var label: QLabelStyleSheet
 
+        public init(label: QLabelStyleSheet) {
+            self.edgeInsets = UIEdgeInsets.zero
+            self.label = label
+
+            super.init()
+        }
+        
     }
 
 #endif

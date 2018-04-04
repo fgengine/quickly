@@ -4,8 +4,8 @@
 
 import Quickly.Private
 
-public let QJsonErrorDomain: String = QJsonImplErrorDomain
-public let QJsonErrorPathKey: String = QJsonImplErrorPathKey
+public let QJsonErrorDomain = QJsonImplErrorDomain
+public let QJsonErrorPathKey = QJsonImplErrorPathKey
 
 public enum QJsonErrorCode : Int {
     case notFound
@@ -45,7 +45,7 @@ public final class QJson {
     }
 
     public init?(data: Data) {
-        if let impl: QJsonImpl = QJsonImpl(basePath: "", data: data) {
+        if let impl = QJsonImpl(basePath: "", data: data) {
             self.impl = impl
         } else {
             return nil
@@ -53,7 +53,7 @@ public final class QJson {
     }
 
     public init?(basePath: String, data: Data) {
-        if let impl: QJsonImpl = QJsonImpl(basePath: basePath, data: data) {
+        if let impl = QJsonImpl(basePath: basePath, data: data) {
             self.impl = impl
         } else {
             return nil
@@ -61,7 +61,7 @@ public final class QJson {
     }
 
     public init?(string: String) {
-        if let impl: QJsonImpl = QJsonImpl(basePath: "", string: string) {
+        if let impl = QJsonImpl(basePath: "", string: string) {
             self.impl = impl
         } else {
             return nil
@@ -69,7 +69,7 @@ public final class QJson {
     }
 
     public init?(basePath: String, string: String) {
-        if let impl: QJsonImpl = QJsonImpl(basePath: basePath, string: string) {
+        if let impl = QJsonImpl(basePath: basePath, string: string) {
             self.impl = impl
         } else {
             return nil
@@ -77,7 +77,7 @@ public final class QJson {
     }
 
     public init?(string: String, encoding: UInt) {
-        if let impl: QJsonImpl = QJsonImpl(basePath: "", string: string, encoding: encoding) {
+        if let impl = QJsonImpl(basePath: "", string: string, encoding: encoding) {
             self.impl = impl
         } else {
             return nil
@@ -85,7 +85,7 @@ public final class QJson {
     }
 
     public init?(basePath: String, string: String, encoding: UInt) {
-        if let impl: QJsonImpl = QJsonImpl(basePath: basePath, string: string, encoding: encoding) {
+        if let impl = QJsonImpl(basePath: basePath, string: string, encoding: encoding) {
             self.impl = impl
         } else {
             return nil
@@ -207,15 +207,15 @@ public final class QJson {
         return self.impl.set(color: value, forPath: path)
     }
 
-    public func object(at: String) throws -> Any? {
+    public func object(at: String) throws -> Any {
         return try self.impl.object(at: at)
     }
 
-    public func dictionary(at: String) throws -> [AnyHashable : Any]? {
+    public func dictionary(at: String) throws -> [AnyHashable : Any] {
         return try self.impl.dictionary(at: at)
     }
 
-    public func array(at: String) throws -> [Any]? {
+    public func array(at: String) throws -> [Any] {
         return try self.impl.array(at: at)
     }
 
@@ -269,14 +269,14 @@ public final class QJson {
 
 }
 
-extension QJson: IQDebug {
+extension QJson : IQDebug {
 
     open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         if self.isArray() == true {
-            let array: NSArray = self.root! as! NSArray
+            let array = self.root! as! NSArray
             array.debugString(&buffer, headerIndent, indent, footerIndent)
         } else if self.isDictionary() == true {
-            let dictionary: NSDictionary = self.root! as! NSDictionary
+            let dictionary = self.root! as! NSDictionary
             dictionary.debugString(&buffer, headerIndent, indent, footerIndent)
         } else {
             if headerIndent > 0 {

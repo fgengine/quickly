@@ -34,15 +34,18 @@ class TextFieldViewController: QStaticViewController, IQRouted {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let textStyle: QTextStyle = QTextStyle()
+        let textStyle = QTextStyle()
         textStyle.font = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize)
         textStyle.color = UIColor.darkGray
 
-        let typingStyle: QTextStyle = QTextStyle()
+        let typingStyle = QTextStyle()
         typingStyle.font = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize)
         typingStyle.color = UIColor.white
         typingStyle.backgroundColor = UIColor.darkGray
 
+        self.textField.layer.borderColor = UIColor.red.cgColor
+        self.textField.layer.borderWidth = 1
+        self.textField.textInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 4)
         self.textField.textStyle = textStyle
         self.textField.typingStyle = typingStyle
         self.textField.placeholder = QText("TextField")

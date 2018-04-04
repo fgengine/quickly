@@ -71,7 +71,7 @@ open class QPushViewController : QPlatformViewController, IQPushViewController {
     }
 
     deinit {
-        if let timer: QTimer = self.timer {
+        if let timer = self.timer {
             timer.stop()
         }
     }
@@ -81,12 +81,11 @@ open class QPushViewController : QPlatformViewController, IQPushViewController {
 
     open override func loadView() {
         self.view = QTransparentView()
-        if let displayTime: TimeInterval = self.displayTime {
-            let timer: QTimer = QTimer(interval: displayTime)
+        if let displayTime = self.displayTime {
+            let timer = QTimer(interval: displayTime)
             timer.onFinished = { [weak self] (timer: QTimer) in
-                if let strongify = self {
-                    strongify.contentViewController.didTimeout()
-                }
+                guard let strongify = self else { return }
+                strongify.contentViewController.didTimeout()
             }
             self.timer = timer
         }
@@ -102,7 +101,7 @@ open class QPushViewController : QPlatformViewController, IQPushViewController {
     }
 
     open func didPresent(animated: Bool) {
-        if let timer: QTimer = self.timer {
+        if let timer = self.timer {
             timer.start()
         }
         #if DEBUG
@@ -112,7 +111,7 @@ open class QPushViewController : QPlatformViewController, IQPushViewController {
     }
 
     open func willDismiss(animated: Bool) {
-        if let timer: QTimer = self.timer {
+        if let timer = self.timer {
             timer.stop()
         }
         #if DEBUG
@@ -129,19 +128,19 @@ open class QPushViewController : QPlatformViewController, IQPushViewController {
     }
 
     open func beginInteractiveDismiss() {
-        if let timer: QTimer = self.timer {
+        if let timer = self.timer {
             timer.pause()
         }
     }
 
     open func cancelInteractiveDismiss() {
-        if let timer: QTimer = self.timer {
+        if let timer = self.timer {
             timer.resume()
         }
     }
 
     open func funishInteractiveDismiss() {
-        if let timer: QTimer = self.timer {
+        if let timer = self.timer {
             timer.stop()
         }
     }
@@ -149,7 +148,7 @@ open class QPushViewController : QPlatformViewController, IQPushViewController {
     #if os(iOS)
 
     private func _prepareTapGesture() -> UITapGestureRecognizer {
-        let gesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self._tapGestureHandler(_:)))
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(self._tapGestureHandler(_:)))
         gesture.delegate = self
         return gesture
     }
@@ -228,7 +227,8 @@ open class QPushViewController : QPlatformViewController, IQPushViewController {
     extension QPushViewController : UIGestureRecognizerDelegate {
 
         open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-            if self.contentViewController.view.point(inside: gestureRecognizer.location(in: self.view), with: nil) == false {
+            let location = gestureRecognizer.location(in: self.contentViewController.view)
+            if self.contentViewController.view.point(inside: location, with: nil) == false {
                 return false
             }
             return true

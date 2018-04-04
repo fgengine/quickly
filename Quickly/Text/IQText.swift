@@ -5,6 +5,7 @@
 public protocol IQText {
 
     var attributed: NSAttributedString { get }
+    var string: String { get }
 
     func size() -> CGSize
     func size(width: CGFloat) -> CGSize
@@ -14,6 +15,10 @@ public protocol IQText {
 }
 
 extension IQText {
+
+    public var string: String {
+        get { return self.attributed.string }
+    }
 
     public func size() -> CGSize {
         return self.size(size: CGSize(
@@ -37,7 +42,7 @@ extension IQText {
     }
 
     public func size(size: CGSize) -> CGSize {
-        let rect: CGRect = self.attributed.boundingRect(
+        let rect = self.attributed.boundingRect(
             with: size,
             options: [.usesLineFragmentOrigin],
             context: nil

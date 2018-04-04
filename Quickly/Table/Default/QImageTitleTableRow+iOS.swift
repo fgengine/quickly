@@ -4,21 +4,25 @@
 
 #if os(iOS)
 
-    open class QImageTitleTableRow: QBackgroundColorTableRow {
+    open class QImageTitleTableRow : QBackgroundColorTableRow {
 
-        public var edgeInsets: UIEdgeInsets = UIEdgeInsets.zero
+        public var edgeInsets: UIEdgeInsets
 
-        public var imageSource: QImageSource?
-        public var imageWidth: CGFloat = 96
-        public var imageCornerRadius: CGFloat = 0
-        public var imageRoundCorners: Bool = false
-        public var imageSpacing: CGFloat = 0
+        public var image: QImageViewStyleSheet
+        public var imageWidth: CGFloat
+        public var imageSpacing: CGFloat
 
-        public var titleText: IQText?
-        public var titleContentAlignment: QLabel.ContentAlignment = .left
-        public var titlePadding: CGFloat = 0
-        public var titleNumberOfLines: Int = 0
-        public var titleLineBreakMode: NSLineBreakMode = .byWordWrapping
+        public var title: QLabelStyleSheet
+
+        public init(image: QImageViewStyleSheet, imageWidth: CGFloat, title: QLabelStyleSheet) {
+            self.edgeInsets = UIEdgeInsets.zero
+            self.image = image
+            self.imageWidth = imageWidth
+            self.imageSpacing = 0
+            self.title = title
+
+            super.init()
+        }
 
     }
 

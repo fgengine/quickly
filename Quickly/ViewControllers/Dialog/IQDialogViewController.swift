@@ -60,7 +60,7 @@ public protocol IQDialogViewController : IQBaseViewController {
     typealias ContainerViewControllerType = QPlatformViewController & IQDialogContainerViewController
     typealias ContentViewControllerType = QPlatformViewController & IQDialogContentViewController
 
-    weak var containerViewController: ContainerViewControllerType? { set get }
+    var containerViewController: ContainerViewControllerType? { set get }
 
     var contentViewController: ContentViewControllerType { set get }
     var widthBehaviour: QDialogViewControllerSizeBehaviour { set get }
@@ -79,7 +79,7 @@ public protocol IQDialogContentViewController : IQBaseViewController {
 
     typealias DialogViewControllerType = QPlatformViewController & IQDialogViewController
 
-    weak var dialogViewController: DialogViewControllerType? { set get }
+    var dialogViewController: DialogViewControllerType? { set get }
 
     func didPressedOutsideContent()
 
@@ -88,10 +88,8 @@ public protocol IQDialogContentViewController : IQBaseViewController {
 public extension IQDialogViewController where Self : QPlatformViewController {
 
     public func dismissDialog(animated: Bool, completion: (() -> Swift.Void)?) {
-        guard let containerViewController: IQDialogContainerViewController = self.containerViewController else {
-            return
-        }
-        containerViewController.dismissDialog(viewController: self, animated: animated, completion: completion)
+        guard let vc = self.containerViewController else { return }
+        vc.dismissDialog(viewController: self, animated: animated, completion: completion)
     }
 
 }
@@ -118,7 +116,7 @@ public protocol IQDialogContainerBackgroundView : class {
     typealias ContainerViewControllerType = QPlatformViewController & IQDialogContainerViewController
     typealias ViewControllerType = QPlatformViewController & IQDialogViewController
 
-    weak var containerViewController: ContainerViewControllerType? { set get }
+    var containerViewController: ContainerViewControllerType? { set get }
 
     func presentDialog(viewController: ViewControllerType, isFirst: Bool, animated: Bool)
     func dismissDialog(viewController: ViewControllerType, isLast: Bool, animated: Bool)

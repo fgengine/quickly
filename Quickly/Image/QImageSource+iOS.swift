@@ -13,12 +13,8 @@
         case originOrAspectFill
 
         public func rect(_ bounds: CGRect, size: CGSize) -> CGRect? {
-            guard bounds.width > CGFloat.leastNonzeroMagnitude && bounds.height > CGFloat.leastNonzeroMagnitude else {
-                return nil
-            }
-            guard size.width > CGFloat.leastNonzeroMagnitude && size.height > CGFloat.leastNonzeroMagnitude else {
-                return nil
-            }
+            guard bounds.width > CGFloat.leastNonzeroMagnitude && bounds.height > CGFloat.leastNonzeroMagnitude else { return nil }
+            guard size.width > CGFloat.leastNonzeroMagnitude && size.height > CGFloat.leastNonzeroMagnitude else { return nil }
             switch self {
             case .origin: return CGRect(origin: bounds.origin, size: size)
             case .stretch: return CGRect(origin: bounds.origin, size: size)
@@ -34,10 +30,8 @@
         }
 
         public func size(_ available: CGSize, size: CGSize) -> CGSize? {
-            let bounds: CGRect = CGRect(x: 0, y: 0, width: available.width, height: available.height)
-            guard let rect: CGRect = self.rect(bounds, size: size) else {
-                return nil
-            }
+            let bounds = CGRect(x: 0, y: 0, width: available.width, height: available.height)
+            guard let rect = self.rect(bounds, size: size) else { return nil }
             return rect.integral.size
         }
     }
@@ -74,7 +68,7 @@
             backgroundColor: UIColor = UIColor.clear,
             tintColor: UIColor? = nil
         ) {
-            if let image: UIImage = UIImage(named: imageNamed) {
+            if let image = UIImage(named: imageNamed) {
                 self.image = image
                 self.size = image.size
             } else {
@@ -104,27 +98,23 @@
 
         public func rect(_ bounds: CGRect, image: UIImage? = nil) -> CGRect {
             var size: CGSize
-            if let image: UIImage = image {
+            if let image = image {
                 size = image.size
             } else {
                 size = self.size
             }
-            guard let scaleRect: CGRect = self.scale.rect(bounds, size: size) else {
-                return bounds
-            }
+            guard let scaleRect = self.scale.rect(bounds, size: size) else { return bounds }
             return scaleRect
         }
 
         public func size(_ available: CGSize, image: UIImage? = nil) -> CGSize {
             var size: CGSize
-            if let image: UIImage = image {
+            if let image = image {
                 size = image.size
             } else {
                 size = self.size
             }
-            guard let scaleSize: CGSize = self.scale.size(available, size: size) else {
-                return self.size
-            }
+            guard let scaleSize = self.scale.size(available, size: size) else { return self.size }
             return scaleSize
         }
 

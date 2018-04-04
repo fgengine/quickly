@@ -32,7 +32,7 @@ class ButtonViewController: QStaticViewController, IQRouted {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let normalStyle: QButtonStyle = QButtonStyle()
+        let normalStyle = QButtonStyle()
         normalStyle.color = UIColor.red
         normalStyle.cornerRadius = 4
         normalStyle.text = QText("Normal", color: UIColor.black)
@@ -42,7 +42,7 @@ class ButtonViewController: QStaticViewController, IQRouted {
             tintColor: UIColor.black
         )
 
-        let highlightedStyle: QButtonStyle = QButtonStyle(parent: normalStyle)
+        let highlightedStyle = QButtonStyle(parent: normalStyle)
         highlightedStyle.color = UIColor.blue
         highlightedStyle.text = QText("Highlighted", color: UIColor.white)
         highlightedStyle.imageSource = QImageSource(
@@ -61,7 +61,7 @@ class ButtonViewController: QStaticViewController, IQRouted {
         self.spinnerButton.textInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         self.spinnerButton.normalStyle = normalStyle
         self.spinnerButton.highlightedStyle = highlightedStyle
-        self.spinnerButton.spinnerView = QSystemSpinnerView()
+        self.spinnerButton.spinnerView = QSpinnerView()
         self.spinnerButton.addTouchUpInside(self, action: #selector(self.pressedSpinnerButton(_:)))
     }
 

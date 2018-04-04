@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public protocol IQApiProvider: class {
+public protocol IQApiProvider : class {
 
     var baseUrl: URL? { get }
     var urlParams: [String: Any] { get }

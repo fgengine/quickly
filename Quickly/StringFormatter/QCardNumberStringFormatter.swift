@@ -2,17 +2,17 @@
 //  Quickly
 //
 
-open class QCardNumberStringFormatter: IQStringFormatter {
+open class QCardNumberStringFormatter : IQStringFormatter {
 
     public init() {
     }
 
     public func format(_ unformat: String) -> String {
-        var format: String = String()
-        var unformatOffset: Int = 0
+        var format = String()
+        var unformatOffset = 0
         while unformatOffset < unformat.count {
-            let unformatIndex: String.Index = unformat.index(unformat.startIndex, offsetBy: unformatOffset)
-            let unformatCharacter: Character = unformat[unformatIndex]
+            let unformatIndex = unformat.index(unformat.startIndex, offsetBy: unformatOffset)
+            let unformatCharacter = unformat[unformatIndex]
             if unformatOffset != 0 && unformatOffset % 4 == 0 {
                 format.append(" ")
             }
@@ -23,7 +23,7 @@ open class QCardNumberStringFormatter: IQStringFormatter {
     }
 
     public func format(_ unformat: String, caret: inout Int) -> String {
-        let format: String = self.format(unformat)
+        let format = self.format(unformat)
         caret = self.formatDifferenceCaret(
             unformat: unformat,
             format: format,
@@ -39,7 +39,7 @@ open class QCardNumberStringFormatter: IQStringFormatter {
     }
 
     public func unformat(_ format: String, caret: inout Int) -> String {
-        let unformat: String = self.unformat(format)
+        let unformat = self.unformat(format)
         caret = self.unformatDifferenceCaret(
             unformat: unformat,
             format: format,

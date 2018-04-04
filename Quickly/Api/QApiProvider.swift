@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QApiProvider: NSObject, IQApiProvider {
+open class QApiProvider : NSObject, IQApiProvider {
 
     public var baseUrl: URL? = nil
     public var urlParams: [String: Any] = [:]
@@ -30,7 +30,7 @@ open class QApiProvider: NSObject, IQApiProvider {
 
     public func set(urlParam: String, value: Any?) {
         self.queue.sync {
-            if let safeValue: Any = value {
+            if let safeValue = value {
                 self.urlParams[urlParam] = safeValue
             } else {
                 self.urlParams.removeValue(forKey: urlParam)
@@ -54,7 +54,7 @@ open class QApiProvider: NSObject, IQApiProvider {
 
     public func set(header: String, value: String?) {
         self.queue.sync {
-            if let safeValue: String = value {
+            if let safeValue = value {
                 self.headers[header] = safeValue
             } else {
                 self.headers.removeValue(forKey: header)
@@ -78,7 +78,7 @@ open class QApiProvider: NSObject, IQApiProvider {
 
     public func set(bodyParam: String, value: Any?) {
         self.queue.sync {
-            if let safeValue: Any = value {
+            if let safeValue = value {
                 if self.bodyParams == nil {
                     self.bodyParams = [:]
                 }
@@ -245,14 +245,14 @@ open class QApiProvider: NSObject, IQApiProvider {
     }
 
     private func prepareSessionConfiguration() -> URLSessionConfiguration {
-        let sessionConfiguration: URLSessionConfiguration = URLSessionConfiguration.default
+        let sessionConfiguration = URLSessionConfiguration.default
         sessionConfiguration.timeoutIntervalForRequest = 30
         sessionConfiguration.timeoutIntervalForResource = 60
         return sessionConfiguration
     }
 
     private func prepareSessionQueue() -> OperationQueue {
-        let queue: OperationQueue = OperationQueue()
+        let queue = OperationQueue()
         queue.maxConcurrentOperationCount = 1
         return queue;
     }
@@ -263,38 +263,38 @@ open class QApiProvider: NSObject, IQApiProvider {
     
 }
 
-extension QApiProvider: IQDebug {
+extension QApiProvider : IQDebug {
 
     open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-        let nextIndent: Int = indent + 1
+        let nextIndent = indent + 1
 
         if headerIndent > 0 {
             buffer.append(String(repeating: "\t", count: headerIndent))
         }
         buffer.append("<\(String(describing: self))\n")
 
-        if let baseUrl: URL = self.baseUrl {
-            var debug: String = String()
+        if let baseUrl = self.baseUrl {
+            var debug = String()
             baseUrl.debugString(&debug, 0, nextIndent, indent)
             QDebugString("BaseUrl: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if self.urlParams.count > 0 {
-            var debug: String = String()
+            var debug = String()
             self.urlParams.debugString(&debug, 0, nextIndent, indent)
             QDebugString("UrlParams: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if self.headers.count > 0 {
-            var debug: String = String()
+            var debug = String()
             self.headers.debugString(&debug, 0, nextIndent, indent)
             QDebugString("Headers: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
-        if let bodyParams: [String: Any] = self.bodyParams {
-            var debug: String = String()
+        if let bodyParams = self.bodyParams {
+            var debug = String()
             bodyParams.debugString(&debug, 0, nextIndent, indent)
             QDebugString("BodyParams: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if self.allowInvalidCertificates == true {
-            var debug: String = String()
+            var debug = String()
             self.allowInvalidCertificates.debugString(&debug, 0, nextIndent, indent)
             QDebugString("AllowInvalidCertificates: \(debug)\n", &buffer, indent, nextIndent, indent)
         }

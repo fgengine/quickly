@@ -4,14 +4,16 @@
 
 #if os(iOS)
 
-    public protocol IQTableDecorDelegate: class {
+    public protocol IQTableDecorDelegate : class {
     }
 
-    public protocol IQTableDecor: IQTableReuse {
+    public protocol IQTableDecor : IQTableReuse {
 
-        weak var tableDelegate: IQTableDecorDelegate? { set get }
+        typealias DequeueType = UITableViewHeaderFooterView & IQTableDecor
 
-        static func dequeue(tableView: UITableView) -> UITableViewHeaderFooterView?
+        var tableDelegate: IQTableDecorDelegate? { set get }
+
+        static func dequeue(tableView: UITableView) -> DequeueType?
 
         func configure()
 
@@ -20,23 +22,25 @@
 
     }
 
-    extension IQTableDecor where Self: UIView {
+    extension IQTableDecor where Self : UITableViewHeaderFooterView {
 
         public static func register(tableView: UITableView) {
-            if let nib: UINib = self.currentNib() {
+            if let nib = self.currentNib() {
                 tableView.register(nib, forHeaderFooterViewReuseIdentifier: self.reuseIdentifier())
             } else {
                 tableView.register(self.classForCoder(), forHeaderFooterViewReuseIdentifier: self.reuseIdentifier())
             }
         }
 
-        public static func dequeue(tableView: UITableView) -> UITableViewHeaderFooterView? {
-            return tableView.dequeueReusableHeaderFooterView(withIdentifier: self.reuseIdentifier())
+        public static func dequeue(tableView: UITableView) -> DequeueType? {
+            return tableView.dequeueReusableHeaderFooterView(
+                withIdentifier: self.reuseIdentifier()
+            ) as? DequeueType
         }
 
     }
 
-    public protocol IQTypedTableDecor: IQTableDecor {
+    public protocol IQTypedTableDecor : IQTableDecor {
 
         associatedtype DataType: IQTableData
 

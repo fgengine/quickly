@@ -25,12 +25,12 @@ class QuicklyJsonTests: XCTestCase {
     }
 
     func testDebugJson() {
-        let json: QJson = self.fakeJson()
+        let json = self.fakeJson()
         print(json.debugString())
     }
 
     func testSimpleGetJson() {
-        let json: QJson = self.fakeJson()
+        let json = self.fakeJson()
         XCTAssert(try json.boolean(at: "bool") == true)
         XCTAssert(try json.int(at: "int") == 1)
         XCTAssert(try json.uint(at: "uint") == 1)
@@ -39,28 +39,28 @@ class QuicklyJsonTests: XCTestCase {
         XCTAssert(try json.uint(at: "numberString") == 1)
         XCTAssert(try json.string(at: "string") == "test")
         XCTAssert(try json.date(at: "date") == Date(timeIntervalSince1970: 183548353))
-        XCTAssert(try json.color(at: "color_gg") == UIColor(hex: 0xaaaaaaff))
-        XCTAssert(try json.color(at: "color_rgb") == UIColor(hex: 0x44ddaaff))
-        XCTAssert(try json.color(at: "color_rrggbb") == UIColor(hex: 0x40d0a0ff))
-        XCTAssert(try json.color(at: "color_rrggbbaa") == UIColor(hex: 0x40d0a070))
+        XCTAssert(try json.color(at: "color_gg") == QPlatformColor(hex: 0xaaaaaaff))
+        XCTAssert(try json.color(at: "color_rgb") == QPlatformColor(hex: 0x44ddaaff))
+        XCTAssert(try json.color(at: "color_rrggbb") == QPlatformColor(hex: 0x40d0a0ff))
+        XCTAssert(try json.color(at: "color_rrggbbaa") == QPlatformColor(hex: 0x40d0a070))
     }
 
     func testSimpleOperatorGetJson() throws {
-        let json: QJson = self.fakeJson()
+        let json = self.fakeJson()
 
-        var existReguiredBool: Bool = false
+        var existReguiredBool = false
         try existReguiredBool <<< (json, "bool")
         XCTAssert(existReguiredBool == true)
 
         var existOptionalBool: Bool?
         existOptionalBool <<< (json, "bool")
-        if let value: Bool = existOptionalBool {
+        let value = existOptionalBool {
             XCTAssert(value == true)
         } else {
             XCTFail("")
         }
 
-        var notFoundReguiredBool: Bool = false
+        var notFoundReguiredBool = false
         do {
             try notFoundReguiredBool <<< (json, "not_found")
         } catch let error as NSError {
@@ -76,10 +76,10 @@ class QuicklyJsonTests: XCTestCase {
     }
 
     func testSimpleSetJson() {
-        let json: QJson = QJson()
+        let json = QJson()
         "USD" >>> (json, "RUR")
 
-        var existReguiredString: String = ""
+        var existReguiredString = ""
         do {
             try existReguiredString <<< (json, "RUR")
             XCTAssert(existReguiredString == "USD")

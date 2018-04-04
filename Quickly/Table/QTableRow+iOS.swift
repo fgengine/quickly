@@ -4,10 +4,10 @@
 
 #if os(iOS)
 
-    open class QTableRow: IQTableRow {
+    open class QTableRow : IQTableRow {
 
-        public private(set) weak var section: IQTableSection? = nil
-        public private(set) var indexPath: IndexPath? = nil
+        public private(set) weak var section: IQTableSection?
+        public private(set) var indexPath: IndexPath?
         public var canSelect: Bool = true
         public var canEdit: Bool = false
         public var canMove: Bool = false

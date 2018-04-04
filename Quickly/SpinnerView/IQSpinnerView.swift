@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public protocol IQSpinnerView: IQView {
+public protocol IQSpinnerView : IQView {
 
     func isAnimating() -> Bool
     
@@ -10,3 +10,5 @@ public protocol IQSpinnerView: IQView {
     func stop()
 
 }
+
+public typealias QSpinnerViewType = QPlatformView & IQSpinnerView

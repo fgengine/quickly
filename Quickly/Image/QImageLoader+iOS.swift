@@ -4,7 +4,7 @@
 
 #if os(iOS)
 
-    public protocol IQImageLoaderTarget: class {
+    public protocol IQImageLoaderTarget : class {
 
         func imageLoader(_ imageLoader: QImageLoader, cacheImage: UIImage)
 
@@ -14,7 +14,7 @@
 
     }
 
-    public protocol IQImageLoaderFilter: class {
+    public protocol IQImageLoaderFilter : class {
 
         var name: String { get }
 
@@ -55,20 +55,16 @@
         public func isExist(
             _ url: URL,
             filter: IQImageLoaderFilter? = nil
-            ) -> Bool {
-            guard let key: String = self.key(url, filter: filter) else {
-                return false
-            }
+        ) -> Bool {
+            guard let key = self.key(url, filter: filter) else { return false }
             return self.cache.isExist(key)
         }
 
         public func cacheImage(
             _ url: URL,
             filter: IQImageLoaderFilter? = nil
-            ) -> UIImage? {
-            guard let key: String = self.key(url, filter: filter) else {
-                return nil
-            }
+        ) -> UIImage? {
+            guard let key = self.key(url, filter: filter) else { return nil }
             return self.cache.image(key)
         }
 
@@ -78,8 +74,8 @@
             filter: IQImageLoaderFilter? = nil,
             success: SuccessClosure? = nil,
             failure: FailureClosure? = nil
-            ) {
-            if let data: Data = UIImagePNGRepresentation(image) {
+        ) {
+            if let data = UIImagePNGRepresentation(image) {
                 self.set(data, image: image, url: url, filter: filter, success: success, failure: failure)
             }
         }
@@ -90,8 +86,8 @@
             filter: IQImageLoaderFilter? = nil,
             success: SuccessClosure? = nil,
             failure: FailureClosure? = nil
-            ) {
-            if let image: UIImage = UIImage(data: data) {
+        ) {
+            if let image = UIImage(data: data) {
                 self.set(data, image: image, url: url, filter: filter, success: success, failure: failure)
             }
         }
@@ -103,10 +99,8 @@
             filter: IQImageLoaderFilter? = nil,
             success: SuccessClosure? = nil,
             failure: FailureClosure? = nil
-            ) {
-            guard let key: String = self.key(url, filter: filter) else {
-                return
-            }
+        ) {
+            guard let key = self.key(url, filter: filter) else { return }
             self.cache.set(data, image: image, key: key, success: success, failure: failure)
         }
 
@@ -115,17 +109,15 @@
             filter: IQImageLoaderFilter? = nil,
             success: SuccessClosure? = nil,
             failure: FailureClosure? = nil
-            ) {
-            guard let key: String = self.key(url, filter: filter) else {
-                return
-            }
+        ) {
+            guard let key = self.key(url, filter: filter) else { return }
             self.cache.remove(key, success: success, failure: failure)
         }
 
         public func cleanup(
             _ success: SuccessClosure? = nil,
             failure: FailureClosure? = nil
-            ) {
+        ) {
             self.cache.cleanup(success, failure: failure)
         }
 
@@ -133,11 +125,11 @@
             var existOperation: BaseOperation? = nil
             self.syncQueue.sync {
                 self.operationQueue.isSuspended = true
-                for operation: Operation in self.operationQueue.operations {
+                for operation in self.operationQueue.operations {
                     if operation.isCancelled == true {
                         continue
                     }
-                    if let operation: BaseOperation = operation as? BaseOperation {
+                    if let operation = operation as? BaseOperation {
                         if operation.url == url && operation.filter === filter {
                             existOperation = operation
                         }
@@ -145,7 +137,7 @@
                 }
                 self.operationQueue.isSuspended = false
             }
-            if let existOperation: BaseOperation = existOperation {
+            if let existOperation = existOperation {
                 existOperation.add(target: target)
             } else {
                 if self.isExist(url, filter: filter) {
@@ -163,7 +155,7 @@
                         filter: filter
                     )
                 }
-                if let existOperation: BaseOperation = existOperation {
+                if let existOperation = existOperation {
                     self.syncQueue.sync {
                         self.operationQueue.isSuspended = true
                         self.operationQueue.addOperation(existOperation)
@@ -176,11 +168,11 @@
         public func cancel(_ target: IQImageLoaderTarget) {
             self.syncQueue.sync {
                 self.operationQueue.isSuspended = true
-                for operation: Operation in self.operationQueue.operations {
+                for operation in self.operationQueue.operations {
                     if operation.isCancelled == true {
                         continue
                     }
-                    if let operation: BaseOperation = operation as? BaseOperation {
+                    if let operation = operation as? BaseOperation {
                         if operation.contains(target: target) == true {
                             operation.cancel()
                         }
@@ -191,7 +183,7 @@
         }
 
         private func key(_ url: URL, filter: IQImageLoaderFilter?) -> String? {
-            if let filter: IQImageLoaderFilter = filter {
+            if let filter = filter {
                 return self.key("{\(filter.name)}{\(url.absoluteString)}")
             } else {
                 return self.key(url.absoluteString)
@@ -199,9 +191,7 @@
         }
 
         private func key(_ name: String) -> String? {
-            guard let key: String = name.sha256 else {
-                return nil
-            }
+            guard let key = name.sha256 else { return nil }
             return key
         }
 
@@ -224,18 +214,13 @@
             }
 
             public func remove(target: IQImageLoaderTarget) {
-                let index: Int? = self.targets.index { (existTarget: IQImageLoaderTarget) -> Bool in
-                    return target === existTarget
-                }
-                if let index: Int = index {
+                if let index = self.targets.index(where: { return $0 === target }) {
                     self.targets.remove(at: index)
                 }
             }
 
             public func contains(target: IQImageLoaderTarget) -> Bool {
-                let index: Int? = self.targets.index { (existTarget: IQImageLoaderTarget) -> Bool in
-                    return target === existTarget
-                }
+                let index = self.targets.index(where: { return $0 === target })
                 return index != nil
             }
 
@@ -244,23 +229,23 @@
         private class CacheOperation: BaseOperation {
 
             open override func main() {
-                if let loader: QImageLoader = self.loader {
+                if let loader = self.loader {
                     if self.isCancelled == true {
                         return
                     }
-                    if let filter: IQImageLoaderFilter = self.filter {
+                    if let filter = self.filter {
                         var final: UIImage? = nil
                         if let image = loader.cacheImage(self.url, filter: filter) {
                             final = image
-                        } else if let image: UIImage = loader.cacheImage(self.url) {
-                            let filtered: UIImage = filter.apply(image)
+                        } else if let image = loader.cacheImage(self.url) {
+                            let filtered = filter.apply(image)
                             loader.set(filtered, url: self.url, filter: filter)
                             final = filtered
                         }
-                        if let final: UIImage = final {
+                        if let final = final {
                             self.notifyCache(loader: loader, image: final)
                         }
-                    } else if let image: UIImage = loader.cacheImage(self.url) {
+                    } else if let image = loader.cacheImage(self.url) {
                         self.notifyCache(loader: loader, image: image)
                     }
                 }
@@ -268,7 +253,7 @@
 
             private func notifyCache(loader: QImageLoader, image: UIImage) {
                 DispatchQueue.main.async {
-                    for target: IQImageLoaderTarget in self.targets {
+                    for target in self.targets {
                         target.imageLoader(loader, cacheImage: image)
                     }
                 }
@@ -287,41 +272,41 @@
             }
 
             open override func main() {
-                if let loader: QImageLoader = self.loader {
+                if let loader = self.loader {
                     if self.isCancelled == true {
                         return
                     }
                     var downloadData: Data?
                     var downloadImage: UIImage?
                     var downloadError: Error?
-                    let request: QImageRequest = QImageRequest(url: self.url)
-                    let response: QImageResponse = QImageResponse()
+                    let request = QImageRequest(url: self.url)
+                    let response = QImageResponse()
                     self.query = loader.provider.send(
                         request: request,
                         response: response,
                         queue: loader.syncQueue,
-                        download: { (progress: Progress) in
+                        download: { (progress) in
                             self.notify(loader: loader, progress: progress)
-                    },
-                        completed: { (request: QImageRequest, response: QImageResponse) in
+                        },
+                        completed: { (request, response) in
                             downloadData = response.data
                             downloadImage = response.image
                             downloadError = response.error
                             self.query = nil
                             self.semaphore.signal()
-                    }
+                        }
                     )
                     self.semaphore.wait()
                     if self.isCancelled == false {
-                        guard let data: Data = downloadData, let image: UIImage = downloadImage else {
-                            if let error: Error = downloadError {
+                        guard let data = downloadData, let image = downloadImage else {
+                            if let error = downloadError {
                                 self.notifyFinish(loader: loader, error: error)
                             }
                             return
                         }
                         loader.set(data, image: image, url: self.url)
-                        if let filter: IQImageLoaderFilter = self.filter {
-                            let filtered: UIImage = filter.apply(image)
+                        if let filter = self.filter {
+                            let filtered = filter.apply(image)
                             loader.set(filtered, url: self.url, filter: filter)
                             self.notifyFinish(loader: loader, image: filtered)
                         } else {
@@ -334,7 +319,7 @@
             open override func cancel() {
                 super.cancel()
 
-                if let query: IQApiQuery = self.query {
+                if let query = self.query {
                     query.cancel()
                 }
                 self.semaphore.signal()
@@ -342,7 +327,7 @@
 
             private func notify(loader: QImageLoader, progress: Progress) {
                 DispatchQueue.main.async {
-                    for target: IQImageLoaderTarget in self.targets {
+                    for target in self.targets {
                         target.imageLoader(loader, downloadProgress: progress)
                     }
                 }
@@ -350,7 +335,7 @@
 
             private func notifyFinish(loader: QImageLoader, image: UIImage) {
                 DispatchQueue.main.async {
-                    for target: IQImageLoaderTarget in self.targets {
+                    for target in self.targets {
                         target.imageLoader(loader, downloadImage: image)
                     }
                 }
@@ -358,7 +343,7 @@
 
             private func notifyFinish(loader: QImageLoader, error: Error) {
                 DispatchQueue.main.async {
-                    for target: IQImageLoaderTarget in self.targets {
+                    for target in self.targets {
                         target.imageLoader(loader, downloadError: error)
                     }
                 }

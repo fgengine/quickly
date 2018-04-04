@@ -10,12 +10,12 @@ class QuicklyApiTests: XCTestCase {
     func testGetApi() {
         let expectation = self.expectation(description: "")
 
-        let provider: QApiProvider = QApiProvider(baseUrl: URL(string: "http://yandex.ru")!)
+        let provider = QApiProvider(baseUrl: URL(string: "http://yandex.ru")!)
 
-        let request: QApiRequest = QApiRequest(method: "GET")
+        let request = QApiRequest(method: "GET")
         request.isLogging = true
 
-        let response: QApiResponse = QApiResponse()
+        let response = QApiResponse()
 
         _ = provider.send(request: request, response: response) { (request: QApiRequest, response: QApiResponse) in
             expectation.fulfill()

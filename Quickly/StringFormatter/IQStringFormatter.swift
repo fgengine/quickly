@@ -20,18 +20,18 @@ public extension IQStringFormatter {
         formatSuffix: Int,
         caret: Int
     ) -> Int {
-        var result: Int = caret
+        var result = caret
         if unformat.count > 0 {
-            var formatIndex: String.Index = format.index(format.startIndex, offsetBy: formatPrefix)
-            let formatEndIndex: String.Index = format.index(format.endIndex, offsetBy: -formatSuffix)
-            var unformatIndex: String.Index = unformat.startIndex
-            let unformatEndIndex: String.Index = unformat.endIndex
-            var formatOffset: Int = formatPrefix
-            var unformatOffset: Int = 0
+            var formatIndex = format.index(format.startIndex, offsetBy: formatPrefix)
+            let formatEndIndex = format.index(format.endIndex, offsetBy: -formatSuffix)
+            var unformatIndex = unformat.startIndex
+            let unformatEndIndex = unformat.endIndex
+            var formatOffset = formatPrefix
+            var unformatOffset = 0
             while formatIndex < formatEndIndex {
-                let formatCharacter: Character = format[formatIndex]
+                let formatCharacter = format[formatIndex]
                 if unformatIndex < unformatEndIndex {
-                    let unformatCharacter: Character = unformat[unformatIndex]
+                    let unformatCharacter = unformat[unformatIndex]
                     if formatCharacter == unformatCharacter {
                         unformatIndex = unformat.index(unformatIndex, offsetBy: 1)
                         unformatOffset += 1
@@ -62,18 +62,18 @@ public extension IQStringFormatter {
         formatSuffix: Int,
         caret: Int
     ) -> Int {
-        var result: Int = caret
+        var result = caret
         if unformat.count > 0 {
-            var formatIndex: String.Index = format.index(format.startIndex, offsetBy: formatPrefix)
-            let formatEndIndex: String.Index = format.index(format.endIndex, offsetBy: -formatSuffix)
-            var unformatIndex: String.Index = unformat.startIndex
-            let unformatEndIndex: String.Index = unformat.endIndex
-            var formatOffset: Int = formatPrefix
-            var unformatOffset: Int = 0
+            var formatIndex = format.index(format.startIndex, offsetBy: formatPrefix)
+            let formatEndIndex = format.index(format.endIndex, offsetBy: -formatSuffix)
+            var unformatIndex = unformat.startIndex
+            let unformatEndIndex = unformat.endIndex
+            var formatOffset = formatPrefix
+            var unformatOffset = 0
             while formatIndex < formatEndIndex {
-                let formatCharacter: Character = format[formatIndex]
+                let formatCharacter = format[formatIndex]
                 if unformatIndex < unformatEndIndex {
-                    let unformatCharacter: Character = unformat[unformatIndex]
+                    let unformatCharacter = unformat[unformatIndex]
                     if formatCharacter == unformatCharacter {
                         unformatIndex = unformat.index(unformatIndex, offsetBy: 1)
                         unformatOffset += 1

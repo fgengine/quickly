@@ -4,9 +4,9 @@
 
 #if os(iOS)
 
-    public protocol IQTableSection: class {
+    public protocol IQTableSection : class {
 
-        weak var controller: IQTableController? { get }
+        var controller: IQTableController? { get }
         var index: Int? { get }
         var canEdit: Bool { get }
         var canMove: Bool { get }
@@ -20,7 +20,6 @@
         func rebind(_ index: Int)
         func unbind()
 
-        func beginUpdates()
         func prependRow(_ row: IQTableRow, with animation: UITableViewRowAnimation)
         func prependRow(_ rows: [IQTableRow], with animation: UITableViewRowAnimation)
         func appendRow(_ row: IQTableRow, with animation: UITableViewRowAnimation)
@@ -31,7 +30,6 @@
         func deleteRow(_ rows: [IQTableRow], with animation: UITableViewRowAnimation)
         func reloadRow(_ row: IQTableRow, with animation: UITableViewRowAnimation)
         func reloadRow(_ rows: [IQTableRow], with animation: UITableViewRowAnimation)
-        func endUpdates()
 
         func moveRow(_ fromRow: IQTableRow, toIndex: Int) -> Bool
         func moveRow(_ fromIndex: Int, toIndex: Int)
@@ -69,11 +67,7 @@
         }
         
         public func moveRow(_ fromRow: IQTableRow, toIndex: Int) -> Bool {
-            guard let fromIndex: Int = self.rows.index(where: { (existRow: IQTableRow) -> Bool in
-                return (existRow === fromRow)
-            }) else {
-                return false
-            }
+            guard let fromIndex = self.rows.index(where: { return ($0 === fromRow) }) else { return false }
             self.moveRow(fromIndex, toIndex: toIndex)
             return true
         }

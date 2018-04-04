@@ -5,9 +5,9 @@
 public extension NSMutableAttributedString {
 
     func fontInfo(range: NSRange) -> QFontInfo {
-        var fontInfo: QFontInfo = QFontInfo()
+        var fontInfo = QFontInfo()
         self.enumerateAttributes(in: range) { (attributes: [NSAttributedStringKey : Any], range: NSRange, stop: UnsafeMutablePointer< ObjCBool >) in
-            if let font: QPlatformFont = attributes[NSAttributedStringKey.font] as? QPlatformFont {
+            if let font = attributes[NSAttributedStringKey.font] as? QPlatformFont {
                 fontInfo.height = max(fontInfo.height, font.pointSize)
                 fontInfo.ascender = max(fontInfo.ascender, font.ascender)
                 fontInfo.descender = max(fontInfo.descender, font.descender)

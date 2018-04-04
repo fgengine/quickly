@@ -17,11 +17,11 @@
         public private(set) lazy var tabBarController: QTabBarController = self.prepareTabBarController()
         public var routers: [IQViewControllerRouter] = [] {
             didSet {
-                self.tabBarController.viewControllers = self.routers.flatMap({ (router: IQViewControllerRouter) -> UIViewController? in
+                self.tabBarController.viewControllers = self.routers.compactMap({ (router: IQViewControllerRouter) -> UIViewController? in
                     return router.viewController
                 })
                 if self.routers.count > 0 {
-                    if let currentRouter: IQViewControllerRouter = self.currentRouter {
+                    if let currentRouter = self.currentRouter {
                         if let index = self.routers.index(where: { (router: IQViewControllerRouter) -> Bool in
                             return router === currentRouter
                         }) {
@@ -37,9 +37,9 @@
                 }
             }
         }
-        public var currentRouter: IQViewControllerRouter? = nil {
+        public var currentRouter: IQViewControllerRouter? {
             didSet {
-                if let currentRouter: IQViewControllerRouter = self.currentRouter {
+                if let currentRouter = self.currentRouter {
                     self.tabBarController.currentViewController = currentRouter.viewController
                 } else {
                     self.tabBarController.currentViewController = nil

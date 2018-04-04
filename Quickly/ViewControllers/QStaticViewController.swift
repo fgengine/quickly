@@ -7,7 +7,7 @@ open class QStaticViewController : QPlatformViewController, IQViewController {
     #if os(macOS)
 
     @IBOutlet open var rootView: QPlatformView? {
-        set(view) { if let view: QPlatformView = view { self.view = view } }
+        set(value) { if let view = value { self.view = view } }
         get { return self.view }
     }
 
@@ -79,7 +79,7 @@ open class QStaticViewController : QPlatformViewController, IQViewController {
     #if os(macOS)
 
     open func currentNibName() -> NSNib.Name {
-        if let nibName: NSNib.Name = self.nibName {
+        if let nibName = self.nibName {
             return nibName
         }
         return NSNib.Name(rawValue: String(describing: self.classForCoder))
@@ -88,7 +88,7 @@ open class QStaticViewController : QPlatformViewController, IQViewController {
     #elseif os(iOS)
 
     open func currentNibName() -> String {
-        if let nibName: String = self.nibName {
+        if let nibName = self.nibName {
             return nibName
         }
         return String(describing: self.classForCoder)
@@ -97,7 +97,7 @@ open class QStaticViewController : QPlatformViewController, IQViewController {
     #endif
 
     open func currentNibBundle() -> Bundle {
-        if let nibBundle: Bundle = self.nibBundle {
+        if let nibBundle = self.nibBundle {
             return nibBundle
         }
         return Bundle.main
@@ -109,14 +109,14 @@ open class QStaticViewController : QPlatformViewController, IQViewController {
     #if os(iOS)
 
     open func setNavigationBarHidden(_ hidden: Bool, animated: Bool) {
-        if let navigationController: UINavigationController = self.navigationController {
+        if let navigationController = self.navigationController {
             navigationController.setNavigationBarHidden(hidden, animated: animated)
         }
         self.navigationBarHidden = hidden
     }
 
     open func setToolbarHidden(_ hidden: Bool, animated: Bool) {
-        if let navigationController: UINavigationController = self.navigationController {
+        if let navigationController = self.navigationController {
             navigationController.setToolbarHidden(hidden, animated: animated)
         }
         self.toolbarHidden = hidden
@@ -126,16 +126,14 @@ open class QStaticViewController : QPlatformViewController, IQViewController {
 
     open override func loadView() {
         #if os(macOS)
-            let nibName: NSNib.Name = self.currentNibName()
-            let bundle: Bundle = self.currentNibBundle()
-            guard let nib: NSNib = NSNib(nibNamed: nibName, bundle: bundle) else {
-                return
-            }
+            let nibName = self.currentNibName()
+            let bundle = self.currentNibBundle()
+            guard let nib = NSNib(nibNamed: nibName, bundle: bundle) else { return }
             nib.instantiate(withOwner: self, topLevelObjects: nil)
         #elseif os(iOS)
-            let nibName: String = self.currentNibName()
-            let bundle: Bundle = self.currentNibBundle()
-            let nib: UINib = UINib(nibName: nibName, bundle: bundle)
+            let nibName = self.currentNibName()
+            let bundle = self.currentNibBundle()
+            let nib = UINib(nibName: nibName, bundle: bundle)
             _ = nib.instantiate(withOwner: self, options: nil)
         #endif
     }
@@ -145,7 +143,7 @@ open class QStaticViewController : QPlatformViewController, IQViewController {
         open override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
             self.isAppeared = true
-            if let navigationController: UINavigationController = self.navigationController {
+            if let navigationController = self.navigationController {
                 navigationController.isNavigationBarHidden = self.navigationBarHidden
                 navigationController.isToolbarHidden = self.toolbarHidden
             }

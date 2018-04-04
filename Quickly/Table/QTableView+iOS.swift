@@ -4,7 +4,7 @@
 
 #if os(iOS)
 
-    open class QTableView: UITableView {
+    open class QTableView : UITableView {
 
         public var tableController: IQTableController? {
             willSet {

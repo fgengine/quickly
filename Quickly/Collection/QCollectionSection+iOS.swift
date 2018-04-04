@@ -4,19 +4,47 @@
 
 #if os(iOS)
 
-    open class QCollectionSection: IQCollectionSection {
+    open class QCollectionSection : IQCollectionSection {
 
-        public weak var controller: IQCollectionController? = nil
-        public private(set) var index: Int? = nil
-        public var insets: UIEdgeInsets = UIEdgeInsets.zero
-        public var minimumLineSpacing: CGFloat = 0
-        public var minimumInteritemSpacing: CGFloat = 0
-        public var canMove: Bool = true
-        public var hidden: Bool = false
-        
-        public var header: IQCollectionData?
-        public var footer: IQCollectionData?
-        public var items: [IQCollectionItem]
+        public weak var controller: IQCollectionController?
+        public private(set) var index: Int?
+        public var insets: UIEdgeInsets = UIEdgeInsets.zero {
+            didSet { self.reloadSection() }
+        }
+        public var minimumLineSpacing: CGFloat = 0 {
+            didSet { self.reloadSection() }
+        }
+        public var minimumInteritemSpacing: CGFloat = 0 {
+            didSet { self.reloadSection() }
+        }
+        public var canMove: Bool = true {
+            didSet { self.reloadSection() }
+        }
+        public var hidden: Bool = false {
+            didSet { self.reloadSection() }
+        }
+
+        public var header: IQCollectionData? {
+            willSet { self.unbindHeader() }
+            didSet {
+                self.bindHeader()
+                self.reloadSection()
+            }
+        }
+        public var footer: IQCollectionData? {
+            willSet { self.unbindFooter() }
+            didSet {
+                self.bindFooter()
+                self.reloadSection()
+            }
+        }
+        public var items: [IQCollectionItem] {
+            willSet { self.unbind() }
+            didSet {
+                self.rebindItems(from: self.items.startIndex, to: self.items.endIndex)
+                self.reloadSection()
+            }
+        }
         
         public init(items: [IQCollectionItem]) {
             self.header = nil
@@ -61,7 +89,7 @@
         public func unbind() {
             self.unbindHeader()
             self.unbindFooter()
-            for item: IQCollectionItem in self.items {
+            for item in self.items {
                 item.unbind()
             }
             self.index = nil
@@ -71,11 +99,9 @@
         public func insertItem(_ items: [IQCollectionItem], index: Int) {
             self.items.insert(contentsOf: items, at: index)
             self.rebindItems(from: index, to: self.items.endIndex)
-            let indexPaths: [IndexPath] = items.flatMap({ (item: IQCollectionItem) -> IndexPath? in
-                return item.indexPath
-            })
+            let indexPaths = items.compactMap({ $0.indexPath })
             if indexPaths.count > 0 {
-                if let controller: IQCollectionController = self.controller, let collectionView: UICollectionView = controller.collectionView {
+                if let controller = self.controller, let collectionView = controller.collectionView {
                     collectionView.insertItems(at: indexPaths)
                 }
             }
@@ -83,25 +109,21 @@
         
         public func deleteItem(_ items: [IQCollectionItem]) {
             var indices: [Int] = []
-            for item: IQCollectionItem in items {
-                if let index: Int = self.items.index(where: { (existItem: IQCollectionItem) -> Bool in
-                    return (existItem === item)
-                }) {
+            for item in items {
+                if let index = self.items.index(where: { return ($0 === item) }) {
                     indices.append(index)
                 }
             }
             if indices.count > 0 {
-                let indexPaths: [IndexPath] = items.flatMap({ (item: IQCollectionItem) -> IndexPath? in
-                    return item.indexPath
-                })
-                for index: Int in indices.reversed() {
-                    let item: IQCollectionItem = self.items[index]
+                let indexPaths = items.compactMap({ $0.indexPath })
+                for index in indices.reversed() {
+                    let item = self.items[index]
                     self.items.remove(at: index)
                     item.unbind()
                 }
                 self.rebindItems(from: indices.first!, to: self.items.endIndex)
                 if indexPaths.count > 0 {
-                    if let controller: IQCollectionController = self.controller, let collectionView: UICollectionView = controller.collectionView {
+                    if let controller = self.controller, let collectionView = controller.collectionView {
                         collectionView.deleteItems(at: indexPaths)
                     }
                 }
@@ -109,11 +131,9 @@
         }
         
         public func reloadItem(_ items: [IQCollectionItem]) {
-            let indexPaths: [IndexPath] = items.flatMap({ (item: IQCollectionItem) -> IndexPath? in
-                return item.indexPath
-            })
+            let indexPaths = items.compactMap({ return $0.indexPath })
             if indexPaths.count > 0 {
-                if let controller: IQCollectionController = self.controller, let collectionView: UICollectionView = controller.collectionView {
+                if let controller = self.controller, let collectionView = controller.collectionView {
                     collectionView.reloadItems(at: indexPaths)
                 }
             }
@@ -134,48 +154,59 @@
     extension QCollectionSection {
         
         private func bindHeader() {
-            if let header: IQCollectionData = self.header {
+            if let header = self.header {
                 header.bind(self)
             }
         }
         
         private func unbindHeader() {
-            if let header: IQCollectionData = self.header {
+            if let header = self.header {
                 header.unbind()
             }
         }
         
         private func bindFooter() {
-            if let footer: IQCollectionData = self.header {
+            if let footer = self.header {
                 footer.bind(self)
             }
         }
         
         private func unbindFooter() {
-            if let footer: IQCollectionData = self.header {
+            if let footer = self.header {
                 footer.unbind()
             }
         }
         
         private func bindItems() {
-            guard let sectionIndex: Int = self.index else { return }
-            var itemIndex: Int = 0
-            for item: IQCollectionItem in self.items {
+            guard let sectionIndex = self.index else { return }
+            var itemIndex = 0
+            for item in self.items {
                 item.bind(self, IndexPath(item: itemIndex, section: sectionIndex))
                 itemIndex += 1
             }
         }
         
         private func rebindItems(from: Int, to: Int) {
-            guard let sectionIndex: Int = self.index else { return }
-            for itemIndex: Int in from..<to {
+            guard let sectionIndex = self.index else { return }
+            for itemIndex in from..<to {
                 self.items[itemIndex].rebind(IndexPath(item: itemIndex, section: sectionIndex))
             }
         }
         
         private func unbindItems() {
-            for item: IQCollectionItem in self.items {
+            for item in self.items {
                 item.unbind()
+            }
+        }
+
+        private func reloadSection() {
+            guard
+                let index = self.index,
+                let controller = self.controller,
+                let collectionView = controller.collectionView
+                else { return }
+            if controller.isBatchUpdating == false {
+                collectionView.reloadSections(IndexSet(integer: index))
             }
         }
         

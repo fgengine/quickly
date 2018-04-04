@@ -4,9 +4,9 @@
 
 #if os(iOS)
 
-    public protocol IQCollectionItem: class {
+    public protocol IQCollectionItem : class {
 
-        weak var section: IQCollectionSection? { get }
+        var section: IQCollectionSection? { get }
         var indexPath: IndexPath? { get }
         var canSelect: Bool { get }
         var canDeselect: Bool { get }

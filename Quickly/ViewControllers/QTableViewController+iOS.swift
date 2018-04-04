@@ -9,7 +9,7 @@
         public var tableController: IQTableController? {
             set(value) {
                 self.proxy.tableController = value
-                if let tableController: IQTableController = value {
+                if let tableController = value {
                     tableController.reload()
                 }
             }
@@ -78,7 +78,7 @@
         open override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
             self.isAppeared = true
-            if let navigationController: UINavigationController = self.navigationController {
+            if let navigationController = self.navigationController {
                 navigationController.isNavigationBarHidden = self.navigationBarHidden
                 navigationController.isToolbarHidden = self.toolbarHidden
             }
@@ -114,14 +114,14 @@
         }
 
         open func setNavigationBarHidden(_ hidden: Bool, animated: Bool) {
-            if let navigationController: UINavigationController = self.navigationController {
+            if let navigationController = self.navigationController {
                 navigationController.setNavigationBarHidden(hidden, animated: animated)
             }
             self.navigationBarHidden = hidden
         }
 
         open func setToolbarHidden(_ hidden: Bool, animated: Bool) {
-            if let navigationController: UINavigationController = self.navigationController {
+            if let navigationController = self.navigationController {
                 navigationController.setToolbarHidden(hidden, animated: animated)
             }
             self.toolbarHidden = hidden
@@ -141,7 +141,7 @@
             }
 
             deinit {
-                if let tableController: IQTableController = self.tableController {
+                if let tableController = self.tableController {
                     tableController.tableView = nil
                 }
             }
@@ -155,7 +155,7 @@
                 if let viewController = self.viewController {
                     viewController.tableView.delegate = self
                     viewController.tableView.dataSource = self
-                    if let tableController: IQTableController = self.tableController {
+                    if let tableController = self.tableController {
                         tableController.tableView = viewController.tableView
                     }
                 }
@@ -166,7 +166,7 @@
                     viewController.tableView.delegate = nil
                     viewController.tableView.dataSource = nil
                 }
-                if let tableController: IQTableController = self.tableController {
+                if let tableController = self.tableController {
                     tableController.tableView = nil
                 }
             }
@@ -175,12 +175,12 @@
                 if super.responds(to: selector) {
                     return true
                 }
-                if let tableController: IQTableController = self.tableController {
+                if let tableController = self.tableController {
                     if tableController.responds(to: selector) {
                         return true
                     }
                 }
-                if let viewController: QTableViewController = self.viewController {
+                if let viewController = self.viewController {
                     if viewController.responds(to: selector) {
                         return true
                     }
@@ -192,12 +192,12 @@
                 if super.responds(to: selector) {
                     return self
                 }
-                if let tableController: IQTableController = self.tableController {
+                if let tableController = self.tableController {
                     if tableController.responds(to: selector) {
                         return tableController
                     }
                 }
-                if let viewController: QTableViewController = self.viewController {
+                if let viewController = self.viewController {
                     if viewController.responds(to: selector) {
                         return viewController
                     }
@@ -209,7 +209,7 @@
                 _ tableView: UITableView,
                 numberOfRowsInSection index: Int
             ) -> Int {
-                if let tableController: IQTableController = self.tableController {
+                if let tableController = self.tableController {
                     return tableController.tableView(tableView, numberOfRowsInSection: index)
                 }
                 return 0
@@ -219,7 +219,7 @@
                 _ tableView: UITableView,
                 cellForRowAt indexPath: IndexPath
             ) -> UITableViewCell {
-                if let tableController: IQTableController = self.tableController {
+                if let tableController = self.tableController {
                     return tableController.tableView(tableView, cellForRowAt: indexPath)
                 }
                 return UITableViewCell(style: .default, reuseIdentifier: "Unknown")

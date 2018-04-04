@@ -4,12 +4,18 @@
 
 #if os(iOS)
 
-    open class QImageCollectionItem: QBackgroundColorCollectionItem {
+    open class QImageCollectionItem : QBackgroundColorCollectionItem {
 
-        public var edgeInsets: UIEdgeInsets = UIEdgeInsets.zero
+        public var edgeInsets: UIEdgeInsets
 
-        public var source: QImageSource?
-        public var roundCorners: Bool = false
+        public var image: QImageViewStyleSheet
+
+        public init(image: QImageViewStyleSheet) {
+            self.edgeInsets = UIEdgeInsets.zero
+            self.image = image
+
+            super.init()
+        }
 
     }
 

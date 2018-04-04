@@ -4,7 +4,7 @@
 
 #if os(iOS)
 
-    public class QTitleDetailTableCell< RowType: QTitleDetailTableRow >: QBackgroundColorTableCell< RowType > {
+    open class QTitleDetailTableCell< RowType: QTitleDetailTableRow >: QBackgroundColorTableCell< RowType > {
 
         private var _labelTitle: QLabel!
         private var _labelDetail: QLabel!
@@ -17,13 +17,9 @@
         }
 
         open override class func height(row: RowType, width: CGFloat) -> CGFloat {
-            guard
-                let titleText: IQText = row.titleText,
-                let detailText: IQText = row.detailText
-                else { return 0 }
-            let availableWidth: CGFloat = width - (row.edgeInsets.left + row.edgeInsets.right)
-            let titleTextSize: CGSize = titleText.size(width: availableWidth)
-            let detailTextSize: CGSize = detailText.size(width: availableWidth)
+            let availableWidth = width - (row.edgeInsets.left + row.edgeInsets.right)
+            let titleTextSize = row.title.text.size(width: availableWidth)
+            let detailTextSize = row.detail.text.size(width: availableWidth)
             return row.edgeInsets.top + titleTextSize.height + row.titleSpacing + detailTextSize.height + row.edgeInsets.bottom
         }
 
@@ -41,7 +37,7 @@
             self._labelDetail.setContentHuggingPriority(UILayoutPriority(rawValue: 251), for: .horizontal)
             self._labelDetail.setContentHuggingPriority(UILayoutPriority(rawValue: 251), for: .vertical)
             self.contentView.addSubview(self._labelDetail)
-    }
+        }
 
         open override func set(row: RowType) {
             super.set(row: row)
@@ -67,18 +63,8 @@
                 selfConstraints.append(self._labelDetail.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
                 self.selfConstraints = selfConstraints
             }
-
-            self._labelTitle.contentAlignment = row.titleContentAlignment
-            self._labelTitle.padding = row.titlePadding
-            self._labelTitle.numberOfLines = row.titleNumberOfLines
-            self._labelTitle.lineBreakMode = row.titleLineBreakMode
-            self._labelTitle.text = row.titleText
-
-            self._labelDetail.contentAlignment = row.detailContentAlignment
-            self._labelDetail.padding = row.detailPadding
-            self._labelDetail.numberOfLines = row.detailNumberOfLines
-            self._labelDetail.lineBreakMode = row.detailLineBreakMode
-            self._labelDetail.text = row.detailText
+            row.title.apply(target: self._labelTitle)
+            row.detail.apply(target: self._labelDetail)
         }
 
     }

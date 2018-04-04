@@ -8,7 +8,7 @@
     import UIKit
 #endif
 
-public class QTextStyle {
+public final class QTextStyle {
 
     #if os(macOS)
         public typealias Font = NSFont
@@ -21,11 +21,11 @@ public class QTextStyle {
     public var parent: QTextStyle? {
         set(value) {
             if self._parent !== value {
-                if let parent: QTextStyle = self._parent {
+                if let parent = self._parent {
                     parent.removeChild(self)
                 }
                 self._parent = value
-                if let parent: QTextStyle = value {
+                if let parent = value {
                     parent.addChild(self)
                 }
             }
@@ -43,8 +43,8 @@ public class QTextStyle {
     public var font: Font? {
         set(value) { self._font = value }
         get {
-            if let value: Font = self._font { return value }
-            if let parent: QTextStyle = self._parent { return parent.font }
+            if let value = self._font { return value }
+            if let parent = self._parent { return parent.font }
             return nil
         }
     }
@@ -55,8 +55,8 @@ public class QTextStyle {
     public var color: Color? {
         set(value) { self._color = value }
         get {
-            if let value: Color = self._color { return value }
-            if let parent: QTextStyle = self._parent { return parent.color }
+            if let value = self._color { return value }
+            if let parent = self._parent { return parent.color }
             return nil
         }
     }
@@ -67,8 +67,8 @@ public class QTextStyle {
     public var backgroundColor: Color? {
         set(value) { self._backgroundColor = value }
         get {
-            if let value: Color = self._backgroundColor { return value }
-            if let parent: QTextStyle = self._parent { return parent.backgroundColor }
+            if let value = self._backgroundColor { return value }
+            if let parent = self._parent { return parent.backgroundColor }
             return nil
         }
     }
@@ -79,8 +79,8 @@ public class QTextStyle {
     public var strikeColor: Color? {
         set(value) { self._strikeColor = value }
         get {
-            if let value: Color = self._strikeColor { return value }
-            if let parent: QTextStyle = self._parent { return parent.strikeColor }
+            if let value = self._strikeColor { return value }
+            if let parent = self._parent { return parent.strikeColor }
             return nil
         }
     }
@@ -91,8 +91,8 @@ public class QTextStyle {
     public var strikeWidth: Float? {
         set(value) { self._strikeWidth = value }
         get {
-            if let value: Float = self._strikeWidth { return value }
-            if let parent: QTextStyle = self._parent { return parent.strikeWidth }
+            if let value = self._strikeWidth { return value }
+            if let parent = self._parent { return parent.strikeWidth }
             return nil
         }
     }
@@ -103,8 +103,8 @@ public class QTextStyle {
     public var strikeThrough: Int? {
         set(value) { self._strikeThrough = value }
         get {
-            if let value: Int = self._strikeThrough { return value }
-            if let parent: QTextStyle = self._parent { return parent.strikeThrough }
+            if let value = self._strikeThrough { return value }
+            if let parent = self._parent { return parent.strikeThrough }
             return nil
         }
     }
@@ -115,8 +115,8 @@ public class QTextStyle {
     public var underlineColor: Color? {
         set(value) { self._underlineColor = value }
         get {
-            if let value: Color = self._underlineColor { return value }
-            if let parent: QTextStyle = self._parent { return parent.underlineColor }
+            if let value = self._underlineColor { return value }
+            if let parent = self._parent { return parent.underlineColor }
             return nil
         }
     }
@@ -127,8 +127,8 @@ public class QTextStyle {
     public var underlineStyle: NSUnderlineStyle? {
         set(value) { self._underlineStyle = value }
         get {
-            if let value: NSUnderlineStyle = self._underlineStyle { return value }
-            if let parent: QTextStyle = self._parent { return parent.underlineStyle }
+            if let value = self._underlineStyle { return value }
+            if let parent = self._parent { return parent.underlineStyle }
             return nil
         }
     }
@@ -139,8 +139,8 @@ public class QTextStyle {
     public var shadowOffset: CGSize? {
         set(value) { self._shadowOffset = value }
         get {
-            if let value: CGSize = self._shadowOffset { return value }
-            if let parent: QTextStyle = self._parent { return parent.shadowOffset }
+            if let value = self._shadowOffset { return value }
+            if let parent = self._parent { return parent.shadowOffset }
             return nil
         }
     }
@@ -151,8 +151,8 @@ public class QTextStyle {
     public var shadowBlurRadius: Float? {
         set(value) { self._shadowBlurRadius = value }
         get {
-            if let value: Float = self._shadowBlurRadius { return value }
-            if let parent: QTextStyle = self._parent { return parent.shadowBlurRadius }
+            if let value = self._shadowBlurRadius { return value }
+            if let parent = self._parent { return parent.shadowBlurRadius }
             return nil
         }
     }
@@ -163,8 +163,8 @@ public class QTextStyle {
     public var shadowColor: Color? {
         set(value) { self._shadowColor = value }
         get {
-            if let value: Color = self._shadowColor { return value }
-            if let parent: QTextStyle = self._parent { return parent.shadowColor }
+            if let value = self._shadowColor { return value }
+            if let parent = self._parent { return parent.shadowColor }
             return nil
         }
     }
@@ -175,8 +175,8 @@ public class QTextStyle {
     public var ligature: Int? {
         set(value) { self._ligature = value }
         get {
-            if let value: Int = self._ligature { return value }
-            if let parent: QTextStyle = self._parent { return parent.ligature }
+            if let value = self._ligature { return value }
+            if let parent = self._parent { return parent.ligature }
             return nil
         }
     }
@@ -187,8 +187,8 @@ public class QTextStyle {
     public var kerning: Float? {
         set(value) { self._kerning = value }
         get {
-            if let value: Float = self._kerning { return value }
-            if let parent: QTextStyle = self._parent { return parent.kerning }
+            if let value = self._kerning { return value }
+            if let parent = self._parent { return parent.kerning }
             return nil
         }
     }
@@ -199,8 +199,8 @@ public class QTextStyle {
     public var baselineOffset: Float? {
         set(value) { self._baselineOffset = value }
         get {
-            if let value: Float = self._baselineOffset { return value }
-            if let parent: QTextStyle = self._parent { return parent.baselineOffset }
+            if let value = self._baselineOffset { return value }
+            if let parent = self._parent { return parent.baselineOffset }
             return nil
         }
     }
@@ -211,8 +211,8 @@ public class QTextStyle {
     public var obliqueness: Float? {
         set(value) { self._obliqueness = value }
         get {
-            if let value: Float = self._obliqueness { return value }
-            if let parent: QTextStyle = self._parent { return parent.obliqueness }
+            if let value = self._obliqueness { return value }
+            if let parent = self._parent { return parent.obliqueness }
             return nil
         }
     }
@@ -223,8 +223,8 @@ public class QTextStyle {
     public var expansion: Float? {
         set(value) { self._expansion = value }
         get {
-            if let value: Float = self._expansion { return value }
-            if let parent: QTextStyle = self._parent { return parent.expansion }
+            if let value = self._expansion { return value }
+            if let parent = self._parent { return parent.expansion }
             return nil
         }
     }
@@ -235,8 +235,8 @@ public class QTextStyle {
     public var lineSpacing: Float? {
         set(value) { self._lineSpacing = value }
         get {
-            if let value: Float = self._lineSpacing { return value }
-            if let parent: QTextStyle = self._parent { return parent.lineSpacing }
+            if let value = self._lineSpacing { return value }
+            if let parent = self._parent { return parent.lineSpacing }
             return nil
         }
     }
@@ -247,8 +247,8 @@ public class QTextStyle {
     public var paragraphBetween: Float? {
         set(value) { self._paragraphBetween = value }
         get {
-            if let value: Float = self._paragraphBetween { return value }
-            if let parent: QTextStyle = self._parent { return parent.paragraphBetween }
+            if let value = self._paragraphBetween { return value }
+            if let parent = self._parent { return parent.paragraphBetween }
             return nil
         }
     }
@@ -259,8 +259,8 @@ public class QTextStyle {
     public var alignment: NSTextAlignment? {
         set(value) { self._alignment = value }
         get {
-            if let value: NSTextAlignment = self._alignment { return value }
-            if let parent: QTextStyle = self._parent { return parent.alignment }
+            if let value = self._alignment { return value }
+            if let parent = self._parent { return parent.alignment }
             return nil
         }
     }
@@ -271,8 +271,8 @@ public class QTextStyle {
     public var firstLineHeadIndent: Float? {
         set(value) { self._firstLineHeadIndent = value }
         get {
-            if let value: Float = self._firstLineHeadIndent { return value }
-            if let parent: QTextStyle = self._parent { return parent.firstLineHeadIndent }
+            if let value = self._firstLineHeadIndent { return value }
+            if let parent = self._parent { return parent.firstLineHeadIndent }
             return nil
         }
     }
@@ -283,8 +283,8 @@ public class QTextStyle {
     public var headIndent: Float? {
         set(value) { self._headIndent = value }
         get {
-            if let value: Float = self._headIndent { return value }
-            if let parent: QTextStyle = self._parent { return parent.headIndent }
+            if let value = self._headIndent { return value }
+            if let parent = self._parent { return parent.headIndent }
             return nil
         }
     }
@@ -295,8 +295,8 @@ public class QTextStyle {
     public var tailIndent: Float? {
         set(value) { self._tailIndent = value }
         get {
-            if let value: Float = self._tailIndent { return value }
-            if let parent: QTextStyle = self._parent { return parent.tailIndent }
+            if let value = self._tailIndent { return value }
+            if let parent = self._parent { return parent.tailIndent }
             return nil
         }
     }
@@ -307,8 +307,8 @@ public class QTextStyle {
     public var lineBreakMode: QPlatformLineBreakMode? {
         set(value) { self._lineBreakMode = value }
         get {
-            if let value: QPlatformLineBreakMode = self._lineBreakMode { return value }
-            if let parent: QTextStyle = self._parent { return parent.lineBreakMode }
+            if let value = self._lineBreakMode { return value }
+            if let parent = self._parent { return parent.lineBreakMode }
             return nil
         }
     }
@@ -319,8 +319,8 @@ public class QTextStyle {
     public var minimumLineHeight: Float? {
         set(value) { self._minimumLineHeight = value }
         get {
-            if let value: Float = self._minimumLineHeight { return value }
-            if let parent: QTextStyle = self._parent { return parent.minimumLineHeight }
+            if let value = self._minimumLineHeight { return value }
+            if let parent = self._parent { return parent.minimumLineHeight }
             return nil
         }
     }
@@ -331,8 +331,8 @@ public class QTextStyle {
     public var maximumLineHeight: Float? {
         set(value) { self._maximumLineHeight = value }
         get {
-            if let value: Float = self._maximumLineHeight { return value }
-            if let parent: QTextStyle = self._parent { return parent.maximumLineHeight }
+            if let value = self._maximumLineHeight { return value }
+            if let parent = self._parent { return parent.maximumLineHeight }
             return nil
         }
     }
@@ -343,8 +343,8 @@ public class QTextStyle {
     public var baseWritingDirection: NSWritingDirection? {
         set(value) { self._baseWritingDirection = value }
         get {
-            if let value: NSWritingDirection = self._baseWritingDirection { return value }
-            if let parent: QTextStyle = self._parent { return parent.baseWritingDirection }
+            if let value = self._baseWritingDirection { return value }
+            if let parent = self._parent { return parent.baseWritingDirection }
             return nil
         }
     }
@@ -355,8 +355,8 @@ public class QTextStyle {
     public var lineHeightMultiple: Float? {
         set(value) { self._lineHeightMultiple = value }
         get {
-            if let value: Float = self._lineHeightMultiple { return value }
-            if let parent: QTextStyle = self._parent { return parent.lineHeightMultiple }
+            if let value = self._lineHeightMultiple { return value }
+            if let parent = self._parent { return parent.lineHeightMultiple }
             return nil
         }
     }
@@ -367,8 +367,8 @@ public class QTextStyle {
     public var paragraphSpacingBefore: Float? {
         set(value) { self._paragraphSpacingBefore = value }
         get {
-            if let value: Float = self._paragraphSpacingBefore { return value }
-            if let parent: QTextStyle = self._parent { return parent.paragraphSpacingBefore }
+            if let value = self._paragraphSpacingBefore { return value }
+            if let parent = self._parent { return parent.paragraphSpacingBefore }
             return nil
         }
     }
@@ -379,8 +379,8 @@ public class QTextStyle {
     public var hyphenationFactor: Float? {
         set(value) { self._hyphenationFactor = value }
         get {
-            if let value: Float = self._hyphenationFactor { return value }
-            if let parent: QTextStyle = self._parent { return parent.hyphenationFactor }
+            if let value = self._hyphenationFactor { return value }
+            if let parent = self._parent { return parent.hyphenationFactor }
             return nil
         }
     }
@@ -421,9 +421,7 @@ public class QTextStyle {
     }
 
     private func addChild(_ child: QTextStyle) {
-        let index: Int? = self.children.index(where: { (textStyle) -> Bool in
-            return textStyle === child
-        })
+        let index = self.children.index { $0 === child }
         if index == nil {
             self.children.append(child)
             child._parent = self
@@ -431,131 +429,131 @@ public class QTextStyle {
     }
 
     private func removeChild(_ child: QTextStyle) {
-        let index: Int? = self.children.index(where: { (textStyle) -> Bool in
+        let index = self.children.index(where: { (textStyle) -> Bool in
             return textStyle === child
         })
-        if let safeIndex: Int = index {
+        if let safeIndex = index {
             self.children.remove(at: safeIndex)
             child._parent = nil
         }
     }
 
     private func removeFromParent() {
-        if let parent: QTextStyle = self._parent {
+        if let parent = self._parent {
             parent.removeChild(self)
         }
     }
 
     private func removeAllChildren() {
-        let copyChildren: [QTextStyle] = self.children
+        let copyChildren = self.children
         self.children.removeAll()
-        for child: QTextStyle in copyChildren {
+        for child in copyChildren {
             child._parent = nil
         }
     }
 
     private func setNeedRebuildAttributes() {
         self._rebuildAttributes = true
-        for child: QTextStyle in self.children {
+        for child in self.children {
             child._rebuildAttributes = true
         }
     }
 
     private func rebuildAttributes() -> [NSAttributedStringKey: Any] {
         var attributes: [NSAttributedStringKey: Any] = [:]
-        if let font: Font = self.font {
+        if let font = self.font {
             attributes[.font] = font
         }
-        if let color: Color = self.color {
+        if let color = self.color {
             attributes[.foregroundColor] = color
         }
-        if let backgroundColor: Color = self.backgroundColor {
+        if let backgroundColor = self.backgroundColor {
             attributes[.backgroundColor] = backgroundColor
         }
-        if let strikeColor: Color = self.strikeColor {
+        if let strikeColor = self.strikeColor {
             attributes[.strokeColor] = strikeColor
         }
-        if let strikeColor: Color = self.strikeColor {
+        if let strikeColor = self.strikeColor {
             attributes[.strokeColor] = strikeColor
         }
-        if let strikeWidth: Float = self.strikeWidth {
+        if let strikeWidth = self.strikeWidth {
             attributes[.strokeWidth] = NSNumber(value: strikeWidth)
         }
-        if let strikeThrough: Int = self.strikeThrough {
+        if let strikeThrough = self.strikeThrough {
             attributes[.strikethroughStyle] = NSNumber(value: strikeThrough)
         }
-        if let underlineColor: Color = self.underlineColor {
+        if let underlineColor = self.underlineColor {
             attributes[.underlineColor] = underlineColor
         }
-        if let underlineStyle: NSUnderlineStyle = self.underlineStyle {
+        if let underlineStyle = self.underlineStyle {
             attributes[.underlineStyle] = NSNumber(value: underlineStyle.rawValue)
         }
         if #available(iOS 6.0, *) {
             let shadow = NSShadow()
-            if let shadowColor: Color = self.shadowColor {
+            if let shadowColor = self.shadowColor {
                 shadow.shadowColor = shadowColor
             }
-            if let shadowOffset: CGSize = self.shadowOffset {
+            if let shadowOffset = self.shadowOffset {
                 shadow.shadowOffset = shadowOffset
             }
-            if let shadowBlurRadius: Float = self.shadowBlurRadius {
+            if let shadowBlurRadius = self.shadowBlurRadius {
                 shadow.shadowBlurRadius = CGFloat(shadowBlurRadius)
             }
             attributes[.shadow] = shadow
         }
-        if let ligature: Int = self.ligature {
+        if let ligature = self.ligature {
             attributes[.ligature] = NSNumber(value: ligature)
         }
-        if let kerning: Float = self.kerning {
+        if let kerning = self.kerning {
             attributes[.kern] = NSNumber(value: kerning)
         }
-        if let baselineOffset: Float = self.baselineOffset {
+        if let baselineOffset = self.baselineOffset {
             attributes[.baselineOffset] = NSNumber(value: baselineOffset)
         }
-        if let obliqueness: Float = self.obliqueness {
+        if let obliqueness = self.obliqueness {
             attributes[.obliqueness] = NSNumber(value: obliqueness)
         }
-        if let expansion: Float = self.expansion {
+        if let expansion = self.expansion {
             attributes[.expansion] = NSNumber(value: expansion)
         }
         let paragraphStyle = NSMutableParagraphStyle()
-        if let lineSpacing: Float = self.lineSpacing {
+        if let lineSpacing = self.lineSpacing {
             paragraphStyle.lineSpacing = CGFloat(lineSpacing)
         }
-        if let paragraphBetween: Float = self.paragraphBetween {
+        if let paragraphBetween = self.paragraphBetween {
             paragraphStyle.lineSpacing = CGFloat(paragraphBetween)
         }
-        if let alignment: NSTextAlignment = self.alignment {
+        if let alignment = self.alignment {
             paragraphStyle.alignment = alignment
         }
-        if let firstLineHeadIndent: Float = self.firstLineHeadIndent {
+        if let firstLineHeadIndent = self.firstLineHeadIndent {
             paragraphStyle.firstLineHeadIndent = CGFloat(firstLineHeadIndent)
         }
-        if let headIndent: Float = self.headIndent {
+        if let headIndent = self.headIndent {
             paragraphStyle.headIndent = CGFloat(headIndent)
         }
-        if let tailIndent: Float = self.tailIndent {
+        if let tailIndent = self.tailIndent {
             paragraphStyle.tailIndent = CGFloat(tailIndent)
         }
-        if let lineBreakMode: QPlatformLineBreakMode = self.lineBreakMode {
+        if let lineBreakMode = self.lineBreakMode {
             paragraphStyle.lineBreakMode = lineBreakMode
         }
-        if let minimumLineHeight: Float = self.minimumLineHeight {
+        if let minimumLineHeight = self.minimumLineHeight {
             paragraphStyle.minimumLineHeight = CGFloat(minimumLineHeight)
         }
-        if let maximumLineHeight: Float = self.maximumLineHeight {
+        if let maximumLineHeight = self.maximumLineHeight {
             paragraphStyle.maximumLineHeight = CGFloat(maximumLineHeight)
         }
-        if let baseWritingDirection: NSWritingDirection = self.baseWritingDirection {
+        if let baseWritingDirection = self.baseWritingDirection {
             paragraphStyle.baseWritingDirection = baseWritingDirection
         }
-        if let lineHeightMultiple: Float = self.lineHeightMultiple {
+        if let lineHeightMultiple = self.lineHeightMultiple {
             paragraphStyle.lineHeightMultiple = CGFloat(lineHeightMultiple)
         }
-        if let paragraphSpacingBefore: Float = self.paragraphSpacingBefore {
+        if let paragraphSpacingBefore = self.paragraphSpacingBefore {
             paragraphStyle.paragraphSpacingBefore = CGFloat(paragraphSpacingBefore)
         }
-        if let hyphenationFactor: Float = self.hyphenationFactor {
+        if let hyphenationFactor = self.hyphenationFactor {
             paragraphStyle.hyphenationFactor = hyphenationFactor
         }
         attributes[.paragraphStyle] = paragraphStyle

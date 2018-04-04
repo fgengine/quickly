@@ -4,13 +4,13 @@
 
 #if os(iOS)
 
-    public protocol QTitleButtonTableCellDelegate: IQTableCellDelegate {
+    public protocol QTitleButtonTableCellDelegate : IQTableCellDelegate {
 
         func pressedButton(_ row: QTitleButtonTableRow)
 
     }
 
-    public class QTitleButtonTableCell< RowType: QTitleButtonTableRow >: QBackgroundColorTableCell< RowType > {
+    open class QTitleButtonTableCell< RowType: QTitleButtonTableRow >: QBackgroundColorTableCell< RowType > {
 
         open weak var titleButtonTableDelegate: QTitleButtonTableCellDelegate? {
             get{ return self.tableDelegate as? QTitleButtonTableCellDelegate }
@@ -20,6 +20,7 @@
         private var _button: QButton!
 
         private var currentEdgeInsets: UIEdgeInsets?
+        private var currentTitleSpacing: CGFloat?
 
         private var selfConstraints: [NSLayoutConstraint] = [] {
             willSet { self.contentView.removeConstraints(self.selfConstraints) }
@@ -27,11 +28,8 @@
         }
 
         open override class func height(row: RowType, width: CGFloat) -> CGFloat {
-            guard
-                let text: IQText = row.titleText
-                else { return 0 }
-            let availableWidth: CGFloat = width - (row.edgeInsets.left + row.edgeInsets.right)
-            let textSize: CGSize = text.size(width: availableWidth)
+            let availableWidth = width - (row.edgeInsets.left + row.edgeInsets.right)
+            let textSize = row.title.text.size(width: availableWidth)
             return row.edgeInsets.top + max(textSize.height, row.buttonHeight) + row.edgeInsets.bottom
         }
 
@@ -67,22 +65,23 @@
         }
 
         public func startSpinner() {
-            if let row: RowType = self.row {
+            if let row = self.row {
                 row.buttonIsSpinnerAnimating = true
                 self._button.startSpinner()
             }
         }
 
         public func stopSpinner() {
-            if let row: RowType = self.row {
+            if let row = self.row {
                 row.buttonIsSpinnerAnimating = false
                 self._button.stopSpinner()
             }
         }
 
         private func apply(row: QTitleButtonTableRow) {
-            if self.currentEdgeInsets != row.edgeInsets {
+            if self.currentEdgeInsets != row.edgeInsets || self.currentTitleSpacing != row.titleSpacing {
                 self.currentEdgeInsets = row.edgeInsets
+                self.currentTitleSpacing = row.titleSpacing
 
                 var selfConstraints: [NSLayoutConstraint] = []
                 selfConstraints.append(self._labelTitle.topLayout == self.contentView.topLayout + row.edgeInsets.top)
@@ -94,46 +93,19 @@
                 selfConstraints.append(self._button.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
                 self.selfConstraints = selfConstraints
             }
-
-            self._labelTitle.contentAlignment = row.titleContentAlignment
-            self._labelTitle.padding = row.titlePadding
-            self._labelTitle.numberOfLines = row.titleNumberOfLines
-            self._labelTitle.lineBreakMode = row.titleLineBreakMode
-            self._labelTitle.text = row.titleText
-
-            self._button.contentHorizontalAlignment = row.buttonContentHorizontalAlignment
-            self._button.contentVerticalAlignment = row.buttonContentVerticalAlignment
-            self._button.contentInsets = row.buttonContentInsets
-            self._button.imagePosition = row.buttonImagePosition
-            self._button.imageInsets = row.buttonImageInsets
-            self._button.textInsets = row.buttonTextInsets
-            self._button.normalStyle = row.buttonNormalStyle
-            self._button.highlightedStyle = row.buttonHighlightedStyle
-            self._button.disabledStyle = row.buttonDisabledStyle
-            self._button.selectedStyle = row.buttonSelectedStyle
-            self._button.selectedHighlightedStyle = row.buttonSelectedHighlightedStyle
-            self._button.selectedDisabledStyle = row.buttonSelectedDisabledStyle
-            self._button.isSelected = row.buttonIsSelected
-            self._button.isEnabled = row.buttonIsEnabled
-            self._button.spinnerPosition = row.buttonSpinnerPosition
-            self._button.spinnerView = row.buttonSpinnerView
-
+            row.title.apply(target: self._labelTitle)
+            row.button.apply(target: self._button)
             if row.buttonIsSpinnerAnimating == true {
                 self._button.startSpinner()
             } else {
                 self._button.stopSpinner()
             }
-
         }
 
         @objc
         private func pressedButton(_ sender: Any) {
-            guard let row: RowType = self.row else {
-                return
-            }
-            if let delegate: QTitleButtonTableCellDelegate = self.titleButtonTableDelegate {
-                delegate.pressedButton(row as QTitleButtonTableRow)
-            }
+            guard let delegate = self.titleButtonTableDelegate, let row = self.row else { return }
+            delegate.pressedButton(row as QTitleButtonTableRow)
         }
 
     }

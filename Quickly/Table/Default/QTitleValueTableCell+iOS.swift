@@ -4,12 +4,13 @@
 
 #if os(iOS)
 
-    public class QTitleValueTableCell< RowType: QTitleValueTableRow >: QBackgroundColorTableCell< RowType > {
+    open class QTitleValueTableCell< RowType: QTitleValueTableRow >: QBackgroundColorTableCell< RowType > {
 
         private var _labelTitle: QLabel!
         private var _labelValue: QLabel!
 
         private var currentEdgeInsets: UIEdgeInsets?
+        private var currentTitleSpacing: CGFloat?
 
         private var selfConstraints: [NSLayoutConstraint] = [] {
             willSet { self.contentView.removeConstraints(self.selfConstraints) }
@@ -17,13 +18,9 @@
         }
 
         open override class func height(row: RowType, width: CGFloat) -> CGFloat {
-            guard
-                let titleText: IQText = row.titleText,
-                let valueText: IQText = row.valueText
-                else { return 0 }
-            let availableWidth: CGFloat = width - (row.edgeInsets.left + row.edgeInsets.right)
-            let valueTextSize: CGSize = valueText.size(width: availableWidth)
-            let titleTextSize: CGSize = titleText.size(width: availableWidth - (valueTextSize.width + row.titleSpacing))
+            let availableWidth = width - (row.edgeInsets.left + row.edgeInsets.right)
+            let valueTextSize = row.value.text.size(width: availableWidth)
+            let titleTextSize = row.title.text.size(width: availableWidth - (valueTextSize.width + row.titleSpacing))
             return row.edgeInsets.top + max(titleTextSize.height, valueTextSize.height) + row.edgeInsets.bottom
         }
 
@@ -54,8 +51,9 @@
         }
 
         private func apply(row: QTitleValueTableRow) {
-            if self.currentEdgeInsets != row.edgeInsets {
+            if self.currentEdgeInsets != row.edgeInsets || self.currentTitleSpacing != row.titleSpacing {
                 self.currentEdgeInsets = row.edgeInsets
+                self.currentTitleSpacing = row.titleSpacing
 
                 var selfConstraints: [NSLayoutConstraint] = []
                 selfConstraints.append(self._labelTitle.topLayout == self.contentView.topLayout + row.edgeInsets.top)
@@ -67,18 +65,8 @@
                 selfConstraints.append(self._labelValue.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
                 self.selfConstraints = selfConstraints
             }
-
-            self._labelTitle.contentAlignment = row.titleContentAlignment
-            self._labelTitle.padding = row.titlePadding
-            self._labelTitle.numberOfLines = row.titleNumberOfLines
-            self._labelTitle.lineBreakMode = row.titleLineBreakMode
-            self._labelTitle.text = row.titleText
-
-            self._labelValue.contentAlignment = row.valueContentAlignment
-            self._labelValue.padding = row.valuePadding
-            self._labelValue.numberOfLines = row.valueNumberOfLines
-            self._labelValue.lineBreakMode = row.valueLineBreakMode
-            self._labelValue.text = row.valueText
+            row.title.apply(target: self._labelTitle)
+            row.value.apply(target: self._labelValue)
         }
 
     }

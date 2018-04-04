@@ -5,7 +5,7 @@
 #if os(iOS)
 
     @IBDesignable
-    open class QPinCodeView: QControl {
+    open class QPinCodeView : QControl {
 
         @IBInspectable public var text: String = "" {
             didSet {

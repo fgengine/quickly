@@ -4,7 +4,7 @@
 
 #if os(iOS)
 
-    public class QImageTitleValueShapeTableCell< RowType: QImageTitleValueShapeTableRow >: QBackgroundColorTableCell< RowType > {
+    open class QImageTitleValueShapeTableCell< RowType: QImageTitleValueShapeTableRow >: QBackgroundColorTableCell< RowType > {
 
         private var _image: QImageView!
         private var _labelTitle: QLabel!
@@ -13,7 +13,10 @@
 
         private var currentEdgeInsets: UIEdgeInsets?
         private var currentImageWidth: CGFloat?
+        private var currentImageSpacing: CGFloat?
+        private var currentTitleSpacing: CGFloat?
         private var currentShapeWidth: CGFloat?
+        private var currentShapeSpacing: CGFloat?
         
         private var selfConstraints: [NSLayoutConstraint] = [] {
             willSet { self.contentView.removeConstraints(self.selfConstraints) }
@@ -29,19 +32,11 @@
         }
 
         open override class func height(row: RowType, width: CGFloat) -> CGFloat {
-            guard
-                let imageSource: QImageSource = row.imageSource,
-                let titleText: IQText = row.titleText,
-                let valueText: IQText = row.valueText,
-                let shapeModel: IQShapeModel = row.shapeModel
-                else { return 0 }
-            let availableWidth: CGFloat = width - (row.edgeInsets.left + row.edgeInsets.right)
-            let imageSize: CGSize = imageSource.size(CGSize(
-                width: row.imageWidth, height: availableWidth
-            ))
-            let valueTextSize: CGSize = valueText.size(width: availableWidth - (imageSize.width + row.imageSpacing))
-            let titleTextSize: CGSize = titleText.size(width: availableWidth - (imageSize.width + row.imageSpacing + valueTextSize.width + row.titleSpacing))
-            return row.edgeInsets.top + max(imageSize.height, titleTextSize.height, valueTextSize.height, shapeModel.size.height) + row.edgeInsets.bottom
+            let availableWidth = width - (row.edgeInsets.left + row.edgeInsets.right)
+            let imageSize = row.image.source.size(CGSize(width: row.imageWidth, height: availableWidth))
+            let valueTextSize = row.value.text.size(width: availableWidth - (row.imageWidth + row.imageSpacing + row.shapeWidth + row.shapeSpacing))
+            let titleTextSize = row.title.text.size(width: availableWidth - (row.imageWidth + row.imageSpacing + valueTextSize.width + row.titleSpacing + row.shapeWidth + row.shapeSpacing))
+            return row.edgeInsets.top + max(imageSize.height, titleTextSize.height, valueTextSize.height, row.shape.size.height) + row.edgeInsets.bottom
         }
 
         open override func setup() {
@@ -83,8 +78,11 @@
         }
 
         private func apply(row: QImageTitleValueShapeTableRow) {
-            if self.currentEdgeInsets != row.edgeInsets {
+            if self.currentEdgeInsets != row.edgeInsets || self.currentImageSpacing != row.imageSpacing || self.currentTitleSpacing != row.titleSpacing || self.currentShapeSpacing != row.shapeSpacing {
                 self.currentEdgeInsets = row.edgeInsets
+                self.currentImageSpacing = row.imageSpacing
+                self.currentTitleSpacing = row.titleSpacing
+                self.currentShapeSpacing = row.shapeSpacing
 
                 var selfConstraints: [NSLayoutConstraint] = []
                 selfConstraints.append(self._image.topLayout == self.contentView.topLayout + row.edgeInsets.top)
@@ -116,24 +114,10 @@
                 shapeConstraints.append(self._shape.widthLayout == row.shapeWidth)
                 self.shapeConstraints = shapeConstraints
             }
-
-            self._image.layer.cornerRadius = row.imageCornerRadius
-            self._image.roundCorners = row.imageRoundCorners
-            self._image.source = row.imageSource
-
-            self._labelTitle.contentAlignment = row.titleContentAlignment
-            self._labelTitle.padding = row.titlePadding
-            self._labelTitle.numberOfLines = row.titleNumberOfLines
-            self._labelTitle.lineBreakMode = row.titleLineBreakMode
-            self._labelTitle.text = row.titleText
-
-            self._labelValue.contentAlignment = row.valueContentAlignment
-            self._labelValue.padding = row.valuePadding
-            self._labelValue.numberOfLines = row.valueNumberOfLines
-            self._labelValue.lineBreakMode = row.valueLineBreakMode
-            self._labelValue.text = row.valueText
-
-            self._shape.model = row.shapeModel
+            row.image.apply(target: self._image)
+            row.title.apply(target: self._labelTitle)
+            row.value.apply(target: self._labelValue)
+            self._shape.model = row.shape
         }
 
     }

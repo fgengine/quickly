@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QAmountStringValidator: QRegularExpressionStringValidator {
+open class QAmountStringValidator : QRegularExpressionStringValidator {
 
     public init(
         maximumSimbol: Int,

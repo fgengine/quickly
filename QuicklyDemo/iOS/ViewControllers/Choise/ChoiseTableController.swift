@@ -26,6 +26,8 @@ class ChoiseTableController: QTableController {
                 ChoiseSectionTableRow(mode: .label),
                 ChoiseSectionTableRow(mode: .button),
                 ChoiseSectionTableRow(mode: .textField),
+                ChoiseSectionTableRow(mode: .listField),
+                ChoiseSectionTableRow(mode: .dateField),
                 ChoiseSectionTableRow(mode: .image),
                 ChoiseSectionTableRow(mode: .dialog),
                 ChoiseSectionTableRow(mode: .push)
@@ -34,9 +36,9 @@ class ChoiseTableController: QTableController {
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let delegate: ChoiseTableControllerDelegate = self.delegate {
-            let row: IQTableRow = self.row(indexPath: indexPath)
-            if let row: ChoiseSectionTableRow = row as? ChoiseSectionTableRow {
+        if let delegate = self.delegate {
+            let row = self.row(indexPath: indexPath)
+            if let row = row as? ChoiseSectionTableRow {
                 delegate.pressedChoiseSectionRow(row)
             }
         }

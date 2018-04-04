@@ -18,7 +18,7 @@
         public init(name: String) throws {
             self.name = name
             self.memory = [:]
-            if let cachePath: URL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
+            if let cachePath = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
                 self.url = cachePath
             } else {
                 self.url = URL(fileURLWithPath: NSHomeDirectory())
@@ -40,25 +40,25 @@
         }
 
         public func isExist(_ key: String) -> Bool {
-            let memoryImage: UIImage? = self.queue.sync {
+            let memoryImage = self.queue.sync {
                 return self.memory[key]
             }
             if memoryImage != nil {
                 return true
             }
-            let url: URL = self.url.appendingPathComponent(key)
+            let url = self.url.appendingPathComponent(key)
             return FileManager.default.fileExists(atPath: url.path)
         }
 
         public func image(_ key: String) -> UIImage? {
-            let memoryImage: UIImage? = self.queue.sync {
+            let memoryImage = self.queue.sync {
                 return self.memory[key]
             }
-            if let image: UIImage = memoryImage {
+            if let image = memoryImage {
                 return image
             }
-            let url: URL = self.url.appendingPathComponent(key)
-            if let image: UIImage = UIImage(contentsOfFile: url.path) {
+            let url = self.url.appendingPathComponent(key)
+            if let image = UIImage(contentsOfFile: url.path) {
                 self.queue.sync {
                     self.memory[key] = image
                 }
@@ -69,11 +69,11 @@
 
         public func image(_ key: String, complete: @escaping ImageClosure) {
             self.queue.async {
-                if let image: UIImage = self.memory[key] {
+                if let image = self.memory[key] {
                     complete(image)
                 }
-                let url: URL = self.url.appendingPathComponent(key)
-                if let image: UIImage = UIImage(contentsOfFile: url.path) {
+                let url = self.url.appendingPathComponent(key)
+                if let image = UIImage(contentsOfFile: url.path) {
                     self.memory[key] = image
                     complete(image)
                 }
@@ -84,25 +84,21 @@
             self.queue.sync {
                 self.memory[key] = image
             }
-            let url: URL = self.url.appendingPathComponent(key)
-            if let success: SuccessClosure = success {
+            let url = self.url.appendingPathComponent(key)
+            if let success = success {
                 self.queue.async {
                     do {
                         try data.write(to: url, options: .atomic)
                         success()
                     } catch let error {
-                        if let failure: FailureClosure = failure {
-                            failure(error)
-                        }
+                        failure?(error)
                     }
                 }
             } else {
                 do {
                     try data.write(to: url, options: .atomic)
                 } catch let error {
-                    if let failure: FailureClosure = failure {
-                        failure(error)
-                    }
+                    failure?(error)
                 }
             }
         }
@@ -111,26 +107,22 @@
             self.queue.sync {
                 _ = self.memory.removeValue(forKey: key)
             }
-            let url: URL = self.url.appendingPathComponent(key)
+            let url = self.url.appendingPathComponent(key)
             if FileManager.default.fileExists(atPath: url.path) == true {
-                if let success: SuccessClosure = success {
+                if let success = success {
                     self.queue.async {
                         do {
                             try FileManager.default.removeItem(at: url)
                             success()
                         } catch let error {
-                            if let failure: FailureClosure = failure {
-                                failure(error)
-                            }
+                            failure?(error)
                         }
                     }
                 } else {
                     do {
                         try FileManager.default.removeItem(at: url)
                     } catch let error {
-                        if let failure: FailureClosure = failure {
-                            failure(error)
-                        }
+                        failure?(error)
                     }
                 }
             }
@@ -141,44 +133,38 @@
                 self.memory.removeAll()
             }
             do {
-                let urls: [URL] = try FileManager.default.contentsOfDirectory(at: self.url, includingPropertiesForKeys: nil, options: [ .skipsHiddenFiles ])
-                if let success: SuccessClosure = success {
+                let urls = try FileManager.default.contentsOfDirectory(at: self.url, includingPropertiesForKeys: nil, options: [ .skipsHiddenFiles ])
+                if let success = success {
                     self.queue.async {
                         var lastError: Error? = nil
-                        for url: URL in urls {
+                        for url in urls {
                             do {
                                 try FileManager.default.removeItem(at: url)
                             } catch let error {
                                 lastError = error
                             }
                         }
-                        if let lastError: Error = lastError {
-                            if let failure: FailureClosure = failure {
-                                failure(lastError)
-                            }
+                        if let lastError = lastError {
+                            failure?(lastError)
                         } else {
                             success()
                         }
                     }
                 } else {
                     var lastError: Error? = nil
-                    for url: URL in urls {
+                    for url in urls {
                         do {
                             try FileManager.default.removeItem(at: url)
                         } catch let error {
                             lastError = error
                         }
                     }
-                    if let lastError: Error = lastError {
-                        if let failure: FailureClosure = failure {
-                            failure(lastError)
-                        }
+                    if let lastError = lastError {
+                        failure?(lastError)
                     }
                 }
             } catch let error {
-                if let failure: FailureClosure = failure {
-                    failure(error)
-                }
+                failure?(error)
             }
         }
 

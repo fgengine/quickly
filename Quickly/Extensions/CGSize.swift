@@ -12,17 +12,17 @@ public extension CGSize {
     }
 
     public func aspectFit(bounds: CGRect) -> CGRect {
-        let iw: CGFloat = floor(self.width)
-        let ih: CGFloat = floor(self.height)
-        let bw: CGFloat = floor(bounds.size.width)
-        let bh: CGFloat = floor(bounds.size.height)
-        let fw: CGFloat = bw / iw
-        let fh: CGFloat = bh / ih
-        let sc: CGFloat = (fw < fh) ? fw : fh
-        let rw: CGFloat = iw * sc
-        let rh: CGFloat = ih * sc
-        let rx: CGFloat = (bw - rw) * 0.5
-        let ry: CGFloat = (bh - rh) * 0.5
+        let iw = floor(self.width)
+        let ih = floor(self.height)
+        let bw = floor(bounds.size.width)
+        let bh = floor(bounds.size.height)
+        let fw = bw / iw
+        let fh = bh / ih
+        let sc = (fw < fh) ? fw : fh
+        let rw = iw * sc
+        let rh = ih * sc
+        let rx = (bw - rw) / 2
+        let ry = (bh - rh) / 2
         return CGRect(
             x: bounds.origin.x + rx,
             y: bounds.origin.y + ry,
@@ -32,17 +32,17 @@ public extension CGSize {
     }
 
     public func aspectFill(bounds: CGRect) -> CGRect {
-        let iw: CGFloat = floor(self.width)
-        let ih: CGFloat = floor(self.height)
-        let bw: CGFloat = floor(bounds.size.width)
-        let bh: CGFloat = floor(bounds.size.height)
-        let fw: CGFloat = bw / iw
-        let fh: CGFloat = bh / ih
-        let sc: CGFloat = (fw > fh) ? fw : fh
-        let rw: CGFloat = iw * sc
-        let rh: CGFloat = ih * sc
-        let rx: CGFloat = (bw - rw) * 0.5
-        let ry: CGFloat = (bh - rh) * 0.5
+        let iw = floor(self.width)
+        let ih = floor(self.height)
+        let bw = floor(bounds.size.width)
+        let bh = floor(bounds.size.height)
+        let fw = bw / iw
+        let fh = bh / ih
+        let sc = (fw > fh) ? fw : fh
+        let rw = iw * sc
+        let rh = ih * sc
+        let rx = (bw - rw) / 2
+        let ry = (bh - rh) / 2
         return CGRect(
             x: bounds.origin.x + rx,
             y: bounds.origin.y + ry,

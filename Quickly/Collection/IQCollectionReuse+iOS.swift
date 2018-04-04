@@ -4,7 +4,7 @@
 
 #if os(iOS)
 
-    public protocol IQCollectionReuse: class {
+    public protocol IQCollectionReuse : IQView {
 
         static func reuseIdentifier() -> String
         static func currentNib() -> UINib?
@@ -17,15 +17,15 @@
 
     }
 
-    extension IQCollectionReuse where Self: UIView {
+    extension IQCollectionReuse where Self : UIView {
 
         public static func reuseIdentifier() -> String {
             return String(describing: self)
         }
 
         public static func currentNib() -> UINib? {
-            let nibName: String = self.currentNibName()
-            let bundle: Bundle = self.currentNibBundle()
+            let nibName = self.currentNibName()
+            let bundle = self.currentNibBundle()
             if bundle.url(forResource: nibName, withExtension: "nib") == nil {
                 return nil
             }

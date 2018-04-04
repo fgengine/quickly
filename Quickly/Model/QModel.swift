@@ -4,7 +4,7 @@
 
 import Quickly.Private
 
-open class QModel: IQModel {
+open class QModel : IQModel {
 
     open class func from(json: QJson) throws -> IQModel? {
         if json.isDictionary() == true {
@@ -23,7 +23,7 @@ open class QModel: IQModel {
             } catch let error as NSError {
                 switch error.domain {
                 case QJsonErrorDomain:
-                    if let path: Any = error.userInfo[QJsonErrorPathKey] {
+                    if let path = error.userInfo[QJsonErrorPathKey] {
                         print("QModel::\(String(describing: self)) invalid parse from JSON in path '\(path)'")
                     } else {
                         print("QModel::\(String(describing: self)) invalid parse from JSON")
@@ -44,7 +44,7 @@ open class QModel: IQModel {
     }
 
     public final func toJson() -> QJson? {
-        let json: QJson = QJson(basePath: "")
+        let json = QJson(basePath: "")
         self.toJson(json: json)
         return json
     }
@@ -54,23 +54,23 @@ open class QModel: IQModel {
 
 }
 
-extension QModel: IQDebug {
+extension QModel : IQDebug {
 
     open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-        let nextIndent: Int = indent + 1
+        let nextIndent = indent + 1
 
         if headerIndent > 0 {
             buffer.append(String(repeating: "\t", count: headerIndent))
         }
         buffer.append("<\(String(describing: self))\n")
 
-        let mirror: Mirror = Mirror(reflecting: self)
+        let mirror = Mirror(reflecting: self)
         for (label, value) in mirror.children {
-            guard let label: String = label else {
+            guard let label = label else {
                 continue
             }
-            var debug: String = String()
-            if let debugValue: IQDebug = value as? IQDebug {
+            var debug = String()
+            if let debugValue = value as? IQDebug {
                 debugValue.debugString(&debug, 0, nextIndent, indent)
             } else {
                 debug.append("\(value)")
@@ -86,21 +86,20 @@ extension QModel: IQDebug {
 
 }
 
-extension QModel: IJsonValue {
+extension QModel : IJsonValue {
 
     public static func fromJson(value: Any?, at: String) throws -> Any {
-        guard let value: Any = value else {
+        guard let value = value else {
             throw QJsonImpl.convertError(at: at)
         }
-        let maybeModel: IQModel? = try self.from(json: QJson(basePath: at, root: value))
-        guard let model: IQModel = maybeModel else {
+        guard let model = try self.from(json: QJson(basePath: at, root: value)) else {
             throw QJsonImpl.convertError(at: at)
         }
         return model
     }
 
     public func toJsonValue() -> Any? {
-        if let json: QJson = self.toJson() {
+        if let json = self.toJson() {
             return json.root
         }
         return nil
@@ -109,8 +108,8 @@ extension QModel: IJsonValue {
 }
 
 public func >>> < Type: IJsonValue & IQModel >(left: Type, right: QJson) {
-    if let json: QJson = left.toJson() {
-        if let dict: [AnyHashable: Any] = json.dictionary() {
+    if let json = left.toJson() {
+        if let dict = json.dictionary() {
             right.set(dict)
         }
     }
@@ -120,12 +119,8 @@ public func <<< < Type: IJsonValue & IQModel >(left: inout Type, right: QJson) t
     left = try Type.from(json: right) as! Type
 }
 
-public func <<< < Type: IJsonValue & IQModel >(left: inout Type!, right: QJson) throws {
-    left = try Type.from(json: right) as! Type
-}
-
 public func <<< < Type: IJsonValue & IQModel >(left: inout Type?, right: QJson) {
-    if let model: IQModel? = try? Type.from(json: right) {
+    if let model = try? Type.from(json: right) {
         left = model as? Type
     } else {
         left = nil

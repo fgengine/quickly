@@ -11,7 +11,9 @@
         private var _shape: QShapeView!
 
         private var currentEdgeInsets: UIEdgeInsets?
+        private var currentTitleSpacing: CGFloat?
         private var currentShapeWidth: CGFloat?
+        private var currentShapeSpacing: CGFloat?
 
         private var selfConstraints: [NSLayoutConstraint] = [] {
             willSet { self.contentView.removeConstraints(self.selfConstraints) }
@@ -23,15 +25,10 @@
         }
 
         open override class func height(row: RowType, width: CGFloat) -> CGFloat {
-            guard
-                let titleText: IQText = row.titleText,
-                let detailText: IQText = row.detailText,
-                let shapeModel: IQShapeModel = row.shapeModel
-                else { return 0 }
-            let availableWidth: CGFloat = width - (row.edgeInsets.left + row.edgeInsets.right)
-            let titleTextSize: CGSize = titleText.size(width: availableWidth - (shapeModel.size.width + row.detailSpacing))
-            let detailTextSize: CGSize = detailText.size(width: availableWidth - (shapeModel.size.width + row.detailSpacing))
-            return row.edgeInsets.top + max(titleTextSize.height + row.titleSpacing + detailTextSize.height, shapeModel.size.height) + row.edgeInsets.bottom
+            let availableWidth = width - (row.edgeInsets.left + row.edgeInsets.right)
+            let titleTextSize = row.title.text.size(width: availableWidth - (row.shapeWidth + row.shapeSpacing))
+            let detailTextSize = row.detail.text.size(width: availableWidth - (row.shapeWidth + row.shapeSpacing))
+            return row.edgeInsets.top + max(titleTextSize.height + row.titleSpacing + detailTextSize.height, row.shape.size.height) + row.edgeInsets.bottom
         }
 
         open override func setup() {
@@ -67,8 +64,10 @@
         }
 
         private func apply(row: QTitleDetailShapeTableRow) {
-            if self.currentEdgeInsets != row.edgeInsets {
+            if self.currentEdgeInsets != row.edgeInsets || self.currentTitleSpacing != row.titleSpacing || self.currentShapeSpacing != row.shapeSpacing {
                 self.currentEdgeInsets = row.edgeInsets
+                self.currentTitleSpacing = row.titleSpacing
+                self.currentShapeSpacing = row.shapeSpacing
 
                 var selfConstraints: [NSLayoutConstraint] = []
                 selfConstraints.append(self._labelTitle.topLayout == self.contentView.topLayout + row.edgeInsets.top)
@@ -77,8 +76,8 @@
                 selfConstraints.append(self._labelDetail.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
                 selfConstraints.append(self._labelDetail.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
                 selfConstraints.append(self._shape.topLayout == self.contentView.topLayout + row.edgeInsets.top)
-                selfConstraints.append(self._shape.leadingLayout == self._labelTitle.trailingLayout + row.detailSpacing)
-                selfConstraints.append(self._shape.leadingLayout == self._labelDetail.trailingLayout + row.detailSpacing)
+                selfConstraints.append(self._shape.leadingLayout == self._labelTitle.trailingLayout + row.shapeSpacing)
+                selfConstraints.append(self._shape.leadingLayout == self._labelDetail.trailingLayout + row.shapeSpacing)
                 selfConstraints.append(self._shape.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
                 selfConstraints.append(self._shape.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
                 self.selfConstraints = selfConstraints
@@ -90,20 +89,9 @@
                 shapeConstraints.append(self._shape.widthLayout == row.shapeWidth)
                 self.shapeConstraints = shapeConstraints
             }
-
-            self._labelTitle.contentAlignment = row.titleContentAlignment
-            self._labelTitle.padding = row.titlePadding
-            self._labelTitle.numberOfLines = row.titleNumberOfLines
-            self._labelTitle.lineBreakMode = row.titleLineBreakMode
-            self._labelTitle.text = row.titleText
-
-            self._labelDetail.contentAlignment = row.detailContentAlignment
-            self._labelDetail.padding = row.detailPadding
-            self._labelDetail.numberOfLines = row.detailNumberOfLines
-            self._labelDetail.lineBreakMode = row.detailLineBreakMode
-            self._labelDetail.text = row.detailText
-
-            self._shape.model = row.shapeModel
+            row.title.apply(target: self._labelTitle)
+            row.detail.apply(target: self._labelDetail)
+            self._shape.model = row.shape
         }
 
     }

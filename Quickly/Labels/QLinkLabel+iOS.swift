@@ -4,7 +4,7 @@
 
 #if os(iOS)
 
-    open class QLinkLabel: QLabel {
+    open class QLinkLabel : QLabel {
 
         public typealias PressedClosure = (_ label: QLinkLabel, _ link: QLinkLabel.Link) -> Void
 
@@ -26,7 +26,7 @@
 
             public func attributes() -> [NSAttributedStringKey: Any] {
                 if self.isHighlighted == true {
-                    if let highlight: QTextStyle = self.highlight {
+                    if let highlight = self.highlight {
                         return highlight.attributes
                     }
                 }
@@ -37,12 +37,12 @@
 
         public private(set) var pressGestureRecognizer: UILongPressGestureRecognizer? {
             willSet {
-                if let gestureRecognizer: UILongPressGestureRecognizer = self.pressGestureRecognizer {
+                if let gestureRecognizer = self.pressGestureRecognizer {
                     self.removeGestureRecognizer(gestureRecognizer)
                 }
             }
             didSet {
-                if let gestureRecognizer: UILongPressGestureRecognizer = self.pressGestureRecognizer {
+                if let gestureRecognizer = self.pressGestureRecognizer {
                     self.addGestureRecognizer(gestureRecognizer)
                 }
             }
@@ -52,12 +52,8 @@
         }
 
         public func appendLink(_ string: String, normal: QTextStyle, highlight: QTextStyle?, onPressed: @escaping PressedClosure) {
-            guard let text: IQText = self.text else {
-                return
-            }
-            guard let range: Range< String.Index > = text.attributed.string.range(of: string) else {
-                return
-            }
+            guard let text = self.text else { return }
+            guard let range = text.attributed.string.range(of: string) else { return }
             self.links.append(Link(range, normal: normal, highlight: highlight, onPressed: onPressed))
             self.updateTextStorage()
         }
@@ -70,13 +66,13 @@
         public func removeLink(_ range: Range< String.Index >) {
             var removeIndeces: [Int] = []
             var index: Int = 0
-            for link: Link in self.links {
+            for link in self.links {
                 if range.overlaps(link.range) == true {
                     removeIndeces.append(index)
                 }
                 index += 1
             }
-            for removeIndex: Int in removeIndeces {
+            for removeIndex in removeIndeces {
                 self.links.remove(at: removeIndex)
             }
             self.updateTextStorage()
@@ -88,18 +84,18 @@
         }
 
         @IBAction private func handlePressGesture(_ gesture: UILongPressGestureRecognizer) {
-            var needUpdate: Bool = false
-            let point: CGPoint = gesture.location(in: self)
-            if let charecterIndex: String.Index = self.characterIndex(point: point) {
-                for link: Link in self.links {
-                    let highlighted: Bool = link.range.contains(charecterIndex)
+            var needUpdate = false
+            let point = gesture.location(in: self)
+            if let charecterIndex = self.characterIndex(point: point) {
+                for link in self.links {
+                    let highlighted = link.range.contains(charecterIndex)
                     if link.isHighlighted != highlighted {
                         link.isHighlighted = highlighted
                         needUpdate = true
                     }
                 }
             } else {
-                for link: Link in self.links {
+                for link in self.links {
                     if link.isHighlighted == true {
                         link.isHighlighted = false
                         needUpdate = true
@@ -108,7 +104,7 @@
             }
             switch gesture.state {
             case .ended:
-                for link: Link in self.links {
+                for link in self.links {
                     if link.isHighlighted == true {
                         link.onPressed(self, link)
                     }
@@ -125,7 +121,7 @@
 
             self.isUserInteractionEnabled = true
 
-            let gestureRecognizer: UILongPressGestureRecognizer = UILongPressGestureRecognizer(
+            let gestureRecognizer = UILongPressGestureRecognizer(
                 target: self,
                 action: #selector(self.handlePressGesture(_:))
             )
@@ -137,12 +133,12 @@
         internal override func updateTextStorage() {
             super.updateTextStorage()
 
-            let string: String = self.textStorage.string
-            let stringRange: Range< String.Index > = string.startIndex ..< string.endIndex
-            for link: Link in self.links {
-                let stringRange: Range< String.Index > = stringRange.clamped(to: link.range)
-                let nsRange: NSRange = string.nsRange(from: stringRange)
-                let attributes: [NSAttributedStringKey: Any] = link.attributes()
+            let string = self.textStorage.string
+            let stringRange = string.startIndex ..< string.endIndex
+            for link in self.links {
+                let stringRange = stringRange.clamped(to: link.range)
+                let nsRange = string.nsRange(from: stringRange)
+                let attributes = link.attributes()
                 self.textStorage.setAttributes(attributes, range: nsRange)
             }
         }

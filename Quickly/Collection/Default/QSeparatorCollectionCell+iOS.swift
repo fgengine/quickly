@@ -6,8 +6,11 @@
 
     open class QSeparatorCollectionCell< ItemType: QSeparatorCollectionItem >: QBackgroundColorCollectionCell< ItemType > {
 
-        internal var separator: QView!
-        internal var selfConstraints: [NSLayoutConstraint] = [] {
+        private var _separator: QView!
+
+        private var currentEdgeInsets: UIEdgeInsets?
+
+        private var selfConstraints: [NSLayoutConstraint] = [] {
             willSet { self.contentView.removeConstraints(self.selfConstraints) }
             didSet { self.contentView.addConstraints(self.selfConstraints) }
         }
@@ -18,25 +21,31 @@
             section: IQCollectionSection,
             size: CGSize
         ) -> CGSize {
-            let separatorSize: CGFloat = (1 / UIScreen.main.scale)
+            let separatorSize = (1 / UIScreen.main.scale)
             switch item.axis {
-            case .horizontal: return CGSize(
-                width: item.edgeInsets.left + separatorSize + item.edgeInsets.right,
-                height: size.height
-            )
-            case .vertical: return CGSize(
-                width: size.width,
-                height: item.edgeInsets.top + separatorSize + item.edgeInsets.bottom
-            )
+            case .horizontal:
+                return CGSize(
+                    width: item.edgeInsets.left + separatorSize + item.edgeInsets.right,
+                    height: size.height
+                )
+            case .vertical:
+                return CGSize(
+                    width: size.width,
+                    height: item.edgeInsets.top + separatorSize + item.edgeInsets.bottom
+                )
             }
         }
 
         open override func setup() {
             super.setup()
 
-            self.separator = QView(frame: self.contentView.bounds)
-            self.separator.translatesAutoresizingMaskIntoConstraints = false
-            self.contentView.addSubview(self.separator)
+            self._separator = self.prepareView()
+            self._separator.translatesAutoresizingMaskIntoConstraints = false
+            self.contentView.addSubview(self._separator)
+        }
+
+        open func prepareView() -> QView {
+            return QView(frame: self.contentView.bounds)
         }
 
         open override func set(item: ItemType) {
@@ -50,14 +59,17 @@
         }
 
         private func apply(item: QSeparatorCollectionItem) {
-            var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self.separator.topLayout == self.contentView.topLayout + item.edgeInsets.top)
-            selfConstraints.append(self.separator.leadingLayout == self.contentView.leadingLayout + item.edgeInsets.left)
-            selfConstraints.append(self.separator.trailingLayout == self.contentView.trailingLayout - item.edgeInsets.right)
-            selfConstraints.append(self.separator.bottomLayout == self.contentView.bottomLayout - item.edgeInsets.bottom)
-            self.selfConstraints = selfConstraints
+            if self.currentEdgeInsets != item.edgeInsets {
+                self.currentEdgeInsets = item.edgeInsets
 
-            self.separator.backgroundColor = item.color
+                var selfConstraints: [NSLayoutConstraint] = []
+                selfConstraints.append(self._separator.topLayout == self.contentView.topLayout + item.edgeInsets.top)
+                selfConstraints.append(self._separator.leadingLayout == self.contentView.leadingLayout + item.edgeInsets.left)
+                selfConstraints.append(self._separator.trailingLayout == self.contentView.trailingLayout - item.edgeInsets.right)
+                selfConstraints.append(self._separator.bottomLayout == self.contentView.bottomLayout - item.edgeInsets.bottom)
+                self.selfConstraints = selfConstraints
+            }
+            self._separator.backgroundColor = item.color
         }
 
     }

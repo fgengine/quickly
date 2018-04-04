@@ -8,21 +8,21 @@
     import UIKit
 #endif
 
-public protocol QLayoutTarget: AnyObject {
+public protocol QLayoutTarget : AnyObject {
 }
 
 #if os(macOS)
 
-    extension NSView: QLayoutTarget {
+    extension NSView : QLayoutTarget {
     }
 
 #elseif os(iOS)
 
-    extension UIView: QLayoutTarget {
+    extension UIView : QLayoutTarget {
     }
 
     @available(iOS 9.0, *)
-    extension UILayoutGuide: QLayoutTarget {
+    extension UILayoutGuide : QLayoutTarget {
     }
 
 #endif

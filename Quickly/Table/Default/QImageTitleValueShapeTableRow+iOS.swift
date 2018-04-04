@@ -4,32 +4,37 @@
 
 #if os(iOS)
 
-    open class QImageTitleValueShapeTableRow: QBackgroundColorTableRow {
+    open class QImageTitleValueShapeTableRow : QBackgroundColorTableRow {
 
-        public var edgeInsets: UIEdgeInsets = UIEdgeInsets.zero
+        public var edgeInsets: UIEdgeInsets
 
-        public var imageSource: QImageSource?
-        public var imageWidth: CGFloat = 96
-        public var imageCornerRadius: CGFloat = 0
-        public var imageRoundCorners: Bool = false
-        public var imageSpacing: CGFloat = 0
+        public var image: QImageViewStyleSheet
+        public var imageWidth: CGFloat
+        public var imageSpacing: CGFloat
 
-        public var titleText: IQText?
-        public var titleContentAlignment: QLabel.ContentAlignment = .left
-        public var titlePadding: CGFloat = 0
-        public var titleNumberOfLines: Int = 0
-        public var titleLineBreakMode: NSLineBreakMode = .byWordWrapping
+        public var title: QLabelStyleSheet
         public var titleSpacing: CGFloat = 0
 
-        public var valueText: IQText?
-        public var valueContentAlignment: QLabel.ContentAlignment = .left
-        public var valuePadding: CGFloat = 0
-        public var valueNumberOfLines: Int = 0
-        public var valueLineBreakMode: NSLineBreakMode = .byWordWrapping
+        public var value: QLabelStyleSheet
 
-        public var shapeModel: IQShapeModel?
-        public var shapeWidth: CGFloat = 16
-        public var shapeSpacing: CGFloat = 0
+        public var shape: IQShapeModel
+        public var shapeWidth: CGFloat
+        public var shapeSpacing: CGFloat
+
+        public init(image: QImageViewStyleSheet, title: QLabelStyleSheet, value: QLabelStyleSheet, shape: IQShapeModel) {
+            self.edgeInsets = UIEdgeInsets.zero
+            self.image = image
+            self.imageWidth = 96
+            self.imageSpacing = 0
+            self.title = title
+            self.titleSpacing = 0
+            self.value = value
+            self.shape = shape
+            self.shapeWidth = 16
+            self.shapeSpacing = 0
+
+            super.init()
+        }
 
     }
 

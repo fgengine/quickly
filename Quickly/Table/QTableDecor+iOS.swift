@@ -4,12 +4,10 @@
 
 #if os(iOS)
 
-    open class QTableDecor<
-        Type: IQTableData
-    >: UITableViewHeaderFooterView, IQView, IQTypedTableDecor {
+    open class QTableDecor< Type: IQTableData > : UITableViewHeaderFooterView, IQTypedTableDecor {
 
-        open weak var tableDelegate: IQTableDecorDelegate? = nil
-        open var data: Type? = nil
+        open weak var tableDelegate: IQTableDecorDelegate?
+        open var data: Type?
 
         public override init(reuseIdentifier: String?) {
             super.init(reuseIdentifier: reuseIdentifier)

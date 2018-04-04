@@ -82,7 +82,7 @@ public class QApiQuery<
 
     public func prepare(session: URLSession) -> Bool {
         if self.task == nil {
-            if let urlRequest: URLRequest = self.request.urlRequest(provider: self.provider) {
+            if let urlRequest = self.request.urlRequest(provider: self.provider) {
                 if self.download != nil {
                     self.task = session.downloadTask(with: urlRequest)
                 } else if self.upload != nil {
@@ -96,19 +96,19 @@ public class QApiQuery<
     }
 
     public func resume() {
-        if let task: URLSessionTask = self.task {
+        if let task = self.task {
             task.resume()
         }
     }
 
     public func suspend() {
-        if let task: URLSessionTask = self.task {
+        if let task = self.task {
             task.suspend()
         }
     }
 
     public func cancel() {
-        if let task: URLSessionTask = self.task {
+        if let task = self.task {
             task.cancel()
             self.task = nil
             self.receivedResponse = nil
@@ -120,7 +120,7 @@ public class QApiQuery<
     public func upload(bytes: Int64, totalBytes: Int64) {
         self.uploadProgress.totalUnitCount = totalBytes
         self.uploadProgress.completedUnitCount = bytes
-        if let upload: ProgressClosure = self.upload {
+        if let upload = self.upload {
             self.queue.async {
                 upload(self.uploadProgress)
             }
@@ -130,7 +130,7 @@ public class QApiQuery<
     public func resumeDownload(bytes: Int64, totalBytes: Int64) {
         self.downloadProgress.totalUnitCount = totalBytes
         self.downloadProgress.completedUnitCount = bytes
-        if let download: ProgressClosure = self.download {
+        if let download = self.download {
             self.queue.async {
                 download(self.downloadProgress)
             }
@@ -140,7 +140,7 @@ public class QApiQuery<
     public func download(bytes: Int64, totalBytes: Int64) {
         self.downloadProgress.totalUnitCount = totalBytes
         self.downloadProgress.completedUnitCount = bytes
-        if let download: ProgressClosure = self.download {
+        if let download = self.download {
             self.queue.async {
                 download(self.downloadProgress)
             }
@@ -164,14 +164,14 @@ public class QApiQuery<
     }
 
     public func download(url: URL) {
-        if let data: Data = try? Data(contentsOf: url) {
+        if let data = try? Data(contentsOf: url) {
             self.receivedData = data
         }
     }
 
     public func finish(error: Error?) {
         self.task = nil
-        if let error: NSError = error as NSError? {
+        if let error = error as NSError? {
             if self.canceled == false {
                 self.parse(error: error)
             }
@@ -181,7 +181,7 @@ public class QApiQuery<
     }
 
     private func parse() {
-        guard let response: URLResponse = self.receivedResponse, let data: Data = self.receivedData else {
+        guard let response = self.receivedResponse, let data = self.receivedData else {
             return
         }
         self.response.parse(response: response, data: data)
@@ -219,25 +219,25 @@ public class QApiQuery<
 
 }
 
-extension QApiQuery: IQDebug {
+extension QApiQuery : IQDebug {
 
     open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-        let nextIndent: Int = indent + 1
+        let nextIndent = indent + 1
 
         if headerIndent > 0 {
             buffer.append(String(repeating: "\t", count: headerIndent))
         }
         buffer.append("<\(String(describing: self))\n")
 
-        if let provider: IQDebug = self.provider as? IQDebug {
-            var debug: String = String()
+        if let provider = self.provider as? IQDebug {
+            var debug = String()
             provider.debugString(&debug, 0, nextIndent, indent)
             QDebugString("Provider: \(debug)\n", &buffer, indent, nextIndent, indent)
         } else {
             QDebugString("Provider: \(self.provider)\n", &buffer, indent, nextIndent, indent)
         }
-        if let request: IQDebug = self.request as? IQDebug {
-            var debug: String = String()
+        if let request = self.request as? IQDebug {
+            var debug = String()
             request.debugString(&debug, 0, nextIndent, indent)
             QDebugString("Request: \(debug)\n", &buffer, indent, nextIndent, indent)
         } else {
@@ -245,16 +245,16 @@ extension QApiQuery: IQDebug {
         }
         QDebugString("CreateAt: \(self.createAt)\n", &buffer, indent, nextIndent, indent)
         QDebugString("Duration: \(-self.createAt.timeIntervalSinceNow) s\n", &buffer, indent, nextIndent, indent)
-        if let response: IQDebug = self.response as? IQDebug {
-            var debug: String = String()
+        if let response = self.response as? IQDebug {
+            var debug = String()
             response.debugString(&debug, 0, nextIndent, indent)
             QDebugString("Response: \(debug)\n", &buffer, indent, nextIndent, indent)
         } else {
             QDebugString("Response: \(self.response)\n", &buffer, indent, nextIndent, indent)
         }
-        if let receivedData: Data = self.receivedData {
-            var debug: String = String()
-            if let json: QJson = QJson(basePath: "", data: receivedData) {
+        if let receivedData = self.receivedData {
+            var debug = String()
+            if let json = QJson(basePath: "", data: receivedData) {
                 json.debugString(&debug, 0, nextIndent, indent)
             } else {
                 receivedData.debugString(&debug, 0, nextIndent, indent)

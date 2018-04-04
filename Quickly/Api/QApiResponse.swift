@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QApiResponse: IQApiResponse {
+open class QApiResponse : IQApiResponse {
 
     public private(set) var url: URL?
     public private(set) var mimeType: String?
@@ -18,7 +18,7 @@ open class QApiResponse: IQApiResponse {
         self.url = response.url
         self.mimeType = response.mimeType
         self.textEncodingName = response.textEncodingName
-        if let httpResponse: HTTPURLResponse = response as? HTTPURLResponse {
+        if let httpResponse = response as? HTTPURLResponse {
             self.httpStatusCode = httpResponse.statusCode
             self.httpHeaders = httpResponse.allHeaderFields
         }
@@ -30,7 +30,7 @@ open class QApiResponse: IQApiResponse {
     }
 
     open func parse(data: Data) throws {
-        if let json: QJson = QJson(basePath: "", data: data) {
+        if let json = QJson(basePath: "", data: data) {
             do {
                 try self.parse(json: json)
             } catch let error {
@@ -59,43 +59,43 @@ open class QApiResponse: IQApiResponse {
 
 }
 
-extension QApiResponse: IQDebug {
+extension QApiResponse : IQDebug {
 
     open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-        let nextIndent: Int = indent + 1
+        let nextIndent = indent + 1
 
         if headerIndent > 0 {
             buffer.append(String(repeating: "\t", count: headerIndent))
         }
         buffer.append("<\(String(describing: self))\n")
 
-        if let url: URL = self.url {
-            var debug: String = String()
+        if let url = self.url {
+            var debug = String()
             url.debugString(&debug, 0, nextIndent, indent)
             QDebugString("Url: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
-        if let mimeType: String = self.mimeType {
-            var debug: String = String()
+        if let mimeType = self.mimeType {
+            var debug = String()
             mimeType.debugString(&debug, 0, nextIndent, indent)
             QDebugString("MimeType: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
-        if let textEncodingName: String = self.textEncodingName {
-            var debug: String = String()
+        if let textEncodingName = self.textEncodingName {
+            var debug = String()
             textEncodingName.debugString(&debug, 0, nextIndent, indent)
             QDebugString("TextEncodingName: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
-        if let httpStatusCode: Int = self.httpStatusCode {
-            var debug: String = String()
+        if let httpStatusCode = self.httpStatusCode {
+            var debug = String()
             httpStatusCode.debugString(&debug, 0, nextIndent, indent)
             QDebugString("HttpStatusCode: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
-        if let httpHeaders: [AnyHashable: Any] = self.httpHeaders {
-            var debug: String = String()
+        if let httpHeaders = self.httpHeaders {
+            var debug = String()
             httpHeaders.debugString(&debug, 0, nextIndent, indent)
             QDebugString("HttpHeaders: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
-        if let error: IQDebug = self.error as IQDebug? {
-            var debug: String = String()
+        if let error = self.error as IQDebug? {
+            var debug = String()
             error.debugString(&debug, 0, nextIndent, indent)
             QDebugString("error: \(debug)\n", &buffer, indent, nextIndent, indent)
         }

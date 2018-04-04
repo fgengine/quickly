@@ -4,7 +4,7 @@
 
 #if os(iOS)
 
-    open class QImageResponse: QApiResponse {
+    open class QImageResponse : QApiResponse {
 
         open var data: Data?
         open var image: UIImage?

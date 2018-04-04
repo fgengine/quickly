@@ -108,13 +108,13 @@ open class QPushViewControllerInteractiveDismissAnimation : IQPushViewController
     }
 
     open func update(position: CGPoint, velocity: CGPoint) {
-        let deltaPosition: CGFloat = position.y - self.position.y
+        let deltaPosition = position.y - self.position.y
         if deltaPosition > 0 {
-            let height: CGFloat = self.viewController.contentViewController.view.frame.height
-            let progress: CGFloat = (abs(deltaPosition) / height)
+            let height = self.viewController.contentViewController.view.frame.height
+            let progress = abs(deltaPosition) / height
             if progress > self.deceleration {
-                var limit: CGFloat = self.deceleration
-                var multiplier: CGFloat = self.deceleration
+                var limit = self.deceleration
+                var multiplier = self.deceleration
                 while progress > limit {
                     limit = limit + (limit * self.deceleration)
                     multiplier *= multiplier
@@ -133,7 +133,7 @@ open class QPushViewControllerInteractiveDismissAnimation : IQPushViewController
 
     open func cancel(_ complete: @escaping (_ completed: Bool) -> Void) {
         #if os(iOS)
-            let duration: TimeInterval = TimeInterval(self.deltaPosition / self.acceleration)
+            let duration = TimeInterval(self.deltaPosition / self.acceleration)
             UIView.animate(withDuration: duration, animations: {
                 self.viewController.offset = 0
                 self.viewController.view.layoutIfNeeded()
@@ -144,11 +144,11 @@ open class QPushViewControllerInteractiveDismissAnimation : IQPushViewController
     open func finish(_ complete: @escaping (_ completed: Bool) -> Void) {
         self.viewController.willDismiss(animated: true)
         #if os(iOS)
-            let offset: CGFloat = self.viewController.offset
-            let height: CGFloat = self.viewController.contentViewController.view.frame.height
-            let edgeInsets: UIEdgeInsets = self.viewController.edgeInsets
-            let hideOffset: CGFloat = height + edgeInsets.top
-            let duration: TimeInterval = TimeInterval((hideOffset - offset) / self.acceleration)
+            let offset = self.viewController.offset
+            let height = self.viewController.contentViewController.view.frame.height
+            let edgeInsets = self.viewController.edgeInsets
+            let hideOffset = height + edgeInsets.top
+            let duration = TimeInterval((hideOffset - offset) / self.acceleration)
             UIView.animate(withDuration: duration, animations: {
                 self.viewController.offset = -hideOffset
                 self.viewController.view.layoutIfNeeded()

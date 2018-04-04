@@ -4,32 +4,26 @@
 
 #if os(iOS)
 
-    open class QTextFieldTableRow: QBackgroundColorTableRow {
+    open class QTextFieldTableRow : QBackgroundColorTableRow {
 
-        public var edgeInsets: UIEdgeInsets = UIEdgeInsets.zero
-        public var height: CGFloat = 44
+        public var edgeInsets: UIEdgeInsets
 
-        public var fieldRequireValidator: Bool = true
-        public var fieldValidator: IQInputValidator? = nil
-        public var fieldIsValid: Bool = true
-        public var fieldFormatter: IQStringFormatter? = nil
-        public var fieldTextInsets: UIEdgeInsets = UIEdgeInsets.zero
-        public var fieldTextAlignment: NSTextAlignment = .left
-        public var fieldTextStyle: QTextStyle? = nil
-        public var fieldText: String = ""
-        public var fieldPlaceholder: IQText? = nil
-        public var fieldTypingStyle: QTextStyle? = nil
-        public var fieldAutocapitalizationType: UITextAutocapitalizationType = .none
-        public var fieldAutocorrectionType: UITextAutocorrectionType = .default
-        public var fieldSpellCheckingType: UITextSpellCheckingType = .default
-        public var fieldKeyboardType: UIKeyboardType = .default
-        public var fieldKeyboardAppearance: UIKeyboardAppearance = .default
-        public var fieldReturnKeyType: UIReturnKeyType = .default
-        public var fieldEnablesReturnKeyAutomatically: Bool = true
-        public var fieldIsSecureTextEntry: Bool = false
-        public var fieldTextContentType: UITextContentType! = nil
-        public var fieldIsEditing: Bool = false
-        public var fieldIsEnabled: Bool = true
+        public var field: QTextFieldStyleSheet
+        public var fieldHeight: CGFloat
+        public var fieldText: String
+        public var fieldIsValid: Bool
+        public var fieldIsEditing: Bool
+
+        public init(field: QTextFieldStyleSheet, text: String) {
+            self.edgeInsets = UIEdgeInsets.zero
+            self.field = field
+            self.fieldHeight = 44
+            self.fieldText = text
+            self.fieldIsValid = true
+            self.fieldIsEditing = false
+
+            super.init()
+        }
 
     }
 

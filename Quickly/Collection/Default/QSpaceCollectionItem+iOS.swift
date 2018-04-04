@@ -4,7 +4,7 @@
 
 #if os(iOS)
 
-    open class QSpaceCollectionItem: QBackgroundColorCollectionItem {
+    open class QSpaceCollectionItem : QBackgroundColorCollectionItem {
 
         public var size: CGSize
 

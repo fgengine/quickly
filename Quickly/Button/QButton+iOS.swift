@@ -17,7 +17,7 @@
     }
 
     @IBDesignable
-    open class QButton: QControl {
+    open class QButton : QControl {
 
         open override var isHighlighted: Bool {
             didSet { self.applyStyle() }
@@ -83,14 +83,14 @@
         public var spinnerPosition: QButtonSpinnerPosition = .fill {
             didSet { self.applyStyle() }
         }
-        public var spinnerView: QSpinnerView? {
+        public var spinnerView: QSpinnerViewType? {
             willSet {
-                if let spinnerView: QSpinnerView = self.spinnerView {
+                if let spinnerView = self.spinnerView {
                     spinnerView.removeFromSuperview()
                 }
             }
             didSet {
-                if let spinnerView: QSpinnerView = self.spinnerView {
+                if let spinnerView = self.spinnerView {
                     spinnerView.translatesAutoresizingMaskIntoConstraints = false
                     self.contentView.addSubview(spinnerView)
                 }
@@ -154,7 +154,7 @@
         #if TARGET_INTERFACE_BUILDER
 
         open override func prepareForInterfaceBuilder() {
-            let style: QButtonStyle = QButtonStyle()
+            let style = QButtonStyle()
             style.color = UIColor.blue
             style.text = QText("QButton")
             style.cornerRadius = 4
@@ -183,22 +183,22 @@
         }
 
         public func applyStyle() {
-            if let style: QButtonStyle = self.currentStyle() {
+            if let style = self.currentStyle() {
                 self.applyStyle(style)
                 self.invalidateIntrinsicContentSize()
             }
         }
 
         public func isSpinnerAnimating() -> Bool {
-            if let spinnerView: IQSpinnerView = self.spinnerView {
+            if let spinnerView = self.spinnerView {
                 return spinnerView.isAnimating()
             }
             return false
         }
 
         public func startSpinner() {
-            if let spinnerView: IQSpinnerView = self.spinnerView {
-                let isAnimating: Bool = spinnerView.isAnimating()
+            if let spinnerView = self.spinnerView {
+                let isAnimating = spinnerView.isAnimating()
                 spinnerView.start()
                 if isAnimating == false {
                     self.setNeedsUpdateConstraints()
@@ -208,8 +208,8 @@
         }
 
         public func stopSpinner() {
-            if let spinnerView: IQSpinnerView = self.spinnerView {
-                let isAnimating: Bool = spinnerView.isAnimating()
+            if let spinnerView = self.spinnerView {
+                let isAnimating = spinnerView.isAnimating()
                 spinnerView.stop()
                 if isAnimating == true {
                     self.setNeedsUpdateConstraints()
@@ -221,23 +221,23 @@
         open override func invalidateIntrinsicContentSize() {
             super.invalidateIntrinsicContentSize()
 
-            if let imageView: QImageView = self.imageView {
+            if let imageView = self.imageView {
                 imageView.invalidateIntrinsicContentSize()
             }
-            if let textLabel: QLabel = self.textLabel {
+            if let textLabel = self.textLabel {
                 textLabel.preferredMaxLayoutWidth = self.bounds.width
             }
         }
 
         open override func sizeThatFits(_ size: CGSize) -> CGSize {
-            let contentSize: CGSize = CGSize(
+            let contentSize = CGSize(
                 width: size.width - (self.contentInsets.left + self.contentInsets.right),
                 height: size.height - (self.contentInsets.top + self.contentInsets.bottom)
             )
-            var imageSize: CGSize = CGSize.zero
-            var textSize: CGSize = CGSize.zero
+            var imageSize = CGSize.zero
+            var textSize = CGSize.zero
             if self.isSpinnerAnimating() == true {
-                let spinnerSizeThatFits: CGSize = self.spinnerView!.sizeThatFits(contentSize)
+                let spinnerSizeThatFits = self.spinnerView!.sizeThatFits(contentSize)
                 imageSize = CGSize(
                     width: self.imageInsets.left + spinnerSizeThatFits.width + self.imageInsets.right,
                     height: self.imageInsets.top + spinnerSizeThatFits.height + self.imageInsets.bottom
@@ -247,7 +247,7 @@
                     break
                 case .image:
                     if self.textLabel.alpha > CGFloat.leastNonzeroMagnitude {
-                        let textSizeThatFits: CGSize = self.textLabel.sizeThatFits(contentSize)
+                        let textSizeThatFits = self.textLabel.sizeThatFits(contentSize)
                         textSize = CGSize(
                             width: self.textInsets.left + textSizeThatFits.width + self.textInsets.right,
                             height: self.textInsets.top + textSizeThatFits.height + self.textInsets.bottom
@@ -257,14 +257,14 @@
                 }
             } else {
                 if self.imageView.alpha > CGFloat.leastNonzeroMagnitude {
-                    let imageSizeThatFits: CGSize = self.imageView.sizeThatFits(CGSize.zero)
+                    let imageSizeThatFits = self.imageView.sizeThatFits(CGSize.zero)
                     imageSize = CGSize(
                         width: self.imageInsets.left + imageSizeThatFits.width + self.imageInsets.right,
                         height: self.imageInsets.top + imageSizeThatFits.height + self.imageInsets.bottom
                     )
                 }
                 if self.textLabel.alpha > CGFloat.leastNonzeroMagnitude {
-                    let textSizeThatFits: CGSize = self.textLabel.sizeThatFits(contentSize)
+                    let textSizeThatFits = self.textLabel.sizeThatFits(contentSize)
                     textSize = CGSize(
                         width: self.textInsets.left + textSizeThatFits.width + self.textInsets.right,
                         height: self.textInsets.top + textSizeThatFits.height + self.textInsets.bottom
@@ -286,7 +286,7 @@
         }
 
         open override func sizeToFit() {
-            var frame: CGRect = self.frame
+            var frame = self.frame
             frame.size = self.sizeThatFits(CGSize(
                 width: Const.defaultSize,
                 height: Const.defaultSize
@@ -296,7 +296,7 @@
 
         open override func updateConstraints() {
             var selfConstraints: [NSLayoutConstraint] = []
-            let horizontalAlignment: UIControlContentHorizontalAlignment = self.contentHorizontalAlignment
+            let horizontalAlignment = self.contentHorizontalAlignment
             if horizontalAlignment == .fill {
                 selfConstraints.append(self.contentView.leadingLayout == self.leadingLayout + self.contentInsets.left)
                 selfConstraints.append(self.contentView.trailingLayout == self.trailingLayout - self.contentInsets.right)
@@ -319,7 +319,7 @@
                     selfConstraints.append(self.contentView.trailingLayout == self.trailingLayout - self.contentInsets.right)
                 }
             }
-            let verticalAlignment: UIControlContentVerticalAlignment = self.contentVerticalAlignment
+            let verticalAlignment = self.contentVerticalAlignment
             if verticalAlignment == .fill {
                 selfConstraints.append(self.contentView.topLayout == self.topLayout + self.contentInsets.top)
                 selfConstraints.append(self.contentView.bottomLayout == self.bottomLayout - self.contentInsets.bottom)
@@ -437,16 +437,16 @@
         }
 
         private func applyStyle(_ style: QButtonStyle) {
-            if let color: UIColor = style.color {
+            if let color = style.color {
                 self.backgroundColor = color
             }
-            if let borderColor: UIColor = style.borderColor {
+            if let borderColor = style.borderColor {
                 self.layer.borderColor = borderColor.cgColor
             }
-            if let borderWidth: CGFloat = style.borderWidth {
+            if let borderWidth = style.borderWidth {
                 self.layer.borderWidth = borderWidth
             }
-            if let cornerRadius: CGFloat = style.cornerRadius {
+            if let cornerRadius = style.cornerRadius {
                 self.layer.cornerRadius = cornerRadius
             }
             if self.isSpinnerAnimating() == true {
@@ -469,7 +469,7 @@
         }
 
         private func applyImageStyle(_ style: QButtonStyle) {
-            if let imageSource: QImageSource = style.imageSource {
+            if let imageSource = style.imageSource {
                 self.imageView.source = imageSource
                 self.imageView.alpha = 1
             } else {
@@ -482,7 +482,7 @@
         }
 
         private func applyTextStyle(_ style: QButtonStyle) {
-            if let text: IQText = style.text {
+            if let text = style.text {
                 self.textLabel.text = text
                 self.textLabel.alpha = 1
             } else {
@@ -560,7 +560,8 @@
             constraints.append(rightView.centerYLayout == self.contentView.centerYLayout)
         }
 
-        @IBAction private func gestureHandler(_ sender: Any) {
+        @objc
+        private func gestureHandler(_ sender: Any) {
             self.sendActions(for: .touchUpInside)
         }
 
@@ -572,11 +573,11 @@
 
     }
 
-    extension QButton: UIGestureRecognizerDelegate {
+    extension QButton : UIGestureRecognizerDelegate {
 
         open override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
             if self.tapGesture == gestureRecognizer {
-                let location: CGPoint = self.tapGesture.location(in: self)
+                let location = self.tapGesture.location(in: self)
                 return self.bounds.contains(location)
             }
             return false

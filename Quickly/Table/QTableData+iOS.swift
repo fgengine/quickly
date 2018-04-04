@@ -4,9 +4,9 @@
 
 #if os(iOS)
 
-    open class QTableData: IQTableData {
+    open class QTableData : IQTableData {
 
-        public private(set) weak var section: IQTableSection? = nil
+        public private(set) weak var section: IQTableSection?
 
         public init() {
         }

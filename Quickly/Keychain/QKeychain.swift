@@ -30,30 +30,31 @@ public enum QKeychainAccessOptions {
     }
 }
 
-open class QKeychain {
+public final class QKeychain {
 
     open var accessGroup: String?
-    open var synchronizable: Bool = false
+    open var synchronizable: Bool
 
     public init() {
+        self.synchronizable = false
     }
 
     @discardableResult
     open func set(_ value: Data, key: String, access: QKeychainAccessOptions = .defaultOption) -> Bool {
         self.delete(key)
-        let query: [String : Any] = self.process(query: [
+        let query = self.process(query: [
             Constants.klass : kSecClassGenericPassword,
             Constants.attrAccount : key,
             Constants.valueData : value,
             Constants.accessible : access.value
        ], forceSync: true)
-        let code: OSStatus = SecItemAdd(query as CFDictionary, nil)
+        let code = SecItemAdd(query as CFDictionary, nil)
         return code == noErr
     }
 
     @discardableResult
     open func set(_ value: String, key: String, access: QKeychainAccessOptions = .defaultOption) -> Bool {
-        if let value: Data = value.data(using: String.Encoding.utf8) {
+        if let value = value.data(using: String.Encoding.utf8) {
             return self.set(value, key: key, access: access)
         }
         return false
@@ -62,19 +63,19 @@ open class QKeychain {
     @discardableResult
     open func set(_ value: Bool, key: String, access: QKeychainAccessOptions = .defaultOption) -> Bool {
         let bytes: [UInt8] = value ? [1] : [0]
-        let data: Data = Data(bytes: bytes)
+        let data = Data(bytes: bytes)
         return self.set(data, key: key, access: access)
     }
 
     open func getData(_ key: String) -> Data? {
-        let query: [String: Any] = self.process(query: [
+        let query = self.process(query: [
             Constants.klass : kSecClassGenericPassword,
             Constants.attrAccount : key,
             Constants.returnData : kCFBooleanTrue,
             Constants.matchLimit : kSecMatchLimitOne
        ], forceSync: false)
         var result: AnyObject? = nil
-        let code: OSStatus = withUnsafeMutablePointer(to: &result) {
+        let code = withUnsafeMutablePointer(to: &result) {
             SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
         }
         if code == noErr {
@@ -84,8 +85,8 @@ open class QKeychain {
     }
 
     open func getString(_ key: String) -> String? {
-        if let data: Data = self.getData(key) {
-            if let currentString: String = String(data: data, encoding: .utf8) {
+        if let data = self.getData(key) {
+            if let currentString = String(data: data, encoding: .utf8) {
                 return currentString
             }
         }
@@ -93,10 +94,10 @@ open class QKeychain {
     }
 
     open func getBool(_ key: String) -> Bool? {
-        guard let data: Data = self.getData(key) else {
+        guard let data = self.getData(key) else {
             return nil
         }
-        guard let firstBit: UInt8 = data.first else {
+        guard let firstBit = data.first else {
             return nil
         }
         return firstBit == 1
@@ -104,25 +105,25 @@ open class QKeychain {
 
     @discardableResult
     open func delete(_ key: String) -> Bool {
-        let query: [String: Any] = self.process(query: [
+        let query = self.process(query: [
             Constants.klass : kSecClassGenericPassword,
             Constants.attrAccount : key
        ], forceSync: false)
-        let code: OSStatus = SecItemDelete(query as CFDictionary)
+        let code = SecItemDelete(query as CFDictionary)
         return code == noErr
     }
 
     @discardableResult
     open func clear() -> Bool {
-        let query: [String: Any] = self.process(query: [
+        let query = self.process(query: [
             Constants.klass : kSecClassGenericPassword
        ], forceSync: false)
-        let code: OSStatus = SecItemDelete(query as CFDictionary)
+        let code = SecItemDelete(query as CFDictionary)
         return code == noErr
     }
 
     private func process(query: [String: Any], forceSync: Bool) -> [String: Any] {
-        var result: [String: Any] = query
+        var result = query
         if let accessGroup = self.accessGroup {
             result[Constants.accessGroup] = accessGroup
         }

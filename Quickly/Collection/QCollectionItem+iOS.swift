@@ -4,7 +4,7 @@
 
 #if os(iOS)
 
-    open class QCollectionItem: IQCollectionItem {
+    open class QCollectionItem : IQCollectionItem {
 
         public weak var section: IQCollectionSection? = nil
         public var indexPath: IndexPath? = nil

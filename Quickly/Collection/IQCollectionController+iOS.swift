@@ -4,15 +4,28 @@
 
 #if os(iOS)
 
-    public protocol IQCollectionController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    public protocol IQCollectionControllerObserver : class {
 
-        weak var collectionView: UICollectionView? { set get }
+        func update(_ controller: IQCollectionController)
+
+    }
+
+    public protocol IQCollectionController : UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+
+        typealias DecorType = IQCollectionDecor.DequeueType
+        typealias CellType = IQCollectionCell.DequeueType
+
+        var collectionView: UICollectionView? { set get }
         var sections: [IQCollectionSection] { set get }
         var items: [IQCollectionItem] { get }
         var selectedItems: [IQCollectionItem] { get }
         var canMove: Bool { get }
+        var isBatchUpdating: Bool { get }
 
         func configure()
+
+        func addObserver(_ observer: IQCollectionControllerObserver)
+        func removeObserver(_ observer: IQCollectionControllerObserver)
 
         func section(index: Int) -> IQCollectionSection
         func index(section: IQCollectionSection) -> Int?
@@ -29,8 +42,8 @@
         func indexPath(item: IQCollectionItem) -> IndexPath?
         func indexPath(predicate: (IQCollectionItem) -> Bool) -> IndexPath?
 
-        func dequeue(data: IQCollectionData, kind: String, indexPath: IndexPath) -> IQCollectionDecor?
-        func dequeue(item: IQCollectionItem, indexPath: IndexPath) -> IQCollectionCell?
+        func dequeue(data: IQCollectionData, kind: String, indexPath: IndexPath) -> DecorType?
+        func dequeue(item: IQCollectionItem, indexPath: IndexPath) -> CellType?
 
         func reload()
 

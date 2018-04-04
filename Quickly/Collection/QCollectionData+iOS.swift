@@ -4,7 +4,7 @@
 
 #if os(iOS)
 
-    open class QCollectionData: IQCollectionData {
+    open class QCollectionData : IQCollectionData {
         
         public private(set) weak var section: IQCollectionSection? = nil
         

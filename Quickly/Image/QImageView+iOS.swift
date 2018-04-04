@@ -4,29 +4,47 @@
 
 #if os(iOS)
 
-    open class QImageView: QView, IQImageLoaderTarget {
+    public enum QImageViewVerticalAlignment {
+        case top
+        case center
+        case bottom
+    }
 
+    public enum QImageViewHorizontalAlignment {
+        case left
+        case center
+        case right
+    }
+
+    open class QImageView : QView, IQImageLoaderTarget {
+
+        public var verticalAlignment: QImageViewVerticalAlignment = .center {
+            didSet { self.setNeedsDisplay() }
+        }
+        public var horizontalAlignment: QImageViewHorizontalAlignment = .center {
+            didSet { self.setNeedsDisplay() }
+        }
         public var roundCorners: Bool = false {
             didSet { self.updateCornerRadius() }
         }
         public var source: QImageSource? {
             willSet {
                 if self.isDownloading == true {
-                    if let loader: QImageLoader = self.loader {
+                    if let loader = self.loader {
                         loader.cancel(self)
                     }
                 }
                 self.isDownloading = false
             }
             didSet {
-                if let source: QImageSource = self.source {
-                    if let image: UIImage = source.image {
+                if let source = self.source {
+                    if let image = source.image {
                         self.image = image.withRenderingMode(source.renderingMode)
                     } else {
                         self.image = nil
                     }
-                    if let url: URL = source.url {
-                        if let loader: QImageLoader = self.loader {
+                    if let url = source.url {
+                        if let loader = self.loader {
                             loader.download(url, filter: self.filter, target: self)
                             self.isDownloading = true
                         }
@@ -58,7 +76,7 @@
         }
         open override var intrinsicContentSize: CGSize {
             get {
-                if let source: QImageSource = self.source {
+                if let source = self.source {
                     return source.size(CGSize.zero)
                 }
                 return CGSize.zero
@@ -75,14 +93,22 @@
         }
 
         open override func draw(_ rect: CGRect) {
-            guard let image: UIImage = self.image else {
-                return
-            }
-            if let context: CGContext = UIGraphicsGetCurrentContext() {
+            guard let image = self.image else { return }
+            if let context = UIGraphicsGetCurrentContext() {
                 var imageRect: CGRect
-                let bounds: CGRect = self.bounds
-                if let source: QImageSource = self.source {
+                let bounds = self.bounds
+                if let source = self.source {
                     imageRect = source.rect(bounds, image: image)
+                    switch self.verticalAlignment {
+                    case .top: imageRect.origin.y = bounds.origin.y
+                    case .center: break
+                    case .bottom: imageRect.origin.y = (bounds.origin.y + bounds.height) - imageRect.height
+                    }
+                    switch self.horizontalAlignment {
+                    case .left: imageRect.origin.x = bounds.origin.x
+                    case .center: break
+                    case .right: imageRect.origin.x = (bounds.origin.x + bounds.width) - imageRect.width
+                    }
                 } else {
                     imageRect = self.bounds
                 }
@@ -90,18 +116,18 @@
                 context.scaleBy(x: 1.0, y: -1.0)
                 switch image.renderingMode {
                 case .automatic, .alwaysOriginal:
-                    if let cgImage: CGImage = image.cgImage {
+                    if let cgImage = image.cgImage {
                         context.draw(cgImage, in: imageRect)
                     }
                 case .alwaysTemplate:
-                    if let tintColor: UIColor = self.tintColor {
-                        if let tintImage: UIImage = image.tintImage(tintColor) {
-                            if let cgTintImage: CGImage = tintImage.cgImage {
+                    if let tintColor = self.tintColor {
+                        if let tintImage = image.tintImage(tintColor) {
+                            if let cgTintImage = tintImage.cgImage {
                                 context.draw(cgTintImage, in: imageRect)
                             }
                         }
                     } else {
-                        if let cgImage: CGImage = image.cgImage {
+                        if let cgImage = image.cgImage {
                             context.draw(cgImage, in: imageRect)
                         }
                     }
@@ -111,21 +137,21 @@
         }
 
         open override func sizeThatFits(_ size: CGSize) -> CGSize {
-            if let source: QImageSource = self.source {
+            if let source = self.source {
                 return source.size(size)
             }
             return CGSize.zero
         }
 
         open override func sizeToFit() {
-            var frame: CGRect = self.frame
+            var frame = self.frame
             frame.size = self.sizeThatFits(frame.size)
             self.frame = frame
         }
 
         private func updateCornerRadius() {
             if self.roundCorners == true {
-                let boundsSize: CGSize = self.bounds.integral.size
+                let boundsSize = self.bounds.integral.size
                 self.layer.cornerRadius = ceil(min(boundsSize.width - 1, boundsSize.height - 1) / 2)
             }
         }

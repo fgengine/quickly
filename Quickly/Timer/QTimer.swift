@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QTimer: NSObject {
+public final class QTimer : NSObject {
 
     public typealias Closure = (_ timer: QTimer) -> Void
 
@@ -56,7 +56,7 @@ public class QTimer: NSObject {
                 repeats: (self.isDelaying == true) || (self.repeating != 0)
             )
             if self.isDelaying == false {
-                if let closure: Closure = self.onStarted {
+                if let closure = self.onStarted {
                     closure(self)
                 }
             }
@@ -72,11 +72,11 @@ public class QTimer: NSObject {
             self.startDate = nil
             self.pauseDate = nil
             self.repeated = 0
-            if let timer: Timer = self.timer {
+            if let timer = self.timer {
                 timer.invalidate()
                 self.timer = nil
             }
-            if let closure: Closure = self.onStoped {
+            if let closure = self.onStoped {
                 closure(self)
             }
         }
@@ -86,11 +86,11 @@ public class QTimer: NSObject {
         if (self.isStarted == true) && (self.isPaused == false) {
             self.isPaused = true
             self.pauseDate = Date()
-            if let timer: Timer = self.timer {
+            if let timer = self.timer {
                 timer.invalidate()
                 self.timer = nil
             }
-            if let closure: Closure = self.onPaused {
+            if let closure = self.onPaused {
                 closure(self)
             }
         }
@@ -110,7 +110,7 @@ public class QTimer: NSObject {
                 userInfo: nil,
                 repeats: (self.repeating != 0)
             )
-            if let closure: Closure = self.onResumed {
+            if let closure = self.onResumed {
                 closure(self)
             }
             RunLoop.main.add(self.timer!, forMode: .commonModes)
@@ -127,18 +127,18 @@ public class QTimer: NSObject {
     @IBAction private func handler(_ sender: Any) {
         if self.isDelaying == true {
             self.isDelaying = false
-            if let closure: Closure = self.onStarted {
+            if let closure = self.onStarted {
                 closure(self)
             }
         } else {
-            var finished: Bool = false
+            var finished = false
             self.repeated += 1
             if self.repeating == UInt.max {
-                if let closure: Closure = self.onRepeat {
+                if let closure = self.onRepeat {
                     closure(self)
                 }
             } else if self.repeated != 0 {
-                if let closure: Closure = self.onRepeat {
+                if let closure = self.onRepeat {
                     closure(self)
                 }
                 if self.repeated >= self.repeating {
@@ -150,11 +150,11 @@ public class QTimer: NSObject {
             if finished == true {
                 self.isStarted = false
                 self.isPaused = false
-                if let timer: Timer = self.timer {
+                if let timer = self.timer {
                     timer.invalidate()
                     self.timer = nil
                 }
-                if let closure: Closure = self.onFinished {
+                if let closure = self.onFinished {
                     closure(self)
                 }
             }

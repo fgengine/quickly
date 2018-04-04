@@ -22,7 +22,7 @@
         }
 
         private func updateCornerRadius() {
-            let boundsSize: CGSize = self.bounds.integral.size
+            let boundsSize = self.bounds.integral.size
             self.layer.cornerRadius = ceil(min(boundsSize.width - 1, boundsSize.height - 1) / 2)
         }
 

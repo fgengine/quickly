@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QAmountStringFormatter: IQStringFormatter {
+open class QAmountStringFormatter : IQStringFormatter {
 
     public let groupingSeparator: String
     public let numberOfGrouping: Int
@@ -29,13 +29,13 @@ open class QAmountStringFormatter: IQStringFormatter {
     }
 
     public func format(_ unformat: String) -> String {
-        var format: String = String()
-        let parts: [String] = unformat.components(separatedBy: self.decimalSeparator)
+        var format = String()
+        let parts = unformat.components(separatedBy: self.decimalSeparator)
         if parts.count == 2 {
-            let firstPart: String = parts.first!
-            let firstPartLength: Int = firstPart.count
+            let firstPart = parts.first!
+            let firstPartLength = firstPart.count
             if firstPartLength > self.numberOfGrouping {
-                var firstPartIndex: String.Index = firstPart.startIndex
+                var firstPartIndex = firstPart.startIndex
                 let numberOfGroups = firstPartLength / self.numberOfGrouping
                 let numberOfFirstGroups = firstPartLength - (numberOfGroups * self.numberOfGrouping)
                 for _ in 0 ..< numberOfFirstGroups {
@@ -45,7 +45,7 @@ open class QAmountStringFormatter: IQStringFormatter {
                 if numberOfFirstGroups > 0 && numberOfGroups > 0 {
                     format.append(self.groupingSeparator)
                 }
-                for groupIndex: Int in 0 ..< numberOfGroups {
+                for groupIndex in 0 ..< numberOfGroups {
                     for _ in 0 ..< self.numberOfGrouping {
                         format.append(firstPart[firstPartIndex])
                         firstPartIndex = firstPart.index(firstPartIndex, offsetBy: 1)
@@ -60,9 +60,9 @@ open class QAmountStringFormatter: IQStringFormatter {
             format.append(self.decimalSeparator)
             format.append(parts.last!)
         } else {
-            let unformatLength: Int = unformat.count
+            let unformatLength = unformat.count
             if unformatLength > self.numberOfGrouping {
-                var unformatIndex: String.Index = unformat.startIndex
+                var unformatIndex = unformat.startIndex
                 let numberOfGroups = unformatLength / self.numberOfGrouping
                 let numberOfFirstGroups = unformatLength - (numberOfGroups * self.numberOfGrouping)
                 for _ in 0 ..< numberOfFirstGroups {
@@ -72,7 +72,7 @@ open class QAmountStringFormatter: IQStringFormatter {
                 if numberOfFirstGroups > 0 && numberOfGroups > 0 {
                     format.append(self.groupingSeparator)
                 }
-                for groupIndex: Int in 0 ..< numberOfGroups {
+                for groupIndex in 0 ..< numberOfGroups {
                     for _ in 0 ..< self.numberOfGrouping {
                         format.append(unformat[unformatIndex])
                         unformatIndex = unformat.index(unformatIndex, offsetBy: 1)
@@ -89,7 +89,7 @@ open class QAmountStringFormatter: IQStringFormatter {
     }
 
     public func format(_ unformat: String, caret: inout Int) -> String {
-        let format: String = self.format(unformat)
+        let format = self.format(unformat)
         caret = self.formatDifferenceCaret(
             unformat: unformat,
             format: format,
@@ -102,10 +102,10 @@ open class QAmountStringFormatter: IQStringFormatter {
 
     public func unformat(_ format: String) -> String {
         var unformat: String
-        let parts: [String] = format.components(separatedBy: self.decimalSeparator)
+        let parts = format.components(separatedBy: self.decimalSeparator)
         if parts.count == 2 {
-            let firstPart: String = parts.first!.remove(self.decimalDigitsSet)
-            let lastPart: String = parts.last!.remove(self.decimalDigitsSet)
+            let firstPart = parts.first!.remove(self.decimalDigitsSet)
+            let lastPart = parts.last!.remove(self.decimalDigitsSet)
             unformat = "\(firstPart)\(decimalSeparator)\(lastPart)"
         } else {
             unformat = format.remove(self.decimalDigitsSet)
@@ -114,7 +114,7 @@ open class QAmountStringFormatter: IQStringFormatter {
     }
 
     public func unformat(_ format: String, caret: inout Int) -> String {
-        let unformat: String = self.unformat(format)
+        let unformat = self.unformat(format)
         caret = self.unformatDifferenceCaret(
             unformat: unformat,
             format: format,

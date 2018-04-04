@@ -2,10 +2,10 @@
 //  Quickly
 //
 
-public protocol IQContainer: class {
+public protocol IQContainer : class {
 }
 
-public protocol IQRouter: class {
+public protocol IQRouter : class {
 }
 
 public protocol IQRouted {
@@ -17,3 +17,12 @@ public protocol IQRouted {
     var container: ContainerType { get }
 
 }
+
+public protocol IQViewControllerRouter : IQRouter {
+
+    typealias ViewControllerType = QPlatformViewController & IQBaseViewController
+
+    var viewController: ViewControllerType { get }
+
+}
+

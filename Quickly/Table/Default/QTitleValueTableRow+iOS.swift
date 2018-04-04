@@ -4,22 +4,23 @@
 
 #if os(iOS)
 
-    open class QTitleValueTableRow: QBackgroundColorTableRow {
+    open class QTitleValueTableRow : QBackgroundColorTableRow {
 
-        public var edgeInsets: UIEdgeInsets = UIEdgeInsets.zero
+        public var edgeInsets: UIEdgeInsets
 
-        public var titleText: IQText?
-        public var titleContentAlignment: QLabel.ContentAlignment = .left
-        public var titlePadding: CGFloat = 0
-        public var titleNumberOfLines: Int = 0
-        public var titleLineBreakMode: NSLineBreakMode = .byWordWrapping
-        public var titleSpacing: CGFloat = 0
+        public var title: QLabelStyleSheet
+        public var titleSpacing: CGFloat
 
-        public var valueText: IQText?
-        public var valueContentAlignment: QLabel.ContentAlignment = .left
-        public var valuePadding: CGFloat = 0
-        public var valueNumberOfLines: Int = 0
-        public var valueLineBreakMode: NSLineBreakMode = .byWordWrapping
+        public var value: QLabelStyleSheet
+
+        public init(title: QLabelStyleSheet, value: QLabelStyleSheet) {
+            self.edgeInsets = UIEdgeInsets.zero
+            self.title = title
+            self.titleSpacing = 0
+            self.value = value
+
+            super.init()
+        }
 
     }
 

@@ -14,7 +14,7 @@
         }
         open override var prefersStatusBarHidden: Bool {
             get {
-                if let viewController: UIViewController = self.topViewController {
+                if let viewController = self.topViewController {
                     return viewController.prefersStatusBarHidden
                 }
                 return super.prefersStatusBarHidden
@@ -22,7 +22,7 @@
         }
         open override var preferredStatusBarStyle: UIStatusBarStyle {
             get {
-                if let viewController: UIViewController = self.topViewController {
+                if let viewController = self.topViewController {
                     return viewController.preferredStatusBarStyle
                 }
                 return super.preferredStatusBarStyle
@@ -30,7 +30,7 @@
         }
         open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
             get {
-                if let viewController: UIViewController = self.topViewController {
+                if let viewController = self.topViewController {
                     return viewController.preferredStatusBarUpdateAnimation
                 }
                 return super.preferredStatusBarUpdateAnimation
@@ -38,7 +38,7 @@
         }
         open override var shouldAutorotate: Bool {
             get {
-                if let viewController: UIViewController = self.topViewController {
+                if let viewController = self.topViewController {
                     return viewController.shouldAutorotate
                 }
                 return super.shouldAutorotate
@@ -46,7 +46,7 @@
         }
         open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
             get {
-                if let viewController: UIViewController = self.topViewController {
+                if let viewController = self.topViewController {
                     return viewController.supportedInterfaceOrientations
                 }
                 return super.supportedInterfaceOrientations
@@ -107,10 +107,10 @@
         }
 
         open func removeViewController(_ viewController: UIViewController, animated: Bool) {
-            if let topViewController: UIViewController = self.topViewController {
+            if let topViewController = self.topViewController {
                 if viewController != topViewController {
-                    var viewControllers: [UIViewController] = self.viewControllers
-                    if let index: Int = viewControllers.index(of: viewController) {
+                    var viewControllers = self.viewControllers
+                    if let index = viewControllers.index(of: viewController) {
                         viewControllers.remove(at: index)
                         self.setViewControllers(viewControllers, animated: false)
                     }
@@ -134,7 +134,7 @@
                 if super.responds(to: selector) {
                     return true
                 }
-                if let delegate: UINavigationControllerDelegate = self.delegate {
+                if let delegate = self.delegate {
                     if delegate.responds(to: selector) {
                         return true
                     }
@@ -146,7 +146,7 @@
                 if super.responds(to: selector) {
                     return self
                 }
-                if let delegate: UINavigationControllerDelegate = self.delegate {
+                if let delegate = self.delegate {
                     if delegate.responds(to: selector) {
                         return delegate
                     }
@@ -156,14 +156,14 @@
 
             public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
                 if self.previousViewController != viewController {
-                    if let vc: IQBaseViewController = self.previousViewController as? IQBaseViewController {
+                    if let vc = self.previousViewController as? IQBaseViewController {
                         vc.willDismiss(animated: animated)
                     }
-                    if let vc: IQBaseViewController = viewController as? IQBaseViewController {
+                    if let vc = viewController as? IQBaseViewController {
                         vc.willPresent(animated: animated)
                     }
                 }
-                if let delegate: UINavigationControllerDelegate = self.delegate {
+                if let delegate = self.delegate {
                     if let selector = delegate.navigationController(_:willShow:animated:) {
                         selector(navigationController, viewController, animated)
                     }
@@ -172,15 +172,15 @@
 
             public func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
                 if self.previousViewController != viewController {
-                    if let vc: IQBaseViewController = self.previousViewController as? IQBaseViewController {
+                    if let vc = self.previousViewController as? IQBaseViewController {
                         vc.didDismiss(animated: animated)
                     }
                     self.previousViewController = viewController
-                    if let vc: IQBaseViewController = viewController as? IQBaseViewController {
+                    if let vc = viewController as? IQBaseViewController {
                         vc.didPresent(animated: animated)
                     }
                 }
-                if let delegate: UINavigationControllerDelegate = self.delegate {
+                if let delegate = self.delegate {
                     if let selector = delegate.navigationController(_:didShow:animated:) {
                         selector(navigationController, viewController, animated)
                     }

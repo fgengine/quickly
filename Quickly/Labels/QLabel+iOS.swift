@@ -4,7 +4,7 @@
 
 #if os(iOS)
 
-    open class QLabel: QView {
+    open class QLabel : QView {
 
         public enum ContentAlignment: Int {
             case center
@@ -18,8 +18,8 @@
             case bottomRight
 
             public func point(size: CGSize, textSize: CGSize) -> CGPoint {
-                let x: CGFloat = size.width - textSize.width
-                let y: CGFloat = size.height - textSize.height
+                let x = size.width - textSize.width
+                let y = size.height - textSize.height
                 switch self {
                 case .center: return CGPoint(x: max(x / 2, 0), y: max(y / 2, 0))
                 case .top: return CGPoint(x: max(x / 2, 0), y: 0)
@@ -159,12 +159,12 @@
         #endif
 
         public func characterIndex(point: CGPoint) -> String.Index? {
-            let viewRect: CGRect = self.bounds
-            let textSize: CGSize = self.layoutManager.usedRect(for: self.textContainer).integral.size
-            let textOffset: CGPoint = self.contentAlignment.point(size: viewRect.size, textSize: textSize)
-            let textRect: CGRect = CGRect(x: textOffset.x, y: textOffset.y, width: textSize.width, height: textSize.height)
+            let viewRect = self.bounds
+            let textSize = self.layoutManager.usedRect(for: self.textContainer).integral.size
+            let textOffset = self.contentAlignment.point(size: viewRect.size, textSize: textSize)
+            let textRect = CGRect(x: textOffset.x, y: textOffset.y, width: textSize.width, height: textSize.height)
             if textRect.contains(point) == true {
-                let location: CGPoint = CGPoint(
+                let location = CGPoint(
                     x: point.x - textOffset.x,
                     y: point.y - textOffset.y
                 )
@@ -185,18 +185,18 @@
             self.textContainer.size = self.bounds.integral.size
 
             if self.firstBaselineView != nil || self.lastBaselineView != nil {
-                let viewRect: CGRect = self.bounds.integral
-                let textSize: CGSize = self.layoutManager.usedRect(for: self.textContainer).integral.size
-                let textOffset: CGPoint = self.contentAlignment.point(size: viewRect.size, textSize: textSize)
-                let length: Int = self.textStorage.length
+                let viewRect = self.bounds.integral
+                let textSize = self.layoutManager.usedRect(for: self.textContainer).integral.size
+                let textOffset = self.contentAlignment.point(size: viewRect.size, textSize: textSize)
+                let length = self.textStorage.length
                 if length > 0 {
-                    var firstLineRange: NSRange = NSRange()
-                    let firstLineRect: CGRect = self.layoutManager.lineFragmentRect(forGlyphAt: 0, effectiveRange: &firstLineRange)
-                    let firstFontInfo: QFontInfo = self.textStorage.fontInfo(range: firstLineRange)
-                    var lastFontInfo: QFontInfo
-                    var lastLineRect: CGRect
+                    var firstLineRange = NSRange()
+                    let firstLineRect = self.layoutManager.lineFragmentRect(forGlyphAt: 0, effectiveRange: &firstLineRange)
+                    let firstFontInfo = self.textStorage.fontInfo(range: firstLineRange)
+                    var lastFontInfo = QFontInfo()
+                    var lastLineRect = CGRect.zero
                     if firstLineRange.contains(length - 1) == false {
-                        var lastLineRange: NSRange = NSRange()
+                        var lastLineRange = NSRange()
                         lastLineRect = self.layoutManager.lineFragmentRect(forGlyphAt: length - 1, effectiveRange: &lastLineRange)
                         lastFontInfo = self.textStorage.fontInfo(range: lastLineRange)
                     } else {
@@ -241,10 +241,10 @@
         }
 
         open override func draw(_ rect: CGRect) {
-            let viewRect: CGRect = self.bounds.integral
-            let textSize: CGSize = self.layoutManager.usedRect(for: self.textContainer).integral.size
-            let textOffset: CGPoint = self.contentAlignment.point(size: viewRect.size, textSize: textSize)
-            let textRange: NSRange = self.layoutManager.glyphRange(for: self.textContainer)
+            let viewRect = self.bounds.integral
+            let textSize = self.layoutManager.usedRect(for: self.textContainer).integral.size
+            let textOffset = self.contentAlignment.point(size: viewRect.size, textSize: textSize)
+            let textRange = self.layoutManager.glyphRange(for: self.textContainer)
             self.layoutManager.drawBackground(forGlyphRange: textRange, at: textOffset)
             self.layoutManager.drawGlyphs(forGlyphRange: textRange, at: textOffset)
         }
@@ -253,14 +253,14 @@
             if self.textStorage.length < 1 {
                 return CGSize.zero
             }
-            let textContainer: NSTextContainer = NSTextContainer(size: size)
+            let textContainer = NSTextContainer(size: size)
             textContainer.lineBreakMode = self.textContainer.lineBreakMode
             textContainer.lineFragmentPadding = self.textContainer.lineFragmentPadding
-            let layoutManager: NSLayoutManager = NSLayoutManager()
+            let layoutManager = NSLayoutManager()
             layoutManager.addTextContainer(textContainer)
             let textStorage: NSTextStorage = NSTextStorage(attributedString: self.textStorage)
             textStorage.addLayoutManager(layoutManager)
-            let frame: CGRect = layoutManager.usedRect(for: textContainer)
+            let frame = layoutManager.usedRect(for: textContainer)
             return frame.integral.size
         }
 
@@ -274,7 +274,7 @@
         }
 
         internal func currentPreferredMaxLayoutWidth() -> CGFloat {
-            let maxLayoutWidth: CGFloat = self.preferredMaxLayoutWidth
+            let maxLayoutWidth = self.preferredMaxLayoutWidth
             if maxLayoutWidth > CGFloat.leastNonzeroMagnitude {
                 return maxLayoutWidth
             }
@@ -285,7 +285,7 @@
         }
 
         internal func updateTextStorage() {
-            if let text: IQText = self.text {
+            if let text = self.text {
                 self.textStorage.setAttributedString(text.attributed)
             } else {
                 self.textStorage.deleteAllCharacters()

@@ -4,9 +4,7 @@
 
 #if os(iOS)
 
-    open class QCollectionDecor<
-        Type: IQCollectionData
-    >: UIView, IQView, IQTypedCollectionDecor {
+    open class QCollectionDecor< Type: IQCollectionData > : UICollectionReusableView, IQTypedCollectionDecor {
 
         public override init(frame: CGRect) {
             super.init(frame: frame)

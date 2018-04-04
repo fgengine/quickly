@@ -4,7 +4,7 @@
 
 #if os(iOS)
 
-    public class QImageTableCell< RowType: QImageTableRow >: QBackgroundColorTableCell< RowType > {
+    open class QImageTableCell< RowType: QImageTableRow >: QBackgroundColorTableCell< RowType > {
 
         private var _image: QImageView!
         
@@ -16,13 +16,8 @@
         }
 
         open override class func height(row: RowType, width: CGFloat) -> CGFloat {
-            guard
-                let imageSource: QImageSource = row.imageSource
-                else { return 0 }
-            let availableWidth: CGFloat = width - (row.edgeInsets.left + row.edgeInsets.right)
-            let imageSize: CGSize = imageSource.size(CGSize(
-                width: availableWidth, height: availableWidth
-            ))
+            let availableWidth = width - (row.edgeInsets.left + row.edgeInsets.right)
+            let imageSize = row.image.source.size(CGSize(width: availableWidth, height: availableWidth))
             return row.edgeInsets.top + imageSize.height + row.edgeInsets.bottom
         }
 
@@ -55,10 +50,7 @@
                 selfConstraints.append(self._image.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
                 self.selfConstraints = selfConstraints
             }
-
-            self._image.layer.cornerRadius = row.imageCornerRadius
-            self._image.roundCorners = row.imageRoundCorners
-            self._image.source = row.imageSource
+            row.image.apply(target: self._image)
         }
 
     }

@@ -4,7 +4,7 @@
 
 import Quickly.Private
 
-extension QApiProvider: URLSessionDelegate {
+extension QApiProvider : URLSessionDelegate {
 
     public func urlSession(
         _ session: URLSession,
@@ -20,7 +20,7 @@ extension QApiProvider: URLSessionDelegate {
         didReceive challenge: URLAuthenticationChallenge,
         completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Swift.Void
     )  {
-        let challenge: QApiImplAuthenticationChallenge = QApiImplAuthenticationChallenge(
+        let challenge = QApiImplAuthenticationChallenge(
             localCertificateUrls: self.localCertificateUrls,
             allowInvalidCertificates: self.allowInvalidCertificates,
             challenge: challenge
@@ -30,7 +30,7 @@ extension QApiProvider: URLSessionDelegate {
 
 }
 
-extension QApiProvider: URLSessionTaskDelegate {
+extension QApiProvider : URLSessionTaskDelegate {
 
     public func urlSession(
         _ session: URLSession,
@@ -48,7 +48,7 @@ extension QApiProvider: URLSessionTaskDelegate {
         didReceive challenge: URLAuthenticationChallenge,
         completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Swift.Void
     ) {
-        let challenge: QApiImplAuthenticationChallenge = QApiImplAuthenticationChallenge(
+        let challenge = QApiImplAuthenticationChallenge(
             localCertificateUrls: self.localCertificateUrls,
             allowInvalidCertificates: self.allowInvalidCertificates,
             challenge: challenge
@@ -62,8 +62,8 @@ extension QApiProvider: URLSessionTaskDelegate {
         needNewBodyStream completionHandler: @escaping (InputStream?) -> Swift.Void
     ) {
         var inputStream: InputStream? = nil
-        if let request: URLRequest = task.originalRequest {
-            if let stream: InputStream = request.httpBodyStream {
+        if let request = task.originalRequest {
+            if let stream = request.httpBodyStream {
                 inputStream = stream.copy() as? InputStream
             }
         }
@@ -77,7 +77,7 @@ extension QApiProvider: URLSessionTaskDelegate {
         totalBytesSent: Int64,
         totalBytesExpectedToSend: Int64
     ) {
-        if let query: IQApiQuery = self.getQuery(task: task) {
+        if let query = self.getQuery(task: task) {
             query.upload(bytes: totalBytesSent, totalBytes: totalBytesExpectedToSend)
         }
     }
@@ -87,14 +87,14 @@ extension QApiProvider: URLSessionTaskDelegate {
         task: URLSessionTask,
         didCompleteWithError error: Error?
     ) {
-        if let query: IQApiQuery = self.removeQuery(task: task) {
+        if let query = self.removeQuery(task: task) {
             query.finish(error: error)
         }
     }
 
 }
 
-extension QApiProvider: URLSessionDataDelegate {
+extension QApiProvider : URLSessionDataDelegate {
 
     public func urlSession(
         _ session: URLSession,
@@ -102,7 +102,7 @@ extension QApiProvider: URLSessionDataDelegate {
         didReceive response: URLResponse,
         completionHandler: @escaping (URLSession.ResponseDisposition) -> Swift.Void
     ) {
-        if let query: IQApiQuery = self.getQuery(task: dataTask) {
+        if let query = self.getQuery(task: dataTask) {
             query.receive(response: response)
         }
         completionHandler(.allow)
@@ -113,7 +113,7 @@ extension QApiProvider: URLSessionDataDelegate {
         dataTask: URLSessionDataTask,
         didBecome downloadTask: URLSessionDownloadTask
     ) {
-        if let query: IQApiQuery = self.moveQuery(fromTask: dataTask, toTask: downloadTask) {
+        if let query = self.moveQuery(fromTask: dataTask, toTask: downloadTask) {
             query.become(task: downloadTask)
         }
     }
@@ -124,7 +124,7 @@ extension QApiProvider: URLSessionDataDelegate {
         dataTask: URLSessionDataTask,
         didBecome streamTask: URLSessionStreamTask
     ) {
-        if let query: IQApiQuery = self.moveQuery(fromTask: dataTask, toTask: streamTask) {
+        if let query = self.moveQuery(fromTask: dataTask, toTask: streamTask) {
             query.become(task: streamTask)
         }
     }
@@ -134,22 +134,22 @@ extension QApiProvider: URLSessionDataDelegate {
         dataTask: URLSessionDataTask,
         didReceive data: Data
     ) {
-        if let query: IQApiQuery = self.getQuery(task: dataTask) {
+        if let query = self.getQuery(task: dataTask) {
             query.receive(data: data)
         }
     }
 
 }
 
-extension QApiProvider: URLSessionDownloadDelegate {
+extension QApiProvider : URLSessionDownloadDelegate {
 
     public func urlSession(
         _ session: URLSession,
         downloadTask: URLSessionDownloadTask,
         didFinishDownloadingTo location: URL
     ) {
-        if let query: IQApiQuery = self.getQuery(task: downloadTask) {
-            if let response: URLResponse = downloadTask.response {
+        if let query = self.getQuery(task: downloadTask) {
+            if let response = downloadTask.response {
                 query.receive(response: response)
             }
             query.download(url: location)
@@ -163,7 +163,7 @@ extension QApiProvider: URLSessionDownloadDelegate {
         totalBytesWritten: Int64,
         totalBytesExpectedToWrite: Int64
     ) {
-        if let query: IQApiQuery = self.getQuery(task: downloadTask) {
+        if let query = self.getQuery(task: downloadTask) {
             query.download(bytes: totalBytesWritten, totalBytes: totalBytesExpectedToWrite)
         }
     }
@@ -174,7 +174,7 @@ extension QApiProvider: URLSessionDownloadDelegate {
         didResumeAtOffset fileOffset: Int64,
         expectedTotalBytes: Int64
     ) {
-        if let query: IQApiQuery = self.getQuery(task: downloadTask) {
+        if let query = self.getQuery(task: downloadTask) {
             query.resumeDownload(bytes: fileOffset, totalBytes: expectedTotalBytes)
         }
     }

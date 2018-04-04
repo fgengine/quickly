@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public protocol IQApiQuery: class {
+public protocol IQApiQuery : class {
 
     var task: URLSessionTask? { get }
     var provider: IQApiProvider { get }

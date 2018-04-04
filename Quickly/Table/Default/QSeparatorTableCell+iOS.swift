@@ -4,7 +4,7 @@
 
 #if os(iOS)
 
-    public class QSeparatorTableCell< RowType: QSeparatorTableRow >: QBackgroundColorTableCell< RowType > {
+    open class QSeparatorTableCell< RowType: QSeparatorTableRow >: QBackgroundColorTableCell< RowType > {
 
         private var _separator: QView!
         
@@ -48,7 +48,6 @@
                 selfConstraints.append(self._separator.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
                 self.selfConstraints = selfConstraints
             }
-
             self._separator.backgroundColor = row.color
         }
 

@@ -16,9 +16,9 @@
         open var currentViewController: UIViewController? {
             set(value) {
                 var selectedIndex: Int = 0
-                if let currentViewController: UIViewController = value {
-                    if let viewControllers: [UIViewController] = self.viewControllers {
-                        if let index: Int = viewControllers.index(of: currentViewController) {
+                if let currentViewController = value {
+                    if let viewControllers = self.viewControllers {
+                        if let index = viewControllers.index(of: currentViewController) {
                             selectedIndex = index
                         }
                     }
@@ -26,7 +26,7 @@
                 self.selectedIndex = selectedIndex
             }
             get {
-                if let viewControllers: [UIViewController] = self.viewControllers {
+                if let viewControllers = self.viewControllers {
                     return viewControllers[self.selectedIndex]
                 }
                 return nil
@@ -54,7 +54,7 @@
 
         open override var prefersStatusBarHidden: Bool {
             get {
-                if let viewController: UIViewController = self.currentViewController {
+                if let viewController = self.currentViewController {
                     return viewController.prefersStatusBarHidden
                 }
                 return super.prefersStatusBarHidden
@@ -63,7 +63,7 @@
 
         open override var preferredStatusBarStyle: UIStatusBarStyle {
             get {
-                if let viewController: UIViewController = self.currentViewController {
+                if let viewController = self.currentViewController {
                     return viewController.preferredStatusBarStyle
                 }
                 return super.preferredStatusBarStyle
@@ -72,7 +72,7 @@
 
         open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
             get {
-                if let viewController: UIViewController = self.currentViewController {
+                if let viewController = self.currentViewController {
                     return viewController.preferredStatusBarUpdateAnimation
                 }
                 return super.preferredStatusBarUpdateAnimation
@@ -81,7 +81,7 @@
 
         open override var shouldAutorotate: Bool {
             get {
-                if let viewController: UIViewController = self.currentViewController {
+                if let viewController = self.currentViewController {
                     return viewController.shouldAutorotate
                 }
                 return super.shouldAutorotate
@@ -90,7 +90,7 @@
 
         open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
             get {
-                if let viewController: UIViewController = self.currentViewController {
+                if let viewController = self.currentViewController {
                     return viewController.supportedInterfaceOrientations
                 }
                 return super.supportedInterfaceOrientations
@@ -136,7 +136,7 @@
                 if super.responds(to: selector) {
                     return true
                 }
-                if let delegate: UITabBarControllerDelegate = self.delegate {
+                if let delegate = self.delegate {
                     if delegate.responds(to: selector) {
                         return true
                     }
@@ -148,7 +148,7 @@
                 if super.responds(to: selector) {
                     return self
                 }
-                if let delegate: UITabBarControllerDelegate = self.delegate {
+                if let delegate = self.delegate {
                     if delegate.responds(to: selector) {
                         return delegate
                     }
@@ -158,19 +158,19 @@
 
             public func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
                 if self.previousViewController != viewController {
-                    if let pvc: UIViewController = self.previousViewController {
+                    if let pvc = self.previousViewController {
                         self.previousViewController = pvc
-                        if let vc: IQBaseViewController = pvc as? IQBaseViewController {
+                        if let vc = pvc as? IQBaseViewController {
                             vc.willDismiss(animated: false)
                             vc.didDismiss(animated: false)
                         }
                     }
-                    if let vc: IQBaseViewController = viewController as? IQBaseViewController {
+                    if let vc = viewController as? IQBaseViewController {
                         vc.willPresent(animated: false)
                         vc.didPresent(animated: false)
                     }
                 }
-                if let delegate: UITabBarControllerDelegate = self.delegate {
+                if let delegate = self.delegate {
                     if let selector = delegate.tabBarController(_:didSelect:) {
                         selector(tabBarController, viewController)
                     }

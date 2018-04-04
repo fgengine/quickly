@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QNumberStringValidator: QLengthStringValidator {
+open class QNumberStringValidator : QLengthStringValidator {
 
     open var formatter: NumberFormatter {
         didSet { self.formatter.generatesDecimalNumbers = true }
@@ -23,14 +23,14 @@ open class QNumberStringValidator: QLengthStringValidator {
     }
 
     open override func validate(_ string: String, complete: Bool) -> Bool {
-        var valid: Bool = super.validate(string, complete: complete)
+        var valid = super.validate(string, complete: complete)
         if valid == true {
-            if let number: Decimal = self.formatter.number(from: string) as? Decimal {
-                if let maximumValue: Decimal = self.maximumValue {
+            if let number = self.formatter.number(from: string) as? Decimal {
+                if let maximumValue = self.maximumValue {
                     valid = number <= maximumValue
                 }
                 if valid == true && complete == true {
-                    if let minimumValue: Decimal = self.minimumValue {
+                    if let minimumValue = self.minimumValue {
                         valid = number >= minimumValue
                     }
                 }

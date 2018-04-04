@@ -4,16 +4,18 @@
 
 #if os(iOS)
 
-    public protocol IQCollectionDecorDelegate: class {
+    public protocol IQCollectionDecorDelegate : class {
     }
 
-    public protocol IQCollectionDecor: IQCollectionReuse {
+    public protocol IQCollectionDecor : IQCollectionReuse {
 
-        weak var collectionDelegate: IQCollectionDecorDelegate? { set get }
+        typealias DequeueType = UICollectionReusableView & IQCollectionDecor
+
+        var collectionDelegate: IQCollectionDecorDelegate? { set get }
 
         static func register(collectionView: UICollectionView, kind: String)
 
-        static func dequeue(collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView?
+        static func dequeue(collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> DequeueType?
 
         func configure()
 
@@ -22,23 +24,27 @@
 
     }
 
-    extension IQCollectionDecor where Self: UIView {
+    extension IQCollectionDecor where Self : UICollectionReusableView {
 
         public static func register(collectionView: UICollectionView, kind: String) {
-            if let nib: UINib = self.currentNib() {
+            if let nib = self.currentNib() {
                 collectionView.register(nib, forSupplementaryViewOfKind: kind, withReuseIdentifier: self.reuseIdentifier())
             } else {
                 collectionView.register(self.classForCoder(), forSupplementaryViewOfKind: kind, withReuseIdentifier: self.reuseIdentifier())
             }
         }
 
-        public static func dequeue(collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? {
-            return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: self.reuseIdentifier(), for: indexPath)
+        public static func dequeue(collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> DequeueType? {
+            return collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: self.reuseIdentifier(),
+                for: indexPath
+            ) as? DequeueType
         }
 
     }
 
-    public protocol IQTypedCollectionDecor: IQCollectionDecor {
+    public protocol IQTypedCollectionDecor : IQCollectionDecor {
 
         associatedtype DataType: IQCollectionData
 

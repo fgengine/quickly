@@ -28,7 +28,7 @@ public protocol IQPushViewController : IQBaseViewController {
     typealias ContainerViewControllerType = QPlatformViewController & IQPushContainerViewController
     typealias ContentViewControllerType = QPlatformViewController & IQPushContentViewController
 
-    weak var containerViewController: ContainerViewControllerType? { set get }
+    var containerViewController: ContainerViewControllerType? { set get }
 
     var contentViewController: ContentViewControllerType { set get }
     var state: QPushViewControllerState { set get }
@@ -51,20 +51,18 @@ public protocol IQPushContentViewController : IQBaseViewController {
 
     typealias PushViewControllerType = QPlatformViewController & IQPushViewController
 
-    weak var pushViewController: PushViewControllerType? { set get }
+    var pushViewController: PushViewControllerType? { set get }
 
     func didTimeout()
     func didPressed()
 
 }
 
-public extension IQPushViewController where Self: QPlatformViewController {
+public extension IQPushViewController where Self : QPlatformViewController {
 
     public func dismissPush(animated: Bool, completion: (() -> Swift.Void)?) {
-        guard let containerViewController: IQPushContainerViewController = self.containerViewController else {
-            return
-        }
-        containerViewController.dismissPush(viewController: self, animated: animated, completion: completion)
+        guard let vc = self.containerViewController else { return }
+        vc.dismissPush(viewController: self, animated: animated, completion: completion)
     }
 
 }

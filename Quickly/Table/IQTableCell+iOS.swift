@@ -4,14 +4,16 @@
 
 #if os(iOS)
 
-    public protocol IQTableCellDelegate: class {
+    public protocol IQTableCellDelegate : class {
     }
 
-    public protocol IQTableCell: IQTableReuse {
+    public protocol IQTableCell : IQTableReuse {
 
-        weak var tableDelegate: IQTableCellDelegate? { set get }
+        typealias DequeueType = UITableViewCell & IQTableCell
 
-        static func dequeue(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell?
+        var tableDelegate: IQTableCellDelegate? { set get }
+
+        static func dequeue(tableView: UITableView, indexPath: IndexPath) -> DequeueType?
 
         func configure()
 
@@ -20,26 +22,26 @@
 
     }
 
-    extension IQTableCell where Self: UITableViewCell {
+    extension IQTableCell where Self : UITableViewCell {
 
         public static func register(tableView: UITableView) {
-            if let nib: UINib = self.currentNib() {
+            if let nib = self.currentNib() {
                 tableView.register(nib, forCellReuseIdentifier: self.reuseIdentifier())
             } else {
                 tableView.register(self.classForCoder(), forCellReuseIdentifier: self.reuseIdentifier())
             }
         }
 
-        public static func dequeue(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell? {
+        public static func dequeue(tableView: UITableView, indexPath: IndexPath) -> DequeueType? {
             return tableView.dequeueReusableCell(
                 withIdentifier: self.reuseIdentifier(),
                 for: indexPath
-            )
+            ) as? DequeueType
         }
 
     }
 
-    public protocol IQTypedTableCell: IQTableCell {
+    public protocol IQTypedTableCell : IQTableCell {
 
         associatedtype RowType: IQTableRow
 

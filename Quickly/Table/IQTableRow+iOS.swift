@@ -4,9 +4,9 @@
 
 #if os(iOS)
 
-    public protocol IQTableRow: class {
+    public protocol IQTableRow : class {
 
-        weak var section: IQTableSection? { get }
+        var section: IQTableSection? { get }
         var indexPath: IndexPath? { get }
         var canSelect: Bool { get }
         var canEdit: Bool { get }

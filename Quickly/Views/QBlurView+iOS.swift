@@ -100,7 +100,7 @@
         }
 
         private func getNumber(blurKeyPath: String, empty: NSNumber) -> NSNumber {
-            guard let number: NSNumber = self.get(blurKeyPath: blurKeyPath) as? NSNumber else { return empty }
+            guard let number = self.get(blurKeyPath: blurKeyPath) as? NSNumber else { return empty }
             return number
         }
 
@@ -125,7 +125,7 @@
         }
 
         private func getUIColor(blurKeyPath: String, empty: UIColor?) -> UIColor? {
-            guard let color: UIColor = self.get(blurKeyPath: blurKeyPath) as? UIColor else { return empty }
+            guard let color = self.get(blurKeyPath: blurKeyPath) as? UIColor else { return empty }
             return color
         }
 

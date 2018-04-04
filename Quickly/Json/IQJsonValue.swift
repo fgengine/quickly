@@ -11,7 +11,7 @@ public protocol IJsonValue {
 
 }
 
-extension Bool: IJsonValue {
+extension Bool : IJsonValue {
 
     public static func fromJson(value: Any?, at: String) throws -> Any {
         return try QJsonImpl.toNumber(from: value, at: at)
@@ -23,7 +23,7 @@ extension Bool: IJsonValue {
 
 }
 
-extension Int: IJsonValue {
+extension Int : IJsonValue {
 
     public static func fromJson(value: Any?, at: String) throws -> Any {
         return try QJsonImpl.toNumber(from: value, at: at).intValue
@@ -35,7 +35,7 @@ extension Int: IJsonValue {
     
 }
 
-extension UInt: IJsonValue {
+extension UInt : IJsonValue {
 
     public static func fromJson(value: Any?, at: String) throws -> Any {
         return try QJsonImpl.toNumber(from: value, at: at).uintValue
@@ -47,7 +47,7 @@ extension UInt: IJsonValue {
     
 }
 
-extension Float: IJsonValue {
+extension Float : IJsonValue {
 
     public static func fromJson(value: Any?, at: String) throws -> Any {
         return try QJsonImpl.toNumber(from: value, at: at).floatValue
@@ -59,7 +59,7 @@ extension Float: IJsonValue {
     
 }
 
-extension Double: IJsonValue {
+extension Double : IJsonValue {
 
     public static func fromJson(value: Any?, at: String) throws -> Any {
         return try QJsonImpl.toNumber(from: value, at: at).doubleValue
@@ -71,7 +71,7 @@ extension Double: IJsonValue {
     
 }
 
-extension Decimal: IJsonValue {
+extension Decimal : IJsonValue {
 
     public static func fromJson(value: Any?, at: String) throws -> Any {
         return try QJsonImpl.toDecimalNumber(from: value, at: at).decimalValue
@@ -83,7 +83,7 @@ extension Decimal: IJsonValue {
     
 }
 
-extension String: IJsonValue {
+extension String : IJsonValue {
 
     public static func fromJson(value: Any?, at: String) throws -> Any {
         return try QJsonImpl.toString(from: value, at: at)
@@ -95,7 +95,7 @@ extension String: IJsonValue {
 
 }
 
-extension URL: IJsonValue {
+extension URL : IJsonValue {
 
     public static func fromJson(value: Any?, at: String) throws -> Any {
         return try QJsonImpl.toUrl(from: value, at: at)
@@ -107,7 +107,7 @@ extension URL: IJsonValue {
     
 }
 
-extension Date: IJsonValue {
+extension Date : IJsonValue {
 
     public static func fromJson(value: Any?, at: String) throws -> Any {
         return try QJsonImpl.toDate(from: value, at: at)
@@ -119,7 +119,7 @@ extension Date: IJsonValue {
     
 }
 
-extension CGFloat: IJsonValue {
+extension CGFloat : IJsonValue {
     
     public static func fromJson(value: Any?, at: String) throws -> Any {
         return try self.NativeType.fromJson(value: value, at: at)
@@ -133,7 +133,7 @@ extension CGFloat: IJsonValue {
 
 #if os(macOS)
 
-    extension NSColor: IJsonValue {
+    extension NSColor : IJsonValue {
 
         public static func fromJson(value: Any?, at: String) throws -> Any {
             return try QJsonImpl.toColor(from: value, at: at)
@@ -147,7 +147,7 @@ extension CGFloat: IJsonValue {
 
 #elseif os(iOS)
 
-    extension UIColor: IJsonValue {
+    extension UIColor : IJsonValue {
 
         public static func fromJson(value: Any?, at: String) throws -> Any {
             return try QJsonImpl.toColor(from: value, at: at)
@@ -173,7 +173,7 @@ infix operator <<<
 //
 
 public func >>> < Type: IJsonValue >(left: Type, right: (QJson, String)) {
-    if let jsonValue: Any = left.toJsonValue() {
+    if let jsonValue = left.toJsonValue() {
         right.0.set(jsonValue, forPath: right.1)
     } else {
         right.0.set(nil, forPath: right.1)
@@ -181,65 +181,41 @@ public func >>> < Type: IJsonValue >(left: Type, right: (QJson, String)) {
 }
 
 public func >>> < Type: IJsonValue >(left: Type?, right: (QJson, String)) {
-    if let safe: Type = left {
-        if let jsonValue: Any = safe.toJsonValue() {
-            right.0.set(jsonValue, forPath: right.1)
-        } else {
-            right.0.set(nil, forPath: right.1)
-        }
+    if let jsonValue = left?.toJsonValue() {
+        right.0.set(jsonValue, forPath: right.1)
     } else {
         right.0.set(nil, forPath: right.1)
     }
 }
 
 public func <<< < Type: IJsonValue >(left: inout Type, right: (QJson, String)) throws {
-    let source: Any? = try right.0.object(at: right.1)
-    let jsonValue: Any = try Type.fromJson(
-        value: source,
-        at: QJsonImpl.prepare(basePath: right.0.basePath, path: right.1)
-    )
-    left = (jsonValue as! Type)
-}
-
-public func <<< < Type: IJsonValue >(left: inout Type!, right: (QJson, String)) throws {
-    let source: Any? = try right.0.object(at: right.1)
-    let jsonValue: Any = try Type.fromJson(
-        value: source,
+    let jsonValue = try Type.fromJson(
+        value: try right.0.object(at: right.1),
         at: QJsonImpl.prepare(basePath: right.0.basePath, path: right.1)
     )
     left = (jsonValue as! Type)
 }
 
 public func <<< < Type: IJsonValue >(left: inout Type?, right: (QJson, String)) {
-    let maybeMaybeSource: Any?? = try? right.0.object(at: right.1)
-    if let maybeSource: Any? = maybeMaybeSource, let source: Any = maybeSource {
-        let maybeJsonValue: Any? = try? Type.fromJson(
+    if let source = try? right.0.object(at: right.1) {
+        let jsonValue = try? Type.fromJson(
             value: source,
             at: QJsonImpl.prepare(basePath: right.0.basePath, path: right.1)
         )
-        if let jsonValue: Any = maybeJsonValue {
-            left = jsonValue as? Type
-        } else {
-            left = nil
-        }
+        left = jsonValue as? Type
     } else {
         left = nil
     }
 }
 
 public func <<< < Type: IJsonValue >(left: inout Type, right: (QJson, String, Type)) {
-    let maybeMaybeSource: Any?? = try? right.0.object(at: right.1)
-    if let maybeSource: Any? = maybeMaybeSource, let source: Any = maybeSource {
-        let maybeJsonValue: Any? = try? Type.fromJson(
+    if let source = try? right.0.object(at: right.1) {
+        let jsonValue = try? Type.fromJson(
             value: source,
             at: QJsonImpl.prepare(basePath: right.0.basePath, path: right.1)
         )
-        if let jsonValue: Any = maybeJsonValue {
-            if let value: Type = jsonValue as? Type {
-                left = value
-            } else {
-                left = right.2
-            }
+        if let value = jsonValue as? Type {
+            left = value
         } else {
             left = right.2
         }
@@ -249,18 +225,13 @@ public func <<< < Type: IJsonValue >(left: inout Type, right: (QJson, String, Ty
 }
 
 public func <<< < Type: IJsonValue >(left: inout Type!, right: (QJson, String, Type)) {
-    let maybeMaybeSource: Any?? = try? right.0.object(at: right.1)
-    if let maybeSource: Any? = maybeMaybeSource, let source: Any = maybeSource {
-        let maybeJsonValue: Any? = try? Type.fromJson(
+    if let source = try? right.0.object(at: right.1) {
+        let jsonValue = try? Type.fromJson(
             value: source,
             at: QJsonImpl.prepare(basePath: right.0.basePath, path: right.1)
         )
-        if let jsonValue: Any = maybeJsonValue {
-            if let value: Type = jsonValue as? Type {
-                left = value
-            } else {
-                left = right.2
-            }
+        if let value = jsonValue as? Type {
+            left = value
         } else {
             left = right.2
         }
@@ -270,18 +241,13 @@ public func <<< < Type: IJsonValue >(left: inout Type!, right: (QJson, String, T
 }
 
 public func <<< < Type: IJsonValue >(left: inout Type?, right: (QJson, String, Type?)) {
-    let maybeMaybeSource: Any?? = try? right.0.object(at: right.1)
-    if let maybeSource: Any? = maybeMaybeSource, let source: Any = maybeSource {
-        let maybeJsonValue: Any? = try? Type.fromJson(
+    if let source = try? right.0.object(at: right.1) {
+        let jsonValue = try? Type.fromJson(
             value: source,
             at: QJsonImpl.prepare(basePath: right.0.basePath, path: right.1)
         )
-        if let jsonValue: Any = maybeJsonValue {
-            if let value: Type = jsonValue as? Type {
-                left = value
-            } else {
-                left = right.2
-            }
+        if let value = jsonValue as? Type {
+            left = value
         } else {
             left = right.2
         }
@@ -295,7 +261,7 @@ public func <<< < Type: IJsonValue >(left: inout Type?, right: (QJson, String, T
 //
 
 public func >>> < EnumType: RawRepresentable >(left: EnumType, right: (QJson, String)) where EnumType.RawValue: IJsonValue {
-    if let jsonValue: Any = left.rawValue.toJsonValue() {
+    if let jsonValue = left.rawValue.toJsonValue() {
         right.0.set(jsonValue, forPath: right.1)
     } else {
         right.0.set(nil, forPath: right.1)
@@ -303,46 +269,21 @@ public func >>> < EnumType: RawRepresentable >(left: EnumType, right: (QJson, St
 }
 
 public func >>> < EnumType: RawRepresentable >(left: EnumType?, right: (QJson, String)) where EnumType.RawValue: IJsonValue {
-    if let safe: EnumType = left {
-        if let jsonValue: Any = safe.rawValue.toJsonValue() {
-            right.0.set(jsonValue, forPath: right.1)
-        } else {
-            right.0.set(nil, forPath: right.1)
-        }
+    if let jsonValue = left?.rawValue.toJsonValue() {
+        right.0.set(jsonValue, forPath: right.1)
     } else {
         right.0.set(nil, forPath: right.1)
     }
 }
 
 public func <<< < EnumType: RawRepresentable >(left: inout EnumType, right: (QJson, String)) throws where EnumType.RawValue: IJsonValue {
-    let source: Any? = try right.0.object(at: right.1)
-    let jsonValue: Any = try EnumType.RawValue.fromJson(
+    let source = try right.0.object(at: right.1)
+    let jsonValue = try EnumType.RawValue.fromJson(
         value: source,
         at: QJsonImpl.prepare(basePath: right.0.basePath, path: right.1)
     )
-    if let rawValue: EnumType.RawValue = jsonValue as? EnumType.RawValue {
-        if let value: EnumType = EnumType(rawValue: rawValue) {
-            left = value
-        } else {
-            throw QJsonImpl.convertError(
-                at: QJsonImpl.prepare(basePath: right.0.basePath, path: right.1)
-            )
-        }
-    } else {
-        throw QJsonImpl.convertError(
-            at: QJsonImpl.prepare(basePath: right.0.basePath, path: right.1)
-        )
-    }
-}
-
-public func <<< < EnumType: RawRepresentable >(left: inout EnumType!, right: (QJson, String)) throws where EnumType.RawValue: IJsonValue {
-    let source: Any? = try right.0.object(at: right.1)
-    let jsonValue: Any = try EnumType.RawValue.fromJson(
-        value: source,
-        at: QJsonImpl.prepare(basePath: right.0.basePath, path: right.1)
-    )
-    if let rawValue: EnumType.RawValue = jsonValue as? EnumType.RawValue {
-        if let value: EnumType = EnumType(rawValue: rawValue) {
+    if let rawValue = jsonValue as? EnumType.RawValue {
+        if let value = EnumType(rawValue: rawValue) {
             left = value
         } else {
             throw QJsonImpl.convertError(
@@ -357,18 +298,13 @@ public func <<< < EnumType: RawRepresentable >(left: inout EnumType!, right: (QJ
 }
 
 public func <<< < EnumType: RawRepresentable >(left: inout EnumType?, right: (QJson, String)) where EnumType.RawValue: IJsonValue {
-    let maybeMaybeSource: Any?? = try? right.0.object(at: right.1)
-    if let maybeSource: Any? = maybeMaybeSource, let source: Any = maybeSource {
-        let maybeJsonValue: Any? = try? EnumType.RawValue.fromJson(
+    if let source = try? right.0.object(at: right.1) {
+        let jsonValue = try? EnumType.RawValue.fromJson(
             value: source,
             at: QJsonImpl.prepare(basePath: right.0.basePath, path: right.1)
         )
-        if let jsonValue: Any = maybeJsonValue {
-            if let rawValue: EnumType.RawValue = jsonValue as? EnumType.RawValue {
-                left = EnumType(rawValue: rawValue)
-            } else {
-                left = nil
-            }
+        if let rawValue = jsonValue as? EnumType.RawValue {
+            left = EnumType(rawValue: rawValue)
         } else {
             left = nil
         }
@@ -378,19 +314,14 @@ public func <<< < EnumType: RawRepresentable >(left: inout EnumType?, right: (QJ
 }
 
 public func <<< < EnumType: RawRepresentable >(left: inout EnumType, right: (QJson, String, EnumType)) where EnumType.RawValue: IJsonValue {
-    let maybeMaybeSource: Any?? = try? right.0.object(at: right.1)
-    if let maybeSource: Any? = maybeMaybeSource, let source: Any = maybeSource {
-        let maybeJsonValue: Any? = try? EnumType.RawValue.fromJson(
+    if let source = try? right.0.object(at: right.1) {
+        let jsonValue = try? EnumType.RawValue.fromJson(
             value: source,
             at: QJsonImpl.prepare(basePath: right.0.basePath, path: right.1)
         )
-        if let jsonValue: Any = maybeJsonValue {
-            if let rawValue: EnumType.RawValue = jsonValue as? EnumType.RawValue {
-                if let enumValue: EnumType = EnumType(rawValue: rawValue) {
-                    left = enumValue
-                } else {
-                    left = right.2
-                }
+        if let rawValue = jsonValue as? EnumType.RawValue {
+            if let enumValue = EnumType(rawValue: rawValue) {
+                left = enumValue
             } else {
                 left = right.2
             }
@@ -403,19 +334,14 @@ public func <<< < EnumType: RawRepresentable >(left: inout EnumType, right: (QJs
 }
 
 public func <<< < EnumType: RawRepresentable >(left: inout EnumType!, right: (QJson, String, EnumType)) where EnumType.RawValue: IJsonValue {
-    let maybeMaybeSource: Any?? = try? right.0.object(at: right.1)
-    if let maybeSource: Any? = maybeMaybeSource, let source: Any = maybeSource {
-        let maybeJsonValue: Any? = try? EnumType.RawValue.fromJson(
+    if let source = try? right.0.object(at: right.1) {
+        let jsonValue = try? EnumType.RawValue.fromJson(
             value: source,
             at: QJsonImpl.prepare(basePath: right.0.basePath, path: right.1)
         )
-        if let jsonValue: Any = maybeJsonValue {
-            if let rawValue: EnumType.RawValue = jsonValue as? EnumType.RawValue {
-                if let enumValue: EnumType = EnumType(rawValue: rawValue) {
-                    left = enumValue
-                } else {
-                    left = right.2
-                }
+        if let rawValue = jsonValue as? EnumType.RawValue {
+            if let enumValue = EnumType(rawValue: rawValue) {
+                left = enumValue
             } else {
                 left = right.2
             }
@@ -428,18 +354,13 @@ public func <<< < EnumType: RawRepresentable >(left: inout EnumType!, right: (QJ
 }
 
 public func <<< < EnumType: RawRepresentable >(left: inout EnumType?, right: (QJson, String, EnumType?)) where EnumType.RawValue: IJsonValue {
-    let maybeMaybeSource: Any?? = try? right.0.object(at: right.1)
-    if let maybeSource: Any? = maybeMaybeSource, let source: Any = maybeSource {
-        let maybeJsonValue: Any? = try? EnumType.RawValue.fromJson(
+    if let source = try? right.0.object(at: right.1) {
+        let jsonValue = try? EnumType.RawValue.fromJson(
             value: source,
             at: QJsonImpl.prepare(basePath: right.0.basePath, path: right.1)
         )
-        if let jsonValue: Any = maybeJsonValue {
-            if let rawValue: EnumType.RawValue = jsonValue as? EnumType.RawValue {
-                left = EnumType(rawValue: rawValue)
-            } else {
-                left = right.2
-            }
+        if let rawValue = jsonValue as? EnumType.RawValue {
+            left = EnumType(rawValue: rawValue)
         } else {
             left = right.2
         }
@@ -457,7 +378,7 @@ public func >>> (left: Date, right: (QJson, String, String)) {
 }
 
 public func >>> (left: Date?, right: (QJson, String, String)) {
-    if let date: Date = left {
+    if let date = left {
         right.0.set(date, format: right.2, forPath: right.1)
     } else {
         right.0.set(nil, forPath: right.1)
@@ -468,13 +389,9 @@ public func <<< (left: inout Date, right: (QJson, String, String)) throws {
     left = try right.0.date(at: right.1, formats: [right.2])
 }
 
-public func <<< (left: inout Date!, right: (QJson, String, String)) throws {
-    left = try right.0.date(at: right.1, formats: [right.2])
-}
-
 public func <<< (left: inout Date?, right: (QJson, String, String)) {
-    let maybeMaybeSource: Date?? = try? right.0.date(at: right.1, formats: [right.2])
-    if let maybeSource: Date? = maybeMaybeSource, let source: Date = maybeSource {
+    let maybeSource = try? right.0.date(at: right.1, formats: [right.2])
+    if let source = maybeSource {
         left = source
     } else {
         left = nil
@@ -482,8 +399,7 @@ public func <<< (left: inout Date?, right: (QJson, String, String)) {
 }
 
 public func <<< (left: inout Date, right: (QJson, String, String, Date)) {
-    let maybeMaybeSource: Date?? = try? right.0.date(at: right.1, formats: [right.2])
-    if let maybeSource: Date? = maybeMaybeSource, let source: Date = maybeSource {
+    if let source = try? right.0.date(at: right.1, formats: [right.2]) {
         left = source
     } else {
         left = right.3
@@ -491,8 +407,7 @@ public func <<< (left: inout Date, right: (QJson, String, String, Date)) {
 }
 
 public func <<< (left: inout Date!, right: (QJson, String, String, Date)) {
-    let maybeMaybeSource: Date?? = try? right.0.date(at: right.1, formats: [right.2])
-    if let maybeSource: Date? = maybeMaybeSource, let source: Date = maybeSource {
+    if let source = try? right.0.date(at: right.1, formats: [right.2]) {
         left = source
     } else {
         left = right.3
@@ -500,8 +415,7 @@ public func <<< (left: inout Date!, right: (QJson, String, String, Date)) {
 }
 
 public func <<< (left: inout Date?, right: (QJson, String, String, Date?)) {
-    let maybeMaybeSource: Date?? = try? right.0.date(at: right.1, formats: [right.2])
-    if let maybeSource: Date? = maybeMaybeSource, let source: Date = maybeSource {
+    if let source = try? right.0.date(at: right.1, formats: [right.2]) {
         left = source
     } else {
         left = right.3
@@ -512,13 +426,8 @@ public func <<< (left: inout Date, right: (QJson, String, [String])) throws {
     left = try right.0.date(at: right.1, formats: right.2)
 }
 
-public func <<< (left: inout Date!, right: (QJson, String, [String])) throws {
-    left = try right.0.date(at: right.1, formats: right.2)
-}
-
 public func <<< (left: inout Date?, right: (QJson, String, [String])) {
-    let maybeMaybeSource: Date?? = try? right.0.date(at: right.1, formats: right.2)
-    if let maybeSource: Date? = maybeMaybeSource, let source: Date = maybeSource {
+    if let source = try? right.0.date(at: right.1, formats: right.2) {
         left = source
     } else {
         left = nil
@@ -526,8 +435,7 @@ public func <<< (left: inout Date?, right: (QJson, String, [String])) {
 }
 
 public func <<< (left: inout Date, right: (QJson, String, [String], Date)) {
-    let maybeMaybeSource: Date?? = try? right.0.date(at: right.1, formats: right.2)
-    if let maybeSource: Date? = maybeMaybeSource, let source: Date = maybeSource {
+    if let source = try? right.0.date(at: right.1, formats: right.2) {
         left = source
     } else {
         left = right.3
@@ -535,8 +443,7 @@ public func <<< (left: inout Date, right: (QJson, String, [String], Date)) {
 }
 
 public func <<< (left: inout Date!, right: (QJson, String, [String], Date)) {
-    let maybeMaybeSource: Date?? = try? right.0.date(at: right.1, formats: right.2)
-    if let maybeSource: Date? = maybeMaybeSource, let source: Date = maybeSource {
+    if let source = try? right.0.date(at: right.1, formats: right.2) {
         left = source
     } else {
         left = right.3
@@ -544,8 +451,7 @@ public func <<< (left: inout Date!, right: (QJson, String, [String], Date)) {
 }
 
 public func <<< (left: inout Date?, right: (QJson, String, [String], Date?)) {
-    let maybeMaybeSource: Date?? = try? right.0.date(at: right.1, formats: right.2)
-    if let maybeSource: Date? = maybeMaybeSource, let source: Date = maybeSource {
+    if let source = try? right.0.date(at: right.1, formats: right.2) {
         left = source
     } else {
         left = right.3
@@ -557,17 +463,13 @@ public func <<< (left: inout Date?, right: (QJson, String, [String], Date?)) {
 //
 
 public func >>> < ItemType: IJsonValue >(left: [ItemType], right: QJson) {
-    let jsonValue: [Any] = left.flatMap { (item: ItemType) -> Any? in
-        return item.toJsonValue()
-    }
+    let jsonValue = left.compactMap { return $0.toJsonValue() }
     right.set(jsonValue)
 }
 
 public func >>> < ItemType: IJsonValue >(left: [ItemType]?, right: QJson) {
     if let jsonArray = left {
-        let jsonValue: [Any] = jsonArray.flatMap { (item: ItemType) -> Any? in
-            return item.toJsonValue()
-        }
+        let jsonValue = jsonArray.compactMap { return $0.toJsonValue() }
         right.set(jsonValue)
     } else {
         right.clean()
@@ -575,17 +477,13 @@ public func >>> < ItemType: IJsonValue >(left: [ItemType]?, right: QJson) {
 }
 
 public func >>> < ItemType: IJsonValue >(left: [ItemType], right: (QJson, String)) {
-    let jsonValue: [Any] = left.flatMap { (item: ItemType) -> Any? in
-        return item.toJsonValue()
-    }
+    let jsonValue = left.compactMap { return $0.toJsonValue() }
     right.0.set(jsonValue, forPath: right.1)
 }
 
 public func >>> < ItemType: IJsonValue >(left: [ItemType]?, right: (QJson, String)) {
     if let jsonArray = left {
-        let jsonValue: [Any] = jsonArray.flatMap { (item: ItemType) -> Any? in
-            return item.toJsonValue()
-        }
+        let jsonValue = jsonArray.compactMap { return $0.toJsonValue() }
         right.0.set(jsonValue, forPath: right.1)
     } else {
         right.0.set(nil, forPath: right.1)
@@ -593,30 +491,12 @@ public func >>> < ItemType: IJsonValue >(left: [ItemType]?, right: (QJson, Strin
 }
 
 public func <<< < ItemType: IJsonValue >(left: inout [ItemType], right: QJson) {
-    if let source: [Any] = right.array() {
-        var index: Int = 0
-        left = source.flatMap({ (item: Any) -> ItemType? in
-            let path: String = QJsonImpl.prepare(path: right.basePath, index: index)
+    if let source = right.array() {
+        var index = 0
+        left = source.compactMap({ (item) -> ItemType? in
+            let path = QJsonImpl.prepare(path: right.basePath, index: index)
             index += 1
-            let maybeJsonValue: Any? = try? ItemType.fromJson(value: item, at: path)
-            if let jsonValue: Any = maybeJsonValue {
-                return jsonValue as? ItemType
-            }
-            return nil
-        })
-    } else {
-        left = []
-    }
-}
-
-public func <<< < ItemType: IJsonValue >(left: inout [ItemType]!, right: QJson) {
-    if let source: [Any] = right.array() {
-        var index: Int = 0
-        left = source.flatMap({ (item: Any) -> ItemType? in
-            let path: String = QJsonImpl.prepare(path: right.basePath, index: index)
-            index += 1
-            let maybeJsonValue: Any? = try? ItemType.fromJson(value: item, at: path)
-            if let jsonValue: Any = maybeJsonValue {
+            if let jsonValue = try? ItemType.fromJson(value: item, at: path) {
                 return jsonValue as? ItemType
             }
             return nil
@@ -627,13 +507,12 @@ public func <<< < ItemType: IJsonValue >(left: inout [ItemType]!, right: QJson) 
 }
 
 public func <<< < ItemType: IJsonValue >(left: inout [ItemType]?, right: QJson) {
-    if let source: [Any] = right.array() {
-        var index: Int = 0
-        left = source.flatMap({ (item: Any) -> ItemType? in
-            let path: String = QJsonImpl.prepare(path: right.basePath, index: index)
+    if let source = right.array() {
+        var index = 0
+        left = source.compactMap({ (item) -> ItemType? in
+            let path = QJsonImpl.prepare(path: right.basePath, index: index)
             index += 1
-            let maybeJsonValue: Any? = try? ItemType.fromJson(value: item, at: path)
-            if let jsonValue: Any = maybeJsonValue {
+            if let jsonValue = try? ItemType.fromJson(value: item, at: path) {
                 return jsonValue as? ItemType
             }
             return nil
@@ -644,32 +523,13 @@ public func <<< < ItemType: IJsonValue >(left: inout [ItemType]?, right: QJson) 
 }
 
 public func <<< < ItemType: IJsonValue >(left: inout [ItemType], right: (QJson, String)) {
-    let maybeMaybeSource: [Any]?? = try? right.0.array(at: right.1)
-    if let maybeSource: [Any]? = maybeMaybeSource, let source: [Any] = maybeSource {
-        var index: Int = 0
-        left = source.flatMap({ (item: Any) -> ItemType? in
-            let path: String = QJsonImpl.prepare(basePath: right.0.basePath, path: right.1, index: index)
+    if let source = try? right.0.array(at: right.1) {
+        var index = 0
+        left = source.compactMap({ (item: Any) -> ItemType? in
+            let path = QJsonImpl.prepare(basePath: right.0.basePath, path: right.1, index: index)
             index += 1
-            let maybeJsonValue: Any? = try? ItemType.fromJson(value: item, at: path)
-            if let jsonValue: Any = maybeJsonValue {
-                return jsonValue as? ItemType
-            }
-            return nil
-        })
-    } else {
-        left = []
-    }
-}
-
-public func <<< < ItemType: IJsonValue >(left: inout [ItemType]!, right: (QJson, String)) {
-    let maybeMaybeSource: [Any]?? = try? right.0.array(at: right.1)
-    if let maybeSource: [Any]? = maybeMaybeSource, let source: [Any] = maybeSource {
-        var index: Int = 0
-        left = source.flatMap({ (item: Any) -> ItemType? in
-            let path: String = QJsonImpl.prepare(basePath: right.0.basePath, path: right.1, index: index)
-            index += 1
-            let maybeJsonValue: Any? = try? ItemType.fromJson(value: item, at: path)
-            if let jsonValue: Any = maybeJsonValue {
+            let maybeJsonValue = try? ItemType.fromJson(value: item, at: path)
+            if let jsonValue = maybeJsonValue {
                 return jsonValue as? ItemType
             }
             return nil
@@ -680,14 +540,13 @@ public func <<< < ItemType: IJsonValue >(left: inout [ItemType]!, right: (QJson,
 }
 
 public func <<< < ItemType: IJsonValue >(left: inout [ItemType]?, right: (QJson, String)) {
-    let maybeMaybeSource: [Any]?? = try? right.0.array(at: right.1)
-    if let maybeSource: [Any]? = maybeMaybeSource, let source: [Any] = maybeSource {
-        var index: Int = 0
-        left = source.flatMap({ (item: Any) -> ItemType? in
-            let path: String = QJsonImpl.prepare(basePath: right.0.basePath, path: right.1, index: index)
+    if let source = try? right.0.array(at: right.1) {
+        var index = 0
+        left = source.compactMap({ (item: Any) -> ItemType? in
+            let path = QJsonImpl.prepare(basePath: right.0.basePath, path: right.1, index: index)
             index += 1
-            let maybeJsonValue: Any? = try? ItemType.fromJson(value: item, at: path)
-            if let jsonValue: Any = maybeJsonValue {
+            let maybeJsonValue = try? ItemType.fromJson(value: item, at: path)
+            if let jsonValue = maybeJsonValue {
                 return jsonValue as? ItemType
             }
             return nil
@@ -702,26 +561,26 @@ public func <<< < ItemType: IJsonValue >(left: inout [ItemType]?, right: (QJson,
 //
 
 public func >>> < KeyType: IJsonValue, ValueType: IJsonValue >(left: [KeyType: ValueType], right: QJson) {
-    var jsonValue: [AnyHashable: Any] = [:]
+    var jsonValue: [KeyType:ValueType] = [:]
     left.forEach { (key: KeyType, value: ValueType) in
-        if let safeKey: AnyHashable = key.toJsonValue() as? AnyHashable {
-            if let safeValue: Any = value.toJsonValue() {
-                jsonValue[safeKey] = safeValue
-            }
-        }
+        guard
+            let safeKey = key.toJsonValue() as? KeyType,
+            let safeValue = value.toJsonValue() as? ValueType
+            else { return }
+        jsonValue[safeKey] = safeValue
     }
     right.set(jsonValue)
 }
 
 public func >>> < KeyType: IJsonValue, ValueType: IJsonValue >(left: [KeyType: ValueType]?, right: QJson) {
     if let jsonDictionary = left {
-        var jsonValue: [AnyHashable: Any] = [:]
+        var jsonValue: [KeyType:ValueType] = [:]
         jsonDictionary.forEach { (key: KeyType, value: ValueType) in
-            if let safeKey: AnyHashable = key.toJsonValue() as? AnyHashable {
-                if let safeValue: Any = value.toJsonValue() {
-                    jsonValue[safeKey] = safeValue
-                }
-            }
+            guard
+                let safeKey = key.toJsonValue() as? KeyType,
+                let safeValue = value.toJsonValue() as? ValueType
+                else { return }
+            jsonValue[safeKey] = safeValue
         }
         right.set(jsonValue)
     } else {
@@ -730,26 +589,26 @@ public func >>> < KeyType: IJsonValue, ValueType: IJsonValue >(left: [KeyType: V
 }
 
 public func >>> < KeyType: IJsonValue, ValueType: IJsonValue >(left: [KeyType: ValueType], right: (QJson, String)) {
-    var jsonValue: [AnyHashable: Any] = [:]
+    var jsonValue: [KeyType:ValueType] = [:]
     left.forEach { (key: KeyType, value: ValueType) in
-        if let safeKey: AnyHashable = key.toJsonValue() as? AnyHashable {
-            if let safeValue: Any = value.toJsonValue() {
-                jsonValue[safeKey] = safeValue
-            }
-        }
+        guard
+            let safeKey = key.toJsonValue() as? KeyType,
+            let safeValue = value.toJsonValue() as? ValueType
+            else { return }
+        jsonValue[safeKey] = safeValue
     }
     right.0.set(jsonValue, forPath: right.1)
 }
 
 public func >>> < KeyType: IJsonValue, ValueType: IJsonValue >(left: [KeyType: ValueType]?, right: (QJson, String)) {
     if let jsonDictionary = left {
-        var jsonValue: [AnyHashable: Any] = [:]
+        var jsonValue: [KeyType:ValueType] = [:]
         jsonDictionary.forEach { (key: KeyType, value: ValueType) in
-            if let safeKey: AnyHashable = key.toJsonValue() as? AnyHashable {
-                if let safeValue: Any = value.toJsonValue() {
-                    jsonValue[safeKey] = safeValue
-                }
-            }
+            guard
+                let safeKey = key.toJsonValue() as? KeyType,
+                let safeValue = value.toJsonValue() as? ValueType
+                else { return }
+            jsonValue[safeKey] = safeValue
         }
         right.0.set(jsonValue, forPath: right.1)
     } else {
@@ -758,39 +617,16 @@ public func >>> < KeyType: IJsonValue, ValueType: IJsonValue >(left: [KeyType: V
 }
 
 public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyType: ValueType], right: QJson) {
-    if let source: [AnyHashable: Any] = right.dictionary() {
-        var result: [KeyType: ValueType] = [:]
+    if let source = right.dictionary() {
+        var result: [KeyType:ValueType] = [:]
         source.forEach({ (key: AnyHashable, value: Any) in
-            let path: String = QJsonImpl.prepare(path: right.basePath, key: key)
-            let maybeJsonKey: Any? = try? KeyType.fromJson(value: key, at: path)
-            if let jsonKey: Any = maybeJsonKey {
-                if let safeKey: KeyType = jsonKey as? KeyType {
-                    let maybeJsonValue: Any? = try? ValueType.fromJson(value: value, at: path)
-                    if let jsonValue: Any = maybeJsonValue {
-                        if let safeValue: ValueType = jsonValue as? ValueType {
-                            result[safeKey] = safeValue
-                        }
-                    }
-                }
-            }
-        })
-        left = result
-    } else {
-        left = [:]
-    }
-}
-
-public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyType: ValueType]!, right: QJson) {
-    if let source: [AnyHashable: Any] = right.dictionary() {
-        var result: [KeyType: ValueType] = [:]
-        source.forEach({ (key: AnyHashable, value: Any) in
-            let path: String = QJsonImpl.prepare(path: right.basePath, key: key)
-            let maybeJsonKey: Any? = try? KeyType.fromJson(value: key, at: path)
-            if let jsonKey: Any = maybeJsonKey {
-                if let safeKey: KeyType = jsonKey as? KeyType {
-                    let maybeJsonValue: Any? = try? ValueType.fromJson(value: value, at: path)
-                    if let jsonValue: Any = maybeJsonValue {
-                        if let safeValue: ValueType = jsonValue as? ValueType {
+            let path = QJsonImpl.prepare(path: right.basePath, key: key)
+            let maybeJsonKey = try? KeyType.fromJson(value: key, at: path)
+            if let jsonKey = maybeJsonKey {
+                if let safeKey = jsonKey as? KeyType {
+                    let maybeJsonValue = try? ValueType.fromJson(value: value, at: path)
+                    if let jsonValue = maybeJsonValue {
+                        if let safeValue = jsonValue as? ValueType {
                             result[safeKey] = safeValue
                         }
                     }
@@ -804,16 +640,16 @@ public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyT
 }
 
 public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyType: ValueType]?, right: QJson) {
-    if let source: [AnyHashable: Any] = right.dictionary() {
-        var result: [KeyType: ValueType] = [:]
+    if let source = right.dictionary() {
+        var result: [KeyType:ValueType] = [:]
         source.forEach({ (key: AnyHashable, value: Any) in
-            let path: String = QJsonImpl.prepare(path: right.basePath, key: key)
-            let maybeJsonKey: Any? = try? KeyType.fromJson(value: key, at: path)
-            if let jsonKey: Any = maybeJsonKey {
-                if let safeKey: KeyType = jsonKey as? KeyType {
-                    let maybeJsonValue: Any? = try? ValueType.fromJson(value: value, at: path)
-                    if let jsonValue: Any = maybeJsonValue {
-                        if let safeValue: ValueType = jsonValue as? ValueType {
+            let path = QJsonImpl.prepare(path: right.basePath, key: key)
+            let maybeJsonKey = try? KeyType.fromJson(value: key, at: path)
+            if let jsonKey = maybeJsonKey {
+                if let safeKey = jsonKey as? KeyType {
+                    let maybeJsonValue = try? ValueType.fromJson(value: value, at: path)
+                    if let jsonValue = maybeJsonValue {
+                        if let safeValue = jsonValue as? ValueType {
                             result[safeKey] = safeValue
                         }
                     }
@@ -827,39 +663,16 @@ public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyT
 }
 
 public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyType: ValueType], right: (QJson, String)) {
-    let maybeMaybeSource: [AnyHashable: Any]?? = try? right.0.dictionary(at: right.1)
-    if let maybeSource: [AnyHashable: Any]? = maybeMaybeSource, let source: [AnyHashable: Any] = maybeSource {
-        var result: [KeyType: ValueType] = [:]
+    if let source = try? right.0.dictionary(at: right.1) {
+        var result: [KeyType:ValueType] = [:]
         source.forEach({ (key: AnyHashable, value: Any) in
-            let path: String = QJsonImpl.prepare(basePath: right.0.basePath, path: right.1, key: key)
-            let maybeJsonKey: Any? = try? KeyType.fromJson(value: key, at: path)
-            if let jsonKey: Any = maybeJsonKey {
-                if let safeKey: KeyType = jsonKey as? KeyType {
-                    let maybeJsonValue: Any? = try? ValueType.fromJson(value: value, at: path)
-                    if let jsonValue: Any = maybeJsonValue {
-                        if let safeValue: ValueType = jsonValue as? ValueType {
-                            result[safeKey] = safeValue
-                        }
-                    }
-                }
-            }
-        })
-        left = result
-    } else {
-        left = [:]
-    }
-}
-
-public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyType: ValueType]!, right: (QJson, String)) {
-    let maybeMaybeSource: [AnyHashable: Any]?? = try? right.0.dictionary(at: right.1)
-    if let maybeSource: [AnyHashable: Any]? = maybeMaybeSource, let source: [AnyHashable: Any] = maybeSource {
-        var result: [KeyType: ValueType] = [:]
-        source.forEach({ (key: AnyHashable, value: Any) in
-            let path: String = QJsonImpl.prepare(basePath: right.0.basePath, path: right.1, key: key)
-            if let jsonKey: Any = try? KeyType.fromJson(value: key, at: path) {
-                if let safeKey: KeyType = jsonKey as? KeyType {
-                    if let jsonValue: Any = try? ValueType.fromJson(value: value, at: path) {
-                        if let safeValue: ValueType = jsonValue as? ValueType {
+            let path = QJsonImpl.prepare(basePath: right.0.basePath, path: right.1, key: key)
+            let maybeJsonKey = try? KeyType.fromJson(value: key, at: path)
+            if let jsonKey = maybeJsonKey {
+                if let safeKey = jsonKey as? KeyType {
+                    let maybeJsonValue = try? ValueType.fromJson(value: value, at: path)
+                    if let jsonValue = maybeJsonValue {
+                        if let safeValue = jsonValue as? ValueType {
                             result[safeKey] = safeValue
                         }
                     }
@@ -873,15 +686,14 @@ public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyT
 }
 
 public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyType: ValueType]?, right: (QJson, String)) {
-    let maybeMaybeSource: [AnyHashable: Any]?? = try? right.0.dictionary(at: right.1)
-    if let maybeSource: [AnyHashable: Any]? = maybeMaybeSource, let source: [AnyHashable: Any] = maybeSource {
-        var result: [KeyType: ValueType] = [:]
+    if let source = try? right.0.dictionary(at: right.1) {
+        var result: [KeyType:ValueType] = [:]
         source.forEach({ (key: AnyHashable, value: Any) in
-            let path: String = QJsonImpl.prepare(basePath: right.0.basePath, path: right.1, key: key)
-            if let jsonKey: Any = try? KeyType.fromJson(value: key, at: path) {
-                if let safeKey: KeyType = jsonKey as? KeyType {
-                    if let jsonValue: Any = try? ValueType.fromJson(value: value, at: path) {
-                        if let safeValue: ValueType = jsonValue as? ValueType {
+            let path = QJsonImpl.prepare(basePath: right.0.basePath, path: right.1, key: key)
+            if let jsonKey = try? KeyType.fromJson(value: key, at: path) {
+                if let safeKey = jsonKey as? KeyType {
+                    if let jsonValue = try? ValueType.fromJson(value: value, at: path) {
+                        if let safeValue = jsonValue as? ValueType {
                             result[safeKey] = safeValue
                         }
                     }
@@ -895,53 +707,21 @@ public func <<< < KeyType: IJsonValue, ValueType: IJsonValue >(left: inout [KeyT
 }
 
 public func <<< < KeyType: RawRepresentable, ValueType: IJsonValue >(left: inout [KeyType: ValueType], right: (QJson, String)) where KeyType.RawValue: IJsonValue {
-    let maybeMaybeSource: [AnyHashable: Any]?? = try? right.0.dictionary(at: right.1)
-    if let maybeSource: [AnyHashable: Any]? = maybeMaybeSource, let source: [AnyHashable: Any] = maybeSource {
-        var result: [KeyType: ValueType] = [:]
+    if let source = try? right.0.dictionary(at: right.1) {
+        var result: [KeyType:ValueType] = [:]
         source.forEach({ (key: AnyHashable, value: Any) in
-            let path: String = QJsonImpl.prepare(basePath: right.0.basePath, path: right.1, key: key)
+            let path = QJsonImpl.prepare(basePath: right.0.basePath, path: right.1, key: key)
             let maybeJsonKey: KeyType?
             if let rawValue = (try? KeyType.RawValue.fromJson(value: key, at: path)) as? KeyType.RawValue, let key = KeyType(rawValue: rawValue) {
                 maybeJsonKey = key
             } else {
                 maybeJsonKey = nil
             }
-            if let jsonKey: Any = maybeJsonKey {
-                if let safeKey: KeyType = jsonKey as? KeyType {
-                    let maybeJsonValue: Any? = try? ValueType.fromJson(value: value, at: path)
-                    if let jsonValue: Any = maybeJsonValue {
-                        if let safeValue: ValueType = jsonValue as? ValueType {
-                            result[safeKey] = safeValue
-                        }
-                    }
-                }
-            }
-        })
-        left = result
-    } else {
-        left = [:]
-    }
-}
-
-public func <<< < KeyType: RawRepresentable, ValueType: IJsonValue >(left: inout [KeyType: ValueType]!, right: (QJson, String)) where KeyType.RawValue: IJsonValue {
-    let maybeMaybeSource: [AnyHashable: Any]?? = try? right.0.dictionary(at: right.1)
-    if let maybeSource: [AnyHashable: Any]? = maybeMaybeSource, let source: [AnyHashable: Any] = maybeSource {
-        var result: [KeyType: ValueType] = [:]
-        source.forEach({ (key: AnyHashable, value: Any) in
-            let path: String = QJsonImpl.prepare(basePath: right.0.basePath, path: right.1, key: key)
-            let maybeJsonKey: KeyType?
-            if let rawValue = (try? KeyType.RawValue.fromJson(value: key, at: path)) as? KeyType.RawValue, let key = KeyType(rawValue: rawValue) {
-                maybeJsonKey = key
-            } else {
-                maybeJsonKey = nil
-            }
-            if let jsonKey: Any = maybeJsonKey {
-                if let safeKey: KeyType = jsonKey as? KeyType {
-                    let maybeJsonValue: Any? = try? ValueType.fromJson(value: value, at: path)
-                    if let jsonValue: Any = maybeJsonValue {
-                        if let safeValue: ValueType = jsonValue as? ValueType {
-                            result[safeKey] = safeValue
-                        }
+            if let jsonKey = maybeJsonKey {
+                let maybeJsonValue = try? ValueType.fromJson(value: value, at: path)
+                if let jsonValue = maybeJsonValue {
+                    if let safeValue = jsonValue as? ValueType {
+                        result[jsonKey] = safeValue
                     }
                 }
             }
@@ -953,24 +733,21 @@ public func <<< < KeyType: RawRepresentable, ValueType: IJsonValue >(left: inout
 }
 
 public func <<< < KeyType: RawRepresentable, ValueType: IJsonValue >(left: inout [KeyType: ValueType]?, right: (QJson, String)) where KeyType.RawValue: IJsonValue {
-    let maybeMaybeSource: [AnyHashable: Any]?? = try? right.0.dictionary(at: right.1)
-    if let maybeSource: [AnyHashable: Any]? = maybeMaybeSource, let source: [AnyHashable: Any] = maybeSource {
-        var result: [KeyType: ValueType] = [:]
+    if let source = try? right.0.dictionary(at: right.1) {
+        var result: [KeyType:ValueType] = [:]
         source.forEach({ (key: AnyHashable, value: Any) in
-            let path: String = QJsonImpl.prepare(basePath: right.0.basePath, path: right.1, key: key)
+            let path = QJsonImpl.prepare(basePath: right.0.basePath, path: right.1, key: key)
             let maybeJsonKey: KeyType?
             if let rawValue = (try? KeyType.RawValue.fromJson(value: key, at: path)) as? KeyType.RawValue, let key = KeyType(rawValue: rawValue) {
                 maybeJsonKey = key
             } else {
                 maybeJsonKey = nil
             }
-            if let jsonKey: Any = maybeJsonKey {
-                if let safeKey: KeyType = jsonKey as? KeyType {
-                    let maybeJsonValue: Any? = try? ValueType.fromJson(value: value, at: path)
-                    if let jsonValue: Any = maybeJsonValue {
-                        if let safeValue: ValueType = jsonValue as? ValueType {
-                            result[safeKey] = safeValue
-                        }
+            if let jsonKey = maybeJsonKey {
+                let maybeJsonValue = try? ValueType.fromJson(value: value, at: path)
+                if let jsonValue = maybeJsonValue {
+                    if let safeValue = jsonValue as? ValueType {
+                        result[jsonKey] = safeValue
                     }
                 }
             }

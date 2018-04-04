@@ -4,9 +4,18 @@
 
 #if os(iOS)
 
-    public protocol IQTableController: UITableViewDataSource, UITableViewDelegate {
+    public protocol IQTableControllerObserver : class {
 
-        weak var tableView: UITableView? { set get }
+        func update(_ controller: IQTableController)
+
+    }
+
+    public protocol IQTableController : UITableViewDataSource, UITableViewDelegate {
+
+        typealias DecorType = IQTableDecor.DequeueType
+        typealias CellType = IQTableCell.DequeueType
+
+        var tableView: UITableView? { set get }
         var rowHeight: CGFloat { set get }
         var sectionHeaderHeight: CGFloat { set get }
         var sectionFooterHeight: CGFloat { set get }
@@ -19,9 +28,12 @@
         var selectedRows: [IQTableRow] { get }
         var canEdit: Bool { get }
         var canMove: Bool { get }
-        var isUpdating: Bool { get }
+        var isBatchUpdating: Bool { get }
 
         func configure()
+
+        func addObserver(_ observer: IQTableControllerObserver)
+        func removeObserver(_ observer: IQTableControllerObserver)
 
         func section(index: Int) -> IQTableSection
         func index(section: IQTableSection) -> Int?
@@ -42,12 +54,11 @@
         func footer(data: IQTableData) -> IQTableDecor?
         func cell(row: IQTableRow) -> IQTableCell?
 
-        func dequeue(data: IQTableData) -> IQTableDecor?
-        func dequeue(row: IQTableRow, indexPath: IndexPath) -> IQTableCell?
+        func dequeue(data: IQTableData) -> DecorType?
+        func dequeue(row: IQTableRow, indexPath: IndexPath) -> CellType?
 
         func reload()
 
-        func beginUpdates()
         func prependSection(_ section: IQTableSection, with animation: UITableViewRowAnimation)
         func prependSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation)
         func appendSection(_ section: IQTableSection, with animation: UITableViewRowAnimation)
@@ -58,7 +69,8 @@
         func deleteSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation)
         func reloadSection(_ section: IQTableSection, with animation: UITableViewRowAnimation)
         func reloadSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation)
-        func endUpdates()
+
+        func performBatchUpdates(_ updates: (() -> Void))
 
         func scroll(row: IQTableRow, scroll: UITableViewScrollPosition, animated: Bool)
 

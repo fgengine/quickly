@@ -42,11 +42,11 @@ open class QDialogViewControllerPresentAnimation : QDialogViewControllerAnimatio
 
     open override func update(animated: Bool, complete: @escaping (_ completed: Bool) -> Void) {
         if animated == true {
-            let originalVerticalAlignment: QDialogViewControllerVerticalAlignment = self.viewController.verticalAlignment
+            let originalVerticalAlignment = self.viewController.verticalAlignment
             #if os(macOS)
-                let originalAlpha: CGFloat = self.viewController.view.alphaValue
+                let originalAlpha = self.viewController.view.alphaValue
             #elseif os(iOS)
-                let originalAlpha: CGFloat = self.viewController.view.alpha
+                let originalAlpha = self.viewController.view.alpha
             #endif
             self.viewController.willPresent(animated: animated)
             self.viewController.verticalAlignment = self.contentVerticalAlignment(originalVerticalAlignment)
@@ -104,11 +104,11 @@ open class QDialogViewControllerDismissAnimation : QDialogViewControllerAnimatio
 
     open override func update(animated: Bool, complete: @escaping (_ completed: Bool) -> Void) {
         if animated == true {
-            let originalVerticalAlignment: QDialogViewControllerVerticalAlignment = self.viewController.verticalAlignment
+            let originalVerticalAlignment = self.viewController.verticalAlignment
             #if os(macOS)
-                let originalAlpha: CGFloat = self.viewController.view.alphaValue
+                let originalAlpha = self.viewController.view.alphaValue
             #elseif os(iOS)
-                let originalAlpha: CGFloat = self.viewController.view.alpha
+                let originalAlpha = self.viewController.view.alpha
             #endif
             self.viewController.willDismiss(animated: animated)
             #if os(macOS)
@@ -188,7 +188,7 @@ open class QDialogViewControllerInteractiveDismissAnimation : IQDialogViewContro
 
     open func cancel(_ complete: @escaping (_ completed: Bool) -> Void) {
         #if os(iOS)
-            let duration: TimeInterval = TimeInterval(self.deltaPosition / self.acceleration)
+            let duration = TimeInterval(self.deltaPosition / self.acceleration)
             UIView.animate(withDuration: duration, animations: {
                 self.viewController.verticalAlignment = self.verticalAlignment
                 self.viewController.view.layoutIfNeeded()
@@ -197,16 +197,16 @@ open class QDialogViewControllerInteractiveDismissAnimation : IQDialogViewContro
     }
 
     open func finish(_ complete: @escaping (_ completed: Bool) -> Void) {
-        let originalVerticalAlignment: QDialogViewControllerVerticalAlignment = self.viewController.verticalAlignment
-        let originalHorizontalAlignment: QDialogViewControllerHorizontalAlignment = self.viewController.horizontalAlignment
+        let originalVerticalAlignment = self.viewController.verticalAlignment
+        let originalHorizontalAlignment = self.viewController.horizontalAlignment
         #if os(macOS)
-            let originalAlpha: CGFloat = self.viewController.view.alphaValue
+            let originalAlpha = self.viewController.view.alphaValue
         #elseif os(iOS)
-            let originalAlpha: CGFloat = self.viewController.view.alpha
+            let originalAlpha = self.viewController.view.alpha
         #endif
         self.viewController.willDismiss(animated: true)
-        let duration: TimeInterval = TimeInterval(self.deltaPosition / self.acceleration)
-        let deceleration: CGFloat = self.deltaPosition * 2.5
+        let duration = TimeInterval(self.deltaPosition / self.acceleration)
+        let deceleration = self.deltaPosition * 2.5
         #if os(macOS)
             NSAnimationContext.runAnimationGroup({ (context: NSAnimationContext) in
                 context.duration = duration

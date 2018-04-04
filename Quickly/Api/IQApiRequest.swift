@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public protocol IQApiRequest: class {
+public protocol IQApiRequest : class {
 
     var timeout: TimeInterval { get }
     var retries: TimeInterval { get }

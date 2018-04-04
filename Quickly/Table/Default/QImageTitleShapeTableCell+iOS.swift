@@ -4,7 +4,7 @@
 
 #if os(iOS)
 
-    public class QImageTitleShapeTableCell< RowType: QImageTitleShapeTableRow >: QBackgroundColorTableCell< RowType > {
+    open class QImageTitleShapeTableCell< RowType: QImageTitleShapeTableRow >: QBackgroundColorTableCell< RowType > {
 
         private var _image: QImageView!
         private var _labelTitle: QLabel!
@@ -12,7 +12,9 @@
 
         private var currentEdgeInsets: UIEdgeInsets?
         private var currentImageWidth: CGFloat?
+        private var currentImageSpacing: CGFloat?
         private var currentShapeWidth: CGFloat?
+        private var currentShapeSpacing: CGFloat?
         
         private var selfConstraints: [NSLayoutConstraint] = [] {
             willSet { self.contentView.removeConstraints(self.selfConstraints) }
@@ -28,17 +30,10 @@
         }
 
         open override class func height(row: RowType, width: CGFloat) -> CGFloat {
-            guard
-                let imageSource: QImageSource = row.imageSource,
-                let titleText: IQText = row.titleText,
-                let shapeModel: IQShapeModel = row.shapeModel
-                else { return 0 }
-            let availableWidth: CGFloat = width - (row.edgeInsets.left + row.edgeInsets.right)
-            let imageSize: CGSize = imageSource.size(CGSize(
-                width: row.imageWidth, height: availableWidth
-            ))
-            let titleTextSize: CGSize = titleText.size(width: availableWidth - (imageSize.width + row.imageSpacing + shapeModel.size.width + row.shapeSpacing))
-            return row.edgeInsets.top + max(imageSize.height, titleTextSize.height, shapeModel.size.height) + row.edgeInsets.bottom
+            let availableWidth = width - (row.edgeInsets.left + row.edgeInsets.right)
+            let imageSize = row.image.source.size(CGSize(width: row.imageWidth, height: availableWidth))
+            let titleTextSize = row.title.text.size(width: availableWidth - (row.imageWidth + row.imageSpacing + row.shapeWidth + row.shapeSpacing))
+            return row.edgeInsets.top + max(imageSize.height, titleTextSize.height, row.shape.size.height) + row.edgeInsets.bottom
         }
 
         open override func setup() {
@@ -74,8 +69,10 @@
         }
 
         private func apply(row: QImageTitleShapeTableRow) {
-            if self.currentEdgeInsets != row.edgeInsets {
+            if self.currentEdgeInsets != row.edgeInsets || self.currentImageSpacing != row.imageSpacing || self.currentShapeSpacing != row.shapeSpacing {
                 self.currentEdgeInsets = row.edgeInsets
+                self.currentImageSpacing = row.imageSpacing
+                self.currentShapeSpacing = row.shapeSpacing
 
                 var selfConstraints: [NSLayoutConstraint] = []
                 selfConstraints.append(self._image.topLayout == self.contentView.topLayout + row.edgeInsets.top)
@@ -104,18 +101,9 @@
                 shapeConstraints.append(self._shape.widthLayout == row.shapeWidth)
                 self.shapeConstraints = shapeConstraints
             }
-
-            self._image.layer.cornerRadius = row.imageCornerRadius
-            self._image.roundCorners = row.imageRoundCorners
-            self._image.source = row.imageSource
-
-            self._labelTitle.contentAlignment = row.titleContentAlignment
-            self._labelTitle.padding = row.titlePadding
-            self._labelTitle.numberOfLines = row.titleNumberOfLines
-            self._labelTitle.lineBreakMode = row.titleLineBreakMode
-            self._labelTitle.text = row.titleText
-
-            self._shape.model = row.shapeModel
+            row.image.apply(target: self._image)
+            row.title.apply(target: self._labelTitle)
+            self._shape.model = row.shape
         }
 
     }

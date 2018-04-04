@@ -4,16 +4,18 @@
 
 #if os(iOS)
 
-    public protocol CollectionCellDelegate: class {
+    public protocol CollectionCellDelegate : class {
     }
 
-    public protocol IQCollectionCell: IQCollectionReuse {
+    public protocol IQCollectionCell : IQCollectionReuse {
 
-        weak var collectionDelegate: CollectionCellDelegate? { set get }
+        typealias DequeueType = UICollectionViewCell & IQCollectionCell
+
+        var collectionDelegate: CollectionCellDelegate? { set get }
 
         static func register(collectionView: UICollectionView)
 
-        static func dequeue(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell?
+        static func dequeue(collectionView: UICollectionView, indexPath: IndexPath) -> DequeueType?
 
         func configure()
 
@@ -22,23 +24,26 @@
 
     }
 
-    extension IQCollectionCell where Self: UICollectionViewCell {
+    extension IQCollectionCell where Self : UICollectionViewCell {
 
         public static func register(collectionView: UICollectionView) {
-            if let nib: UINib = self.currentNib() {
+            if let nib = self.currentNib() {
                 collectionView.register(nib, forCellWithReuseIdentifier: self.reuseIdentifier())
             } else {
                 collectionView.register(self.classForCoder(), forCellWithReuseIdentifier: self.reuseIdentifier())
             }
         }
 
-        public static func dequeue(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell? {
-            return collectionView.dequeueReusableCell(withReuseIdentifier: self.reuseIdentifier(), for: indexPath)
+        public static func dequeue(collectionView: UICollectionView, indexPath: IndexPath) -> DequeueType? {
+            return collectionView.dequeueReusableCell(
+                withReuseIdentifier: self.reuseIdentifier(),
+                for: indexPath
+            ) as? DequeueType
         }
 
     }
 
-    public protocol IQTypedCollectionCell: IQCollectionCell {
+    public protocol IQTypedCollectionCell : IQCollectionCell {
 
         associatedtype ItemType: IQCollectionItem
 

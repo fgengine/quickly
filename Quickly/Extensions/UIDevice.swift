@@ -19,9 +19,9 @@
 
         public var displaySize: QDeviceDisplaySize {
             get {
-                let screenSize: CGSize = UIScreen.main.bounds.integral.size
-                let screenWidth: CGFloat = max(screenSize.width, screenSize.height)
-                let screenHeight: CGFloat = min(screenSize.width, screenSize.height)
+                let screenSize = UIScreen.main.bounds.integral.size
+                let screenWidth = max(screenSize.width, screenSize.height)
+                let screenHeight = min(screenSize.width, screenSize.height)
                 switch self.userInterfaceIdiom {
                 case .phone:
                     if screenWidth >= 736 && screenHeight >= 414 {

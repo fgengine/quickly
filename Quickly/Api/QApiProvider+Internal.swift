@@ -21,7 +21,7 @@ extension QApiProvider {
     internal func removeQuery(task: URLSessionTask) -> IQApiQuery? {
         var query: IQApiQuery? = nil
         self.queue.sync {
-            let key: Int = task.taskIdentifier
+            let key = task.taskIdentifier
             query = self.queries[key]
             self.queries.removeValue(forKey: key)
         }
@@ -33,7 +33,7 @@ extension QApiProvider {
         self.queue.sync {
             query = self.queries[fromTask.taskIdentifier]
             self.queries.removeValue(forKey: fromTask.taskIdentifier)
-            if let query: IQApiQuery = query {
+            if let query = query {
                 self.queries[toTask.taskIdentifier] = query
             }
         }

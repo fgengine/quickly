@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QInputValidator: IQInputValidator {
+public class QInputValidator : IQInputValidator {
 
     public var validator: IQStringValidator
 

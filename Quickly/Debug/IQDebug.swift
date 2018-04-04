@@ -22,7 +22,7 @@ public protocol IQDebug {
 public extension IQDebug {
 
     public func debugString() -> String {
-        var buffer: String = String()
+        var buffer = String()
         self.debugString(&buffer, 0, 1, 0)
         return buffer
     }
@@ -48,29 +48,29 @@ public func QDebugString(_ value: IQDebug, _ buffer: inout String, _ headerInden
 // MARK: Extension IQDebug
 //
 
-extension Int: IQDebug {}
-extension Int8: IQDebug {}
-extension Int16: IQDebug {}
-extension Int32: IQDebug {}
-extension Int64: IQDebug {}
-extension UInt: IQDebug {}
-extension UInt8: IQDebug {}
-extension UInt16: IQDebug {}
-extension UInt32: IQDebug {}
-extension UInt64: IQDebug {}
-extension Float: IQDebug {}
-extension Double: IQDebug {}
-extension String: IQDebug {}
-extension NSString: IQDebug {}
-extension NSNumber: IQDebug {}
-extension URL: IQDebug {}
-extension NSURL: IQDebug {}
+extension Int : IQDebug {}
+extension Int8 : IQDebug {}
+extension Int16 : IQDebug {}
+extension Int32 : IQDebug {}
+extension Int64 : IQDebug {}
+extension UInt : IQDebug {}
+extension UInt8 : IQDebug {}
+extension UInt16 : IQDebug {}
+extension UInt32 : IQDebug {}
+extension UInt64 : IQDebug {}
+extension Float : IQDebug {}
+extension Double : IQDebug {}
+extension String : IQDebug {}
+extension NSString : IQDebug {}
+extension NSNumber : IQDebug {}
+extension URL : IQDebug {}
+extension NSURL : IQDebug {}
 
 //
 // MARK: Extension IQDebug
 //
 
-extension Optional: IQDebug {
+extension Optional : IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         switch self {
@@ -81,7 +81,7 @@ extension Optional: IQDebug {
             buffer.append("nil")
             break
         case .some(let value):
-            if let debugValue: IQDebug = value as? IQDebug {
+            if let debugValue = value as? IQDebug {
                 debugValue.debugString(&buffer, 0, indent, footerIndent)
             } else {
                 buffer.append("\(value)")
@@ -92,29 +92,7 @@ extension Optional: IQDebug {
 
 }
 
-extension ImplicitlyUnwrappedOptional: IQDebug {
-
-    public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-        switch self {
-        case .none:
-            if headerIndent > 0 {
-                buffer.append(String(repeating: "\t", count: headerIndent))
-            }
-            buffer.append("nil")
-            break
-        case .some(let value):
-            if let debugValue: IQDebug = value as? IQDebug {
-                debugValue.debugString(&buffer, 0, indent, footerIndent)
-            } else {
-                buffer.append("\(value)")
-            }
-            break
-        }
-    }
-
-}
-
-extension Bool: IQDebug {
+extension Bool : IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         if headerIndent > 0 {
@@ -125,7 +103,7 @@ extension Bool: IQDebug {
 
 }
 
-extension Data: IQDebug {
+extension Data : IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         if headerIndent > 0 {
@@ -136,7 +114,7 @@ extension Data: IQDebug {
 
 }
 
-extension NSData: IQDebug {
+extension NSData : IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         if headerIndent > 0 {
@@ -147,7 +125,7 @@ extension NSData: IQDebug {
 
 }
 
-extension CGPoint: IQDebug {
+extension CGPoint : IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         if headerIndent > 0 {
@@ -158,7 +136,7 @@ extension CGPoint: IQDebug {
 
 }
 
-extension CGSize: IQDebug {
+extension CGSize : IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         if headerIndent > 0 {
@@ -169,7 +147,7 @@ extension CGSize: IQDebug {
 
 }
 
-extension CGRect: IQDebug {
+extension CGRect : IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         if headerIndent > 0 {
@@ -186,13 +164,13 @@ extension CGRect: IQDebug {
 
 #elseif os(iOS)
 
-    extension UIColor: IQDebug {
+    extension UIColor : IQDebug {
 
         public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
             if headerIndent > 0 {
                 buffer.append(String(repeating: "\t", count: headerIndent))
             }
-            if let hexString: String = self.hexString() {
+            if let hexString = self.hexString() {
                 buffer.append("<UIColor \(hexString)>")
             } else {
                 buffer.append("<UIColor>")
@@ -201,7 +179,7 @@ extension CGRect: IQDebug {
 
     }
 
-    extension UIImage: IQDebug {
+    extension UIImage : IQDebug {
 
         public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
             if headerIndent > 0 {
@@ -214,7 +192,7 @@ extension CGRect: IQDebug {
 
 #endif
 
-extension NSError: IQDebug {
+extension NSError : IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         if headerIndent > 0 {
@@ -225,10 +203,10 @@ extension NSError: IQDebug {
 
 }
 
-extension Array: IQDebug {
+extension Array : IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-        let nextIndent: Int = indent + 1
+        let nextIndent = indent + 1
 
         if headerIndent > 0 {
             buffer.append(String(repeating: "\t", count: headerIndent))
@@ -236,7 +214,7 @@ extension Array: IQDebug {
         buffer.append("[\n")
 
         self.forEach({ (element) in
-            if let debugElement: IQDebug = element as? IQDebug {
+            if let debugElement = element as? IQDebug {
                 debugElement.debugString(&buffer, indent, nextIndent, indent)
             } else {
                 if indent > 0 {
@@ -255,10 +233,10 @@ extension Array: IQDebug {
 
 }
 
-extension NSArray: IQDebug {
+extension NSArray : IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-        let nextIndent: Int = indent + 1
+        let nextIndent = indent + 1
 
         if headerIndent > 0 {
             buffer.append(String(repeating: "\t", count: headerIndent))
@@ -266,7 +244,7 @@ extension NSArray: IQDebug {
         buffer.append("[\n")
 
         self.forEach({ (element) in
-            if let debugElement: IQDebug = element as? IQDebug {
+            if let debugElement = element as? IQDebug {
                 debugElement.debugString(&buffer, indent, nextIndent, indent)
             } else {
                 if indent > 0 {
@@ -285,10 +263,10 @@ extension NSArray: IQDebug {
 
 }
 
-extension Dictionary: IQDebug {
+extension Dictionary : IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-        let nextIndent: Int = indent + 1
+        let nextIndent = indent + 1
 
         if headerIndent > 0 {
             buffer.append(String(repeating: "\t", count: headerIndent))
@@ -296,7 +274,7 @@ extension Dictionary: IQDebug {
         buffer.append("{\n")
 
         self.forEach({ (key, value) in
-            if let debugKey: IQDebug = key as? IQDebug {
+            if let debugKey = key as? IQDebug {
                 debugKey.debugString(&buffer, indent, nextIndent, 0)
             } else {
                 if indent > 0 {
@@ -305,7 +283,7 @@ extension Dictionary: IQDebug {
                 buffer.append("\(key)")
             }
             buffer.append(" : ")
-            if let debugValue: IQDebug = value as? IQDebug {
+            if let debugValue = value as? IQDebug {
                 debugValue.debugString(&buffer, 0, nextIndent, indent)
             } else {
                 buffer.append("\(value)")
@@ -321,10 +299,10 @@ extension Dictionary: IQDebug {
 
 }
 
-extension NSDictionary: IQDebug {
+extension NSDictionary : IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-        let nextIndent: Int = indent + 1
+        let nextIndent = indent + 1
 
         if headerIndent > 0 {
             buffer.append(String(repeating: "\t", count: headerIndent))
@@ -332,7 +310,7 @@ extension NSDictionary: IQDebug {
         buffer.append("{\n")
 
         self.forEach({ (key, value) in
-            if let debugKey: IQDebug = key as? IQDebug {
+            if let debugKey = key as? IQDebug {
                 debugKey.debugString(&buffer, indent, nextIndent, 0)
             } else {
                 if indent > 0 {
@@ -341,7 +319,7 @@ extension NSDictionary: IQDebug {
                 buffer.append("\(key)")
             }
             buffer.append(" : ")
-            if let debugValue: IQDebug = value as? IQDebug {
+            if let debugValue = value as? IQDebug {
                 debugValue.debugString(&buffer, 0, nextIndent, indent)
             } else {
                 buffer.append("\(value)")

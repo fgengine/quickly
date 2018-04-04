@@ -4,9 +4,9 @@
 
 #if os(iOS)
 
-    public protocol IQCollectionSection: class {
+    public protocol IQCollectionSection : class {
 
-        weak var controller: IQCollectionController? { get }
+        var controller: IQCollectionController? { get }
         var index: Int? { get }
         var insets: UIEdgeInsets { get }
         var minimumLineSpacing: CGFloat { get }
@@ -70,7 +70,7 @@
         }
         
         public func moveItem(_ fromItem: IQCollectionItem, toIndex: Int) -> Bool {
-            guard let fromIndex: Int = self.items.index(where: { (existItem: IQCollectionItem) -> Bool in
+            guard let fromIndex = self.items.index(where: { (existItem: IQCollectionItem) -> Bool in
                 return (existItem === fromItem)
             }) else {
                 return false

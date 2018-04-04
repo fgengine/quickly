@@ -17,12 +17,12 @@
         }
 
         private func apply(row: QBackgroundColorTableRow) {
-            if let backgroundColor: UIColor = row.backgroundColor {
+            if let backgroundColor = row.backgroundColor {
                 self.backgroundColor = backgroundColor
                 self.contentView.backgroundColor = backgroundColor
             }
-            if let selectedBackgroundColor: UIColor = row.selectedBackgroundColor {
-                let view: UIView = UIView(frame: self.bounds)
+            if let selectedBackgroundColor = row.selectedBackgroundColor {
+                let view = UIView(frame: self.bounds)
                 view.backgroundColor = selectedBackgroundColor
                 self.selectedBackgroundView = view
             } else {
