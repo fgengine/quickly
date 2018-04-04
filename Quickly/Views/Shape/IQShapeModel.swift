@@ -72,7 +72,11 @@ public extension IQShapeModel {
 
     func prepare(_ bounds: CGRect) -> QPlatformBezierPath? {
         guard let path = self.make() else { return nil }
+        #if os(macOS)
+        path.transform(using: AffineTransform(translationByX: (bounds.width / 2), byY: (bounds.height / 2)))
+        #elseif os(iOS)
         path.apply(CGAffineTransform(translationX: (bounds.width / 2), y: (bounds.height / 2)))
+        #endif
         return path
     }
 
