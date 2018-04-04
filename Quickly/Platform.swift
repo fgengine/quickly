@@ -8,6 +8,7 @@
 
     public typealias QPlatformColor = NSColor
     public typealias QPlatformFont = NSFont
+    public typealias QPlatformBezierPath = NSBezierPath
     public typealias QPlatformEdgeInsets = NSEdgeInsets
 
     public typealias QPlatformLayoutAttribute = NSLayoutConstraint.Attribute
@@ -25,6 +26,7 @@
 
     public typealias QPlatformColor = UIColor
     public typealias QPlatformFont = UIFont
+    public typealias QPlatformBezierPath = UIBezierPath
     public typealias QPlatformEdgeInsets = UIEdgeInsets
 
     public typealias QPlatformLayoutAttribute = NSLayoutAttribute

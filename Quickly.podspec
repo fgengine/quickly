@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
     :tag => s.version.to_s
   }
   s.osx.deployment_target = '10.11'
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '9.0'
   s.requires_arc = true
 
   s.source_files = 'Quickly/**/*.{h,m,swift}'
