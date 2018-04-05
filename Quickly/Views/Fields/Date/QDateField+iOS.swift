@@ -20,8 +20,40 @@
         }
     }
 
-    @IBDesignable
-    open class QDateField : QView, IQField {
+    public class QDateFieldStyleSheet : QDisplayViewStyleSheet< QDateField > {
+
+        public var formatter: IQDateFieldFormatter?
+        public var mode: QDateFieldMode
+        public var calendar: Calendar?
+        public var locale: Locale?
+        public var minimumDate: Date?
+        public var maximumDate: Date?
+        public var placeholder: IQText?
+        public var isEnabled: Bool
+
+        public override init() {
+            self.mode = .date
+            self.isEnabled = true
+
+            super.init()
+        }
+
+        public override func apply(target: QDateField) {
+            super.apply(target: target)
+
+            target.formatter = self.formatter
+            target.mode = self.mode
+            target.calendar = self.calendar
+            target.locale = self.locale
+            target.minimumDate = self.minimumDate
+            target.maximumDate = self.maximumDate
+            target.placeholder = self.placeholder
+            target.isEnabled = self.isEnabled
+        }
+
+    }
+
+    public class QDateField : QDisplayView, IQField {
 
         public typealias ShouldClosure = (_ dateField: QDateField) -> Bool
         public typealias SelectClosure = (_ dateField: QDateField, _ date: Date) -> Void
@@ -42,22 +74,21 @@
             get { return self.picker.locale }
         }
         public var date: Date? {
-            set(value) {
-                if var date = value {
+            didSet {
+                if var date = self.date {
                     self.processDate(&date)
                     self.picker.setDate(date, animated: self.isFirstResponder)
                 }
                 self.updateText()
             }
-            get { return self.picker.date }
         }
         public var minimumDate: Date? {
             set(value) {
                 self.picker.minimumDate = value
-                var newDate = self.picker.date
-                if self.processDate(&newDate) == true {
-                    self.picker.setDate(newDate, animated: self.isFirstResponder)
-                    self.updateText()
+                if var date = self.date {
+                    if self.processDate(&date) == true {
+                        self.date = date
+                    }
                 }
             }
             get { return self.picker.minimumDate }
@@ -65,10 +96,10 @@
         public var maximumDate: Date? {
             set(value) {
                 self.picker.maximumDate = value
-                var newDate = self.picker.date
-                if self.processDate(&newDate) == true {
-                    self.picker.setDate(newDate, animated: self.isFirstResponder)
-                    self.updateText()
+                if var date = self.date {
+                    if self.processDate(&date) == true {
+                        self.date = date
+                    }
                 }
             }
             get { return self.picker.maximumDate }
@@ -138,6 +169,9 @@
         @discardableResult
         open override func becomeFirstResponder() -> Bool {
             guard super.becomeFirstResponder() == true else { return false }
+            if self.date == nil {
+                self.date = self.picker.date
+            }
             self.onBeginEdititing?(self)
             return true
         }
@@ -162,14 +196,15 @@
         @discardableResult
         private func processDate(_ newDate: inout Date) -> Bool {
             guard
+                let date = self.date,
                 let minimumDate = self.minimumDate,
                 let maximumDate = self.maximumDate
                 else { return false }
-            if self.picker.date < minimumDate {
-                newDate = self.picker.date
+            if date < minimumDate {
+                newDate = date
                 return true
-            } else if self.picker.date > maximumDate {
-                newDate = self.picker.date
+            } else if date > maximumDate {
+                newDate = date
                 return true
             }
             return false
@@ -177,6 +212,7 @@
 
         @objc
         private func changeDate(_ sender: Any) {
+            self.date = self.picker.date
             self.updateText()
             self.onSelect?(self, self.picker.date)
         }

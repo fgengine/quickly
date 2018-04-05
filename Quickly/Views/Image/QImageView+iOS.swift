@@ -4,28 +4,41 @@
 
 #if os(iOS)
 
-    public enum QImageViewVerticalAlignment {
-        case top
-        case center
-        case bottom
+    public class QImageViewStyleSheet : QDisplayViewStyleSheet< QImageView > {
+
+        public var verticalAlignment: QViewVerticalAlignment
+        public var horizontalAlignment: QViewHorizontalAlignment
+        public var source: QImageSource
+        public var filter: IQImageLoaderFilter?
+        public var loader: QImageLoader?
+
+        public init(source: QImageSource) {
+            self.verticalAlignment = .center
+            self.horizontalAlignment = .center
+            self.source = source
+
+            super.init()
+        }
+
+        public override func apply(target: QImageView) {
+            super.apply(target: target)
+
+            target.verticalAlignment = self.verticalAlignment
+            target.horizontalAlignment = self.horizontalAlignment
+            target.source = self.source
+            target.filter = self.filter
+            target.loader = self.loader
+        }
+
     }
 
-    public enum QImageViewHorizontalAlignment {
-        case left
-        case center
-        case right
-    }
+    public class QImageView : QDisplayView, IQImageLoaderTarget {
 
-    open class QImageView : QView, IQImageLoaderTarget {
-
-        public var verticalAlignment: QImageViewVerticalAlignment = .center {
+        public var verticalAlignment: QViewVerticalAlignment = .center {
             didSet { self.setNeedsDisplay() }
         }
-        public var horizontalAlignment: QImageViewHorizontalAlignment = .center {
+        public var horizontalAlignment: QViewHorizontalAlignment = .center {
             didSet { self.setNeedsDisplay() }
-        }
-        public var roundCorners: Bool = false {
-            didSet { self.updateCornerRadius() }
         }
         public var source: QImageSource? {
             willSet {
@@ -68,12 +81,6 @@
             }
         }
 
-        open override var frame: CGRect {
-            didSet { self.updateCornerRadius() }
-        }
-        open override var bounds: CGRect {
-            didSet { self.updateCornerRadius() }
-        }
         open override var intrinsicContentSize: CGSize {
             get {
                 if let source = self.source {
@@ -89,7 +96,6 @@
             self.loader = QImageLoader.shared
 
             self.backgroundColor = UIColor.clear
-            self.clipsToBounds = true
         }
 
         open override func draw(_ rect: CGRect) {
@@ -147,13 +153,6 @@
             var frame = self.frame
             frame.size = self.sizeThatFits(frame.size)
             self.frame = frame
-        }
-
-        private func updateCornerRadius() {
-            if self.roundCorners == true {
-                let boundsSize = self.bounds.integral.size
-                self.layer.cornerRadius = ceil(min(boundsSize.width - 1, boundsSize.height - 1) / 2)
-            }
         }
 
         open func imageLoader(_ imageLoader: QImageLoader, cacheImage: UIImage) {

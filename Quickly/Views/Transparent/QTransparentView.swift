@@ -2,7 +2,6 @@
 //  Quickly
 //
 
-@IBDesignable
 open class QTransparentView : QInvisibleView {
 
     #if os(macOS)

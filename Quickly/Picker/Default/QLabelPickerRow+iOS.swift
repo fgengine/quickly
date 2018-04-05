@@ -8,20 +8,11 @@
 
         public var edgeInsets: UIEdgeInsets
 
-        public var labelText: IQText
-        public var labelContentAlignment: QLabel.ContentAlignment
-        public var labelPadding: CGFloat
-        public var labelNumberOfLines: Int
-        public var labelLineBreakMode: NSLineBreakMode
+        public var label: QLabelStyleSheet
 
-        public init(text: IQText) {
+        public init(label: QLabelStyleSheet) {
             self.edgeInsets = UIEdgeInsets.zero
-
-            self.labelText = text
-            self.labelContentAlignment = .center
-            self.labelPadding = 0
-            self.labelNumberOfLines = 0
-            self.labelLineBreakMode = .byWordWrapping
+            self.label = label
 
             super.init()
         }

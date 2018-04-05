@@ -8,9 +8,7 @@
     open class QPinCodeView : QControl {
 
         @IBInspectable public var text: String = "" {
-            didSet {
-                self.setNeedsDisplay()
-            }
+            didSet { self.setNeedsDisplay() }
         }
         @IBInspectable public var length: Int = 4 {
             didSet {
@@ -19,9 +17,7 @@
             }
         }
         @IBInspectable public var color: UIColor = UIColor.black {
-            didSet {
-                self.setNeedsDisplay()
-            }
+            didSet { self.setNeedsDisplay() }
         }
         @IBInspectable public var diameter: CGFloat = 16.0 {
             didSet {
@@ -41,6 +37,20 @@
                 self.setNeedsDisplay()
             }
         }
+        public var isEmpty: Bool {
+            get { return self.text.isEmpty }
+        }
+        public var isFilled: Bool {
+            get { return self.text.count == self.length }
+        }
+
+        open override var intrinsicContentSize: CGSize {
+            get {
+                let width = CGFloat(self.length) * (self.diameter + self.spacing) - self.spacing + self.thickness
+                let height = self.diameter + self.thickness
+                return CGSize(width: width, height: height)
+            }
+        }
 
         public override init(frame: CGRect) {
             super.init(frame: frame)
@@ -50,14 +60,6 @@
         public required init?(coder: NSCoder) {
             super.init(coder: coder)
             self.setup()
-        }
-
-        public var isEmpty: Bool {
-            return self.text.isEmpty
-        }
-
-        public var isFilled: Bool {
-            return self.text.count == self.length
         }
 
         public func append(number: Int) {
@@ -72,10 +74,6 @@
             }
         }
 
-        open override func setup() {
-            super.setup()
-        }
-
         open func drawDot(_ context: CGContext, origin: CGPoint, filled: Bool) {
             if filled == true {
                 let dotRect = CGRect(origin: origin, size: CGSize(width: self.diameter + self.thickness, height: self.diameter + self.thickness))
@@ -84,14 +82,6 @@
                 let position = CGPoint(x: origin.x + self.thickness / 2, y: origin.y + self.thickness / 2)
                 let dotRect = CGRect(origin: position, size: CGSize(width: self.diameter, height: self.diameter))
                 context.strokeEllipse(in: dotRect)
-            }
-        }
-
-        open override var intrinsicContentSize: CGSize {
-            get {
-                let width = CGFloat(self.length) * (self.diameter + self.spacing) - self.spacing + self.thickness
-                let height = self.diameter + self.thickness
-                return CGSize(width: width, height: height)
             }
         }
 

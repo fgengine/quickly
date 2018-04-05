@@ -4,8 +4,33 @@
 
 #if os(iOS)
 
-    @IBDesignable
-    open class QListField : QView, IQField {
+    public class QListFieldStyleSheet : QDisplayViewStyleSheet< QListField > {
+
+        public var rows: [QListFieldPickerRow]
+        public var rowHeight: CGFloat
+        public var placeholder: IQText?
+        public var isEnabled: Bool
+
+        public init(rows: [QListFieldPickerRow]) {
+            self.rows = rows
+            self.rowHeight = 40
+            self.isEnabled = true
+
+            super.init()
+        }
+
+        public override func apply(target: QListField) {
+            super.apply(target: target)
+
+            target.rows = self.rows
+            target.rowHeight = self.rowHeight
+            target.placeholder = self.placeholder
+            target.isEnabled = self.isEnabled
+        }
+
+    }
+
+    public class QListField : QDisplayView, IQField {
 
         public typealias ShouldClosure = (_ listField: QListField) -> Bool
         public typealias SelectClosure = (_ listField: QListField, _ row: QListFieldPickerRow) -> Void
@@ -18,11 +43,7 @@
         public var selectedRow: QListFieldPickerRow? {
             didSet {
                 if let selectedRow = self.selectedRow {
-                    self.label.contentAlignment = selectedRow.fieldContentAlignment
-                    self.label.padding = selectedRow.fieldPadding
-                    self.label.numberOfLines = selectedRow.fieldNumberOfLines
-                    self.label.lineBreakMode = selectedRow.fieldLineBreakMode
-                    self.label.text = selectedRow.fieldText
+                    selectedRow.field.apply(target: self.label)
                     self.pickerController.select(row: selectedRow, animated: self.isEditing)
                 } else {
                     self.label.text = self.placeholder

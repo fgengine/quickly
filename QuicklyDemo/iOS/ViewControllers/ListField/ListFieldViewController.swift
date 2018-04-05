@@ -33,14 +33,14 @@ class ListFieldViewController: QStaticViewController, IQRouted {
 
         self.listField.placeholder = QText("ListField")
         self.listField.rows = [
-            QListFieldPickerRow(fieldText: QText("#1"), rowText: QText("Row #1")),
-            QListFieldPickerRow(fieldText: QText("#2"), rowText: QText("Row #2")),
-            QListFieldPickerRow(fieldText: QText("#3"), rowText: QText("Row #3")),
-            QListFieldPickerRow(fieldText: QText("#4"), rowText: QText("Row #4")),
-            QListFieldPickerRow(fieldText: QText("#5"), rowText: QText("Row #5"))
+            QListFieldPickerRow(field: QText("#1"), row: QText("Row #1")),
+            QListFieldPickerRow(field: QText("#2"), row: QText("Row #2")),
+            QListFieldPickerRow(field: QText("#3"), row: QText("Row #3")),
+            QListFieldPickerRow(field: QText("#4"), row: QText("Row #4")),
+            QListFieldPickerRow(field: QText("#5"), row: QText("Row #5"))
         ]
         self.listField.onSelect = { (listField, row) in
-            print("\(NSStringFromClass(listField.classForCoder)).onSelect(row: \(row.rowText.string)")
+            print("\(NSStringFromClass(listField.classForCoder)).onSelect(row: \(row.row.text.string)")
         }
     }
 

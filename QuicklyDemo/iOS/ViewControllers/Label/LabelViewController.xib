@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13771"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14109"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -23,7 +23,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DHZ-qe-oz1" customClass="QRoundView" customModule="Quickly">
+                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DHZ-qe-oz1">
                     <rect key="frame" x="28" y="164" width="4" height="4"/>
                     <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
@@ -31,11 +31,11 @@
                         <constraint firstAttribute="height" constant="4" id="neg-JW-aLf"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VrJ-lI-GSc" customClass="QLabel" customModule="Quickly">
+                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VrJ-lI-GSc" customClass="QLabel" customModule="Quickly">
                     <rect key="frame" x="40" y="155" width="240" height="14"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sdA-rq-OTe" customClass="QRoundView" customModule="Quickly">
+                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sdA-rq-OTe">
                     <rect key="frame" x="288" y="164.5" width="4" height="4"/>
                     <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
@@ -43,7 +43,7 @@
                         <constraint firstAttribute="width" constant="4" id="sI7-3m-C0w"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H4b-4k-qLd" customClass="QLinkLabel" customModule="Quickly">
+                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H4b-4k-qLd" customClass="QLinkLabel" customModule="Quickly">
                     <rect key="frame" x="40" y="177" width="240" height="14"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
@@ -62,7 +62,7 @@
                 <constraint firstItem="sdA-rq-OTe" firstAttribute="leading" secondItem="VrJ-lI-GSc" secondAttribute="trailing" constant="8" id="n8o-fp-RFP"/>
                 <constraint firstItem="VrJ-lI-GSc" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="40" id="wCl-Gv-i4d"/>
             </constraints>
-            <point key="canvasLocation" x="188" y="47"/>
+            <point key="canvasLocation" x="261" y="41"/>
         </view>
     </objects>
 </document>

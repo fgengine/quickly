@@ -16,8 +16,7 @@
         case bottom
     }
 
-    @IBDesignable
-    open class QButton : QControl {
+    public class QButton : QControl {
 
         open override var isHighlighted: Bool {
             didSet { self.applyStyle() }
@@ -46,13 +45,13 @@
                 self.setNeedsUpdateConstraints()
             }
         }
-        @IBInspectable public var imageInsets: UIEdgeInsets = UIEdgeInsets.zero {
+        public var imageInsets: UIEdgeInsets = UIEdgeInsets.zero {
             didSet {
                 self.invalidateIntrinsicContentSize()
                 self.setNeedsUpdateConstraints()
             }
         }
-        @IBInspectable public var textInsets: UIEdgeInsets = UIEdgeInsets.zero {
+        public var textInsets: UIEdgeInsets = UIEdgeInsets.zero {
             didSet {
                 self.invalidateIntrinsicContentSize()
                 self.setNeedsUpdateConstraints()
@@ -76,6 +75,7 @@
         public var selectedDisabledStyle: QButtonStyle? {
             didSet { self.applyStyle() }
         }
+        public private(set) var backgroundView: QDisplayView!
         public private(set) var contentView: QView!
         public private(set) var imageView: QImageView!
         public private(set) var textLabel: QLabel!
@@ -126,6 +126,12 @@
             super.setup()
 
             self.backgroundColor = UIColor.clear
+
+            self.backgroundView = QDisplayView(frame: self.bounds)
+            self.backgroundView.translatesAutoresizingMaskIntoConstraints = false
+            self.backgroundView.isUserInteractionEnabled = false
+            self.backgroundView.backgroundColor = UIColor.clear
+            self.addSubview(self.backgroundView)
 
             self.contentView = QView(frame: self.bounds)
             self.contentView.translatesAutoresizingMaskIntoConstraints = false
@@ -296,6 +302,10 @@
 
         open override func updateConstraints() {
             var selfConstraints: [NSLayoutConstraint] = []
+            selfConstraints.append(self.backgroundView.topLayout == self.topLayout)
+            selfConstraints.append(self.backgroundView.leadingLayout == self.leadingLayout)
+            selfConstraints.append(self.backgroundView.trailingLayout == self.trailingLayout)
+            selfConstraints.append(self.backgroundView.bottomLayout == self.bottomLayout)
             let horizontalAlignment = self.contentHorizontalAlignment
             if horizontalAlignment == .fill {
                 selfConstraints.append(self.contentView.leadingLayout == self.leadingLayout + self.contentInsets.left)
@@ -438,16 +448,13 @@
 
         private func applyStyle(_ style: QButtonStyle) {
             if let color = style.color {
-                self.backgroundColor = color
+                self.backgroundView.backgroundColor = color
             }
-            if let borderColor = style.borderColor {
-                self.layer.borderColor = borderColor.cgColor
-            }
-            if let borderWidth = style.borderWidth {
-                self.layer.borderWidth = borderWidth
+            if let border = style.border {
+                self.backgroundView.border = border
             }
             if let cornerRadius = style.cornerRadius {
-                self.layer.cornerRadius = cornerRadius
+                self.backgroundView.cornerRadius = cornerRadius
             }
             if self.isSpinnerAnimating() == true {
                 self.isUserInteractionEnabled = false

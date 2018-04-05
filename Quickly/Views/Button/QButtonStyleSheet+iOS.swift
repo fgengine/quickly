@@ -4,7 +4,7 @@
 
 #if os(iOS)
 
-    public struct QButtonStyleSheet : IQStyleSheet {
+    public class QButtonStyleSheet : IQStyleSheet {
 
         public var contentHorizontalAlignment: UIControlContentHorizontalAlignment
         public var contentVerticalAlignment: UIControlContentVerticalAlignment

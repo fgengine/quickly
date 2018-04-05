@@ -39,12 +39,7 @@
                 selfConstraints.append(self._label.bottomLayout == self.bottomLayout - row.edgeInsets.bottom)
                 self.selfConstraints = selfConstraints
             }
-
-            self._label.contentAlignment = row.labelContentAlignment
-            self._label.padding = row.labelPadding
-            self._label.numberOfLines = row.labelNumberOfLines
-            self._label.lineBreakMode = row.labelLineBreakMode
-            self._label.text = row.labelText
+            row.label.apply(target: self._label)
         }
 
     }

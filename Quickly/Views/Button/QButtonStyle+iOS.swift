@@ -18,27 +18,17 @@
         }
         private var _color: UIColor?
 
-        public var borderColor: UIColor? {
-            set(value) { self._borderColor = value }
+        public var border: QViewBorder? {
+            set(value) { self._border = value }
             get {
-                if let value = self._borderColor { return value }
-                if let parent = self.parent { return parent.borderColor }
+                if let value = self._border { return value }
+                if let parent = self.parent { return parent.border }
                 return nil
             }
         }
-        private var _borderColor: UIColor?
+        private var _border: QViewBorder?
 
-        public var borderWidth: CGFloat? {
-            set(value) { self._borderWidth = value }
-            get {
-                if let value = self._borderWidth { return value }
-                if let parent = self.parent { return parent.borderWidth }
-                return nil
-            }
-        }
-        private var _borderWidth: CGFloat?
-
-        public var cornerRadius: CGFloat? {
+        public var cornerRadius: QViewCornerRadius? {
             set(value) { self._cornerRadius = value }
             get {
                 if let value = self._cornerRadius { return value }
@@ -46,7 +36,7 @@
                 return nil
             }
         }
-        private var _cornerRadius: CGFloat?
+        private var _cornerRadius: QViewCornerRadius?
 
         public var imageSource: QImageSource? {
             set(value) { self._imageSource = value }

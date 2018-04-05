@@ -34,7 +34,7 @@ class ButtonViewController: QStaticViewController, IQRouted {
 
         let normalStyle = QButtonStyle()
         normalStyle.color = UIColor.red
-        normalStyle.cornerRadius = 4
+        normalStyle.cornerRadius = QViewCornerRadius.auto
         normalStyle.text = QText("Normal", color: UIColor.black)
         normalStyle.imageSource = QImageSource(
             "button_image",

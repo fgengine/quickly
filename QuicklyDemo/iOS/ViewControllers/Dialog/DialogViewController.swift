@@ -34,7 +34,7 @@ class DialogViewController: QStaticViewController, IQRouted {
 
         let normalStyle = QButtonStyle()
         normalStyle.color = UIColor.lightGray
-        normalStyle.cornerRadius = 4
+        normalStyle.cornerRadius = QViewCornerRadius.manual(radius: 4)
         normalStyle.text = QText("Show dialog", color: UIColor.black)
 
         let highlightedStyle = QButtonStyle(parent: normalStyle)

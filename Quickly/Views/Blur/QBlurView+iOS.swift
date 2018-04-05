@@ -4,7 +4,6 @@
 
 #if os(iOS)
 
-    @IBDesignable
     open class QBlurView : UIVisualEffectView, IQView {
 
         private var blurEffect: UIBlurEffect!

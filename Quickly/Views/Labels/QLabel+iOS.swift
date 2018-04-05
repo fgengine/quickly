@@ -4,40 +4,60 @@
 
 #if os(iOS)
 
-    open class QLabel : QView {
+    public class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
 
-        public enum ContentAlignment: Int {
-            case center
-            case top
-            case bottom
-            case left
-            case right
-            case topLeft
-            case topRight
-            case bottomLeft
-            case bottomRight
+        public var text: IQText
+        public var verticalAlignment: QViewVerticalAlignment
+        public var horizontalAlignment: QViewHorizontalAlignment
+        public var padding: CGFloat = 0
+        public var numberOfLines: Int = 0
+        public var lineBreakMode: NSLineBreakMode
 
-            public func point(size: CGSize, textSize: CGSize) -> CGPoint {
-                let x = size.width - textSize.width
-                let y = size.height - textSize.height
-                switch self {
-                case .center: return CGPoint(x: max(x / 2, 0), y: max(y / 2, 0))
-                case .top: return CGPoint(x: max(x / 2, 0), y: 0)
-                case .bottom: return CGPoint(x: max(x / 2, 0), y: max(y, 0))
-                case .left: return CGPoint(x: 0, y: max(y / 2, 0))
-                case .right: return CGPoint(x: max(x, 0), y: max(y / 2, 0))
-                case .topLeft: return CGPoint(x: 0, y: 0)
-                case .topRight: return CGPoint(x: max(x, 0), y: 0)
-                case .bottomLeft: return CGPoint(x: 0, y: max(y, 0))
-                case .bottomRight: return CGPoint(x: max(x, 0), y: max(y, 0))
-                }
-            }
+        public init(
+            text: IQText,
+            verticalAlignment: QViewVerticalAlignment,
+            horizontalAlignment: QViewHorizontalAlignment,
+            lineBreakMode: NSLineBreakMode
+        ) {
+            self.text = text
+            self.verticalAlignment = verticalAlignment
+            self.horizontalAlignment = horizontalAlignment
+            self.padding = 0
+            self.numberOfLines = 0
+            self.lineBreakMode = lineBreakMode
+
+            super.init()
         }
 
-        public var contentAlignment: ContentAlignment = .left {
-            didSet {
-                self.setNeedsDisplay()
-            }
+        public convenience init(text: IQText) {
+            self.init(
+                text: text,
+                verticalAlignment: .center,
+                horizontalAlignment: .left,
+                lineBreakMode: .byWordWrapping
+            )
+        }
+
+        public override func apply(target: QLabel) {
+            super.apply(target: target)
+
+            target.text = self.text
+            target.verticalAlignment = self.verticalAlignment
+            target.horizontalAlignment = self.horizontalAlignment
+            target.padding = self.padding
+            target.numberOfLines = self.numberOfLines
+            target.lineBreakMode = self.lineBreakMode
+        }
+
+    }
+
+    open class QLabel : QDisplayView {
+
+        public var verticalAlignment: QViewVerticalAlignment = .center {
+            didSet { self.setNeedsDisplay() }
+        }
+        public var horizontalAlignment: QViewHorizontalAlignment = .left {
+            didSet { self.setNeedsDisplay() }
         }
         public var padding: CGFloat {
             set {
@@ -45,19 +65,15 @@
                 self.invalidateIntrinsicContentSize()
                 self.setNeedsDisplay()
             }
-            get {
-                return self.textContainer.lineFragmentPadding
-            }
+            get { return self.textContainer.lineFragmentPadding }
         }
-        @IBInspectable public var numberOfLines: Int {
+        public var numberOfLines: Int {
             set(value) {
                 self.textContainer.maximumNumberOfLines = value
                 self.invalidateIntrinsicContentSize()
                 self.setNeedsDisplay()
             }
-            get {
-                return self.textContainer.maximumNumberOfLines
-            }
+            get { return self.textContainer.maximumNumberOfLines }
         }
         public var lineBreakMode: NSLineBreakMode {
             set {
@@ -65,9 +81,7 @@
                 self.invalidateIntrinsicContentSize()
                 self.setNeedsDisplay()
             }
-            get {
-                return self.textContainer.lineBreakMode
-            }
+            get { return self.textContainer.lineBreakMode }
         }
         public var text: IQText? {
             didSet {
@@ -161,7 +175,7 @@
         public func characterIndex(point: CGPoint) -> String.Index? {
             let viewRect = self.bounds
             let textSize = self.layoutManager.usedRect(for: self.textContainer).integral.size
-            let textOffset = self.contentAlignment.point(size: viewRect.size, textSize: textSize)
+            let textOffset = self.alignmentPoint(size: viewRect.size, textSize: textSize)
             let textRect = CGRect(x: textOffset.x, y: textOffset.y, width: textSize.width, height: textSize.height)
             if textRect.contains(point) == true {
                 let location = CGPoint(
@@ -187,7 +201,7 @@
             if self.firstBaselineView != nil || self.lastBaselineView != nil {
                 let viewRect = self.bounds.integral
                 let textSize = self.layoutManager.usedRect(for: self.textContainer).integral.size
-                let textOffset = self.contentAlignment.point(size: viewRect.size, textSize: textSize)
+                let textOffset = self.alignmentPoint(size: viewRect.size, textSize: textSize)
                 let length = self.textStorage.length
                 if length > 0 {
                     var firstLineRange = NSRange()
@@ -243,7 +257,7 @@
         open override func draw(_ rect: CGRect) {
             let viewRect = self.bounds.integral
             let textSize = self.layoutManager.usedRect(for: self.textContainer).integral.size
-            let textOffset = self.contentAlignment.point(size: viewRect.size, textSize: textSize)
+            let textOffset = self.alignmentPoint(size: viewRect.size, textSize: textSize)
             let textRange = self.layoutManager.glyphRange(for: self.textContainer)
             self.layoutManager.drawBackground(forGlyphRange: textRange, at: textOffset)
             self.layoutManager.drawGlyphs(forGlyphRange: textRange, at: textOffset)
@@ -290,6 +304,22 @@
             } else {
                 self.textStorage.deleteAllCharacters()
             }
+        }
+
+        private func alignmentPoint(size: CGSize, textSize: CGSize) -> CGPoint {
+            var x = size.width - textSize.width
+            var y = size.height - textSize.height
+            switch self.verticalAlignment {
+            case .top: y = 0
+            case .center: y = max(y / 2, 0)
+            case .bottom: y = max(y, 0)
+            }
+            switch self.horizontalAlignment {
+            case .left: x = 0
+            case .center: x = max(x / 2, 0)
+            case .right: x = max(x, 0)
+            }
+            return CGPoint(x: x, y: y)
         }
 
     }

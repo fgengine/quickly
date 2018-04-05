@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public protocol IQStyleSheet {
+public protocol IQStyleSheet : class {
 
     associatedtype TargetType
 

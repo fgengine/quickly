@@ -2,7 +2,6 @@
 //  Quickly
 //
 
-@IBDesignable
 open class QControl : QPlatformControl, IQView {
 
     public override init(frame: CGRect) {
