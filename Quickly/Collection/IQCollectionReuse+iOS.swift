@@ -14,6 +14,7 @@
         static func size(any: Any, layout: UICollectionViewLayout, section: IQCollectionSection, size: CGSize) -> CGSize
 
         static func using(any: Any) -> Bool
+        static func usingLevel(any: AnyClass) -> UInt?
 
     }
 

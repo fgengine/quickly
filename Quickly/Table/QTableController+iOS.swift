@@ -56,7 +56,9 @@
         public var canMove: Bool = true
         public private(set) var isBatchUpdating: Bool = false
         private var decors: [IQTableDecor.Type]
+        private var aliasDecors: [QMetatype : IQTableDecor.Type]
         private var cells: [IQTableCell.Type]
+        private var aliasCells: [QMetatype : IQTableCell.Type]
         private var observer: QObserver< IQTableControllerObserver >
 
         public init(
@@ -70,7 +72,9 @@
             self.estimatedSectionFooterHeight = UITableViewAutomaticDimension
 
             self.decors = []
+            self.aliasDecors = [:]
             self.cells = cells
+            self.aliasCells = [:]
             self.observer = QObserver< IQTableControllerObserver >()
             super.init()
         }
@@ -87,21 +91,59 @@
             self.estimatedSectionFooterHeight = UITableViewAutomaticDimension
 
             self.decors = decors
+            self.aliasDecors = [:]
             self.cells = cells
+            self.aliasCells = [:]
             self.observer = QObserver< IQTableControllerObserver >()
             super.init()
         }
 
         fileprivate func decorClass(data: IQTableData) -> IQTableDecor.Type? {
-            return self.decors.first(where: { (decor: IQTableDecor.Type) -> Bool in
-                return decor.using(any: data)
-            })
+            let dataMetatype = QMetatype(data)
+            if let metatype = self.aliasDecors.first(where: { return $0.key == dataMetatype }) {
+                return metatype.value
+            }
+            let usings = self.decors.filter({ return $0.using(any: data) })
+            guard usings.count > 0 else { return nil }
+            if usings.count > 1 {
+                let typeOfData = type(of: data)
+                let levels = usings.compactMap({ (type) -> (IQTableDecor.Type, UInt)? in
+                    guard let level = type.usingLevel(any: typeOfData) else { return nil }
+                    return (type, level)
+                })
+                let sorted = levels.sorted(by: { return $0.1 > $1.1 })
+                let decorType = sorted.first!.0
+                self.aliasDecors[dataMetatype] = decorType
+                return decorType
+            } else {
+                let decorType = usings.first!
+                self.aliasDecors[dataMetatype] = decorType
+                return decorType
+            }
         }
 
         fileprivate func cellClass(row: IQTableRow) -> IQTableCell.Type? {
-            return self.cells.first(where: { (cell: IQTableCell.Type) -> Bool in
-                return cell.using(any: row)
-            })
+            let rowMetatype = QMetatype(row)
+            if let metatype = self.aliasCells.first(where: { return $0.key == rowMetatype }) {
+                return metatype.value
+            }
+            let usings = self.cells.filter({ return $0.using(any: row) })
+            guard usings.count > 0 else { return nil }
+            if usings.count > 1 {
+                let typeOfData = type(of: row)
+                let levels = usings.compactMap({ (type) -> (IQTableCell.Type, UInt)? in
+                    guard let level = type.usingLevel(any: typeOfData) else { return nil }
+                    return (type, level)
+                })
+                let sorted = levels.sorted(by: { return $0.1 > $1.1 })
+                let cellType = sorted.first!.0
+                self.aliasCells[rowMetatype] = cellType
+                return cellType
+            } else {
+                let cellType = usings.first!
+                self.aliasCells[rowMetatype] = cellType
+                return cellType
+            }
         }
 
         open func configure() {

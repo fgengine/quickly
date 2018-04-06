@@ -62,6 +62,17 @@
             return any is ItemType
         }
 
+        public static func usingLevel(any: AnyClass) -> UInt? {
+            var selfclass: AnyClass = any
+            var level: UInt = 0
+            while selfclass !== ItemType.self {
+                guard let superclass = selfclass.superclass() else { return nil }
+                selfclass = superclass
+                level += 1
+            }
+            return level
+        }
+
         public static func size(any: Any, layout: UICollectionViewLayout, section: IQCollectionSection, size: CGSize) -> CGSize {
             return self.size(item: any as! ItemType, layout: layout, section: section, size: size)
         }

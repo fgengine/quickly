@@ -60,6 +60,17 @@
             return any is RowType
         }
 
+        public static func usingLevel(any: AnyClass) -> UInt? {
+            var selfclass: AnyClass = any
+            var level: UInt = 0
+            while selfclass !== RowType.self {
+                guard let superclass = selfclass.superclass() else { return nil }
+                selfclass = superclass
+                level += 1
+            }
+            return level
+        }
+
         public static func height(any: Any, width: CGFloat) -> CGFloat {
             return self.height(row: any as! RowType, width: width)
         }

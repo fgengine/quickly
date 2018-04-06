@@ -303,6 +303,8 @@
 		4040717F20568C2800F6ECC2 /* ConfirmDialogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4040717D20568C2800F6ECC2 /* ConfirmDialogViewController.xib */; };
 		4040718120569F4600F6ECC2 /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4040718020569F4500F6ECC2 /* CGPoint.swift */; };
 		4040718220569F4600F6ECC2 /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4040718020569F4500F6ECC2 /* CGPoint.swift */; };
+		404EC1EC2077798100761BBD /* QMetatype.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404EC1EB2077798100761BBD /* QMetatype.swift */; };
+		404EC1ED2077798100761BBD /* QMetatype.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404EC1EB2077798100761BBD /* QMetatype.swift */; };
 		4057FFEE205027DC004F3EDB /* IQDialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4057FFEA205027DB004F3EDB /* IQDialogViewController.swift */; };
 		4057FFEF205027DC004F3EDB /* IQDialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4057FFEA205027DB004F3EDB /* IQDialogViewController.swift */; };
 		4057FFF0205027DC004F3EDB /* QDialogContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4057FFEB205027DB004F3EDB /* QDialogContainerViewController.swift */; };
@@ -635,6 +637,7 @@
 		4040717C20568C2800F6ECC2 /* ConfirmDialogViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmDialogViewController.swift; sourceTree = "<group>"; };
 		4040717D20568C2800F6ECC2 /* ConfirmDialogViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfirmDialogViewController.xib; sourceTree = "<group>"; };
 		4040718020569F4500F6ECC2 /* CGPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGPoint.swift; sourceTree = "<group>"; };
+		404EC1EB2077798100761BBD /* QMetatype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QMetatype.swift; sourceTree = "<group>"; };
 		4057FFEA205027DB004F3EDB /* IQDialogViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQDialogViewController.swift; sourceTree = "<group>"; };
 		4057FFEB205027DB004F3EDB /* QDialogContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QDialogContainerViewController.swift; sourceTree = "<group>"; };
 		4057FFEC205027DB004F3EDB /* QDialogViewControllerAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QDialogViewControllerAnimation.swift; sourceTree = "<group>"; };
@@ -920,6 +923,7 @@
 				40E52943204E7F0E002EDB0A /* Animation */,
 				40CF45A71F4DE6AB004D00D8 /* ViewControllers */,
 				406101661F8D797A00A5463E /* Other */,
+				404EC1EB2077798100761BBD /* QMetatype.swift */,
 				406101641F8D728900A5463E /* Platform.swift */,
 				4018295C1F4C1C0A005C9949 /* Quickly.h */,
 				409403541F4DEB6C008A8B90 /* QuicklyPrivate.h */,
@@ -2050,6 +2054,7 @@
 				402F1FB21F4EE0F8007625CA /* IQApiResponse.swift in Sources */,
 				40CF45D11F4DE6AB004D00D8 /* QTabBarRouter+iOS.swift in Sources */,
 				4094035E1F4E2645008A8B90 /* QApiProvider+URLSession.swift in Sources */,
+				404EC1ED2077798100761BBD /* QMetatype.swift in Sources */,
 				400DDF731F5623D400D11991 /* CGSize.swift in Sources */,
 				4006EDBA1F61363E0050AD91 /* QSeparatorCollectionItem+iOS.swift in Sources */,
 				4040717A205688B300F6ECC2 /* UIControl.swift in Sources */,
@@ -2291,6 +2296,7 @@
 				403FE0D61F8EA51600596124 /* IQApiResponse.swift in Sources */,
 				403FE0D71F8EA51600596124 /* QTabBarRouter+iOS.swift in Sources */,
 				403FE0D91F8EA51600596124 /* QApiProvider+URLSession.swift in Sources */,
+				404EC1EC2077798100761BBD /* QMetatype.swift in Sources */,
 				403FE0DA1F8EA51600596124 /* CGSize.swift in Sources */,
 				403FE0DB1F8EA51600596124 /* QSeparatorCollectionItem+iOS.swift in Sources */,
 				40407179205688B300F6ECC2 /* UIControl.swift in Sources */,

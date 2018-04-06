@@ -16,6 +16,7 @@
         static func height(any: Any, width: CGFloat) -> CGFloat
 
         static func using(any: Any) -> Bool
+        static func usingLevel(any: AnyClass) -> UInt?
 
     }
 

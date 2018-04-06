@@ -61,6 +61,17 @@
             return any is DataType
         }
 
+        public static func usingLevel(any: AnyClass) -> UInt? {
+            var selfclass: AnyClass = any
+            var level: UInt = 0
+            while selfclass !== DataType.self {
+                guard let superclass = selfclass.superclass() else { return nil }
+                selfclass = superclass
+                level += 1
+            }
+            return level
+        }
+
         public static func size(any: Any, layout: UICollectionViewLayout, section: IQCollectionSection, size: CGSize) -> CGSize {
             return self.size(data: any as! DataType, layout: layout, section: section, size: size)
         }

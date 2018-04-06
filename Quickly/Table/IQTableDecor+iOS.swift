@@ -57,6 +57,17 @@
             return any is DataType
         }
 
+        public static func usingLevel(any: AnyClass) -> UInt? {
+            var selfclass: AnyClass = any
+            var level: UInt = 0
+            while selfclass !== DataType.self {
+                guard let superclass = selfclass.superclass() else { return nil }
+                selfclass = superclass
+                level += 1
+            }
+            return level
+        }
+
         public static func height(any: Any, width: CGFloat) -> CGFloat {
             return self.height(data: any as! DataType, width: width)
         }
