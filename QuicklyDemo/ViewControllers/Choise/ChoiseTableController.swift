@@ -19,7 +19,7 @@ class ChoiseTableController: QTableController {
         self.delegate = delegate
 
         super.init(cells: [
-            QTitleDetailShapeTableCell.self
+            QCompositionTableCell< QTitleDetailShapeComposition >.self
         ])
         self.sections = [
             QTableSection(rows: [

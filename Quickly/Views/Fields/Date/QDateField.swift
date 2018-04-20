@@ -130,10 +130,10 @@ public class QDateField : QDisplayView, IQField {
     }
 
     public var onShouldBeginEditing: ShouldClosure?
-    public var onBeginEdititing: Closure?
+    public var onBeginEditing: Closure?
     public var onSelect: SelectClosure?
     public var onShouldEndEditing: ShouldClosure?
-    public var onEndEdititing: Closure?
+    public var onEndEditing: Closure?
 
     private var label: QLabel!
     private var picker: UIDatePicker!
@@ -170,14 +170,14 @@ public class QDateField : QDisplayView, IQField {
         if self.date == nil {
             self.date = self.picker.date
         }
-        self.onBeginEdititing?(self)
+        self.onBeginEditing?(self)
         return true
     }
 
     @discardableResult
     open override func resignFirstResponder() -> Bool {
         guard super.resignFirstResponder() == true else { return false }
-        self.onEndEdititing?(self)
+        self.onEndEditing?(self)
         return true
     }
 

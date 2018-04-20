@@ -238,10 +238,10 @@ public class QTextField : QDisplayView, IQField {
     }
 
     public var onShouldBeginEditing: ShouldClosure?
-    public var onBeginEdititing: Closure?
-    public var onEdititing: Closure?
+    public var onBeginEditing: Closure?
+    public var onEditing: Closure?
     public var onShouldEndEditing: ShouldClosure?
-    public var onEndEdititing: Closure?
+    public var onEndEditing: Closure?
     public var onShouldClear: ShouldClosure?
     public var onPressedClear: Closure?
     public var onShouldReturn: ShouldClosure?
@@ -340,7 +340,7 @@ public class QTextField : QDisplayView, IQField {
         }
 
         public func textFieldDidBeginEditing(_ textField: UITextField) {
-            guard let field = self.field, let closure = field.onBeginEdititing else { return }
+            guard let field = self.field, let closure = field.onBeginEditing else { return }
             closure(field)
         }
 
@@ -350,7 +350,7 @@ public class QTextField : QDisplayView, IQField {
         }
 
         public func textFieldDidEndEditing(_ textField: UITextField) {
-            guard let field = self.field, let closure = field.onEndEdititing else { return }
+            guard let field = self.field, let closure = field.onEndEditing else { return }
             closure(field)
         }
 
@@ -382,7 +382,7 @@ public class QTextField : QDisplayView, IQField {
                 }
                 textField.sendActions(for: .editingChanged)
                 NotificationCenter.default.post(name: NSNotification.Name.UITextFieldTextDidChange, object: textField)
-                if let closure = field.onEdititing {
+                if let closure = field.onEditing {
                     closure(field)
                 }
             }

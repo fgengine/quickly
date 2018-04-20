@@ -2,6 +2,13 @@
 //  Quickly
 //
 
+open class QBackgroundColorTableRow : QTableRow {
+
+    public var backgroundColor: UIColor?
+    public var selectedBackgroundColor: UIColor?
+
+}
+
 open class QBackgroundColorTableCell< RowType: QBackgroundColorTableRow >: QTableCell< RowType > {
 
     open override func set(row: RowType, animated: Bool) {

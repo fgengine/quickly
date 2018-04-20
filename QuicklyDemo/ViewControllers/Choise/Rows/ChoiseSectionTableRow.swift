@@ -4,7 +4,7 @@
 
 import Quickly
 
-class ChoiseSectionTableRow: QTitleDetailShapeTableRow {
+class ChoiseSectionTableRow : QCompositionTableRow< QTitleDetailShapeCompositionData > {
 
     // MARK: Enum
 
@@ -58,15 +58,14 @@ class ChoiseSectionTableRow: QTitleDetailShapeTableRow {
         self.mode = mode
 
         super.init(
-            title: QLabelStyleSheet(text: QStyledText(mode.name, style: TextStyle.title)),
-            detail: QLabelStyleSheet(text: QStyledText(mode.detail, style: TextStyle.subtitle)),
-            shape: DisclosureShape(color: UIColor.black)
+            data: QTitleDetailShapeCompositionData(
+                title: QLabelStyleSheet(text: QStyledText(mode.name, style: TextStyle.title)),
+                detail: QLabelStyleSheet(text: QStyledText(mode.detail, style: TextStyle.subtitle)),
+                shape: DisclosureShape(color: UIColor.black)
+            )
         )
 
         self.selectedBackgroundColor = UIColor(white: 0, alpha: 0.1)
-        self.edgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
-        self.titleSpacing = 4
-        self.shapeSpacing = 8
     }
 
 }

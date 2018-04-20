@@ -89,10 +89,10 @@ public class QListField : QDisplayView, IQField {
     }
 
     public var onShouldBeginEditing: ShouldClosure?
-    public var onBeginEdititing: Closure?
+    public var onBeginEditing: Closure?
     public var onSelect: SelectClosure?
     public var onShouldEndEditing: ShouldClosure?
-    public var onEndEdititing: Closure?
+    public var onEndEditing: Closure?
 
     private var label: QLabel!
     private var picker: QPickerView!
@@ -136,14 +136,14 @@ public class QListField : QDisplayView, IQField {
         if self.selectedRow == nil {
             self.selectedRow = self.rows.first
         }
-        self.onBeginEdititing?(self)
+        self.onBeginEditing?(self)
         return true
     }
 
     @discardableResult
     open override func resignFirstResponder() -> Bool {
         guard super.resignFirstResponder() == true else { return false }
-        self.onEndEdititing?(self)
+        self.onEndEditing?(self)
         return true
     }
 
