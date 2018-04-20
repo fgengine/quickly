@@ -11,4 +11,4 @@ public protocol IQSpinnerView : IQView {
 
 }
 
-public typealias QSpinnerViewType = QPlatformView & IQSpinnerView
+public typealias QSpinnerViewType = UIView & IQSpinnerView

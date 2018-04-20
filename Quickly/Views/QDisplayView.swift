@@ -6,6 +6,7 @@ open class QDisplayViewStyleSheet< TargetType: QDisplayView > : IQStyleSheet {
 
     public var cornerRadius: QViewCornerRadius
     public var border: QViewBorder
+    public var shadow: QViewShadow?
 
     public init() {
         self.cornerRadius = .none
@@ -27,7 +28,9 @@ open class QDisplayView : QView {
     public var border: QViewBorder = .none {
         didSet { self.updateBorder() }
     }
-
+    public var shadow: QViewShadow? {
+        didSet { self.updateShadow() }
+    }
     open override var frame: CGRect {
         didSet { self.updateCornerRadius() }
     }
@@ -35,14 +38,9 @@ open class QDisplayView : QView {
         didSet { self.updateCornerRadius() }
     }
 
-    open override func setup() {
-        super.setup()
-
-        self.clipsToBounds = true
-    }
-
     private func updateCornerRadius() {
         self.layer.cornerRadius = self.cornerRadius.compute(self.bounds)
+        self.updateShadowPath()
     }
 
     private func updateBorder() {
@@ -55,6 +53,28 @@ open class QDisplayView : QView {
             self.layer.borderWidth = width
             self.layer.borderColor = color.cgColor
             break
+        }
+        self.updateShadowPath()
+    }
+
+    private func updateShadow() {
+        if let shadow = self.shadow {
+            self.layer.shadowColor = shadow.color.cgColor
+            self.layer.shadowOpacity = Float(shadow.opacity)
+            self.layer.shadowRadius = shadow.radius
+            self.layer.shadowOffset = shadow.offset
+        } else {
+            self.layer.shadowColor = nil
+        }
+        self.updateShadowPath()
+    }
+
+    private func updateShadowPath() {
+        if self.layer.shadowColor != nil {
+            let path = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.layer.cornerRadius)
+            self.layer.shadowPath = path.cgPath
+        } else {
+            self.layer.shadowPath = nil
         }
     }
     

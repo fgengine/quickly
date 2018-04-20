@@ -3,11 +3,7 @@
 //
 
 @import Foundation;
-#if TARGET_OS_IPHONE
 @import UIKit;
-#elif TARGET_OS_MAC
-@import AppKit;
-#endif
 
 extern NSErrorDomain _Nonnull QJsonImplErrorDomain;
 
@@ -17,12 +13,6 @@ typedef NS_ENUM(NSInteger, QJsonImplErrorCode) {
     QJsonImplErrorCodeNotFound,
     QJsonImplErrorCodeConvert
 };
-
-#if TARGET_OS_IPHONE
-#define QJsonColor UIColor
-#elif TARGET_OS_MAC
-#define QJsonColor NSColor
-#endif
 
 @interface QJsonImpl : NSObject
 
@@ -60,7 +50,7 @@ typedef NS_ENUM(NSInteger, QJsonImplErrorCode) {
 - (BOOL)setUrl:(nullable NSURL*)url forPath:(nonnull NSString*)path NS_SWIFT_NAME(set(url:forPath:));
 - (BOOL)setDate:(nullable NSDate*)date forPath:(nonnull NSString*)path NS_SWIFT_NAME(set(date:forPath:));
 - (BOOL)setDate:(nullable NSDate*)date format:(nonnull NSString*)format forPath:(nonnull NSString*)path NS_SWIFT_NAME(set(date:format:forPath:));
-- (BOOL)setColor:(nullable QJsonColor*)color forPath:(nonnull NSString*)path NS_SWIFT_NAME(set(color:forPath:));
+- (BOOL)setColor:(nullable UIColor*)color forPath:(nonnull NSString*)path NS_SWIFT_NAME(set(color:forPath:));
 
 - (nullable id)objectAtPath:(nonnull NSString*)path error:(NSError* _Nullable __autoreleasing * _Nullable)error NS_SWIFT_NAME(object(at:));
 - (nullable NSDictionary*)dictionaryAtPath:(nonnull NSString*)path error:(NSError* _Nullable __autoreleasing * _Nullable)error NS_SWIFT_NAME(dictionary(at:));
@@ -71,7 +61,7 @@ typedef NS_ENUM(NSInteger, QJsonImplErrorCode) {
 - (nullable NSURL*)urlAtPath:(nonnull NSString*)path error:(NSError* _Nullable __autoreleasing * _Nullable)error NS_SWIFT_NAME(url(at:));
 - (nullable NSDate*)dateAtPath:(nonnull NSString*)path error:(NSError* _Nullable __autoreleasing * _Nullable)error NS_SWIFT_NAME(date(at:));
 - (nullable NSDate*)dateAtPath:(nonnull NSString*)path formats:(nonnull NSArray< NSString* >*)formats error:(NSError* _Nullable __autoreleasing * _Nullable)error NS_SWIFT_NAME(date(at:formats:));
-- (nullable QJsonColor*)colorAtPath:(nonnull NSString*)path error:(NSError* _Nullable __autoreleasing * _Nullable)error NS_SWIFT_NAME(color(at:));
+- (nullable UIColor*)colorAtPath:(nonnull NSString*)path error:(NSError* _Nullable __autoreleasing * _Nullable)error NS_SWIFT_NAME(color(at:));
 
 + (nullable id)objectFromBoolean:(BOOL)value NS_SWIFT_NAME(objectFrom(boolean:));
 + (nullable id)objectFromNumber:(nullable NSNumber*)number NS_SWIFT_NAME(objectFrom(number:));
@@ -80,7 +70,7 @@ typedef NS_ENUM(NSInteger, QJsonImplErrorCode) {
 + (nullable id)objectFromUrl:(nullable NSURL*)url NS_SWIFT_NAME(objectFrom(url:));
 + (nullable id)objectFromDate:(nullable NSDate*)date NS_SWIFT_NAME(objectFrom(date:));
 + (nullable id)objectFromDate:(nullable NSDate*)date format:(nonnull NSString*)format NS_SWIFT_NAME(objectFrom(date:format:));
-+ (nullable id)objectFromColor:(nullable QJsonColor*)color NS_SWIFT_NAME(objectFrom(color:));
++ (nullable id)objectFromColor:(nullable UIColor*)color NS_SWIFT_NAME(objectFrom(color:));
 
 + (nullable NSNumber*)numberFromObject:(nullable id)object forPath:(nonnull NSString*)path error:(NSError* _Nullable __autoreleasing * _Nullable)error NS_SWIFT_NAME(toNumber(from:at:));
 + (nullable NSDecimalNumber*)decimalNumberFromObject:(nullable id)object forPath:(nonnull NSString*)path error:(NSError* _Nullable __autoreleasing * _Nullable)error NS_SWIFT_NAME(toDecimalNumber(from:at:));
@@ -88,7 +78,7 @@ typedef NS_ENUM(NSInteger, QJsonImplErrorCode) {
 + (nullable NSURL*)urlFromObject:(nullable id)object forPath:(nonnull NSString*)path error:(NSError* _Nullable __autoreleasing * _Nullable)error NS_SWIFT_NAME(toUrl(from:at:));
 + (nullable NSDate*)dateFromObject:(nullable id)object forPath:(nonnull NSString*)path error:(NSError* _Nullable __autoreleasing * _Nullable)error NS_SWIFT_NAME(toDate(from:at:));
 + (nullable NSDate*)dateFromObject:(nullable id)object forPath:(nonnull NSString*)path formats:(nonnull NSArray< NSString* >*)formats error:(NSError* _Nullable __autoreleasing * _Nullable)error NS_SWIFT_NAME(toDate(from:at:formats:));
-+ (nullable QJsonColor*)colorFromObject:(nullable id)object forPath:(nonnull NSString*)path error:(NSError* _Nullable __autoreleasing * _Nullable)error NS_SWIFT_NAME(toColor(from:at:));
++ (nullable UIColor*)colorFromObject:(nullable id)object forPath:(nonnull NSString*)path error:(NSError* _Nullable __autoreleasing * _Nullable)error NS_SWIFT_NAME(toColor(from:at:));
 
 + (nonnull NSError*)notFoundError:(nonnull NSString*)path NS_SWIFT_NAME(notFoundError(at:));
 + (nonnull NSError*)convertError:(nonnull NSString*)path NS_SWIFT_NAME(convertError(at:));
@@ -106,7 +96,7 @@ typedef NS_ENUM(NSInteger, QJsonImplErrorCode) {
 NSNumber* _Nullable QJsonImplBoolFromString(NSString* _Nonnull string);
 NSNumber* _Nullable QJsonImplNumberFromString(NSString* _Nonnull string);
 NSDecimalNumber* _Nullable QJsonImplDecimalNumberFromString(NSString* _Nonnull string);
-NSString* _Nullable QJsonImplStringFromColor(QJsonColor* _Nonnull color);
+NSString* _Nullable QJsonImplStringFromColor(UIColor* _Nonnull color);
 BOOL QJsonImplColorComponentsFromString(NSString* _Nonnull string, CGFloat* _Nonnull r, CGFloat* _Nonnull g, CGFloat* _Nonnull b, CGFloat* _Nonnull a);
-QJsonColor* _Nullable QJsonImplColorFromString(NSString* _Nonnull string);
-NSString* _Nullable QJsonImplColorToString(QJsonColor* _Nonnull color);
+UIColor* _Nullable QJsonImplColorFromString(NSString* _Nonnull string);
+NSString* _Nullable QJsonImplColorToString(UIColor* _Nonnull color);

@@ -50,9 +50,9 @@ public enum QShapeModelLineJoid {
 
 public protocol IQShapeModel : class {
 
-    var fillColor: QPlatformColor? { get }
+    var fillColor: UIColor? { get }
     var fillRule: QShapeModelFillRule { get }
-    var strokeColor: QPlatformColor? { get }
+    var strokeColor: UIColor? { get }
     var strokeStart: CGFloat { get }
     var strokeEnd: CGFloat { get }
     var lineWidth: CGFloat { get }
@@ -63,20 +63,16 @@ public protocol IQShapeModel : class {
     var lineDashPattern: [UInt]? { get }
     var size: CGSize { get }
 
-    func make() -> QPlatformBezierPath?
-    func prepare(_ bounds: CGRect) -> QPlatformBezierPath?
+    func make() -> UIBezierPath?
+    func prepare(_ bounds: CGRect) -> UIBezierPath?
 
 }
 
 public extension IQShapeModel {
 
-    func prepare(_ bounds: CGRect) -> QPlatformBezierPath? {
+    func prepare(_ bounds: CGRect) -> UIBezierPath? {
         guard let path = self.make() else { return nil }
-        #if os(macOS)
-        path.transform(using: AffineTransform(translationByX: (bounds.width / 2), byY: (bounds.height / 2)))
-        #elseif os(iOS)
         path.apply(CGAffineTransform(translationX: (bounds.width / 2), y: (bounds.height / 2)))
-        #endif
         return path
     }
 

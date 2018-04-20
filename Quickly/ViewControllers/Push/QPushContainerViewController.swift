@@ -2,129 +2,55 @@
 //  Quickly
 //
 
-open class QPushContainerViewController : QPlatformViewController, IQPushContainerViewController {
+open class QPushContainerViewController : QViewController, IQPushContainerViewController {
 
-    public typealias PushViewControllerType = IQPushContainerViewController.ViewControllerType
-
-    #if os(iOS)
-    open override var prefersStatusBarHidden: Bool {
-        get {
-            guard let vc = self.currentViewController else { return super.prefersStatusBarHidden }
-            return vc.prefersStatusBarHidden
-        }
-    }
-    open override var preferredStatusBarStyle: UIStatusBarStyle {
-        get {
-            guard let vc = self.currentViewController else { return super.preferredStatusBarStyle }
-            return vc.preferredStatusBarStyle
-        }
-    }
-    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
-        get {
-            guard let vc = self.currentViewController else { return super.preferredStatusBarUpdateAnimation }
-            return vc.preferredStatusBarUpdateAnimation
-        }
-    }
-    open override var shouldAutorotate: Bool {
-        get {
-            guard let vc = self.currentViewController else { return super.shouldAutorotate }
-            return vc.shouldAutorotate
-        }
-    }
-    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        get {
-            guard let vc = self.currentViewController else { return super.supportedInterfaceOrientations }
-            return vc.supportedInterfaceOrientations
-        }
-    }
-    #endif
-    open var viewControllers: [PushViewControllerType] = []
-    open var currentViewController: PushViewControllerType? {
+    open var viewControllers: [IQPushViewController] = []
+    open var currentViewController: IQPushViewController? {
         get { return self.viewControllers.first }
     }
     open var presentAnimation: IQPushViewControllerFixedAnimation = QPushViewControllerPresentAnimation()
     open var dismissAnimation: IQPushViewControllerFixedAnimation = QPushViewControllerDismissAnimation()
     open var interactiveDismissAnimation: IQPushViewControllerInteractiveAnimation? = QPushViewControllerInteractiveDismissAnimation()
-    #if os(iOS)
     open lazy var interactiveDismissGesture: UIPanGestureRecognizer = self._prepareInteractiveDismissGesture()
-    open var currentDismissViewController: ViewControllerType?
-    open var currentInteractiveDismissAnimation: IQPushViewControllerInteractiveAnimation?
-    #endif
+    private var activeInteractiveViewController: IQPushViewController?
+    private var activeInteractiveDismissAnimation: IQPushViewControllerInteractiveAnimation?
 
-    #if os(macOS)
-
-    public override init(nibName: NSNib.Name?, bundle: Bundle?) {
-        super.init(nibName: nibName, bundle: bundle)
-        self.setup()
+    open override func supportedOrientations() -> UIInterfaceOrientationMask {
+        guard let vc = self.currentViewController else { return super.supportedOrientations() }
+        return vc.supportedOrientations()
     }
 
-    #elseif os(iOS)
-
-    public override init(nibName: String?, bundle: Bundle?) {
-        super.init(nibName: nibName, bundle: bundle)
-        self.setup()
+    open override func preferedStatusBarHidden() -> Bool {
+        guard let vc = self.currentViewController else { return super.preferedStatusBarHidden() }
+        return vc.preferedStatusBarHidden()
     }
 
-    #endif
-
-    public required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.setup()
+    open override func preferedStatusBarStyle() -> UIStatusBarStyle {
+        guard let vc = self.currentViewController else { return super.preferedStatusBarStyle() }
+        return vc.preferedStatusBarStyle()
     }
 
-    open func setup() {
+    open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
+        guard let vc = self.currentViewController else { return super.preferedStatusBarAnimation() }
+        return vc.preferedStatusBarAnimation()
     }
 
-    open override func loadView() {
-        self.view = QTransparentView()
-    }
-
-    open func willPresent(animated: Bool) {
-        #if DEBUG
-            print("\(NSStringFromClass(self.classForCoder)).willPresent(animated: \(animated))")
-        #endif
-    }
-
-    open func didPresent(animated: Bool) {
-        #if DEBUG
-            print("\(NSStringFromClass(self.classForCoder)).didPresent(animated: \(animated))")
-        #endif
-    }
-
-    open func willDismiss(animated: Bool) {
-        #if DEBUG
-            print("\(NSStringFromClass(self.classForCoder)).willDismiss(animated: \(animated))")
-        #endif
-    }
-
-    open func didDismiss(animated: Bool) {
-        #if DEBUG
-            print("\(NSStringFromClass(self.classForCoder)).didDismiss(animated: \(animated))")
-        #endif
-    }
-
-    open func presentPush(viewController: ViewControllerType, animated: Bool, completion: (() -> Void)?) {
+    open func presentPush(viewController: IQPushViewController, animated: Bool, completion: (() -> Void)?) {
         let currentViewController = self.currentViewController
         self.viewControllers.append(viewController)
         viewController.containerViewController = self
-        if self.isViewLoaded == true {
-            if currentViewController == nil {
-                self._present(viewController, animated: animated, completion: {
-                    completion?()
-                })
-            }
+        if self.isLoaded == true && currentViewController == nil {
+            self._present(viewController, animated: animated, completion: completion)
         }
     }
 
-    open func dismissPush(viewController: ViewControllerType, animated: Bool, completion: (() -> Void)?) {
-        self._dismiss(viewController: viewController, animated: animated, presentAnimated: animated, skipInteractiveDismiss: true, completion: completion)
+    open func dismissPush(viewController: IQPushViewController, animated: Bool, completion: (() -> Void)?) {
+        self._dismiss(viewController, currentAnimated: animated, nextAnimated: animated, skipInteractiveDismiss: true, completion: completion)
     }
 
-    private func _present(_ viewController: ViewControllerType, animated: Bool, completion: (() -> Void)?) {
+    private func _present(_ viewController: IQPushViewController, animated: Bool, completion: (() -> Void)?) {
         self._appearViewController(viewController)
-        #if os(iOS)
-            self.setNeedsStatusBarAppearanceUpdate()
-        #endif
+        self.setNeedUpdateStatusBar()
         if animated == true {
             let presentAnimation = self._preparePresentAnimation(viewController)
             presentAnimation.prepare(viewController: viewController)
@@ -136,27 +62,23 @@ open class QPushContainerViewController : QPlatformViewController, IQPushContain
         }
     }
 
-    open func _dismiss(viewController: ViewControllerType, animated: Bool, presentAnimated: Bool, skipInteractiveDismiss: Bool, completion: (() -> Void)?) {
+    private func _dismiss(_ viewController: IQPushViewController, currentAnimated: Bool, nextAnimated: Bool, skipInteractiveDismiss: Bool, completion: (() -> Void)?) {
         let currentViewController = self.currentViewController
-        if let index = self.viewControllers.index(where: { return $0 == viewController }) {
+        if let index = self.viewControllers.index(where: { return $0 === viewController }) {
             self.viewControllers.remove(at: index)
-            #if os(iOS)
-                self.setNeedsStatusBarAppearanceUpdate()
-            #endif
-            if self.isViewLoaded == true {
+            self.setNeedUpdateStatusBar()
+            if self.isLoaded == true {
                 if currentViewController === viewController {
-                    #if os(iOS)
-                        if skipInteractiveDismiss == true && self.interactiveDismissGesture.state != .possible {
-                            let enabled = self.interactiveDismissGesture.isEnabled
-                            self.interactiveDismissGesture.isEnabled = false
-                            self.interactiveDismissGesture.isEnabled = enabled
-                        }
-                    #endif
+                    if skipInteractiveDismiss == true && self.interactiveDismissGesture.state != .possible {
+                        let enabled = self.interactiveDismissGesture.isEnabled
+                        self.interactiveDismissGesture.isEnabled = false
+                        self.interactiveDismissGesture.isEnabled = enabled
+                    }
                     if let nextViewController = self.currentViewController {
-                        self._dismiss(viewController, animated: animated, completion: { [weak self] in
+                        self._dismiss(viewController, animated: currentAnimated, completion: { [weak self] in
                             viewController.containerViewController = nil
                             if let strongify = self {
-                                strongify._present(nextViewController, animated: presentAnimated, completion: {
+                                strongify._present(nextViewController, animated: nextAnimated, completion: {
                                     completion?()
                                 })
                             } else {
@@ -164,7 +86,7 @@ open class QPushContainerViewController : QPlatformViewController, IQPushContain
                             }
                         })
                     } else {
-                        self._dismiss(viewController, animated: animated, completion: {
+                        self._dismiss(viewController, animated: currentAnimated, completion: {
                             viewController.containerViewController = nil
                             completion?()
                         })
@@ -179,7 +101,7 @@ open class QPushContainerViewController : QPlatformViewController, IQPushContain
         }
     }
 
-    private func _dismiss(_ viewController: ViewControllerType, animated: Bool, completion: (() -> Void)?) {
+    private func _dismiss(_ viewController: IQPushViewController, animated: Bool, completion: (() -> Void)?) {
         if animated == true {
             let dismissAnimation = self._prepareDismissAnimation(viewController)
             dismissAnimation.prepare(viewController: viewController)
@@ -195,45 +117,31 @@ open class QPushContainerViewController : QPlatformViewController, IQPushContain
         }
     }
 
-    private func _appearViewController(_ viewController: PushViewControllerType) {
-        self.addChildViewController(viewController)
+    private func _appearViewController(_ viewController: IQPushViewController) {
+        viewController.parent = self
         viewController.view.frame = self.view.bounds
+        viewController.view.addGestureRecognizer(self.interactiveDismissGesture)
         self.view.addSubview(viewController.view)
-        #if os(iOS)
-            viewController.didMove(toParentViewController: self)
-            viewController.view.addGestureRecognizer(self.interactiveDismissGesture)
-        #endif
     }
 
-    private func _disappearViewController(_ viewController: PushViewControllerType) {
-        #if os(iOS)
-            viewController.view.removeGestureRecognizer(self.interactiveDismissGesture)
-            viewController.willMove(toParentViewController: nil)
-        #endif
+    private func _disappearViewController(_ viewController: IQPushViewController) {
+        viewController.view.removeGestureRecognizer(self.interactiveDismissGesture)
         viewController.view.removeFromSuperview()
-        viewController.removeFromParentViewController()
+        viewController.parent = nil
     }
 
-    private func _preparePresentAnimation(_ viewController: ViewControllerType) -> IQPushViewControllerFixedAnimation {
-        if let animation = viewController.presentAnimation {
-            return animation
-        }
+    private func _preparePresentAnimation(_ viewController: IQPushViewController) -> IQPushViewControllerFixedAnimation {
+        if let animation = viewController.presentAnimation { return animation }
         return self.presentAnimation
     }
 
-    private func _prepareDismissAnimation(_ viewController: ViewControllerType) -> IQPushViewControllerFixedAnimation {
-        if let animation = viewController.dismissAnimation {
-            return animation
-        }
+    private func _prepareDismissAnimation(_ viewController: IQPushViewController) -> IQPushViewControllerFixedAnimation {
+        if let animation = viewController.dismissAnimation { return animation }
         return self.dismissAnimation
     }
 
-    #if os(iOS)
-
-    private func _prepareInteractiveDismissAnimation(_ viewController: ViewControllerType) -> IQPushViewControllerInteractiveAnimation? {
-        if let animation = viewController.interactiveDismissAnimation {
-            return animation
-        }
+    private func _prepareinteractiveDismissAnimation(_ viewController: IQPushViewController) -> IQPushViewControllerInteractiveAnimation? {
+        if let animation = viewController.interactiveDismissAnimation { return animation }
         return self.interactiveDismissAnimation
     }
 
@@ -243,44 +151,40 @@ open class QPushContainerViewController : QPlatformViewController, IQPushContain
         return gesture
     }
 
-    @objc private func _interactiveDismissGestureHandler(_ sender: Any) {
+    @objc
+    private func _interactiveDismissGestureHandler(_ sender: Any) {
         let position = self.interactiveDismissGesture.location(in: nil)
         let velocity = self.interactiveDismissGesture.velocity(in: nil)
         switch self.interactiveDismissGesture.state {
         case .began:
             guard
                 let vc = self.currentViewController,
-                let ida = self._prepareInteractiveDismissAnimation(vc)
+                let ida = self._prepareinteractiveDismissAnimation(vc)
                 else { return }
-            self.currentDismissViewController = vc
-            self.currentInteractiveDismissAnimation = interactiveDismissAnimation
-            vc.beginInteractiveDismiss()
+            self.activeInteractiveViewController = vc
+            self.activeInteractiveDismissAnimation = interactiveDismissAnimation
             ida.prepare(viewController: vc, position: position, velocity: velocity)
             break
         case .changed:
-            guard let ida = self.currentInteractiveDismissAnimation else { return }
+            guard let ida = self.activeInteractiveDismissAnimation else { return }
             ida.update(position: position, velocity: velocity)
             break
         case .ended, .failed, .cancelled:
             guard
-                let vc = self.currentDismissViewController,
-                let ida = self.currentInteractiveDismissAnimation
+                let vc = self.activeInteractiveViewController,
+                let ida = self.activeInteractiveDismissAnimation
                 else { return }
             if ida.canFinish == true {
-                vc.funishInteractiveDismiss()
                 ida.finish({ [weak self] (completed: Bool) in
                     guard let strongify = self else { return }
-                    strongify._dismiss(viewController: vc, animated: false, presentAnimated: true, skipInteractiveDismiss: false, completion: {
-                        strongify.currentDismissViewController = nil
-                        strongify.currentInteractiveDismissAnimation = nil
+                    strongify._dismiss(vc, currentAnimated: false, nextAnimated: true, skipInteractiveDismiss: false, completion: {
+                        strongify._endInteractiveDismiss()
                     })
                 })
             } else {
-                vc.cancelInteractiveDismiss()
                 ida.cancel({ [weak self] (completed: Bool) in
                     guard let strongify = self else { return }
-                    strongify.currentDismissViewController = nil
-                    strongify.currentInteractiveDismissAnimation = nil
+                    strongify._endInteractiveDismiss()
                 })
             }
             break
@@ -289,22 +193,21 @@ open class QPushContainerViewController : QPlatformViewController, IQPushContain
         }
     }
 
-    #endif
+    private func _endInteractiveDismiss() {
+        self.activeInteractiveViewController = nil
+        self.activeInteractiveDismissAnimation = nil
+    }
 
 }
 
-#if os(iOS)
+extension QPushContainerViewController : UIGestureRecognizerDelegate {
 
-    extension QPushContainerViewController : UIGestureRecognizerDelegate {
-
-        open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-            guard let viewController = self.currentViewController else {
-                return false
-            }
-            let location = gestureRecognizer.location(in: viewController.contentViewController.view)
-            return viewController.contentViewController.view.point(inside: location, with: nil)
+    open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let viewController = self.currentViewController else {
+            return false
         }
-
+        let location = gestureRecognizer.location(in: viewController.contentViewController.view)
+        return viewController.contentViewController.view.point(inside: location, with: nil)
     }
 
-#endif
+}

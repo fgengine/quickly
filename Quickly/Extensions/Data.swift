@@ -2,9 +2,7 @@
 //  Quickly
 //
 
-#if os(macOS)
-    import QuicklyCryptoMacOS
-#elseif os(iOS)
+#if os(iOS)
     #if (arch(i386) || arch(x86_64))
         import QuicklyCryptoIOSSimulator
     #else

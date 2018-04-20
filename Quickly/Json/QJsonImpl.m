@@ -166,7 +166,7 @@ static NSString* QJsonImplPathIndexPattern = @"^\\[\\d+\\]$";
     return [self setObject:[QJsonImpl objectFromDate:date format:format] forPath:path];
 }
 
-- (BOOL)setColor:(QJsonColor*)color forPath:(NSString*)path {
+- (BOOL)setColor:(UIColor*)color forPath:(NSString*)path {
     return [self setObject:[QJsonImpl objectFromColor:color] forPath:path];
 }
 
@@ -266,7 +266,7 @@ static NSString* QJsonImplPathIndexPattern = @"^\\[\\d+\\]$";
     return [QJsonImpl dateFromObject:object forPath:path formats:formats error:error];
 }
 
-- (QJsonColor*)colorAtPath:(NSString*)path error:(NSError* __autoreleasing *)error {
+- (UIColor*)colorAtPath:(NSString*)path error:(NSError* __autoreleasing *)error {
     id object = [self objectAtPath:path error:error];
     if(object == nil) {
         return nil;
@@ -326,7 +326,7 @@ static NSString* QJsonImplPathIndexPattern = @"^\\[\\d+\\]$";
     return [formatter stringFromDate:date];
 }
 
-+ (id)objectFromColor:(QJsonColor*)color {
++ (id)objectFromColor:(UIColor*)color {
     if(color == nil) {
         return nil;
     }
@@ -431,8 +431,8 @@ static NSString* QJsonImplPathIndexPattern = @"^\\[\\d+\\]$";
     return date;
 }
 
-+ (QJsonColor*)colorFromObject:(id)object forPath:(NSString*)path error:(NSError* __autoreleasing *)error {
-    QJsonColor* color = nil;
++ (UIColor*)colorFromObject:(id)object forPath:(NSString*)path error:(NSError* __autoreleasing *)error {
+    UIColor* color = nil;
     if([object isKindOfClass:NSString.class] == YES) {
         color = QJsonImplColorFromString(object);
     }
@@ -749,7 +749,7 @@ NSDecimalNumber* QJsonImplDecimalNumberFromString(NSString* string) {
     return decimalNumber;
 }
 
-NSString* QJsonImplStringFromColor(QJsonColor* color) {
+NSString* QJsonImplStringFromColor(UIColor* color) {
     CGFloat r, g, b, a;
     [color getRed:&r green:&g blue:&b alpha:&a];
     return [NSString stringWithFormat:@"#%02X%02X%02X%02X", (int)(255 * r), (int)(255 * g), (int)(255 * b), (int)(255 * a)];
@@ -792,12 +792,12 @@ BOOL QJsonImplColorComponentsFromString(NSString* string, CGFloat* r, CGFloat* g
     }
 }
 
-QJsonColor* QJsonImplColorFromString(NSString* string) {
+UIColor* QJsonImplColorFromString(NSString* string) {
     CGFloat r = 1, g = 1, b = 1, a = 1;
     if(QJsonImplColorComponentsFromString(string, &r, &g, &b, &a) == NO) {
         return nil;
     }
-    return [QJsonColor colorWithRed:r
+    return [UIColor colorWithRed:r
                               green:g
                                blue:b
                               alpha:a];

@@ -4,9 +4,7 @@
 
 open class QDialogViewControllerAnimation : IQDialogViewControllerFixedAnimation {
 
-    public typealias ViewControllerType = IQDialogViewControllerFixedAnimation.ViewControllerType
-
-    public var viewController: ViewControllerType!
+    public var viewController: IQDialogViewController!
     public var duration: TimeInterval
     public var verticalOffset: CGFloat
 
@@ -15,7 +13,7 @@ open class QDialogViewControllerAnimation : IQDialogViewControllerFixedAnimation
         self.verticalOffset = verticalOffset
     }
 
-    open func prepare(viewController: ViewControllerType) {
+    open func prepare(viewController: IQDialogViewController) {
         self.viewController = viewController
     }
 
@@ -34,8 +32,6 @@ open class QDialogViewControllerAnimation : IQDialogViewControllerFixedAnimation
 
 open class QDialogViewControllerPresentAnimation : QDialogViewControllerAnimation {
 
-    public typealias ViewControllerType = QDialogViewControllerAnimation.ViewControllerType
-
     public init() {
         super.init(duration: 0.2, verticalOffset: 50)
     }
@@ -43,47 +39,20 @@ open class QDialogViewControllerPresentAnimation : QDialogViewControllerAnimatio
     open override func update(animated: Bool, complete: @escaping (_ completed: Bool) -> Void) {
         if animated == true {
             let originalVerticalAlignment = self.viewController.verticalAlignment
-            #if os(macOS)
-                let originalAlpha = self.viewController.view.alphaValue
-            #elseif os(iOS)
-                let originalAlpha = self.viewController.view.alpha
-            #endif
+            let originalAlpha = self.viewController.view.alpha
             self.viewController.willPresent(animated: animated)
             self.viewController.verticalAlignment = self.contentVerticalAlignment(originalVerticalAlignment)
-            #if os(macOS)
-                self.viewController.view.layoutSubtreeIfNeeded()
-                self.viewController.view.alphaValue = 0
-            #elseif os(iOS)
+            self.viewController.view.layoutIfNeeded()
+            self.viewController.view.alpha = 0
+            UIView.animate(withDuration: self.duration, animations: {
+                self.viewController.verticalAlignment = originalVerticalAlignment
+                self.viewController.view.alpha = originalAlpha
                 self.viewController.view.layoutIfNeeded()
-                self.viewController.view.alpha = 0
-            #endif
-            #if os(macOS)
-                NSAnimationContext.runAnimationGroup({ (context: NSAnimationContext) in
-                    context.duration = self.duration
-
-                    self.viewController.verticalAlignment = originalVerticalAlignment
-                    self.viewController.view.alphaValue = originalAlpha
-                    self.viewController.view.layoutSubtreeIfNeeded()
-                }, completionHandler: { [weak self] in
-                    if let strongify = self {
-                        strongify.viewController.didPresent(animated: animated)
-                        strongify.viewController = nil
-                    }
-                    complete(true)
-                })
-            #elseif os(iOS)
-                UIView.animate(withDuration: self.duration, animations: {
-                    self.viewController.verticalAlignment = originalVerticalAlignment
-                    self.viewController.view.alpha = originalAlpha
-                    self.viewController.view.layoutIfNeeded()
-                }, completion: { [weak self] (completed: Bool) in
-                    if let strongify = self {
-                        strongify.viewController.didPresent(animated: animated)
-                        strongify.viewController = nil
-                    }
-                    complete(completed)
-                })
-            #endif
+            }, completion: { (completed: Bool) in
+                self.viewController.didPresent(animated: animated)
+                self.viewController = nil
+                complete(completed)
+            })
         } else {
             self.viewController.willPresent(animated: animated)
             self.viewController.didPresent(animated: animated)
@@ -96,8 +65,6 @@ open class QDialogViewControllerPresentAnimation : QDialogViewControllerAnimatio
 
 open class QDialogViewControllerDismissAnimation : QDialogViewControllerAnimation {
 
-    public typealias ViewControllerType = QDialogViewControllerAnimation.ViewControllerType
-
     public init() {
         super.init(duration: 0.2, verticalOffset: 200)
     }
@@ -105,70 +72,46 @@ open class QDialogViewControllerDismissAnimation : QDialogViewControllerAnimatio
     open override func update(animated: Bool, complete: @escaping (_ completed: Bool) -> Void) {
         if animated == true {
             let originalVerticalAlignment = self.viewController.verticalAlignment
-            #if os(macOS)
-                let originalAlpha = self.viewController.view.alphaValue
-            #elseif os(iOS)
-                let originalAlpha = self.viewController.view.alpha
-            #endif
+            let originalAlpha = self.viewController.view.alpha
             self.viewController.willDismiss(animated: animated)
-            #if os(macOS)
-                NSAnimationContext.runAnimationGroup({ (context: NSAnimationContext) in
-                    context.duration = self.duration
-
-                    self.viewController.verticalAlignment = self.contentVerticalAlignment(originalVerticalAlignment)
-                    self.viewController.view.alphaValue = 0
-                    self.viewController.view.layoutSubtreeIfNeeded()
-                }, completionHandler: { [weak self] in
-                    if let strongify = self {
-                        strongify.viewController.verticalAlignment = originalVerticalAlignment
-                        strongify.viewController.view.alphaValue = originalAlpha
-                        strongify.viewController.didDismiss(animated: animated)
-                        strongify.viewController = nil
-                    }
-                    complete(true)
-                })
-            #elseif os(iOS)
-                UIView.animate(withDuration: self.duration, animations: {
-                    self.viewController.verticalAlignment = self.contentVerticalAlignment(originalVerticalAlignment)
-                    self.viewController.view.alpha = 0
-                    self.viewController.view.layoutIfNeeded()
-                }, completion: { [weak self] (completed: Bool) in
-                    if let strongify = self {
-                        strongify.viewController.verticalAlignment = originalVerticalAlignment
-                        strongify.viewController.view.alpha = originalAlpha
-                        strongify.viewController.didDismiss(animated: animated)
-                        strongify.viewController = nil
-                    }
-                    complete(completed)
-                })
-            #endif
+            UIView.animate(withDuration: self.duration, animations: {
+                self.viewController.verticalAlignment = self.contentVerticalAlignment(originalVerticalAlignment)
+                self.viewController.view.alpha = 0
+                self.viewController.view.layoutIfNeeded()
+            }, completion: { (completed: Bool) in
+                self.viewController.verticalAlignment = originalVerticalAlignment
+                self.viewController.view.alpha = originalAlpha
+                self.viewController.didDismiss(animated: animated)
+                self.viewController = nil
+                complete(completed)
+            })
         } else {
             self.viewController.willDismiss(animated: animated)
             self.viewController.didDismiss(animated: animated)
+            self.viewController = nil
             complete(true)
         }
     }
 
 }
 
-open class QDialogViewControllerInteractiveDismissAnimation : IQDialogViewControllerInteractiveAnimation {
+open class QDialogViewControllerinteractiveDismissAnimation : IQDialogViewControllerInteractiveAnimation {
 
-    public typealias ViewControllerType = IQDialogViewControllerFixedAnimation.ViewControllerType
-
-    open var viewController: ViewControllerType!
+    open var viewController: IQDialogViewController!
     open var verticalAlignment: QDialogViewControllerVerticalAlignment = .center(offset: 0)
     open var position: CGPoint = CGPoint.zero
-    open var deltaPosition: CGFloat = 0
+    open private(set) var deltaPosition: CGFloat = 0
     open var velocity: CGPoint = CGPoint.zero
     open var finishDistance: CGFloat = 80
     open var acceleration: CGFloat = 600
     open var canFinish: Bool = false
 
-    open func prepare(viewController: ViewControllerType, position: CGPoint, velocity: CGPoint) {
+    open func prepare(viewController: IQDialogViewController, position: CGPoint, velocity: CGPoint) {
         self.viewController = viewController
         self.verticalAlignment = viewController.verticalAlignment
         self.position = position
         self.velocity = velocity
+        self.viewController.prepareInteractiveDismiss()
     }
 
     open func update(position: CGPoint, velocity: CGPoint) {
@@ -187,67 +130,41 @@ open class QDialogViewControllerInteractiveDismissAnimation : IQDialogViewContro
     }
 
     open func cancel(_ complete: @escaping (_ completed: Bool) -> Void) {
-        #if os(iOS)
-            let duration = TimeInterval(self.deltaPosition / self.acceleration)
-            UIView.animate(withDuration: duration, animations: {
-                self.viewController.verticalAlignment = self.verticalAlignment
-                self.viewController.view.layoutIfNeeded()
-            }, completion: complete)
-        #endif
+        let duration = TimeInterval(self.deltaPosition / self.acceleration)
+        UIView.animate(withDuration: duration, animations: {
+            self.viewController.verticalAlignment = self.verticalAlignment
+            self.viewController.view.layoutIfNeeded()
+        }, completion: { (completed: Bool) in
+            self.viewController.cancelInteractiveDismiss()
+            self.viewController = nil
+            complete(completed)
+        })
     }
 
     open func finish(_ complete: @escaping (_ completed: Bool) -> Void) {
         let originalVerticalAlignment = self.viewController.verticalAlignment
         let originalHorizontalAlignment = self.viewController.horizontalAlignment
-        #if os(macOS)
-            let originalAlpha = self.viewController.view.alphaValue
-        #elseif os(iOS)
-            let originalAlpha = self.viewController.view.alpha
-        #endif
+        let originalAlpha = self.viewController.view.alpha
         self.viewController.willDismiss(animated: true)
         let duration = TimeInterval(self.deltaPosition / self.acceleration)
         let deceleration = self.deltaPosition * 2.5
-        #if os(macOS)
-            NSAnimationContext.runAnimationGroup({ (context: NSAnimationContext) in
-                context.duration = duration
-
-                switch self.verticalAlignment {
-                case .top(let offset): self.viewController.verticalAlignment = .top(offset: offset + deceleration)
-                case .center(let offset): self.viewController.verticalAlignment = .center(offset: offset + deceleration)
-                case .bottom(let offset): self.viewController.verticalAlignment = .bottom(offset: offset + deceleration)
-                }
-                self.viewController.view.alphaValue = 0
-                self.viewController.view.layoutSubtreeIfNeeded()
-            }, completionHandler: { [weak self] in
-                if let strongify = self {
-                    strongify.viewController.verticalAlignment = originalVerticalAlignment
-                    strongify.viewController.horizontalAlignment = originalHorizontalAlignment
-                    strongify.viewController.view.alphaValue = originalAlpha
-                    strongify.viewController.didDismiss(animated: true)
-                    strongify.viewController = nil
-                }
-                complete(true)
-            })
-        #elseif os(iOS)
-            UIView.animate(withDuration: duration, animations: {
-                switch self.verticalAlignment {
-                case .top(let offset): self.viewController.verticalAlignment = .top(offset: offset + deceleration)
-                case .center(let offset): self.viewController.verticalAlignment = .center(offset: offset + deceleration)
-                case .bottom(let offset): self.viewController.verticalAlignment = .bottom(offset: offset + deceleration)
-                }
-                self.viewController.view.alpha = 0
-                self.viewController.view.layoutIfNeeded()
-            }, completion: { [weak self] (completed: Bool) in
-                if let strongify = self {
-                    strongify.viewController.verticalAlignment = originalVerticalAlignment
-                    strongify.viewController.horizontalAlignment = originalHorizontalAlignment
-                    strongify.viewController.view.alpha = originalAlpha
-                    strongify.viewController.didDismiss(animated: true)
-                    strongify.viewController = nil
-                }
-                complete(completed)
-            })
-        #endif
+        UIView.animate(withDuration: duration, animations: {
+            switch self.verticalAlignment {
+            case .top(let offset): self.viewController.verticalAlignment = .top(offset: offset + deceleration)
+            case .center(let offset): self.viewController.verticalAlignment = .center(offset: offset + deceleration)
+            case .bottom(let offset): self.viewController.verticalAlignment = .bottom(offset: offset + deceleration)
+            }
+            self.viewController.view.alpha = 0
+            self.viewController.view.layoutIfNeeded()
+        }, completion: { (completed: Bool) in
+            self.viewController.verticalAlignment = originalVerticalAlignment
+            self.viewController.horizontalAlignment = originalHorizontalAlignment
+            self.viewController.view.alpha = originalAlpha
+            self.viewController.finishInteractiveDismiss()
+            self.viewController.didDismiss(animated: true)
+            self.viewController = nil
+            complete(completed)
+        })
     }
 
 }

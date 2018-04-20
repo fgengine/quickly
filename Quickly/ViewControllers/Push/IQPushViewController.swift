@@ -9,56 +9,41 @@ public enum QPushViewControllerState {
 
 public protocol IQPushViewControllerFixedAnimation : IQFixedAnimation {
 
-    typealias ViewControllerType = QPlatformViewController & IQPushViewController
-
-    func prepare(viewController: ViewControllerType)
+    func prepare(viewController: IQPushViewController)
 
 }
 
 public protocol IQPushViewControllerInteractiveAnimation : IQInteractiveAnimation {
 
-    typealias ViewControllerType = QPlatformViewController & IQPushViewController
-
-    func prepare(viewController: ViewControllerType, position: CGPoint, velocity: CGPoint)
+    func prepare(viewController: IQPushViewController, position: CGPoint, velocity: CGPoint)
 
 }
 
-public protocol IQPushViewController : IQBaseViewController {
+public protocol IQPushViewController : IQViewController {
 
-    typealias ContainerViewControllerType = QPlatformViewController & IQPushContainerViewController
-    typealias ContentViewControllerType = QPlatformViewController & IQPushContentViewController
-
-    var containerViewController: ContainerViewControllerType? { set get }
-
-    var contentViewController: ContentViewControllerType { set get }
+    var containerViewController: IQPushContainerViewController? { set get }
+    var contentViewController: IQPushContentViewController { get }
     var state: QPushViewControllerState { set get }
     var offset: CGFloat { set get }
-    var edgeInsets: QPlatformEdgeInsets { set get }
     var displayTime: TimeInterval? { get }
     var presentAnimation: IQPushViewControllerFixedAnimation? { get }
     var dismissAnimation: IQPushViewControllerFixedAnimation? { get }
     var interactiveDismissAnimation: IQPushViewControllerInteractiveAnimation? { get }
 
-    func beginInteractiveDismiss()
-    func cancelInteractiveDismiss()
-    func funishInteractiveDismiss()
-
     func dismissPush(animated: Bool, completion: (() -> Swift.Void)?)
 
 }
 
-public protocol IQPushContentViewController : IQBaseViewController {
+public protocol IQPushContentViewController : IQViewController {
 
-    typealias PushViewControllerType = QPlatformViewController & IQPushViewController
-
-    var pushViewController: PushViewControllerType? { set get }
+    var pushViewController: IQPushViewController? { set get }
 
     func didTimeout()
     func didPressed()
 
 }
 
-public extension IQPushViewController where Self : QPlatformViewController {
+public extension IQPushViewController {
 
     public func dismissPush(animated: Bool, completion: (() -> Swift.Void)?) {
         guard let vc = self.containerViewController else { return }
@@ -67,17 +52,15 @@ public extension IQPushViewController where Self : QPlatformViewController {
 
 }
 
-public protocol IQPushContainerViewController : IQBaseViewController {
+public protocol IQPushContainerViewController : IQViewController {
 
-    typealias ViewControllerType = QPlatformViewController & IQPushViewController
-
-    var viewControllers: [ViewControllerType] { get }
-    var currentViewController: ViewControllerType? { get }
+    var viewControllers: [IQPushViewController] { get }
+    var currentViewController: IQPushViewController? { get }
     var presentAnimation: IQPushViewControllerFixedAnimation { get }
     var dismissAnimation: IQPushViewControllerFixedAnimation { get }
     var interactiveDismissAnimation: IQPushViewControllerInteractiveAnimation? { set get }
 
-    func presentPush(viewController: ViewControllerType, animated: Bool, completion: (() -> Swift.Void)?)
-    func dismissPush(viewController: ViewControllerType, animated: Bool, completion: (() -> Swift.Void)?)
+    func presentPush(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func dismissPush(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)?)
 
 }

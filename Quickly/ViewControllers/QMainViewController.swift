@@ -2,329 +2,155 @@
 //  Quickly
 //
 
-open class QMainViewController : QPlatformViewController, IQBaseViewController {
+open class QMainViewController : QViewController {
 
-    public typealias ContentViewControllerType = QPlatformViewController & IQBaseViewController
-    public typealias PushContainerViewControllerType = QPlatformViewController & IQBaseViewController & IQPushContainerViewController
-    public typealias DialogContainerViewControllerType = QPlatformViewController & IQBaseViewController & IQDialogContainerViewController
-
-    #if os(iOS)
-    open override var prefersStatusBarHidden: Bool {
-        get {
-            guard let cvc = self.contentViewController else { return super.prefersStatusBarHidden }
-            guard let cdvc = self.dialogContainerViewController?.currentViewController else { return cvc.prefersStatusBarHidden }
-            return cdvc.prefersStatusBarHidden
-        }
-    }
-    open override var preferredStatusBarStyle: UIStatusBarStyle {
-        get {
-            guard let cvc = self.contentViewController else { return super.preferredStatusBarStyle }
-            guard let cdvc = self.dialogContainerViewController?.currentViewController else { return cvc.preferredStatusBarStyle }
-            return cdvc.preferredStatusBarStyle
-        }
-    }
-    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
-        get {
-            guard let cvc = self.contentViewController else { return super.preferredStatusBarUpdateAnimation }
-            guard let cdvc = self.dialogContainerViewController?.currentViewController else { return cvc.preferredStatusBarUpdateAnimation }
-            return cdvc.preferredStatusBarUpdateAnimation
-        }
-    }
-    open override var shouldAutorotate: Bool {
-        get {
-            guard let cvc = self.contentViewController else { return super.shouldAutorotate }
-            return cvc.shouldAutorotate
-        }
-    }
-    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        get {
-            guard let cvc = self.contentViewController else { return super.supportedInterfaceOrientations }
-            return cvc.supportedInterfaceOrientations
-        }
-    }
-    #endif
-    open var contentViewController: ContentViewControllerType? {
+    open var contentViewController: IQViewController? {
         willSet {
-            guard let vc = self.contentViewController, self.isViewLoaded == true else { return }
-            vc.willDismiss(animated: false)
-            vc.didDismiss(animated: false)
-            self._disappearViewController(vc)
+            guard let vc = self.contentViewController else { return }
+            if self.isLoaded == true {
+                vc.willDismiss(animated: false)
+                vc.didDismiss(animated: false)
+            }
+            vc.parent = nil
         }
         didSet {
-            #if os(iOS)
-                defer {
-                    self.setNeedsStatusBarAppearanceUpdate()
-                }
-            #endif
-            guard let vc = self.contentViewController, self.isViewLoaded == true else { return }
-            vc.willPresent(animated: false)
-            vc.didPresent(animated: false)
-            self._appearViewController(contentViewController: vc)
+            guard let vc = self.contentViewController else { return }
+            vc.parent = self
+            if self.isLoaded == true {
+                self.appendContentController(vc)
+                vc.willPresent(animated: false)
+                vc.didPresent(animated: false)
+            }
         }
     }
-    open var pushContainerViewController: PushContainerViewControllerType? {
+    open var pushContainerViewController: IQPushContainerViewController? {
         willSet {
-            guard let vc = self.pushContainerViewController, self.isViewLoaded == true else { return }
-            vc.willDismiss(animated: false)
-            vc.didDismiss(animated: false)
-            self._disappearViewController(vc)
+            guard let vc = self.pushContainerViewController else { return }
+            if self.isLoaded == true {
+                vc.willDismiss(animated: false)
+                vc.didDismiss(animated: false)
+            }
+            vc.parent = nil
         }
         didSet {
-            #if os(iOS)
-                defer {
-                    self.setNeedsStatusBarAppearanceUpdate()
-                }
-            #endif
-            guard let vc = self.pushContainerViewController, self.isViewLoaded == true else { return }
-            vc.willPresent(animated: false)
-            vc.didPresent(animated: false)
-            self._appearViewController(pushContainerViewController: vc)
+            guard let vc = self.pushContainerViewController else { return }
+            vc.parent = self
+            if self.isLoaded == true {
+                self.appendPushContainer(vc)
+                vc.willPresent(animated: false)
+                vc.didPresent(animated: false)
+            }
         }
     }
-    open var dialogContainerViewController: DialogContainerViewControllerType? {
+    open var dialogContainerViewController: IQDialogContainerViewController? {
         willSet {
-            guard let vc = self.dialogContainerViewController, self.isViewLoaded == true else { return }
-            vc.willDismiss(animated: false)
-            vc.didDismiss(animated: false)
-            self._disappearViewController(vc)
+            guard let vc = self.dialogContainerViewController else { return }
+            if self.isLoaded == true {
+                vc.willDismiss(animated: false)
+                vc.didDismiss(animated: false)
+            }
+            vc.parent = nil
         }
         didSet {
-            #if os(iOS)
-                defer {
-                    self.setNeedsStatusBarAppearanceUpdate()
-                }
-            #endif
-            guard let vc = self.dialogContainerViewController, self.isViewLoaded == true else { return }
-            vc.willPresent(animated: false)
-            vc.didPresent(animated: false)
-            self._appearViewController(dialogContainerViewController: vc)
+            guard let vc = self.dialogContainerViewController else { return }
+            vc.parent = self
+            if self.isLoaded == true {
+                self.appendDialogContainer(vc)
+                vc.willPresent(animated: false)
+                vc.didPresent(animated: false)
+            }
         }
     }
 
-    #if os(macOS)
-
-    public override init(nibName: NSNib.Name?, bundle: Bundle?) {
-        super.init(nibName: nibName, bundle: bundle)
-        self.setup()
-    }
-
-    #elseif os(iOS)
-
-    public override init(nibName: String?, bundle: Bundle?) {
-        super.init(nibName: nibName, bundle: bundle)
-        self.setup()
-    }
-
-    #endif
-
-    public required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.setup()
-    }
-
-    open func setup() {
-    }
-
-    open override func loadView() {
-        self.view = QTransparentView()
-
+    open override func didLoad() {
         if let vc = self.contentViewController {
-            self._appearViewController(contentViewController: vc)
+            self.appendContentController(vc)
         }
         if let vc = self.pushContainerViewController {
-            self._appearViewController(pushContainerViewController: vc)
+            self.appendPushContainer(vc)
         }
         if let vc = self.dialogContainerViewController {
-            self._appearViewController(dialogContainerViewController: vc)
+            self.appendDialogContainer(vc)
         }
     }
 
-    #if os(macOS)
-
-    open override func viewDidLayout() {
-        super.viewDidLayout()
-        self._layoutViewControllers(self.view.bounds)
+    open override func supportedOrientations() -> UIInterfaceOrientationMask {
+        guard let cvc = self.contentViewController else { return super.supportedOrientations() }
+        return cvc.supportedOrientations()
     }
 
-    #elseif os(iOS)
-
-    open override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        self._layoutViewControllers(self.view.bounds)
+    open override func preferedStatusBarHidden() -> Bool {
+        guard let cvc = self.contentViewController else { return super.preferedStatusBarHidden() }
+        guard let cdvc = self.dialogContainerViewController?.currentViewController else { return cvc.preferedStatusBarHidden() }
+        return cdvc.preferedStatusBarHidden()
     }
 
-    #endif
-
-    open func willPresent(animated: Bool) {
-        #if DEBUG
-            print("\(NSStringFromClass(self.classForCoder)).willPresent(animated: \(animated))")
-        #endif
-        if let vc = self.contentViewController {
-            vc.willPresent(animated: animated)
-        }
-        if let vc = self.pushContainerViewController {
-            vc.willPresent(animated: animated)
-        }
-        if let vc = self.dialogContainerViewController {
-            vc.willPresent(animated: animated)
-        }
+    open override func preferedStatusBarStyle() -> UIStatusBarStyle {
+        guard let cvc = self.contentViewController else { return super.preferedStatusBarStyle() }
+        guard let cdvc = self.dialogContainerViewController?.currentViewController else { return cvc.preferedStatusBarStyle() }
+        return cdvc.preferedStatusBarStyle()
     }
 
-    open func didPresent(animated: Bool) {
-        #if DEBUG
-            print("\(NSStringFromClass(self.classForCoder)).didPresent(animated: \(animated))")
-        #endif
-        if let vc = self.contentViewController {
-            vc.didPresent(animated: animated)
-        }
-        if let vc = self.pushContainerViewController {
-            vc.didPresent(animated: animated)
-        }
-        if let vc = self.dialogContainerViewController {
-            vc.didPresent(animated: animated)
-        }
+    open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
+        guard let cvc = self.contentViewController else { return super.preferedStatusBarAnimation() }
+        guard let cdvc = self.dialogContainerViewController?.currentViewController else { return cvc.preferedStatusBarAnimation() }
+        return cdvc.preferedStatusBarAnimation()
     }
 
-    open func willDismiss(animated: Bool) {
-        #if DEBUG
-            print("\(NSStringFromClass(self.classForCoder)).willDismiss(animated: \(animated))")
-        #endif
-        if let vc = self.contentViewController {
-            vc.willDismiss(animated: animated)
-        }
-        if let vc = self.pushContainerViewController {
-            vc.willDismiss(animated: animated)
-        }
-        if let vc = self.dialogContainerViewController {
-            vc.willDismiss(animated: animated)
-        }
-    }
-
-    open func didDismiss(animated: Bool) {
-        #if DEBUG
-            print("\(NSStringFromClass(self.classForCoder)).didDismiss(animated: \(animated))")
-        #endif
-        if let vc = self.contentViewController {
-            vc.didDismiss(animated: animated)
-        }
-        if let vc = self.pushContainerViewController {
-            vc.didDismiss(animated: animated)
-        }
-        if let vc = self.dialogContainerViewController {
-            vc.didDismiss(animated: animated)
-        }
-    }
-
-    private func _appearViewController(contentViewController: ContentViewControllerType) {
-        self.addChildViewController(contentViewController)
-        contentViewController.view.frame = self.view.bounds
+    private func appendContentController(_ viewController: IQViewController) {
+        viewController.view.frame = self.view.bounds
         if let vc = self.dialogContainerViewController {
             if vc.view.superview == self.view {
-                #if os(macOS)
-                    self.view.addSubview(contentViewController.view, positioned: .below, relativeTo: vc.view)
-                #elseif os(iOS)
-                    self.view.insertSubview(contentViewController.view, belowSubview: vc.view)
-                #endif
+                self.view.insertSubview(viewController.view, belowSubview: vc.view)
             } else {
-                self.view.addSubview(contentViewController.view)
+                self.view.addSubview(viewController.view)
             }
         } else if let vc = self.pushContainerViewController {
             if vc.view.superview == self.view {
-                #if os(macOS)
-                    self.view.addSubview(contentViewController.view, positioned: .below, relativeTo: vc.view)
-                #elseif os(iOS)
-                    self.view.insertSubview(contentViewController.view, belowSubview: vc.view)
-                #endif
+                self.view.insertSubview(viewController.view, belowSubview: vc.view)
             } else {
-                self.view.addSubview(contentViewController.view)
+                self.view.addSubview(viewController.view)
             }
         } else {
-            self.view.addSubview(contentViewController.view)
+            self.view.addSubview(viewController.view)
         }
-        #if os(iOS)
-            contentViewController.didMove(toParentViewController: self)
-        #endif
     }
 
-    private func _appearViewController(pushContainerViewController: PushContainerViewControllerType) {
-        self.addChildViewController(pushContainerViewController)
-        pushContainerViewController.view.frame = self.view.bounds
+    private func appendPushContainer(_ viewController: IQPushContainerViewController) {
+        viewController.view.frame = self.view.bounds
         if let vc = self.dialogContainerViewController {
             if vc.view.superview == self.view {
-                #if os(macOS)
-                    self.view.addSubview(pushContainerViewController.view, positioned: .above, relativeTo: vc.view)
-                #elseif os(iOS)
-                    self.view.insertSubview(pushContainerViewController.view, aboveSubview: vc.view)
-                #endif
+                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
             } else {
-                self.view.addSubview(pushContainerViewController.view)
+                self.view.addSubview(viewController.view)
             }
         } else if let vc = self.contentViewController {
             if vc.view.superview == self.view {
-                #if os(macOS)
-                    self.view.addSubview(pushContainerViewController.view, positioned: .above, relativeTo: vc.view)
-                #elseif os(iOS)
-                    self.view.insertSubview(pushContainerViewController.view, aboveSubview: vc.view)
-                #endif
+                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
             } else {
-                self.view.addSubview(pushContainerViewController.view)
+                self.view.addSubview(viewController.view)
             }
         } else {
-            self.view.addSubview(pushContainerViewController.view)
+            self.view.addSubview(viewController.view)
         }
-        #if os(iOS)
-            pushContainerViewController.didMove(toParentViewController: self)
-        #endif
     }
 
-    private func _appearViewController(dialogContainerViewController: DialogContainerViewControllerType) {
-        self.addChildViewController(dialogContainerViewController)
-        dialogContainerViewController.view.frame = self.view.bounds
+    private func appendDialogContainer(_ viewController: IQDialogContainerViewController) {
+        viewController.view.frame = self.view.bounds
         if let vc = self.pushContainerViewController {
             if vc.view.superview == self.view {
-                #if os(macOS)
-                    self.view.addSubview(dialogContainerViewController.view, positioned: .below, relativeTo: vc.view)
-                #elseif os(iOS)
-                    self.view.insertSubview(dialogContainerViewController.view, belowSubview: vc.view)
-                #endif
+                self.view.insertSubview(viewController.view, belowSubview: vc.view)
             } else {
-                self.view.addSubview(dialogContainerViewController.view)
+                self.view.addSubview(viewController.view)
             }
         } else if let vc = self.contentViewController {
             if vc.view.superview == self.view {
-                #if os(macOS)
-                    self.view.addSubview(dialogContainerViewController.view, positioned: .above, relativeTo: vc.view)
-                #elseif os(iOS)
-                    self.view.insertSubview(dialogContainerViewController.view, belowSubview: vc.view)
-                #endif
+                self.view.insertSubview(viewController.view, belowSubview: vc.view)
             } else {
-                self.view.addSubview(dialogContainerViewController.view)
+                self.view.addSubview(viewController.view)
             }
         } else {
-            self.view.addSubview(dialogContainerViewController.view)
-        }
-        #if os(iOS)
-            dialogContainerViewController.didMove(toParentViewController: self)
-        #endif
-    }
-
-    private func _disappearViewController(_ viewController: QPlatformViewController) {
-        #if os(iOS)
-            viewController.willMove(toParentViewController: nil)
-        #endif
-        viewController.view.removeFromSuperview()
-        viewController.removeFromParentViewController()
-    }
-
-    private func _layoutViewControllers(_ bounds: CGRect) {
-        if let vc = self.contentViewController {
-            vc.view.frame = bounds
-        }
-        if let vc = self.pushContainerViewController {
-            vc.view.frame = bounds
-        }
-        if let vc = self.dialogContainerViewController {
-            vc.view.frame = bounds
+            self.view.addSubview(viewController.view)
         }
     }
 

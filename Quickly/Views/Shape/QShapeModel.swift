@@ -4,9 +4,9 @@
 
 open class QShapeModel : IQShapeModel {
 
-    open var fillColor: QPlatformColor?
+    open var fillColor: UIColor?
     open var fillRule: QShapeModelFillRule
-    open var strokeColor: QPlatformColor?
+    open var strokeColor: UIColor?
     open var strokeStart: CGFloat
     open var strokeEnd: CGFloat
     open var lineWidth: CGFloat
@@ -32,7 +32,7 @@ open class QShapeModel : IQShapeModel {
         self.size = size
     }
 
-    open func make() -> QPlatformBezierPath? {
+    open func make() -> UIBezierPath? {
         return nil
     }
 

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14109"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ConfirmPushViewController" customModule="QuicklyDemo" customModuleProvider="target">
+            <connections>
+                <outlet property="imageView" destination="pyt-V0-E3K" id="sU5-qP-reB"/>
+                <outlet property="rootView" destination="iN0-l3-epB" id="nnq-w0-jqP"/>
+                <outlet property="subtitleLabel" destination="HGW-bx-FpZ" id="a5h-nS-Wnk"/>
+                <outlet property="titleLabel" destination="Ubq-8a-wVG" id="fJ7-fr-B7H"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pyt-V0-E3K" customClass="QImageView" customModule="Quickly">
+                    <rect key="frame" x="12" y="12" width="56" height="56"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="56" id="7d5-Lo-Dqu"/>
+                        <constraint firstAttribute="width" secondItem="pyt-V0-E3K" secondAttribute="height" id="K9e-BA-Jxl"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ubq-8a-wVG" customClass="QLabel" customModule="Quickly">
+                    <rect key="frame" x="76" y="12" width="232" height="14"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
+                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HGW-bx-FpZ" customClass="QLabel" customModule="Quickly">
+                    <rect key="frame" x="76" y="30" width="232" height="14"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <gestureRecognizers/>
+            <constraints>
+                <constraint firstItem="HGW-bx-FpZ" firstAttribute="top" secondItem="Ubq-8a-wVG" secondAttribute="bottom" constant="4" id="3ZT-Kp-tRn"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="HGW-bx-FpZ" secondAttribute="bottom" constant="12" id="89M-0f-SuF"/>
+                <constraint firstItem="pyt-V0-E3K" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="12" id="Brl-Rd-xI6"/>
+                <constraint firstAttribute="trailing" secondItem="HGW-bx-FpZ" secondAttribute="trailing" constant="12" id="fZd-05-076"/>
+                <constraint firstAttribute="bottom" secondItem="pyt-V0-E3K" secondAttribute="bottom" constant="12" id="fsQ-4K-uup"/>
+                <constraint firstAttribute="trailing" secondItem="Ubq-8a-wVG" secondAttribute="trailing" constant="12" id="gtY-di-KbX"/>
+                <constraint firstItem="HGW-bx-FpZ" firstAttribute="leading" secondItem="pyt-V0-E3K" secondAttribute="trailing" constant="8" id="hbS-0G-WcH"/>
+                <constraint firstItem="pyt-V0-E3K" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="12" id="jTi-Iu-FaV"/>
+                <constraint firstItem="Ubq-8a-wVG" firstAttribute="leading" secondItem="pyt-V0-E3K" secondAttribute="trailing" constant="8" id="ltm-0L-Ca0"/>
+                <constraint firstItem="Ubq-8a-wVG" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="12" id="w2v-an-MJQ"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="12" y="-226"/>
+        </view>
+    </objects>
+</document>

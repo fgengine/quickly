@@ -2,182 +2,54 @@
 //  Quickly
 //
 
-open class QStaticViewController : QPlatformViewController, IQViewController {
+open class QStaticViewController : QViewController, IQStackContentViewController {
 
-    #if os(macOS)
-
-    @IBOutlet open var rootView: QPlatformView? {
-        set(value) { if let view = value { self.view = view } }
-        get { return self.view }
+    open var stackPageViewController: IQStackPageViewController?
+    open var stackPageContentOffset: CGPoint {
+        get { return CGPoint.zero }
     }
-
-    #elseif os(iOS)
-
-    open var statusBarHidden: Bool = false {
-        didSet { self.setNeedsStatusBarAppearanceUpdate() }
-    }
-    open var statusBarStyle: UIStatusBarStyle = .default {
-        didSet { self.setNeedsStatusBarAppearanceUpdate() }
-    }
-    open var statusBarAnimation: UIStatusBarAnimation = .fade {
-        didSet { self.setNeedsStatusBarAppearanceUpdate() }
-    }
-    open var supportedOrientationMask: UIInterfaceOrientationMask = .portrait
-    open var navigationBarHidden: Bool = false
-    open var toolbarHidden: Bool = true
-
-    open override var prefersStatusBarHidden: Bool {
-        get { return self.statusBarHidden }
-    }
-
-    open override var preferredStatusBarStyle: UIStatusBarStyle {
-        get { return self.statusBarStyle }
-    }
-
-    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
-        get { return self.statusBarAnimation }
-    }
-
-    open override var shouldAutorotate: Bool {
-        get { return true }
-    }
-
-    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        get { return self.supportedOrientationMask }
-    }
-
-    #endif
-
-    open var isAppeared: Bool = false
-
-    public init() {
-        super.init(nibName: nil, bundle: nil)
-        self.setup()
-    }
-
-    #if os(macOS)
-
-    public override init(nibName: NSNib.Name?, bundle: Bundle?) {
-        super.init(nibName: nibName, bundle: bundle)
-        self.setup()
-    }
-
-    #elseif os(iOS)
-
-    public override init(nibName: String?, bundle: Bundle?) {
-        super.init(nibName: nibName, bundle: bundle)
-        self.setup()
-    }
-
-    #endif
-
-    public required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.setup()
-    }
-
-    #if os(macOS)
-
-    open func currentNibName() -> NSNib.Name {
-        if let nibName = self.nibName {
-            return nibName
+    open var stackPageContentSize: CGSize {
+        get {
+            guard self.isLoaded == true else { return CGSize.zero }
+            return self.view.bounds.size
         }
-        return NSNib.Name(rawValue: String(describing: self.classForCoder))
     }
 
-    #elseif os(iOS)
-
-    open func currentNibName() -> String {
-        if let nibName = self.nibName {
-            return nibName
+    @IBOutlet
+    open var rootView: UIView! {
+        willSet {
+            guard let view = self.rootView else { return }
+            view.removeFromSuperview()
         }
+        didSet {
+            guard let view = self.rootView else { return }
+            view.frame = self.view.bounds
+            self.view.addSubview(view)
+        }
+    }
+
+    open func nibName() -> String {
         return String(describing: self.classForCoder)
     }
 
-    #endif
-
-    open func currentNibBundle() -> Bundle {
-        if let nibBundle = self.nibBundle {
-            return nibBundle
-        }
+    open func nibBundle() -> Bundle {
         return Bundle.main
     }
 
-    open func setup() {
+    open override func load() -> ViewType {
+        return InvisibleView(viewController: self)
     }
 
-    #if os(iOS)
+    open override func didLoad() {
+        let nib = UINib(nibName: self.nibName(), bundle: self.nibBundle())
+        _ = nib.instantiate(withOwner: self, options: nil)
+    }
 
-    open func setNavigationBarHidden(_ hidden: Bool, animated: Bool) {
-        if let navigationController = self.navigationController {
-            navigationController.setNavigationBarHidden(hidden, animated: animated)
+    open override func layout(bounds: CGRect) {
+        super.layout(bounds : bounds)
+        if let view = self.rootView {
+            view.frame = UIEdgeInsetsInsetRect(self.view.bounds, self.inheritedEdgeInsets)
         }
-        self.navigationBarHidden = hidden
-    }
-
-    open func setToolbarHidden(_ hidden: Bool, animated: Bool) {
-        if let navigationController = self.navigationController {
-            navigationController.setToolbarHidden(hidden, animated: animated)
-        }
-        self.toolbarHidden = hidden
-    }
-
-    #endif
-
-    open override func loadView() {
-        #if os(macOS)
-            let nibName = self.currentNibName()
-            let bundle = self.currentNibBundle()
-            guard let nib = NSNib(nibNamed: nibName, bundle: bundle) else { return }
-            nib.instantiate(withOwner: self, topLevelObjects: nil)
-        #elseif os(iOS)
-            let nibName = self.currentNibName()
-            let bundle = self.currentNibBundle()
-            let nib = UINib(nibName: nibName, bundle: bundle)
-            _ = nib.instantiate(withOwner: self, options: nil)
-        #endif
-    }
-
-    #if os(iOS)
-
-        open override func viewWillAppear(_ animated: Bool) {
-            super.viewWillAppear(animated)
-            self.isAppeared = true
-            if let navigationController = self.navigationController {
-                navigationController.isNavigationBarHidden = self.navigationBarHidden
-                navigationController.isToolbarHidden = self.toolbarHidden
-            }
-        }
-
-        open override func viewDidDisappear(_ animated: Bool) {
-            super.viewDidDisappear(animated)
-            self.isAppeared = false
-        }
-
-    #endif
-
-    open func willPresent(animated: Bool) {
-        #if DEBUG
-            print("\(NSStringFromClass(self.classForCoder)).willPresent(animated: \(animated))")
-        #endif
-    }
-
-    open func didPresent(animated: Bool) {
-        #if DEBUG
-            print("\(NSStringFromClass(self.classForCoder)).didPresent(animated: \(animated))")
-        #endif
-    }
-
-    open func willDismiss(animated: Bool) {
-        #if DEBUG
-            print("\(NSStringFromClass(self.classForCoder)).willDismiss(animated: \(animated))")
-        #endif
-    }
-
-    open func didDismiss(animated: Bool) {
-        #if DEBUG
-            print("\(NSStringFromClass(self.classForCoder)).didDismiss(animated: \(animated))")
-        #endif
     }
 
 }

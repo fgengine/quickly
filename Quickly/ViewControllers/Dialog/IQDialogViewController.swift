@@ -41,28 +41,20 @@ public enum QDialogViewControllerHorizontalAlignment {
 
 public protocol IQDialogViewControllerFixedAnimation : IQFixedAnimation {
 
-    typealias ViewControllerType = QPlatformViewController & IQDialogViewController
-
-    func prepare(viewController: ViewControllerType)
+    func prepare(viewController: IQDialogViewController)
 
 }
 
 public protocol IQDialogViewControllerInteractiveAnimation : IQInteractiveAnimation {
 
-    typealias ViewControllerType = QPlatformViewController & IQDialogViewController
-
-    func prepare(viewController: ViewControllerType, position: CGPoint, velocity: CGPoint)
+    func prepare(viewController: IQDialogViewController, position: CGPoint, velocity: CGPoint)
 
 }
 
-public protocol IQDialogViewController : IQBaseViewController {
+public protocol IQDialogViewController : IQViewController {
 
-    typealias ContainerViewControllerType = QPlatformViewController & IQDialogContainerViewController
-    typealias ContentViewControllerType = QPlatformViewController & IQDialogContentViewController
-
-    var containerViewController: ContainerViewControllerType? { set get }
-
-    var contentViewController: ContentViewControllerType { set get }
+    var containerViewController: IQDialogContainerViewController? { set get }
+    var contentViewController: IQDialogContentViewController { get }
     var widthBehaviour: QDialogViewControllerSizeBehaviour { set get }
     var heightBehaviour: QDialogViewControllerSizeBehaviour { set get }
     var verticalAlignment: QDialogViewControllerVerticalAlignment { set get }
@@ -75,17 +67,15 @@ public protocol IQDialogViewController : IQBaseViewController {
 
 }
 
-public protocol IQDialogContentViewController : IQBaseViewController {
+public protocol IQDialogContentViewController : IQViewController {
 
-    typealias DialogViewControllerType = QPlatformViewController & IQDialogViewController
-
-    var dialogViewController: DialogViewControllerType? { set get }
+    var dialogViewController: IQDialogViewController? { set get }
 
     func didPressedOutsideContent()
 
 }
 
-public extension IQDialogViewController where Self : QPlatformViewController {
+public extension IQDialogViewController {
 
     public func dismissDialog(animated: Bool, completion: (() -> Swift.Void)?) {
         guard let vc = self.containerViewController else { return }
@@ -94,31 +84,27 @@ public extension IQDialogViewController where Self : QPlatformViewController {
 
 }
 
-public protocol IQDialogContainerViewController : IQBaseViewController {
+public protocol IQDialogContainerViewController : IQViewController {
 
-    typealias ViewControllerType = QPlatformViewController & IQDialogViewController
-    typealias BackgroundViewType = QPlatformView & IQDialogContainerBackgroundView
+    typealias BackgroundView = UIView & IQDialogContainerBackgroundView
 
-    var viewControllers: [ViewControllerType] { get }
-    var currentViewController: ViewControllerType? { get }
-    var backgroundView: BackgroundViewType? { get }
+    var viewControllers: [IQDialogViewController] { get }
+    var currentViewController: IQDialogViewController? { get }
+    var backgroundView: BackgroundView? { get }
     var presentAnimation: IQDialogViewControllerFixedAnimation { get }
     var dismissAnimation: IQDialogViewControllerFixedAnimation { get }
     var interactiveDismissAnimation: IQDialogViewControllerInteractiveAnimation? { get }
 
-    func presentDialog(viewController: ViewControllerType, animated: Bool, completion: (() -> Swift.Void)?)
-    func dismissDialog(viewController: ViewControllerType, animated: Bool, completion: (() -> Swift.Void)?)
+    func presentDialog(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func dismissDialog(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?)
 
 }
 
 public protocol IQDialogContainerBackgroundView : class {
 
-    typealias ContainerViewControllerType = QPlatformViewController & IQDialogContainerViewController
-    typealias ViewControllerType = QPlatformViewController & IQDialogViewController
+    var containerViewController: IQDialogContainerViewController? { set get }
 
-    var containerViewController: ContainerViewControllerType? { set get }
-
-    func presentDialog(viewController: ViewControllerType, isFirst: Bool, animated: Bool)
-    func dismissDialog(viewController: ViewControllerType, isLast: Bool, animated: Bool)
+    func presentDialog(viewController: IQDialogViewController, isFirst: Bool, animated: Bool)
+    func dismissDialog(viewController: IQDialogViewController, isLast: Bool, animated: Bool)
 
 }

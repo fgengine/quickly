@@ -14,12 +14,6 @@ public enum QJsonErrorCode : Int {
 
 public final class QJson {
 
-    #if os(macOS)
-    public typealias Color = NSColor
-    #elseif os(iOS)
-    public typealias Color = UIColor
-    #endif
-
     public var basePath: String {
         get { return self.impl.basePath }
     }
@@ -203,7 +197,7 @@ public final class QJson {
     }
 
     @discardableResult
-    public func set(_ value: Color?, forPath path: String) -> Bool {
+    public func set(_ value: UIColor?, forPath path: String) -> Bool {
         return self.impl.set(color: value, forPath: path)
     }
 
@@ -263,7 +257,7 @@ public final class QJson {
         return try self.impl.date(at: at, formats: formats)
     }
 
-    public func color(at: String) throws -> Color {
+    public func color(at: String) throws -> UIColor {
         return try self.impl.color(at: at)
     }
 

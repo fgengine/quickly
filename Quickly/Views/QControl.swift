@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QControl : QPlatformControl, IQView {
+open class QControl : UIControl, IQView {
 
     public override init(frame: CGRect) {
         super.init(frame: frame)

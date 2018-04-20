@@ -4,19 +4,12 @@
 
 open class QDialogBackgroundView : QView, IQDialogContainerBackgroundView {
 
-    public typealias ContainerViewControllerType = IQDialogContainerBackgroundView.ContainerViewControllerType
-    public typealias ViewControllerType = IQDialogContainerBackgroundView.ViewControllerType
+    open weak var containerViewController: IQDialogContainerViewController?
 
-    open weak var containerViewController: ContainerViewControllerType?
-
-    public init(backgroundColor: QPlatformColor) {
+    public init(backgroundColor: UIColor) {
         super.init(frame: CGRect())
-        #if os(macOS)
-            self.wantsLayer = true
-            self.layer!.backgroundColor = backgroundColor.cgColor
-        #elseif os(iOS)
-            self.backgroundColor = backgroundColor
-        #endif
+
+        self.backgroundColor = backgroundColor
     }
 
     public required init?(coder: NSCoder) {
@@ -26,64 +19,33 @@ open class QDialogBackgroundView : QView, IQDialogContainerBackgroundView {
     open override func setup() {
         super.setup()
 
-        #if os(macOS)
-            self.alphaValue = Const.hiddenAlpha
-        #elseif os(iOS)
-            self.alpha = Const.hiddenAlpha
-        #endif
+        self.alpha = Const.hiddenAlpha
         self.isHidden = true
     }
 
-    public func presentDialog(viewController: ViewControllerType, isFirst: Bool, animated: Bool) {
+    public func presentDialog(viewController: IQDialogViewController, isFirst: Bool, animated: Bool) {
         if isFirst == true {
             self.isHidden = false
             if animated == true {
-                #if os(macOS)
-                    NSAnimationContext.runAnimationGroup({ (context: NSAnimationContext) in
-                        context.duration = Const.duration
-
-                        self.animator().alphaValue = Const.visibleAlpha
-                    })
-                #elseif os(iOS)
-                    UIView.animate(withDuration: Const.duration, animations: {
-                        self.alpha = Const.visibleAlpha
-                    })
-                #endif
-            } else {
-                #if os(macOS)
-                    self.alphaValue = Const.visibleAlpha
-                #elseif os(iOS)
+                UIView.animate(withDuration: Const.duration, animations: {
                     self.alpha = Const.visibleAlpha
-                #endif
+                })
+            } else {
+                self.alpha = Const.visibleAlpha
             }
         }
     }
 
-    public func dismissDialog(viewController: ViewControllerType, isLast: Bool, animated: Bool) {
+    public func dismissDialog(viewController: IQDialogViewController, isLast: Bool, animated: Bool) {
         if isLast == true {
             if animated == true {
-                #if os(macOS)
-                    NSAnimationContext.runAnimationGroup({ (context: NSAnimationContext) in
-                        context.duration = Const.duration
-
-                        self.animator().alphaValue = Const.hiddenAlpha
-                    }, completionHandler: {
-                        self.alphaValue = Const.hiddenAlpha
-                        self.isHidden = true
-                    })
-                #elseif os(iOS)
-                    UIView.animate(withDuration: Const.duration, animations: {
-                        self.alpha = Const.hiddenAlpha
-                    }, completion: { (_) in
-                        self.isHidden = true
-                    })
-                #endif
-            } else {
-                #if os(macOS)
-                    self.alphaValue = Const.hiddenAlpha
-                #elseif os(iOS)
+                UIView.animate(withDuration: Const.duration, animations: {
                     self.alpha = Const.hiddenAlpha
-                #endif
+                }, completion: { (_) in
+                    self.isHidden = true
+                })
+            } else {
+                self.alpha = Const.hiddenAlpha
                 self.isHidden = true
             }
         }

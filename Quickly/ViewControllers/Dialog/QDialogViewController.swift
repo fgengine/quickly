@@ -2,43 +2,10 @@
 //  Quickly
 //
 
-open class QDialogViewController : QPlatformViewController, IQDialogViewController {
+open class QDialogViewController : QViewController, IQDialogViewController {
 
-    public typealias ContainerViewControllerType = IQDialogViewController.ContainerViewControllerType
-    public typealias ContentViewControllerType = IQDialogViewController.ContentViewControllerType
-
-    #if os(iOS)
-    open override var prefersStatusBarHidden: Bool {
-        get {
-            return self.contentViewController.prefersStatusBarHidden
-        }
-    }
-    open override var preferredStatusBarStyle: UIStatusBarStyle {
-        get {
-            return self.contentViewController.preferredStatusBarStyle
-        }
-    }
-    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
-        get {
-            return self.contentViewController.preferredStatusBarUpdateAnimation
-        }
-    }
-    open override var shouldAutorotate: Bool {
-        get {
-            return self.contentViewController.shouldAutorotate
-        }
-    }
-    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        get {
-            return self.contentViewController.supportedInterfaceOrientations
-        }
-    }
-    #endif
-    open weak var containerViewController: ContainerViewControllerType?
-    open var contentViewController: ContentViewControllerType {
-        willSet { self._disappearViewController() }
-        didSet { self._appearViewController() }
-    }
+    open weak var containerViewController: IQDialogContainerViewController?
+    open private(set) var contentViewController: IQDialogContentViewController
     open var widthBehaviour: QDialogViewControllerSizeBehaviour = .fit(min: 0, max: 0) {
         didSet { self._relayoutContentViewController() }
     }
@@ -54,64 +21,59 @@ open class QDialogViewController : QPlatformViewController, IQDialogViewControll
     open var presentAnimation: IQDialogViewControllerFixedAnimation?
     open var dismissAnimation: IQDialogViewControllerFixedAnimation?
     open var interactiveDismissAnimation: IQDialogViewControllerInteractiveAnimation?
-    #if os(iOS)
     open lazy var tapGesture: UITapGestureRecognizer = self._prepareTapGesture()
-    #endif
 
     private var contentLayoutConstraints: [NSLayoutConstraint] = []
     private var contentSizeConstraints: [NSLayoutConstraint] = []
 
-    public init(contentViewController: ContentViewControllerType) {
+    public init(contentViewController: IQDialogContentViewController) {
         self.contentViewController = contentViewController
-        super.init(nibName: nil, bundle: nil)
-        self.setup()
+        self.widthBehaviour = .fit(min: 0, max: 0)
+        self.heightBehaviour = .fit(min: 0, max: 0)
+        self.verticalAlignment = .center(offset: 0)
+        self.horizontalAlignment = .center(offset: 0)
+
+        super.init()
     }
 
-    public required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    open override func setup() {
+        super.setup()
+
+        self.contentViewController.dialogViewController = self
+        self.contentViewController.parent = self
     }
 
-    open func setup() {
+    open override func load() -> ViewType {
+        return InvisibleView(viewController: self)
     }
 
-    open override func loadView() {
-        self.view = QInvisibleView()
-        #if os(iOS)
-            self.view.addGestureRecognizer(self.tapGesture)
-        #endif
+    open override func didLoad() {
+        self.view.addGestureRecognizer(self.tapGesture)
 
-        self._appearViewController()
+        self.contentViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.contentViewController.view)
+
+        self._layoutContentViewController()
     }
 
-    open func willPresent(animated: Bool) {
-        #if DEBUG
-            print("\(NSStringFromClass(self.classForCoder)).willPresent(animated: \(animated))")
-        #endif
-        self.contentViewController.willPresent(animated: animated)
+    open override func layout(bounds: CGRect) {
     }
 
-    open func didPresent(animated: Bool) {
-        #if DEBUG
-            print("\(NSStringFromClass(self.classForCoder)).didPresent(animated: \(animated))")
-        #endif
-        self.contentViewController.didPresent(animated: animated)
+    open override func supportedOrientations() -> UIInterfaceOrientationMask {
+        return self.contentViewController.supportedOrientations()
     }
 
-    open func willDismiss(animated: Bool) {
-        #if DEBUG
-            print("\(NSStringFromClass(self.classForCoder)).willDismiss(animated: \(animated))")
-        #endif
-        self.contentViewController.willDismiss(animated: animated)
+    open override func preferedStatusBarHidden() -> Bool {
+        return self.contentViewController.preferedStatusBarHidden()
     }
 
-    open func didDismiss(animated: Bool) {
-        #if DEBUG
-            print("\(NSStringFromClass(self.classForCoder)).didDismiss(animated: \(animated))")
-        #endif
-        self.contentViewController.didDismiss(animated: animated)
+    open override func preferedStatusBarStyle() -> UIStatusBarStyle {
+        return self.contentViewController.preferedStatusBarStyle()
     }
 
-    #if os(iOS)
+    open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
+        return self.contentViewController.preferedStatusBarAnimation()
+    }
 
     private func _prepareTapGesture() -> UITapGestureRecognizer {
         let gesture = UITapGestureRecognizer(target: self, action: #selector(self._tapGestureHandler(_:)))
@@ -119,33 +81,8 @@ open class QDialogViewController : QPlatformViewController, IQDialogViewControll
         return gesture
     }
 
-    #endif
-
-    private func _appearViewController() {
-        guard self.isViewLoaded == true else { return }
-        self.contentViewController.dialogViewController = self
-        self.addChildViewController(self.contentViewController)
-        self.contentViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(self.contentViewController.view)
-        #if os(iOS)
-            self.contentViewController.didMove(toParentViewController: self)
-        #endif
-        self._layoutContentViewController()
-    }
-
-    private func _disappearViewController() {
-        guard self.isViewLoaded == true else { return }
-        self.contentViewController.dialogViewController = nil
-        self._unlayoutContentViewController()
-        #if os(iOS)
-            self.contentViewController.willMove(toParentViewController: nil)
-        #endif
-        self.contentViewController.view.removeFromSuperview()
-        self.contentViewController.removeFromParentViewController()
-    }
-
     private func _relayoutContentViewController() {
-        guard self.isViewLoaded == true else { return }
+        guard self.isLoaded == true else { return }
         self._unlayoutContentViewController()
         self._layoutContentViewController()
     }
@@ -240,32 +177,25 @@ open class QDialogViewController : QPlatformViewController, IQDialogViewControll
         }
     }
 
-    #if os(iOS)
-
-    @objc private func _tapGestureHandler(_ sender: Any) {
+    @objc
+    private func _tapGestureHandler(_ sender: Any) {
         self.contentViewController.didPressedOutsideContent()
     }
 
-    #endif
-
 }
 
-#if os(iOS)
+extension QDialogViewController : UIGestureRecognizerDelegate {
 
-    extension QDialogViewController : UIGestureRecognizerDelegate {
-
-        open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-            let location = gestureRecognizer.location(in: self.view)
-            if self.view.point(inside: location, with: nil) == false {
-                return false
-            }
-            let contentLocation = gestureRecognizer.location(in: self.contentViewController.view)
-            if self.contentViewController.view.point(inside: contentLocation, with: nil) == true {
-                return false
-            }
-            return true
+    open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        let location = gestureRecognizer.location(in: self.view)
+        if self.view.point(inside: location, with: nil) == false {
+            return false
         }
-
+        let contentLocation = gestureRecognizer.location(in: self.contentViewController.view)
+        if self.contentViewController.view.point(inside: contentLocation, with: nil) == true {
+            return false
+        }
+        return true
     }
 
-#endif
+}

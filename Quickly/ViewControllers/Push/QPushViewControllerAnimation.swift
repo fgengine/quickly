@@ -4,16 +4,14 @@
 
 open class QPushViewControllerAnimation : IQPushViewControllerFixedAnimation {
 
-    public typealias ViewControllerType = IQPushViewControllerFixedAnimation.ViewControllerType
-
-    public var viewController: ViewControllerType!
+    public var viewController: IQPushViewController!
     public var duration: TimeInterval
 
     public init(duration: TimeInterval) {
         self.duration = duration
     }
 
-    open func prepare(viewController: ViewControllerType) {
+    open func prepare(viewController: IQPushViewController) {
         self.viewController = viewController
     }
 
@@ -31,21 +29,15 @@ open class QPushViewControllerPresentAnimation : QPushViewControllerAnimation {
     open override func update(animated: Bool, complete: @escaping (_ completed: Bool) -> Void) {
         if animated == true {
             self.viewController.willPresent(animated: animated)
-            #if os(macOS)
-                self.viewController.view.layoutSubtreeIfNeeded()
-            #elseif os(iOS)
+            self.viewController.view.layoutIfNeeded()
+            UIView.animate(withDuration: self.duration, animations: {
+                self.viewController.state = .show
                 self.viewController.view.layoutIfNeeded()
-                UIView.animate(withDuration: self.duration, animations: {
-                    self.viewController.state = .show
-                    self.viewController.view.layoutIfNeeded()
-                }, completion: { [weak self] (completed: Bool) in
-                    if let strongify = self {
-                        strongify.viewController.didPresent(animated: animated)
-                        strongify.viewController = nil
-                    }
-                    complete(completed)
-                })
-            #endif
+            }, completion: { (completed: Bool) in
+                self.viewController.didPresent(animated: animated)
+                self.viewController = nil
+                complete(completed)
+            })
         } else {
             self.viewController.state = .show
             self.viewController.willPresent(animated: animated)
@@ -66,22 +58,19 @@ open class QPushViewControllerDismissAnimation : QPushViewControllerAnimation {
     open override func update(animated: Bool, complete: @escaping (_ completed: Bool) -> Void) {
         if animated == true {
             self.viewController.willDismiss(animated: animated)
-            #if os(iOS)
-                UIView.animate(withDuration: self.duration, animations: {
-                    self.viewController.state = .hide
-                    self.viewController.view.layoutIfNeeded()
-                }, completion: { [weak self] (completed: Bool) in
-                    if let strongify = self {
-                        strongify.viewController.didDismiss(animated: animated)
-                        strongify.viewController = nil
-                    }
-                    complete(completed)
-                })
-            #endif
+            UIView.animate(withDuration: self.duration, animations: {
+                self.viewController.state = .hide
+                self.viewController.view.layoutIfNeeded()
+            }, completion: { (completed: Bool) in
+                self.viewController.didDismiss(animated: animated)
+                self.viewController = nil
+                complete(completed)
+            })
         } else {
             self.viewController.state = .hide
             self.viewController.willDismiss(animated: animated)
             self.viewController.didDismiss(animated: animated)
+            self.viewController = nil
             complete(true)
         }
     }
@@ -90,21 +79,20 @@ open class QPushViewControllerDismissAnimation : QPushViewControllerAnimation {
 
 open class QPushViewControllerInteractiveDismissAnimation : IQPushViewControllerInteractiveAnimation {
 
-    public typealias ViewControllerType = IQPushViewControllerFixedAnimation.ViewControllerType
-
-    open var viewController: ViewControllerType!
+    open var viewController: IQPushViewController!
     open var position: CGPoint = CGPoint.zero
-    open var deltaPosition: CGFloat = 0
+    open private(set) var deltaPosition: CGFloat = 0
     open var velocity: CGPoint = CGPoint.zero
     open var finishDistance: CGFloat = 40
     open var acceleration: CGFloat = 600
     open var deceleration: CGFloat = 0.25
     open var canFinish: Bool = false
 
-    open func prepare(viewController: ViewControllerType, position: CGPoint, velocity: CGPoint) {
+    open func prepare(viewController: IQPushViewController, position: CGPoint, velocity: CGPoint) {
         self.viewController = viewController
         self.position = position
         self.velocity = velocity
+        self.viewController.prepareInteractiveDismiss()
     }
 
     open func update(position: CGPoint, velocity: CGPoint) {
@@ -132,36 +120,35 @@ open class QPushViewControllerInteractiveDismissAnimation : IQPushViewController
     }
 
     open func cancel(_ complete: @escaping (_ completed: Bool) -> Void) {
-        #if os(iOS)
-            let duration = TimeInterval(self.deltaPosition / self.acceleration)
-            UIView.animate(withDuration: duration, animations: {
-                self.viewController.offset = 0
-                self.viewController.view.layoutIfNeeded()
-            }, completion: complete)
-        #endif
+        let duration = TimeInterval(self.deltaPosition / self.acceleration)
+        UIView.animate(withDuration: duration, animations: {
+            self.viewController.offset = 0
+            self.viewController.view.layoutIfNeeded()
+        }, completion: { (completed: Bool) in
+            self.viewController.cancelInteractiveDismiss()
+            self.viewController = nil
+            complete(completed)
+        })
     }
 
     open func finish(_ complete: @escaping (_ completed: Bool) -> Void) {
         self.viewController.willDismiss(animated: true)
-        #if os(iOS)
-            let offset = self.viewController.offset
-            let height = self.viewController.contentViewController.view.frame.height
-            let edgeInsets = self.viewController.edgeInsets
-            let hideOffset = height + edgeInsets.top
-            let duration = TimeInterval((hideOffset - offset) / self.acceleration)
-            UIView.animate(withDuration: duration, animations: {
-                self.viewController.offset = -hideOffset
-                self.viewController.view.layoutIfNeeded()
-            }, completion: { [weak self] (completed: Bool) in
-                if let strongify = self {
-                    strongify.viewController.didDismiss(animated: true)
-                    strongify.viewController.state = .hide
-                    strongify.viewController.offset = 0
-                    strongify.viewController = nil
-                }
-                complete(completed)
-            })
-        #endif
+        let offset = self.viewController.offset
+        let height = self.viewController.contentViewController.view.frame.height
+        let edgeInsets = self.viewController.inheritedEdgeInsets
+        let hideOffset = height + edgeInsets.top
+        let duration = TimeInterval((hideOffset - offset) / self.acceleration)
+        UIView.animate(withDuration: duration, animations: {
+            self.viewController.offset = -hideOffset
+            self.viewController.view.layoutIfNeeded()
+        }, completion: { (completed: Bool) in
+            self.viewController.didDismiss(animated: true)
+            self.viewController.finishInteractiveDismiss()
+            self.viewController.state = .hide
+            self.viewController.offset = 0
+            self.viewController = nil
+            complete(completed)
+        })
     }
 
 }

@@ -2,16 +2,6 @@
 //  Quickly
 //
 
-#if os(macOS)
-    import AppKit
-#elseif os(iOS)
-    import UIKit
-#endif
-
-//
-// MARK: IQDebug
-//
-
 public protocol IQDebug {
 
     func debugString() -> String

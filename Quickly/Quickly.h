@@ -3,11 +3,7 @@
 //
 
 @import Foundation;
-#if TARGET_OS_IPHONE
 @import UIKit;
-#elif TARGET_OS_MAC
-@import AppKit;
-#endif
 @import SystemConfiguration;
 
 //! Project version number for Quickly.

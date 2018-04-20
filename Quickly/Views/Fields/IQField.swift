@@ -11,4 +11,4 @@ public protocol IQField : class {
 
 }
 
-public typealias QFieldType = QPlatformView & IQField
+public typealias QFieldType = UIView & IQField
