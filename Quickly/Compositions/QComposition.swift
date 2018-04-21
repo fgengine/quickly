@@ -15,9 +15,9 @@ open class QCompositionData: IQCompositionData {
 open class QComposition< DataType: QCompositionData >: IQComposition {
 
     public var contentView: UIView
-    public private(set) var data: DataType?
+    public private(set) var data: DataType!
 
-    public class func size(data: DataType?, size: CGSize) -> CGSize {
+    public class func size(data: DataType, size: CGSize) -> CGSize {
         return CGSize.zero
     }
 
@@ -34,22 +34,12 @@ open class QComposition< DataType: QCompositionData >: IQComposition {
     open func setup() {
     }
 
-    open func prepare(data: DataType?, animated: Bool) {
-        self.data = data
-        if let data = data {
-            self.prepare(data: data, animated: animated)
-        } else {
-            self.prepare(animated: animated)
-        }
-    }
-
     open func prepare(data: DataType, animated: Bool) {
-    }
-
-    open func prepare(animated: Bool) {
+        self.data = data
     }
 
     open func cleanup() {
+        self.data = nil
     }
 
 }

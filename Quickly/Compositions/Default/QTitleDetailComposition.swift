@@ -33,8 +33,7 @@ open class QTitleDetailComposition< DataType: QTitleDetailCompositionData >: QCo
         didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
-    open override class func size(data: DataType?, size: CGSize) -> CGSize {
-        guard let data = data else { return CGSize.zero }
+    open override class func size(data: DataType, size: CGSize) -> CGSize {
         let availableWidth = size.width - (data.edgeInsets.left + data.edgeInsets.right)
         let titleTextSize = data.title.text.size(width: availableWidth)
         let detailTextSize = data.detail.text.size(width: availableWidth)
@@ -61,6 +60,8 @@ open class QTitleDetailComposition< DataType: QTitleDetailCompositionData >: QCo
     }
 
     open override func prepare(data: DataType, animated: Bool) {
+        super.prepare(data: data, animated: animated)
+        
         if self.currentEdgeInsets != data.edgeInsets || self.currentTitleSpacing != data.titleSpacing {
             self.currentEdgeInsets = data.edgeInsets
             self.currentTitleSpacing = data.titleSpacing

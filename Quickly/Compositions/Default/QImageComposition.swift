@@ -26,8 +26,7 @@ public class QImageComposition< DataType: QImageCompositionData > : QComposition
         didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
-    open override class func size(data: DataType?, size: CGSize) -> CGSize {
-        guard let data = data else { return CGSize.zero }
+    open override class func size(data: DataType, size: CGSize) -> CGSize {
         let availableWidth = size.width - (data.edgeInsets.left + data.edgeInsets.right)
         let imageSize = data.image.source.size(CGSize(width: availableWidth, height: availableWidth))
         return CGSize(
@@ -45,6 +44,8 @@ public class QImageComposition< DataType: QImageCompositionData > : QComposition
     }
 
     open override func prepare(data: DataType, animated: Bool) {
+        super.prepare(data: data, animated: animated)
+
         if self.currentEdgeInsets != data.edgeInsets {
             self.currentEdgeInsets = data.edgeInsets
 

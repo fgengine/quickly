@@ -2,6 +2,13 @@
 //  Quickly
 //
 
+open class QBackgroundColorCollectionItem : QCollectionItem {
+
+    public var backgroundColor: UIColor?
+    public var selectedBackgroundColor: UIColor?
+
+}
+
 open class QBackgroundColorCollectionCell< ItemType: QBackgroundColorCollectionItem >: QCollectionCell< ItemType > {
 
     open override func set(item: ItemType, animated: Bool) {

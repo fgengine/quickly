@@ -4,11 +4,7 @@
 
 open class QCompositionTableRow< CompositionDataType: IQCompositionData > : QBackgroundColorTableRow {
 
-    public var data: CompositionDataType?
-
-    public override init() {
-        super.init()
-    }
+    public var data: CompositionDataType
 
     public init(data: CompositionDataType) {
         self.data = data

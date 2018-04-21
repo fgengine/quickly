@@ -4,19 +4,22 @@
 
 open class QImageTitleCompositionData : QCompositionData {
 
+    public var direction: QViewDirection
     public var image: QImageViewStyleSheet
-    public var imageWidth: CGFloat
+    public var imageSize: CGSize
     public var imageSpacing: CGFloat
 
     public var title: QLabelStyleSheet
 
     public init(
+        direction: QViewDirection,
         image: QImageViewStyleSheet,
-        imageWidth: CGFloat,
+        imageSize: CGSize,
         title: QLabelStyleSheet
     ) {
+        self.direction = direction
         self.image = image
-        self.imageWidth = imageWidth
+        self.imageSize = imageSize
         self.imageSpacing = 8
         self.title = title
         super.init()
@@ -29,9 +32,10 @@ public class QImageTitleCompositionCell< DataType: QImageTitleCompositionData > 
     public private(set) var imageView: QImageView!
     public private(set) var titleLabel: QLabel!
 
+    private var currentDirection: QViewDirection?
     private var currentEdgeInsets: UIEdgeInsets?
     private var currentImageSpacing: CGFloat?
-    private var currentImageWidth: CGFloat?
+    private var currentImageSize: CGSize?
 
     private var selfConstraints: [NSLayoutConstraint] = [] {
         willSet { self.contentView.removeConstraints(self.selfConstraints) }
@@ -42,15 +46,23 @@ public class QImageTitleCompositionCell< DataType: QImageTitleCompositionData > 
         didSet { self.imageView.addConstraints(self.imageConstraints) }
     }
 
-    open override class func size(data: DataType?, size: CGSize) -> CGSize {
-        guard let data = data else { return CGSize.zero }
+    open override class func size(data: DataType, size: CGSize) -> CGSize {
         let availableWidth = size.width - (data.edgeInsets.left + data.edgeInsets.right)
-        let imageSize = data.image.source.size(CGSize(width: data.imageWidth, height: availableWidth))
-        let titleTextSize = data.title.text.size(width: availableWidth - (data.imageWidth + data.imageSpacing))
-        return CGSize(
-            width: size.width,
-            height: data.edgeInsets.top + max(imageSize.height, titleTextSize.height) + data.edgeInsets.bottom
-        )
+        switch data.direction {
+        case .horizontal:
+            let imageSize = data.image.source.size(CGSize(width: data.imageSize.width, height: availableWidth))
+            let titleTextSize = data.title.text.size(width: availableWidth - (data.imageSize.width + data.imageSpacing))
+            return CGSize(
+                width: size.width,
+                height: data.edgeInsets.top + max(imageSize.height, titleTextSize.height) + data.edgeInsets.bottom
+            )
+        case .vertical:
+            let titleTextSize = data.title.text.size(width: availableWidth)
+            return CGSize(
+                width: data.edgeInsets.left + max(data.imageSize.width, titleTextSize.width) + data.edgeInsets.right,
+                height: data.edgeInsets.top + data.imageSize.height + data.imageSpacing + titleTextSize.height + data.edgeInsets.bottom
+            )
+        }
     }
 
     open override func setup() {
@@ -70,25 +82,47 @@ public class QImageTitleCompositionCell< DataType: QImageTitleCompositionData > 
     }
 
     open override func prepare(data: DataType, animated: Bool) {
-        if self.currentEdgeInsets != data.edgeInsets || self.currentImageSpacing != data.imageSpacing {
-            self.currentEdgeInsets = data.edgeInsets
-            self.currentImageSpacing = data.imageSpacing
+        super.prepare(data: data, animated: animated)
 
+        let changedDirection = self.currentDirection != data.direction
+        self.currentDirection = data.direction
+        let changedEdgeInsets = self.currentEdgeInsets != data.edgeInsets
+        self.currentEdgeInsets = data.edgeInsets
+        let changedImageSpacing = self.currentImageSpacing != data.imageSpacing
+        self.currentImageSpacing = data.imageSpacing
+        let changedImageSize = self.currentImageSize != data.imageSize
+        self.currentImageSize = data.imageSize
+        if changedDirection == true || changedEdgeInsets == true || changedImageSpacing == true {
             var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self.imageView.topLayout == self.contentView.topLayout + data.edgeInsets.top)
-            selfConstraints.append(self.imageView.leadingLayout == self.contentView.leadingLayout + data.edgeInsets.left)
-            selfConstraints.append(self.imageView.trailingLayout == self.titleLabel.leadingLayout - data.imageSpacing)
-            selfConstraints.append(self.imageView.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
-            selfConstraints.append(self.titleLabel.topLayout == self.contentView.topLayout + data.edgeInsets.top)
-            selfConstraints.append(self.titleLabel.trailingLayout == self.contentView.trailingLayout - data.edgeInsets.right)
-            selfConstraints.append(self.titleLabel.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
+            switch data.direction {
+            case .horizontal:
+                selfConstraints.append(self.imageView.topLayout == self.contentView.topLayout + data.edgeInsets.top)
+                selfConstraints.append(self.imageView.leadingLayout == self.contentView.leadingLayout + data.edgeInsets.left)
+                selfConstraints.append(self.imageView.trailingLayout == self.titleLabel.leadingLayout - data.imageSpacing)
+                selfConstraints.append(self.imageView.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
+                selfConstraints.append(self.titleLabel.topLayout == self.contentView.topLayout + data.edgeInsets.top)
+                selfConstraints.append(self.titleLabel.trailingLayout == self.contentView.trailingLayout - data.edgeInsets.right)
+                selfConstraints.append(self.titleLabel.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
+            case .vertical:
+                selfConstraints.append(self.imageView.topLayout == self.contentView.topLayout + data.edgeInsets.top)
+                selfConstraints.append(self.imageView.leadingLayout == self.contentView.leadingLayout + data.edgeInsets.left)
+                selfConstraints.append(self.imageView.trailingLayout == self.contentView.trailingLayout - data.edgeInsets.right)
+                selfConstraints.append(self.imageView.bottomLayout == self.titleLabel.topLayout - data.edgeInsets.bottom)
+                selfConstraints.append(self.titleLabel.leadingLayout == self.contentView.leadingLayout + data.edgeInsets.left)
+                selfConstraints.append(self.titleLabel.trailingLayout == self.contentView.trailingLayout - data.edgeInsets.right)
+                selfConstraints.append(self.titleLabel.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
+            }
             self.selfConstraints = selfConstraints
         }
-        if self.currentImageWidth != data.imageWidth {
-            self.currentImageWidth = data.imageWidth
-
+        if changedDirection == true || changedImageSize == true {
             var imageConstraints: [NSLayoutConstraint] = []
-            imageConstraints.append(self.imageView.widthLayout == data.imageWidth)
+            switch data.direction {
+            case .horizontal:
+                imageConstraints.append(self.imageView.widthLayout == data.imageSize.width)
+            case .vertical:
+                imageConstraints.append(self.imageView.widthLayout == data.imageSize.width)
+                imageConstraints.append(self.imageView.heightLayout == data.imageSize.height)
+            }
             self.imageConstraints = imageConstraints
         }
         data.image.apply(target: self.imageView)

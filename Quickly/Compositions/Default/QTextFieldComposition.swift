@@ -47,8 +47,7 @@ public class QTextFieldComposition< DataType: QTextFieldCompositionData >: QComp
         didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
-    open override class func size(data: DataType?, size: CGSize) -> CGSize {
-        guard let data = data else { return CGSize.zero }
+    open override class func size(data: DataType, size: CGSize) -> CGSize {
         return CGSize(
             width: size.width,
             height: data.edgeInsets.top + data.fieldHeight + data.edgeInsets.bottom
@@ -100,6 +99,8 @@ public class QTextFieldComposition< DataType: QTextFieldCompositionData >: QComp
     }
 
     open override func prepare(data: DataType, animated: Bool) {
+        super.prepare(data: data, animated: animated)
+        
         if self.currentEdgeInsets != data.edgeInsets {
             self.currentEdgeInsets = data.edgeInsets
 

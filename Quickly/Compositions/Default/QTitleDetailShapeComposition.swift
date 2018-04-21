@@ -49,8 +49,7 @@ public class QTitleDetailShapeComposition< DataType: QTitleDetailShapeCompositio
         didSet { self.shapeView.addConstraints(self.shapeConstraints) }
     }
 
-    open override class func size(data: DataType?, size: CGSize) -> CGSize {
-        guard let data = data else { return CGSize.zero }
+    open override class func size(data: DataType, size: CGSize) -> CGSize {
         let availableWidth = size.width - (data.edgeInsets.left + data.edgeInsets.right)
         let titleTextSize = data.title.text.size(width: availableWidth - (data.shapeWidth + data.shapeSpacing))
         let detailTextSize = data.detail.text.size(width: availableWidth - (data.shapeWidth + data.shapeSpacing))
@@ -83,6 +82,8 @@ public class QTitleDetailShapeComposition< DataType: QTitleDetailShapeCompositio
 }
 
     open override func prepare(data: DataType, animated: Bool) {
+        super.prepare(data: data, animated: animated)
+        
         if self.currentEdgeInsets != data.edgeInsets || self.currentTitleSpacing != data.titleSpacing || self.currentShapeSpacing != data.shapeSpacing {
             self.currentEdgeInsets = data.edgeInsets
             self.currentTitleSpacing = data.titleSpacing
