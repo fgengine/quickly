@@ -14,7 +14,6 @@ public class QImageViewStyleSheet : QDisplayViewStyleSheet< QImageView > {
         self.verticalAlignment = .center
         self.horizontalAlignment = .center
         self.source = source
-
         super.init()
     }
 
@@ -23,15 +22,16 @@ public class QImageViewStyleSheet : QDisplayViewStyleSheet< QImageView > {
 
         target.verticalAlignment = self.verticalAlignment
         target.horizontalAlignment = self.horizontalAlignment
-        target.source = self.source
-        target.filter = self.filter
         target.loader = self.loader
+        target.filter = self.filter
+        target.source = self.source
     }
 
 }
 
 public class QImageView : QDisplayView, IQImageLoaderTarget {
 
+    public private(set) var isDownloading: Bool = false
     public var verticalAlignment: QViewVerticalAlignment = .center {
         didSet { self.setNeedsDisplay() }
     }
@@ -39,14 +39,7 @@ public class QImageView : QDisplayView, IQImageLoaderTarget {
         didSet { self.setNeedsDisplay() }
     }
     public var source: QImageSource? {
-        willSet {
-            if self.isDownloading == true {
-                if let loader = self.loader {
-                    loader.cancel(self)
-                }
-            }
-            self.isDownloading = false
-        }
+        willSet { self.stopDownloading() }
         didSet {
             if let source = self.source {
                 if let image = source.image {
@@ -54,14 +47,9 @@ public class QImageView : QDisplayView, IQImageLoaderTarget {
                 } else {
                     self.image = nil
                 }
-                if let url = source.url {
-                    if let loader = self.loader {
-                        loader.download(url, filter: self.filter, target: self)
-                        self.isDownloading = true
-                    }
-                }
                 self.backgroundColor = source.backgroundColor
                 self.tintColor = source.tintColor
+                self.startDownloading()
             } else {
                 self.image = nil
                 self.backgroundColor = UIColor.clear
@@ -69,9 +57,12 @@ public class QImageView : QDisplayView, IQImageLoaderTarget {
             }
         }
     }
-    public var filter: IQImageLoaderFilter?
-    public private(set) var isDownloading: Bool = false
-    public var loader: QImageLoader?
+    public var filter: IQImageLoaderFilter? {
+        willSet { self.stopDownloading() }
+    }
+    public var loader: QImageLoader? {
+        willSet { self.stopDownloading() }
+    }
     public private(set) var image: UIImage? {
         didSet {
             self.invalidateIntrinsicContentSize()
@@ -151,6 +142,24 @@ public class QImageView : QDisplayView, IQImageLoaderTarget {
         var frame = self.frame
         frame.size = self.sizeThatFits(frame.size)
         self.frame = frame
+    }
+
+    open func startDownloading() {
+        if self.isDownloading == false {
+            if let source = self.source, let loader = self.loader, let url = source.url {
+                loader.download(url, filter: self.filter, target: self)
+                self.isDownloading = true
+            }
+        }
+    }
+
+    open func stopDownloading() {
+        if self.isDownloading == true {
+            if let loader = self.loader {
+                loader.cancel(self)
+            }
+            self.isDownloading = false
+        }
     }
 
     open func imageLoader(_ imageLoader: QImageLoader, cacheImage: UIImage) {
