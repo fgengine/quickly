@@ -131,35 +131,17 @@ extension CGFloat : IJsonValue {
     
 }
 
-#if os(macOS)
+extension UIColor : IJsonValue {
 
-    extension NSColor : IJsonValue {
-
-        public static func fromJson(value: Any?, at: String) throws -> Any {
-            return try QJsonImpl.toColor(from: value, at: at)
-        }
-
-        public func toJsonValue() -> Any? {
-            return QJsonImpl.objectFrom(color: self)
-        }
-
+    public static func fromJson(value: Any?, at: String) throws -> Any {
+        return try QJsonImpl.toColor(from: value, at: at)
     }
 
-#elseif os(iOS)
-
-    extension UIColor : IJsonValue {
-
-        public static func fromJson(value: Any?, at: String) throws -> Any {
-            return try QJsonImpl.toColor(from: value, at: at)
-        }
-
-        public func toJsonValue() -> Any? {
-            return QJsonImpl.objectFrom(color: self)
-        }
-
+    public func toJsonValue() -> Any? {
+        return QJsonImpl.objectFrom(color: self)
     }
 
-#endif
+}
 
 //
 // MARK: Operators
