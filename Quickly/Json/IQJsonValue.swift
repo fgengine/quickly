@@ -149,6 +149,7 @@ extension UIColor : IJsonValue {
 
 infix operator >>>
 infix operator <<<
+infix operator <<?
 
 //
 // MARK: Any
@@ -178,7 +179,15 @@ public func <<< < Type: IJsonValue >(left: inout Type, right: (QJson, String)) t
     left = (jsonValue as! Type)
 }
 
-public func <<< < Type: IJsonValue >(left: inout Type?, right: (QJson, String)) {
+public func <<< < Type: IJsonValue >(left: inout Type!, right: (QJson, String)) throws {
+    let jsonValue = try Type.fromJson(
+        value: try right.0.object(at: right.1),
+        at: QJsonImpl.prepare(basePath: right.0.basePath, path: right.1)
+    )
+    left = (jsonValue as! Type)
+}
+
+public func <<? < Type: IJsonValue >(left: inout Type?, right: (QJson, String)) {
     if let source = try? right.0.object(at: right.1) {
         let jsonValue = try? Type.fromJson(
             value: source,
@@ -222,7 +231,7 @@ public func <<< < Type: IJsonValue >(left: inout Type!, right: (QJson, String, T
     }
 }
 
-public func <<< < Type: IJsonValue >(left: inout Type?, right: (QJson, String, Type?)) {
+public func <<? < Type: IJsonValue >(left: inout Type?, right: (QJson, String, Type?)) {
     if let source = try? right.0.object(at: right.1) {
         let jsonValue = try? Type.fromJson(
             value: source,
@@ -279,7 +288,28 @@ public func <<< < EnumType: RawRepresentable >(left: inout EnumType, right: (QJs
     }
 }
 
-public func <<< < EnumType: RawRepresentable >(left: inout EnumType?, right: (QJson, String)) where EnumType.RawValue: IJsonValue {
+public func <<< < EnumType: RawRepresentable >(left: inout EnumType!, right: (QJson, String)) throws where EnumType.RawValue: IJsonValue {
+    let source = try right.0.object(at: right.1)
+    let jsonValue = try EnumType.RawValue.fromJson(
+        value: source,
+        at: QJsonImpl.prepare(basePath: right.0.basePath, path: right.1)
+    )
+    if let rawValue = jsonValue as? EnumType.RawValue {
+        if let value = EnumType(rawValue: rawValue) {
+            left = value
+        } else {
+            throw QJsonImpl.convertError(
+                at: QJsonImpl.prepare(basePath: right.0.basePath, path: right.1)
+            )
+        }
+    } else {
+        throw QJsonImpl.convertError(
+            at: QJsonImpl.prepare(basePath: right.0.basePath, path: right.1)
+        )
+    }
+}
+
+public func <<? < EnumType: RawRepresentable >(left: inout EnumType?, right: (QJson, String)) where EnumType.RawValue: IJsonValue {
     if let source = try? right.0.object(at: right.1) {
         let jsonValue = try? EnumType.RawValue.fromJson(
             value: source,
@@ -335,7 +365,7 @@ public func <<< < EnumType: RawRepresentable >(left: inout EnumType!, right: (QJ
     }
 }
 
-public func <<< < EnumType: RawRepresentable >(left: inout EnumType?, right: (QJson, String, EnumType?)) where EnumType.RawValue: IJsonValue {
+public func <<? < EnumType: RawRepresentable >(left: inout EnumType?, right: (QJson, String, EnumType?)) where EnumType.RawValue: IJsonValue {
     if let source = try? right.0.object(at: right.1) {
         let jsonValue = try? EnumType.RawValue.fromJson(
             value: source,
@@ -371,7 +401,11 @@ public func <<< (left: inout Date, right: (QJson, String, String)) throws {
     left = try right.0.date(at: right.1, formats: [right.2])
 }
 
-public func <<< (left: inout Date?, right: (QJson, String, String)) {
+public func <<< (left: inout Date!, right: (QJson, String, String)) throws {
+    left = try right.0.date(at: right.1, formats: [right.2])
+}
+
+public func <<? (left: inout Date?, right: (QJson, String, String)) {
     let maybeSource = try? right.0.date(at: right.1, formats: [right.2])
     if let source = maybeSource {
         left = source
@@ -396,7 +430,7 @@ public func <<< (left: inout Date!, right: (QJson, String, String, Date)) {
     }
 }
 
-public func <<< (left: inout Date?, right: (QJson, String, String, Date?)) {
+public func <<? (left: inout Date?, right: (QJson, String, String, Date?)) {
     if let source = try? right.0.date(at: right.1, formats: [right.2]) {
         left = source
     } else {
@@ -408,7 +442,11 @@ public func <<< (left: inout Date, right: (QJson, String, [String])) throws {
     left = try right.0.date(at: right.1, formats: right.2)
 }
 
-public func <<< (left: inout Date?, right: (QJson, String, [String])) {
+public func <<< (left: inout Date!, right: (QJson, String, [String])) throws {
+    left = try right.0.date(at: right.1, formats: right.2)
+}
+
+public func <<? (left: inout Date?, right: (QJson, String, [String])) {
     if let source = try? right.0.date(at: right.1, formats: right.2) {
         left = source
     } else {
@@ -432,7 +470,7 @@ public func <<< (left: inout Date!, right: (QJson, String, [String], Date)) {
     }
 }
 
-public func <<< (left: inout Date?, right: (QJson, String, [String], Date?)) {
+public func <<? (left: inout Date?, right: (QJson, String, [String], Date?)) {
     if let source = try? right.0.date(at: right.1, formats: right.2) {
         left = source
     } else {
@@ -488,7 +526,7 @@ public func <<< < ItemType: IJsonValue >(left: inout [ItemType], right: QJson) {
     }
 }
 
-public func <<< < ItemType: IJsonValue >(left: inout [ItemType]?, right: QJson) {
+public func <<? < ItemType: IJsonValue >(left: inout [ItemType]?, right: QJson) {
     if let source = right.array() {
         var index = 0
         left = source.compactMap({ (item) -> ItemType? in
@@ -521,7 +559,7 @@ public func <<< < ItemType: IJsonValue >(left: inout [ItemType], right: (QJson, 
     }
 }
 
-public func <<< < ItemType: IJsonValue >(left: inout [ItemType]?, right: (QJson, String)) {
+public func <<? < ItemType: IJsonValue >(left: inout [ItemType]?, right: (QJson, String)) {
     if let source = try? right.0.array(at: right.1) {
         var index = 0
         left = source.compactMap({ (item: Any) -> ItemType? in

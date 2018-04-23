@@ -37,18 +37,19 @@ extension IQJsonModel {
 }
 
 public func >>> < Type: IQJsonModel >(left: Type, right: QJson) {
-    if let json = left.toJson() {
-        if let dict = json.dictionary() {
-            right.set(dict)
-        }
-    }
+    guard let json = left.toJson(), let dict = json.dictionary() else { return }
+    right.set(dict)
 }
 
 public func <<< < Type: IQJsonModel >(left: inout Type, right: QJson) throws {
     left = try Type.from(json: right) as! Type
 }
 
-public func <<< < Type: IQJsonModel >(left: inout Type?, right: QJson) {
+public func <<< < Type: IQJsonModel >(left: inout Type!, right: QJson) throws {
+    left = try Type.from(json: right) as! Type
+}
+
+public func <<? < Type: IQJsonModel >(left: inout Type?, right: QJson) {
     if let model = try? Type.from(json: right) {
         left = model as? Type
     } else {
