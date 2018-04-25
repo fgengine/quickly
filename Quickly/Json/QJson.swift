@@ -102,7 +102,7 @@ public final class QJson {
     }
 
     public func set< Type: IQJsonValue >(_ value: Type, path: String? = nil) throws {
-        let jsonValue = try value.toJsonValue(path: self.buildPath(path: path))
+        let jsonValue = try value.toJsonValue(path: self.buildPath([ path ]))
         try self.set(jsonValue, path: path)
     }
 
@@ -110,7 +110,7 @@ public final class QJson {
         var index: Int = 0
         let jsonArray = NSMutableArray()
         for item in value {
-            let subpath = self.buildPath(path: path, index: index)
+            let subpath = self.buildPath([ path, index ])
             if mandarory == true {
                 let jsonItem = try item.toJsonValue(path: subpath)
                 jsonArray.add(jsonItem)
@@ -128,7 +128,7 @@ public final class QJson {
         var index: Int = 0
         let jsonDictionary = NSMutableDictionary()
         for item in value {
-            let subpath = self.buildPath(path: path, key: item.key)
+            let subpath = self.buildPath([ path, item.key ])
             guard let jsonKey = try item.key.toJsonValue(path: subpath) as? NSCopying else {
                 throw QJsonError.cast(path: subpath)
             }
@@ -158,19 +158,19 @@ public final class QJson {
             let subpath = subpaths[subpathIndex]
             if let dictionary = root as? NSDictionary {
                 guard let key = subpath.jsonPathKey else {
-                    throw QJsonError.access(path: self.buildPath(subpaths: subpaths, from: 0, to: subpathIndex))
+                    throw QJsonError.access(path: self.buildPath(subpaths, from: 0, to: subpathIndex))
                 }
                 guard let temp = dictionary.object(forKey: key) else {
-                    throw QJsonError.access(path: self.buildPath(subpaths: subpaths, from: 0, to: subpathIndex))
+                    throw QJsonError.access(path: self.buildPath(subpaths, from: 0, to: subpathIndex + 1))
                 }
                 root = temp
             } else if let array = root as? NSArray {
                 guard let index = subpath.jsonPathIndex else {
-                    throw QJsonError.access(path: self.buildPath(subpaths: subpaths, from: 0, to: subpathIndex))
+                    throw QJsonError.access(path: self.buildPath(subpaths, from: 0, to: subpathIndex))
                 }
                 root = array.object(at: index)
             } else {
-                throw QJsonError.access(path: self.buildPath(subpaths: subpaths, from: 0, to: subpathIndex))
+                throw QJsonError.access(path: self.buildPath(subpaths, from: 0, to: subpathIndex))
             }
             subpathIndex += 1
         }
@@ -186,25 +186,25 @@ public final class QJson {
     public func get(formatter: DateFormatter, path: String? = nil) throws -> Date {
         let string: String = try self.get(path: path)
         guard let date = formatter.date(from: string) else {
-            throw QJsonError.cast(path: self.buildPath(path: path))
+            throw QJsonError.cast(path: self.buildPath([ path ]))
         }
         return date
     }
 
     public func get< Type: IQJsonValue >(path: String? = nil) throws -> Type {
         let jsonValue: Any = try self.get(path: path)
-        return try Type.fromJson(value: jsonValue, path: self.buildPath(path: path)) as! Type
+        return try Type.fromJson(value: jsonValue, path: self.buildPath([ path ])) as! Type
     }
 
     public func get< Type: IQJsonValue >(mandarory: Bool, path: String? = nil) throws -> [Type] {
         let jsonValue: Any = try self.get(path: path)
         guard let jsonArray = jsonValue as? NSArray else {
-            throw QJsonError.cast(path: self.buildPath(path: path))
+            throw QJsonError.cast(path: self.buildPath([ path ]))
         }
         var result: [Type] = []
         var index: Int = 0
         for jsonItem in jsonArray {
-            let subpath = self.buildPath(path: path, index: index)
+            let subpath = self.buildPath([ path, index ])
             if mandarory == true {
                 let item = try Type.fromJson(value: jsonItem, path: subpath) as! Type
                 result.append(item)
@@ -221,11 +221,11 @@ public final class QJson {
     public func get< Key: IQJsonValue, Value: IQJsonValue >(mandarory: Bool, path: String? = nil) throws -> [Key : Value] {
         let jsonValue: Any = try self.get(path: path)
         guard let jsonDictionary = jsonValue as? NSDictionary else {
-            throw QJsonError.cast(path: self.buildPath(path: path))
+            throw QJsonError.cast(path: self.buildPath([ path ]))
         }
         var result: [Key : Value] = [:]
         for jsonItem in jsonDictionary {
-            let subpath = self.buildPath(path: path, key: jsonItem.key)
+            let subpath = self.buildPath([ path, jsonItem.key ])
             let key = try Key.fromJson(value: jsonItem.key, path: subpath) as! Key
             if mandarory == true {
                 let value = try Value.fromJson(value: jsonItem.value, path: subpath) as! Value
@@ -257,58 +257,6 @@ public final class QJson {
         })
     }
 
-    private func buildPath(path: String?) -> String {
-        if let path = path {
-            if self.basePath.count > 0 {
-                return "\(self.basePath).\(path)"
-            }
-            return path
-        }
-        return self.basePath
-    }
-
-    private func buildPath(path: String?, index: Int) -> String {
-        if let path = path {
-            if self.basePath.count > 0 {
-                return "\(self.basePath).\(path)[\(index)]"
-            }
-            return "\(path)[\(index)]"
-        }
-        if self.basePath.count > 0 {
-            return "\(self.basePath)[\(index)]"
-        }
-        return "[\(index)]"
-    }
-
-    private func buildPath(path: String?, key: Any) -> String {
-        if let path = path {
-            if self.basePath.count > 0 {
-                return "\(self.basePath).\(path).\(key)"
-            }
-            return "\(path).\(key)"
-        }
-        if self.basePath.count > 0 {
-            return "\(self.basePath).\(key)"
-        }
-        return "\(key)"
-    }
-
-    private func buildPath(subpaths: [IQJsonPath], from: Int, to: Int) -> String {
-        var path = self.basePath
-        Array< IQJsonPath >(subpaths[from..<to]).forEach({
-            if let string = $0.jsonPathKey {
-                if path.count > 0 {
-                    path.append(".\(string)")
-                } else {
-                    path.append(string)
-                }
-            } else if let number = $0.jsonPathIndex {
-                path.append("[\(number)]")
-            }
-        })
-        return path
-    }
-
     private func set(_ value: Any?, subpaths: [IQJsonPath]) throws {
         if self.root == nil {
             if let subpath = subpaths.first {
@@ -317,7 +265,7 @@ public final class QJson {
                 } else if subpath.jsonPathIndex != nil {
                     self.root = NSMutableArray()
                 } else {
-                    throw QJsonError.access(path: self.buildPath(subpaths: subpaths, from: 0, to: 1))
+                    throw QJsonError.access(path: self.buildPath(subpaths, from: 0, to: 1))
                 }
             } else {
                 throw QJsonError.access(path: self.basePath)
@@ -344,7 +292,7 @@ public final class QJson {
                     }
                     root = mutable
                 } else {
-                    throw QJsonError.access(path: self.buildPath(subpaths: subpaths, from: 0, to: subpathIndex))
+                    throw QJsonError.access(path: self.buildPath(subpaths, from: 0, to: subpathIndex))
                 }
                 if subpathIndex == subpaths.endIndex - 1 {
                     if let value = value {
@@ -369,7 +317,7 @@ public final class QJson {
                     }
                     root = mutable
                 } else {
-                    throw QJsonError.access(path: self.buildPath(subpaths: subpaths, from: 0, to: subpathIndex))
+                    throw QJsonError.access(path: self.buildPath(subpaths, from: 0, to: subpathIndex))
                 }
                 if subpathIndex == subpaths.endIndex - 1 {
                     if let value = value {
@@ -379,11 +327,36 @@ public final class QJson {
                     }
                 }
             } else {
-                throw QJsonError.access(path: self.buildPath(subpaths: subpaths, from: 0, to: subpathIndex))
+                throw QJsonError.access(path: self.buildPath(subpaths, from: 0, to: subpathIndex))
             }
             subpathIndex += 1
             prevRoot = root
         }
+    }
+
+    private func buildPath(_ subpaths: [Any?]) -> String {
+        return self.buildPath(subpaths, from: subpaths.startIndex, to: subpaths.endIndex)
+    }
+
+    private func buildPath(_ subpaths: [Any?], from: Int, to: Int) -> String {
+        var path = self.basePath
+        Array< Any? >(subpaths[from..<to]).forEach({
+            guard let item = $0 else { return }
+            if let string = item as? String {
+                if path.count > 0 {
+                    path.append(".\(string)")
+                } else {
+                    path.append(string)
+                }
+            } else if let number = item as? NSNumber {
+                path.append("[\(number)]")
+            } else if let number = item as? UInt {
+                path.append("[\(number)]")
+            } else if let number = item as? Int {
+                path.append("[\(number)]")
+            }
+        })
+        return path
     }
 
     private struct Const {
