@@ -99,6 +99,7 @@ open class QApiRequest : IQApiRequest {
                 var urlRequest = URLRequest(url: url)
                 urlRequest.httpMethod = self.method
                 urlRequest.cachePolicy = self.cachePolicy
+                urlRequest.timeoutInterval = self.timeout
                 urlRequest.allHTTPHeaderFields = headers
                 if let body = bodyData {
                     urlRequest.httpBody = body
@@ -113,8 +114,13 @@ open class QApiRequest : IQApiRequest {
         if let selfUrl = self.url {
             return URLComponents(string: selfUrl.absoluteString)
         } else if let providerUrl = provider.baseUrl {
-            if let urlPart = self.urlPart {
+            if var urlPart = self.urlPart {
                 var string = providerUrl.absoluteString
+                if urlPart.hasPrefix("/") == true {
+                    let startIndex = urlPart.index(urlPart.startIndex, offsetBy: 1)
+                    let endIndex = urlPart.endIndex
+                    urlPart = String(urlPart[startIndex..<endIndex])
+                }
                 if string.hasSuffix("/") == true {
                     string.append(urlPart)
                 } else {

@@ -142,7 +142,6 @@
 		409403581F4E129F008A8B90 /* QApiProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409403571F4E129F008A8B90 /* QApiProvider.swift */; };
 		4094035B1F4E12BF008A8B90 /* QApiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409403591F4E12BF008A8B90 /* QApiRequest.swift */; };
 		4094035C1F4E12BF008A8B90 /* QApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4094035A1F4E12BF008A8B90 /* QApiResponse.swift */; };
-		4094035E1F4E2645008A8B90 /* QApiProvider+URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4094035D1F4E2645008A8B90 /* QApiProvider+URLSession.swift */; };
 		409403601F4E2663008A8B90 /* QApiQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4094035F1F4E2663008A8B90 /* QApiQuery.swift */; };
 		409403621F4E26D1008A8B90 /* IQApiQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409403611F4E26D1008A8B90 /* IQApiQuery.swift */; };
 		40979EC21F62C88A0003ED1C /* IQStringValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40979EBD1F62C88A0003ED1C /* IQStringValidator.swift */; };
@@ -416,7 +415,6 @@
 		409403571F4E129F008A8B90 /* QApiProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QApiProvider.swift; sourceTree = "<group>"; };
 		409403591F4E12BF008A8B90 /* QApiRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QApiRequest.swift; sourceTree = "<group>"; };
 		4094035A1F4E12BF008A8B90 /* QApiResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QApiResponse.swift; sourceTree = "<group>"; };
-		4094035D1F4E2645008A8B90 /* QApiProvider+URLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QApiProvider+URLSession.swift"; sourceTree = "<group>"; };
 		4094035F1F4E2663008A8B90 /* QApiQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QApiQuery.swift; sourceTree = "<group>"; };
 		409403611F4E26D1008A8B90 /* IQApiQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQApiQuery.swift; sourceTree = "<group>"; };
 		40979EBD1F62C88A0003ED1C /* IQStringValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQStringValidator.swift; sourceTree = "<group>"; };
@@ -1058,7 +1056,6 @@
 				406FDF6E209082E4004178CC /* IQApiPagination.swift */,
 				409403571F4E129F008A8B90 /* QApiProvider.swift */,
 				402F1FB91F4F380B007625CA /* QApiProvider+Internal.swift */,
-				4094035D1F4E2645008A8B90 /* QApiProvider+URLSession.swift */,
 				4094035F1F4E2663008A8B90 /* QApiQuery.swift */,
 				409403591F4E12BF008A8B90 /* QApiRequest.swift */,
 				4094035A1F4E12BF008A8B90 /* QApiResponse.swift */,
@@ -1704,7 +1701,6 @@
 				4062C8C42088BAC40098F809 /* QDialogBlurBackgroundView.swift in Sources */,
 				40CF45DB1F4DE6AB004D00D8 /* IQTableReuse.swift in Sources */,
 				402F1FB21F4EE0F8007625CA /* IQApiResponse.swift in Sources */,
-				4094035E1F4E2645008A8B90 /* QApiProvider+URLSession.swift in Sources */,
 				404EC1ED2077798100761BBD /* QMetatype.swift in Sources */,
 				400DDF731F5623D400D11991 /* CGSize.swift in Sources */,
 				4040717A205688B300F6ECC2 /* UIControl.swift in Sources */,

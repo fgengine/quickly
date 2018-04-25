@@ -47,6 +47,7 @@ static NSString* QApiImplSHA256(NSData* data) {
           allowInvalidCertificates:(BOOL)allowInvalidCertificates
                          challenge:(NSURLAuthenticationChallenge*)challenge {
     SecTrustRef serverTrust = challenge.protectionSpace.serverTrust;
+    id< NSURLAuthenticationChallengeSender > sender = challenge.sender;
     if(localCertificateUrl != nil) {
         SecCertificateRef localCertificate = NULL;
         SecTrustResultType serverTrustResult = kSecTrustResultOtherError;
@@ -106,7 +107,10 @@ static NSString* QApiImplSHA256(NSData* data) {
         _credential = [NSURLCredential credentialForTrust:serverTrust];
     } else {
         _disposition = NSURLSessionAuthChallengePerformDefaultHandling;
-        _credential = nil;
+        _credential = [NSURLCredential credentialForTrust:serverTrust];
+    }
+    if(_credential != nil) {
+        [sender useCredential:_credential forAuthenticationChallenge:challenge];
     }
 }
 
