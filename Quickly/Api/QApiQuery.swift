@@ -254,7 +254,7 @@ extension QApiQuery : IQDebug {
         }
         if let receivedData = self.receivedData {
             var debug = String()
-            if let json = QJson(basePath: "", data: receivedData) {
+            if let json = try? QJson(data: receivedData) {
                 json.debugString(&debug, 0, nextIndent, indent)
             } else {
                 receivedData.debugString(&debug, 0, nextIndent, indent)

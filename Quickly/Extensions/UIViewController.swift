@@ -1,6 +1,0 @@
-//
-//  Quickly
-//
-
-public extension UIViewController {
-}

@@ -317,7 +317,7 @@ extension QApiRequest : IQDebug {
         }
         if let bodyData = self.bodyData {
             var debug = String()
-            if let json = QJson(basePath: "", data: bodyData) {
+            if let json = try? QJson(data: bodyData) {
                 json.debugString(&debug, 0, nextIndent, indent)
             } else {
                 bodyData.debugString(&debug, 0, nextIndent, indent)

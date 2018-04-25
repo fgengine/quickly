@@ -2,8 +2,6 @@
 //  Quickly
 //
 
-import Quickly.Private
-
 public extension UIColor {
 
     public convenience init(hex: UInt32) {
@@ -25,18 +23,43 @@ public extension UIColor {
     }
 
     public convenience init?(hexString: String) {
-        var r: CGFloat = 1
-        var g: CGFloat = 1
-        var b: CGFloat = 1
-        var a: CGFloat = 1
-        guard QJsonImplColorComponentsFromString(hexString, &r, &g, &b, &a) else {
+        let characterSet = CharacterSet.alphanumerics.inverted
+        let trimmingHexString = hexString.trimmingCharacters(in: characterSet)
+        let scaner = Scanner.init(string: trimmingHexString)
+        var hexValue: UInt32 = 0
+        scaner.scanHexInt32(&hexValue)
+        switch trimmingHexString.count {
+        case 2:
+            let v: CGFloat = CGFloat(hexValue & 0xff) / 255
+            self.init(red: v, green: v, blue: v, alpha: 1)
+        case 3:
+            let r: CGFloat = CGFloat((hexValue >> 8) * 17) / 255
+            let g: CGFloat = CGFloat(((hexValue >> 4) & 0xf) * 17) / 255
+            let b: CGFloat = CGFloat((hexValue & 0xf) * 17) / 255
+            self.init(red: r, green: g, blue: b, alpha: 1)
+        case 6:
+            let r: CGFloat = CGFloat((hexValue >> 16) & 0xff) / 255
+            let g: CGFloat = CGFloat((hexValue >> 8) & 0xff) / 255
+            let b: CGFloat = CGFloat(hexValue & 0xff) / 255
+            self.init(red: r, green: g, blue: b, alpha: 1)
+        case 8:
+            let r: CGFloat = CGFloat((hexValue >> 24) & 0xff) / 255
+            let g: CGFloat = CGFloat((hexValue >> 16) & 0xff) / 255
+            let b: CGFloat = CGFloat((hexValue >> 8) & 0xff) / 255
+            let a: CGFloat = CGFloat(hexValue & 0xff) / 255
+            self.init(red: r, green: g, blue: b, alpha: a)
+        default:
             return nil
         }
-        self.init(red: r, green: g, blue: b, alpha: a)
     }
 
-    public func hexString() -> String? {
-        return QJsonImplStringFromColor(self)
+    public func hexString() -> String {
+        var r: CGFloat = 0
+        var g: CGFloat = 0
+        var b: CGFloat = 0
+        var a: CGFloat = 0
+        self.getRed(&r, green: &g, blue: &b, alpha: &a)
+        return String.init(format: "#%02X%02X%02X%02X", Int(255 * r), Int(255 * g), Int(255 * b), Int(255 * a))
     }
 
     public static func random() -> UIColor {

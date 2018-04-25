@@ -148,39 +148,27 @@ extension CGRect : IQDebug {
 
 }
 
-#if os(macOS)
+extension UIColor : IQDebug {
 
-
-
-#elseif os(iOS)
-
-    extension UIColor : IQDebug {
-
-        public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-            if headerIndent > 0 {
-                buffer.append(String(repeating: "\t", count: headerIndent))
-            }
-            if let hexString = self.hexString() {
-                buffer.append("<UIColor \(hexString)>")
-            } else {
-                buffer.append("<UIColor>")
-            }
+    public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+        if headerIndent > 0 {
+            buffer.append(String(repeating: "\t", count: headerIndent))
         }
-
+        buffer.append("<UIColor \(self.hexString())>")
     }
 
-    extension UIImage : IQDebug {
+}
 
-        public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
-            if headerIndent > 0 {
-                buffer.append(String(repeating: "\t", count: headerIndent))
-            }
-            buffer.append("<UIImage width: \(self.size.width) height: \(self.size.height)>")
+extension UIImage : IQDebug {
+
+    public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+        if headerIndent > 0 {
+            buffer.append(String(repeating: "\t", count: headerIndent))
         }
-
+        buffer.append("<UIImage width: \(self.size.width) height: \(self.size.height)>")
     }
 
-#endif
+}
 
 extension NSError : IQDebug {
 

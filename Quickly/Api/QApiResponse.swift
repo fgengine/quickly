@@ -30,7 +30,7 @@ open class QApiResponse : IQApiResponse {
     }
 
     open func parse(data: Data) throws {
-        if let json = QJson(basePath: "", data: data) {
+        if let json = try? QJson(data: data) {
             do {
                 try self.parse(json: json)
             } catch let error {

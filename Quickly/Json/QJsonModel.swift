@@ -6,38 +6,29 @@ import Quickly.Private
 
 open class QJsonModel : IQJsonModel {
 
-    open class func from(json: QJson) throws -> IQJsonModel? {
-        if json.isDictionary() == true {
-            return try self.init(json: json)
+    open class func from(json: QJson) throws -> IQJsonModel {
+        guard json.isDictionary() == true else {
+            throw QJsonError.cast(path: json.basePath)
         }
-        return nil
-    }
-
-    public required init(json: QJson) throws {
         #if DEBUG
-            do {
-                try self.from(json: json)
-            } catch let error as NSError {
-                switch error.domain {
-                case QJsonErrorDomain:
-                    if let path = error.userInfo[QJsonErrorPathKey] {
-                        print("QJsonModel::\(String(describing: self)) invalid parse from JSON in path '\(path)'")
-                    } else {
-                        print("QJsonModel::\(String(describing: self)) invalid parse from JSON")
-                    }
-                    break
-                default: break
-                }
-                throw error
-            } catch let error {
-                throw error
+        do {
+            return try self.init(json: json)
+        } catch let error as QJsonError {
+            switch error {
+            case .notJson: print("QJsonModel::\(String(describing: self)) Not JSON")
+            case .access(let path): print("QJsonModel::\(String(describing: self)) invalid set/get from JSON in path '\(path)'")
+            case .cast(let path): print("QJsonModel::\(String(describing: self)) invalid cast from JSON in path '\(path)'")
             }
+            throw error
+        } catch let error {
+            throw error
+        }
         #else
-            try self.from(json: json)
+        return try self.init(json: json)
         #endif
     }
 
-    open func from(json: QJson) throws {
+    public required init(json: QJson) throws {
     }
 
     public final func toJson() -> QJson? {
@@ -47,6 +38,21 @@ open class QJsonModel : IQJsonModel {
     }
 
     open func toJson(json: QJson) {
+    }
+
+}
+
+extension QJsonModel : IQJsonValue {
+
+    public static func fromJson(value: Any, path: String) throws -> IQJsonModel {
+        return try self.from(json: QJson(root: value, basePath: path))
+    }
+
+    public func toJsonValue(path: String) throws -> Any {
+        guard let json = self.toJson(), let root = json.root else {
+            throw QJsonError.cast(path: path)
+        }
+        return root
     }
 
 }

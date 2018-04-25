@@ -10,10 +10,10 @@ class QuicklyJsonTests: XCTestCase {
     private func fakeJson() -> QJson {
         return QJson(root: [
             "bool": true,
-            "int": "1",
-            "uint": "1",
-            "float": "1.9",
-            "double": "1.9",
+            "int": 1,
+            "uint": 1,
+            "float": 1.9,
+            "double": 1.9,
             "numberString": "1",
             "string": "test",
             "date": "183548353",
@@ -31,61 +31,39 @@ class QuicklyJsonTests: XCTestCase {
 
     func testSimpleGetJson() {
         let json = self.fakeJson()
-        XCTAssert(try json.boolean(at: "bool") == true)
-        XCTAssert(try json.int(at: "int") == 1)
-        XCTAssert(try json.uint(at: "uint") == 1)
-        XCTAssert(try json.float(at: "float") == 1.9)
-        XCTAssert(try json.double(at: "double") == 1.9)
-        XCTAssert(try json.uint(at: "numberString") == 1)
-        XCTAssert(try json.string(at: "string") == "test")
-        XCTAssert(try json.date(at: "date") == Date(timeIntervalSince1970: 183548353))
-        XCTAssert(try json.color(at: "color_gg") == UIColor(hex: 0xaaaaaaff))
-        XCTAssert(try json.color(at: "color_rgb") == UIColor(hex: 0x44ddaaff))
-        XCTAssert(try json.color(at: "color_rrggbb") == UIColor(hex: 0x40d0a0ff))
-        XCTAssert(try json.color(at: "color_rrggbbaa") == UIColor(hex: 0x40d0a070))
-    }
 
-    func testSimpleOperatorGetJson() throws {
-        let json = self.fakeJson()
+        let bool: Bool = try! json.get(path: "bool")
+        XCTAssert(bool == true)
 
-        var existReguiredBool = false
-        try existReguiredBool <<< (json, "bool")
-        XCTAssert(existReguiredBool == true)
+        let int: Int = try! json.get(path: "int")
+        XCTAssert(int == 1)
 
-        var existOptionalBool: Bool?
-        existOptionalBool <<< (json, "bool")
-        if let value = existOptionalBool {
-            XCTAssert(value == true)
-        } else {
-            XCTFail("")
-        }
+        let uint: UInt = try! json.get(path: "uint")
+        XCTAssert(uint == 1)
 
-        var notFoundReguiredBool = false
-        do {
-            try notFoundReguiredBool <<< (json, "not_found")
-        } catch let error as NSError {
-            XCTAssert(error.domain == QJsonErrorDomain)
-        }
+        let float: Float = try! json.get(path: "float")
+        XCTAssert(float == 1.9)
 
-        var notFoundOptionalBool: Bool?
-        notFoundOptionalBool <<< (json, "not_found")
-        XCTAssert(notFoundOptionalBool == nil)
+        let double: Float = try! json.get(path: "double")
+        XCTAssert(double == 1.9)
 
-        var dict: [String: String] = [:]
-        dict <<< json
-    }
+        let numberString: Int = try! json.get(path: "numberString")
+        XCTAssert(numberString == 1)
 
-    func testSimpleSetJson() {
-        let json = QJson()
-        "USD" >>> (json, "RUR")
+        let string: String = try! json.get(path: "string")
+        XCTAssert(string == "test")
 
-        var existReguiredString = ""
-        do {
-            try existReguiredString <<< (json, "RUR")
-            XCTAssert(existReguiredString == "USD")
-        } catch let error {
-            XCTFail("")
-        }
+        let colorGG: UIColor = try! json.get(path: "color_gg")
+        XCTAssert(colorGG == UIColor(hex: 0xaaaaaaff))
+
+        let colorRGB: UIColor = try! json.get(path: "color_rgb")
+        XCTAssert(colorRGB == UIColor(hex: 0x44ddaaff))
+
+        let colorRRGGBB: UIColor = try! json.get(path: "color_rrggbb")
+        XCTAssert(colorRRGGBB == UIColor(hex: 0x40d0a0ff))
+
+        let colorRRGGBBAA: UIColor = try! json.get(path: "color_rrggbbaa")
+        XCTAssert(colorRRGGBBAA == UIColor(hex: 0x40d0a070))
     }
     
 }

@@ -2,275 +2,407 @@
 //  Quickly
 //
 
-import Quickly.Private
+// MARK: - QJsonError -
 
-public let QJsonErrorDomain = QJsonImplErrorDomain
-public let QJsonErrorPathKey = QJsonImplErrorPathKey
-
-public enum QJsonErrorCode : Int {
-    case notFound
-    case convert
+public enum QJsonError : Error {
+    case notJson
+    case access(path: String)
+    case cast(path: String)
 }
+
+// MARK: - IQJsonValue -
+
+public protocol IQJsonValue {
+
+    associatedtype FromValue: Any
+    associatedtype ToValue: Any
+
+    static func fromJson(value: Any, path: String) throws -> FromValue
+    func toJsonValue(path: String) throws -> ToValue
+
+}
+
+// MARK: - QJson -
 
 public final class QJson {
 
-    public var basePath: String {
-        get { return self.impl.basePath }
-    }
-    public var root: Any? {
-        get { return self.impl.root }
-    }
-    internal var impl: QJsonImpl
+    public private(set) var root: Any?
+    public private(set) var basePath: String
 
-    public init() {
-        self.impl = QJsonImpl(basePath: "")
+    public init(basePath: String = "") {
+        self.basePath = basePath
     }
 
-    public init(basePath: String) {
-        self.impl = QJsonImpl(basePath: basePath)
+    public init(root: Any, basePath: String = "") {
+        self.root = root
+        self.basePath = basePath
     }
 
-    public init(root: Any) {
-        self.impl = QJsonImpl(basePath: "", root: root)
+    public init(data: Data, basePath: String = "") throws {
+        self.root = try JSONSerialization.jsonObject(with: data, options: [])
+        self.basePath = basePath
     }
 
-    public init(basePath: String, root: Any) {
-        self.impl = QJsonImpl(basePath: basePath, root: root)
-    }
-
-    public init?(data: Data) {
-        if let impl = QJsonImpl(basePath: "", data: data) {
-            self.impl = impl
-        } else {
-            return nil
+    public convenience init(string: String, encoding: String.Encoding = String.Encoding.utf8, basePath: String = "") throws {
+        guard let data = string.data(using: String.Encoding.utf8) else {
+            throw QJsonError.notJson
         }
+        try self.init(data: data, basePath: basePath)
     }
 
-    public init?(basePath: String, data: Data) {
-        if let impl = QJsonImpl(basePath: basePath, data: data) {
-            self.impl = impl
-        } else {
-            return nil
+    public func saveAsData() throws -> Data {
+        guard let root = self.root else {
+            throw QJsonError.notJson
         }
+        return try JSONSerialization.data(withJSONObject: root, options: [])
     }
 
-    public init?(string: String) {
-        if let impl = QJsonImpl(basePath: "", string: string) {
-            self.impl = impl
-        } else {
-            return nil
-        }
-    }
-
-    public init?(basePath: String, string: String) {
-        if let impl = QJsonImpl(basePath: basePath, string: string) {
-            self.impl = impl
-        } else {
-            return nil
-        }
-    }
-
-    public init?(string: String, encoding: UInt) {
-        if let impl = QJsonImpl(basePath: "", string: string, encoding: encoding) {
-            self.impl = impl
-        } else {
-            return nil
-        }
-    }
-
-    public init?(basePath: String, string: String, encoding: UInt) {
-        if let impl = QJsonImpl(basePath: basePath, string: string, encoding: encoding) {
-            self.impl = impl
-        } else {
-            return nil
-        }
-    }
-
-    public func saveAsData() -> Data? {
-        return self.impl.saveAsData()
-    }
-
-    public func saveAsString() -> String? {
-        return self.impl.saveAsString()
-    }
-
-    public func saveAsString(encoding: UInt) -> String? {
-        return self.impl.saveAsString(encoding: encoding)
+    public func saveAsString(encoding: String.Encoding = String.Encoding.utf8) throws -> String? {
+        return String(data: try self.saveAsData(), encoding: encoding)
     }
 
     public func isDictionary() -> Bool {
-        return self.impl.isDictionary()
+        return self.root is NSDictionary
     }
 
-    public func set(_ value: [AnyHashable : Any]) {
-        self.impl.set(value: value)
-    }
-
-    public func dictionary() -> [AnyHashable : Any]? {
-        return self.impl.dictionary()
+    public func dictionary() throws -> NSDictionary {
+        guard let dictionary = self.root as? NSDictionary else { throw QJsonError.notJson }
+        return dictionary
     }
 
     public func isArray() -> Bool {
-        return self.impl.isArray()
+        return self.root is NSArray
     }
 
-    public func set(_ value: [Any]) {
-        self.impl.set(value: value)
-    }
-
-    public func array() -> [Any]? {
-        return self.impl.array()
+    public func array() throws -> NSArray {
+        guard let array = self.root as? NSArray else { throw QJsonError.notJson }
+        return array
     }
 
     public func clean() {
-        self.impl.clean()
+        self.root = nil
     }
 
-    @discardableResult
-    public func set(_ value: Any?, forPath path: String) -> Bool {
-        return self.impl.set(object: value, forPath: path)
+    public func set(_ value: Any, path: String? = nil) throws {
+        if let path = path {
+            try self.set(value, subpaths: self.subpaths(path))
+        } else {
+            self.root = value
+        }
     }
 
-    @discardableResult
-    public func set(_ value: [AnyHashable : Any], forPath path: String) -> Bool {
-        return self.impl.set(dictionary: value, forPath: path)
+    public func set(_ value: Date, format: String, path: String? = nil) throws {
+        let formatter = DateFormatter()
+        formatter.dateFormat = format
+        try self.set(value, formatter: formatter, path: path)
     }
 
-    @discardableResult
-    public func set(_ value: [Any], forPath path: String) -> Bool {
-        return self.impl.set(array: value, forPath: path)
+    public func set(_ value: Date, formatter: DateFormatter, path: String? = nil) throws {
+        try self.set(formatter.string(from: value), path: path)
     }
 
-    @discardableResult
-    public func set(_ value: Bool, forPath path: String) -> Bool {
-        return self.impl.set(boolean: value, forPath: path)
+    public func set< Type: IQJsonValue >(_ value: Type, path: String? = nil) throws {
+        let jsonValue = try value.toJsonValue(path: self.buildPath(path: path))
+        try self.set(jsonValue, path: path)
     }
 
-    @discardableResult
-    public func set(_ value: Int, forPath path: String) -> Bool {
-        return self.impl.set(number: NSNumber(value: value), forPath: path)
+    public func set< Type: IQJsonValue >(_ value: [Type], mandarory: Bool, path: String? = nil) throws {
+        var index: Int = 0
+        let jsonArray = NSMutableArray()
+        for item in value {
+            let subpath = self.buildPath(path: path, index: index)
+            if mandarory == true {
+                let jsonItem = try item.toJsonValue(path: subpath)
+                jsonArray.add(jsonItem)
+            } else {
+                if let jsonItem = try? item.toJsonValue(path: subpath) {
+                    jsonArray.add(jsonItem)
+                }
+            }
+            index += 1
+        }
+        try self.set(jsonArray, path: path)
     }
 
-    @discardableResult
-    public func set(_ value: UInt, forPath path: String) -> Bool {
-        return self.impl.set(number: NSNumber(value: value), forPath: path)
+    public func set< Key: IQJsonValue, Value: IQJsonValue >(_ value: [Key: Value], mandarory: Bool, path: String? = nil) throws {
+        var index: Int = 0
+        let jsonDictionary = NSMutableDictionary()
+        for item in value {
+            let subpath = self.buildPath(path: path, key: item.key)
+            guard let jsonKey = try item.key.toJsonValue(path: subpath) as? NSCopying else {
+                throw QJsonError.cast(path: subpath)
+            }
+            if mandarory == true {
+                let jsonValue = try item.value.toJsonValue(path: subpath)
+                jsonDictionary.setObject(jsonValue, forKey: jsonKey)
+            } else {
+                if let jsonValue = try? item.value.toJsonValue(path: subpath) {
+                    jsonDictionary.setObject(jsonValue, forKey: jsonKey)
+                }
+            }
+            index += 1
+        }
+        try self.set(jsonDictionary, path: path)
     }
 
-    @discardableResult
-    public func set(_ value: Float, forPath path: String) -> Bool {
-        return self.impl.set(number: NSNumber(value: value), forPath: path)
+    public func remove(path: String) throws {
+        try self.set(nil, subpaths: self.subpaths(path))
     }
 
-    @discardableResult
-    public func set(_ value: Double, forPath path: String) -> Bool {
-        return self.impl.set(number: NSNumber(value: value), forPath: path)
+    public func get(path: String? = nil) throws -> Any {
+        guard var root = self.root else { throw QJsonError.notJson }
+        guard let path = path else { return root }
+        var subpathIndex: Int = 0
+        let subpaths = self.subpaths(path)
+        while subpaths.endIndex != subpathIndex {
+            let subpath = subpaths[subpathIndex]
+            if let dictionary = root as? NSDictionary {
+                guard let key = subpath.jsonPathKey else {
+                    throw QJsonError.access(path: self.buildPath(subpaths: subpaths, from: 0, to: subpathIndex))
+                }
+                guard let temp = dictionary.object(forKey: key) else {
+                    throw QJsonError.access(path: self.buildPath(subpaths: subpaths, from: 0, to: subpathIndex))
+                }
+                root = temp
+            } else if let array = root as? NSArray {
+                guard let index = subpath.jsonPathIndex else {
+                    throw QJsonError.access(path: self.buildPath(subpaths: subpaths, from: 0, to: subpathIndex))
+                }
+                root = array.object(at: index)
+            } else {
+                throw QJsonError.access(path: self.buildPath(subpaths: subpaths, from: 0, to: subpathIndex))
+            }
+            subpathIndex += 1
+        }
+        return root
     }
 
-    @discardableResult
-    public func set(_ value: NSNumber, forPath path: String) -> Bool {
-        return self.impl.set(number: value, forPath: path)
+    public func get(format: String, path: String? = nil) throws -> Date {
+        let formatter = DateFormatter()
+        formatter.dateFormat = format
+        return try self.get(formatter: formatter, path: path)
     }
 
-    @discardableResult
-    public func set(_ value: NSDecimalNumber, forPath path: String) -> Bool {
-        return self.impl.set(decimalNumber: value, forPath: path)
+    public func get(formatter: DateFormatter, path: String? = nil) throws -> Date {
+        let string: String = try self.get(path: path)
+        guard let date = formatter.date(from: string) else {
+            throw QJsonError.cast(path: self.buildPath(path: path))
+        }
+        return date
     }
 
-    @discardableResult
-    public func set(_ value: String, forPath path: String) -> Bool {
-        return self.impl.set(string: value, forPath: path)
+    public func get< Type: IQJsonValue >(path: String? = nil) throws -> Type {
+        let jsonValue: Any = try self.get(path: path)
+        return try Type.fromJson(value: jsonValue, path: self.buildPath(path: path)) as! Type
     }
 
-    @discardableResult
-    public func set(_ value: URL, forPath path: String) -> Bool {
-        return self.impl.set(url: value, forPath: path)
+    public func get< Type: IQJsonValue >(mandarory: Bool, path: String? = nil) throws -> [Type] {
+        let jsonValue: Any = try self.get(path: path)
+        guard let jsonArray = jsonValue as? NSArray else {
+            throw QJsonError.cast(path: self.buildPath(path: path))
+        }
+        var result: [Type] = []
+        var index: Int = 0
+        for jsonItem in jsonArray {
+            let subpath = self.buildPath(path: path, index: index)
+            if mandarory == true {
+                let item = try Type.fromJson(value: jsonItem, path: subpath) as! Type
+                result.append(item)
+            } else {
+                if let item = try? Type.fromJson(value: jsonItem, path: subpath) as! Type {
+                    result.append(item)
+                }
+            }
+            index += 1
+        }
+        return result
     }
 
-    @discardableResult
-    public func set(_ value: Date, forPath path: String) -> Bool {
-        return self.impl.set(date: value, forPath: path)
+    public func get< Key: IQJsonValue, Value: IQJsonValue >(mandarory: Bool, path: String? = nil) throws -> [Key : Value] {
+        let jsonValue: Any = try self.get(path: path)
+        guard let jsonDictionary = jsonValue as? NSDictionary else {
+            throw QJsonError.cast(path: self.buildPath(path: path))
+        }
+        var result: [Key : Value] = [:]
+        for jsonItem in jsonDictionary {
+            let subpath = self.buildPath(path: path, key: jsonItem.key)
+            let key = try Key.fromJson(value: jsonItem.key, path: subpath) as! Key
+            if mandarory == true {
+                let value = try Value.fromJson(value: jsonItem.value, path: subpath) as! Value
+                result[key] = value
+            } else {
+                if let value = try? Value.fromJson(value: jsonItem.value, path: subpath) as! Value {
+                    result[key] = value
+                }
+            }
+        }
+        return result
     }
 
-    @discardableResult
-    public func set(_ value: Date, format: String, forPath path: String) -> Bool {
-        return self.impl.set(date: value, format: format, forPath: path)
+    private func subpaths(_ path: String) -> [IQJsonPath] {
+        guard path.contains(Const.pathSeparator) == true else {
+            return [ path ]
+        }
+        return path.components(separatedBy: Const.pathSeparator).compactMap({ (subpath: String) -> IQJsonPath? in
+            guard let subPathRange = NSRange(subpath) else { return nil }
+            guard let match = Const.pathIndexPattern.firstMatch(in: subpath, options: [], range: subPathRange) else {
+                return subpath
+            }
+            if((match.range.location != NSNotFound) && (match.range.length > 0)) {
+                let startIndex = subpath.index(subpath.startIndex, offsetBy: 1)
+                let endIndex = subpath.index(subpath.endIndex, offsetBy: -2)
+                return NSNumber.number(from: String(subpath[startIndex..<endIndex]))
+            }
+            return subpath
+        })
     }
 
-    @discardableResult
-    public func set(_ value: UIColor?, forPath path: String) -> Bool {
-        return self.impl.set(color: value, forPath: path)
+    private func buildPath(path: String?) -> String {
+        if let path = path {
+            if self.basePath.count > 0 {
+                return "\(self.basePath).\(path)"
+            }
+            return path
+        }
+        return self.basePath
     }
 
-    public func object(at: String) throws -> Any {
-        return try self.impl.object(at: at)
+    private func buildPath(path: String?, index: Int) -> String {
+        if let path = path {
+            if self.basePath.count > 0 {
+                return "\(self.basePath).\(path)[\(index)]"
+            }
+            return "\(path)[\(index)]"
+        }
+        if self.basePath.count > 0 {
+            return "\(self.basePath)[\(index)]"
+        }
+        return "[\(index)]"
     }
 
-    public func dictionary(at: String) throws -> [AnyHashable : Any] {
-        return try self.impl.dictionary(at: at)
+    private func buildPath(path: String?, key: Any) -> String {
+        if let path = path {
+            if self.basePath.count > 0 {
+                return "\(self.basePath).\(path).\(key)"
+            }
+            return "\(path).\(key)"
+        }
+        if self.basePath.count > 0 {
+            return "\(self.basePath).\(key)"
+        }
+        return "\(key)"
     }
 
-    public func array(at: String) throws -> [Any] {
-        return try self.impl.array(at: at)
+    private func buildPath(subpaths: [IQJsonPath], from: Int, to: Int) -> String {
+        var path = self.basePath
+        Array< IQJsonPath >(subpaths[from..<to]).forEach({
+            if let string = $0.jsonPathKey {
+                if path.count > 0 {
+                    path.append(".\(string)")
+                } else {
+                    path.append(string)
+                }
+            } else if let number = $0.jsonPathIndex {
+                path.append("[\(number)]")
+            }
+        })
+        return path
     }
 
-    public func boolean(at: String) throws -> Bool {
-        return try self.impl.number(at: at).boolValue
+    private func set(_ value: Any?, subpaths: [IQJsonPath]) throws {
+        if self.root == nil {
+            if let subpath = subpaths.first {
+                if subpath.jsonPathKey != nil {
+                    self.root = NSMutableDictionary()
+                } else if subpath.jsonPathIndex != nil {
+                    self.root = NSMutableArray()
+                } else {
+                    throw QJsonError.access(path: self.buildPath(subpaths: subpaths, from: 0, to: 1))
+                }
+            } else {
+                throw QJsonError.access(path: self.basePath)
+            }
+        }
+        var root: Any = self.root!
+        var prevRoot: Any?
+        var subpathIndex: Int = 0
+        while subpaths.endIndex != subpathIndex {
+            let subpath = subpaths[subpathIndex]
+            if let key = subpath.jsonPathKey {
+                var mutable: NSMutableDictionary
+                if root is NSMutableDictionary {
+                    mutable = root as! NSMutableDictionary
+                } else if root is NSDictionary {
+                    mutable = NSMutableDictionary(dictionary: root as! NSDictionary)
+                    if let prevRoot = prevRoot {
+                        let prevSubpath = subpaths[subpathIndex - 1]
+                        if let prevDictionary = prevRoot as? NSMutableDictionary {
+                            prevDictionary.setValue(mutable, forKey: prevSubpath.jsonPathKey!)
+                        } else if let prevArray = prevRoot as? NSMutableArray {
+                            prevArray.insert(mutable, at: prevSubpath.jsonPathIndex!)
+                        }
+                    }
+                    root = mutable
+                } else {
+                    throw QJsonError.access(path: self.buildPath(subpaths: subpaths, from: 0, to: subpathIndex))
+                }
+                if subpathIndex == subpaths.endIndex - 1 {
+                    if let value = value {
+                        mutable.setValue(value, forKey: key)
+                    } else {
+                        mutable.removeObject(forKey: key)
+                    }
+                }
+            } else if let index = subpath.jsonPathIndex {
+                var mutable: NSMutableArray
+                if root is NSMutableArray {
+                    mutable = root as! NSMutableArray
+                } else if root is NSArray {
+                    mutable = NSMutableArray(array: root as! NSArray)
+                    if let prevRoot = prevRoot {
+                        let prevSubpath = subpaths[subpathIndex - 1]
+                        if let prevDictionary = prevRoot as? NSMutableDictionary {
+                            prevDictionary.setValue(mutable, forKey: prevSubpath.jsonPathKey!)
+                        } else if let prevArray = prevRoot as? NSMutableArray {
+                            prevArray.insert(mutable, at: prevSubpath.jsonPathIndex!)
+                        }
+                    }
+                    root = mutable
+                } else {
+                    throw QJsonError.access(path: self.buildPath(subpaths: subpaths, from: 0, to: subpathIndex))
+                }
+                if subpathIndex == subpaths.endIndex - 1 {
+                    if let value = value {
+                        mutable.insert(value, at: index)
+                    } else {
+                        mutable.removeObject(at: index)
+                    }
+                }
+            } else {
+                throw QJsonError.access(path: self.buildPath(subpaths: subpaths, from: 0, to: subpathIndex))
+            }
+            subpathIndex += 1
+            prevRoot = root
+        }
     }
 
-    public func int(at: String) throws -> Int {
-        return try self.impl.number(at: at).intValue
-    }
-
-    public func uint(at: String) throws -> UInt {
-        return try self.impl.number(at: at).uintValue
-    }
-
-    public func float(at: String) throws -> Float {
-        return try self.impl.number(at: at).floatValue
-    }
-
-    public func double(at: String) throws -> Double {
-        return try self.impl.number(at: at).doubleValue
-    }
-
-    public func number(at: String) throws -> NSNumber {
-        return try self.impl.number(at: at)
-    }
-
-    public func decimalNumber(at: String) throws -> NSDecimalNumber {
-        return try self.impl.decimalNumber(at: at)
-    }
-
-    public func string(at: String) throws -> String {
-        return try self.impl.string(at: at)
-    }
-
-    public func url(at: String) throws -> URL {
-        return try self.impl.url(at: at)
-    }
-
-    public func date(at: String) throws -> Date {
-        return try self.impl.date(at: at)
-    }
-
-    public func date(at: String, formats: [String]) throws -> Date {
-        return try self.impl.date(at: at, formats: formats)
-    }
-
-    public func color(at: String) throws -> UIColor {
-        return try self.impl.color(at: at)
+    private struct Const {
+        public static var pathSeparator = "."
+        public static var pathIndexPattern = try! NSRegularExpression(pattern: "^\\[\\d+\\]$", options: [ .anchorsMatchLines ])
     }
 
 }
+
+// MARK: - QJson : IQDebug -
 
 extension QJson : IQDebug {
 
     open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         if self.isArray() == true {
-            let array = self.root! as! NSArray
+            let array = try! self.array()
             array.debugString(&buffer, headerIndent, indent, footerIndent)
         } else if self.isDictionary() == true {
-            let dictionary = self.root! as! NSDictionary
+            let dictionary = try! self.dictionary()
             dictionary.debugString(&buffer, headerIndent, indent, footerIndent)
         } else {
             if headerIndent > 0 {
@@ -278,6 +410,300 @@ extension QJson : IQDebug {
             }
             buffer.append("<QJson>")
         }
+    }
+
+}
+
+// MARK: - Bool : IQJsonValue -
+
+extension Bool : IQJsonValue {
+
+    public static func fromJson(value: Any, path: String) throws -> Bool {
+        guard let boolean = value as? Bool else {
+            if let string = value as? String {
+                switch string.lowercased() {
+                case "true", "yes", "on": return true
+                case "false", "no", "off": return false
+                default: break
+                }
+            } else if let number = value as? NSNumber {
+                return number.boolValue
+            }
+            throw QJsonError.cast(path: path)
+        }
+        return boolean
+    }
+
+    public func toJsonValue(path: String) throws -> Any {
+        return NSNumber(value: self)
+    }
+
+}
+
+// MARK: - String : IQJsonValue -
+
+extension String : IQJsonValue {
+
+    public static func fromJson(value: Any, path: String) throws -> String {
+        guard let string = value as? String else {
+            if let number = value as? NSNumber {
+                return number.stringValue
+            } else if let decimalNumber = value as? NSDecimalNumber {
+                return decimalNumber.stringValue
+            } else {
+                throw QJsonError.cast(path: path)
+            }
+        }
+        return string
+    }
+
+    public func toJsonValue(path: String) throws -> Any {
+        return self
+    }
+
+}
+
+// MARK: - URL : IQJsonValue -
+
+extension URL : IQJsonValue {
+
+    public static func fromJson(value: Any, path: String) throws -> URL {
+        guard let string = value as? String else {
+            throw QJsonError.cast(path: path)
+        }
+        guard let url = URL(string: string) else {
+            throw QJsonError.cast(path: path)
+        }
+        return url
+    }
+
+    public func toJsonValue(path: String) throws -> Any {
+        return self.absoluteString
+    }
+
+}
+
+// MARK: - NSNumber : IQJsonValue -
+
+extension NSNumber : IQJsonValue {
+
+    @objc
+    public class func fromJson(value: Any, path: String) throws -> NSNumber {
+        guard let number = value as? NSNumber else {
+            if let string = value as? String {
+                if let number = NSNumber.number(from: string) {
+                    return number
+                }
+            } else {
+                throw QJsonError.cast(path: path)
+            }
+            throw QJsonError.cast(path: path)
+        }
+        return number
+    }
+
+    @objc
+    public func toJsonValue(path: String) throws -> Any {
+        return self
+    }
+
+}
+
+extension NSDecimalNumber {
+
+    @objc
+    public override class func fromJson(value: Any, path: String) throws -> NSDecimalNumber {
+        guard let decimalNumber = value as? NSDecimalNumber else {
+            if let string = value as? String {
+                if let decimalNumber = NSDecimalNumber.decimalNumber(from: string) {
+                    return decimalNumber
+                }
+            } else if let number = value as? NSNumber {
+                return NSDecimalNumber(string: number.stringValue)
+            } else {
+                throw QJsonError.cast(path: path)
+            }
+            throw QJsonError.cast(path: path)
+        }
+        return decimalNumber
+    }
+
+    @objc
+    public override func toJsonValue(path: String) throws -> Any {
+        return self.stringValue
+    }
+
+}
+
+// MARK: - Decimal : IQJsonValue -
+
+extension Decimal : IQJsonValue {
+
+    public static func fromJson(value: Any, path: String) throws -> Decimal {
+        return try NSDecimalNumber.fromJson(value: value, path: path) as Decimal
+    }
+
+    public func toJsonValue(path: String) throws -> Any {
+        return try (self as NSDecimalNumber).toJsonValue(path: path)
+    }
+
+}
+
+// MARK: - Date : IQJsonValue -
+
+extension Date : IQJsonValue {
+
+    public static func fromJson(value: Any, path: String) throws -> Date {
+        let timestamp = try NSNumber.fromJson(value: value, path: path)
+        return Date(timeIntervalSince1970: timestamp.doubleValue)
+    }
+
+    public func toJsonValue(path: String) throws -> Any {
+        return NSNumber(value: Int(self.timeIntervalSince1970))
+    }
+
+}
+
+// MARK: - Int : IQJsonValue -
+
+extension Int : IQJsonValue {
+
+    public static func fromJson(value: Any, path: String) throws -> Int {
+        return try NSNumber.fromJson(value: value, path: path).intValue
+    }
+
+    public func toJsonValue(path: String) throws -> Any {
+        return NSNumber(value: self)
+    }
+
+}
+
+// MARK: - UInt : IQJsonValue -
+
+extension UInt : IQJsonValue {
+
+    public static func fromJson(value: Any, path: String) throws -> UInt {
+        return try NSNumber.fromJson(value: value, path: path).uintValue
+    }
+
+    public func toJsonValue(path: String) throws -> Any {
+        return NSNumber(value: self)
+    }
+
+}
+
+// MARK: - Float : IQJsonValue -
+
+extension Float : IQJsonValue {
+
+    public static func fromJson(value: Any, path: String) throws -> Float {
+        return try NSNumber.fromJson(value: value, path: path).floatValue
+    }
+
+    public func toJsonValue(path: String) throws -> Any {
+        return NSNumber(value: self)
+    }
+
+}
+
+// MARK: - Double : IQJsonValue -
+
+extension Double : IQJsonValue {
+
+    public static func fromJson(value: Any, path: String) throws -> Double {
+        return try NSNumber.fromJson(value: value, path: path).doubleValue
+    }
+
+    public func toJsonValue(path: String) throws -> Any {
+        return NSNumber(value: self)
+    }
+
+}
+
+// MARK: - CGFloat : IQJsonValue -
+
+extension CGFloat : IQJsonValue {
+
+    public static func fromJson(value: Any, path: String) throws -> CGFloat {
+        return try CGFloat(self.NativeType.fromJson(value: value, path: path))
+    }
+
+    public func toJsonValue(path: String) throws -> Any {
+        return try self.native.toJsonValue(path: path)
+    }
+
+}
+
+// MARK: - UIColor : IQJsonValue -
+
+extension UIColor : IQJsonValue {
+
+    public static func fromJson(value: Any, path: String) throws -> UIColor {
+        if let string = value as? String {
+            if let color = UIColor.init(hexString: string) {
+                return color
+            }
+        } else if let number = value as? NSNumber {
+            return UIColor.init(hex: number.uint32Value)
+        }
+        throw QJsonError.cast(path: path)
+    }
+
+    public func toJsonValue(path: String) throws -> Any {
+        return self.hexString()
+    }
+
+}
+
+// MARK: - RawRepresentable : IQJsonValue -
+
+extension RawRepresentable where Self.RawValue : IQJsonValue {
+
+    public static func fromJson(value: Any, path: String) throws -> Any {
+        let rawValue = try self.RawValue.fromJson(value: value, path: path) as! Self.RawValue
+        guard let value = self.init(rawValue: rawValue) else {
+            throw QJsonError.cast(path: path)
+        }
+        return value
+    }
+
+    public func toJsonValue(path: String) throws -> Any {
+        return try self.rawValue.toJsonValue(path: path)
+    }
+
+}
+
+// MARK: - IQJsonPath -
+
+fileprivate protocol IQJsonPath {
+
+    var jsonPathKey: String? { get }
+    var jsonPathIndex: Int? { get }
+
+}
+
+// MARK: - String : IQJsonPath -
+
+extension String : IQJsonPath {
+
+    var jsonPathKey: String? {
+        get { return self }
+    }
+    var jsonPathIndex: Int? {
+        get { return nil }
+    }
+
+}
+
+// MARK: - NSNumber : IQJsonPath -
+
+extension NSNumber : IQJsonPath {
+
+    var jsonPathKey: String? {
+        get { return nil }
+    }
+    var jsonPathIndex: Int? {
+        get { return self.intValue }
     }
 
 }

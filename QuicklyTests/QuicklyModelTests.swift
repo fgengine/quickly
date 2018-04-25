@@ -7,21 +7,25 @@ import Quickly
 
 class QuicklyModelTests: XCTestCase {
 
+    enum Enum : String, IQJsonValue {
+        case case1 = "case1"
+    }
+
     class RootModel: QJsonModel {
 
         var child: ChildModel?
         
-        override class func from(json: QJson) throws -> IQJsonModel? {
-            var value = ""
-            try value <<< (json, "type")
+        override class func from(json: QJson) throws -> IQJsonModel {
+            let value: String = try json.get(path: "type")
             switch value {
             case "A": return try SubRootModel(json: json)
             default: return try super.from(json: json)
             }
         }
 
-        override func from(json: QJson) throws {
-            self.child <<< (json, "child")
+        required init(json: QJson) throws {
+            self.child = try? json.get(path: "child")
+            try super.init(json: json)
         }
 
     }
@@ -31,30 +35,23 @@ class QuicklyModelTests: XCTestCase {
 
     class ChildModel: QJsonModel {
 
-        var value = ""
-        
-        override class func from(json: QJson) throws -> IQJsonModel? {
-            var value: String?
-            value <<< (json, "value")
-            guard let _ = value else {
-                return try ChildModel(json: json)
-            }
-            return try super.from(json: json)
-        }
+        var type: Enum
+        var value: String
 
-        override func from(json: QJson) throws {
-            try self.value <<< (json, "value")
+        required init(json: QJson) throws {
+            self.type = try json.get(path: "type")
+            self.value = try json.get(path: "value")
+            try super.init(json: json)
         }
 
     }
 
     func testModel() {
-        let json = QJson(basePath: "", string:
-            "[ { \"type\" : \"A\", \"child\": \"1\" } ]"
-        )!
-        var models: [RootModel] = []
-        models <<< json
-        XCTAssert(models.first!.child == nil)
+        let json = try! QJson(string:
+            "{ \"type\" : \"A\", \"child\": { \"type\" : \"case1\", \"value\" : \"1\" } }"
+        )
+        let model: RootModel = try! json.get()
+        XCTAssert(model.child == nil)
     }
 
 }
