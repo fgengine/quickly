@@ -128,6 +128,8 @@
 		4062C913208A12AA0098F809 /* QTitleButtonComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4062C8E8208A04A20098F809 /* QTitleButtonComposition.swift */; };
 		4062C914208A12AA0098F809 /* QButtonComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4062C8D8208A04A20098F809 /* QButtonComposition.swift */; };
 		40691540208487BE008934D5 /* IQStackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4069153C208487BD008934D5 /* IQStackViewController.swift */; };
+		406FDF6B20908071004178CC /* QApiPagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406FDF6A20908071004178CC /* QApiPagination.swift */; };
+		406FDF6F209082E4004178CC /* IQApiPagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406FDF6E209082E4004178CC /* IQApiPagination.swift */; };
 		4070B6A920628E4E00B568A9 /* QReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4070B6A720628E4E00B568A9 /* QReachability.swift */; };
 		4070B6AD206297BB00B568A9 /* QKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4070B6AB206297BB00B568A9 /* QKeyboard.swift */; };
 		40784DDD207DED22001828E3 /* IQJsonEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40784DDB207DED22001828E3 /* IQJsonEnum.swift */; };
@@ -400,6 +402,8 @@
 		4069153C208487BD008934D5 /* IQStackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQStackViewController.swift; sourceTree = "<group>"; };
 		406915432084C904008934D5 /* QStackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QStackViewController.swift; sourceTree = "<group>"; };
 		406915452084CA26008934D5 /* QStackViewControllerAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QStackViewControllerAnimation.swift; sourceTree = "<group>"; };
+		406FDF6A20908071004178CC /* QApiPagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QApiPagination.swift; sourceTree = "<group>"; };
+		406FDF6E209082E4004178CC /* IQApiPagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQApiPagination.swift; sourceTree = "<group>"; };
 		4070B6A720628E4E00B568A9 /* QReachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QReachability.swift; sourceTree = "<group>"; };
 		4070B6AB206297BB00B568A9 /* QKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QKeyboard.swift; sourceTree = "<group>"; };
 		40784DDB207DED22001828E3 /* IQJsonEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQJsonEnum.swift; sourceTree = "<group>"; };
@@ -1051,12 +1055,14 @@
 				409403611F4E26D1008A8B90 /* IQApiQuery.swift */,
 				402F1FAF1F4EE0AB007625CA /* IQApiRequest.swift */,
 				402F1FB11F4EE0F8007625CA /* IQApiResponse.swift */,
+				406FDF6E209082E4004178CC /* IQApiPagination.swift */,
 				409403571F4E129F008A8B90 /* QApiProvider.swift */,
 				402F1FB91F4F380B007625CA /* QApiProvider+Internal.swift */,
 				4094035D1F4E2645008A8B90 /* QApiProvider+URLSession.swift */,
 				4094035F1F4E2663008A8B90 /* QApiQuery.swift */,
 				409403591F4E12BF008A8B90 /* QApiRequest.swift */,
 				4094035A1F4E12BF008A8B90 /* QApiResponse.swift */,
+				406FDF6A20908071004178CC /* QApiPagination.swift */,
 				402F1FB51F4EF525007625CA /* QApiError.swift */,
 				402F1FBB1F4F446F007625CA /* QApiImpl.h */,
 				402F1FBC1F4F446F007625CA /* QApiImpl.m */,
@@ -1586,6 +1592,7 @@
 				40E2D6041F67850600B954E4 /* QImageResponse.swift in Sources */,
 				40E738561F5606C500B192C6 /* QSeparatorTableCell.swift in Sources */,
 				40CF45BD1F4DE6AB004D00D8 /* QCollectionController.swift in Sources */,
+				406FDF6F209082E4004178CC /* IQApiPagination.swift in Sources */,
 				4062C912208A12AA0098F809 /* QTitleDetailShapeComposition.swift in Sources */,
 				4062C90B208A0EE70098F809 /* QImageTitleValueComposition.swift in Sources */,
 				405A490E201F19020001D684 /* QTransparentView.swift in Sources */,
@@ -1711,6 +1718,7 @@
 				40CF45C51F4DE6AB004D00D8 /* String.swift in Sources */,
 				40134EF81F62D20C009F81A6 /* QRegularExpressionStringValidator.swift in Sources */,
 				40CF45DA1F4DE6AB004D00D8 /* IQTableDecor.swift in Sources */,
+				406FDF6B20908071004178CC /* QApiPagination.swift in Sources */,
 				40224617207662C50020B357 /* QDisplayView.swift in Sources */,
 				40134F021F63129E009F81A6 /* IQStringFormatter.swift in Sources */,
 				401E8F7C206D34C4008A5BE4 /* IQPickerCell.swift in Sources */,

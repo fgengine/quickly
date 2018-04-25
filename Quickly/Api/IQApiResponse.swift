@@ -12,4 +12,3 @@ public protocol IQApiResponse : class {
     func reset()
     
 }
-
