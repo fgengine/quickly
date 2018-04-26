@@ -49,3 +49,22 @@ public struct QApiRangePagination : IQApiRangePagination {
     }
 
 }
+
+public struct QApiDatePagination : IQApiDatePagination {
+
+    public var date: Date
+    public var count: UInt
+
+    public init(date: Date, count: UInt) {
+        self.date = date
+        self.count = count
+    }
+
+    public func next(date: Date) -> QApiDatePagination {
+        return QApiDatePagination(
+            date: date,
+            count: self.count
+        )
+    }
+
+}

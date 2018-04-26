@@ -183,6 +183,11 @@ public final class QJson {
         return try self.get(formatter: formatter, path: path)
     }
 
+    public func get(format: String, path: String? = nil) throws -> Date! {
+        let result: Date = try self.get(format: format, path: path)
+        return result
+    }
+
     public func get(formatter: DateFormatter, path: String? = nil) throws -> Date {
         let string: String = try self.get(path: path)
         guard let date = formatter.date(from: string) else {
@@ -191,9 +196,19 @@ public final class QJson {
         return date
     }
 
+    public func get(formatter: DateFormatter, path: String? = nil) throws -> Date! {
+        let result: Date = try self.get(formatter: formatter, path: path)
+        return result
+    }
+
     public func get< Type: IQJsonValue >(path: String? = nil) throws -> Type {
         let jsonValue: Any = try self.get(path: path)
         return try Type.fromJson(value: jsonValue, path: self.buildPath([ path ])) as! Type
+    }
+
+    public func get< Type: IQJsonValue >(path: String? = nil) throws -> Type! {
+        let result: Type = try self.get(path: path)
+        return result
     }
 
     public func get< Type: IQJsonValue >(mandarory: Bool, path: String? = nil) throws -> [Type] {
@@ -218,6 +233,11 @@ public final class QJson {
         return result
     }
 
+    public func get< Type: IQJsonValue >(mandarory: Bool, path: String? = nil) throws -> [Type]! {
+        let result: [Type] = try self.get(mandarory: mandarory, path: path)
+        return result
+    }
+
     public func get< Key: IQJsonValue, Value: IQJsonValue >(mandarory: Bool, path: String? = nil) throws -> [Key : Value] {
         let jsonValue: Any = try self.get(path: path)
         guard let jsonDictionary = jsonValue as? NSDictionary else {
@@ -236,6 +256,11 @@ public final class QJson {
                 }
             }
         }
+        return result
+    }
+
+    public func get< Key: IQJsonValue, Value: IQJsonValue >(mandarory: Bool, path: String? = nil) throws -> [Key : Value]! {
+        let result: [Key : Value] = try self.get(mandarory: mandarory, path: path)
         return result
     }
 

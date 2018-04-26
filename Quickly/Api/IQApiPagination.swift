@@ -25,3 +25,12 @@ public protocol IQApiRangePagination {
     func next() -> Self
 
 }
+
+public protocol IQApiDatePagination {
+
+    var date: Date { get }
+    var count: UInt { get }
+
+    func next(date: Date) -> Self
+
+}
