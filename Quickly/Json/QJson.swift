@@ -106,12 +106,12 @@ public final class QJson {
         try self.set(jsonValue, path: path)
     }
 
-    public func set< Type: IQJsonValue >(_ value: [Type], mandarory: Bool, path: String? = nil) throws {
+    public func set< Type: IQJsonValue >(_ value: [Type], mandatory: Bool, path: String? = nil) throws {
         var index: Int = 0
         let jsonArray = NSMutableArray()
         for item in value {
             let subpath = self.buildPath([ path, index ])
-            if mandarory == true {
+            if mandatory == true {
                 let jsonItem = try item.toJsonValue(path: subpath)
                 jsonArray.add(jsonItem)
             } else {
@@ -124,7 +124,7 @@ public final class QJson {
         try self.set(jsonArray, path: path)
     }
 
-    public func set< Key: IQJsonValue, Value: IQJsonValue >(_ value: [Key: Value], mandarory: Bool, path: String? = nil) throws {
+    public func set< Key: IQJsonValue, Value: IQJsonValue >(_ value: [Key: Value], mandatory: Bool, path: String? = nil) throws {
         var index: Int = 0
         let jsonDictionary = NSMutableDictionary()
         for item in value {
@@ -132,7 +132,7 @@ public final class QJson {
             guard let jsonKey = try item.key.toJsonValue(path: subpath) as? NSCopying else {
                 throw QJsonError.cast(path: subpath)
             }
-            if mandarory == true {
+            if mandatory == true {
                 let jsonValue = try item.value.toJsonValue(path: subpath)
                 jsonDictionary.setObject(jsonValue, forKey: jsonKey)
             } else {
@@ -211,7 +211,7 @@ public final class QJson {
         return result
     }
 
-    public func get< Type: IQJsonValue >(mandarory: Bool, path: String? = nil) throws -> [Type] {
+    public func get< Type: IQJsonValue >(mandatory: Bool, path: String? = nil) throws -> [Type] {
         let jsonValue: Any = try self.get(path: path)
         guard let jsonArray = jsonValue as? NSArray else {
             throw QJsonError.cast(path: self.buildPath([ path ]))
@@ -220,7 +220,7 @@ public final class QJson {
         var index: Int = 0
         for jsonItem in jsonArray {
             let subpath = self.buildPath([ path, index ])
-            if mandarory == true {
+            if mandatory == true {
                 let item = try Type.fromJson(value: jsonItem, path: subpath) as! Type
                 result.append(item)
             } else {
@@ -233,12 +233,12 @@ public final class QJson {
         return result
     }
 
-    public func get< Type: IQJsonValue >(mandarory: Bool, path: String? = nil) throws -> [Type]! {
-        let result: [Type] = try self.get(mandarory: mandarory, path: path)
+    public func get< Type: IQJsonValue >(mandatory: Bool, path: String? = nil) throws -> [Type]! {
+        let result: [Type] = try self.get(mandatory: mandatory, path: path)
         return result
     }
 
-    public func get< Key: IQJsonValue, Value: IQJsonValue >(mandarory: Bool, path: String? = nil) throws -> [Key : Value] {
+    public func get< Key: IQJsonValue, Value: IQJsonValue >(mandatory: Bool, path: String? = nil) throws -> [Key : Value] {
         let jsonValue: Any = try self.get(path: path)
         guard let jsonDictionary = jsonValue as? NSDictionary else {
             throw QJsonError.cast(path: self.buildPath([ path ]))
@@ -247,7 +247,7 @@ public final class QJson {
         for jsonItem in jsonDictionary {
             let subpath = self.buildPath([ path, jsonItem.key ])
             let key = try Key.fromJson(value: jsonItem.key, path: subpath) as! Key
-            if mandarory == true {
+            if mandatory == true {
                 let value = try Value.fromJson(value: jsonItem.value, path: subpath) as! Value
                 result[key] = value
             } else {
@@ -259,8 +259,8 @@ public final class QJson {
         return result
     }
 
-    public func get< Key: IQJsonValue, Value: IQJsonValue >(mandarory: Bool, path: String? = nil) throws -> [Key : Value]! {
-        let result: [Key : Value] = try self.get(mandarory: mandarory, path: path)
+    public func get< Key: IQJsonValue, Value: IQJsonValue >(mandatory: Bool, path: String? = nil) throws -> [Key : Value]! {
+        let result: [Key : Value] = try self.get(mandatory: mandatory, path: path)
         return result
     }
 
