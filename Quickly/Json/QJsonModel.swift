@@ -28,6 +28,9 @@ open class QJsonModel : IQJsonModel {
         #endif
     }
 
+    public init() {
+    }
+
     public required init(json: QJson) throws {
     }
 
