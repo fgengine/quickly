@@ -43,7 +43,7 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
             }
             self.tableView.tableController = value
             if let controller = self.tableView.tableController {
-                controller.addObserver(self)
+                controller.addObserver(self, priority: 0)
             }
         }
         get { return self.tableView.tableController }

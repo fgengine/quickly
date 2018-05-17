@@ -162,8 +162,8 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         self.reload()
     }
 
-    open func addObserver(_ observer: IQTableControllerObserver) {
-        self.observer.add(observer)
+    open func addObserver(_ observer: IQTableControllerObserver, priority: UInt) {
+        self.observer.add(observer, priority: priority)
     }
 
     open func removeObserver(_ observer: IQTableControllerObserver) {

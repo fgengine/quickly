@@ -5,7 +5,7 @@
 import XCTest
 import Quickly
 
-class QuicklyTextStyleTests: XCTestCase {
+class QuicklyTextStyleTests : XCTestCase {
 
     func testTextStyle() {
         let style = QTextStyle()

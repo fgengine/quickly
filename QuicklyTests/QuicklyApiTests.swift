@@ -5,7 +5,7 @@
 import XCTest
 import Quickly
 
-class QuicklyApiTests: XCTestCase {
+class QuicklyApiTests : XCTestCase {
 
     func testGetApi() {
         let expectation = self.expectation(description: "")

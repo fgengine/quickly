@@ -37,7 +37,7 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
             }
             self._collectionView.collectionController = value
             if let controller = self._collectionView.collectionController {
-                controller.addObserver(self)
+                controller.addObserver(self, priority: 0)
             }
         }
         get { return self._collectionView.collectionController }
@@ -49,7 +49,7 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
             }
             self._collectionView.collectionLayout = value
             if let layout = self._collectionView.collectionLayout {
-                layout.addObserver(self)
+                layout.addObserver(self, priority: 0)
             }
         }
         get { return self._collectionView.collectionLayout }

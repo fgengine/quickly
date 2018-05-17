@@ -283,15 +283,15 @@ public class QImageLoader {
                     request: request,
                     response: response,
                     queue: loader.syncQueue,
-                    download: { (progress) in
-                        self.notify(loader: loader, progress: progress)
+                    download: { [weak self] (progress) in
+                        self?.notify(loader: loader, progress: progress)
                     },
-                    completed: { (request, response) in
+                    completed: { [weak self] (request, response) in
                         downloadData = response.data
                         downloadImage = response.image
                         downloadError = response.error
-                        self.query = nil
-                        self.semaphore.signal()
+                        self?.query = nil
+                        self?.semaphore.signal()
                     }
                 )
                 self.semaphore.wait()

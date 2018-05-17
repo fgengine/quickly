@@ -5,7 +5,7 @@
 import XCTest
 import Quickly
 
-class QuicklyModelTests: XCTestCase {
+class QuicklyModelTests : XCTestCase {
 
     enum Enum : String, IQJsonValue {
         case case1 = "case1"
@@ -51,7 +51,7 @@ class QuicklyModelTests: XCTestCase {
             "{ \"type\" : \"A\", \"child\": { \"type\" : \"case1\", \"value\" : \"1\" } }"
         )
         let model: RootModel = try! json.get()
-        XCTAssert(model.child == nil)
+        XCTAssert(model.child != nil)
     }
 
 }

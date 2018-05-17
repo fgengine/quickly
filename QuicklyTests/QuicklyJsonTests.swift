@@ -5,7 +5,7 @@
 import XCTest
 import Quickly
 
-class QuicklyJsonTests: XCTestCase {
+class QuicklyJsonTests : XCTestCase {
 
     private func fakeJson() -> QJson {
         return QJson(root: [

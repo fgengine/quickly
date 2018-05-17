@@ -30,7 +30,7 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
             }
             self.collectionView.collectionController = value
             if let controller = self.collectionView.collectionController {
-                controller.addObserver(self)
+                controller.addObserver(self, priority: 0)
             }
         }
         get {return self.collectionView.collectionController }

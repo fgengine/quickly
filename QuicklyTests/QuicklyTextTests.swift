@@ -5,7 +5,7 @@
 import XCTest
 import Quickly
 
-class QuicklyTextTests: XCTestCase {
+class QuicklyTextTests : XCTestCase {
 
     func testText() {
         let text = QText(NSAttributedString(string: "Test"))

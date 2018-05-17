@@ -10,7 +10,7 @@ public protocol IQCollectionLayoutObserver : class {
 
 public protocol IQCollectionLayout : class {
 
-    func addObserver(_ observer: IQCollectionLayoutObserver)
+    func addObserver(_ observer: IQCollectionLayoutObserver, priority: UInt)
     func removeObserver(_ observer: IQCollectionLayoutObserver)
 
 

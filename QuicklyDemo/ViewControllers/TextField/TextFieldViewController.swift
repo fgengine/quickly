@@ -58,7 +58,7 @@ class TextFieldViewController: QStaticViewController, IQRouted {
 
     override func willPresent(animated: Bool) {
         super.willPresent(animated: animated)
-        self.keyboard.addObserver(self)
+        self.keyboard.addObserver(self, priority: 0)
     }
 
     override func didPresent(animated: Bool) {

@@ -16,8 +16,8 @@ open class QCollectionLayout : UICollectionViewLayout, IQCollectionLayout {
         super.init(coder: coder)
     }
 
-    public func addObserver(_ observer: IQCollectionLayoutObserver) {
-        self.observer.add(observer)
+    public func addObserver(_ observer: IQCollectionLayoutObserver, priority: UInt) {
+        self.observer.add(observer, priority: priority)
     }
 
     public func removeObserver(_ observer: IQCollectionLayoutObserver) {
@@ -59,8 +59,8 @@ open class QCollectionFlowLayout : UICollectionViewFlowLayout, IQCollectionLayou
         super.init(coder: coder)
     }
 
-    public func addObserver(_ observer: IQCollectionLayoutObserver) {
-        self.observer.add(observer)
+    public func addObserver(_ observer: IQCollectionLayoutObserver, priority: UInt) {
+        self.observer.add(observer, priority: priority)
     }
 
     public func removeObserver(_ observer: IQCollectionLayoutObserver) {
