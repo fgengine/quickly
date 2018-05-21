@@ -27,13 +27,13 @@ class ConfirmPushViewController: QStaticViewController, IQPushContentViewControl
         super.init()
     }
 
-    public override func setup() {
+    override func setup() {
         super.setup()
 
         self.edgesForExtendedLayout = []
     }
 
-    public override func didLoad() {
+    override func didLoad() {
         super.didLoad()
 
         self.rootView.backgroundColor = UIColor.lightGray
@@ -44,11 +44,11 @@ class ConfirmPushViewController: QStaticViewController, IQPushContentViewControl
         self.subtitleLabel.text = QText("Push subtitle", color: .black)
     }
 
-    public func didTimeout() {
+    func didTimeout() {
         self.router.dismiss(viewController: self)
     }
 
-    public func didPressed() {
+    func didPressed() {
         self.router.dismiss(viewController: self)
     }
 

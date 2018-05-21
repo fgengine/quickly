@@ -28,6 +28,7 @@
 		40134F041F63129E009F81A6 /* QCardNumberStringFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40134F011F63129E009F81A6 /* QCardNumberStringFormatter.swift */; };
 		4018295E1F4C1C0A005C9949 /* Quickly.h in Headers */ = {isa = PBXBuildFile; fileRef = 4018295C1F4C1C0A005C9949 /* Quickly.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4019002A204D66AB00608B4F /* QMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40190028204D66AB00608B4F /* QMainViewController.swift */; };
+		401B1BC120B32E8600DC247F /* QApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401B1BC020B32E8600DC247F /* QApplication.swift */; };
 		401E8F75206D34C0008A5BE4 /* IQPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401E8F51206D1206008A5BE4 /* IQPickerController.swift */; };
 		401E8F7A206D34C4008A5BE4 /* IQPickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401E8F54206D1206008A5BE4 /* IQPickerSection.swift */; };
 		401E8F7B206D34C4008A5BE4 /* IQPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401E8F52206D1206008A5BE4 /* IQPickerRow.swift */; };
@@ -307,6 +308,7 @@
 		4018295D1F4C1C0A005C9949 /* Quickly.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Quickly.plist; sourceTree = "<group>"; };
 		40190028204D66AB00608B4F /* QMainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QMainViewController.swift; sourceTree = "<group>"; };
 		4019002B204D885B00608B4F /* QPushContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QPushContainerViewController.swift; sourceTree = "<group>"; };
+		401B1BC020B32E8600DC247F /* QApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QApplication.swift; sourceTree = "<group>"; };
 		401BCBDA20866FE00083CC21 /* QStackPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QStackPageViewController.swift; sourceTree = "<group>"; };
 		401E8F41206D0FBA008A5BE4 /* QListField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QListField.swift; sourceTree = "<group>"; };
 		401E8F4F206D1206008A5BE4 /* QPickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QPickerController.swift; sourceTree = "<group>"; };
@@ -665,6 +667,7 @@
 				40CF45A71F4DE6AB004D00D8 /* ViewControllers */,
 				406101661F8D797A00A5463E /* Other */,
 				404EC1EB2077798100761BBD /* QMetatype.swift */,
+				401B1BC020B32E8600DC247F /* QApplication.swift */,
 				4018295C1F4C1C0A005C9949 /* Quickly.h */,
 				409403541F4DEB6C008A8B90 /* QuicklyPrivate.h */,
 				40E2D60E1F678E7E00B954E4 /* Quickly.xcconfig */,
@@ -1680,6 +1683,7 @@
 				40CF45BA1F4DE6AB004D00D8 /* IQCollectionReuse.swift in Sources */,
 				402315361F7B9FD3001B0AF7 /* QAmountStringFormatter.swift in Sources */,
 				406101681F8D79A700A5463E /* QFontInfo.swift in Sources */,
+				401B1BC120B32E8600DC247F /* QApplication.swift in Sources */,
 				402F1FB41F4EE237007625CA /* IQApiProvider.swift in Sources */,
 				4094035C1F4E12BF008A8B90 /* QApiResponse.swift in Sources */,
 				40CF45B71F4DE6AB004D00D8 /* IQCollectionData.swift in Sources */,

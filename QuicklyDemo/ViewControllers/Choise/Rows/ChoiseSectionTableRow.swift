@@ -8,7 +8,7 @@ class ChoiseSectionTableRow : QCompositionTableRow< QTitleDetailShapeComposition
 
     // MARK: Enum
 
-    public enum Mode {
+    enum Mode {
         case label
         case button
         case textField
@@ -18,7 +18,7 @@ class ChoiseSectionTableRow : QCompositionTableRow< QTitleDetailShapeComposition
         case dialog
         case push
 
-        public var name: String {
+        var name: String {
             get {
                 switch self {
                 case .label: return "Label"
@@ -32,7 +32,7 @@ class ChoiseSectionTableRow : QCompositionTableRow< QTitleDetailShapeComposition
                 }
             }
         }
-        public var detail: String {
+        var detail: String {
             get {
                 switch self {
                 case .label: return "Pressed to open the QLabel component demonstration screen"
@@ -48,13 +48,13 @@ class ChoiseSectionTableRow : QCompositionTableRow< QTitleDetailShapeComposition
         }
     }
 
-    // MARK: Public property
+    // MARK: property
 
-    public private(set) var mode: Mode
+    private(set) var mode: Mode
 
     // MARK: Init
 
-    public init(mode: Mode) {
+    init(mode: Mode) {
         self.mode = mode
 
         super.init(

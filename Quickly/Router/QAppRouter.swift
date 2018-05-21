@@ -30,6 +30,10 @@ open class QAppRouter< ContainerType: IQContainer > : IQRouter {
         self.container = container
     }
 
+    open func launch(_ options: [UIApplicationLaunchOptionsKey : Any]?) {
+        fatalError("Required override function '\(#function)'")
+    }
+
     private func prepareWindow() -> QWindow? {
         return QWindow(self.mainViewController)
     }

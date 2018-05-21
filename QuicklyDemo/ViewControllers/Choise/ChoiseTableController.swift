@@ -12,10 +12,10 @@ protocol ChoiseTableControllerDelegate: class {
 
 class ChoiseTableController: QTableController {
 
-    public weak var delegate: ChoiseTableControllerDelegate?
-    public var section: IQTableSection?
+    weak var delegate: ChoiseTableControllerDelegate?
+    var section: IQTableSection?
 
-    public init(_ delegate: ChoiseTableControllerDelegate) {
+    init(_ delegate: ChoiseTableControllerDelegate) {
         self.delegate = delegate
 
         super.init(cells: [
@@ -35,7 +35,7 @@ class ChoiseTableController: QTableController {
         ]
     }
     
-    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let delegate = self.delegate {
             let row = self.row(indexPath: indexPath)
             if let row = row as? ChoiseSectionTableRow {

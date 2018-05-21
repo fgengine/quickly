@@ -6,7 +6,7 @@ import Quickly
 
 class DisclosureShape : QShapeModel {
 
-    public init(color: UIColor) {
+    init(color: UIColor) {
         super.init(size: CGSize(width: 8, height: 24))
         self.strokeColor = color
         self.lineWidth = 1
@@ -14,7 +14,7 @@ class DisclosureShape : QShapeModel {
         self.lineJoin = .round
     }
 
-    public override func make() -> UIBezierPath? {
+    override func make() -> UIBezierPath? {
         let size2 = CGSize(width: self.size.width / 2, height: self.size.height / 2)
 
         let path = UIBezierPath()

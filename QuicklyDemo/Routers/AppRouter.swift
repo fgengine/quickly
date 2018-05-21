@@ -8,7 +8,7 @@ class AppRouter: QAppRouter<
     AppContainer
 > {
 
-    public override init(container: AppContainer) {
+    override init(container: AppContainer) {
         super.init(container: container)
 
         let dialogViewController = QDialogContainerViewController()
@@ -19,28 +19,32 @@ class AppRouter: QAppRouter<
         self.mainViewController.pushContainerViewController = pushViewController
     }
 
-    public func presentChoise() {
+    override func launch(_ options: [UIApplicationLaunchOptionsKey : Any]?) {
+        self.presentChoise()
+    }
+
+    func presentChoise() {
         self.currentRouter = ChoiseRouter(container: self.container, router: self)
     }
 
-    public func presentDialog(_ viewController: IQDialogContentViewController) {
+    func presentDialog(_ viewController: IQDialogContentViewController) {
         let dialogViewController = QDialogViewController(contentViewController: viewController)
         dialogViewController.widthBehaviour = .fit(min: 160, max: 300)
         dialogViewController.heightBehaviour = .fit(min: 240, max: 480)
         self.mainViewController.dialogContainerViewController!.presentDialog(viewController: dialogViewController, animated: true, completion: nil)
     }
 
-    public func dismissDialog(_ viewController: IQDialogContentViewController) {
+    func dismissDialog(_ viewController: IQDialogContentViewController) {
         guard let dvc = viewController.dialogViewController else { return }
         dvc.dismissDialog(animated: true, completion: nil)
     }
 
-    public func presentPush(_ viewController: IQPushContentViewController, displayTime: TimeInterval?) {
+    func presentPush(_ viewController: IQPushContentViewController, displayTime: TimeInterval?) {
         let pushViewController = QPushViewController(contentViewController: viewController, displayTime: displayTime)
         self.mainViewController.pushContainerViewController!.presentPush(viewController: pushViewController, animated: true, completion: nil)
     }
 
-    public func dismissPush(_ viewController: IQPushContentViewController) {
+    func dismissPush(_ viewController: IQPushContentViewController) {
         guard let pvc = viewController.pushViewController else { return }
         pvc.dismissPush(animated: true, completion: nil)
     }

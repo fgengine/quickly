@@ -9,7 +9,7 @@ class ChoiseRouter: QStackRouter<
     AppRouter
 > {
 
-    public override func prepareRootViewController() -> IQStackContentViewController {
+    override func prepareRootViewController() -> IQStackContentViewController {
         let vc = ChoiseViewController(router: self, container: self.container)
         return vc
     }
@@ -18,42 +18,42 @@ class ChoiseRouter: QStackRouter<
 
 extension ChoiseRouter : IChoiseViewControllerRouter {
 
-    public func presentLabelViewController() {
+    func presentLabelViewController() {
         let vc = LabelViewController(router: self, container: self.container)
         self.present(vc, animated: true)
     }
 
-    public func presentButtonViewController() {
+    func presentButtonViewController() {
         let vc = ButtonViewController(router: self, container: self.container)
         self.present(vc, animated: true)
     }
 
-    public func presentTextFieldViewController() {
+    func presentTextFieldViewController() {
         let vc = TextFieldViewController(router: self, container: self.container)
         self.present(vc, animated: true)
     }
 
-    public func presentListFieldViewController() {
+    func presentListFieldViewController() {
         let vc = ListFieldViewController(router: self, container: self.container)
         self.present(vc, animated: true)
     }
 
-    public func presentDateFieldViewController() {
+    func presentDateFieldViewController() {
         let vc = DateFieldViewController(router: self, container: self.container)
         self.present(vc, animated: true)
     }
 
-    public func presentImageViewController() {
+    func presentImageViewController() {
         let vc = ImageViewController(router: self, container: self.container)
         self.present(vc, animated: true)
     }
 
-    public func presentDialogViewController() {
+    func presentDialogViewController() {
         let vc = DialogViewController(router: self, container: self.container)
         self.present(vc, animated: true)
     }
 
-    public func presentPushViewController() {
+    func presentPushViewController() {
         let vc = PushViewController(router: self, container: self.container)
         self.present(vc, animated: true)
     }
@@ -62,7 +62,7 @@ extension ChoiseRouter : IChoiseViewControllerRouter {
 
 extension ChoiseRouter : ILabelViewControllerRouter {
 
-    public func dismiss(viewController: LabelViewController) {
+    func dismiss(viewController: LabelViewController) {
         self.dismiss(viewController, animated: true)
     }
 
@@ -70,7 +70,7 @@ extension ChoiseRouter : ILabelViewControllerRouter {
 
 extension ChoiseRouter : IButtonViewControllerRouter {
 
-    public func dismiss(viewController: ButtonViewController) {
+    func dismiss(viewController: ButtonViewController) {
         self.dismiss(viewController, animated: true)
     }
     
@@ -78,7 +78,7 @@ extension ChoiseRouter : IButtonViewControllerRouter {
 
 extension ChoiseRouter : ITextFieldViewControllerRouter {
 
-    public func dismiss(viewController: TextFieldViewController) {
+    func dismiss(viewController: TextFieldViewController) {
         self.dismiss(viewController, animated: true)
     }
     
@@ -86,7 +86,7 @@ extension ChoiseRouter : ITextFieldViewControllerRouter {
 
 extension ChoiseRouter : IListFieldViewControllerRouter {
 
-    public func dismiss(viewController: ListFieldViewController) {
+    func dismiss(viewController: ListFieldViewController) {
         self.dismiss(viewController, animated: true)
     }
 
@@ -94,7 +94,7 @@ extension ChoiseRouter : IListFieldViewControllerRouter {
 
 extension ChoiseRouter : IDateFieldViewControllerRouter {
 
-    public func dismiss(viewController: DateFieldViewController) {
+    func dismiss(viewController: DateFieldViewController) {
         self.dismiss(viewController, animated: true)
     }
 
@@ -102,7 +102,7 @@ extension ChoiseRouter : IDateFieldViewControllerRouter {
 
 extension ChoiseRouter : IImageViewControllerRouter {
 
-    public func dismiss(viewController: ImageViewController) {
+    func dismiss(viewController: ImageViewController) {
         self.dismiss(viewController, animated: true)
     }
     
@@ -110,14 +110,14 @@ extension ChoiseRouter : IImageViewControllerRouter {
 
 extension ChoiseRouter : IDialogViewControllerRouter {
 
-    public func presentConfirmDialog() {
+    func presentConfirmDialog() {
         if let router = self.router {
             let vc = ConfirmDialogViewController(router: self, container: self.container)
             router.presentDialog(vc)
         }
     }
 
-    public func dismiss(viewController: DialogViewController) {
+    func dismiss(viewController: DialogViewController) {
         self.dismiss(viewController, animated: true)
     }
 
@@ -125,7 +125,7 @@ extension ChoiseRouter : IDialogViewControllerRouter {
 
 extension ChoiseRouter : IConfirmDialogViewControllerRouter {
 
-    public func dismiss(viewController: ConfirmDialogViewController) {
+    func dismiss(viewController: ConfirmDialogViewController) {
         if let router = self.router {
             router.dismissDialog(viewController)
         }
@@ -135,14 +135,14 @@ extension ChoiseRouter : IConfirmDialogViewControllerRouter {
 
 extension ChoiseRouter : IPushViewControllerRouter {
 
-    public func presentConfirmPush() {
+    func presentConfirmPush() {
         if let router = self.router {
             let vc = ConfirmPushViewController(router: self, container: self.container)
             router.presentPush(vc, displayTime: 7)
         }
     }
 
-    public func dismiss(viewController: PushViewController) {
+    func dismiss(viewController: PushViewController) {
         self.dismiss(viewController, animated: true)
     }
 
@@ -150,7 +150,7 @@ extension ChoiseRouter : IPushViewControllerRouter {
 
 extension ChoiseRouter : IConfirmPushViewControllerRouter {
 
-    public func dismiss(viewController: ConfirmPushViewController) {
+    func dismiss(viewController: ConfirmPushViewController) {
         if let router = self.router {
             router.dismissPush(viewController)
         }
