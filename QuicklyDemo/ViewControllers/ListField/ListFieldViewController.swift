@@ -11,7 +11,7 @@ protocol IListFieldViewControllerRouter: IQRouter {
     
 }
 
-class ListFieldViewController: QStaticViewController, IQRouted {
+class ListFieldViewController: QNibViewController, IQRouted {
 
     var router: IListFieldViewControllerRouter
     var container: AppContainer

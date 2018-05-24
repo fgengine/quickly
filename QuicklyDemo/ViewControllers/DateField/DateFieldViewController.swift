@@ -11,7 +11,7 @@ protocol IDateFieldViewControllerRouter: IQRouter {
     
 }
 
-class DateFieldViewController: QStaticViewController, IQRouted {
+class DateFieldViewController: QNibViewController, IQRouted {
 
     var router: IDateFieldViewControllerRouter
     var container: AppContainer

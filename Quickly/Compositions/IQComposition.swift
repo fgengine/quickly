@@ -3,9 +3,6 @@
 //
 
 public protocol IQCompositionData : class {
-
-    var edgeInsets: UIEdgeInsets { set get }
-
 }
 
 public protocol IQComposition : class {

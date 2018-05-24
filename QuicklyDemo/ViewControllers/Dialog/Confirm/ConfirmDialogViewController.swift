@@ -11,7 +11,7 @@ protocol IConfirmDialogViewControllerRouter: IQRouter {
     
 }
 
-class ConfirmDialogViewController: QStaticViewController, IQDialogContentViewController, IQRouted {
+class ConfirmDialogViewController: QNibViewController, IQDialogContentViewController, IQRouted {
 
     weak var dialogViewController: IQDialogViewController?
     var router: IConfirmDialogViewControllerRouter

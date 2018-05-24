@@ -12,7 +12,7 @@ open class QCompositionData: IQCompositionData {
 
 }
 
-open class QComposition< DataType: QCompositionData >: IQComposition {
+open class QComposition< DataType: IQCompositionData >: IQComposition {
 
     public var contentView: UIView
     public private(set) var data: DataType!

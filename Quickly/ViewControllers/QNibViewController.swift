@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QStaticViewController : QViewController, IQStackContentViewController {
+open class QNibViewController : QViewController, IQStackContentViewController {
 
     open var stackPageViewController: IQStackPageViewController?
     open var stackPageContentOffset: CGPoint {

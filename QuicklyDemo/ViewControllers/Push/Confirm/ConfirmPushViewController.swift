@@ -11,7 +11,7 @@ protocol IConfirmPushViewControllerRouter: IQRouter {
     
 }
 
-class ConfirmPushViewController: QStaticViewController, IQPushContentViewController, IQRouted {
+class ConfirmPushViewController: QNibViewController, IQPushContentViewController, IQRouted {
 
     weak var pushViewController: IQPushViewController?
     var router: IConfirmPushViewControllerRouter

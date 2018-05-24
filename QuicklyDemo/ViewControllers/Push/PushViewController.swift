@@ -12,7 +12,7 @@ protocol IPushViewControllerRouter: IQRouter {
     
 }
 
-class PushViewController: QStaticViewController, IQRouted {
+class PushViewController: QNibViewController, IQRouted {
 
     var router: IPushViewControllerRouter
     var container: AppContainer

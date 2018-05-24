@@ -12,7 +12,7 @@ protocol IDialogViewControllerRouter: IQRouter {
     
 }
 
-class DialogViewController: QStaticViewController, IQRouted {
+class DialogViewController: QNibViewController, IQRouted {
 
     var router: IDialogViewControllerRouter
     var container: AppContainer

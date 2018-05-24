@@ -11,7 +11,7 @@ protocol ITextFieldViewControllerRouter: IQRouter {
     
 }
 
-class TextFieldViewController: QStaticViewController, IQRouted {
+class TextFieldViewController: QNibViewController, IQRouted {
 
     var router: ITextFieldViewControllerRouter
     var container: AppContainer

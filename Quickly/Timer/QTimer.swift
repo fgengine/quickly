@@ -6,15 +6,15 @@ public final class QTimer : NSObject {
 
     public typealias Closure = (_ timer: QTimer) -> Void
 
-    public private(set) var isDelaying: Bool = false
-    public private(set) var isStarted: Bool = false
-    public private(set) var isPaused: Bool = false
     public var interval: TimeInterval
     public var delay: TimeInterval
     public var repeating: UInt
-    public private(set) var duration: TimeInterval = 0
-    public private(set) var elapsed: TimeInterval = 0
-    public private(set) var repeated: UInt = 0
+    public private(set) var isDelaying: Bool
+    public private(set) var isStarted: Bool
+    public private(set) var isPaused: Bool
+    public private(set) var duration: TimeInterval
+    public private(set) var elapsed: TimeInterval
+    public private(set) var repeated: UInt
 
     public var onStarted: Closure?
     public var onRepeat: Closure?
@@ -28,10 +28,35 @@ public final class QTimer : NSObject {
     private var pauseDate: Date?
     private var timer: Timer?
 
-    public init(interval: TimeInterval, delay: TimeInterval = 0, repeating: UInt = 0) {
+    public init(interval: TimeInterval, delay: TimeInterval, repeating: UInt) {
         self.interval = interval
         self.delay = delay
         self.repeating = repeating
+        self.isDelaying = false
+        self.isStarted = false
+        self.isPaused = false
+        self.duration = 0
+        self.elapsed = 0
+        self.repeated = 0
+    }
+
+    public convenience init(
+        interval: TimeInterval,
+        onFinished: @escaping Closure
+    ) {
+        self.init(interval: interval, delay: 0, repeating: 0)
+        self.onFinished = onFinished
+    }
+
+    public convenience init(
+        interval: TimeInterval,
+        repeating: UInt,
+        onRepeat: @escaping Closure,
+        onFinished: @escaping Closure
+    ) {
+        self.init(interval: interval, delay: 0, repeating: repeating)
+        self.onRepeat = onRepeat
+        self.onFinished = onFinished
     }
 
     public func start() {

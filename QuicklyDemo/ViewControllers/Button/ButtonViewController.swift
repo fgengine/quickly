@@ -11,7 +11,7 @@ protocol IButtonViewControllerRouter: IQRouter {
     
 }
 
-class ButtonViewController: QStaticViewController, IQRouted {
+class ButtonViewController: QNibViewController, IQRouted {
 
     var router: IButtonViewControllerRouter
     var container: AppContainer

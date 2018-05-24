@@ -47,11 +47,10 @@ open class QPushViewController : QViewController, IQPushViewController {
 
     open override func didLoad() {
         if let displayTime = self.displayTime {
-            let timer = QTimer(interval: displayTime)
-            timer.onFinished = { [weak self] (timer: QTimer) in
+            let timer = QTimer(interval: displayTime, onFinished: { [weak self] (timer: QTimer) in
                 guard let strongify = self else { return }
                 strongify.contentViewController.didTimeout()
-            }
+            })
             timer.start()
             self.timer = timer
         }

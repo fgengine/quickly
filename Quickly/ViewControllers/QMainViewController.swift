@@ -4,6 +4,25 @@
 
 open class QMainViewController : QViewController {
 
+    open var backgroundViewController: IQViewController? {
+        willSet {
+            guard let vc = self.backgroundViewController else { return }
+            if self.isLoaded == true {
+                vc.willDismiss(animated: false)
+                vc.didDismiss(animated: false)
+            }
+            vc.parent = nil
+        }
+        didSet {
+            guard let vc = self.backgroundViewController else { return }
+            vc.parent = self
+            if self.isLoaded == true {
+                self.appendBackgroundController(vc)
+                vc.willPresent(animated: false)
+                vc.didPresent(animated: false)
+            }
+        }
+    }
     open var contentViewController: IQViewController? {
         willSet {
             guard let vc = self.contentViewController else { return }
@@ -63,6 +82,9 @@ open class QMainViewController : QViewController {
     }
 
     open override func didLoad() {
+        if let vc = self.backgroundViewController {
+            self.appendBackgroundController(vc)
+        }
         if let vc = self.contentViewController {
             self.appendContentController(vc)
         }
@@ -97,6 +119,11 @@ open class QMainViewController : QViewController {
         return cdvc.preferedStatusBarAnimation()
     }
 
+    private func appendBackgroundController(_ viewController: IQViewController) {
+        viewController.view.frame = self.view.bounds
+        self.view.insertSubview(viewController.view, at: 0)
+    }
+
     private func appendContentController(_ viewController: IQViewController) {
         viewController.view.frame = self.view.bounds
         if let vc = self.dialogContainerViewController {
@@ -108,6 +135,12 @@ open class QMainViewController : QViewController {
         } else if let vc = self.pushContainerViewController {
             if vc.view.superview == self.view {
                 self.view.insertSubview(viewController.view, belowSubview: vc.view)
+            } else {
+                self.view.addSubview(viewController.view)
+            }
+        } else if let vc = self.backgroundViewController {
+            if vc.view.superview == self.view {
+                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
             } else {
                 self.view.addSubview(viewController.view)
             }
@@ -130,6 +163,12 @@ open class QMainViewController : QViewController {
             } else {
                 self.view.addSubview(viewController.view)
             }
+        } else if let vc = self.backgroundViewController {
+            if vc.view.superview == self.view {
+                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
+            } else {
+                self.view.addSubview(viewController.view)
+            }
         } else {
             self.view.addSubview(viewController.view)
         }
@@ -145,7 +184,13 @@ open class QMainViewController : QViewController {
             }
         } else if let vc = self.contentViewController {
             if vc.view.superview == self.view {
-                self.view.insertSubview(viewController.view, belowSubview: vc.view)
+                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
+            } else {
+                self.view.addSubview(viewController.view)
+            }
+        } else if let vc = self.backgroundViewController {
+            if vc.view.superview == self.view {
+                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
             } else {
                 self.view.addSubview(viewController.view)
             }

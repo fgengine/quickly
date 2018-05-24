@@ -11,7 +11,7 @@ protocol IImageViewControllerRouter: IQRouter {
     
 }
 
-class ImageViewController: QStaticViewController, IQRouted {
+class ImageViewController: QNibViewController, IQRouted {
 
     var router: IImageViewControllerRouter
     var container: AppContainer
