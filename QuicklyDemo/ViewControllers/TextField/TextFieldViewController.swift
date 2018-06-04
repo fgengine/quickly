@@ -5,13 +5,13 @@
 
 import Quickly
 
-protocol ITextFieldViewControllerRouter: IQRouter {
+protocol ITextFieldViewControllerRouter : IQRouter {
 
     func dismiss(viewController: TextFieldViewController)
     
 }
 
-class TextFieldViewController: QNibViewController, IQRouted {
+class TextFieldViewController : QNibViewController, IQRouted {
 
     var router: ITextFieldViewControllerRouter
     var container: AppContainer

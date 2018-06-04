@@ -5,13 +5,13 @@
 
 import Quickly
 
-protocol IDateFieldViewControllerRouter: IQRouter {
+protocol IDateFieldViewControllerRouter : IQRouter {
 
     func dismiss(viewController: DateFieldViewController)
     
 }
 
-class DateFieldViewController: QNibViewController, IQRouted {
+class DateFieldViewController : QNibViewController, IQRouted {
 
     var router: IDateFieldViewControllerRouter
     var container: AppContainer

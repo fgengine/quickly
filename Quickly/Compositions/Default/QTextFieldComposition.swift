@@ -60,40 +60,40 @@ public class QTextFieldComposition< DataType: QTextFieldCompositionData >: QComp
         self.textField = QTextField(frame: self.contentView.bounds)
         self.textField.translatesAutoresizingMaskIntoConstraints = false
         self.textField.onShouldBeginEditing = { [weak self] (textField: QTextField) in
-            guard let strongify = self else { return true }
-            return strongify.shouldBeginEditing()
+            guard let strong = self else { return true }
+            return strong.shouldBeginEditing()
         }
         self.textField.onBeginEditing = { [weak self] (textField: QTextField) in
-            guard let strongify = self else { return }
-            strongify.beginEditing()
+            guard let strong = self else { return }
+            strong.beginEditing()
         }
         self.textField.onEditing = { [weak self] (textField: QTextField) in
-            guard let strongify = self else { return }
-            strongify.editing()
+            guard let strong = self else { return }
+            strong.editing()
         }
         self.textField.onShouldEndEditing = { [weak self] (textField: QTextField) in
-            guard let strongify = self else { return true }
-            return strongify.shouldEndEditing()
+            guard let strong = self else { return true }
+            return strong.shouldEndEditing()
         }
         self.textField.onEndEditing = { [weak self] (textField: QTextField) in
-            guard let strongify = self else { return }
-            strongify.endEditing()
+            guard let strong = self else { return }
+            strong.endEditing()
         }
         self.textField.onShouldClear = { [weak self] (textField: QTextField) in
-            guard let strongify = self else { return true }
-            return strongify.shouldClear()
+            guard let strong = self else { return true }
+            return strong.shouldClear()
         }
         self.textField.onPressedClear = { [weak self] (textField: QTextField) in
-            guard let strongify = self else { return }
-            strongify.pressedClear()
+            guard let strong = self else { return }
+            strong.pressedClear()
         }
         self.textField.onShouldReturn = { [weak self] (textField: QTextField) in
-            guard let strongify = self else { return true }
-            return strongify.shouldReturn()
+            guard let strong = self else { return true }
+            return strong.shouldReturn()
         }
         self.textField.onPressedReturn = { [weak self] (textField: QTextField) in
-            guard let strongify = self else { return }
-            strongify.pressedReturn()
+            guard let strong = self else { return }
+            strong.pressedReturn()
         }
         self.contentView.addSubview(self.textField)
     }

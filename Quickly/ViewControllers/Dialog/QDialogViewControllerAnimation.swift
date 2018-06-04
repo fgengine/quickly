@@ -2,22 +2,22 @@
 //  Quickly
 //
 
-open class QDialogViewControllerAnimation : IQDialogViewControllerFixedAnimation {
+public class QDialogViewControllerAnimation : IQDialogViewControllerFixedAnimation {
 
-    public var viewController: IQDialogViewController!
-    public var duration: TimeInterval
-    public var verticalOffset: CGFloat
+    internal var viewController: IQDialogViewController!
+    internal var duration: TimeInterval
+    internal var verticalOffset: CGFloat
 
     public init(duration: TimeInterval, verticalOffset: CGFloat) {
         self.duration = duration
         self.verticalOffset = verticalOffset
     }
 
-    open func prepare(viewController: IQDialogViewController) {
+    public func prepare(viewController: IQDialogViewController) {
         self.viewController = viewController
     }
 
-    open func update(animated: Bool, complete: @escaping (Bool) -> Void) {
+    public func update(animated: Bool, complete: @escaping (Bool) -> Void) {
     }
 
     internal func contentVerticalAlignment(_ contentVerticalAlignment: QDialogViewControllerVerticalAlignment) -> QDialogViewControllerVerticalAlignment {
@@ -30,13 +30,13 @@ open class QDialogViewControllerAnimation : IQDialogViewControllerFixedAnimation
 
 }
 
-open class QDialogViewControllerPresentAnimation : QDialogViewControllerAnimation {
+public class QDialogViewControllerPresentAnimation : QDialogViewControllerAnimation {
 
-    public init() {
-        super.init(duration: 0.2, verticalOffset: 50)
+    public override init(duration: TimeInterval = 0.2, verticalOffset: CGFloat = 50) {
+        super.init(duration: duration, verticalOffset: verticalOffset)
     }
 
-    open override func update(animated: Bool, complete: @escaping (_ completed: Bool) -> Void) {
+    public override func update(animated: Bool, complete: @escaping (_ completed: Bool) -> Void) {
         if animated == true {
             let originalVerticalAlignment = self.viewController.verticalAlignment
             let originalAlpha = self.viewController.view.alpha
@@ -63,13 +63,13 @@ open class QDialogViewControllerPresentAnimation : QDialogViewControllerAnimatio
 
 }
 
-open class QDialogViewControllerDismissAnimation : QDialogViewControllerAnimation {
+public class QDialogViewControllerDismissAnimation : QDialogViewControllerAnimation {
 
-    public init() {
-        super.init(duration: 0.2, verticalOffset: 200)
+    public override init(duration: TimeInterval = 0.2, verticalOffset: CGFloat = 200) {
+        super.init(duration: duration, verticalOffset: verticalOffset)
     }
 
-    open override func update(animated: Bool, complete: @escaping (_ completed: Bool) -> Void) {
+    public override func update(animated: Bool, complete: @escaping (_ completed: Bool) -> Void) {
         if animated == true {
             let originalVerticalAlignment = self.viewController.verticalAlignment
             let originalAlpha = self.viewController.view.alpha
@@ -95,18 +95,28 @@ open class QDialogViewControllerDismissAnimation : QDialogViewControllerAnimatio
 
 }
 
-open class QDialogViewControllerinteractiveDismissAnimation : IQDialogViewControllerInteractiveAnimation {
+public class QDialogViewControllerinteractiveDismissAnimation : IQDialogViewControllerInteractiveAnimation {
 
-    open var viewController: IQDialogViewController!
-    open var verticalAlignment: QDialogViewControllerVerticalAlignment = .center(offset: 0)
-    open var position: CGPoint = CGPoint.zero
-    open private(set) var deltaPosition: CGFloat = 0
-    open var velocity: CGPoint = CGPoint.zero
-    open var finishDistance: CGFloat = 80
-    open var acceleration: CGFloat = 600
-    open var canFinish: Bool = false
+    internal var viewController: IQDialogViewController!
+    internal var verticalAlignment: QDialogViewControllerVerticalAlignment
+    internal var position: CGPoint
+    internal var deltaPosition: CGFloat
+    internal var velocity: CGPoint
+    internal var dismissDistance: CGFloat
+    internal var acceleration: CGFloat
+    public private(set) var canFinish: Bool
 
-    open func prepare(viewController: IQDialogViewController, position: CGPoint, velocity: CGPoint) {
+    public init(dismissDistance: CGFloat = 80, acceleration: CGFloat = 600) {
+        self.verticalAlignment = .center(offset: 0)
+        self.position = CGPoint.zero
+        self.deltaPosition = 0
+        self.velocity = CGPoint.zero
+        self.dismissDistance = dismissDistance
+        self.acceleration = acceleration
+        self.canFinish = false
+    }
+
+    public func prepare(viewController: IQDialogViewController, position: CGPoint, velocity: CGPoint) {
         self.viewController = viewController
         self.verticalAlignment = viewController.verticalAlignment
         self.position = position
@@ -114,7 +124,7 @@ open class QDialogViewControllerinteractiveDismissAnimation : IQDialogViewContro
         self.viewController.prepareInteractiveDismiss()
     }
 
-    open func update(position: CGPoint, velocity: CGPoint) {
+    public func update(position: CGPoint, velocity: CGPoint) {
         switch self.verticalAlignment {
         case .top(let offset):
             self.deltaPosition = min(0, position.y - self.position.y)
@@ -126,10 +136,10 @@ open class QDialogViewControllerinteractiveDismissAnimation : IQDialogViewContro
             self.deltaPosition = max(0, position.y - self.position.y)
             self.viewController.verticalAlignment = .bottom(offset: offset + self.deltaPosition)
         }
-        self.canFinish = abs(self.deltaPosition) > self.finishDistance
+        self.canFinish = abs(self.deltaPosition) > self.dismissDistance
     }
 
-    open func cancel(_ complete: @escaping (_ completed: Bool) -> Void) {
+    public func cancel(_ complete: @escaping (_ completed: Bool) -> Void) {
         let duration = TimeInterval(self.deltaPosition / self.acceleration)
         UIView.animate(withDuration: duration, animations: {
             self.viewController.verticalAlignment = self.verticalAlignment
@@ -141,7 +151,7 @@ open class QDialogViewControllerinteractiveDismissAnimation : IQDialogViewContro
         })
     }
 
-    open func finish(_ complete: @escaping (_ completed: Bool) -> Void) {
+    public func finish(_ complete: @escaping (_ completed: Bool) -> Void) {
         let originalVerticalAlignment = self.viewController.verticalAlignment
         let originalHorizontalAlignment = self.viewController.horizontalAlignment
         let originalAlpha = self.viewController.view.alpha

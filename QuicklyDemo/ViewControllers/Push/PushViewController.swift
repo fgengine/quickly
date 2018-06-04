@@ -5,14 +5,14 @@
 
 import Quickly
 
-protocol IPushViewControllerRouter: IQRouter {
+protocol IPushViewControllerRouter : IQRouter {
 
     func presentConfirmPush()
     func dismiss(viewController: PushViewController)
     
 }
 
-class PushViewController: QNibViewController, IQRouted {
+class PushViewController : QNibViewController, IQRouted {
 
     var router: IPushViewControllerRouter
     var container: AppContainer
@@ -46,6 +46,7 @@ class PushViewController: QNibViewController, IQRouted {
 
     @objc
     private func pressedShowPush(_ sender: Any) {
+        self.router.presentConfirmPush()
         self.router.presentConfirmPush()
     }
 

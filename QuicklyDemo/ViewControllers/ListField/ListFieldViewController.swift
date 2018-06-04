@@ -5,13 +5,13 @@
 
 import Quickly
 
-protocol IListFieldViewControllerRouter: IQRouter {
+protocol IListFieldViewControllerRouter : IQRouter {
 
     func dismiss(viewController: ListFieldViewController)
     
 }
 
-class ListFieldViewController: QNibViewController, IQRouted {
+class ListFieldViewController : QNibViewController, IQRouted {
 
     var router: IListFieldViewControllerRouter
     var container: AppContainer

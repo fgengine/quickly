@@ -4,13 +4,13 @@
 
 open class QAppRouter< ContainerType: IQContainer > : IQRouter {
 
-    open var container: ContainerType
+    open private(set) var container: ContainerType
     open var viewController: IQViewController {
         get { return self.mainViewController }
     }
 
-    open lazy var window: QWindow? = self.prepareWindow()
-    open lazy var mainViewController: QMainViewController = self.prepareMainViewController()
+    open private(set) lazy var window: QWindow? = self.prepareWindow()
+    open private(set) lazy var mainViewController: QMainViewController = self.prepareMainViewController()
     open var currentRouter: IQRouter? {
         didSet {
             if let currentRouter = self.currentRouter {

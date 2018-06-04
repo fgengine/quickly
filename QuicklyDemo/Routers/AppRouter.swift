@@ -24,7 +24,7 @@ class AppRouter: QAppRouter<
     }
 
     func presentChoise() {
-        self.currentRouter = ChoiseRouter(container: self.container, router: self)
+        self.currentRouter = ChoiseRouter(container: self.container, parent: self)
     }
 
     func presentDialog(_ viewController: IQDialogContentViewController) {

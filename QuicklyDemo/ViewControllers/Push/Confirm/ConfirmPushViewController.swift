@@ -5,15 +5,14 @@
 
 import Quickly
 
-protocol IConfirmPushViewControllerRouter: IQRouter {
+protocol IConfirmPushViewControllerRouter : IQRouter {
 
     func dismiss(viewController: ConfirmPushViewController)
     
 }
 
-class ConfirmPushViewController: QNibViewController, IQPushContentViewController, IQRouted {
+class ConfirmPushViewController : QNibViewController, IQPushContentViewController, IQRouted {
 
-    weak var pushViewController: IQPushViewController?
     var router: IConfirmPushViewControllerRouter
     var container: AppContainer
 
@@ -36,8 +35,9 @@ class ConfirmPushViewController: QNibViewController, IQPushContentViewController
     override func didLoad() {
         super.didLoad()
 
+        self.view.layer.cornerRadius = 8
+
         self.rootView.backgroundColor = UIColor.lightGray
-        self.rootView.layer.cornerRadius = 8
 
         self.imageView.source = QImageSource("dialog_confirm")
         self.titleLabel.text = QText("Push title", color: .black)

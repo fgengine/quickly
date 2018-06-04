@@ -56,24 +56,24 @@ public class QDateFieldComposition< DataType: QDateFieldCompositionData >: QComp
         self.dateField = QDateField(frame: self.contentView.bounds)
         self.dateField.translatesAutoresizingMaskIntoConstraints = false
         self.dateField.onShouldBeginEditing = { [weak self] (dateField: QDateField) in
-            guard let strongify = self else { return true }
-            return strongify.shouldBeginEditing()
+            guard let strong = self else { return true }
+            return strong.shouldBeginEditing()
         }
         self.dateField.onBeginEditing = { [weak self] (dateField: QDateField) in
-            guard let strongify = self else { return }
-            strongify.beginEditing()
+            guard let strong = self else { return }
+            strong.beginEditing()
         }
         self.dateField.onSelect = { [weak self] (dateField: QDateField, date: Date) in
-            guard let strongify = self else { return }
-            strongify.select(date)
+            guard let strong = self else { return }
+            strong.select(date)
         }
         self.dateField.onShouldEndEditing = { [weak self] (dateField: QDateField) in
-            guard let strongify = self else { return true }
-            return strongify.shouldEndEditing()
+            guard let strong = self else { return true }
+            return strong.shouldEndEditing()
         }
         self.dateField.onEndEditing = { [weak self] (dateField: QDateField) in
-            guard let strongify = self else { return }
-            strongify.endEditing()
+            guard let strong = self else { return }
+            strong.endEditing()
         }
         self.contentView.addSubview(self.dateField)
     }

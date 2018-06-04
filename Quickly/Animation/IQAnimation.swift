@@ -10,8 +10,6 @@ public protocol IQFixedAnimation : class {
 
 public protocol IQInteractiveAnimation : class {
 
-    var position: CGPoint { get }
-    var velocity: CGPoint { get }
     var canFinish: Bool { get }
 
     func update(position: CGPoint, velocity: CGPoint)

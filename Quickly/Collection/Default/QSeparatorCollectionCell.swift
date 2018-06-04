@@ -17,7 +17,7 @@ open class QSeparatorCollectionItem : QBackgroundColorCollectionItem {
 
 }
 
-open class QSeparatorCollectionCell< ItemType: QSeparatorCollectionItem >: QBackgroundColorCollectionCell< ItemType > {
+open class QSeparatorCollectionCell< ItemType: QSeparatorCollectionItem > : QBackgroundColorCollectionCell< ItemType > {
 
     private var _separator: QView!
 

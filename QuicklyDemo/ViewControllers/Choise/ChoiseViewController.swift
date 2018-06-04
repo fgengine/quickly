@@ -4,7 +4,7 @@
 
 import Quickly
 
-protocol IChoiseViewControllerRouter: IQRouter {
+protocol IChoiseViewControllerRouter : IQRouter {
 
     func presentLabelViewController()
     func presentButtonViewController()
@@ -12,12 +12,13 @@ protocol IChoiseViewControllerRouter: IQRouter {
     func presentListFieldViewController()
     func presentDateFieldViewController()
     func presentImageViewController()
+    func presentPageViewController()
     func presentDialogViewController()
     func presentPushViewController()
 
 }
 
-class ChoiseViewController: QTableViewController, IQRouted {
+class ChoiseViewController : QTableViewController, IQRouted {
 
     var router: IChoiseViewControllerRouter
     var container: AppContainer
@@ -54,6 +55,7 @@ extension ChoiseViewController : ChoiseTableControllerDelegate {
         case .listField: self.router.presentListFieldViewController()
         case .dateField: self.router.presentDateFieldViewController()
         case .image: self.router.presentImageViewController()
+        case .page: self.router.presentPageViewController()
         case .dialog: self.router.presentDialogViewController()
         case .push: self.router.presentPushViewController()
         }

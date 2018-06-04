@@ -5,13 +5,13 @@
 
 import Quickly
 
-protocol IImageViewControllerRouter: IQRouter {
+protocol IImageViewControllerRouter : IQRouter {
 
     func dismiss(viewController: ImageViewController)
     
 }
 
-class ImageViewController: QNibViewController, IQRouted {
+class ImageViewController : QNibViewController, IQRouted {
 
     var router: IImageViewControllerRouter
     var container: AppContainer
@@ -28,7 +28,7 @@ class ImageViewController: QNibViewController, IQRouted {
         super.didLoad()
 
         self.imageView.source = QImageSource(
-            URL(string: "http://globus-ltd.ru/images/testing.jpg")!,
+            URL(string: "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png")!,
             size: CGSize(width: 100, height: 100),
             scale: .originOrAspectFit
         )

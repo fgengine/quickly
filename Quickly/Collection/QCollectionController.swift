@@ -240,9 +240,9 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
         guard let collectionView = self.collectionView else { return }
         self.isBatchUpdating = true
         collectionView.performBatchUpdates(updates, completion: { [weak self] (finish: Bool) in
-            if let strongify = self {
-                strongify.isBatchUpdating = true
-                strongify.notifyUpdate()
+            if let strong = self {
+                strong.isBatchUpdating = true
+                strong.notifyUpdate()
             }
             completion?(finish)
         })

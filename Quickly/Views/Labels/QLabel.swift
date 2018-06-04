@@ -13,9 +13,9 @@ public class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
 
     public init(
         text: IQText,
-        verticalAlignment: QViewVerticalAlignment,
-        horizontalAlignment: QViewHorizontalAlignment,
-        lineBreakMode: NSLineBreakMode
+        verticalAlignment: QViewVerticalAlignment = .center,
+        horizontalAlignment: QViewHorizontalAlignment = .left,
+        lineBreakMode: NSLineBreakMode = .byWordWrapping
     ) {
         self.text = text
         self.verticalAlignment = verticalAlignment
@@ -25,15 +25,6 @@ public class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
         self.lineBreakMode = lineBreakMode
 
         super.init()
-    }
-
-    public convenience init(text: IQText) {
-        self.init(
-            text: text,
-            verticalAlignment: .center,
-            horizontalAlignment: .left,
-            lineBreakMode: .byWordWrapping
-        )
     }
 
     public override func apply(target: QLabel) {

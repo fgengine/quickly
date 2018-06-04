@@ -48,6 +48,11 @@ extension ChoiseRouter : IChoiseViewControllerRouter {
         self.present(vc, animated: true)
     }
 
+    func presentPageViewController() {
+        let vc = PageViewController(router: self, container: self.container)
+        self.present(vc, animated: true)
+    }
+
     func presentDialogViewController() {
         let vc = DialogViewController(router: self, container: self.container)
         self.present(vc, animated: true)
@@ -111,9 +116,9 @@ extension ChoiseRouter : IImageViewControllerRouter {
 extension ChoiseRouter : IDialogViewControllerRouter {
 
     func presentConfirmDialog() {
-        if let router = self.router {
+        if let parent = self.parent {
             let vc = ConfirmDialogViewController(router: self, container: self.container)
-            router.presentDialog(vc)
+            parent.presentDialog(vc)
         }
     }
 
@@ -126,9 +131,17 @@ extension ChoiseRouter : IDialogViewControllerRouter {
 extension ChoiseRouter : IConfirmDialogViewControllerRouter {
 
     func dismiss(viewController: ConfirmDialogViewController) {
-        if let router = self.router {
-            router.dismissDialog(viewController)
+        if let parent = self.parent {
+            parent.dismissDialog(viewController)
         }
+    }
+
+}
+
+extension ChoiseRouter : IPageViewControllerRouter {
+
+    func dismiss(viewController: PageViewController) {
+        self.dismiss(viewController, animated: true)
     }
 
 }
@@ -136,9 +149,9 @@ extension ChoiseRouter : IConfirmDialogViewControllerRouter {
 extension ChoiseRouter : IPushViewControllerRouter {
 
     func presentConfirmPush() {
-        if let router = self.router {
+        if let parent = self.parent {
             let vc = ConfirmPushViewController(router: self, container: self.container)
-            router.presentPush(vc, displayTime: 7)
+            parent.presentPush(vc, displayTime: 7)
         }
     }
 
@@ -151,8 +164,8 @@ extension ChoiseRouter : IPushViewControllerRouter {
 extension ChoiseRouter : IConfirmPushViewControllerRouter {
 
     func dismiss(viewController: ConfirmPushViewController) {
-        if let router = self.router {
-            router.dismissPush(viewController)
+        if let parent = self.parent {
+            parent.dismissPush(viewController)
         }
     }
 

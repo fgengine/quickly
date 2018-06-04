@@ -5,15 +5,14 @@
 
 import Quickly
 
-protocol IConfirmDialogViewControllerRouter: IQRouter {
+protocol IConfirmDialogViewControllerRouter : IQRouter {
 
     func dismiss(viewController: ConfirmDialogViewController)
     
 }
 
-class ConfirmDialogViewController: QNibViewController, IQDialogContentViewController, IQRouted {
+class ConfirmDialogViewController : QNibViewController, IQDialogContentViewController, IQRouted {
 
-    weak var dialogViewController: IQDialogViewController?
     var router: IConfirmDialogViewControllerRouter
     var container: AppContainer
 
@@ -29,7 +28,7 @@ class ConfirmDialogViewController: QNibViewController, IQDialogContentViewContro
     override func didLoad() {
         super.didLoad()
 
-        self.rootView.layer.cornerRadius = 4
+        self.view.layer.cornerRadius = 4
 
         self.imageView.source = QImageSource("dialog_confirm")
 

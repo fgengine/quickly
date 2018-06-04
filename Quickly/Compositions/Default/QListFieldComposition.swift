@@ -55,24 +55,24 @@ public class QListFieldComposition< DataType: QListFieldCompositionData >: QComp
         self.listField = QListField(frame: self.contentView.bounds)
         self.listField.translatesAutoresizingMaskIntoConstraints = false
         self.listField.onShouldBeginEditing = { [weak self] (listField: QListField) in
-            guard let strongify = self else { return true }
-            return strongify.shouldBeginEditing()
+            guard let strong = self else { return true }
+            return strong.shouldBeginEditing()
         }
         self.listField.onBeginEditing = { [weak self] (listField: QListField) in
-            guard let strongify = self else { return }
-            strongify.beginEditing()
+            guard let strong = self else { return }
+            strong.beginEditing()
         }
         self.listField.onSelect = { [weak self] (listField: QListField, data: QListFieldPickerRow) in
-            guard let strongify = self else { return }
-            strongify.select(data)
+            guard let strong = self else { return }
+            strong.select(data)
         }
         self.listField.onShouldEndEditing = { [weak self] (listField: QListField) in
-            guard let strongify = self else { return true }
-            return strongify.shouldEndEditing()
+            guard let strong = self else { return true }
+            return strong.shouldEndEditing()
         }
         self.listField.onEndEditing = { [weak self] (listField: QListField) in
-            guard let strongify = self else { return }
-            strongify.endEditing()
+            guard let strong = self else { return }
+            strong.endEditing()
         }
         self.contentView.addSubview(self.listField)
     }

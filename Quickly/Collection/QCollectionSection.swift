@@ -37,9 +37,9 @@ open class QCollectionSection : IQCollectionSection {
         }
     }
     public var items: [IQCollectionItem] {
-        willSet { self.unbind() }
+        willSet { self.unbindItems() }
         didSet {
-            self.rebindItems(from: self.items.startIndex, to: self.items.endIndex)
+            self.bindItems()
             self.reloadSection()
         }
     }
@@ -134,6 +134,13 @@ open class QCollectionSection : IQCollectionSection {
             if let controller = self.controller, let collectionView = controller.collectionView {
                 collectionView.reloadItems(at: indexPaths)
             }
+        }
+    }
+
+    public func replaceItem(_ item: IQCollectionItem, index: Int) {
+        self.items[index] = item
+        if let indexPath = item.indexPath, let controller = self.controller, let collectionView = controller.collectionView {
+            collectionView.reloadItems(at: [ indexPath ])
         }
     }
     

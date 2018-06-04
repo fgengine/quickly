@@ -17,61 +17,49 @@ public enum QButtonImagePosition: Int {
 public class QButton : QControl {
 
     open override var isHighlighted: Bool {
-        didSet { self.applyStyle() }
+        didSet { self.invalidate() }
     }
     open override var isSelected: Bool {
-        didSet { self.applyStyle() }
+        didSet { self.invalidate() }
     }
     open override var isEnabled: Bool {
-        didSet { self.applyStyle() }
+        didSet { self.invalidate() }
     }
     open override var contentHorizontalAlignment: UIControlContentHorizontalAlignment {
-        didSet { self.setNeedsUpdateConstraints() }
+        didSet { self.invalidate() }
     }
     open override var contentVerticalAlignment: UIControlContentVerticalAlignment {
-        didSet { self.setNeedsUpdateConstraints() }
+        didSet { self.invalidate() }
     }
     @IBInspectable public var contentInsets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8) {
-        didSet {
-            self.invalidateIntrinsicContentSize()
-            self.setNeedsUpdateConstraints()
-        }
+        didSet { self.invalidate() }
     }
     public var imagePosition: QButtonImagePosition = .left {
-        didSet {
-            self.invalidateIntrinsicContentSize()
-            self.setNeedsUpdateConstraints()
-        }
+        didSet { self.invalidate() }
     }
     public var imageInsets: UIEdgeInsets = UIEdgeInsets.zero {
-        didSet {
-            self.invalidateIntrinsicContentSize()
-            self.setNeedsUpdateConstraints()
-        }
+        didSet { self.invalidate() }
     }
     public var textInsets: UIEdgeInsets = UIEdgeInsets.zero {
-        didSet {
-            self.invalidateIntrinsicContentSize()
-            self.setNeedsUpdateConstraints()
-        }
+        didSet { self.invalidate() }
     }
     public var normalStyle: QButtonStyle? {
-        didSet { self.applyStyle() }
+        didSet { self.invalidate() }
     }
     public var highlightedStyle: QButtonStyle? {
-        didSet { self.applyStyle() }
+        didSet { self.invalidate() }
     }
     public var disabledStyle: QButtonStyle? {
-        didSet { self.applyStyle() }
+        didSet { self.invalidate() }
     }
     public var selectedStyle: QButtonStyle? {
-        didSet { self.applyStyle() }
+        didSet { self.invalidate() }
     }
     public var selectedHighlightedStyle: QButtonStyle? {
-        didSet { self.applyStyle() }
+        didSet { self.invalidate() }
     }
     public var selectedDisabledStyle: QButtonStyle? {
-        didSet { self.applyStyle() }
+        didSet { self.invalidate() }
     }
     public private(set) var backgroundView: QDisplayView!
     public private(set) var contentView: QView!
@@ -79,7 +67,7 @@ public class QButton : QControl {
     public private(set) var textLabel: QLabel!
     public private(set) var tapGesture: UITapGestureRecognizer!
     public var spinnerPosition: QButtonSpinnerPosition = .fill {
-        didSet { self.applyStyle() }
+        didSet { self.invalidate() }
     }
     public var spinnerView: QSpinnerViewType? {
         willSet {
@@ -92,15 +80,14 @@ public class QButton : QControl {
                 spinnerView.translatesAutoresizingMaskIntoConstraints = false
                 self.contentView.addSubview(spinnerView)
             }
-            self.invalidateIntrinsicContentSize()
-            self.setNeedsUpdateConstraints()
+            self.invalidate()
         }
     }
-    internal var selfConstraints: [NSLayoutConstraint] = [] {
+    private var selfConstraints: [NSLayoutConstraint] = [] {
         willSet { self.removeConstraints(self.selfConstraints) }
         didSet { self.addConstraints(self.selfConstraints) }
     }
-    internal var contentConstraints: [NSLayoutConstraint] = [] {
+    private var contentConstraints: [NSLayoutConstraint] = [] {
         willSet { self.contentView.removeConstraints(self.contentConstraints) }
         didSet { self.contentView.addConstraints(self.contentConstraints) }
     }
@@ -150,47 +137,11 @@ public class QButton : QControl {
         self.textLabel.numberOfLines = 0
         self.contentView.addSubview(self.textLabel)
 
-        self.tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.gestureHandler(_:)))
+        self.tapGesture = UITapGestureRecognizer(target: self, action: #selector(self._gestureHandler(_:)))
         self.tapGesture.delegate = self
         self.addGestureRecognizer(self.tapGesture)
-    }
-
-    #if TARGET_INTERFACE_BUILDER
-
-    open override func prepareForInterfaceBuilder() {
-        let style = QButtonStyle()
-        style.color = UIColor.blue
-        style.text = QText("QButton")
-        style.cornerRadius = 4
-        self.normalStyle = style
-    }
-
-    #endif
-
-    public func currentStyle() -> QButtonStyle? {
-        if self.isEnabled == false {
-            if self.isSelected == true && self.selectedDisabledStyle != nil {
-                return self.selectedDisabledStyle
-            } else if self.disabledStyle != nil {
-                return self.disabledStyle
-            }
-        } else if self.isHighlighted == true {
-            if self.isSelected == true && self.selectedHighlightedStyle != nil {
-                return self.selectedHighlightedStyle
-            } else if self.highlightedStyle != nil {
-                return self.highlightedStyle
-            }
-        } else if self.isSelected == true && self.selectedStyle != nil {
-            return self.selectedStyle
-        }
-        return self.normalStyle
-    }
-
-    public func applyStyle() {
-        if let style = self.currentStyle() {
-            self.applyStyle(style)
-            self.invalidateIntrinsicContentSize()
-        }
+        
+        self.invalidate()
     }
 
     public func isSpinnerAnimating() -> Bool {
@@ -202,29 +153,20 @@ public class QButton : QControl {
 
     public func startSpinner() {
         if let spinnerView = self.spinnerView {
-            let isAnimating = spinnerView.isAnimating()
             spinnerView.start()
-            if isAnimating == false {
-                self.setNeedsUpdateConstraints()
-                self.applyStyle()
-            }
+            self.invalidate()
         }
     }
 
     public func stopSpinner() {
         if let spinnerView = self.spinnerView {
-            let isAnimating = spinnerView.isAnimating()
             spinnerView.stop()
-            if isAnimating == true {
-                self.setNeedsUpdateConstraints()
-                self.applyStyle()
-            }
+            self.invalidate()
         }
     }
 
     open override func invalidateIntrinsicContentSize() {
         super.invalidateIntrinsicContentSize()
-
         if let imageView = self.imageView {
             imageView.invalidateIntrinsicContentSize()
         }
@@ -348,50 +290,50 @@ public class QButton : QControl {
         if self.isSpinnerAnimating() == true {
             switch self.spinnerPosition {
             case .fill:
-                self.updateContent(constraints: &contentConstraints, view: self.spinnerView!)
+                self._updateContent(constraints: &contentConstraints, view: self.spinnerView!)
                 switch self.imagePosition {
                 case .top:
-                    self.updateContent(constraints: &contentConstraints,
+                    self._updateContent(constraints: &contentConstraints,
                                        topView: self.imageView, topEdgeInsets: self.imageInsets,
                                        bottomView: self.spinnerView!, bottomEdgeInsets: UIEdgeInsets.zero)
-                    self.updateContent(constraints: &contentConstraints,
+                    self._updateContent(constraints: &contentConstraints,
                                        topView: self.spinnerView!, topEdgeInsets: UIEdgeInsets.zero,
                                        bottomView: self.textLabel, bottomEdgeInsets: self.textInsets)
                 case .left:
-                    self.updateContent(constraints: &contentConstraints,
+                    self._updateContent(constraints: &contentConstraints,
                                        leftView: self.imageView, leftEdgeInsets: self.imageInsets,
                                        rightView: self.spinnerView!, rightEdgeInsets: UIEdgeInsets.zero)
-                    self.updateContent(constraints: &contentConstraints,
+                    self._updateContent(constraints: &contentConstraints,
                                        leftView: self.spinnerView!, leftEdgeInsets: UIEdgeInsets.zero,
                                        rightView: self.textLabel, rightEdgeInsets: self.textInsets)
                 case .right:
-                    self.updateContent(constraints: &contentConstraints,
+                    self._updateContent(constraints: &contentConstraints,
                                        leftView: self.textLabel, leftEdgeInsets: self.textInsets,
                                        rightView: self.spinnerView!, rightEdgeInsets: UIEdgeInsets.zero)
-                    self.updateContent(constraints: &contentConstraints,
+                    self._updateContent(constraints: &contentConstraints,
                                        leftView: self.spinnerView!, leftEdgeInsets: UIEdgeInsets.zero,
                                        rightView: self.imageView, rightEdgeInsets: self.imageInsets)
                 case .bottom:
-                    self.updateContent(constraints: &contentConstraints,
+                    self._updateContent(constraints: &contentConstraints,
                                        topView: self.textLabel, topEdgeInsets: self.textInsets,
                                        bottomView: self.spinnerView!, bottomEdgeInsets: UIEdgeInsets.zero)
-                    self.updateContent(constraints: &contentConstraints,
+                    self._updateContent(constraints: &contentConstraints,
                                        topView: self.spinnerView!, topEdgeInsets: UIEdgeInsets.zero,
                                        bottomView: self.imageView, bottomEdgeInsets: self.imageInsets)
                 }
                 break
             case .image:
                 switch self.imagePosition {
-                case .top: self.updateContent(constraints: &contentConstraints,
+                case .top: self._updateContent(constraints: &contentConstraints,
                                               topView: self.spinnerView!, topEdgeInsets: self.imageInsets,
                                               bottomView: self.textLabel, bottomEdgeInsets: self.textInsets)
-                case .left: self.updateContent(constraints: &contentConstraints,
+                case .left: self._updateContent(constraints: &contentConstraints,
                                                leftView: self.spinnerView!, leftEdgeInsets: self.imageInsets,
                                                rightView: self.textLabel, rightEdgeInsets: self.textInsets)
-                case .right: self.updateContent(constraints: &contentConstraints,
+                case .right: self._updateContent(constraints: &contentConstraints,
                                                 leftView: self.textLabel, leftEdgeInsets: self.textInsets,
                                                 rightView: self.spinnerView!, rightEdgeInsets: self.imageInsets)
-                case .bottom: self.updateContent(constraints: &contentConstraints,
+                case .bottom: self._updateContent(constraints: &contentConstraints,
                                                  topView: self.textLabel, topEdgeInsets: self.textInsets,
                                                  bottomView: self.spinnerView!, bottomEdgeInsets: self.imageInsets)
                 }
@@ -417,22 +359,22 @@ public class QButton : QControl {
             }
             if self.imageView.alpha > CGFloat.leastNonzeroMagnitude || self.textLabel.alpha > CGFloat.leastNonzeroMagnitude {
                 switch self.imagePosition {
-                case .top: self.updateContent(constraints: &contentConstraints,
+                case .top: self._updateContent(constraints: &contentConstraints,
                                               topView: self.imageView, topEdgeInsets: self.imageInsets,
                                               bottomView: self.textLabel, bottomEdgeInsets: self.textInsets)
-                case .left: self.updateContent(constraints: &contentConstraints,
+                case .left: self._updateContent(constraints: &contentConstraints,
                                                leftView: self.imageView, leftEdgeInsets: self.imageInsets,
                                                rightView: self.textLabel, rightEdgeInsets: self.textInsets)
-                case .right: self.updateContent(constraints: &contentConstraints,
+                case .right: self._updateContent(constraints: &contentConstraints,
                                                 leftView: self.textLabel, leftEdgeInsets: self.textInsets,
                                                 rightView: self.imageView, rightEdgeInsets: self.imageInsets)
-                case .bottom: self.updateContent(constraints: &contentConstraints,
+                case .bottom: self._updateContent(constraints: &contentConstraints,
                                                  topView: self.textLabel, topEdgeInsets: self.textInsets,
                                                  bottomView: self.imageView, bottomEdgeInsets: self.imageInsets)
                 }
             } else {
-                self.updateContent(constraints: &contentConstraints, view: self.imageView, edgeInsets: self.imageInsets)
-                self.updateContent(constraints: &contentConstraints, view: self.textLabel, edgeInsets: self.textInsets)
+                self._updateContent(constraints: &contentConstraints, view: self.imageView, edgeInsets: self.imageInsets)
+                self._updateContent(constraints: &contentConstraints, view: self.textLabel, edgeInsets: self.textInsets)
             }
         }
         if self.isSpinnerAnimating() == false && self.imageView.alpha <= CGFloat.leastNonzeroMagnitude && self.textLabel.alpha <= CGFloat.leastNonzeroMagnitude {
@@ -440,11 +382,42 @@ public class QButton : QControl {
             contentConstraints.append(self.contentView.heightLayout == 0)
         }
         self.contentConstraints = contentConstraints
-
         super.updateConstraints()
     }
 
-    private func applyStyle(_ style: QButtonStyle) {
+    private func invalidate() {
+        self.invalidateIntrinsicContentSize()
+        self.setNeedsUpdateConstraints()
+        self.setNeedsLayout()
+        self._applyStyle()
+    }
+
+    private func _currentStyle() -> QButtonStyle? {
+        if self.isEnabled == false {
+            if self.isSelected == true && self.selectedDisabledStyle != nil {
+                return self.selectedDisabledStyle
+            } else if self.disabledStyle != nil {
+                return self.disabledStyle
+            }
+        } else if self.isHighlighted == true {
+            if self.isSelected == true && self.selectedHighlightedStyle != nil {
+                return self.selectedHighlightedStyle
+            } else if self.highlightedStyle != nil {
+                return self.highlightedStyle
+            }
+        } else if self.isSelected == true && self.selectedStyle != nil {
+            return self.selectedStyle
+        }
+        return self.normalStyle
+    }
+
+    private func _applyStyle() {
+        if let style = self._currentStyle() {
+            self._applyStyle(style)
+        }
+    }
+
+    private func _applyStyle(_ style: QButtonStyle) {
         if let color = style.color {
             self.backgroundView.backgroundColor = color
         }
@@ -461,48 +434,48 @@ public class QButton : QControl {
             self.isUserInteractionEnabled = false
             switch self.spinnerPosition {
             case .fill:
-                self.resetImageStyle()
-                self.resetTextStyle()
+                self._resetImageStyle()
+                self._resetTextStyle()
                 break
             case .image:
-                self.resetImageStyle()
-                self.applyTextStyle(style)
+                self._resetImageStyle()
+                self._applyTextStyle(style)
                 break
             }
         } else {
             self.isUserInteractionEnabled = true
-            self.applyImageStyle(style)
-            self.applyTextStyle(style)
+            self._applyImageStyle(style)
+            self._applyTextStyle(style)
         }
     }
 
-    private func applyImageStyle(_ style: QButtonStyle) {
+    private func _applyImageStyle(_ style: QButtonStyle) {
         if let image = style.image {
             self.imageView.source = image
             self.imageView.alpha = 1
         } else {
-            self.resetImageStyle()
+            self._resetImageStyle()
         }
     }
 
-    private func resetImageStyle() {
+    private func _resetImageStyle() {
         self.imageView.alpha = 0
     }
 
-    private func applyTextStyle(_ style: QButtonStyle) {
+    private func _applyTextStyle(_ style: QButtonStyle) {
         if let text = style.text {
             self.textLabel.text = text
             self.textLabel.alpha = 1
         } else {
-            self.resetTextStyle()
+            self._resetTextStyle()
         }
     }
 
-    private func resetTextStyle() {
+    private func _resetTextStyle() {
         self.textLabel.alpha = 0
     }
 
-    private func updateContent(constraints: inout [NSLayoutConstraint], view: UIView) {
+    private func _updateContent(constraints: inout [NSLayoutConstraint], view: UIView) {
         constraints.append(view.topLayout == self.contentView.topLayout)
         constraints.append(view.leadingLayout == self.contentView.leadingLayout)
         constraints.append(view.trailingLayout <= self.contentView.trailingLayout)
@@ -511,7 +484,7 @@ public class QButton : QControl {
         constraints.append(view.centerYLayout == self.contentView.centerYLayout)
     }
 
-    private func updateContent(constraints: inout [NSLayoutConstraint], view: UIView, edgeInsets: UIEdgeInsets) {
+    private func _updateContent(constraints: inout [NSLayoutConstraint], view: UIView, edgeInsets: UIEdgeInsets) {
         constraints.append(view.topLayout == self.contentView.topLayout + edgeInsets.top)
         constraints.append(view.leadingLayout == self.contentView.leadingLayout + edgeInsets.left)
         constraints.append(view.trailingLayout == self.contentView.trailingLayout - edgeInsets.right)
@@ -520,7 +493,7 @@ public class QButton : QControl {
         constraints.append(view.centerYLayout == self.contentView.centerYLayout)
     }
 
-    private func updateContent(
+    private func _updateContent(
         constraints: inout [NSLayoutConstraint],
         topView: UIView, topEdgeInsets: UIEdgeInsets,
         bottomView: UIView, bottomEdgeInsets: UIEdgeInsets
@@ -544,7 +517,7 @@ public class QButton : QControl {
         constraints.append(bottomView.centerXLayout == self.contentView.centerXLayout)
     }
 
-    private func updateContent(
+    private func _updateContent(
         constraints: inout [NSLayoutConstraint],
         leftView: UIView, leftEdgeInsets: UIEdgeInsets,
         rightView: UIView, rightEdgeInsets: UIEdgeInsets
@@ -569,7 +542,7 @@ public class QButton : QControl {
     }
 
     @objc
-    private func gestureHandler(_ sender: Any) {
+    private func _gestureHandler(_ sender: Any) {
         self.sendActions(for: .touchUpInside)
     }
 

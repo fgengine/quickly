@@ -2,10 +2,14 @@
 //  Quickly
 //
 
-open class QTableViewController : QViewController, IQTableControllerObserver, IQStackContentViewController {
+open class QTableViewController : QViewController, IQStackContentViewController, IQPageContentViewController {
 
-    open var stackPageViewController: IQStackPageViewController?
-    open var stackPageContentOffset: CGPoint {
+    #if DEBUG
+    open override var logging: Bool {
+        get { return true }
+    }
+    #endif
+    public var contentOffset: CGPoint {
         get {
             guard self.isLoaded == true else { return CGPoint.zero }
             let contentOffset = self.tableView.contentOffset
@@ -16,14 +20,13 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
             )
         }
     }
-    open var stackPageContentSize: CGSize {
+    public var contentSize: CGSize {
         get {
             guard self.isLoaded == true else { return CGSize.zero }
             return self.tableView.contentSize
         }
     }
-
-    open private(set) var tableView: QTableView! {
+    public private(set) var tableView: QTableView! {
         willSet {
             guard let view = self.tableView else { return }
             view.removeFromSuperview()
@@ -48,8 +51,8 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
         }
         get { return self.tableView.tableController }
     }
-    open var refreshControlHidden: Bool = false {
-        didSet { self.updateRefreshControlState() }
+    public var refreshControlHidden: Bool = false {
+        didSet { self._updateRefreshControlState() }
     }
     public var refreshControl: UIRefreshControl? {
         set(value) {
@@ -59,25 +62,24 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
                 }
             }
             self.storeRefreshControl = value
-            self.updateRefreshControlState()
+            self._updateRefreshControlState()
         }
         get { return self.storeRefreshControl }
     }
-    open var isRefreshing: Bool {
+    public var isRefreshing: Bool {
         get {
             guard let refreshControl = self.storeRefreshControl else { return false }
             return refreshControl.isRefreshing
         }
     }
-
     private var storeRefreshControl: UIRefreshControl? {
         willSet {
             guard let refreshControl = self.storeRefreshControl else { return }
-            refreshControl.removeValueChanged(self, action: #selector(self.triggeredRefreshControl(_:)))
+            refreshControl.removeValueChanged(self, action: #selector(self._triggeredRefreshControl(_:)))
         }
         didSet {
             guard let refreshControl = self.storeRefreshControl else { return }
-            refreshControl.addValueChanged(self, action: #selector(self.triggeredRefreshControl(_:)))
+            refreshControl.addValueChanged(self, action: #selector(self._triggeredRefreshControl(_:)))
         }
     }
 
@@ -110,14 +112,12 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
 
     open override func willPresent(animated: Bool) {
         super.willPresent(animated: animated)
-
-        self.updateRefreshControlState()
+        self._updateRefreshControlState()
     }
 
     open override func didDismiss(animated: Bool) {
         super.didDismiss(animated: animated)
-
-        self.updateRefreshControlState()
+        self._updateRefreshControlState()
     }
 
     open func beginRefreshing() {
@@ -133,20 +133,12 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     open func triggeredRefreshControl() {
     }
 
-    open func scroll(_ controller: IQTableController, tableView: UITableView) {
-        guard let stackPage = self.stackPageViewController else { return }
-        stackPage.updateContent()
-    }
-
-    open func update(_ controller: IQTableController) {
-    }
-
     @objc
-    private func triggeredRefreshControl(_ sender: Any) {
+    private func _triggeredRefreshControl(_ sender: Any) {
         self.triggeredRefreshControl()
     }
 
-    private func updateRefreshControlState() {
+    private func _updateRefreshControlState() {
         if self.isLoaded == true {
             if self.refreshControlHidden == false && self.isPresented == true {
                 self.tableView.refreshControl = self.storeRefreshControl
@@ -157,6 +149,19 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
                 self.tableView.refreshControl = nil
             }
         }
+    }
+
+}
+
+extension QTableViewController : IQTableControllerObserver {
+
+    open func scroll(_ controller: IQTableController, tableView: UITableView) {
+        if let vc = self.contentOwnerViewController {
+            vc.updateContent()
+        }
+    }
+
+    open func update(_ controller: IQTableController) {
     }
 
 }

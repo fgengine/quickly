@@ -5,13 +5,13 @@
 
 import Quickly
 
-protocol ILabelViewControllerRouter: IQRouter {
+protocol ILabelViewControllerRouter : IQRouter {
 
     func dismiss(viewController: LabelViewController)
     
 }
 
-class LabelViewController: QNibViewController, IQRouted {
+class LabelViewController : QNibViewController, IQRouted {
 
     var router: ILabelViewControllerRouter
     var container: AppContainer
@@ -34,8 +34,8 @@ class LabelViewController: QNibViewController, IQRouted {
         self.linkLabel.text = QText("Thorium is a weakly radioactive metallic chemical element with symbol Th and atomic number 90. Thorium metal is silvery and tarnishes black when it is exposed to air, forming the dioxide; it is moderately hard, malleable, and has a high melting point. Thorium is an electropositive actinide whose chemistry is dominated by the +4 oxidation state; it is quite reactive and can ignite in air when finely divided.", color: UIColor.black)
         self.linkLabel.numberOfLines = 0
         self.linkLabel.appendLink("Thorium", normal: TextStyle.link, highlight: nil) { [weak self] (label, link) in
-            guard let strongify = self else { return }
-            strongify.router.dismiss(viewController: strongify)
+            guard let strong = self else { return }
+            strong.router.dismiss(viewController: strong)
         }
     }
 

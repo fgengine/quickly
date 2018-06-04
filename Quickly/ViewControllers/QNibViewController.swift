@@ -2,21 +2,24 @@
 //  Quickly
 //
 
-open class QNibViewController : QViewController, IQStackContentViewController {
+open class QNibViewController : QViewController, IQStackContentViewController, IQPageContentViewController {
 
-    open var stackPageViewController: IQStackPageViewController?
-    open var stackPageContentOffset: CGPoint {
+    #if DEBUG
+    open override var logging: Bool {
+        get { return true }
+    }
+    #endif
+    public var contentOffset: CGPoint {
         get { return CGPoint.zero }
     }
-    open var stackPageContentSize: CGSize {
+    public var contentSize: CGSize {
         get {
             guard self.isLoaded == true else { return CGSize.zero }
             return self.view.bounds.size
         }
     }
-
     @IBOutlet
-    open var rootView: UIView! {
+    public var rootView: UIView! {
         willSet {
             guard let view = self.rootView else { return }
             view.removeFromSuperview()
@@ -37,7 +40,7 @@ open class QNibViewController : QViewController, IQStackContentViewController {
     }
 
     open override func load() -> ViewType {
-        return InvisibleView(viewController: self)
+        return QViewControllerDefaultView(viewController: self)
     }
 
     open override func didLoad() {
@@ -46,7 +49,6 @@ open class QNibViewController : QViewController, IQStackContentViewController {
     }
 
     open override func layout(bounds: CGRect) {
-        super.layout(bounds : bounds)
         if let view = self.rootView {
             view.frame = UIEdgeInsetsInsetRect(self.view.bounds, self.inheritedEdgeInsets)
         }

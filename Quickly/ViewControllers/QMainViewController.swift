@@ -96,6 +96,181 @@ open class QMainViewController : QViewController {
         }
     }
 
+    open override func layout(bounds: CGRect) {
+        if let vc = self.backgroundViewController {
+            vc.view.frame = bounds
+        }
+        if let vc = self.contentViewController {
+            vc.view.frame = bounds
+        }
+        if let vc = self.pushContainerViewController {
+            vc.view.frame = bounds
+        }
+        if let vc = self.dialogContainerViewController {
+            vc.view.frame = bounds
+        }
+    }
+
+    open override func prepareInteractivePresent() {
+        super.prepareInteractivePresent()
+        if let vc = self.backgroundViewController {
+            vc.prepareInteractivePresent()
+        }
+        if let vc = self.contentViewController {
+            vc.prepareInteractivePresent()
+        }
+        if let vc = self.pushContainerViewController {
+            vc.prepareInteractivePresent()
+        }
+        if let vc = self.dialogContainerViewController {
+            vc.prepareInteractivePresent()
+        }
+    }
+
+    open override func cancelInteractivePresent() {
+        super.cancelInteractivePresent()
+        if let vc = self.backgroundViewController {
+            vc.cancelInteractivePresent()
+        }
+        if let vc = self.contentViewController {
+            vc.cancelInteractivePresent()
+        }
+        if let vc = self.pushContainerViewController {
+            vc.cancelInteractivePresent()
+        }
+        if let vc = self.dialogContainerViewController {
+            vc.cancelInteractivePresent()
+        }
+    }
+
+    open override func finishInteractivePresent() {
+        super.finishInteractivePresent()
+        if let vc = self.backgroundViewController {
+            vc.finishInteractivePresent()
+        }
+        if let vc = self.contentViewController {
+            vc.finishInteractivePresent()
+        }
+        if let vc = self.pushContainerViewController {
+            vc.finishInteractivePresent()
+        }
+        if let vc = self.dialogContainerViewController {
+            vc.finishInteractivePresent()
+        }
+    }
+
+    open override func willPresent(animated: Bool) {
+        super.willPresent(animated: animated)
+        if let vc = self.backgroundViewController {
+            vc.willPresent(animated: animated)
+        }
+        if let vc = self.contentViewController {
+            vc.willPresent(animated: animated)
+        }
+        if let vc = self.pushContainerViewController {
+            vc.willPresent(animated: animated)
+        }
+        if let vc = self.dialogContainerViewController {
+            vc.willPresent(animated: animated)
+        }
+    }
+
+    open override func didPresent(animated: Bool) {
+        super.didPresent(animated: animated)
+        if let vc = self.backgroundViewController {
+            vc.didPresent(animated: animated)
+        }
+        if let vc = self.contentViewController {
+            vc.didPresent(animated: animated)
+        }
+        if let vc = self.pushContainerViewController {
+            vc.didPresent(animated: animated)
+        }
+        if let vc = self.dialogContainerViewController {
+            vc.didPresent(animated: animated)
+        }
+    }
+
+    open override func prepareInteractiveDismiss() {
+        super.prepareInteractiveDismiss()
+        if let vc = self.backgroundViewController {
+            vc.prepareInteractiveDismiss()
+        }
+        if let vc = self.contentViewController {
+            vc.prepareInteractiveDismiss()
+        }
+        if let vc = self.pushContainerViewController {
+            vc.prepareInteractiveDismiss()
+        }
+        if let vc = self.dialogContainerViewController {
+            vc.prepareInteractiveDismiss()
+        }
+    }
+
+    open override func cancelInteractiveDismiss() {
+        super.cancelInteractiveDismiss()
+        if let vc = self.backgroundViewController {
+            vc.cancelInteractiveDismiss()
+        }
+        if let vc = self.contentViewController {
+            vc.cancelInteractiveDismiss()
+        }
+        if let vc = self.pushContainerViewController {
+            vc.cancelInteractiveDismiss()
+        }
+        if let vc = self.dialogContainerViewController {
+            vc.cancelInteractiveDismiss()
+        }
+    }
+
+    open override func finishInteractiveDismiss() {
+        super.finishInteractiveDismiss()
+        if let vc = self.backgroundViewController {
+            vc.finishInteractiveDismiss()
+        }
+        if let vc = self.contentViewController {
+            vc.finishInteractiveDismiss()
+        }
+        if let vc = self.pushContainerViewController {
+            vc.finishInteractiveDismiss()
+        }
+        if let vc = self.dialogContainerViewController {
+            vc.finishInteractiveDismiss()
+        }
+    }
+
+    open override func willDismiss(animated: Bool) {
+        super.willDismiss(animated: animated)
+        if let vc = self.backgroundViewController {
+            vc.willDismiss(animated: animated)
+        }
+        if let vc = self.contentViewController {
+            vc.willDismiss(animated: animated)
+        }
+        if let vc = self.pushContainerViewController {
+            vc.willDismiss(animated: animated)
+        }
+        if let vc = self.dialogContainerViewController {
+            vc.willDismiss(animated: animated)
+        }
+    }
+
+    open override func didDismiss(animated: Bool) {
+        super.didDismiss(animated: animated)
+        if let vc = self.backgroundViewController {
+            vc.didDismiss(animated: animated)
+        }
+        if let vc = self.contentViewController {
+            vc.didDismiss(animated: animated)
+        }
+        if let vc = self.pushContainerViewController {
+            vc.didDismiss(animated: animated)
+        }
+        if let vc = self.dialogContainerViewController {
+            vc.didDismiss(animated: animated)
+        }
+    }
+
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
         guard let cvc = self.contentViewController else { return super.supportedOrientations() }
         return cvc.supportedOrientations()

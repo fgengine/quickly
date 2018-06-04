@@ -4,17 +4,17 @@
 
 open class QStackRouter< ContainerType: IQContainer, RouterType: IQRouter > : IQRouter {
 
-    open var container: ContainerType
-    open weak var router: RouterType?
+    open private(set) var container: ContainerType
+    open private(set) weak var parent: RouterType?
     open var viewController: IQViewController {
         get { return self.stackViewController }
     }
 
     open private(set) lazy var stackViewController: QStackViewController = self.prepareStackViewController()
 
-    public required init(container: ContainerType, router: RouterType) {
+    public init(container: ContainerType, parent: RouterType) {
         self.container = container
-        self.router = router
+        self.parent = parent
     }
 
     private func prepareStackViewController() -> QStackViewController {

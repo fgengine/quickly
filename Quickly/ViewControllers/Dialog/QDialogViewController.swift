@@ -4,25 +4,23 @@
 
 open class QDialogViewController : QViewController, IQDialogViewController {
 
-    open weak var containerViewController: IQDialogContainerViewController?
     open private(set) var contentViewController: IQDialogContentViewController
-    open var widthBehaviour: QDialogViewControllerSizeBehaviour = .fit(min: 0, max: 0) {
+    open var widthBehaviour: QDialogViewControllerSizeBehaviour {
         didSet { self._relayoutContentViewController() }
     }
-    open var heightBehaviour: QDialogViewControllerSizeBehaviour = .fit(min: 0, max: 0) {
+    open var heightBehaviour: QDialogViewControllerSizeBehaviour {
         didSet { self._relayoutContentViewController() }
     }
-    open var verticalAlignment: QDialogViewControllerVerticalAlignment = .center(offset: 0) {
+    open var verticalAlignment: QDialogViewControllerVerticalAlignment {
         didSet { self._relayoutContentViewController() }
     }
-    open var horizontalAlignment: QDialogViewControllerHorizontalAlignment = .center(offset: 0) {
+    open var horizontalAlignment: QDialogViewControllerHorizontalAlignment {
         didSet { self._relayoutContentViewController() }
     }
     open var presentAnimation: IQDialogViewControllerFixedAnimation?
     open var dismissAnimation: IQDialogViewControllerFixedAnimation?
     open var interactiveDismissAnimation: IQDialogViewControllerInteractiveAnimation?
-    open lazy var tapGesture: UITapGestureRecognizer = self._prepareTapGesture()
-
+    public private(set) lazy var tapGesture: UITapGestureRecognizer = self._prepareTapGesture()
     private var contentLayoutConstraints: [NSLayoutConstraint] = []
     private var contentSizeConstraints: [NSLayoutConstraint] = []
 
@@ -32,19 +30,17 @@ open class QDialogViewController : QViewController, IQDialogViewController {
         self.heightBehaviour = .fit(min: 0, max: 0)
         self.verticalAlignment = .center(offset: 0)
         self.horizontalAlignment = .center(offset: 0)
-
         super.init()
     }
 
     open override func setup() {
         super.setup()
 
-        self.contentViewController.dialogViewController = self
         self.contentViewController.parent = self
     }
 
     open override func load() -> ViewType {
-        return InvisibleView(viewController: self)
+        return QViewControllerDefaultView(viewController: self, backgroundColor: UIColor.clear)
     }
 
     open override func didLoad() {
@@ -56,7 +52,54 @@ open class QDialogViewController : QViewController, IQDialogViewController {
         self._layoutContentViewController()
     }
 
-    open override func layout(bounds: CGRect) {
+    open override func prepareInteractivePresent() {
+        super.prepareInteractivePresent()
+        self.contentViewController.prepareInteractivePresent()
+    }
+
+    open override func cancelInteractivePresent() {
+        super.cancelInteractivePresent()
+        self.contentViewController.cancelInteractivePresent()
+    }
+
+    open override func finishInteractivePresent() {
+        super.finishInteractivePresent()
+        self.contentViewController.finishInteractivePresent()
+    }
+
+    open override func willPresent(animated: Bool) {
+        super.willPresent(animated: animated)
+        self.contentViewController.willPresent(animated: animated)
+    }
+
+    open override func didPresent(animated: Bool) {
+        super.didPresent(animated: animated)
+        self.contentViewController.didPresent(animated: animated)
+    }
+
+    open override func prepareInteractiveDismiss() {
+        super.prepareInteractiveDismiss()
+        self.contentViewController.prepareInteractiveDismiss()
+    }
+
+    open override func cancelInteractiveDismiss() {
+        super.cancelInteractiveDismiss()
+        self.contentViewController.cancelInteractiveDismiss()
+    }
+
+    open override func finishInteractiveDismiss() {
+        super.finishInteractiveDismiss()
+        self.contentViewController.finishInteractiveDismiss()
+    }
+
+    open override func willDismiss(animated: Bool) {
+        super.willDismiss(animated: animated)
+        self.contentViewController.willDismiss(animated: animated)
+    }
+
+    open override func didDismiss(animated: Bool) {
+        super.didDismiss(animated: animated)
+        self.contentViewController.didDismiss(animated: animated)
     }
 
     open override func supportedOrientations() -> UIInterfaceOrientationMask {

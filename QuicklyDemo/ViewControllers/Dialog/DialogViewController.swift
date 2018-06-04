@@ -1,18 +1,17 @@
 //
-//
 //  Quickly
 //
 
 import Quickly
 
-protocol IDialogViewControllerRouter: IQRouter {
+protocol IDialogViewControllerRouter : IQRouter {
 
     func presentConfirmDialog()
     func dismiss(viewController: DialogViewController)
     
 }
 
-class DialogViewController: QNibViewController, IQRouted {
+class DialogViewController : QNibViewController, IQRouted {
 
     var router: IDialogViewControllerRouter
     var container: AppContainer
@@ -46,6 +45,7 @@ class DialogViewController: QNibViewController, IQRouted {
 
     @objc
     private func pressedShowDialog(_ sender: Any) {
+        self.router.presentConfirmDialog()
         self.router.presentConfirmDialog()
     }
 

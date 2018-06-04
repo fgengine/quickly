@@ -4,7 +4,7 @@
 
 open class QStackViewController : QViewController, IQStackViewController {
 
-    open var viewControllers: [IQStackPageViewController]
+    open private(set) var viewControllers: [IQStackPageViewController]
     open var currentViewController: IQStackPageViewController? {
         get { return self.viewControllers.last }
     }
@@ -16,18 +16,18 @@ open class QStackViewController : QViewController, IQStackViewController {
     }
     open var presentAnimation: IQStackViewControllerPresentAnimation
     open var dismissAnimation: IQStackViewControllerDismissAnimation
-    open var interactiveDismissAnimation: IQStackViewControllerinteractiveDismissAnimation?
-    open lazy var interactiveDismissGesture: UIScreenEdgePanGestureRecognizer = self._prepareInteractiveDismissGesture()
-    open private(set) var isAnimating: Bool = false
-
+    open var interactiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation?
+    open private(set) var isAnimating: Bool
+    public private(set) lazy var interactiveDismissGesture: UIScreenEdgePanGestureRecognizer = self._prepareInteractiveDismissGesture()
     private var activeInteractiveCurrentViewController: IQStackPageViewController?
     private var activeInteractivePreviousViewController: IQStackPageViewController?
-    private var activeInteractiveDismissAnimation: IQStackViewControllerinteractiveDismissAnimation?
+    private var activeInteractiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation?
 
     public init(rootViewController: IQStackPageViewController) {
         self.viewControllers = [ rootViewController ]
         self.presentAnimation = QStackViewControllerPresentAnimation()
         self.dismissAnimation = QStackViewControllerDismissAnimation()
+        self.isAnimating = false
         self.interactiveDismissAnimation = QStackViewControllerinteractiveDismissAnimation()
         super.init()
     }
@@ -35,16 +35,87 @@ open class QStackViewController : QViewController, IQStackViewController {
     open override func didLoad() {
         self.view.addGestureRecognizer(self.interactiveDismissGesture)
 
-        if let viewController = self.currentViewController {
-            self._present(viewController, animated: false, completion: nil)
+        if let vc = self.currentViewController {
+            self._present(vc, animated: false, completion: nil)
         }
     }
 
     open override func layout(bounds: CGRect) {
-        if self.isAnimating == false {
-            if let vc = self.currentViewController {
-                vc.view.frame = self.view.bounds
-            }
+        guard self.isAnimating == false else {
+            return
+        }
+        if let vc = self.currentViewController {
+            vc.view.frame = bounds
+        }
+    }
+
+    open override func prepareInteractivePresent() {
+        super.prepareInteractivePresent()
+        if let vc = self.currentViewController {
+            vc.prepareInteractivePresent()
+        }
+    }
+
+    open override func cancelInteractivePresent() {
+        super.cancelInteractivePresent()
+        if let vc = self.currentViewController {
+            vc.cancelInteractivePresent()
+        }
+    }
+
+    open override func finishInteractivePresent() {
+        super.finishInteractivePresent()
+        if let vc = self.currentViewController {
+            vc.finishInteractivePresent()
+        }
+    }
+
+    open override func willPresent(animated: Bool) {
+        super.willPresent(animated: animated)
+        if let vc = self.currentViewController {
+            vc.willPresent(animated: animated)
+        }
+    }
+
+    open override func didPresent(animated: Bool) {
+        super.didPresent(animated: animated)
+        if let vc = self.currentViewController {
+            vc.didPresent(animated: animated)
+        }
+    }
+
+    open override func prepareInteractiveDismiss() {
+        super.prepareInteractiveDismiss()
+        if let vc = self.currentViewController {
+            vc.prepareInteractiveDismiss()
+        }
+    }
+
+    open override func cancelInteractiveDismiss() {
+        super.cancelInteractiveDismiss()
+        if let vc = self.currentViewController {
+            vc.cancelInteractiveDismiss()
+        }
+    }
+
+    open override func finishInteractiveDismiss() {
+        super.finishInteractiveDismiss()
+        if let vc = self.currentViewController {
+            vc.finishInteractiveDismiss()
+        }
+    }
+
+    open override func willDismiss(animated: Bool) {
+        super.willDismiss(animated: animated)
+        if let vc = self.currentViewController {
+            vc.willDismiss(animated: animated)
+        }
+    }
+
+    open override func didDismiss(animated: Bool) {
+        super.didDismiss(animated: animated)
+        if let vc = self.currentViewController {
+            vc.didDismiss(animated: animated)
         }
     }
 
@@ -68,51 +139,45 @@ open class QStackViewController : QViewController, IQStackViewController {
         return vc.preferedStatusBarAnimation()
     }
 
-    open func presentStack(_ viewController: IQStackPageViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+    open func presentStack(_ viewController: IQStackPageViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
         self.viewControllers.append(viewController)
-        viewController.stackViewController = self
         if self.isLoaded == true {
             self._present(viewController, animated: animated, completion: completion)
         }
     }
 
-    open func presentStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+    open func presentStack(_ viewController: IQStackContentViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
         let stackPageViewController = QStackPageViewController.init(contentViewController: viewController)
         self.presentStack(stackPageViewController, animated: animated, completion: completion)
     }
 
-    open func dismissStack(_ viewController: IQStackPageViewController, animated: Bool, completion: (() -> Swift.Void)?) {
-        self._dismiss(viewController, animated: animated, skipInteractiveDismiss: true, completion: completion)
+    open func dismissStack(_ viewController: IQStackPageViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
+        self._dismiss(viewController, animated: animated, completion: completion)
     }
 
-    open func dismissStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+    open func dismissStack(_ viewController: IQStackContentViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
         guard let stackPageViewController = viewController.stackPageViewController else { return }
         self.dismissStack(stackPageViewController, animated: animated, completion: completion)
     }
 
     private func _present(_ viewController: IQStackPageViewController, animated: Bool, completion: (() -> Swift.Void)?) {
-        if let pvc = self.previousViewController {
+        if let previousViewController = self.previousViewController {
             self._appearViewController(viewController)
             self.setNeedUpdateStatusBar()
-            if animated == true {
-                self.isAnimating = true
-                let presentAnimation = self._preparePresentAnimation(viewController)
-                presentAnimation.prepare(
-                    contentView: self.view,
-                    currentViewController: pvc,
-                    nextViewController: viewController
-                )
-                presentAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
-                    if let strongify = self {
-                        strongify.isAnimating = false
-                        strongify._disappearViewController(pvc)
-                    }
-                    completion?()
-                })
-            } else {
-                self._disappearViewController(pvc)
+            self.isAnimating = true
+            let presentAnimation = self._preparePresentAnimation(viewController)
+            presentAnimation.prepare(
+                contentView: self.view,
+                currentViewController: previousViewController,
+                nextViewController: viewController
+            )
+            presentAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
+                if let strong = self {
+                    strong.isAnimating = false
+                    strong._disappearViewController(previousViewController)
+                }
                 completion?()
-            }
+            })
         } else {
             self._appearViewController(viewController)
             self.setNeedUpdateStatusBar()
@@ -120,39 +185,34 @@ open class QStackViewController : QViewController, IQStackViewController {
         }
     }
 
-    private func _dismiss(_ viewController: IQStackPageViewController, animated: Bool, skipInteractiveDismiss: Bool, completion: (() -> Void)?) {
+    private func _dismiss(_ viewController: IQStackPageViewController, animated: Bool, completion: (() -> Void)?) {
         if let index = self.viewControllers.index(where: { return $0 === viewController }) {
             let currentViewController = self.currentViewController
             let previousViewController = self.previousViewController
             self.viewControllers.remove(at: index)
             if self.isLoaded == true {
                 self.setNeedUpdateStatusBar()
-                if currentViewController === viewController, let pvc = previousViewController {
-                    if skipInteractiveDismiss == true && self.interactiveDismissGesture.state != .possible {
+                if currentViewController === viewController, let previousViewController = previousViewController {
+                    if self.interactiveDismissGesture.state != .possible {
                         let enabled = self.interactiveDismissGesture.isEnabled
                         self.interactiveDismissGesture.isEnabled = false
                         self.interactiveDismissGesture.isEnabled = enabled
                     }
-                    if animated == true {
-                        self._appearViewController(pvc)
-                        self.isAnimating = true
-                        let dismissAnimation = self._prepareDismissAnimation(pvc)
-                        dismissAnimation.prepare(
-                            contentView: self.view,
-                            currentViewController: viewController,
-                            previousViewController: pvc
-                        )
-                        dismissAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
-                            if let strongify = self {
-                                strongify.isAnimating = false
-                                strongify._disappearViewController(viewController)
-                            }
-                            completion?()
-                        })
-                    } else {
-                        self._disappearViewController(viewController)
+                    self._appearViewController(previousViewController)
+                    self.isAnimating = true
+                    let dismissAnimation = self._prepareDismissAnimation(previousViewController)
+                    dismissAnimation.prepare(
+                        contentView: self.view,
+                        currentViewController: viewController,
+                        previousViewController: previousViewController
+                    )
+                    dismissAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
+                        if let strong = self {
+                            strong.isAnimating = false
+                            strong._disappearViewController(viewController)
+                        }
                         completion?()
-                    }
+                    })
                 } else {
                     self._disappearViewController(viewController)
                     completion?()
@@ -186,7 +246,7 @@ open class QStackViewController : QViewController, IQStackViewController {
         return self.dismissAnimation
     }
 
-    private func _prepareinteractiveDismissAnimation(_ viewController: IQStackPageViewController) -> IQStackViewControllerinteractiveDismissAnimation? {
+    private func _prepareInteractiveDismissAnimation(_ viewController: IQStackPageViewController) -> IQStackViewControllerInteractiveDismissAnimation? {
         if let animation = viewController.interactiveDismissAnimation { return animation }
         return self.interactiveDismissAnimation
     }
@@ -206,47 +266,38 @@ open class QStackViewController : QViewController, IQStackViewController {
         switch self.interactiveDismissGesture.state {
         case .began:
             guard
-                let cvc = self.currentViewController,
-                let pvc = self.previousViewController,
-                let idc = self._prepareinteractiveDismissAnimation(cvc)
+                let currentViewController = self.currentViewController,
+                let previousViewController = self.previousViewController,
+                let dismissAnimation = self._prepareInteractiveDismissAnimation(currentViewController)
                 else { return }
-            self.activeInteractiveCurrentViewController = cvc
-            self.activeInteractivePreviousViewController = pvc
-            self.activeInteractiveDismissAnimation = idc
-            self._appearViewController(pvc)
+            self.activeInteractiveCurrentViewController = currentViewController
+            self.activeInteractivePreviousViewController = previousViewController
+            self.activeInteractiveDismissAnimation = dismissAnimation
+            self._appearViewController(previousViewController)
             self.isAnimating = true
-            idc.prepare(
+            dismissAnimation.prepare(
                 contentView: self.view,
-                currentViewController: cvc,
-                previousViewController: pvc,
+                currentViewController: currentViewController,
+                previousViewController: previousViewController,
                 position: position,
                 velocity: velocity
             )
             break
         case .changed:
-            guard let idc = self.activeInteractiveDismissAnimation else { return }
-            idc.update(position: position, velocity: velocity)
+            guard let dismissAnimation = self.activeInteractiveDismissAnimation else { return }
+            dismissAnimation.update(position: position, velocity: velocity)
             break
         case .ended, .failed, .cancelled:
-            guard
-                let cvc = self.activeInteractiveCurrentViewController,
-                let pvc = self.activeInteractivePreviousViewController,
-                let idc = self.activeInteractiveDismissAnimation
-                else { return }
-            if idc.canFinish == true {
-                idc.finish({ [weak self] (completed: Bool) in
-                    guard let strongify = self else { return }
-                    strongify.isAnimating = false
-                    strongify._dismiss(cvc, animated: false, skipInteractiveDismiss: false, completion: {
-                        strongify._endInteractiveDismiss()
-                    })
+            guard let dismissAnimation = self.activeInteractiveDismissAnimation else { return }
+            if dismissAnimation.canFinish == true {
+                dismissAnimation.finish({ [weak self] (completed: Bool) in
+                    guard let strong = self else { return }
+                    strong._finishInteractiveDismiss()
                 })
             } else {
-                idc.cancel({ [weak self] (completed: Bool) in
-                    guard let strongify = self else { return }
-                    strongify._disappearViewController(pvc)
-                    strongify.isAnimating = false
-                    strongify._endInteractiveDismiss()
+                dismissAnimation.cancel({ [weak self] (completed: Bool) in
+                    guard let strong = self else { return }
+                    strong._cancelInteractiveDismiss()
                 })
             }
             break
@@ -255,10 +306,25 @@ open class QStackViewController : QViewController, IQStackViewController {
         }
     }
 
+    private func _finishInteractiveDismiss() {
+        if let index = self.viewControllers.index(where: { return $0 === self.activeInteractiveCurrentViewController }) {
+            self.viewControllers.remove(at: index)
+        }
+        self._endInteractiveDismiss()
+    }
+
+    private func _cancelInteractiveDismiss() {
+        if let vc = self.activeInteractivePreviousViewController {
+            self._disappearViewController(vc)
+        }
+        self._endInteractiveDismiss()
+    }
+
     private func _endInteractiveDismiss() {
         self.activeInteractiveCurrentViewController = nil
         self.activeInteractivePreviousViewController = nil
         self.activeInteractiveDismissAnimation = nil
+        self.isAnimating = false
     }
 
 }
@@ -271,9 +337,10 @@ extension QStackViewController : UIGestureRecognizerDelegate {
         return true
     }
 
-    open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         guard gestureRecognizer == self.interactiveDismissGesture else { return false }
-        return true
+        guard let gestureRecognizerView = gestureRecognizer.view, let otherGestureRecognizerView = otherGestureRecognizer.view else { return false }
+        return otherGestureRecognizerView.isDescendant(of: gestureRecognizerView)
     }
 
     open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {

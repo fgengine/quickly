@@ -90,6 +90,11 @@ open class QViewController : NSObject, IQViewController {
         get { return (self._view != nil) }
     }
     open private(set) var isPresented: Bool
+    #if DEBUG
+    open var logging: Bool {
+        get { return false }
+    }
+    #endif
 
     private var _parent: IQViewController!
     private var _parentChanging: Bool = false
@@ -107,7 +112,7 @@ open class QViewController : NSObject, IQViewController {
     }
 
     open func load() -> ViewType {
-        return TransparentView(viewController: self)
+        return QViewControllerTransparentView(viewController: self)
     }
 
     open func loadViewIfNeeded() {
@@ -129,101 +134,88 @@ open class QViewController : NSObject, IQViewController {
     }
 
     open func layout(bounds: CGRect) {
-        for vc in self.child {
-            vc.view.frame = bounds
-        }
     }
 
     open func prepareInteractivePresent() {
         #if DEBUG
-        print("\(String(describing: self.classForCoder)).prepareInteractivePresent()")
-        #endif
-        for vc in self.child {
-            vc.prepareInteractivePresent()
+        if self.logging == true {
+            print("\(String(describing: self.classForCoder)).prepareInteractivePresent()")
         }
+        #endif
     }
 
     open func cancelInteractivePresent() {
         #if DEBUG
-        print("\(String(describing: self.classForCoder)).cancelInteractivePresent()")
-        #endif
-        for vc in self.child {
-            vc.cancelInteractivePresent()
+        if self.logging == true {
+            print("\(String(describing: self.classForCoder)).cancelInteractivePresent()")
         }
+        #endif
     }
 
     open func finishInteractivePresent() {
         #if DEBUG
-        print("\(String(describing: self.classForCoder)).finishInteractivePresent()")
-        #endif
-        for vc in self.child {
-            vc.finishInteractivePresent()
+        if self.logging == true {
+            print("\(String(describing: self.classForCoder)).finishInteractivePresent()")
         }
+        #endif
     }
 
     open func willPresent(animated: Bool) {
         self.isPresented = true
         #if DEBUG
-        print("\(String(describing: self.classForCoder)).willPresent(animated: \(animated))")
-        #endif
-        for vc in self.child {
-            vc.willPresent(animated: animated)
+        if self.logging == true {
+            print("\(String(describing: self.classForCoder)).willPresent(animated: \(animated))")
         }
+        #endif
     }
 
     open func didPresent(animated: Bool) {
         #if DEBUG
-        print("\(String(describing: self.classForCoder)).didPresent(animated: \(animated))")
-        #endif
-        for vc in self.child {
-            vc.didPresent(animated: animated)
+        if self.logging == true {
+            print("\(String(describing: self.classForCoder)).didPresent(animated: \(animated))")
         }
+        #endif
     }
 
     open func prepareInteractiveDismiss() {
         #if DEBUG
-        print("\(String(describing: self.classForCoder)).prepareInteractiveDismiss()")
-        #endif
-        for vc in self.child {
-            vc.prepareInteractiveDismiss()
+        if self.logging == true {
+            print("\(String(describing: self.classForCoder)).prepareInteractiveDismiss()")
         }
+        #endif
     }
 
     open func cancelInteractiveDismiss() {
         #if DEBUG
-        print("\(String(describing: self.classForCoder)).cancelInteractiveDismiss()")
-        #endif
-        for vc in self.child {
-            vc.cancelInteractiveDismiss()
+        if self.logging == true {
+            print("\(String(describing: self.classForCoder)).cancelInteractiveDismiss()")
         }
+        #endif
     }
 
     open func finishInteractiveDismiss() {
         #if DEBUG
-        print("\(String(describing: self.classForCoder)).finishInteractiveDismiss()")
-        #endif
-        for vc in self.child {
-            vc.finishInteractiveDismiss()
+        if self.logging == true {
+            print("\(String(describing: self.classForCoder)).finishInteractiveDismiss()")
         }
+        #endif
     }
 
     open func willDismiss(animated: Bool) {
         #if DEBUG
-        print("\(String(describing: self.classForCoder)).willDismiss(animated: \(animated))")
-        #endif
-        for vc in self.child {
-            vc.willDismiss(animated: animated)
+        if self.logging == true {
+            print("\(String(describing: self.classForCoder)).willDismiss(animated: \(animated))")
         }
+        #endif
     }
 
     open func didDismiss(animated: Bool) {
         self.isPresented = false
         #if DEBUG
-        print("\(String(describing: self.classForCoder)).didDismiss(animated: \(animated))")
-        #endif
-        for vc in self.child {
-            vc.didDismiss(animated: animated)
+        if self.logging == true {
+            print("\(String(describing: self.classForCoder)).didDismiss(animated: \(animated))")
         }
+        #endif
     }
 
     open func addViewController(_ viewController: IQViewController) {
@@ -276,50 +268,53 @@ open class QViewController : NSObject, IQViewController {
         }
     }
 
-    public class InvisibleView : QInvisibleView, IQViewControllerView {
+}
 
-        public weak var viewController: IQViewController?
+open class QViewControllerDefaultView : QView, IQViewControllerView {
 
-        public init(viewController: QViewController) {
-            self.viewController = viewController
-            super.init(frame: UIScreen.main.bounds)
-        }
+    public weak var viewController: IQViewController?
 
-        public required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-
-        open override func layoutSubviews() {
-            super.layoutSubviews()
-
-            if let vc = self.viewController {
-                vc.layout(bounds: self.bounds)
-            }
-        }
-
+    public init(viewController: QViewController, backgroundColor: UIColor = .white) {
+        self.viewController = viewController
+        super.init(frame: UIScreen.main.bounds)
+        self.backgroundColor = backgroundColor
+        self.clipsToBounds = true
     }
 
-    public class TransparentView : QTransparentView, IQViewControllerView {
+    public required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
-        public weak var viewController: IQViewController?
+    open override func layoutSubviews() {
+        super.layoutSubviews()
 
-        public init(viewController: QViewController) {
-            self.viewController = viewController
-            super.init(frame: UIScreen.main.bounds)
+        if let vc = self.viewController {
+            vc.layout(bounds: self.bounds)
         }
+    }
 
-        public required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
+}
+
+open class QViewControllerTransparentView : QTransparentView, IQViewControllerView {
+
+    public weak var viewController: IQViewController?
+
+    public init(viewController: QViewController) {
+        self.viewController = viewController
+        super.init(frame: UIScreen.main.bounds)
+        self.clipsToBounds = true
+    }
+
+    public required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+
+        if let vc = self.viewController {
+            vc.layout(bounds: self.bounds)
         }
-
-        open override func layoutSubviews() {
-            super.layoutSubviews()
-
-            if let vc = self.viewController {
-                vc.layout(bounds: self.bounds)
-            }
-        }
-
     }
 
 }

@@ -5,13 +5,13 @@
 
 import Quickly
 
-protocol IButtonViewControllerRouter: IQRouter {
+protocol IButtonViewControllerRouter : IQRouter {
 
     func dismiss(viewController: ButtonViewController)
     
 }
 
-class ButtonViewController: QNibViewController, IQRouted {
+class ButtonViewController : QNibViewController, IQRouted {
 
     var router: IButtonViewControllerRouter
     var container: AppContainer
@@ -70,21 +70,21 @@ class ButtonViewController: QNibViewController, IQRouted {
         case .bottom: self.button.imagePosition = .left
         case .left: self.button.imagePosition = .top
         }
-        UIView.animate(withDuration: 0.2) {
-            self.view.layoutIfNeeded()
+        UIView.animate(withDuration: 2.0) {
+            self.button.layoutIfNeeded()
         }
     }
 
     @objc
     func pressedSpinnerButton(_ sender: Any) {
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: 2.0) {
             self.spinnerButton.startSpinner()
-            self.view.layoutIfNeeded()
+            self.spinnerButton.layoutIfNeeded()
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
-            UIView.animate(withDuration: 0.2) {
+            UIView.animate(withDuration: 2.0) {
                 self.spinnerButton.stopSpinner()
-                self.view.layoutIfNeeded()
+                self.spinnerButton.layoutIfNeeded()
             }
         }
     }

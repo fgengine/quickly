@@ -4,13 +4,13 @@
 
 import Quickly
 
-protocol ChoiseTableControllerDelegate: class {
+protocol ChoiseTableControllerDelegate : class {
 
     func pressedChoiseSectionRow(_ row: ChoiseSectionTableRow)
 
 }
 
-class ChoiseTableController: QTableController {
+class ChoiseTableController : QTableController {
 
     weak var delegate: ChoiseTableControllerDelegate?
     var section: IQTableSection?
@@ -29,6 +29,7 @@ class ChoiseTableController: QTableController {
                 ChoiseSectionTableRow(mode: .listField),
                 ChoiseSectionTableRow(mode: .dateField),
                 ChoiseSectionTableRow(mode: .image),
+                ChoiseSectionTableRow(mode: .page),
                 ChoiseSectionTableRow(mode: .dialog),
                 ChoiseSectionTableRow(mode: .push)
             ])

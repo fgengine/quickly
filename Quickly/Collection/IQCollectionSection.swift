@@ -29,6 +29,7 @@ public protocol IQCollectionSection : class {
     func insertItem(_ items: [IQCollectionItem], index: Int)
     func deleteItem(_ item: IQCollectionItem)
     func deleteItem(_ items: [IQCollectionItem])
+    func replaceItem(_ item: IQCollectionItem, index: Int)
     func reloadItem(_ item: IQCollectionItem)
     func reloadItem(_ items: [IQCollectionItem])
 

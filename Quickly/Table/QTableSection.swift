@@ -31,9 +31,9 @@ open class QTableSection : IQTableSection {
         }
     }
     public var rows: [IQTableRow] {
-        willSet { self.unbind() }
+        willSet { self.unbindRows() }
         didSet {
-            self.rebindRows(from: self.rows.startIndex, to: self.rows.endIndex)
+            self.bindRows()
             self.reloadSection()
         }
     }

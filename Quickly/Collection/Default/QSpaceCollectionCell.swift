@@ -13,7 +13,7 @@ open class QSpaceCollectionItem : QBackgroundColorCollectionItem {
 
 }
 
-open class QSpaceCollectionCell< ItemType: QSpaceCollectionItem >: QBackgroundColorCollectionCell< ItemType > {
+open class QSpaceCollectionCell< ItemType: QSpaceCollectionItem > : QBackgroundColorCollectionCell< ItemType > {
 
     open override class func size(
         item: ItemType,

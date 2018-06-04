@@ -5,85 +5,123 @@
 open class QStackPageViewController : QViewController, IQStackPageViewController {
 
     open weak var stackViewController: IQStackViewController?
-    open var stackbar: QStackbar? {
-        willSet {
-            guard let stackbar = self.stackbar else { return }
-            if self.isLoaded == true {
-                stackbar.removeFromSuperview()
-                self.setNeedLayout()
-            }
-        }
+    open private(set) var stackbar: QStackbar?
+    open private(set) var stackbarHeight: CGFloat {
         didSet {
-            guard let stackbar = self.stackbar else { return }
-            if self.isLoaded == true {
-                stackbar.frame = self.stackbarFrame(bounds: self.view.bounds)
-                stackbar.edgeInsets = self.stackbarEdgeInsets()
-                self.view.insertSubview(stackbar, aboveSubview: self.contentViewController.view)
-            }
-            self.updateAdditionalEdgeInsets()
-        }
-    }
-    open var stackbarHeight: CGFloat {
-        didSet {
-            self.updateAdditionalEdgeInsets()
+            self._updateAdditionalEdgeInsets()
             self.setNeedLayout()
         }
     }
-    open var stackbarHidden: Bool {
-        didSet {
-            self.updateAdditionalEdgeInsets()
-            self.setNeedLayout()
-        }
-    }
+    open private(set) var stackbarHidden: Bool
     open private(set) var contentViewController: IQStackContentViewController
     open var presentAnimation: IQStackViewControllerPresentAnimation?
     open var dismissAnimation: IQStackViewControllerDismissAnimation?
-    open var interactiveDismissAnimation: IQStackViewControllerinteractiveDismissAnimation?
+    open var interactiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation?
 
     public init(contentViewController: IQStackContentViewController) {
         self.stackbarHeight = 50
         self.stackbarHidden = false
         self.contentViewController = contentViewController
-
         super.init()
     }
 
     open override func setup() {
         super.setup()
 
-        self.updateAdditionalEdgeInsets()
-
-        self.contentViewController.stackPageViewController = self
         self.contentViewController.parent = self
     }
 
     open override func didLoad() {
+        self._updateAdditionalEdgeInsets()
+
         self.contentViewController.view.frame = self.view.bounds
         self.view.addSubview(self.contentViewController.view)
 
         if let stackbar = self.stackbar {
             self.view.addSubview(stackbar)
-        } else {
-            self.stackbar = QStackbar()
         }
     }
 
     open override func layout(bounds: CGRect) {
-        super.layout(bounds: bounds)
-
+        self.contentViewController.view.frame = bounds
         if let stackbar = self.stackbar {
-            stackbar.edgeInsets = self.stackbarEdgeInsets()
-            stackbar.frame = self.stackbarFrame(bounds: bounds)
+            stackbar.edgeInsets = self._stackbarEdgeInsets()
+            stackbar.frame = self._stackbarFrame(bounds: bounds)
         }
     }
 
-    open func setStackbar(_ view: QStackbar?, animated: Bool) {
+    open override func prepareInteractivePresent() {
+        super.prepareInteractivePresent()
+        self.contentViewController.prepareInteractivePresent()
     }
 
-    open func setStackbarHeight(_ value: CGFloat, animated: Bool) {
+    open override func cancelInteractivePresent() {
+        super.cancelInteractivePresent()
+        self.contentViewController.cancelInteractivePresent()
     }
 
-    open func setStackbarHidden(_ value: Bool, animated: Bool) {
+    open override func finishInteractivePresent() {
+        super.finishInteractivePresent()
+        self.contentViewController.finishInteractivePresent()
+    }
+
+    open override func willPresent(animated: Bool) {
+        super.willPresent(animated: animated)
+        self.contentViewController.willPresent(animated: animated)
+    }
+
+    open override func didPresent(animated: Bool) {
+        super.didPresent(animated: animated)
+        self.contentViewController.didPresent(animated: animated)
+    }
+
+    open override func prepareInteractiveDismiss() {
+        super.prepareInteractiveDismiss()
+        self.contentViewController.prepareInteractiveDismiss()
+    }
+
+    open override func cancelInteractiveDismiss() {
+        super.cancelInteractiveDismiss()
+        self.contentViewController.cancelInteractiveDismiss()
+    }
+
+    open override func finishInteractiveDismiss() {
+        super.finishInteractiveDismiss()
+        self.contentViewController.finishInteractiveDismiss()
+    }
+
+    open override func willDismiss(animated: Bool) {
+        super.willDismiss(animated: animated)
+        self.contentViewController.willDismiss(animated: animated)
+    }
+
+    open override func didDismiss(animated: Bool) {
+        super.didDismiss(animated: animated)
+        self.contentViewController.didDismiss(animated: animated)
+    }
+
+    open func setStackbar(_ stackbar: QStackbar?, animated: Bool = false) {
+        if self.isLoaded == true {
+            if let stackbar = self.stackbar {
+                stackbar.removeFromSuperview()
+            }
+            self.stackbar = stackbar
+            if let stackbar = self.stackbar {
+                stackbar.frame = self._stackbarFrame(bounds: self.view.bounds)
+                stackbar.edgeInsets = self._stackbarEdgeInsets()
+                self.view.insertSubview(stackbar, aboveSubview: self.contentViewController.view)
+            }
+            self.setNeedLayout()
+        } else {
+            self.stackbar = stackbar
+        }
+        self._updateAdditionalEdgeInsets()
+    }
+
+    open func setStackbarHeight(_ value: CGFloat, animated: Bool = false) {
+    }
+
+    open func setStackbarHidden(_ value: Bool, animated: Bool = false) {
     }
 
     open func updateContent() {
@@ -105,7 +143,7 @@ open class QStackPageViewController : QViewController, IQStackPageViewController
         return self.contentViewController.preferedStatusBarAnimation()
     }
 
-    private func updateAdditionalEdgeInsets() {
+    private func _updateAdditionalEdgeInsets() {
         self.additionalEdgeInsets = UIEdgeInsets(
             top: (self.stackbar != nil && self.stackbarHidden == false) ? self.stackbarHeight : 0,
             left: 0,
@@ -114,7 +152,7 @@ open class QStackPageViewController : QViewController, IQStackPageViewController
         )
     }
 
-    private func stackbarFrame(bounds: CGRect) -> CGRect {
+    private func _stackbarFrame(bounds: CGRect) -> CGRect {
         let edgeInsets = self.inheritedEdgeInsets
         let fullHeight = self.stackbarHeight + edgeInsets.top
         if self.stackbarHidden == true {
@@ -133,7 +171,7 @@ open class QStackPageViewController : QViewController, IQStackPageViewController
         )
     }
 
-    private func stackbarEdgeInsets() -> UIEdgeInsets {
+    private func _stackbarEdgeInsets() -> UIEdgeInsets {
         let edgeInsets = self.inheritedEdgeInsets
         return UIEdgeInsets(
             top: edgeInsets.top,
