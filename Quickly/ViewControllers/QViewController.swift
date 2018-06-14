@@ -96,7 +96,7 @@ open class QViewController : NSObject, IQViewController {
     }
     #endif
 
-    private var _parent: IQViewController!
+    private weak var _parent: IQViewController!
     private var _parentChanging: Bool = false
     private var _view: ViewType!
 
@@ -106,6 +106,14 @@ open class QViewController : NSObject, IQViewController {
         self.isPresented = false
         super.init()
         self.setup()
+    }
+
+    deinit {
+        #if DEBUG
+        if self.logging == true {
+            print("\(String(describing: self.classForCoder)).deinit")
+        }
+        #endif
     }
 
     open func setup() {

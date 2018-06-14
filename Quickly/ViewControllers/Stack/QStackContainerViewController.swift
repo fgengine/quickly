@@ -41,7 +41,7 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     }
 
     open override func layout(bounds: CGRect) {
-        guard self.isAnimating == true else {
+        guard self.isAnimating == false else {
             return
         }
         if let vc = self.currentViewController {
@@ -313,8 +313,11 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     }
 
     private func _finishInteractiveDismiss() {
-        if let index = self.viewControllers.index(where: { return $0 === self.activeInteractiveCurrentViewController }) {
-            self.viewControllers.remove(at: index)
+        if let vc = self.activeInteractiveCurrentViewController {
+            if let index = self.viewControllers.index(where: { return $0 === vc }) {
+                self.viewControllers.remove(at: index)
+            }
+            self._disappearViewController(vc)
         }
         self.setNeedUpdateStatusBar()
         self._endInteractiveDismiss()

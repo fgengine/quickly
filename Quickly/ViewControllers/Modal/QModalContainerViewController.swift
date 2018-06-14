@@ -45,7 +45,7 @@ open class QModalContainerViewController : QViewController, IQModalContainerView
     }
 
     open override func layout(bounds: CGRect) {
-        guard self.isAnimating == true else {
+        guard self.isAnimating == false else {
             return
         }
         if let vc = self.currentViewController {

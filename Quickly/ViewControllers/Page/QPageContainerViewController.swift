@@ -70,7 +70,7 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
     }
 
     open override func layout(bounds: CGRect) {
-        guard self.isAnimating == true else {
+        guard self.isAnimating == false else {
             return
         }
         if let vc = self.backwardViewController {
