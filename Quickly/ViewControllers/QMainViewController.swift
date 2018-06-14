@@ -42,6 +42,25 @@ open class QMainViewController : QViewController {
             }
         }
     }
+    open var modalContainerViewController: IQModalContainerViewController? {
+        willSet {
+            guard let vc = self.modalContainerViewController else { return }
+            if self.isLoaded == true {
+                vc.willDismiss(animated: false)
+                vc.didDismiss(animated: false)
+            }
+            vc.parent = nil
+        }
+        didSet {
+            guard let vc = self.modalContainerViewController else { return }
+            vc.parent = self
+            if self.isLoaded == true {
+                self.appendModalContainer(vc)
+                vc.willPresent(animated: false)
+                vc.didPresent(animated: false)
+            }
+        }
+    }
     open var pushContainerViewController: IQPushContainerViewController? {
         willSet {
             guard let vc = self.pushContainerViewController else { return }
@@ -88,6 +107,9 @@ open class QMainViewController : QViewController {
         if let vc = self.contentViewController {
             self.appendContentController(vc)
         }
+        if let vc = self.modalContainerViewController {
+            self.appendModalContainer(vc)
+        }
         if let vc = self.pushContainerViewController {
             self.appendPushContainer(vc)
         }
@@ -101,6 +123,9 @@ open class QMainViewController : QViewController {
             vc.view.frame = bounds
         }
         if let vc = self.contentViewController {
+            vc.view.frame = bounds
+        }
+        if let vc = self.modalContainerViewController {
             vc.view.frame = bounds
         }
         if let vc = self.pushContainerViewController {
@@ -119,6 +144,9 @@ open class QMainViewController : QViewController {
         if let vc = self.contentViewController {
             vc.prepareInteractivePresent()
         }
+        if let vc = self.modalContainerViewController {
+            vc.prepareInteractivePresent()
+        }
         if let vc = self.pushContainerViewController {
             vc.prepareInteractivePresent()
         }
@@ -133,6 +161,9 @@ open class QMainViewController : QViewController {
             vc.cancelInteractivePresent()
         }
         if let vc = self.contentViewController {
+            vc.cancelInteractivePresent()
+        }
+        if let vc = self.modalContainerViewController {
             vc.cancelInteractivePresent()
         }
         if let vc = self.pushContainerViewController {
@@ -151,6 +182,9 @@ open class QMainViewController : QViewController {
         if let vc = self.contentViewController {
             vc.finishInteractivePresent()
         }
+        if let vc = self.modalContainerViewController {
+            vc.finishInteractivePresent()
+        }
         if let vc = self.pushContainerViewController {
             vc.finishInteractivePresent()
         }
@@ -165,6 +199,9 @@ open class QMainViewController : QViewController {
             vc.willPresent(animated: animated)
         }
         if let vc = self.contentViewController {
+            vc.willPresent(animated: animated)
+        }
+        if let vc = self.modalContainerViewController {
             vc.willPresent(animated: animated)
         }
         if let vc = self.pushContainerViewController {
@@ -183,6 +220,9 @@ open class QMainViewController : QViewController {
         if let vc = self.contentViewController {
             vc.didPresent(animated: animated)
         }
+        if let vc = self.modalContainerViewController {
+            vc.didPresent(animated: animated)
+        }
         if let vc = self.pushContainerViewController {
             vc.didPresent(animated: animated)
         }
@@ -197,6 +237,9 @@ open class QMainViewController : QViewController {
             vc.prepareInteractiveDismiss()
         }
         if let vc = self.contentViewController {
+            vc.prepareInteractiveDismiss()
+        }
+        if let vc = self.modalContainerViewController {
             vc.prepareInteractiveDismiss()
         }
         if let vc = self.pushContainerViewController {
@@ -215,6 +258,9 @@ open class QMainViewController : QViewController {
         if let vc = self.contentViewController {
             vc.cancelInteractiveDismiss()
         }
+        if let vc = self.modalContainerViewController {
+            vc.cancelInteractiveDismiss()
+        }
         if let vc = self.pushContainerViewController {
             vc.cancelInteractiveDismiss()
         }
@@ -229,6 +275,9 @@ open class QMainViewController : QViewController {
             vc.finishInteractiveDismiss()
         }
         if let vc = self.contentViewController {
+            vc.finishInteractiveDismiss()
+        }
+        if let vc = self.modalContainerViewController {
             vc.finishInteractiveDismiss()
         }
         if let vc = self.pushContainerViewController {
@@ -247,6 +296,9 @@ open class QMainViewController : QViewController {
         if let vc = self.contentViewController {
             vc.willDismiss(animated: animated)
         }
+        if let vc = self.modalContainerViewController {
+            vc.willDismiss(animated: animated)
+        }
         if let vc = self.pushContainerViewController {
             vc.willDismiss(animated: animated)
         }
@@ -261,6 +313,9 @@ open class QMainViewController : QViewController {
             vc.didDismiss(animated: animated)
         }
         if let vc = self.contentViewController {
+            vc.didDismiss(animated: animated)
+        }
+        if let vc = self.modalContainerViewController {
             vc.didDismiss(animated: animated)
         }
         if let vc = self.pushContainerViewController {
@@ -313,6 +368,43 @@ open class QMainViewController : QViewController {
             } else {
                 self.view.addSubview(viewController.view)
             }
+        } else if let vc = self.modalContainerViewController {
+            if vc.view.superview == self.view {
+                self.view.insertSubview(viewController.view, belowSubview: vc.view)
+            } else {
+                self.view.addSubview(viewController.view)
+            }
+        } else if let vc = self.backgroundViewController {
+            if vc.view.superview == self.view {
+                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
+            } else {
+                self.view.addSubview(viewController.view)
+            }
+        } else {
+            self.view.addSubview(viewController.view)
+        }
+    }
+
+    private func appendModalContainer(_ viewController: IQModalContainerViewController) {
+        viewController.view.frame = self.view.bounds
+        if let vc = self.dialogContainerViewController {
+            if vc.view.superview == self.view {
+                self.view.insertSubview(viewController.view, belowSubview: vc.view)
+            } else {
+                self.view.addSubview(viewController.view)
+            }
+        } else if let vc = self.pushContainerViewController {
+            if vc.view.superview == self.view {
+                self.view.insertSubview(viewController.view, belowSubview: vc.view)
+            } else {
+                self.view.addSubview(viewController.view)
+            }
+        } else if let vc = self.contentViewController {
+            if vc.view.superview == self.view {
+                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
+            } else {
+                self.view.addSubview(viewController.view)
+            }
         } else if let vc = self.backgroundViewController {
             if vc.view.superview == self.view {
                 self.view.insertSubview(viewController.view, aboveSubview: vc.view)
@@ -327,6 +419,12 @@ open class QMainViewController : QViewController {
     private func appendPushContainer(_ viewController: IQPushContainerViewController) {
         viewController.view.frame = self.view.bounds
         if let vc = self.dialogContainerViewController {
+            if vc.view.superview == self.view {
+                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
+            } else {
+                self.view.addSubview(viewController.view)
+            }
+        } else if let vc = self.modalContainerViewController {
             if vc.view.superview == self.view {
                 self.view.insertSubview(viewController.view, aboveSubview: vc.view)
             } else {
@@ -354,6 +452,12 @@ open class QMainViewController : QViewController {
         if let vc = self.pushContainerViewController {
             if vc.view.superview == self.view {
                 self.view.insertSubview(viewController.view, belowSubview: vc.view)
+            } else {
+                self.view.addSubview(viewController.view)
+            }
+        } else if let vc = self.modalContainerViewController {
+            if vc.view.superview == self.view {
+                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
             } else {
                 self.view.addSubview(viewController.view)
             }

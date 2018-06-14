@@ -4,39 +4,39 @@
 
 open class QDialogViewController : QViewController, IQDialogViewController {
 
-    open private(set) var contentViewController: IQDialogContentViewController
-    open var widthBehaviour: QDialogViewControllerSizeBehaviour {
+    open private(set) var dialogContentViewController: IQDialogContentViewController
+    open var dialogWidthBehaviour: QDialogViewControllerSizeBehaviour {
         didSet { self._relayoutContentViewController() }
     }
-    open var heightBehaviour: QDialogViewControllerSizeBehaviour {
+    open var dialogHeightBehaviour: QDialogViewControllerSizeBehaviour {
         didSet { self._relayoutContentViewController() }
     }
-    open var verticalAlignment: QDialogViewControllerVerticalAlignment {
+    open var dialogVerticalAlignment: QDialogViewControllerVerticalAlignment {
         didSet { self._relayoutContentViewController() }
     }
-    open var horizontalAlignment: QDialogViewControllerHorizontalAlignment {
+    open var dialogHorizontalAlignment: QDialogViewControllerHorizontalAlignment {
         didSet { self._relayoutContentViewController() }
     }
-    open var presentAnimation: IQDialogViewControllerFixedAnimation?
-    open var dismissAnimation: IQDialogViewControllerFixedAnimation?
-    open var interactiveDismissAnimation: IQDialogViewControllerInteractiveAnimation?
+    open var dialogPresentAnimation: IQDialogViewControllerFixedAnimation?
+    open var dialogDismissAnimation: IQDialogViewControllerFixedAnimation?
+    open var dialogInteractiveDismissAnimation: IQDialogViewControllerInteractiveAnimation?
     public private(set) lazy var tapGesture: UITapGestureRecognizer = self._prepareTapGesture()
     private var contentLayoutConstraints: [NSLayoutConstraint] = []
     private var contentSizeConstraints: [NSLayoutConstraint] = []
 
     public init(contentViewController: IQDialogContentViewController) {
-        self.contentViewController = contentViewController
-        self.widthBehaviour = .fit(min: 0, max: 0)
-        self.heightBehaviour = .fit(min: 0, max: 0)
-        self.verticalAlignment = .center(offset: 0)
-        self.horizontalAlignment = .center(offset: 0)
+        self.dialogContentViewController = contentViewController
+        self.dialogWidthBehaviour = .fit(min: 0, max: 0)
+        self.dialogHeightBehaviour = .fit(min: 0, max: 0)
+        self.dialogVerticalAlignment = .center(offset: 0)
+        self.dialogHorizontalAlignment = .center(offset: 0)
         super.init()
     }
 
     open override func setup() {
         super.setup()
 
-        self.contentViewController.parent = self
+        self.dialogContentViewController.parent = self
     }
 
     open override func load() -> ViewType {
@@ -46,76 +46,76 @@ open class QDialogViewController : QViewController, IQDialogViewController {
     open override func didLoad() {
         self.view.addGestureRecognizer(self.tapGesture)
 
-        self.contentViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(self.contentViewController.view)
+        self.dialogContentViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.dialogContentViewController.view)
 
         self._layoutContentViewController()
     }
 
     open override func prepareInteractivePresent() {
         super.prepareInteractivePresent()
-        self.contentViewController.prepareInteractivePresent()
+        self.dialogContentViewController.prepareInteractivePresent()
     }
 
     open override func cancelInteractivePresent() {
         super.cancelInteractivePresent()
-        self.contentViewController.cancelInteractivePresent()
+        self.dialogContentViewController.cancelInteractivePresent()
     }
 
     open override func finishInteractivePresent() {
         super.finishInteractivePresent()
-        self.contentViewController.finishInteractivePresent()
+        self.dialogContentViewController.finishInteractivePresent()
     }
 
     open override func willPresent(animated: Bool) {
         super.willPresent(animated: animated)
-        self.contentViewController.willPresent(animated: animated)
+        self.dialogContentViewController.willPresent(animated: animated)
     }
 
     open override func didPresent(animated: Bool) {
         super.didPresent(animated: animated)
-        self.contentViewController.didPresent(animated: animated)
+        self.dialogContentViewController.didPresent(animated: animated)
     }
 
     open override func prepareInteractiveDismiss() {
         super.prepareInteractiveDismiss()
-        self.contentViewController.prepareInteractiveDismiss()
+        self.dialogContentViewController.prepareInteractiveDismiss()
     }
 
     open override func cancelInteractiveDismiss() {
         super.cancelInteractiveDismiss()
-        self.contentViewController.cancelInteractiveDismiss()
+        self.dialogContentViewController.cancelInteractiveDismiss()
     }
 
     open override func finishInteractiveDismiss() {
         super.finishInteractiveDismiss()
-        self.contentViewController.finishInteractiveDismiss()
+        self.dialogContentViewController.finishInteractiveDismiss()
     }
 
     open override func willDismiss(animated: Bool) {
         super.willDismiss(animated: animated)
-        self.contentViewController.willDismiss(animated: animated)
+        self.dialogContentViewController.willDismiss(animated: animated)
     }
 
     open override func didDismiss(animated: Bool) {
         super.didDismiss(animated: animated)
-        self.contentViewController.didDismiss(animated: animated)
+        self.dialogContentViewController.didDismiss(animated: animated)
     }
 
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
-        return self.contentViewController.supportedOrientations()
+        return self.dialogContentViewController.supportedOrientations()
     }
 
     open override func preferedStatusBarHidden() -> Bool {
-        return self.contentViewController.preferedStatusBarHidden()
+        return self.dialogContentViewController.preferedStatusBarHidden()
     }
 
     open override func preferedStatusBarStyle() -> UIStatusBarStyle {
-        return self.contentViewController.preferedStatusBarStyle()
+        return self.dialogContentViewController.preferedStatusBarStyle()
     }
 
     open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
-        return self.contentViewController.preferedStatusBarAnimation()
+        return self.dialogContentViewController.preferedStatusBarAnimation()
     }
 
     private func _prepareTapGesture() -> UITapGestureRecognizer {
@@ -136,93 +136,93 @@ open class QDialogViewController : QViewController, IQDialogViewController {
             self.contentLayoutConstraints.removeAll()
         }
         if self.contentSizeConstraints.count > 0 {
-            self.contentViewController.view.removeConstraints(self.contentSizeConstraints)
+            self.dialogContentViewController.view.removeConstraints(self.contentSizeConstraints)
             self.contentSizeConstraints.removeAll()
         }
     }
 
     private func _layoutContentViewController() {
-        switch self.widthBehaviour {
+        switch self.dialogWidthBehaviour {
         case .fit(let min, let max):
             if min > CGFloat.leastNonzeroMagnitude || max > CGFloat.leastNonzeroMagnitude {
                 if min == max {
-                    self.contentSizeConstraints.append(self.contentViewController.view.heightLayout == min)
+                    self.contentSizeConstraints.append(self.dialogContentViewController.view.heightLayout == min)
                 } else {
-                    self.contentSizeConstraints.append(self.contentViewController.view.heightLayout >= min)
-                    self.contentSizeConstraints.append(self.contentViewController.view.heightLayout <= max)
+                    self.contentSizeConstraints.append(self.dialogContentViewController.view.heightLayout >= min)
+                    self.contentSizeConstraints.append(self.dialogContentViewController.view.heightLayout <= max)
                 }
             }
             break
         case .fill(let before, let after):
-            switch self.horizontalAlignment {
+            switch self.dialogHorizontalAlignment {
             case .center(let offset):
-                self.contentLayoutConstraints.append(self.contentViewController.view.leadingLayout == self.view.leadingLayout + (before + offset))
-                self.contentLayoutConstraints.append(self.view.trailingLayout == self.contentViewController.view.trailingLayout + (after - offset))
+                self.contentLayoutConstraints.append(self.dialogContentViewController.view.leadingLayout == self.view.leadingLayout + (before + offset))
+                self.contentLayoutConstraints.append(self.view.trailingLayout == self.dialogContentViewController.view.trailingLayout + (after - offset))
                 break
             default:
-                self.contentLayoutConstraints.append(self.contentViewController.view.leadingLayout == self.view.leadingLayout + before)
-                self.contentLayoutConstraints.append(self.view.trailingLayout == self.contentViewController.view.trailingLayout + after)
+                self.contentLayoutConstraints.append(self.dialogContentViewController.view.leadingLayout == self.view.leadingLayout + before)
+                self.contentLayoutConstraints.append(self.view.trailingLayout == self.dialogContentViewController.view.trailingLayout + after)
                 break
             }
             break
         }
-        switch self.heightBehaviour {
+        switch self.dialogHeightBehaviour {
         case .fit(let min, let max):
             if min > CGFloat.leastNonzeroMagnitude || max > CGFloat.leastNonzeroMagnitude {
                 if min == max {
-                    self.contentSizeConstraints.append(self.contentViewController.view.widthLayout == min)
+                    self.contentSizeConstraints.append(self.dialogContentViewController.view.widthLayout == min)
                 } else {
-                    self.contentSizeConstraints.append(self.contentViewController.view.widthLayout >= min)
-                    self.contentSizeConstraints.append(self.contentViewController.view.widthLayout <= max)
+                    self.contentSizeConstraints.append(self.dialogContentViewController.view.widthLayout >= min)
+                    self.contentSizeConstraints.append(self.dialogContentViewController.view.widthLayout <= max)
                 }
             }
             break
         case .fill(let before, let after):
-            switch self.verticalAlignment {
+            switch self.dialogVerticalAlignment {
             case .center(let offset):
-                self.contentLayoutConstraints.append(self.contentViewController.view.topLayout == self.view.topLayout + (before + offset))
-                self.contentLayoutConstraints.append(self.view.bottomLayout == self.contentViewController.view.bottomLayout + (after - offset))
+                self.contentLayoutConstraints.append(self.dialogContentViewController.view.topLayout == self.view.topLayout + (before + offset))
+                self.contentLayoutConstraints.append(self.view.bottomLayout == self.dialogContentViewController.view.bottomLayout + (after - offset))
                 break
             default:
-                self.contentLayoutConstraints.append(self.contentViewController.view.topLayout == self.view.topLayout + before)
-                self.contentLayoutConstraints.append(self.view.bottomLayout == self.contentViewController.view.bottomLayout + after)
+                self.contentLayoutConstraints.append(self.dialogContentViewController.view.topLayout == self.view.topLayout + before)
+                self.contentLayoutConstraints.append(self.view.bottomLayout == self.dialogContentViewController.view.bottomLayout + after)
                 break
             }
             break
         }
-        switch self.horizontalAlignment {
+        switch self.dialogHorizontalAlignment {
         case .left(let offset):
-            self.contentLayoutConstraints.append(self.contentViewController.view.leadingLayout == self.view.leadingLayout + offset)
+            self.contentLayoutConstraints.append(self.dialogContentViewController.view.leadingLayout == self.view.leadingLayout + offset)
             break
         case .center(let offset):
-            self.contentLayoutConstraints.append(self.contentViewController.view.centerXLayout == self.view.centerXLayout + offset)
+            self.contentLayoutConstraints.append(self.dialogContentViewController.view.centerXLayout == self.view.centerXLayout + offset)
             break
         case .right(let offset):
-            self.contentLayoutConstraints.append(self.contentViewController.view.trailingLayout == self.view.trailingLayout + offset)
+            self.contentLayoutConstraints.append(self.dialogContentViewController.view.trailingLayout == self.view.trailingLayout + offset)
             break
         }
-        switch self.verticalAlignment {
+        switch self.dialogVerticalAlignment {
         case .top(let offset):
-            self.contentLayoutConstraints.append(self.contentViewController.view.topLayout == self.view.topLayout + offset)
+            self.contentLayoutConstraints.append(self.dialogContentViewController.view.topLayout == self.view.topLayout + offset)
             break
         case .center(let offset):
-            self.contentLayoutConstraints.append(self.contentViewController.view.centerYLayout == self.view.centerYLayout + offset)
+            self.contentLayoutConstraints.append(self.dialogContentViewController.view.centerYLayout == self.view.centerYLayout + offset)
             break
         case .bottom(let offset):
-            self.contentLayoutConstraints.append(self.contentViewController.view.bottomLayout == self.view.bottomLayout + offset)
+            self.contentLayoutConstraints.append(self.dialogContentViewController.view.bottomLayout == self.view.bottomLayout + offset)
             break
         }
         if self.contentLayoutConstraints.count > 0 {
             self.view.addConstraints(self.contentLayoutConstraints)
         }
         if self.contentSizeConstraints.count > 0 {
-            self.contentViewController.view.addConstraints(self.contentSizeConstraints)
+            self.dialogContentViewController.view.addConstraints(self.contentSizeConstraints)
         }
     }
 
     @objc
     private func _tapGestureHandler(_ sender: Any) {
-        self.contentViewController.didPressedOutsideContent()
+        self.dialogContentViewController.didPressedOutsideContent()
     }
 
 }
@@ -234,8 +234,8 @@ extension QDialogViewController : UIGestureRecognizerDelegate {
         if self.view.point(inside: location, with: nil) == false {
             return false
         }
-        let contentLocation = gestureRecognizer.location(in: self.contentViewController.view)
-        if self.contentViewController.view.point(inside: contentLocation, with: nil) == true {
+        let contentLocation = gestureRecognizer.location(in: self.dialogContentViewController.view)
+        if self.dialogContentViewController.view.point(inside: contentLocation, with: nil) == true {
             return false
         }
         return true

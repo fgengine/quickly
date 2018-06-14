@@ -16,6 +16,7 @@ class ChoiseSectionTableRow : QCompositionTableRow< QTitleDetailShapeComposition
         case dateField
         case image
         case page
+        case modal
         case dialog
         case push
 
@@ -29,6 +30,7 @@ class ChoiseSectionTableRow : QCompositionTableRow< QTitleDetailShapeComposition
                 case .dateField: return "DateField"
                 case .image: return "Image"
                 case .page: return "Page"
+                case .modal: return "Modal"
                 case .dialog: return "Dialog"
                 case .push: return "Push"
                 }
@@ -44,6 +46,7 @@ class ChoiseSectionTableRow : QCompositionTableRow< QTitleDetailShapeComposition
                 case .dateField: return "Pressed to open the QDateField component demonstration screen"
                 case .image: return "Pressed to open the QImageView component demonstration screen"
                 case .page: return "Pressed to open the QPageViewController component demonstration screen"
+                case .modal: return "Pressed to open the QModalViewController component demonstration screen"
                 case .dialog: return "Pressed to open the QDialogViewController component demonstration screen"
                 case .push: return "Pressed to open the QPushViewController component demonstration screen"
                 }

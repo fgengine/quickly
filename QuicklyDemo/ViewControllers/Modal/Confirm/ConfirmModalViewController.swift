@@ -5,21 +5,21 @@
 
 import Quickly
 
-protocol IConfirmDialogViewControllerRouter : IQRouter {
+protocol IConfirmModalViewControllerRouter : IQRouter {
 
-    func dismiss(viewController: ConfirmDialogViewController)
+    func dismiss(viewController: ConfirmModalViewController)
     
 }
 
-class ConfirmDialogViewController : QNibViewController, IQDialogContentViewController, IQRouted {
+class ConfirmModalViewController : QNibViewController, IQModalContentViewController, IQRouted {
 
-    var router: IConfirmDialogViewControllerRouter
+    var router: IConfirmModalViewControllerRouter
     var container: AppContainer
 
     @IBOutlet private weak var imageView: QImageView!
     @IBOutlet private weak var closeButton: QButton!
 
-    init(router: IConfirmDialogViewControllerRouter, container: AppContainer) {
+    init(router: IConfirmModalViewControllerRouter, container: AppContainer) {
         self.router = router
         self.container = container
         super.init()
@@ -29,6 +29,7 @@ class ConfirmDialogViewController : QNibViewController, IQDialogContentViewContr
         super.didLoad()
 
         self.view.layer.cornerRadius = 4
+        self.rootView.backgroundColor = UIColor.random(alpha: 1)
 
         self.imageView.source = QImageSource("icon_confirm")
 

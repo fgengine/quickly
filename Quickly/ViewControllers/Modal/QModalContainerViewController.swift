@@ -2,31 +2,42 @@
 //  Quickly
 //
 
-open class QPushContainerViewController : QViewController, IQPushContainerViewController {
+open class QModalContainerViewController : QViewController, IQModalContainerViewController {
 
-    open private(set) var viewControllers: [IQPushViewController]
-    open var currentViewController: IQPushViewController? {
-        get { return self.viewControllers.first }
+    open private(set) var viewControllers: [IQModalViewController]
+    open var currentViewController: IQModalViewController? {
+        get { return self.viewControllers.last }
     }
-    open var presentAnimation: IQPushViewControllerFixedAnimation
-    open var dismissAnimation: IQPushViewControllerFixedAnimation
-    open var interactiveDismissAnimation: IQPushViewControllerInteractiveAnimation?
+    open var previousViewController: IQModalViewController? {
+        get {
+            guard self.viewControllers.count > 1 else { return nil }
+            return self.viewControllers[self.viewControllers.endIndex - 2]
+        }
+    }
+    open var presentAnimation: IQModalViewControllerFixedAnimation
+    open var dismissAnimation: IQModalViewControllerFixedAnimation
+    open var interactiveDismissAnimation: IQModalViewControllerInteractiveAnimation?
     open private(set) var isAnimating: Bool
     public private(set) lazy var interactiveDismissGesture: UIPanGestureRecognizer = self._prepareInteractiveDismissGesture()
-    private var activeInteractiveViewController: IQPushViewController?
-    private var activeInteractiveDismissAnimation: IQPushViewControllerInteractiveAnimation?
+    private var deferredViewControllers: [(Bool, IQModalViewController, Bool, (() -> Void)?)]
+    private var activeInteractiveCurrentViewController: IQModalViewController?
+    private var activeInteractivePreviousViewController: IQModalViewController?
+    private var activeInteractiveDismissAnimation: IQModalViewControllerInteractiveAnimation?
 
     public override init() {
         self.viewControllers = []
-        self.presentAnimation = QPushViewControllerPresentAnimation()
-        self.dismissAnimation = QPushViewControllerDismissAnimation()
-        self.interactiveDismissAnimation = QPushViewControllerInteractiveDismissAnimation()
+        self.presentAnimation = QModalViewControllerPresentAnimation()
+        self.dismissAnimation = QModalViewControllerDismissAnimation()
+        self.interactiveDismissAnimation = QModalViewControllerInteractiveDismissAnimation()
         self.isAnimating = false
+        self.deferredViewControllers = []
         super.init()
     }
 
     open override func didLoad() {
         super.didLoad()
+
+        self.view.addGestureRecognizer(self.interactiveDismissGesture)
 
         if let vc = self.currentViewController {
             self._present(vc, animated: false, completion: nil)
@@ -34,6 +45,9 @@ open class QPushContainerViewController : QViewController, IQPushContainerViewCo
     }
 
     open override func layout(bounds: CGRect) {
+        guard self.isAnimating == true else {
+            return
+        }
         if let vc = self.currentViewController {
             vc.view.frame = bounds
         }
@@ -129,41 +143,57 @@ open class QPushContainerViewController : QViewController, IQPushContainerViewCo
         return vc.preferedStatusBarAnimation()
     }
 
-    open func presentPush(viewController: IQPushViewController, animated: Bool, completion: (() -> Void)?) {
-        let currentViewController = self.currentViewController
-        self.viewControllers.append(viewController)
-        if currentViewController == nil {
-            self._present(viewController, animated: animated, completion: completion)
-        } else {
-            completion?()
-        }
-    }
-
-    open func dismissPush(viewController: IQPushViewController, animated: Bool, completion: (() -> Void)?) {
-        self._dismiss(viewController, animated: animated, completion: completion)
-    }
-
-    private func _present(_ viewController: IQPushViewController, animated: Bool, completion: (() -> Void)?) {
+    open func presentModal(viewController: IQModalViewController, animated: Bool, completion: (() -> Void)?) {
         if self.isLoaded == true {
-            self._appearViewController(viewController)
-            self.setNeedUpdateStatusBar()
-            self.isAnimating = true
-            let presentAnimation = self._preparePresentAnimation(viewController)
-            presentAnimation.prepare(viewController: viewController)
-            presentAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
-                if let strong = self {
-                    strong.isAnimating = false
-                }
-                completion?()
-            })
+            if self.isAnimating == true {
+                self.deferredViewControllers.append((true, viewController, animated, completion))
+            } else {
+                self._present(viewController, animated: animated, completion: completion)
+            }
         } else {
+            self.viewControllers.append(viewController)
             completion?()
         }
     }
 
-    private func _dismiss(_ viewController: IQPushViewController, animated: Bool, completion: (() -> Void)?) {
+    open func dismissModal(viewController: IQModalViewController, animated: Bool, completion: (() -> Void)?) {
+        if self.isAnimating == true {
+            self.deferredViewControllers.append((false, viewController, animated, completion))
+        } else {
+            self._dismiss(viewController, animated: animated, completion: completion)
+        }
+    }
+
+    private func _present(_ viewController: IQModalViewController, animated: Bool, completion: (() -> Void)?) {
+        if self.viewControllers.contains(where: { return $0 === viewController }) == false {
+            self.viewControllers.append(viewController)
+        }
+        self.isAnimating = true
+        self._appearViewController(viewController)
+        self.setNeedUpdateStatusBar()
+        let presentAnimation = self._preparePresentAnimation(viewController)
+        presentAnimation.prepare(
+            contentView: self.view,
+            previousViewController: self.previousViewController,
+            currentViewController: viewController
+        )
+        presentAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
+            if let strong = self {
+                strong.isAnimating = false
+                strong._processDeferred()
+            }
+            completion?()
+        })
+    }
+
+    private func _dismiss(_ viewController: IQModalViewController, animated: Bool, completion: (() -> Void)?) {
         let currentViewController = self.currentViewController
         if let index = self.viewControllers.index(where: { return $0 === viewController }) {
+            var targetViewController: IQModalViewController?
+            if index > self.viewControllers.startIndex {
+                targetViewController = self.viewControllers[index - 1]
+            }
+            self.isAnimating = true
             self.viewControllers.remove(at: index)
             self.setNeedUpdateStatusBar()
             if self.isLoaded == true {
@@ -173,66 +203,72 @@ open class QPushContainerViewController : QViewController, IQPushContainerViewCo
                         self.interactiveDismissGesture.isEnabled = false
                         self.interactiveDismissGesture.isEnabled = enabled
                     }
-                    if let nextViewController = self.currentViewController {
-                        self._dismissOne(viewController, animated: animated, completion: { [weak self] in
-                            if let strong = self {
-                                strong._present(nextViewController, animated: animated, completion: completion)
-                            } else {
-                                completion?()
-                            }
-                        })
-                    } else {
-                        self._dismissOne(viewController, animated: animated, completion: completion)
-                    }
+                    self._dismiss(targetViewController, viewController, animated: animated, completion: completion)
                 } else {
-                    self._dismissOne(viewController, animated: false, completion: completion)
+                    self._dismiss(targetViewController, viewController, animated: false, completion: completion)
                 }
             } else {
+                self.isAnimating = false
+                self._processDeferred()
                 completion?()
             }
         } else {
+            self._processDeferred()
             completion?()
         }
     }
 
-    private func _dismissOne(_ viewController: IQPushViewController, animated: Bool, completion: (() -> Void)?) {
-        let dismissAnimation = self._prepareDismissAnimation(viewController)
-        self.isAnimating = true
-        dismissAnimation.prepare(viewController: viewController)
+    private func _dismiss(_ previousViewController: IQModalViewController?, _ currentViewController: IQModalViewController, animated: Bool, completion: (() -> Void)?) {
+        let dismissAnimation = self._prepareDismissAnimation(currentViewController)
+        dismissAnimation.prepare(
+            contentView: self.view,
+            previousViewController: previousViewController,
+            currentViewController: currentViewController
+        )
         dismissAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
             if let strong = self {
-                strong._disappearViewController(viewController)
+                strong._disappearViewController(currentViewController)
                 strong.isAnimating = false
+                strong._processDeferred()
             }
             completion?()
         })
     }
 
-    private func _appearViewController(_ viewController: IQPushViewController) {
+    private func _processDeferred() {
+        if self.deferredViewControllers.count > 0 {
+            let deferred = self.deferredViewControllers.remove(at: 0)
+            if deferred.0 == true {
+                self._present(deferred.1, animated: deferred.2, completion: deferred.3)
+            } else {
+                self._dismiss(deferred.1, animated: deferred.2, completion: deferred.3)
+            }
+        }
+    }
+
+    private func _appearViewController(_ viewController: IQModalViewController) {
         viewController.parent = self
         viewController.view.frame = self.view.bounds
-        viewController.view.addGestureRecognizer(self.interactiveDismissGesture)
         self.view.addSubview(viewController.view)
     }
 
-    private func _disappearViewController(_ viewController: IQPushViewController) {
-        viewController.view.removeGestureRecognizer(self.interactiveDismissGesture)
+    private func _disappearViewController(_ viewController: IQModalViewController) {
         viewController.view.removeFromSuperview()
         viewController.parent = nil
     }
 
-    private func _preparePresentAnimation(_ viewController: IQPushViewController) -> IQPushViewControllerFixedAnimation {
-        if let animation = viewController.pushPresentAnimation { return animation }
+    private func _preparePresentAnimation(_ viewController: IQModalViewController) -> IQModalViewControllerFixedAnimation {
+        if let animation = viewController.modalPresentAnimation { return animation }
         return self.presentAnimation
     }
 
-    private func _prepareDismissAnimation(_ viewController: IQPushViewController) -> IQPushViewControllerFixedAnimation {
-        if let animation = viewController.pushDismissAnimation { return animation }
+    private func _prepareDismissAnimation(_ viewController: IQModalViewController) -> IQModalViewControllerFixedAnimation {
+        if let animation = viewController.modalDismissAnimation { return animation }
         return self.dismissAnimation
     }
 
-    private func _prepareinteractiveDismissAnimation(_ viewController: IQPushViewController) -> IQPushViewControllerInteractiveAnimation? {
-        if let animation = viewController.pushInteractiveDismissAnimation { return animation }
+    private func _prepareinteractiveDismissAnimation(_ viewController: IQModalViewController) -> IQModalViewControllerInteractiveAnimation? {
+        if let animation = viewController.modalInteractiveDismissAnimation { return animation }
         return self.interactiveDismissAnimation
     }
 
@@ -252,11 +288,13 @@ open class QPushContainerViewController : QViewController, IQPushContainerViewCo
                 let viewController = self.currentViewController,
                 let dismissAnimation = self._prepareinteractiveDismissAnimation(viewController)
                 else { return }
-            self.activeInteractiveViewController = viewController
+            self.activeInteractiveCurrentViewController = viewController
+            self.activeInteractivePreviousViewController = self.previousViewController
             self.activeInteractiveDismissAnimation = dismissAnimation
-            self.isAnimating = true
             dismissAnimation.prepare(
-                viewController: viewController,
+                contentView: self.view,
+                previousViewController: self.previousViewController,
+                currentViewController: viewController,
                 position: position,
                 velocity: velocity
             )
@@ -285,25 +323,16 @@ open class QPushContainerViewController : QViewController, IQPushContainerViewCo
     }
 
     private func _finishInteractiveDismiss() {
-        guard let viewController = self.activeInteractiveViewController else {
+        guard let currentViewController = self.activeInteractiveCurrentViewController else {
             self._endInteractiveDismiss()
             return
         }
-        self._disappearViewController(viewController)
-        if let index = self.viewControllers.index(where: { return $0 === viewController }) {
+        self._disappearViewController(currentViewController)
+        if let index = self.viewControllers.index(where: { return $0 === currentViewController }) {
             self.viewControllers.remove(at: index)
             self.setNeedUpdateStatusBar()
-            if let nextViewController = self.currentViewController {
-                self._present(nextViewController, animated: true, completion: { [weak self] in
-                    guard let strong = self else { return }
-                    strong._endInteractiveDismiss()
-                })
-            } else {
-                self._endInteractiveDismiss()
-            }
-        } else {
-            self._endInteractiveDismiss()
         }
+        self._endInteractiveDismiss()
     }
 
     private func _cancelInteractiveDismiss() {
@@ -311,21 +340,21 @@ open class QPushContainerViewController : QViewController, IQPushContainerViewCo
     }
 
     private func _endInteractiveDismiss() {
-        self.activeInteractiveViewController = nil
+        self.activeInteractiveCurrentViewController = nil
+        self.activeInteractivePreviousViewController = nil
         self.activeInteractiveDismissAnimation = nil
-        self.isAnimating = false
     }
 
 }
 
-extension QPushContainerViewController : UIGestureRecognizerDelegate {
+extension QModalContainerViewController : UIGestureRecognizerDelegate {
 
     open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard let viewController = self.currentViewController else {
             return false
         }
-        let location = gestureRecognizer.location(in: viewController.pushContentViewController.view)
-        return viewController.pushContentViewController.view.point(inside: location, with: nil)
+        let location = gestureRecognizer.location(in: viewController.modalContentViewController.view)
+        return viewController.modalContentViewController.view.point(inside: location, with: nil)
     }
 
 }

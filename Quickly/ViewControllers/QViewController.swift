@@ -230,6 +230,17 @@ open class QViewController : NSObject, IQViewController {
         self.parent = nil
     }
 
+    open func parentOf< ParentType >() -> ParentType? {
+        var parent = self.parent
+        while let safe = parent {
+            if let temp = safe as? ParentType {
+                return temp
+            }
+            parent = safe.parent
+        }
+        return nil
+    }
+
     open func addChild(_ viewController: IQViewController) {
         if self.child.contains(where: { return $0 === viewController }) == false {
             self.child.append(viewController)

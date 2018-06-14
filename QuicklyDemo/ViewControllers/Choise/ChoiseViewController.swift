@@ -13,6 +13,7 @@ protocol IChoiseViewControllerRouter : IQRouter {
     func presentDateFieldViewController()
     func presentImageViewController()
     func presentPageViewController()
+    func presentModalViewController()
     func presentDialogViewController()
     func presentPushViewController()
 
@@ -56,6 +57,7 @@ extension ChoiseViewController : ChoiseTableControllerDelegate {
         case .dateField: self.router.presentDateFieldViewController()
         case .image: self.router.presentImageViewController()
         case .page: self.router.presentPageViewController()
+        case .modal: self.router.presentModalViewController()
         case .dialog: self.router.presentDialogViewController()
         case .push: self.router.presentPushViewController()
         }

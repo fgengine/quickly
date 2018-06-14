@@ -4,349 +4,176 @@
 
 open class QStackViewController : QViewController, IQStackViewController {
 
-    open private(set) var viewControllers: [IQStackPageViewController]
-    open var currentViewController: IQStackPageViewController? {
-        get { return self.viewControllers.last }
-    }
-    open var previousViewController: IQStackPageViewController? {
-        get {
-            guard self.viewControllers.count > 1 else { return nil }
-            return self.viewControllers[self.viewControllers.endIndex - 2]
-        }
-    }
-    open var presentAnimation: IQStackViewControllerPresentAnimation
-    open var dismissAnimation: IQStackViewControllerDismissAnimation
-    open var interactiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation?
-    open private(set) var isAnimating: Bool
-    public private(set) lazy var interactiveDismissGesture: UIScreenEdgePanGestureRecognizer = self._prepareInteractiveDismissGesture()
-    private var activeInteractiveCurrentViewController: IQStackPageViewController?
-    private var activeInteractivePreviousViewController: IQStackPageViewController?
-    private var activeInteractiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation?
+    open weak var stackContainerViewController: IQStackContainerViewController?
+    open private(set) var stackbar: QStackbar?
+    open private(set) var stackbarHeight: CGFloat
+    open private(set) var stackbarHidden: Bool
+    open private(set) var stackContentViewController: IQStackContentViewController
+    open var stackPresentAnimation: IQStackViewControllerPresentAnimation?
+    open var stackDismissAnimation: IQStackViewControllerDismissAnimation?
+    open var stackInteractiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation?
 
-    public init(rootViewController: IQStackPageViewController) {
-        self.viewControllers = [ rootViewController ]
-        self.presentAnimation = QStackViewControllerPresentAnimation()
-        self.dismissAnimation = QStackViewControllerDismissAnimation()
-        self.isAnimating = false
-        self.interactiveDismissAnimation = QStackViewControllerinteractiveDismissAnimation()
+    public init(contentViewController: IQStackContentViewController) {
+        self.stackbarHeight = 50
+        self.stackbarHidden = false
+        self.stackContentViewController = contentViewController
         super.init()
     }
 
-    open override func didLoad() {
-        self.view.addGestureRecognizer(self.interactiveDismissGesture)
+    open override func setup() {
+        super.setup()
 
-        if let vc = self.currentViewController {
-            self._present(vc, animated: false, completion: nil)
+        self.stackContentViewController.parent = self
+    }
+
+    open override func didLoad() {
+        self._updateAdditionalEdgeInsets()
+
+        self.stackContentViewController.view.frame = self.view.bounds
+        self.view.addSubview(self.stackContentViewController.view)
+
+        if let stackbar = self.stackbar {
+            self.view.addSubview(stackbar)
         }
     }
 
     open override func layout(bounds: CGRect) {
-        guard self.isAnimating == false else {
-            return
-        }
-        if let vc = self.currentViewController {
-            vc.view.frame = bounds
+        self.stackContentViewController.view.frame = bounds
+        if let stackbar = self.stackbar {
+            stackbar.edgeInsets = self._stackbarEdgeInsets()
+            stackbar.frame = self._stackbarFrame(bounds: bounds)
         }
     }
 
     open override func prepareInteractivePresent() {
         super.prepareInteractivePresent()
-        if let vc = self.currentViewController {
-            vc.prepareInteractivePresent()
-        }
+        self.stackContentViewController.prepareInteractivePresent()
     }
 
     open override func cancelInteractivePresent() {
         super.cancelInteractivePresent()
-        if let vc = self.currentViewController {
-            vc.cancelInteractivePresent()
-        }
+        self.stackContentViewController.cancelInteractivePresent()
     }
 
     open override func finishInteractivePresent() {
         super.finishInteractivePresent()
-        if let vc = self.currentViewController {
-            vc.finishInteractivePresent()
-        }
+        self.stackContentViewController.finishInteractivePresent()
     }
 
     open override func willPresent(animated: Bool) {
         super.willPresent(animated: animated)
-        if let vc = self.currentViewController {
-            vc.willPresent(animated: animated)
-        }
+        self.stackContentViewController.willPresent(animated: animated)
     }
 
     open override func didPresent(animated: Bool) {
         super.didPresent(animated: animated)
-        if let vc = self.currentViewController {
-            vc.didPresent(animated: animated)
-        }
+        self.stackContentViewController.didPresent(animated: animated)
     }
 
     open override func prepareInteractiveDismiss() {
         super.prepareInteractiveDismiss()
-        if let vc = self.currentViewController {
-            vc.prepareInteractiveDismiss()
-        }
+        self.stackContentViewController.prepareInteractiveDismiss()
     }
 
     open override func cancelInteractiveDismiss() {
         super.cancelInteractiveDismiss()
-        if let vc = self.currentViewController {
-            vc.cancelInteractiveDismiss()
-        }
+        self.stackContentViewController.cancelInteractiveDismiss()
     }
 
     open override func finishInteractiveDismiss() {
         super.finishInteractiveDismiss()
-        if let vc = self.currentViewController {
-            vc.finishInteractiveDismiss()
-        }
+        self.stackContentViewController.finishInteractiveDismiss()
     }
 
     open override func willDismiss(animated: Bool) {
         super.willDismiss(animated: animated)
-        if let vc = self.currentViewController {
-            vc.willDismiss(animated: animated)
-        }
+        self.stackContentViewController.willDismiss(animated: animated)
     }
 
     open override func didDismiss(animated: Bool) {
         super.didDismiss(animated: animated)
-        if let vc = self.currentViewController {
-            vc.didDismiss(animated: animated)
+        self.stackContentViewController.didDismiss(animated: animated)
+    }
+
+    open func setStackbar(_ stackbar: QStackbar?, animated: Bool = false) {
+        if self.isLoaded == true {
+            if let stackbar = self.stackbar {
+                stackbar.removeFromSuperview()
+            }
+            self.stackbar = stackbar
+            if let stackbar = self.stackbar {
+                stackbar.frame = self._stackbarFrame(bounds: self.view.bounds)
+                stackbar.edgeInsets = self._stackbarEdgeInsets()
+                self.view.insertSubview(stackbar, aboveSubview: self.stackContentViewController.view)
+            }
+            self.setNeedLayout()
+        } else {
+            self.stackbar = stackbar
         }
+        self._updateAdditionalEdgeInsets()
+    }
+
+    open func setStackbarHeight(_ value: CGFloat, animated: Bool = false) {
+    }
+
+    open func setStackbarHidden(_ value: Bool, animated: Bool = false) {
+    }
+
+    open func updateContent() {
     }
 
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
-        guard let vc = self.currentViewController else { return super.supportedOrientations() }
-        return vc.supportedOrientations()
+        return self.stackContentViewController.supportedOrientations()
     }
 
     open override func preferedStatusBarHidden() -> Bool {
-        guard let vc = self.currentViewController else { return super.preferedStatusBarHidden() }
-        return vc.preferedStatusBarHidden()
+        return self.stackContentViewController.preferedStatusBarHidden()
     }
 
     open override func preferedStatusBarStyle() -> UIStatusBarStyle {
-        guard let vc = self.currentViewController else { return super.preferedStatusBarStyle() }
-        return vc.preferedStatusBarStyle()
+        return self.stackContentViewController.preferedStatusBarStyle()
     }
 
     open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
-        guard let vc = self.currentViewController else { return super.preferedStatusBarAnimation() }
-        return vc.preferedStatusBarAnimation()
+        return self.stackContentViewController.preferedStatusBarAnimation()
     }
 
-    open func presentStack(_ viewController: IQStackPageViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
-        self.viewControllers.append(viewController)
-        if self.isLoaded == true {
-            self._present(viewController, animated: animated, completion: completion)
-        }
+    private func _updateAdditionalEdgeInsets() {
+        self.additionalEdgeInsets = UIEdgeInsets(
+            top: (self.stackbar != nil && self.stackbarHidden == false) ? self.stackbarHeight : 0,
+            left: 0,
+            bottom: 0,
+            right: 0
+        )
     }
 
-    open func presentStack(_ viewController: IQStackContentViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
-        let stackPageViewController = QStackPageViewController.init(contentViewController: viewController)
-        self.presentStack(stackPageViewController, animated: animated, completion: completion)
-    }
-
-    open func dismissStack(_ viewController: IQStackPageViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
-        self._dismiss(viewController, animated: animated, completion: completion)
-    }
-
-    open func dismissStack(_ viewController: IQStackContentViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
-        guard let stackPageViewController = viewController.stackPageViewController else { return }
-        self.dismissStack(stackPageViewController, animated: animated, completion: completion)
-    }
-
-    private func _present(_ viewController: IQStackPageViewController, animated: Bool, completion: (() -> Swift.Void)?) {
-        if let previousViewController = self.previousViewController {
-            self._appearViewController(viewController)
-            self.setNeedUpdateStatusBar()
-            self.isAnimating = true
-            let presentAnimation = self._preparePresentAnimation(viewController)
-            presentAnimation.prepare(
-                contentView: self.view,
-                currentViewController: previousViewController,
-                nextViewController: viewController
+    private func _stackbarFrame(bounds: CGRect) -> CGRect {
+        let edgeInsets = self.inheritedEdgeInsets
+        let fullHeight = self.stackbarHeight + edgeInsets.top
+        if self.stackbarHidden == true {
+            return CGRect(
+                x: bounds.origin.x,
+                y: bounds.origin.y - fullHeight,
+                width: bounds.size.width,
+                height: fullHeight
             )
-            presentAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
-                if let strong = self {
-                    strong.isAnimating = false
-                    strong._disappearViewController(previousViewController)
-                }
-                completion?()
-            })
-        } else {
-            self._appearViewController(viewController)
-            self.setNeedUpdateStatusBar()
-            completion?()
         }
+        return CGRect(
+            x: bounds.origin.x,
+            y: bounds.origin.y,
+            width: bounds.size.width,
+            height: fullHeight
+        )
     }
 
-    private func _dismiss(_ viewController: IQStackPageViewController, animated: Bool, completion: (() -> Void)?) {
-        if let index = self.viewControllers.index(where: { return $0 === viewController }) {
-            let currentViewController = self.currentViewController
-            let previousViewController = self.previousViewController
-            self.viewControllers.remove(at: index)
-            if self.isLoaded == true {
-                self.setNeedUpdateStatusBar()
-                if currentViewController === viewController, let previousViewController = previousViewController {
-                    if self.interactiveDismissGesture.state != .possible {
-                        let enabled = self.interactiveDismissGesture.isEnabled
-                        self.interactiveDismissGesture.isEnabled = false
-                        self.interactiveDismissGesture.isEnabled = enabled
-                    }
-                    self._appearViewController(previousViewController)
-                    self.isAnimating = true
-                    let dismissAnimation = self._prepareDismissAnimation(previousViewController)
-                    dismissAnimation.prepare(
-                        contentView: self.view,
-                        currentViewController: viewController,
-                        previousViewController: previousViewController
-                    )
-                    dismissAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
-                        if let strong = self {
-                            strong.isAnimating = false
-                            strong._disappearViewController(viewController)
-                        }
-                        completion?()
-                    })
-                } else {
-                    self._disappearViewController(viewController)
-                    completion?()
-                }
-            }
-        }
-    }
-
-    private func _appearViewController(_ viewController: IQStackPageViewController) {
-        if viewController.parent !== self {
-            viewController.parent = self
-            viewController.view.bounds = self.view.bounds
-            self.view.addSubview(viewController.view)
-        }
-    }
-
-    private func _disappearViewController(_ viewController: IQStackPageViewController) {
-        if viewController.parent === self {
-            viewController.view.removeFromSuperview()
-            viewController.parent = nil
-        }
-    }
-
-    private func _preparePresentAnimation(_ viewController: IQStackPageViewController) -> IQStackViewControllerPresentAnimation {
-        if let animation = viewController.presentAnimation { return animation }
-        return self.presentAnimation
-    }
-
-    private func _prepareDismissAnimation(_ viewController: IQStackPageViewController) -> IQStackViewControllerDismissAnimation {
-        if let animation = viewController.dismissAnimation { return animation }
-        return self.dismissAnimation
-    }
-
-    private func _prepareInteractiveDismissAnimation(_ viewController: IQStackPageViewController) -> IQStackViewControllerInteractiveDismissAnimation? {
-        if let animation = viewController.interactiveDismissAnimation { return animation }
-        return self.interactiveDismissAnimation
-    }
-
-    private func _prepareInteractiveDismissGesture() -> UIScreenEdgePanGestureRecognizer {
-        let gesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(self._interactiveDismissGestureHandler(_:)))
-        gesture.delaysTouchesBegan = true
-        gesture.edges = [ .left ]
-        gesture.delegate = self
-        return gesture
-    }
-
-    @objc
-    private func _interactiveDismissGestureHandler(_ sender: Any) {
-        let position = self.interactiveDismissGesture.location(in: nil)
-        let velocity = self.interactiveDismissGesture.velocity(in: nil)
-        switch self.interactiveDismissGesture.state {
-        case .began:
-            guard
-                let currentViewController = self.currentViewController,
-                let previousViewController = self.previousViewController,
-                let dismissAnimation = self._prepareInteractiveDismissAnimation(currentViewController)
-                else { return }
-            self.activeInteractiveCurrentViewController = currentViewController
-            self.activeInteractivePreviousViewController = previousViewController
-            self.activeInteractiveDismissAnimation = dismissAnimation
-            self._appearViewController(previousViewController)
-            self.isAnimating = true
-            dismissAnimation.prepare(
-                contentView: self.view,
-                currentViewController: currentViewController,
-                previousViewController: previousViewController,
-                position: position,
-                velocity: velocity
-            )
-            break
-        case .changed:
-            guard let dismissAnimation = self.activeInteractiveDismissAnimation else { return }
-            dismissAnimation.update(position: position, velocity: velocity)
-            break
-        case .ended, .failed, .cancelled:
-            guard let dismissAnimation = self.activeInteractiveDismissAnimation else { return }
-            if dismissAnimation.canFinish == true {
-                dismissAnimation.finish({ [weak self] (completed: Bool) in
-                    guard let strong = self else { return }
-                    strong._finishInteractiveDismiss()
-                })
-            } else {
-                dismissAnimation.cancel({ [weak self] (completed: Bool) in
-                    guard let strong = self else { return }
-                    strong._cancelInteractiveDismiss()
-                })
-            }
-            break
-        default:
-            break
-        }
-    }
-
-    private func _finishInteractiveDismiss() {
-        if let index = self.viewControllers.index(where: { return $0 === self.activeInteractiveCurrentViewController }) {
-            self.viewControllers.remove(at: index)
-        }
-        self._endInteractiveDismiss()
-    }
-
-    private func _cancelInteractiveDismiss() {
-        if let vc = self.activeInteractivePreviousViewController {
-            self._disappearViewController(vc)
-        }
-        self._endInteractiveDismiss()
-    }
-
-    private func _endInteractiveDismiss() {
-        self.activeInteractiveCurrentViewController = nil
-        self.activeInteractivePreviousViewController = nil
-        self.activeInteractiveDismissAnimation = nil
-        self.isAnimating = false
-    }
-
-}
-
-extension QStackViewController : UIGestureRecognizerDelegate {
-
-    open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard gestureRecognizer == self.interactiveDismissGesture else { return false }
-        guard self.viewControllers.count > 1 else { return false }
-        return true
-    }
-
-    open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard gestureRecognizer == self.interactiveDismissGesture else { return false }
-        guard let gestureRecognizerView = gestureRecognizer.view, let otherGestureRecognizerView = otherGestureRecognizer.view else { return false }
-        return otherGestureRecognizerView.isDescendant(of: gestureRecognizerView)
-    }
-
-    open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        guard gestureRecognizer == self.interactiveDismissGesture else { return false }
-        let location = touch.location(in: self.view)
-        return self.view.point(inside: location, with: nil)
+    private func _stackbarEdgeInsets() -> UIEdgeInsets {
+        let edgeInsets = self.inheritedEdgeInsets
+        return UIEdgeInsets(
+            top: edgeInsets.top,
+            left: edgeInsets.left,
+            bottom: 0,
+            right: edgeInsets.right
+        )
     }
 
 }

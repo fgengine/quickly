@@ -30,6 +30,7 @@ class ChoiseTableController : QTableController {
                 ChoiseSectionTableRow(mode: .dateField),
                 ChoiseSectionTableRow(mode: .image),
                 ChoiseSectionTableRow(mode: .page),
+                ChoiseSectionTableRow(mode: .modal),
                 ChoiseSectionTableRow(mode: .dialog),
                 ChoiseSectionTableRow(mode: .push)
             ])

@@ -46,7 +46,6 @@ class DialogViewController : QNibViewController, IQRouted {
     @objc
     private func pressedShowDialog(_ sender: Any) {
         self.router.presentConfirmDialog()
-        self.router.presentConfirmDialog()
     }
 
 }

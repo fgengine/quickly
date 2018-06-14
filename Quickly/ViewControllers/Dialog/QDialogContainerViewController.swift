@@ -11,7 +11,7 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
     open var backgroundView: BackgroundView? {
         willSet {
             if let backgroundView = self.backgroundView {
-                backgroundView.containerViewController = nil
+                backgroundView.dialogContainerViewController = nil
                 if self.isLoaded == true {
                     backgroundView.removeFromSuperview()
                 }
@@ -20,7 +20,7 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
         }
         didSet {
             if let backgroundView = self.backgroundView {
-                backgroundView.containerViewController = self
+                backgroundView.dialogContainerViewController = self
                 if self.isLoaded == true {
                     self.view.insertSubview(backgroundView, at: 0)
                 }
@@ -31,6 +31,7 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
     open var presentAnimation: IQDialogViewControllerFixedAnimation
     open var dismissAnimation: IQDialogViewControllerFixedAnimation
     open var interactiveDismissAnimation: IQDialogViewControllerInteractiveAnimation?
+    open private(set) var isAnimating: Bool
     public private(set) lazy var interactiveDismissGesture: UIPanGestureRecognizer = self._prepareInteractiveDismissGesture()
     private var activeInteractiveViewController: IQDialogViewController?
     private var activeInteractiveDismissAnimation: IQDialogViewControllerInteractiveAnimation?
@@ -40,6 +41,7 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
         self.presentAnimation = QDialogViewControllerPresentAnimation()
         self.dismissAnimation = QDialogViewControllerDismissAnimation()
         self.interactiveDismissAnimation = QDialogViewControllerinteractiveDismissAnimation()
+        self.isAnimating = false
         super.init()
     }
 
@@ -163,8 +165,10 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
     open func presentDialog(viewController: IQDialogViewController, animated: Bool, completion: (() -> Void)?) {
         let currentViewController = self.currentViewController
         self.viewControllers.append(viewController)
-        if currentViewController == nil && self.isLoaded == true {
+        if currentViewController == nil {
             self._present(viewController, animated: animated, completion: completion)
+        } else {
+            completion?()
         }
     }
 
@@ -173,20 +177,28 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
     }
 
     private func _present(_ viewController: IQDialogViewController, animated: Bool, completion: (() -> Void)?) {
-        if let backgroundView = self.backgroundView {
-            backgroundView.presentDialog(
-                viewController: viewController,
-                isFirst: self.viewControllers.count == 1,
-                animated: animated
-            )
-        }
-        self._appearViewController(viewController)
-        self.setNeedUpdateStatusBar()
-        let presentAnimation = self._preparePresentAnimation(viewController)
-        presentAnimation.prepare(viewController: viewController)
-        presentAnimation.update(animated: animated, complete: { (completed: Bool) in
+        if self.isLoaded == true {
+            if let backgroundView = self.backgroundView {
+                backgroundView.presentDialog(
+                    viewController: viewController,
+                    isFirst: self.viewControllers.count == 1,
+                    animated: animated
+                )
+            }
+            self._appearViewController(viewController)
+            self.setNeedUpdateStatusBar()
+            self.isAnimating = true
+            let presentAnimation = self._preparePresentAnimation(viewController)
+            presentAnimation.prepare(viewController: viewController)
+            presentAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
+                if let strong = self {
+                    strong.isAnimating = true
+                }
+                completion?()
+            })
+        } else {
             completion?()
-        })
+        }
     }
 
     private func _dismiss(_ viewController: IQDialogViewController, animated: Bool, completion: (() -> Void)?) {
@@ -215,7 +227,11 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
                 } else {
                     self._dismissOne(viewController, animated: false, completion: completion)
                 }
+            } else {
+                completion?()
             }
+        } else {
+            completion?()
         }
     }
 
@@ -232,6 +248,7 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
         dismissAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
             if let strong = self {
                 strong._disappearViewController(viewController)
+                strong.isAnimating = true
             }
             completion?()
         })
@@ -251,17 +268,17 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
     }
 
     private func _preparePresentAnimation(_ viewController: IQDialogViewController) -> IQDialogViewControllerFixedAnimation {
-        if let animation = viewController.presentAnimation { return animation }
+        if let animation = viewController.dialogPresentAnimation { return animation }
         return self.presentAnimation
     }
 
     private func _prepareDismissAnimation(_ viewController: IQDialogViewController) -> IQDialogViewControllerFixedAnimation {
-        if let animation = viewController.dismissAnimation { return animation }
+        if let animation = viewController.dialogDismissAnimation { return animation }
         return self.dismissAnimation
     }
 
     private func _prepareinteractiveDismissAnimation(_ viewController: IQDialogViewController) -> IQDialogViewControllerInteractiveAnimation? {
-        if let animation = viewController.interactiveDismissAnimation { return animation }
+        if let animation = viewController.dialogInteractiveDismissAnimation { return animation }
         return self.interactiveDismissAnimation
     }
 
@@ -283,6 +300,7 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
                 else { return }
             self.activeInteractiveViewController = viewController
             self.activeInteractiveDismissAnimation = dismissAnimation
+            self.isAnimating = true
             dismissAnimation.prepare(viewController: viewController, position: position, velocity: velocity)
             break
         case .changed:
@@ -345,6 +363,7 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
     private func _endInteractiveDismiss() {
         self.activeInteractiveViewController = nil
         self.activeInteractiveDismissAnimation = nil
+        self.isAnimating = false
     }
 
 }
@@ -353,8 +372,8 @@ extension QDialogContainerViewController : UIGestureRecognizerDelegate {
 
     open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard let vc = self.currentViewController else { return false }
-        let location = gestureRecognizer.location(in: vc.contentViewController.view)
-        return vc.contentViewController.view.point(inside: location, with: nil)
+        let location = gestureRecognizer.location(in: vc.dialogContentViewController.view)
+        return vc.dialogContentViewController.view.point(inside: location, with: nil)
     }
 
 }

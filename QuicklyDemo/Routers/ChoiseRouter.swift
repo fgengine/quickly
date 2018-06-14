@@ -53,6 +53,11 @@ extension ChoiseRouter : IChoiseViewControllerRouter {
         self.present(vc, animated: true)
     }
 
+    func presentModalViewController() {
+        let vc = ModalViewController(router: self, container: self.container)
+        self.present(vc, animated: true)
+    }
+
     func presentDialogViewController() {
         let vc = DialogViewController(router: self, container: self.container)
         self.present(vc, animated: true)
@@ -113,6 +118,39 @@ extension ChoiseRouter : IImageViewControllerRouter {
     
 }
 
+extension ChoiseRouter : IPageViewControllerRouter {
+
+    func dismiss(viewController: PageViewController) {
+        self.dismiss(viewController, animated: true)
+    }
+
+}
+
+extension ChoiseRouter : IModalViewControllerRouter {
+
+    func presentConfirmModal() {
+        if let parent = self.parent {
+            let vc = ConfirmModalViewController(router: self, container: self.container)
+            parent.presentModal(vc)
+        }
+    }
+
+    func dismiss(viewController: ModalViewController) {
+        self.dismiss(viewController, animated: true)
+    }
+
+}
+
+extension ChoiseRouter : IConfirmModalViewControllerRouter {
+
+    func dismiss(viewController: ConfirmModalViewController) {
+        if let parent = self.parent {
+            parent.dismissModal(viewController)
+        }
+    }
+
+}
+
 extension ChoiseRouter : IDialogViewControllerRouter {
 
     func presentConfirmDialog() {
@@ -134,14 +172,6 @@ extension ChoiseRouter : IConfirmDialogViewControllerRouter {
         if let parent = self.parent {
             parent.dismissDialog(viewController)
         }
-    }
-
-}
-
-extension ChoiseRouter : IPageViewControllerRouter {
-
-    func dismiss(viewController: PageViewController) {
-        self.dismiss(viewController, animated: true)
     }
 
 }

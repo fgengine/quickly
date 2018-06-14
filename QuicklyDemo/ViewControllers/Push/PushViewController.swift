@@ -47,7 +47,6 @@ class PushViewController : QNibViewController, IQRouted {
     @objc
     private func pressedShowPush(_ sender: Any) {
         self.router.presentConfirmPush()
-        self.router.presentConfirmPush()
     }
 
 }

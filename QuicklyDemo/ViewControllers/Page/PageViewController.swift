@@ -10,7 +10,7 @@ protocol IPageViewControllerRouter : IPageContentViewControllerRouter {
 
 }
 
-class PageViewController : QPageViewController, IQRouted {
+class PageViewController : QPageContainerViewController, IQRouted {
 
     var router: IPageViewControllerRouter
     var container: AppContainer
@@ -30,7 +30,7 @@ class PageViewController : QPageViewController, IQRouted {
         self.setPagebar(pagebar)
 
         self.setViewControllers([
-            QPageSlideViewController(
+            QPageViewController(
                 pagebarItem: QPagebarTitleItem(
                     backgroundColor: UIColor.gray,
                     selectedBackgroundColor: UIColor.darkGray,
@@ -38,7 +38,7 @@ class PageViewController : QPageViewController, IQRouted {
                 ),
                 contentViewController: PageContentViewController(router: self.router, container: self.container)
             ),
-            QPageSlideViewController(
+            QPageViewController(
                 pagebarItem: QPagebarTitleItem(
                     backgroundColor: UIColor.gray,
                     selectedBackgroundColor: UIColor.darkGray,
@@ -46,7 +46,7 @@ class PageViewController : QPageViewController, IQRouted {
                 ),
                 contentViewController: PageContentViewController(router: self.router, container: self.container)
             ),
-            QPageSlideViewController(
+            QPageViewController(
                 pagebarItem: QPagebarTitleItem(
                     backgroundColor: UIColor.gray,
                     selectedBackgroundColor: UIColor.darkGray,

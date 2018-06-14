@@ -34,6 +34,7 @@ public protocol IQPushContainerViewController : IQViewController {
     var presentAnimation: IQPushViewControllerFixedAnimation { get }
     var dismissAnimation: IQPushViewControllerFixedAnimation { get }
     var interactiveDismissAnimation: IQPushViewControllerInteractiveAnimation? { set get }
+    var isAnimating: Bool { get }
 
     func presentPush(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)?)
     func dismissPush(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)?)
@@ -44,14 +45,14 @@ public protocol IQPushContainerViewController : IQViewController {
 
 public protocol IQPushViewController : IQViewController {
 
-    var containerViewController: IQPushContainerViewController? { get }
-    var contentViewController: IQPushContentViewController { get }
-    var state: QPushViewControllerState { set get }
-    var offset: CGFloat { set get }
-    var displayTime: TimeInterval? { get }
-    var presentAnimation: IQPushViewControllerFixedAnimation? { get }
-    var dismissAnimation: IQPushViewControllerFixedAnimation? { get }
-    var interactiveDismissAnimation: IQPushViewControllerInteractiveAnimation? { get }
+    var pushContainerViewController: IQPushContainerViewController? { get }
+    var pushContentViewController: IQPushContentViewController { get }
+    var pushState: QPushViewControllerState { set get }
+    var pushOffset: CGFloat { set get }
+    var pushDisplayTime: TimeInterval? { get }
+    var pushPresentAnimation: IQPushViewControllerFixedAnimation? { get }
+    var pushDismissAnimation: IQPushViewControllerFixedAnimation? { get }
+    var pushInteractiveDismissAnimation: IQPushViewControllerInteractiveAnimation? { get }
 
     func dismissPush(animated: Bool, completion: (() -> Swift.Void)?)
 
@@ -59,12 +60,12 @@ public protocol IQPushViewController : IQViewController {
 
 public extension IQPushViewController {
 
-    public var containerViewController: IQPushContainerViewController? {
+    public var pushContainerViewController: IQPushContainerViewController? {
         get { return self.parent as? IQPushContainerViewController }
     }
 
     public func dismissPush(animated: Bool, completion: (() -> Swift.Void)?) {
-        guard let vc = self.containerViewController else { return }
+        guard let vc = self.pushContainerViewController else { return }
         vc.dismissPush(viewController: self, animated: animated, completion: completion)
     }
 
@@ -84,7 +85,7 @@ public protocol IQPushContentViewController : IQViewController {
 public extension IQPushContentViewController {
 
     public var pushViewController: IQPushViewController? {
-        get { return self.parent as? IQPushViewController }
+        get { return self.parentOf() }
     }
 
 }
