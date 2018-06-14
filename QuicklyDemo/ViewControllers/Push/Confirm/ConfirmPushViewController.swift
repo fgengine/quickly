@@ -39,7 +39,7 @@ class ConfirmPushViewController : QNibViewController, IQPushContentViewControlle
 
         self.rootView.backgroundColor = UIColor.lightGray
 
-        self.imageView.source = QImageSource("dialog_confirm")
+        self.imageView.source = QImageSource("icon_confirm")
         self.titleLabel.text = QText("Push title", color: .black)
         self.subtitleLabel.text = QText("Push subtitle", color: .black)
     }
