@@ -5,23 +5,23 @@
 
 import Quickly
 
-protocol IPushViewControllerRouter : IQRouter {
+protocol IPushViewControllerRoutePath : IQRoutePath {
 
     func presentConfirmPush()
     func dismiss(viewController: PushViewController)
     
 }
 
-class PushViewController : QNibViewController, IQRouted {
+class PushViewController : QNibViewController, IQRoutable {
 
-    var router: IPushViewControllerRouter
-    var container: AppContainer
+    var routePath: IPushViewControllerRoutePath
+    var routeContext: AppRouteContext
 
     @IBOutlet private weak var showPushButton: QButton!
 
-    init(router: IPushViewControllerRouter, container: AppContainer) {
-        self.router = router
-        self.container = container
+    init(_ routePath: IPushViewControllerRoutePath, _ routeContext: AppRouteContext) {
+        self.routePath = routePath
+        self.routeContext = routeContext
         super.init()
     }
 
@@ -46,7 +46,7 @@ class PushViewController : QNibViewController, IQRouted {
 
     @objc
     private func pressedShowPush(_ sender: Any) {
-        self.router.presentConfirmPush()
+        self.routePath.presentConfirmPush()
     }
 
 }

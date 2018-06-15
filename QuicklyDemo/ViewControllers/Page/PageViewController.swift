@@ -4,20 +4,20 @@
 
 import Quickly
 
-protocol IPageViewControllerRouter : IPageContentViewControllerRouter {
+protocol IPageViewControllerRoutePath : IPageContentViewControllerRoutePath {
 
     func dismiss(viewController: PageViewController)
 
 }
 
-class PageViewController : QPageContainerViewController, IQRouted {
+class PageViewController : QPageContainerViewController, IQRoutable {
 
-    var router: IPageViewControllerRouter
-    var container: AppContainer
+    var routePath: IPageViewControllerRoutePath
+    var routeContext: AppRouteContext
 
-    init(router: IPageViewControllerRouter, container: AppContainer) {
-        self.router = router
-        self.container = container
+    init(_ routePath: IPageViewControllerRoutePath, _ routeContext: AppRouteContext) {
+        self.routePath = routePath
+        self.routeContext = routeContext
         super.init()
     }
 
@@ -36,7 +36,7 @@ class PageViewController : QPageContainerViewController, IQRouted {
                     selectedBackgroundColor: UIColor.darkGray,
                     title: QLabelStyleSheet(text: QText("Page #1", color: .red))
                 ),
-                contentViewController: PageContentViewController(router: self.router, container: self.container)
+                contentViewController: PageContentViewController(self.routePath, self.routeContext)
             ),
             QPageViewController(
                 pagebarItem: QPagebarTitleItem(
@@ -44,7 +44,7 @@ class PageViewController : QPageContainerViewController, IQRouted {
                     selectedBackgroundColor: UIColor.darkGray,
                     title: QLabelStyleSheet(text: QText("Page #2", color: .green))
                 ),
-                contentViewController: PageContentViewController(router: self.router, container: self.container)
+                contentViewController: PageContentViewController(self.routePath, self.routeContext)
             ),
             QPageViewController(
                 pagebarItem: QPagebarTitleItem(
@@ -52,7 +52,7 @@ class PageViewController : QPageContainerViewController, IQRouted {
                     selectedBackgroundColor: UIColor.darkGray,
                     title: QLabelStyleSheet(text: QText("Page #3", color: .blue))
                 ),
-                contentViewController: PageContentViewController(router: self.router, container: self.container)
+                contentViewController: PageContentViewController(self.routePath, self.routeContext)
             )
         ])
     }

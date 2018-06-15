@@ -5,22 +5,22 @@
 
 import Quickly
 
-protocol IDateFieldViewControllerRouter : IQRouter {
+protocol IDateFieldViewControllerRoutePath : IQRoutePath {
 
     func dismiss(viewController: DateFieldViewController)
     
 }
 
-class DateFieldViewController : QNibViewController, IQRouted {
+class DateFieldViewController : QNibViewController, IQRoutable {
 
-    var router: IDateFieldViewControllerRouter
-    var container: AppContainer
+    var routePath: IDateFieldViewControllerRoutePath
+    var routeContext: AppRouteContext
 
     @IBOutlet private weak var dateField: QDateField!
 
-    init(router: IDateFieldViewControllerRouter, container: AppContainer) {
-        self.router = router
-        self.container = container
+    init(_ routePath: IDateFieldViewControllerRoutePath, _ routeContext: AppRouteContext) {
+        self.routePath = routePath
+        self.routeContext = routeContext
         super.init()
     }
 

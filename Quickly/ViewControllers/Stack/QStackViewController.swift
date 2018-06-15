@@ -13,7 +13,7 @@ open class QStackViewController : QViewController, IQStackViewController {
     open var stackDismissAnimation: IQStackViewControllerDismissAnimation?
     open var stackInteractiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation?
 
-    public init(contentViewController: IQStackContentViewController) {
+    public init(_ contentViewController: IQStackContentViewController) {
         self.stackbarHeight = 50
         self.stackbarHidden = false
         self.stackContentViewController = contentViewController

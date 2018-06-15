@@ -5,23 +5,23 @@
 
 import Quickly
 
-protocol IConfirmDialogViewControllerRouter : IQRouter {
+protocol IConfirmDialogViewControllerRoutePath : IQRoutePath {
 
     func dismiss(viewController: ConfirmDialogViewController)
     
 }
 
-class ConfirmDialogViewController : QNibViewController, IQDialogContentViewController, IQRouted {
+class ConfirmDialogViewController : QNibViewController, IQDialogContentViewController, IQRoutable {
 
-    var router: IConfirmDialogViewControllerRouter
-    var container: AppContainer
+    var routePath: IConfirmDialogViewControllerRoutePath
+    var routeContext: AppRouteContext
 
     @IBOutlet private weak var imageView: QImageView!
     @IBOutlet private weak var closeButton: QButton!
 
-    init(router: IConfirmDialogViewControllerRouter, container: AppContainer) {
-        self.router = router
-        self.container = container
+    init(_ routePath: IConfirmDialogViewControllerRoutePath, _ routeContext: AppRouteContext) {
+        self.routePath = routePath
+        self.routeContext = routeContext
         super.init()
     }
 
@@ -53,12 +53,12 @@ class ConfirmDialogViewController : QNibViewController, IQDialogContentViewContr
     }
 
     func didPressedOutsideContent() {
-        self.router.dismiss(viewController: self)
+        self.routePath.dismiss(viewController: self)
     }
 
     @objc
     private func pressedClose(_ sender: Any) {
-        self.router.dismiss(viewController: self)
+        self.routePath.dismiss(viewController: self)
     }
 
 }

@@ -5,23 +5,23 @@
 
 import Quickly
 
-protocol IButtonViewControllerRouter : IQRouter {
+protocol IButtonViewControllerRoutePath : IQRoutePath {
 
     func dismiss(viewController: ButtonViewController)
     
 }
 
-class ButtonViewController : QNibViewController, IQRouted {
+class ButtonViewController : QNibViewController, IQRoutable {
 
-    var router: IButtonViewControllerRouter
-    var container: AppContainer
+    var routePath: IButtonViewControllerRoutePath
+    var routeContext: AppRouteContext
 
     @IBOutlet private weak var button: QButton!
     @IBOutlet private weak var spinnerButton: QButton!
 
-    init(router: IButtonViewControllerRouter, container: AppContainer) {
-        self.router = router
-        self.container = container
+    init(_ routePath: IButtonViewControllerRoutePath, _ routeContext: AppRouteContext) {
+        self.routePath = routePath
+        self.routeContext = routeContext
         super.init()
     }
 

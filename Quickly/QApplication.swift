@@ -2,25 +2,25 @@
 //  Quickly
 //
 
-open class QApplication< ContainerType: IQContainer, RouterType: QAppRouter< ContainerType > > : UIResponder, UIApplicationDelegate {
+open class QApplication< RouteContextType: IQRouteContext, WireframeType: QAppWireframe< RouteContextType > > : UIResponder, UIApplicationDelegate {
 
-    public private(set) lazy var container: ContainerType = self.prepareContainer()
-    public private(set) lazy var router: RouterType = self.prepareRouter()
+    public private(set) lazy var routeContext: RouteContextType = self.prepareRouteContext()
+    public private(set) lazy var wireframe: WireframeType = self.prepareWireframe()
     public var window: UIWindow? {
         set(value) { fatalError("Unsupported method '\(#function)'") }
-        get { return self.router.window }
+        get { return self.wireframe.window }
     }
 
-    open func prepareContainer() -> ContainerType {
+    open func prepareRouteContext() -> RouteContextType {
         fatalError("Required override function '\(#function)'")
     }
 
-    open func prepareRouter() -> RouterType {
+    open func prepareWireframe() -> WireframeType {
         fatalError("Required override function '\(#function)'")
     }
 
     open func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
-        self.router.launch(launchOptions)
+        self.wireframe.launch(launchOptions)
         return true
     }
 

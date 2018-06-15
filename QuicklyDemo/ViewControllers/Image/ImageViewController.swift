@@ -5,22 +5,22 @@
 
 import Quickly
 
-protocol IImageViewControllerRouter : IQRouter {
+protocol IImageViewControllerRoutePath : IQRoutePath {
 
     func dismiss(viewController: ImageViewController)
     
 }
 
-class ImageViewController : QNibViewController, IQRouted {
+class ImageViewController : QNibViewController, IQRoutable {
 
-    var router: IImageViewControllerRouter
-    var container: AppContainer
+    var routePath: IImageViewControllerRoutePath
+    var routeContext: AppRouteContext
 
     @IBOutlet private weak var imageView: QImageView!
 
-    init(router: IImageViewControllerRouter, container: AppContainer) {
-        self.router = router
-        self.container = container
+    init(_ routePath: IImageViewControllerRoutePath, _ routeContext: AppRouteContext) {
+        self.routePath = routePath
+        self.routeContext = routeContext
         super.init()
     }
 

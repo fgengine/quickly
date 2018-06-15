@@ -4,23 +4,23 @@
 
 import Quickly
 
-protocol IDialogViewControllerRouter : IQRouter {
+protocol IDialogViewControllerRoutePath : IQRoutePath {
 
     func presentConfirmDialog()
     func dismiss(viewController: DialogViewController)
     
 }
 
-class DialogViewController : QNibViewController, IQRouted {
+class DialogViewController : QNibViewController, IQRoutable {
 
-    var router: IDialogViewControllerRouter
-    var container: AppContainer
+    var routePath: IDialogViewControllerRoutePath
+    var routeContext: AppRouteContext
 
     @IBOutlet private weak var showDialogButton: QButton!
 
-    init(router: IDialogViewControllerRouter, container: AppContainer) {
-        self.router = router
-        self.container = container
+    init(_ routePath: IDialogViewControllerRoutePath, _ routeContext: AppRouteContext) {
+        self.routePath = routePath
+        self.routeContext = routeContext
         super.init()
     }
 
@@ -45,7 +45,7 @@ class DialogViewController : QNibViewController, IQRouted {
 
     @objc
     private func pressedShowDialog(_ sender: Any) {
-        self.router.presentConfirmDialog()
+        self.routePath.presentConfirmDialog()
     }
 
 }

@@ -23,7 +23,7 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     private var activeInteractivePreviousViewController: IQStackViewController?
     private var activeInteractiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation?
 
-    public init(rootViewController: IQStackViewController) {
+    public init(_ rootViewController: IQStackViewController) {
         self.viewControllers = [ rootViewController ]
         self.presentAnimation = QStackViewControllerPresentAnimation()
         self.dismissAnimation = QStackViewControllerDismissAnimation()
@@ -145,7 +145,7 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     }
 
     open func presentStack(_ viewController: IQStackContentViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
-        let stackPageViewController = QStackViewController.init(contentViewController: viewController)
+        let stackPageViewController = QStackViewController(viewController)
         self.presentStack(stackPageViewController, animated: animated, completion: completion)
     }
 

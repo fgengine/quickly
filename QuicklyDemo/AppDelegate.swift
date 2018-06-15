@@ -5,14 +5,14 @@
 import Quickly
 
 @UIApplicationMain
-class AppDelegate : QApplication< AppContainer, AppRouter > {
+class AppDelegate : QApplication< AppRouteContext, AppWireframe > {
 
-    override func prepareContainer() -> AppContainer {
-        return AppContainer()
+    override func prepareRouteContext() -> AppRouteContext {
+        return AppRouteContext()
     }
 
-    override func prepareRouter() -> AppRouter {
-        return AppRouter(container: self.container)
+    override func prepareWireframe() -> AppWireframe {
+        return AppWireframe(self.routeContext)
     }
 
 }

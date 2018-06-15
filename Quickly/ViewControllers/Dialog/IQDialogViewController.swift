@@ -69,7 +69,7 @@ public protocol IQDialogContainerViewController : IQViewController {
 
     var viewControllers: [IQDialogViewController] { get }
     var currentViewController: IQDialogViewController? { get }
-    var backgroundView: BackgroundView? { get }
+    var backgroundView: BackgroundView? { set get }
     var presentAnimation: IQDialogViewControllerFixedAnimation { get }
     var dismissAnimation: IQDialogViewControllerFixedAnimation { get }
     var interactiveDismissAnimation: IQDialogViewControllerInteractiveAnimation? { get }

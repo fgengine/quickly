@@ -5,23 +5,23 @@
 
 import Quickly
 
-protocol ILabelViewControllerRouter : IQRouter {
+protocol ILabelViewControllerRoutePath : IQRoutePath {
 
     func dismiss(viewController: LabelViewController)
     
 }
 
-class LabelViewController : QNibViewController, IQRouted {
+class LabelViewController : QNibViewController, IQRoutable {
 
-    var router: ILabelViewControllerRouter
-    var container: AppContainer
+    var routePath: ILabelViewControllerRoutePath
+    var routeContext: AppRouteContext
 
     @IBOutlet private weak var label: QLabel!
     @IBOutlet private weak var linkLabel: QLinkLabel!
 
-    init(router: ILabelViewControllerRouter, container: AppContainer) {
-        self.router = router
-        self.container = container
+    init(_ routePath: ILabelViewControllerRoutePath, _ routeContext: AppRouteContext) {
+        self.routePath = routePath
+        self.routeContext = routeContext
         super.init()
     }
 
@@ -35,7 +35,7 @@ class LabelViewController : QNibViewController, IQRouted {
         self.linkLabel.numberOfLines = 0
         self.linkLabel.appendLink("Thorium", normal: TextStyle.link, highlight: nil) { [weak self] (label, link) in
             guard let strong = self else { return }
-            strong.router.dismiss(viewController: strong)
+            strong.routePath.dismiss(viewController: strong)
         }
     }
 

@@ -4,22 +4,10 @@
 
 import Quickly
 
-class AppRouter: QAppRouter<
-    AppContainer
-> {
+class AppWireframe: QAppWireframe< AppRouteContext > {
 
-    override init(container: AppContainer) {
-        super.init(container: container)
-
-        let modalContainerViewController = QModalContainerViewController()
-        self.mainViewController.modalContainerViewController = modalContainerViewController
-
-        let dialogContainerViewController = QDialogContainerViewController()
-        dialogContainerViewController.backgroundView = QDialogBackgroundView(backgroundColor: UIColor(white: 0, alpha: 0.9))
-        self.mainViewController.dialogContainerViewController = dialogContainerViewController
-
-        let pushContainerViewController = QPushContainerViewController()
-        self.mainViewController.pushContainerViewController = pushContainerViewController
+    override init(_ routeContext: AppRouteContext) {
+        super.init(routeContext)
     }
 
     override func launch(_ options: [UIApplicationLaunchOptionsKey : Any]?) {
@@ -27,12 +15,12 @@ class AppRouter: QAppRouter<
     }
 
     func presentChoise() {
-        self.currentRouter = ChoiseRouter(container: self.container, parent: self)
+        self.currentWireframe = ChoiseWireframe(self.routeContext, self)
     }
 
     func presentModal(_ viewController: IQModalContentViewController) {
         let pushViewController = QModalViewController(contentViewController: viewController)
-        self.mainViewController.modalContainerViewController!.presentModal(viewController: pushViewController, animated: true, completion: nil)
+        self.modalContainerViewController!.presentModal(viewController: pushViewController, animated: true, completion: nil)
     }
 
     func dismissModal(_ viewController: IQModalContentViewController) {
@@ -43,7 +31,7 @@ class AppRouter: QAppRouter<
         let dialogViewController = QDialogViewController(contentViewController: viewController)
         dialogViewController.dialogWidthBehaviour = .fit(min: 160, max: 300)
         dialogViewController.dialogHeightBehaviour = .fit(min: 240, max: 480)
-        self.mainViewController.dialogContainerViewController!.presentDialog(viewController: dialogViewController, animated: true, completion: nil)
+        self.dialogContainerViewController!.presentDialog(viewController: dialogViewController, animated: true, completion: nil)
     }
 
     func dismissDialog(_ viewController: IQDialogContentViewController) {
@@ -52,7 +40,7 @@ class AppRouter: QAppRouter<
 
     func presentPush(_ viewController: IQPushContentViewController, displayTime: TimeInterval?) {
         let pushViewController = QPushViewController(contentViewController: viewController, displayTime: displayTime)
-        self.mainViewController.pushContainerViewController!.presentPush(viewController: pushViewController, animated: true, completion: nil)
+        self.pushContainerViewController!.presentPush(viewController: pushViewController, animated: true, completion: nil)
     }
 
     func dismissPush(_ viewController: IQPushContentViewController) {

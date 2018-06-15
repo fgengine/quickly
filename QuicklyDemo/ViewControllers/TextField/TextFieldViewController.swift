@@ -5,24 +5,24 @@
 
 import Quickly
 
-protocol ITextFieldViewControllerRouter : IQRouter {
+protocol ITextFieldViewControllerRoutePath : IQRoutePath {
 
     func dismiss(viewController: TextFieldViewController)
     
 }
 
-class TextFieldViewController : QNibViewController, IQRouted {
+class TextFieldViewController : QNibViewController, IQRoutable {
 
-    var router: ITextFieldViewControllerRouter
-    var container: AppContainer
+    var routePath: ITextFieldViewControllerRoutePath
+    var routeContext: AppRouteContext
 
     @IBOutlet private weak var textField: QTextField!
 
     private var keyboard: QKeyboard
 
-    init(router: ITextFieldViewControllerRouter, container: AppContainer) {
-        self.router = router
-        self.container = container
+    init(_ routePath: ITextFieldViewControllerRoutePath, _ routeContext: AppRouteContext) {
+        self.routePath = routePath
+        self.routeContext = routeContext
         self.keyboard = QKeyboard()
         super.init()
     }
