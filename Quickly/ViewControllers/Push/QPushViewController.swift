@@ -19,7 +19,7 @@ open class QPushViewController : QViewController, IQPushViewController {
     private var timer: QTimer?
     private var contentLayoutConstraints: [NSLayoutConstraint]
 
-    public init(contentViewController: IQPushContentViewController, displayTime: TimeInterval?) {
+    public init(_ contentViewController: IQPushContentViewController, displayTime: TimeInterval? = nil) {
         self.pushContentViewController = contentViewController
         self.pushState = .hide
         self.pushOffset = 0

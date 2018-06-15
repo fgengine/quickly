@@ -129,8 +129,9 @@ extension ChoiseWireframe : IModalViewControllerRoutePath {
 
     func presentConfirmModal() {
         if let wireframe = self.parentWireframe {
-            let vc = ConfirmModalViewController(self, self.routeContext)
-            wireframe.presentModal(vc)
+            let contentViewController = ConfirmModalViewController(self, self.routeContext)
+            let modalViewController = QModalViewController(contentViewController)
+            wireframe.presentModal(modalViewController, animated: true, completion: nil)
         }
     }
 
@@ -143,9 +144,8 @@ extension ChoiseWireframe : IModalViewControllerRoutePath {
 extension ChoiseWireframe : IConfirmModalViewControllerRoutePath {
 
     func dismiss(viewController: ConfirmModalViewController) {
-        if let wireframe = self.parentWireframe {
-            wireframe.dismissModal(viewController)
-        }
+        guard let modalViewController = viewController.modalViewController else { return }
+        self.dismissModal(modalViewController, animated: true, completion: nil)
     }
 
 }
@@ -154,8 +154,13 @@ extension ChoiseWireframe : IDialogViewControllerRoutePath {
 
     func presentConfirmDialog() {
         if let wireframe = self.parentWireframe {
-            let vc = ConfirmDialogViewController(self, self.routeContext)
-            wireframe.presentDialog(vc)
+            let contentViewController = ConfirmDialogViewController(self, self.routeContext)
+            let dialogViewController = QDialogViewController(
+                contentViewController,
+                widthBehaviour: .fit(min: 160, max: 300),
+                heightBehaviour: .fit(min: 240, max: 480)
+            )
+            wireframe.presentDialog(dialogViewController, animated: true, completion: nil)
         }
     }
 
@@ -168,9 +173,8 @@ extension ChoiseWireframe : IDialogViewControllerRoutePath {
 extension ChoiseWireframe : IConfirmDialogViewControllerRoutePath {
 
     func dismiss(viewController: ConfirmDialogViewController) {
-        if let wireframe = self.parentWireframe {
-            wireframe.dismissDialog(viewController)
-        }
+        guard let dialogViewController = viewController.dialogViewController else { return }
+        self.dismissDialog(dialogViewController, animated: true, completion: nil)
     }
 
 }
@@ -179,8 +183,9 @@ extension ChoiseWireframe : IPushViewControllerRoutePath {
 
     func presentConfirmPush() {
         if let wireframe = self.parentWireframe {
-            let vc = ConfirmPushViewController(self, self.routeContext)
-            wireframe.presentPush(vc, displayTime: 7)
+            let contentViewController = ConfirmPushViewController(self, self.routeContext)
+            let pushViewController = QPushViewController(contentViewController, displayTime: 7)
+            wireframe.presentPush(pushViewController, animated: true, completion: nil)
         }
     }
 
@@ -193,9 +198,8 @@ extension ChoiseWireframe : IPushViewControllerRoutePath {
 extension ChoiseWireframe : IConfirmPushViewControllerRoutePath {
 
     func dismiss(viewController: ConfirmPushViewController) {
-        if let wireframe = self.parentWireframe {
-            wireframe.dismissPush(viewController)
-        }
+        guard let pushViewController = viewController.pushViewController else { return }
+        self.dismissPush(pushViewController, animated: true, completion: nil)
     }
 
 }

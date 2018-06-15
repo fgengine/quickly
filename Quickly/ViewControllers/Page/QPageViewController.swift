@@ -10,7 +10,12 @@ open class QPageViewController : QViewController, IQPageViewController {
     open var pageBackwardAnimation: IQPageViewControllerAnimation?
     open var pageInteractiveAnimation: IQPageViewControllerInteractiveAnimation?
 
-    public init(pagebarItem: QPagebarItem? = nil, contentViewController: IQPageContentViewController) {
+    public init(_ contentViewController: IQPageContentViewController) {
+        self.pageContentViewController = contentViewController
+        super.init()
+    }
+
+    public init(_ pagebarItem: QPagebarItem?, _ contentViewController: IQPageContentViewController) {
         self.pageItem = pagebarItem
         self.pageContentViewController = contentViewController
         super.init()

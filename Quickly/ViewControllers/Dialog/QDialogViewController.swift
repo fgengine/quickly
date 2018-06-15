@@ -24,12 +24,18 @@ open class QDialogViewController : QViewController, IQDialogViewController {
     private var contentLayoutConstraints: [NSLayoutConstraint] = []
     private var contentSizeConstraints: [NSLayoutConstraint] = []
 
-    public init(contentViewController: IQDialogContentViewController) {
+    public init(
+        _ contentViewController: IQDialogContentViewController,
+        widthBehaviour: QDialogViewControllerSizeBehaviour = .fit(min: 0, max: 0),
+        heightBehaviour: QDialogViewControllerSizeBehaviour = .fit(min: 0, max: 0),
+        verticalAlignment: QDialogViewControllerVerticalAlignment = .center(offset: 0),
+        horizontalAlignment: QDialogViewControllerHorizontalAlignment = .center(offset: 0)
+    ) {
         self.dialogContentViewController = contentViewController
-        self.dialogWidthBehaviour = .fit(min: 0, max: 0)
-        self.dialogHeightBehaviour = .fit(min: 0, max: 0)
-        self.dialogVerticalAlignment = .center(offset: 0)
-        self.dialogHorizontalAlignment = .center(offset: 0)
+        self.dialogWidthBehaviour = widthBehaviour
+        self.dialogHeightBehaviour = heightBehaviour
+        self.dialogVerticalAlignment = verticalAlignment
+        self.dialogHorizontalAlignment = horizontalAlignment
         super.init()
     }
 

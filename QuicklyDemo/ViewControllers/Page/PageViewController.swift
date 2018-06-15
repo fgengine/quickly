@@ -27,32 +27,33 @@ class PageViewController : QPageContainerViewController, IQRoutable {
         let pagebar = QPagebar(cellTypes: [
             QPagebarTitleCell< QPagebarTitleItem >.self
         ])
+        pagebar.backgroundColor = UIColor.white
         self.setPagebar(pagebar)
 
         self.setViewControllers([
             QPageViewController(
-                pagebarItem: QPagebarTitleItem(
+                QPagebarTitleItem(
                     backgroundColor: UIColor.gray,
                     selectedBackgroundColor: UIColor.darkGray,
                     title: QLabelStyleSheet(text: QText("Page #1", color: .red))
                 ),
-                contentViewController: PageContentViewController(self.routePath, self.routeContext)
+                PageContentViewController(self.routePath, self.routeContext)
             ),
             QPageViewController(
-                pagebarItem: QPagebarTitleItem(
+                QPagebarTitleItem(
                     backgroundColor: UIColor.gray,
                     selectedBackgroundColor: UIColor.darkGray,
                     title: QLabelStyleSheet(text: QText("Page #2", color: .green))
                 ),
-                contentViewController: PageContentViewController(self.routePath, self.routeContext)
+                PageContentViewController(self.routePath, self.routeContext)
             ),
             QPageViewController(
-                pagebarItem: QPagebarTitleItem(
+                QPagebarTitleItem(
                     backgroundColor: UIColor.gray,
                     selectedBackgroundColor: UIColor.darkGray,
                     title: QLabelStyleSheet(text: QText("Page #3", color: .blue))
                 ),
-                contentViewController: PageContentViewController(self.routePath, self.routeContext)
+                PageContentViewController(self.routePath, self.routeContext)
             )
         ])
     }

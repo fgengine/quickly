@@ -9,7 +9,7 @@ open class QModalViewController : QViewController, IQModalViewController {
     open var modalDismissAnimation: IQModalViewControllerFixedAnimation?
     open var modalInteractiveDismissAnimation: IQModalViewControllerInteractiveAnimation?
 
-    public init(contentViewController: IQModalContentViewController) {
+    public init(_ contentViewController: IQModalContentViewController) {
         self.modalContentViewController = contentViewController
         super.init()
     }
