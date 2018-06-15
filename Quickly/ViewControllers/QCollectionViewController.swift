@@ -97,16 +97,16 @@ open class QCollectionViewController : QViewController, IQStackContentViewContro
                 let beforeContentOffset = view.contentOffset
                 let beforeContentSize = layout.collectionViewContentSize
                 let progress = CGPoint(
-                    x: (beforeContentInset.left + beforeContentOffset.x) / beforeContentSize.width,
-                    y: (beforeContentInset.top + beforeContentOffset.y) / beforeContentSize.height
+                    x: (beforeContentSize.width > CGFloat.leastNonzeroMagnitude) ? ((beforeContentInset.left + beforeContentOffset.x) / beforeContentSize.width) : 0,
+                    y: (beforeContentSize.height > CGFloat.leastNonzeroMagnitude) ? ((beforeContentInset.top + beforeContentOffset.y) / beforeContentSize.height) : 0
                 )
                 view.frame = bounds
                 view.contentInset = edgeInsets
                 view.scrollIndicatorInsets = edgeInsets
-                let afterContentSize = layout.collectionViewContentSize
+                let afterContentSize = view.contentSize
                 view.contentOffset = CGPoint(
-                    x: -edgeInsets.left + (afterContentSize.width * progress.x),
-                    y: -edgeInsets.top + (afterContentSize.height * progress.y)
+                    x: (afterContentSize.width > CGFloat.leastNonzeroMagnitude) ? (-edgeInsets.left + (afterContentSize.width * progress.x)) : 0,
+                    y: (afterContentSize.height > CGFloat.leastNonzeroMagnitude) ? (-edgeInsets.top + (afterContentSize.height * progress.y)) : 0
                 )
             } else {
                 view.frame = bounds
