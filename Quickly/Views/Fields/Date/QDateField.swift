@@ -29,7 +29,7 @@ public class QDateFieldStyleSheet : QDisplayViewStyleSheet< QDateField > {
     public var placeholder: IQText?
     public var isEnabled: Bool
 
-    public override init() {
+    public init() {
         self.mode = .date
         self.isEnabled = true
 

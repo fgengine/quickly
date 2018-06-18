@@ -4,18 +4,28 @@
 
 open class QDisplayViewStyleSheet< TargetType: QDisplayView > : IQStyleSheet {
 
+    public var backgroundColor: UIColor?
     public var cornerRadius: QViewCornerRadius
     public var border: QViewBorder
     public var shadow: QViewShadow?
 
-    public init() {
-        self.cornerRadius = .none
-        self.border = .none
+    public init(
+        backgroundColor: UIColor? = nil,
+        cornerRadius: QViewCornerRadius = .none,
+        border: QViewBorder = .none,
+        shadow: QViewShadow? = nil
+    ) {
+        self.backgroundColor = backgroundColor
+        self.cornerRadius = cornerRadius
+        self.border = border
+        self.shadow = shadow
     }
 
     public func apply(target: TargetType) {
+        target.backgroundColor = self.backgroundColor
         target.cornerRadius = self.cornerRadius
         target.border = self.border
+        target.shadow = self.shadow
     }
 
 }

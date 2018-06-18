@@ -251,6 +251,9 @@
 		40E738581F5606C500B192C6 /* QSpaceTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E738521F5606C500B192C6 /* QSpaceTableCell.swift */; };
 		40EBC12D1F4DC40200D42A64 /* QuicklyJsonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EBC12C1F4DC40200D42A64 /* QuicklyJsonTests.swift */; };
 		40EC44A11F983DD2005233F1 /* Quickly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 401829591F4C1C0A005C9949 /* Quickly.framework */; };
+		40ED37FF20D7C935001352D7 /* QImageTitleDetailIconComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40ED37FC20D7C934001352D7 /* QImageTitleDetailIconComposition.swift */; };
+		40ED380020D7C935001352D7 /* QTitleDetailImageComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40ED37FD20D7C934001352D7 /* QTitleDetailImageComposition.swift */; };
+		40ED380120D7C935001352D7 /* QImageTitleValueIconComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40ED37FE20D7C935001352D7 /* QImageTitleValueIconComposition.swift */; };
 		40FBE67A1F5311EB00F5194B /* QLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE6791F5311EB00F5194B /* QLayout.swift */; };
 		40FBE68C1F540A2800F5194B /* ChoiseSectionTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE68B1F540A2800F5194B /* ChoiseSectionTableRow.swift */; };
 		40FBE68F1F540AD500F5194B /* TextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE68E1F540AD500F5194B /* TextStyle.swift */; };
@@ -558,6 +561,9 @@
 		40E738501F5606C500B192C6 /* QSeparatorTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSeparatorTableCell.swift; sourceTree = "<group>"; };
 		40E738521F5606C500B192C6 /* QSpaceTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSpaceTableCell.swift; sourceTree = "<group>"; };
 		40EBC12C1F4DC40200D42A64 /* QuicklyJsonTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuicklyJsonTests.swift; sourceTree = "<group>"; };
+		40ED37FC20D7C934001352D7 /* QImageTitleDetailIconComposition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QImageTitleDetailIconComposition.swift; sourceTree = "<group>"; };
+		40ED37FD20D7C934001352D7 /* QTitleDetailImageComposition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTitleDetailImageComposition.swift; sourceTree = "<group>"; };
+		40ED37FE20D7C935001352D7 /* QImageTitleValueIconComposition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QImageTitleValueIconComposition.swift; sourceTree = "<group>"; };
 		40FBE6791F5311EB00F5194B /* QLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QLayout.swift; sourceTree = "<group>"; };
 		40FBE68B1F540A2800F5194B /* ChoiseSectionTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChoiseSectionTableRow.swift; sourceTree = "<group>"; };
 		40FBE68E1F540AD500F5194B /* TextStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextStyle.swift; sourceTree = "<group>"; };
@@ -1100,13 +1106,16 @@
 				4062C8D6208A04A20098F809 /* QImageTitleComposition.swift */,
 				4062C8E0208A04A20098F809 /* QImageTitleValueComposition.swift */,
 				4062C8DC208A04A20098F809 /* QImageTitleValueShapeComposition.swift */,
+				40ED37FE20D7C935001352D7 /* QImageTitleValueIconComposition.swift */,
 				4062C8E7208A04A20098F809 /* QImageTitleDetailComposition.swift */,
 				4062C8E5208A04A20098F809 /* QImageTitleDetailShapeComposition.swift */,
+				40ED37FC20D7C934001352D7 /* QImageTitleDetailIconComposition.swift */,
 				4062C8E6208A04A20098F809 /* QImageTitleShapeComposition.swift */,
 				4062C8D9208A04A20098F809 /* QTitleComposition.swift */,
 				4062C8EB208A04A20098F809 /* QTitleValueComposition.swift */,
 				4062C8ED208A04A20098F809 /* QTitleDetailComposition.swift */,
 				4062C8D5208A04A20098F809 /* QTitleDetailShapeComposition.swift */,
+				40ED37FD20D7C934001352D7 /* QTitleDetailImageComposition.swift */,
 				4062C8E8208A04A20098F809 /* QTitleButtonComposition.swift */,
 				4062C8D8208A04A20098F809 /* QButtonComposition.swift */,
 				4030A7522068D51000326D5A /* QTextFieldComposition.swift */,
@@ -1846,6 +1855,7 @@
 				406101681F8D79A700A5463E /* QFontInfo.swift in Sources */,
 				401B1BC120B32E8600DC247F /* QApplication.swift in Sources */,
 				402F1FB41F4EE237007625CA /* IQApiProvider.swift in Sources */,
+				40ED380020D7C935001352D7 /* QTitleDetailImageComposition.swift in Sources */,
 				4094035C1F4E12BF008A8B90 /* QApiResponse.swift in Sources */,
 				40CF45B71F4DE6AB004D00D8 /* IQCollectionData.swift in Sources */,
 				40B8A1961F4F6BED00204E5A /* QShapeView+iOS.swift in Sources */,
@@ -1893,11 +1903,13 @@
 				40134EF81F62D20C009F81A6 /* QRegularExpressionStringValidator.swift in Sources */,
 				40CF45DA1F4DE6AB004D00D8 /* IQTableDecor.swift in Sources */,
 				406FDF6B20908071004178CC /* QApiPagination.swift in Sources */,
+				40ED37FF20D7C935001352D7 /* QImageTitleDetailIconComposition.swift in Sources */,
 				40224617207662C50020B357 /* QDisplayView.swift in Sources */,
 				40134F021F63129E009F81A6 /* IQStringFormatter.swift in Sources */,
 				401E8F7C206D34C4008A5BE4 /* IQPickerCell.swift in Sources */,
 				405ABE0D20C1745A005E1192 /* QPagebarTitleCell.swift in Sources */,
 				40CF45DC1F4DE6AB004D00D8 /* IQTableRow.swift in Sources */,
+				40ED380120D7C935001352D7 /* QImageTitleValueIconComposition.swift in Sources */,
 				4070B6A920628E4E00B568A9 /* QReachability.swift in Sources */,
 				4061E1A91F4ECDFA00AC3217 /* NSError.swift in Sources */,
 				4039BCB71F516F5900E38090 /* QControl.swift in Sources */,

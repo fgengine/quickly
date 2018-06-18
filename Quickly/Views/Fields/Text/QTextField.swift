@@ -24,7 +24,7 @@ public class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
     public var textContentType: UITextContentType!
     public var isEnabled: Bool
 
-    public override init() {
+    public init() {
         self.requireValidator = true
         self.textInsets = UIEdgeInsets.zero
         self.editingInsets = UIEdgeInsets.zero

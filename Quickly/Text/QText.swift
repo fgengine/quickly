@@ -6,6 +6,10 @@ public class QText : IQText {
 
     public private(set) var attributed: NSAttributedString
 
+    public init() {
+        self.attributed = NSAttributedString()
+    }
+
     public init(_ text: String) {
         self.attributed = NSAttributedString(string: text)
     }

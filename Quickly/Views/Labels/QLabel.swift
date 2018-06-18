@@ -7,8 +7,8 @@ public class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
     public var text: IQText
     public var verticalAlignment: QViewVerticalAlignment
     public var horizontalAlignment: QViewHorizontalAlignment
-    public var padding: CGFloat = 0
-    public var numberOfLines: Int = 0
+    public var padding: CGFloat
+    public var numberOfLines: Int
     public var lineBreakMode: NSLineBreakMode
 
     public init(
