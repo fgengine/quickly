@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QCompositionViewController< CompositionType: IQComposition > : QViewController, IQStackContentViewController, IQPageContentViewController {
+open class QCompositionViewController< Composition: IQComposition > : QViewController, IQStackContentViewController, IQPageContentViewController {
 
     #if DEBUG
     open override var logging: Bool {
@@ -18,14 +18,18 @@ open class QCompositionViewController< CompositionType: IQComposition > : QViewC
             return self.view.bounds.size
         }
     }
-    public private(set) lazy var composition: CompositionType = self._prepareComposition()
+    public private(set) lazy var composition: Composition = self._prepareComposition()
+
+    open override func load() -> ViewType {
+        return QViewControllerDefaultView(viewController: self, backgroundColor: .clear)
+    }
 
     open override func layout(bounds: CGRect) {
         self.composition.contentView.frame = bounds
     }
 
-    private func _prepareComposition() -> CompositionType {
-        return CompositionType(contentView: self.view)
+    private func _prepareComposition() -> Composition {
+        return Composition(contentView: self.view)
     }
 
 }

@@ -12,8 +12,8 @@ protocol IPageViewControllerRoutePath : IPageContentViewControllerRoutePath {
 
 class PageViewController : QPageContainerViewController, IQRoutable {
 
-    var routePath: IPageViewControllerRoutePath
-    var routeContext: AppRouteContext
+    weak var routePath: IPageViewControllerRoutePath!
+    weak var routeContext: AppRouteContext!
 
     init(_ routePath: IPageViewControllerRoutePath, _ routeContext: AppRouteContext) {
         self.routePath = routePath

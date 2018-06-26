@@ -13,8 +13,8 @@ protocol IDateFieldViewControllerRoutePath : IQRoutePath {
 
 class DateFieldViewController : QNibViewController, IQRoutable {
 
-    var routePath: IDateFieldViewControllerRoutePath
-    var routeContext: AppRouteContext
+    weak var routePath: IDateFieldViewControllerRoutePath!
+    weak var routeContext: AppRouteContext!
 
     @IBOutlet private weak var dateField: QDateField!
 

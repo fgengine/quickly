@@ -4,8 +4,8 @@
 
 open class QTableController : NSObject, IQTableController, IQTableCellDelegate, IQTableDecorDelegate {
 
-    public typealias DecorType = IQTableController.DecorType
-    public typealias CellType = IQTableController.CellType
+    public typealias DecorType = IQTableController.Decor
+    public typealias CellType = IQTableController.Cell
 
     public weak var tableView: UITableView? {
         didSet { self.configure() }

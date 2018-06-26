@@ -14,8 +14,8 @@ protocol IPushViewControllerRoutePath : IQRoutePath {
 
 class PushViewController : QNibViewController, IQRoutable {
 
-    var routePath: IPushViewControllerRoutePath
-    var routeContext: AppRouteContext
+    weak var routePath: IPushViewControllerRoutePath!
+    weak var routeContext: AppRouteContext!
 
     @IBOutlet private weak var showPushButton: QButton!
 

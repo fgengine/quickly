@@ -10,6 +10,9 @@ open class QMainViewController : QViewController {
             if self.isLoaded == true {
                 vc.willDismiss(animated: false)
                 vc.didDismiss(animated: false)
+                if vc.isLoaded == true {
+                    vc.view.removeFromSuperview()
+                }
             }
             vc.parent = nil
         }
@@ -29,6 +32,9 @@ open class QMainViewController : QViewController {
             if self.isLoaded == true {
                 vc.willDismiss(animated: false)
                 vc.didDismiss(animated: false)
+                if vc.isLoaded == true {
+                    vc.view.removeFromSuperview()
+                }
             }
             vc.parent = nil
         }
@@ -48,6 +54,9 @@ open class QMainViewController : QViewController {
             if self.isLoaded == true {
                 vc.willDismiss(animated: false)
                 vc.didDismiss(animated: false)
+                if vc.isLoaded == true {
+                    vc.view.removeFromSuperview()
+                }
             }
             vc.parent = nil
         }
@@ -67,6 +76,9 @@ open class QMainViewController : QViewController {
             if self.isLoaded == true {
                 vc.willDismiss(animated: false)
                 vc.didDismiss(animated: false)
+                if vc.isLoaded == true {
+                    vc.view.removeFromSuperview()
+                }
             }
             vc.parent = nil
         }
@@ -86,6 +98,9 @@ open class QMainViewController : QViewController {
             if self.isLoaded == true {
                 vc.willDismiss(animated: false)
                 vc.didDismiss(animated: false)
+                if vc.isLoaded == true {
+                    vc.view.removeFromSuperview()
+                }
             }
             vc.parent = nil
         }

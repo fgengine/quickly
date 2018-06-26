@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QTitleValueCompositionData : QCompositionData {
+open class QTitleValueComposable : QComposable {
 
     public var title: QLabelStyleSheet
     public var titleSpacing: CGFloat
@@ -21,7 +21,7 @@ open class QTitleValueCompositionData : QCompositionData {
 
 }
 
-public class QTitleValueComposition< DataType: QTitleValueCompositionData >: QComposition< DataType > {
+open class QTitleValueComposition< Composable: QTitleValueComposable > : QComposition< Composable > {
 
     public private(set) var titleLabel: QLabel!
     public private(set) var valueLabel: QLabel!
@@ -34,13 +34,13 @@ public class QTitleValueComposition< DataType: QTitleValueCompositionData >: QCo
         didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
-    open override class func size(data: DataType, size: CGSize) -> CGSize {
-        let availableWidth = size.width - (data.edgeInsets.left + data.edgeInsets.right)
-        let valueTextSize = data.value.text.size(width: availableWidth)
-        let titleTextSize = data.title.text.size(width: availableWidth - (valueTextSize.width + data.titleSpacing))
+    open override class func size(composable: Composable, size: CGSize) -> CGSize {
+        let availableWidth = size.width - (composable.edgeInsets.left + composable.edgeInsets.right)
+        let valueTextSize = composable.value.text.size(width: availableWidth)
+        let titleTextSize = composable.title.text.size(width: availableWidth - (valueTextSize.width + composable.titleSpacing))
         return CGSize(
             width: size.width,
-            height: data.edgeInsets.top + max(titleTextSize.height, valueTextSize.height) + data.edgeInsets.bottom
+            height: composable.edgeInsets.top + max(titleTextSize.height, valueTextSize.height) + composable.edgeInsets.bottom
         )
     }
 
@@ -60,25 +60,25 @@ public class QTitleValueComposition< DataType: QTitleValueCompositionData >: QCo
         self.contentView.addSubview(self.valueLabel)
     }
 
-    open override func prepare(data: DataType, animated: Bool) {
-        super.prepare(data: data, animated: animated)
+    open override func prepare(composable: Composable, animated: Bool) {
+        super.prepare(composable: composable, animated: animated)
         
-        if self.currentEdgeInsets != data.edgeInsets || self.currentTitleSpacing != data.titleSpacing {
-            self.currentEdgeInsets = data.edgeInsets
-            self.currentTitleSpacing = data.titleSpacing
+        if self.currentEdgeInsets != composable.edgeInsets || self.currentTitleSpacing != composable.titleSpacing {
+            self.currentEdgeInsets = composable.edgeInsets
+            self.currentTitleSpacing = composable.titleSpacing
 
             var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self.titleLabel.topLayout == self.contentView.topLayout + data.edgeInsets.top)
-            selfConstraints.append(self.titleLabel.leadingLayout == self.contentView.leadingLayout + data.edgeInsets.left)
-            selfConstraints.append(self.titleLabel.trailingLayout == self.valueLabel.leadingLayout - data.titleSpacing)
-            selfConstraints.append(self.titleLabel.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
-            selfConstraints.append(self.valueLabel.topLayout == self.contentView.topLayout + data.edgeInsets.top)
-            selfConstraints.append(self.valueLabel.trailingLayout == self.contentView.trailingLayout - data.edgeInsets.right)
-            selfConstraints.append(self.valueLabel.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
+            selfConstraints.append(self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
+            selfConstraints.append(self.titleLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
+            selfConstraints.append(self.titleLabel.trailingLayout == self.valueLabel.leadingLayout - composable.titleSpacing)
+            selfConstraints.append(self.titleLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
+            selfConstraints.append(self.valueLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
+            selfConstraints.append(self.valueLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
+            selfConstraints.append(self.valueLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
             self.selfConstraints = selfConstraints
         }
-        data.title.apply(target: self.titleLabel)
-        data.value.apply(target: self.valueLabel)
+        composable.title.apply(target: self.titleLabel)
+        composable.value.apply(target: self.valueLabel)
     }
 
 }

@@ -40,7 +40,7 @@ open class QNibViewController : QViewController, IQStackContentViewController, I
     }
 
     open override func load() -> ViewType {
-        return QViewControllerDefaultView(viewController: self)
+        return QViewControllerDefaultView(viewController: self, backgroundColor: .clear)
     }
 
     open override func didLoad() {

@@ -13,8 +13,8 @@ protocol IConfirmModalViewControllerRoutePath : IQRoutePath {
 
 class ConfirmModalViewController : QNibViewController, IQModalContentViewController, IQRoutable {
 
-    var routePath: IConfirmModalViewControllerRoutePath
-    var routeContext: AppRouteContext
+    weak var routePath: IConfirmModalViewControllerRoutePath!
+    weak var routeContext: AppRouteContext!
 
     @IBOutlet private weak var imageView: QImageView!
     @IBOutlet private weak var closeButton: QButton!

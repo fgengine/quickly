@@ -19,7 +19,7 @@ open class QGroupbarCell< Type: IQGroupbarItem > : QCollectionCell< Type > {
 
 public class QGroupbar : QView {
 
-    public typealias ItemType = IQCollectionController.CellType
+    public typealias ItemType = IQCollectionController.Cell
 
     public weak var delegate: QGroupbarDelegate?
 

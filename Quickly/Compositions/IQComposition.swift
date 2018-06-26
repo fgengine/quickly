@@ -2,33 +2,33 @@
 //  Quickly
 //
 
-public protocol IQCompositionData : class {
+public protocol IQComposable : class {
 }
 
 public protocol IQComposition : class {
 
-    associatedtype DataType: IQCompositionData
+    associatedtype Composable: IQComposable
 
     var contentView: UIView { get }
-    var data: DataType! { get }
+    var composable: Composable! { get }
 
-    static func size(data: DataType, size: CGSize) -> CGSize
-    static func height(data: DataType, width: CGFloat) -> CGFloat
+    static func size(composable: Composable, size: CGSize) -> CGSize
+    static func height(composable: Composable, width: CGFloat) -> CGFloat
 
     init(contentView: UIView)
     init(frame: CGRect)
 
     func setup()
 
-    func prepare(data: DataType, animated: Bool)
+    func prepare(composable: Composable, animated: Bool)
     func cleanup()
 
 }
 
 public extension IQComposition {
 
-    static func height(data: DataType, width: CGFloat) -> CGFloat {
-        return self.size(data: data, size: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)).height
+    static func height(composable: Composable, width: CGFloat) -> CGFloat {
+        return self.size(composable: composable, size: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)).height
     }
 
 }

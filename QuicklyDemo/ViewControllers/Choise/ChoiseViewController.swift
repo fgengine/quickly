@@ -21,8 +21,8 @@ protocol IChoiseViewControllerRoutePath : IQRoutePath {
 
 class ChoiseViewController : QTableViewController, IQRoutable {
 
-    var routePath: IChoiseViewControllerRoutePath
-    var routeContext: AppRouteContext
+    weak var routePath: IChoiseViewControllerRoutePath!
+    weak var routeContext: AppRouteContext!
     var choiseTableController: ChoiseTableController! {
         get { return self.tableController as! ChoiseTableController }
     }

@@ -4,7 +4,7 @@
 
 import Quickly
 
-class ChoiseSectionTableRow : QCompositionTableRow< QTitleDetailShapeCompositionData > {
+class ChoiseSectionTableRow : QCompositionTableRow< QTitleDetailShapeComposable > {
 
     // MARK: Enum
 
@@ -64,7 +64,7 @@ class ChoiseSectionTableRow : QCompositionTableRow< QTitleDetailShapeComposition
         self.mode = mode
 
         super.init(
-            data: QTitleDetailShapeCompositionData(
+            composable: QTitleDetailShapeComposable(
                 title: QLabelStyleSheet(text: QStyledText(mode.name, style: TextStyle.title)),
                 detail: QLabelStyleSheet(text: QStyledText(mode.detail, style: TextStyle.subtitle)),
                 shape: DisclosureShape(color: UIColor.black)

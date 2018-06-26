@@ -2,10 +2,10 @@
 //  Quickly
 //
 
-open class QTextFieldCompositionData : QCompositionData {
+open class QTextFieldComposable : QComposable {
 
-    public typealias ShouldClosure = (_ data: QTextFieldCompositionData) -> Bool
-    public typealias Closure = (_ data: QTextFieldCompositionData) -> Void
+    public typealias ShouldClosure = (_ composable: QTextFieldComposable) -> Bool
+    public typealias Closure = (_ composable: QTextFieldComposable) -> Void
 
     public var field: QTextFieldStyleSheet
     public var fieldHeight: CGFloat
@@ -36,7 +36,7 @@ open class QTextFieldCompositionData : QCompositionData {
 
 }
 
-public class QTextFieldComposition< DataType: QTextFieldCompositionData >: QComposition< DataType > {
+open class QTextFieldComposition< Composable: QTextFieldComposable >: QComposition< Composable > {
 
     public private(set) var textField: QTextField!
 
@@ -47,10 +47,10 @@ public class QTextFieldComposition< DataType: QTextFieldCompositionData >: QComp
         didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
-    open override class func size(data: DataType, size: CGSize) -> CGSize {
+    open override class func size(composable: Composable, size: CGSize) -> CGSize {
         return CGSize(
             width: size.width,
-            height: data.edgeInsets.top + data.fieldHeight + data.edgeInsets.bottom
+            height: composable.edgeInsets.top + composable.fieldHeight + composable.edgeInsets.bottom
         )
     }
 
@@ -98,93 +98,93 @@ public class QTextFieldComposition< DataType: QTextFieldCompositionData >: QComp
         self.contentView.addSubview(self.textField)
     }
 
-    open override func prepare(data: DataType, animated: Bool) {
-        super.prepare(data: data, animated: animated)
+    open override func prepare(composable: Composable, animated: Bool) {
+        super.prepare(composable: composable, animated: animated)
         
-        if self.currentEdgeInsets != data.edgeInsets {
-            self.currentEdgeInsets = data.edgeInsets
+        if self.currentEdgeInsets != composable.edgeInsets {
+            self.currentEdgeInsets = composable.edgeInsets
 
             var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self.textField.topLayout == self.contentView.topLayout + data.edgeInsets.top)
-            selfConstraints.append(self.textField.leadingLayout == self.contentView.leadingLayout + data.edgeInsets.left)
-            selfConstraints.append(self.textField.trailingLayout == self.contentView.trailingLayout - data.edgeInsets.right)
-            selfConstraints.append(self.textField.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
+            selfConstraints.append(self.textField.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
+            selfConstraints.append(self.textField.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
+            selfConstraints.append(self.textField.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
+            selfConstraints.append(self.textField.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
             self.selfConstraints = selfConstraints
         }
-        data.field.apply(target: self.textField)
-        self.textField.unformatText = data.fieldText
+        composable.field.apply(target: self.textField)
+        self.textField.unformatText = composable.fieldText
     }
 
     private func shouldBeginEditing() -> Bool {
-        guard let data = self.data else { return true }
-        if let closure = data.fieldShouldBeginEditing {
-            return closure(data)
+        guard let composable = self.composable else { return true }
+        if let closure = composable.fieldShouldBeginEditing {
+            return closure(composable)
         }
         return true
     }
 
     private func beginEditing() {
-        guard let data = self.data else { return }
-        data.fieldIsEditing = self.textField.isEditing
-        if let closure = data.fieldBeginEditing {
-            closure(data)
+        guard let composable = self.composable else { return }
+        composable.fieldIsEditing = self.textField.isEditing
+        if let closure = composable.fieldBeginEditing {
+            closure(composable)
         }
     }
 
     private func editing() {
-        guard let data = self.data else { return }
-        data.fieldIsValid = self.textField.isValid
-        data.fieldText = self.textField.unformatText
-        if let closure = data.fieldEditing {
-            closure(data)
+        guard let composable = self.composable else { return }
+        composable.fieldIsValid = self.textField.isValid
+        composable.fieldText = self.textField.unformatText
+        if let closure = composable.fieldEditing {
+            closure(composable)
         }
     }
 
     private func shouldEndEditing() -> Bool {
-        guard let data = self.data else { return true }
-        if let closure = data.fieldShouldEndEditing {
-            return closure(data)
+        guard let composable = self.composable else { return true }
+        if let closure = composable.fieldShouldEndEditing {
+            return closure(composable)
         }
         return true
     }
 
     private func endEditing() {
-        guard let data = self.data else { return }
-        data.fieldIsEditing = self.textField.isEditing
-        if let closure = data.fieldEndEditing {
-            closure(data)
+        guard let composable = self.composable else { return }
+        composable.fieldIsEditing = self.textField.isEditing
+        if let closure = composable.fieldEndEditing {
+            closure(composable)
         }
     }
 
     private func shouldClear() -> Bool {
-        guard let data = self.data else { return true }
-        if let closure = data.fieldShouldClear {
-            return closure(data)
+        guard let composable = self.composable else { return true }
+        if let closure = composable.fieldShouldClear {
+            return closure(composable)
         }
         return true
     }
 
     private func pressedClear() {
-        guard let data = self.data else { return }
-        data.fieldIsValid = self.textField.isValid
-        data.fieldText = self.textField.unformatText
-        if let closure = data.fieldPressedClear {
-            closure(data)
+        guard let composable = self.composable else { return }
+        composable.fieldIsValid = self.textField.isValid
+        composable.fieldText = self.textField.unformatText
+        if let closure = composable.fieldPressedClear {
+            closure(composable)
         }
     }
 
     private func shouldReturn() -> Bool {
-        guard let data = self.data else { return true }
-        if let closure = data.fieldShouldReturn {
-            return closure(data)
+        guard let composable = self.composable else { return true }
+        if let closure = composable.fieldShouldReturn {
+            return closure(composable)
         }
         return true
     }
 
     private func pressedReturn() {
-        guard let data = self.data else { return }
-        if let closure = data.fieldPressedReturn {
-            closure(data)
+        guard let composable = self.composable else { return }
+        if let closure = composable.fieldPressedReturn {
+            closure(composable)
         }
     }
 

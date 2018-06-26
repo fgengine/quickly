@@ -7,6 +7,12 @@ open class QBackgroundColorTableRow : QTableRow {
     public var backgroundColor: UIColor?
     public var selectedBackgroundColor: UIColor?
 
+    public init(backgroundColor: UIColor? = nil, selectedBackgroundColor: UIColor? = nil) {
+        self.backgroundColor = backgroundColor
+        self.selectedBackgroundColor = selectedBackgroundColor
+        super.init()
+    }
+
 }
 
 open class QBackgroundColorTableCell< RowType: QBackgroundColorTableRow >: QTableCell< RowType > {

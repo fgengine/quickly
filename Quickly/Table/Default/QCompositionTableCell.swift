@@ -2,28 +2,28 @@
 //  Quickly
 //
 
-open class QCompositionTableRow< CompositionDataType: IQCompositionData > : QBackgroundColorTableRow {
+open class QCompositionTableRow< Composable: IQComposable > : QBackgroundColorTableRow {
 
-    public var data: CompositionDataType
+    public var composable: Composable
 
-    public init(data: CompositionDataType) {
-        self.data = data
-        super.init()
+    public init(composable: Composable, backgroundColor: UIColor? = nil, selectedBackgroundColor: UIColor? = nil) {
+        self.composable = composable
+        super.init(backgroundColor: backgroundColor, selectedBackgroundColor: selectedBackgroundColor)
     }
 
 }
 
-open class QCompositionTableCell< CompositionType: IQComposition > : QBackgroundColorTableCell< QCompositionTableRow< CompositionType.DataType > > {
+open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColorTableCell< QCompositionTableRow< Composition.Composable > > {
 
-    public private(set) var composition: CompositionType!
+    public private(set) var composition: Composition!
 
-    open override class func height(row: RowType, width: CGFloat) -> CGFloat {
-        return CompositionType.height(data: row.data, width: width)
+    open override class func height(row: Row, width: CGFloat) -> CGFloat {
+        return Composition.height(composable: row.composable, width: width)
     }
 
     open override func setup() {
         super.setup()
-        self.composition = CompositionType(contentView: self.contentView)
+        self.composition = Composition(contentView: self.contentView)
     }
 
     open override func prepareForReuse() {
@@ -31,9 +31,9 @@ open class QCompositionTableCell< CompositionType: IQComposition > : QBackground
         super.prepareForReuse()
     }
 
-    open override func set(row: RowType, animated: Bool) {
+    open override func set(row: Row, animated: Bool) {
         super.set(row: row, animated: animated)
-        self.composition.prepare(data: row.data, animated: animated)
+        self.composition.prepare(composable: row.composable, animated: animated)
     }
 
 }

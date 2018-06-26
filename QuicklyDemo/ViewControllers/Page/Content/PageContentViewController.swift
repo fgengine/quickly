@@ -9,8 +9,8 @@ protocol IPageContentViewControllerRoutePath : IQRoutePath {
 
 class PageContentViewController : QNibViewController, IQRoutable {
 
-    var routePath: IPageContentViewControllerRoutePath
-    var routeContext: AppRouteContext
+    weak var routePath: IPageContentViewControllerRoutePath!
+    weak var routeContext: AppRouteContext!
 
     @IBOutlet private weak var imageView: QImageView!
     @IBOutlet private weak var closeButton: QButton!

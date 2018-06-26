@@ -2,9 +2,9 @@
 //  Quickly
 //
 
-open class QButtonCompositionData : QCompositionData {
+open class QButtonComposable : QComposable {
 
-    public typealias Closure = (_ data: QButtonCompositionData) -> Void
+    public typealias Closure = (_ composable: QButtonComposable) -> Void
 
     public var button: QButtonStyleSheet
     public var buttonHeight: CGFloat
@@ -24,7 +24,7 @@ open class QButtonCompositionData : QCompositionData {
 
 }
 
-open class QButtonComposition< DataType: QButtonCompositionData > : QComposition< DataType > {
+open class QButtonComposition< Composable: QButtonComposable > : QComposition< Composable > {
 
     public private(set) var button: QButton!
 
@@ -34,10 +34,10 @@ open class QButtonComposition< DataType: QButtonCompositionData > : QComposition
         didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
-    open override class func size(data: DataType, size: CGSize) -> CGSize {
+    open override class func size(composable: Composable, size: CGSize) -> CGSize {
         return CGSize(
             width: size.width,
-            height: data.edgeInsets.top + data.buttonHeight + data.edgeInsets.bottom
+            height: composable.edgeInsets.top + composable.buttonHeight + composable.edgeInsets.bottom
         )
     }
 
@@ -50,21 +50,21 @@ open class QButtonComposition< DataType: QButtonCompositionData > : QComposition
         self.contentView.addSubview(self.button)
     }
 
-    open override func prepare(data: DataType, animated: Bool) {
-        super.prepare(data: data, animated: animated)
+    open override func prepare(composable: Composable, animated: Bool) {
+        super.prepare(composable: composable, animated: animated)
         
-        if self.currentEdgeInsets != data.edgeInsets {
-            self.currentEdgeInsets = data.edgeInsets
+        if self.currentEdgeInsets != composable.edgeInsets {
+            self.currentEdgeInsets = composable.edgeInsets
 
             var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self.button.topLayout == self.contentView.topLayout + data.edgeInsets.top)
-            selfConstraints.append(self.button.leadingLayout == self.contentView.leadingLayout + data.edgeInsets.left)
-            selfConstraints.append(self.button.trailingLayout == self.contentView.trailingLayout - data.edgeInsets.right)
-            selfConstraints.append(self.button.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
+            selfConstraints.append(self.button.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
+            selfConstraints.append(self.button.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
+            selfConstraints.append(self.button.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
+            selfConstraints.append(self.button.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
             self.selfConstraints = selfConstraints
         }
-        data.button.apply(target: self.button)
-        if data.buttonIsSpinnerAnimating == true {
+        composable.button.apply(target: self.button)
+        if composable.buttonIsSpinnerAnimating == true {
             self.button.startSpinner()
         } else {
             self.button.stopSpinner()
@@ -76,21 +76,21 @@ open class QButtonComposition< DataType: QButtonCompositionData > : QComposition
     }
 
     public func startSpinner() {
-        guard let data = self.data else { return }
-        data.buttonIsSpinnerAnimating = true
+        guard let composable = self.composable else { return }
+        composable.buttonIsSpinnerAnimating = true
         self.button.startSpinner()
     }
 
     public func stopSpinner() {
-        guard let data = self.data else { return }
-        data.buttonIsSpinnerAnimating = false
+        guard let composable = self.composable else { return }
+        composable.buttonIsSpinnerAnimating = false
         self.button.stopSpinner()
     }
 
     @objc
     private func pressedButton(_ sender: Any) {
-        if let data = self.data {
-            data.buttonPressed(data)
+        if let composable = self.composable {
+            composable.buttonPressed(composable)
         }
     }
 

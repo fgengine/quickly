@@ -13,8 +13,8 @@ protocol IConfirmDialogViewControllerRoutePath : IQRoutePath {
 
 class ConfirmDialogViewController : QNibViewController, IQDialogContentViewController, IQRoutable {
 
-    var routePath: IConfirmDialogViewControllerRoutePath
-    var routeContext: AppRouteContext
+    weak var routePath: IConfirmDialogViewControllerRoutePath!
+    weak var routeContext: AppRouteContext!
 
     @IBOutlet private weak var imageView: QImageView!
     @IBOutlet private weak var closeButton: QButton!

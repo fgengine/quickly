@@ -13,8 +13,8 @@ protocol IModalViewControllerRoutePath : IQRoutePath {
 
 class ModalViewController : QNibViewController, IQRoutable {
 
-    var routePath: IModalViewControllerRoutePath
-    var routeContext: AppRouteContext
+    weak var routePath: IModalViewControllerRoutePath!
+    weak var routeContext: AppRouteContext!
 
     @IBOutlet private weak var showModalButton: QButton!
 

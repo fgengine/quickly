@@ -13,8 +13,8 @@ protocol ITextFieldViewControllerRoutePath : IQRoutePath {
 
 class TextFieldViewController : QNibViewController, IQRoutable {
 
-    var routePath: ITextFieldViewControllerRoutePath
-    var routeContext: AppRouteContext
+    weak var routePath: ITextFieldViewControllerRoutePath!
+    weak var routeContext: AppRouteContext!
 
     @IBOutlet private weak var textField: QTextField!
 

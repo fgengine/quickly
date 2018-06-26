@@ -2,18 +2,22 @@
 //  Quickly
 //
 
-public class QImageViewStyleSheet : QDisplayViewStyleSheet< QImageView > {
+open class QImageViewStyleSheet : QDisplayViewStyleSheet< QImageView > {
 
+    public var source: QImageSource
     public var verticalAlignment: QViewVerticalAlignment
     public var horizontalAlignment: QViewHorizontalAlignment
-    public var source: QImageSource
     public var filter: IQImageLoaderFilter?
     public var loader: QImageLoader?
 
-    public init(source: QImageSource) {
-        self.verticalAlignment = .center
-        self.horizontalAlignment = .center
+    public init(
+        _ source: QImageSource,
+        verticalAlignment: QViewVerticalAlignment = .center,
+        horizontalAlignment: QViewHorizontalAlignment = .center
+    ) {
         self.source = source
+        self.verticalAlignment = verticalAlignment
+        self.horizontalAlignment = horizontalAlignment
         super.init()
     }
 
@@ -96,12 +100,12 @@ public class QImageView : QDisplayView, IQImageLoaderTarget {
                 imageRect = source.rect(bounds, image: image)
                 switch self.verticalAlignment {
                 case .top: imageRect.origin.y = bounds.origin.y
-                case .center: break
+                case .center: imageRect.origin.y = bounds.midY - (imageRect.height / 2)
                 case .bottom: imageRect.origin.y = (bounds.origin.y + bounds.height) - imageRect.height
                 }
                 switch self.horizontalAlignment {
                 case .left: imageRect.origin.x = bounds.origin.x
-                case .center: break
+                case .center: imageRect.origin.x = bounds.midX - (imageRect.width / 2)
                 case .right: imageRect.origin.x = (bounds.origin.x + bounds.width) - imageRect.width
                 }
             } else {

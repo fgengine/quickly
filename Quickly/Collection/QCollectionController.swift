@@ -4,8 +4,8 @@
 
 open class QCollectionController : NSObject, IQCollectionController, CollectionCellDelegate, IQCollectionDecorDelegate {
 
-    public typealias DecorType = IQCollectionController.DecorType
-    public typealias CellType = IQCollectionController.CellType
+    public typealias DecorType = IQCollectionController.Decor
+    public typealias CellType = IQCollectionController.Cell
 
     public weak var collectionView: UICollectionView? = nil {
         didSet {

@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QImageTitleValueIconCompositionData : QCompositionData {
+open class QImageTitleValueIconComposable : QComposable {
 
     public var image: QImageViewStyleSheet
     public var imageWidth: CGFloat
@@ -37,7 +37,7 @@ open class QImageTitleValueIconCompositionData : QCompositionData {
 
 }
 
-public class QImageTitleValueIconComposition< DataType: QImageTitleValueIconCompositionData >: QComposition< DataType > {
+open class QImageTitleValueIconComposition< Composable: QImageTitleValueIconComposable >: QComposition< Composable > {
 
     public private(set) var imageView: QImageView!
     public private(set) var titleLabel: QLabel!
@@ -64,15 +64,15 @@ public class QImageTitleValueIconComposition< DataType: QImageTitleValueIconComp
         didSet { self.iconView.addConstraints(self.iconConstraints) }
     }
 
-    open override class func size(data: DataType, size: CGSize) -> CGSize {
-        let availableWidth = size.width - (data.edgeInsets.left + data.edgeInsets.right)
-        let imageSize = data.image.source.size(CGSize(width: data.imageWidth, height: availableWidth))
-        let valueTextSize = data.value.text.size(width: availableWidth - (data.imageWidth + data.imageSpacing + data.iconWidth + data.iconSpacing))
-        let titleTextSize = data.title.text.size(width: availableWidth - (data.imageWidth + data.imageSpacing + valueTextSize.width + data.titleSpacing + data.iconWidth + data.iconSpacing))
-        let iconSize = data.icon.source.size(CGSize(width: data.iconWidth, height: availableWidth))
+    open override class func size(composable: Composable, size: CGSize) -> CGSize {
+        let availableWidth = size.width - (composable.edgeInsets.left + composable.edgeInsets.right)
+        let imageSize = composable.image.source.size(CGSize(width: composable.imageWidth, height: availableWidth))
+        let valueTextSize = composable.value.text.size(width: availableWidth - (composable.imageWidth + composable.imageSpacing + composable.iconWidth + composable.iconSpacing))
+        let titleTextSize = composable.title.text.size(width: availableWidth - (composable.imageWidth + composable.imageSpacing + valueTextSize.width + composable.titleSpacing + composable.iconWidth + composable.iconSpacing))
+        let iconSize = composable.icon.source.size(CGSize(width: composable.iconWidth, height: availableWidth))
         return CGSize(
             width: size.width,
-            height: data.edgeInsets.top + max(imageSize.height, titleTextSize.height, valueTextSize.height, iconSize.height) + data.edgeInsets.bottom
+            height: composable.edgeInsets.top + max(imageSize.height, titleTextSize.height, valueTextSize.height, iconSize.height) + composable.edgeInsets.bottom
         )
     }
 
@@ -104,49 +104,50 @@ public class QImageTitleValueIconComposition< DataType: QImageTitleValueIconComp
         self.contentView.addSubview(self.iconView)
     }
 
-    open override func prepare(data: DataType, animated: Bool) {
-        super.prepare(data: data, animated: animated)
+    open override func prepare(composable: Composable, animated: Bool) {
+        super.prepare(composable: composable, animated: animated)
         
-        if self.currentEdgeInsets != data.edgeInsets || self.currentImageSpacing != data.imageSpacing || self.currentTitleSpacing != data.titleSpacing || self.currentIconSpacing != data.iconSpacing {
-            self.currentEdgeInsets = data.edgeInsets
-            self.currentImageSpacing = data.imageSpacing
-            self.currentTitleSpacing = data.titleSpacing
-            self.currentIconSpacing = data.iconSpacing
+        if self.currentEdgeInsets != composable.edgeInsets || self.currentImageSpacing != composable.imageSpacing || self.currentTitleSpacing != composable.titleSpacing || self.currentIconSpacing != composable.iconSpacing {
+            self.currentEdgeInsets = composable.edgeInsets
+            self.currentImageSpacing = composable.imageSpacing
+            self.currentTitleSpacing = composable.titleSpacing
+            self.currentIconSpacing = composable.iconSpacing
 
             var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self.imageView.topLayout == self.contentView.topLayout + data.edgeInsets.top)
-            selfConstraints.append(self.imageView.leadingLayout == self.contentView.leadingLayout + data.edgeInsets.left)
-            selfConstraints.append(self.imageView.trailingLayout == self.titleLabel.leadingLayout - data.imageSpacing)
-            selfConstraints.append(self.imageView.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
-            selfConstraints.append(self.titleLabel.topLayout == self.contentView.topLayout + data.edgeInsets.top)
-            selfConstraints.append(self.titleLabel.trailingLayout == self.valueLabel.leadingLayout - data.titleSpacing)
-            selfConstraints.append(self.titleLabel.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
-            selfConstraints.append(self.valueLabel.topLayout == self.contentView.topLayout + data.edgeInsets.top)
-            selfConstraints.append(self.valueLabel.trailingLayout == self.iconView.leadingLayout - data.iconSpacing)
-            selfConstraints.append(self.valueLabel.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
-            selfConstraints.append(self.iconView.topLayout == self.contentView.topLayout + data.edgeInsets.top)
-            selfConstraints.append(self.iconView.leadingLayout == self.titleLabel.trailingLayout + data.iconSpacing)
-            selfConstraints.append(self.iconView.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
+            selfConstraints.append(self.imageView.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
+            selfConstraints.append(self.imageView.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
+            selfConstraints.append(self.imageView.trailingLayout == self.titleLabel.leadingLayout - composable.imageSpacing)
+            selfConstraints.append(self.imageView.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
+            selfConstraints.append(self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
+            selfConstraints.append(self.titleLabel.trailingLayout == self.valueLabel.leadingLayout - composable.titleSpacing)
+            selfConstraints.append(self.titleLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
+            selfConstraints.append(self.valueLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
+            selfConstraints.append(self.valueLabel.trailingLayout == self.iconView.leadingLayout - composable.iconSpacing)
+            selfConstraints.append(self.valueLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
+            selfConstraints.append(self.iconView.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
+            selfConstraints.append(self.iconView.leadingLayout == self.titleLabel.trailingLayout + composable.iconSpacing)
+            selfConstraints.append(self.iconView.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
+            selfConstraints.append(self.iconView.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
             self.selfConstraints = selfConstraints
         }
-        if self.currentImageWidth != data.imageWidth {
-            self.currentImageWidth = data.imageWidth
+        if self.currentImageWidth != composable.imageWidth {
+            self.currentImageWidth = composable.imageWidth
 
             var imageConstraints: [NSLayoutConstraint] = []
-            imageConstraints.append(self.imageView.widthLayout == data.imageWidth)
+            imageConstraints.append(self.imageView.widthLayout == composable.imageWidth)
             self.imageConstraints = imageConstraints
         }
-        if self.currentIconWidth != data.iconWidth {
-            self.currentIconWidth = data.iconWidth
+        if self.currentIconWidth != composable.iconWidth {
+            self.currentIconWidth = composable.iconWidth
 
             var iconConstraints: [NSLayoutConstraint] = []
-            iconConstraints.append(self.iconView.widthLayout == data.iconWidth)
+            iconConstraints.append(self.iconView.widthLayout == composable.iconWidth)
             self.iconConstraints = iconConstraints
         }
-        data.image.apply(target: self.imageView)
-        data.title.apply(target: self.titleLabel)
-        data.value.apply(target: self.valueLabel)
-        data.icon.apply(target: self.iconView)
+        composable.image.apply(target: self.imageView)
+        composable.title.apply(target: self.titleLabel)
+        composable.value.apply(target: self.valueLabel)
+        composable.icon.apply(target: self.iconView)
     }
 
 }

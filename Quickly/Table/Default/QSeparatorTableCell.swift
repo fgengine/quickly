@@ -4,19 +4,19 @@
 
 open class QSeparatorTableRow : QBackgroundColorTableRow {
 
-    public var edgeInsets: UIEdgeInsets = UIEdgeInsets.zero
-
+    public var edgeInsets: UIEdgeInsets
     public var color: UIColor
 
-    public init(_ color: UIColor) {
+    public init(color: UIColor, backgroundColor: UIColor? = nil, edgeInsets: UIEdgeInsets = UIEdgeInsets.zero) {
+        self.edgeInsets = edgeInsets
         self.color = color
-        super.init()
+        super.init(backgroundColor: backgroundColor)
+        self.canSelect = false
     }
-
 
 }
 
-open class QSeparatorTableCell< RowType: QSeparatorTableRow >: QBackgroundColorTableCell< RowType > {
+open class QSeparatorTableCell< RowType: QSeparatorTableRow > : QBackgroundColorTableCell< RowType > {
 
     private var _separator: QView!
 

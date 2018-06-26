@@ -2,10 +2,10 @@
 //  Quickly
 //
 
-open class QDateFieldCompositionData : QCompositionData {
+open class QDateFieldComposable : QComposable {
 
-    public typealias ShouldClosure = (_ data: QDateFieldCompositionData) -> Bool
-    public typealias Closure = (_ data: QDateFieldCompositionData) -> Void
+    public typealias ShouldClosure = (_ composable: QDateFieldComposable) -> Bool
+    public typealias Closure = (_ composable: QDateFieldComposable) -> Void
 
     public var field: QDateFieldStyleSheet
     public var fieldHeight: CGFloat
@@ -32,7 +32,7 @@ open class QDateFieldCompositionData : QCompositionData {
 
 }
 
-public class QDateFieldComposition< DataType: QDateFieldCompositionData >: QComposition< DataType > {
+open class QDateFieldComposition< Composable: QDateFieldComposable >: QComposition< Composable > {
 
     public private(set) var dateField: QDateField!
 
@@ -43,10 +43,10 @@ public class QDateFieldComposition< DataType: QDateFieldCompositionData >: QComp
         didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
-    open override class func size(data: DataType, size: CGSize) -> CGSize {
+    open override class func size(composable: Composable, size: CGSize) -> CGSize {
         return CGSize(
             width: size.width,
-            height: data.edgeInsets.top + data.fieldHeight + data.edgeInsets.bottom
+            height: composable.edgeInsets.top + composable.fieldHeight + composable.edgeInsets.bottom
         )
     }
 
@@ -78,61 +78,61 @@ public class QDateFieldComposition< DataType: QDateFieldCompositionData >: QComp
         self.contentView.addSubview(self.dateField)
     }
 
-    open override func prepare(data: DataType, animated: Bool) {
-        super.prepare(data: data, animated: animated)
+    open override func prepare(composable: Composable, animated: Bool) {
+        super.prepare(composable: composable, animated: animated)
         
-        if self.currentEdgeInsets != data.edgeInsets {
-            self.currentEdgeInsets = data.edgeInsets
+        if self.currentEdgeInsets != composable.edgeInsets {
+            self.currentEdgeInsets = composable.edgeInsets
 
             var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self.dateField.topLayout == self.contentView.topLayout + data.edgeInsets.top)
-            selfConstraints.append(self.dateField.leadingLayout == self.contentView.leadingLayout + data.edgeInsets.left)
-            selfConstraints.append(self.dateField.trailingLayout == self.contentView.trailingLayout - data.edgeInsets.right)
-            selfConstraints.append(self.dateField.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
+            selfConstraints.append(self.dateField.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
+            selfConstraints.append(self.dateField.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
+            selfConstraints.append(self.dateField.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
+            selfConstraints.append(self.dateField.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
             self.selfConstraints = selfConstraints
         }
-        data.field.apply(target: self.dateField)
-        self.dateField.date = data.fieldDate
+        composable.field.apply(target: self.dateField)
+        self.dateField.date = composable.fieldDate
     }
 
     private func shouldBeginEditing() -> Bool {
-        guard let data = self.data else { return true }
-        if let closure = data.fieldShouldBeginEditing {
-            return closure(data)
+        guard let composable = self.composable else { return true }
+        if let closure = composable.fieldShouldBeginEditing {
+            return closure(composable)
         }
         return true
     }
 
     private func beginEditing() {
-        guard let data = self.data else { return }
-        data.fieldIsEditing = self.dateField.isEditing
-        if let closure = data.fieldBeginEditing {
-            closure(data)
+        guard let composable = self.composable else { return }
+        composable.fieldIsEditing = self.dateField.isEditing
+        if let closure = composable.fieldBeginEditing {
+            closure(composable)
         }
     }
 
     private func select(_ date: Date) {
-        guard let data = self.data else { return }
-        data.fieldIsValid = self.dateField.isValid
-        data.fieldDate = date
-        if let closure = data.fieldSelect {
-            closure(data)
+        guard let composable = self.composable else { return }
+        composable.fieldIsValid = self.dateField.isValid
+        composable.fieldDate = date
+        if let closure = composable.fieldSelect {
+            closure(composable)
         }
     }
 
     private func shouldEndEditing() -> Bool {
-        guard let data = self.data else { return true }
-        if let closure = data.fieldShouldEndEditing {
-            return closure(data)
+        guard let composable = self.composable else { return true }
+        if let closure = composable.fieldShouldEndEditing {
+            return closure(composable)
         }
         return true
     }
 
     private func endEditing() {
-        guard let data = self.data else { return }
-        data.fieldIsEditing = self.dateField.isEditing
-        if let closure = data.fieldEndEditing {
-            closure(data)
+        guard let composable = self.composable else { return }
+        composable.fieldIsEditing = self.dateField.isEditing
+        if let closure = composable.fieldEndEditing {
+            closure(composable)
         }
     }
 

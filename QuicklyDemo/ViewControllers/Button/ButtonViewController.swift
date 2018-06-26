@@ -13,8 +13,8 @@ protocol IButtonViewControllerRoutePath : IQRoutePath {
 
 class ButtonViewController : QNibViewController, IQRoutable {
 
-    var routePath: IButtonViewControllerRoutePath
-    var routeContext: AppRouteContext
+    weak var routePath: IButtonViewControllerRoutePath!
+    weak var routeContext: AppRouteContext!
 
     @IBOutlet private weak var button: QButton!
     @IBOutlet private weak var spinnerButton: QButton!

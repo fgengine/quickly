@@ -7,11 +7,11 @@ public protocol IQTableDecorDelegate : class {
 
 public protocol IQTableDecor : IQTableReuse {
 
-    typealias DequeueType = UITableViewHeaderFooterView & IQTableDecor
+    typealias Dequeue = UITableViewHeaderFooterView & IQTableDecor
 
     var tableDelegate: IQTableDecorDelegate? { set get }
 
-    static func dequeue(tableView: UITableView) -> DequeueType?
+    static func dequeue(tableView: UITableView) -> Dequeue?
 
     func configure()
 
@@ -29,40 +29,40 @@ extension IQTableDecor where Self : UITableViewHeaderFooterView {
         }
     }
 
-    public static func dequeue(tableView: UITableView) -> DequeueType? {
+    public static func dequeue(tableView: UITableView) -> Dequeue? {
         return tableView.dequeueReusableHeaderFooterView(
             withIdentifier: self.reuseIdentifier()
-        ) as? DequeueType
+        ) as? Dequeue
     }
 
 }
 
 public protocol IQTypedTableDecor : IQTableDecor {
 
-    associatedtype DataType: IQTableData
+    associatedtype Data: IQTableData
 
-    static func height(data: DataType, width: CGFloat) -> CGFloat
+    static func height(data: Data, width: CGFloat) -> CGFloat
 
-    func set(data: DataType, animated: Bool)
+    func set(data: Data, animated: Bool)
 
 }
 
 extension IQTypedTableDecor {
 
     public static func using(any: Any) -> Bool {
-        return any is DataType
+        return any is Data
     }
 
     public static func usingLevel(any: AnyClass) -> UInt? {
-        return inheritanceLevel(any, DataType.self)
+        return inheritanceLevel(any, Data.self)
     }
 
     public static func height(any: Any, width: CGFloat) -> CGFloat {
-        return self.height(data: any as! DataType, width: width)
+        return self.height(data: any as! Data, width: width)
     }
 
     public func set(any: Any, animated: Bool) {
-        self.set(data: any as! DataType, animated: animated)
+        self.set(data: any as! Data, animated: animated)
     }
 
 }

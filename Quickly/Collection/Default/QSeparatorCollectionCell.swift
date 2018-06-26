@@ -8,11 +8,12 @@ open class QSeparatorCollectionItem : QBackgroundColorCollectionItem {
     public var axis: UILayoutConstraintAxis
     public var color: UIColor
 
-    public init(axis: UILayoutConstraintAxis, color: UIColor) {
-        self.edgeInsets = UIEdgeInsets.zero
+    public init(axis: UILayoutConstraintAxis, color: UIColor, backgroundColor: UIColor? = nil, edgeInsets: UIEdgeInsets = UIEdgeInsets.zero) {
+        self.edgeInsets = edgeInsets
         self.axis = axis
         self.color = color
-        super.init()
+        super.init(backgroundColor: backgroundColor)
+        self.canSelect = false
     }
 
 }

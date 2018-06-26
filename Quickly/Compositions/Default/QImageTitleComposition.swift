@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QImageTitleCompositionData : QCompositionData {
+open class QImageTitleComposable : QComposable {
 
     public var direction: QViewDirection
     public var image: QImageViewStyleSheet
@@ -27,7 +27,7 @@ open class QImageTitleCompositionData : QCompositionData {
 
 }
 
-public class QImageTitleCompositionCell< DataType: QImageTitleCompositionData > : QComposition< DataType > {
+open class QImageTitleCompositionCell< Composable: QImageTitleComposable > : QComposition< Composable > {
 
     public private(set) var imageView: QImageView!
     public private(set) var titleLabel: QLabel!
@@ -46,21 +46,21 @@ public class QImageTitleCompositionCell< DataType: QImageTitleCompositionData > 
         didSet { self.imageView.addConstraints(self.imageConstraints) }
     }
 
-    open override class func size(data: DataType, size: CGSize) -> CGSize {
-        let availableWidth = size.width - (data.edgeInsets.left + data.edgeInsets.right)
-        switch data.direction {
+    open override class func size(composable: Composable, size: CGSize) -> CGSize {
+        let availableWidth = size.width - (composable.edgeInsets.left + composable.edgeInsets.right)
+        switch composable.direction {
         case .horizontal:
-            let imageSize = data.image.source.size(CGSize(width: data.imageSize.width, height: availableWidth))
-            let titleTextSize = data.title.text.size(width: availableWidth - (data.imageSize.width + data.imageSpacing))
+            let imageSize = composable.image.source.size(CGSize(width: composable.imageSize.width, height: availableWidth))
+            let titleTextSize = composable.title.text.size(width: availableWidth - (composable.imageSize.width + composable.imageSpacing))
             return CGSize(
                 width: size.width,
-                height: data.edgeInsets.top + max(imageSize.height, titleTextSize.height) + data.edgeInsets.bottom
+                height: composable.edgeInsets.top + max(imageSize.height, titleTextSize.height) + composable.edgeInsets.bottom
             )
         case .vertical:
-            let titleTextSize = data.title.text.size(width: availableWidth)
+            let titleTextSize = composable.title.text.size(width: availableWidth)
             return CGSize(
-                width: data.edgeInsets.left + max(data.imageSize.width, titleTextSize.width) + data.edgeInsets.right,
-                height: data.edgeInsets.top + data.imageSize.height + data.imageSpacing + titleTextSize.height + data.edgeInsets.bottom
+                width: composable.edgeInsets.left + max(composable.imageSize.width, titleTextSize.width) + composable.edgeInsets.right,
+                height: composable.edgeInsets.top + composable.imageSize.height + composable.imageSpacing + titleTextSize.height + composable.edgeInsets.bottom
             )
         }
     }
@@ -81,52 +81,52 @@ public class QImageTitleCompositionCell< DataType: QImageTitleCompositionData > 
         self.contentView.addSubview(self.titleLabel)
     }
 
-    open override func prepare(data: DataType, animated: Bool) {
-        super.prepare(data: data, animated: animated)
+    open override func prepare(composable: Composable, animated: Bool) {
+        super.prepare(composable: composable, animated: animated)
 
-        let changedDirection = self.currentDirection != data.direction
-        self.currentDirection = data.direction
-        let changedEdgeInsets = self.currentEdgeInsets != data.edgeInsets
-        self.currentEdgeInsets = data.edgeInsets
-        let changedImageSpacing = self.currentImageSpacing != data.imageSpacing
-        self.currentImageSpacing = data.imageSpacing
-        let changedImageSize = self.currentImageSize != data.imageSize
-        self.currentImageSize = data.imageSize
+        let changedDirection = self.currentDirection != composable.direction
+        self.currentDirection = composable.direction
+        let changedEdgeInsets = self.currentEdgeInsets != composable.edgeInsets
+        self.currentEdgeInsets = composable.edgeInsets
+        let changedImageSpacing = self.currentImageSpacing != composable.imageSpacing
+        self.currentImageSpacing = composable.imageSpacing
+        let changedImageSize = self.currentImageSize != composable.imageSize
+        self.currentImageSize = composable.imageSize
         if changedDirection == true || changedEdgeInsets == true || changedImageSpacing == true {
             var selfConstraints: [NSLayoutConstraint] = []
-            switch data.direction {
+            switch composable.direction {
             case .horizontal:
-                selfConstraints.append(self.imageView.topLayout == self.contentView.topLayout + data.edgeInsets.top)
-                selfConstraints.append(self.imageView.leadingLayout == self.contentView.leadingLayout + data.edgeInsets.left)
-                selfConstraints.append(self.imageView.trailingLayout == self.titleLabel.leadingLayout - data.imageSpacing)
-                selfConstraints.append(self.imageView.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
-                selfConstraints.append(self.titleLabel.topLayout == self.contentView.topLayout + data.edgeInsets.top)
-                selfConstraints.append(self.titleLabel.trailingLayout == self.contentView.trailingLayout - data.edgeInsets.right)
-                selfConstraints.append(self.titleLabel.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
+                selfConstraints.append(self.imageView.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
+                selfConstraints.append(self.imageView.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
+                selfConstraints.append(self.imageView.trailingLayout == self.titleLabel.leadingLayout - composable.imageSpacing)
+                selfConstraints.append(self.imageView.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
+                selfConstraints.append(self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
+                selfConstraints.append(self.titleLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
+                selfConstraints.append(self.titleLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
             case .vertical:
-                selfConstraints.append(self.imageView.topLayout == self.contentView.topLayout + data.edgeInsets.top)
-                selfConstraints.append(self.imageView.leadingLayout == self.contentView.leadingLayout + data.edgeInsets.left)
-                selfConstraints.append(self.imageView.trailingLayout == self.contentView.trailingLayout - data.edgeInsets.right)
-                selfConstraints.append(self.imageView.bottomLayout == self.titleLabel.topLayout - data.edgeInsets.bottom)
-                selfConstraints.append(self.titleLabel.leadingLayout == self.contentView.leadingLayout + data.edgeInsets.left)
-                selfConstraints.append(self.titleLabel.trailingLayout == self.contentView.trailingLayout - data.edgeInsets.right)
-                selfConstraints.append(self.titleLabel.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
+                selfConstraints.append(self.imageView.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
+                selfConstraints.append(self.imageView.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
+                selfConstraints.append(self.imageView.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
+                selfConstraints.append(self.imageView.bottomLayout == self.titleLabel.topLayout - composable.edgeInsets.bottom)
+                selfConstraints.append(self.titleLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
+                selfConstraints.append(self.titleLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
+                selfConstraints.append(self.titleLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
             }
             self.selfConstraints = selfConstraints
         }
         if changedDirection == true || changedImageSize == true {
             var imageConstraints: [NSLayoutConstraint] = []
-            switch data.direction {
+            switch composable.direction {
             case .horizontal:
-                imageConstraints.append(self.imageView.widthLayout == data.imageSize.width)
+                imageConstraints.append(self.imageView.widthLayout == composable.imageSize.width)
             case .vertical:
-                imageConstraints.append(self.imageView.widthLayout == data.imageSize.width)
-                imageConstraints.append(self.imageView.heightLayout == data.imageSize.height)
+                imageConstraints.append(self.imageView.widthLayout == composable.imageSize.width)
+                imageConstraints.append(self.imageView.heightLayout == composable.imageSize.height)
             }
             self.imageConstraints = imageConstraints
         }
-        data.image.apply(target: self.imageView)
-        data.title.apply(target: self.titleLabel)
+        composable.image.apply(target: self.imageView)
+        composable.title.apply(target: self.titleLabel)
     }
 
 }

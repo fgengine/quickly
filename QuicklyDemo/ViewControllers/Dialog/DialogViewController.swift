@@ -13,8 +13,8 @@ protocol IDialogViewControllerRoutePath : IQRoutePath {
 
 class DialogViewController : QNibViewController, IQRoutable {
 
-    var routePath: IDialogViewControllerRoutePath
-    var routeContext: AppRouteContext
+    weak var routePath: IDialogViewControllerRoutePath!
+    weak var routeContext: AppRouteContext!
 
     @IBOutlet private weak var showDialogButton: QButton!
 

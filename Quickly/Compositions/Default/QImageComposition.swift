@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QImageCompositionData : QCompositionData {
+open class QImageComposable : QComposable {
 
     public var image: QImageViewStyleSheet
 
@@ -15,7 +15,7 @@ open class QImageCompositionData : QCompositionData {
 
 }
 
-public class QImageComposition< DataType: QImageCompositionData > : QComposition< DataType > {
+open class QImageComposition< Composable: QImageComposable > : QComposition< Composable > {
 
     public private(set) var imageView: QImageView!
 
@@ -26,12 +26,12 @@ public class QImageComposition< DataType: QImageCompositionData > : QComposition
         didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
-    open override class func size(data: DataType, size: CGSize) -> CGSize {
-        let availableWidth = size.width - (data.edgeInsets.left + data.edgeInsets.right)
-        let imageSize = data.image.source.size(CGSize(width: availableWidth, height: availableWidth))
+    open override class func size(composable: Composable, size: CGSize) -> CGSize {
+        let availableWidth = size.width - (composable.edgeInsets.left + composable.edgeInsets.right)
+        let imageSize = composable.image.source.size(CGSize(width: availableWidth, height: availableWidth))
         return CGSize(
             width: size.width,
-            height: data.edgeInsets.top + imageSize.height + data.edgeInsets.bottom
+            height: composable.edgeInsets.top + imageSize.height + composable.edgeInsets.bottom
         )
     }
 
@@ -43,20 +43,20 @@ public class QImageComposition< DataType: QImageCompositionData > : QComposition
         self.contentView.addSubview(self.imageView)
     }
 
-    open override func prepare(data: DataType, animated: Bool) {
-        super.prepare(data: data, animated: animated)
+    open override func prepare(composable: Composable, animated: Bool) {
+        super.prepare(composable: composable, animated: animated)
 
-        if self.currentEdgeInsets != data.edgeInsets {
-            self.currentEdgeInsets = data.edgeInsets
+        if self.currentEdgeInsets != composable.edgeInsets {
+            self.currentEdgeInsets = composable.edgeInsets
 
             var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self.imageView.topLayout == self.contentView.topLayout + data.edgeInsets.top)
-            selfConstraints.append(self.imageView.leadingLayout == self.contentView.leadingLayout + data.edgeInsets.left)
-            selfConstraints.append(self.imageView.trailingLayout == self.contentView.trailingLayout - data.edgeInsets.right)
-            selfConstraints.append(self.imageView.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
+            selfConstraints.append(self.imageView.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
+            selfConstraints.append(self.imageView.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
+            selfConstraints.append(self.imageView.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
+            selfConstraints.append(self.imageView.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
             self.selfConstraints = selfConstraints
         }
-        data.image.apply(target: self.imageView)
+        composable.image.apply(target: self.imageView)
     }
 
 }

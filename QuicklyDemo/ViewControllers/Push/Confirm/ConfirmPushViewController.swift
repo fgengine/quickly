@@ -13,8 +13,8 @@ protocol IConfirmPushViewControllerRoutePath : IQRoutePath {
 
 class ConfirmPushViewController : QNibViewController, IQPushContentViewController, IQRoutable {
 
-    var routePath: IConfirmPushViewControllerRoutePath
-    var routeContext: AppRouteContext
+    weak var routePath: IConfirmPushViewControllerRoutePath!
+    weak var routeContext: AppRouteContext!
 
     @IBOutlet private weak var imageView: QImageView!
     @IBOutlet private weak var titleLabel: QLabel!

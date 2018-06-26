@@ -10,7 +10,7 @@ open class QPagebarCell< Type: QPagebarItem > : QCollectionCell< Type > {
 
 public class QPagebar : QView {
 
-    public typealias ItemType = IQCollectionController.CellType
+    public typealias ItemType = IQCollectionController.Cell
 
     public weak var delegate: QPagebarDelegate?
     public var edgeInsets: UIEdgeInsets = UIEdgeInsets.zero {

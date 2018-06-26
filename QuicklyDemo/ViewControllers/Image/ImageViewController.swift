@@ -13,8 +13,8 @@ protocol IImageViewControllerRoutePath : IQRoutePath {
 
 class ImageViewController : QNibViewController, IQRoutable {
 
-    var routePath: IImageViewControllerRoutePath
-    var routeContext: AppRouteContext
+    weak var routePath: IImageViewControllerRoutePath!
+    weak var routeContext: AppRouteContext!
 
     @IBOutlet private weak var imageView: QImageView!
 

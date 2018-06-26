@@ -13,8 +13,8 @@ protocol ILabelViewControllerRoutePath : IQRoutePath {
 
 class LabelViewController : QNibViewController, IQRoutable {
 
-    var routePath: ILabelViewControllerRoutePath
-    var routeContext: AppRouteContext
+    weak var routePath: ILabelViewControllerRoutePath!
+    weak var routeContext: AppRouteContext!
 
     @IBOutlet private weak var label: QLabel!
     @IBOutlet private weak var linkLabel: QLinkLabel!

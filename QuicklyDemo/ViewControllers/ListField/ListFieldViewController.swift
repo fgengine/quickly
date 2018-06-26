@@ -13,8 +13,8 @@ protocol IListFieldViewControllerRoutePath : IQRoutePath {
 
 class ListFieldViewController : QNibViewController, IQRoutable {
 
-    var routePath: IListFieldViewControllerRoutePath
-    var routeContext: AppRouteContext
+    weak var routePath: IListFieldViewControllerRoutePath!
+    weak var routeContext: AppRouteContext!
 
     @IBOutlet private weak var listField: QListField!
 

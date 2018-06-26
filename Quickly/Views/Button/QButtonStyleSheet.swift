@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QButtonStyleSheet : IQStyleSheet {
+open class QButtonStyleSheet : IQStyleSheet {
 
     public var contentHorizontalAlignment: UIControlContentHorizontalAlignment
     public var contentVerticalAlignment: UIControlContentVerticalAlignment
@@ -21,14 +21,13 @@ public class QButtonStyleSheet : IQStyleSheet {
     public var isSelected: Bool
     public var isEnabled: Bool
 
-    public init(style: QButtonStyle) {
+    public init() {
         self.contentHorizontalAlignment = .center
         self.contentVerticalAlignment = .center
         self.contentInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         self.imagePosition = .left
         self.imageInsets = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
         self.textInsets = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
-        self.normalStyle = style
         self.spinnerPosition = .fill
         self.isSelected = false
         self.isEnabled = true
@@ -42,6 +41,10 @@ public class QButtonStyleSheet : IQStyleSheet {
         target.imageInsets = self.imageInsets
         target.textInsets = self.textInsets
         target.normalStyle = self.normalStyle
+        target.highlightedStyle = self.highlightedStyle
+        target.selectedStyle = self.selectedStyle
+        target.selectedHighlightedStyle = self.selectedHighlightedStyle
+        target.selectedDisabledStyle = self.selectedDisabledStyle
         target.spinnerPosition = self.spinnerPosition
         if let spinnerViewType = self.spinnerViewType {
             target.spinnerView = spinnerViewType.init()

@@ -73,4 +73,9 @@ public class QButtonStyle {
         self.parent = parent
     }
 
+    public init(parent: QButtonStyle, text: IQText) {
+        self.parent = parent
+        self.text = text
+    }
+
 }

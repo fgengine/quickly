@@ -11,8 +11,8 @@ public protocol IQTableControllerObserver : class {
 
 public protocol IQTableController : UITableViewDataSource, UITableViewDelegate {
 
-    typealias DecorType = IQTableDecor.DequeueType
-    typealias CellType = IQTableCell.DequeueType
+    typealias Decor = IQTableDecor.Dequeue
+    typealias Cell = IQTableCell.DequeueType
 
     var tableView: UITableView? { set get }
     var rowHeight: CGFloat { set get }
@@ -53,8 +53,8 @@ public protocol IQTableController : UITableViewDataSource, UITableViewDelegate {
     func footer(data: IQTableData) -> IQTableDecor?
     func cell(row: IQTableRow) -> IQTableCell?
 
-    func dequeue(data: IQTableData) -> DecorType?
-    func dequeue(row: IQTableRow, indexPath: IndexPath) -> CellType?
+    func dequeue(data: IQTableData) -> Decor?
+    func dequeue(row: IQTableRow, indexPath: IndexPath) -> Cell?
 
     func reload()
 

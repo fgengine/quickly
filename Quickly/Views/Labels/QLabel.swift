@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
+open class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
 
     public var text: IQText
     public var verticalAlignment: QViewVerticalAlignment

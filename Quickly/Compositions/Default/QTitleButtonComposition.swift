@@ -2,9 +2,9 @@
 //  Quickly
 //
 
-open class QTitleButtonCompositionData : QCompositionData {
+open class QTitleButtonComposable : QComposable {
 
-    public typealias Closure = (_ data: QTitleButtonCompositionData) -> Void
+    public typealias Closure = (_ composable: QTitleButtonComposable) -> Void
 
     public var title: QLabelStyleSheet
 
@@ -30,7 +30,7 @@ open class QTitleButtonCompositionData : QCompositionData {
 
 }
 
-public class QTitleButtonComposition< DataType: QTitleButtonCompositionData > : QComposition< DataType > {
+open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComposition< Composable > {
 
     public private(set) var titleLabel: QLabel!
     public private(set) var button: QButton!
@@ -43,12 +43,12 @@ public class QTitleButtonComposition< DataType: QTitleButtonCompositionData > : 
         didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
-    open override class func size(data: DataType, size: CGSize) -> CGSize {
-        let availableWidth = size.width - (data.edgeInsets.left + data.edgeInsets.right)
-        let textSize = data.title.text.size(width: availableWidth)
+    open override class func size(composable: Composable, size: CGSize) -> CGSize {
+        let availableWidth = size.width - (composable.edgeInsets.left + composable.edgeInsets.right)
+        let textSize = composable.title.text.size(width: availableWidth)
         return CGSize(
             width: size.width,
-            height: data.edgeInsets.top + max(textSize.height, data.buttonHeight) + data.edgeInsets.bottom
+            height: composable.edgeInsets.top + max(textSize.height, composable.buttonHeight) + composable.edgeInsets.bottom
         )
     }
 
@@ -69,26 +69,26 @@ public class QTitleButtonComposition< DataType: QTitleButtonCompositionData > : 
         self.contentView.addSubview(self.button)
     }
 
-    open override func prepare(data: DataType, animated: Bool) {
-        super.prepare(data: data, animated: animated)
+    open override func prepare(composable: Composable, animated: Bool) {
+        super.prepare(composable: composable, animated: animated)
         
-        if self.currentEdgeInsets != data.edgeInsets || self.currentButtonSpacing != data.buttonSpacing {
-            self.currentEdgeInsets = data.edgeInsets
-            self.currentButtonSpacing = data.buttonSpacing
+        if self.currentEdgeInsets != composable.edgeInsets || self.currentButtonSpacing != composable.buttonSpacing {
+            self.currentEdgeInsets = composable.edgeInsets
+            self.currentButtonSpacing = composable.buttonSpacing
 
             var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self.titleLabel.topLayout == self.contentView.topLayout + data.edgeInsets.top)
-            selfConstraints.append(self.titleLabel.leadingLayout == self.contentView.leadingLayout + data.edgeInsets.left)
-            selfConstraints.append(self.titleLabel.trailingLayout == self.button.leadingLayout - data.buttonSpacing)
-            selfConstraints.append(self.titleLabel.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
-            selfConstraints.append(self.button.topLayout == self.contentView.topLayout + data.edgeInsets.top)
-            selfConstraints.append(self.button.trailingLayout == self.contentView.trailingLayout - data.edgeInsets.right)
-            selfConstraints.append(self.button.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
+            selfConstraints.append(self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
+            selfConstraints.append(self.titleLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
+            selfConstraints.append(self.titleLabel.trailingLayout == self.button.leadingLayout - composable.buttonSpacing)
+            selfConstraints.append(self.titleLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
+            selfConstraints.append(self.button.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
+            selfConstraints.append(self.button.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
+            selfConstraints.append(self.button.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
             self.selfConstraints = selfConstraints
         }
-        data.title.apply(target: self.titleLabel)
-        data.button.apply(target: self.button)
-        if data.buttonIsSpinnerAnimating == true {
+        composable.title.apply(target: self.titleLabel)
+        composable.button.apply(target: self.button)
+        if composable.buttonIsSpinnerAnimating == true {
             self.button.startSpinner()
         } else {
             self.button.stopSpinner()
@@ -100,23 +100,23 @@ public class QTitleButtonComposition< DataType: QTitleButtonCompositionData > : 
     }
 
     public func startSpinner() {
-        if let data = self.data {
-            data.buttonIsSpinnerAnimating = true
+        if let composable = self.composable {
+            composable.buttonIsSpinnerAnimating = true
             self.button.startSpinner()
         }
     }
 
     public func stopSpinner() {
-        if let data = self.data {
-            data.buttonIsSpinnerAnimating = false
+        if let composable = self.composable {
+            composable.buttonIsSpinnerAnimating = false
             self.button.stopSpinner()
         }
     }
 
     @objc
     private func pressedButton(_ sender: Any) {
-        if let data = self.data {
-            data.buttonPressed(data)
+        if let composable = self.composable {
+            composable.buttonPressed(composable)
         }
     }
 

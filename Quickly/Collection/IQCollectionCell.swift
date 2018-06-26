@@ -7,13 +7,13 @@ public protocol CollectionCellDelegate : class {
 
 public protocol IQCollectionCell : IQCollectionReuse {
 
-    typealias DequeueType = UICollectionViewCell & IQCollectionCell
+    typealias Dequeue = UICollectionViewCell & IQCollectionCell
 
     var collectionDelegate: CollectionCellDelegate? { set get }
 
     static func register(collectionView: UICollectionView)
 
-    static func dequeue(collectionView: UICollectionView, indexPath: IndexPath) -> DequeueType?
+    static func dequeue(collectionView: UICollectionView, indexPath: IndexPath) -> Dequeue?
 
     func configure()
 
@@ -31,43 +31,43 @@ extension IQCollectionCell where Self : UICollectionViewCell {
         }
     }
 
-    public static func dequeue(collectionView: UICollectionView, indexPath: IndexPath) -> DequeueType? {
+    public static func dequeue(collectionView: UICollectionView, indexPath: IndexPath) -> Dequeue? {
         return collectionView.dequeueReusableCell(
             withReuseIdentifier: self.reuseIdentifier(),
             for: indexPath
-        ) as? DequeueType
+        ) as? Dequeue
     }
 
 }
 
 public protocol IQTypedCollectionCell : IQCollectionCell {
 
-    associatedtype ItemType: IQCollectionItem
+    associatedtype Item: IQCollectionItem
 
-    var item: ItemType? { get }
+    var item: Item? { get }
 
-    static func size(item: ItemType, layout: UICollectionViewLayout, section: IQCollectionSection, size: CGSize) -> CGSize
+    static func size(item: Item, layout: UICollectionViewLayout, section: IQCollectionSection, size: CGSize) -> CGSize
 
-    func set(item: ItemType, animated: Bool)
+    func set(item: Item, animated: Bool)
 
 }
 
 extension IQTypedCollectionCell {
 
     public static func using(any: Any) -> Bool {
-        return any is ItemType
+        return any is Item
     }
 
     public static func usingLevel(any: AnyClass) -> UInt? {
-        return inheritanceLevel(any, ItemType.self)
+        return inheritanceLevel(any, Item.self)
     }
 
     public static func size(any: Any, layout: UICollectionViewLayout, section: IQCollectionSection, size: CGSize) -> CGSize {
-        return self.size(item: any as! ItemType, layout: layout, section: section, size: size)
+        return self.size(item: any as! Item, layout: layout, section: section, size: size)
     }
 
     public func set(any: Any, animated: Bool) {
-        self.set(item: any as! ItemType, animated: animated)
+        self.set(item: any as! Item, animated: animated)
     }
 
 }

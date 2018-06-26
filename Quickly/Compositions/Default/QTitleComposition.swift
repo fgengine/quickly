@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QTitleCompositionData : QCompositionData {
+open class QTitleComposable : QComposable {
 
     public var title: QLabelStyleSheet
 
@@ -15,7 +15,7 @@ open class QTitleCompositionData : QCompositionData {
 
 }
 
-public class QTitleComposition< DataType: QTitleCompositionData > : QComposition< DataType > {
+open class QTitleComposition< Composable: QTitleComposable > : QComposition< Composable > {
 
     public private(set) var titleLabel: QLabel!
 
@@ -26,12 +26,12 @@ public class QTitleComposition< DataType: QTitleCompositionData > : QComposition
         didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
-    open override class func size(data: DataType, size: CGSize) -> CGSize {
-        let availableWidth = size.width - (data.edgeInsets.left + data.edgeInsets.right)
-        let textSize = data.title.text.size(width: availableWidth)
+    open override class func size(composable: Composable, size: CGSize) -> CGSize {
+        let availableWidth = size.width - (composable.edgeInsets.left + composable.edgeInsets.right)
+        let textSize = composable.title.text.size(width: availableWidth)
         return CGSize(
             width: size.width,
-            height: data.edgeInsets.top + textSize.height + data.edgeInsets.bottom
+            height: composable.edgeInsets.top + textSize.height + composable.edgeInsets.bottom
         )
     }
 
@@ -43,20 +43,20 @@ public class QTitleComposition< DataType: QTitleCompositionData > : QComposition
         self.contentView.addSubview(self.titleLabel)
     }
 
-    open override func prepare(data: DataType, animated: Bool) {
-        super.prepare(data: data, animated: animated)
+    open override func prepare(composable: Composable, animated: Bool) {
+        super.prepare(composable: composable, animated: animated)
         
-        if self.currentEdgeInsets != data.edgeInsets {
-            self.currentEdgeInsets = data.edgeInsets
+        if self.currentEdgeInsets != composable.edgeInsets {
+            self.currentEdgeInsets = composable.edgeInsets
 
             var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self.titleLabel.topLayout == self.contentView.topLayout + data.edgeInsets.top)
-            selfConstraints.append(self.titleLabel.leadingLayout == self.contentView.leadingLayout + data.edgeInsets.left)
-            selfConstraints.append(self.titleLabel.trailingLayout == self.contentView.trailingLayout - data.edgeInsets.right)
-            selfConstraints.append(self.titleLabel.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
+            selfConstraints.append(self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
+            selfConstraints.append(self.titleLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
+            selfConstraints.append(self.titleLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
+            selfConstraints.append(self.titleLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
             self.selfConstraints = selfConstraints
         }
-        data.title.apply(target: self.titleLabel)
+        composable.title.apply(target: self.titleLabel)
     }
 
 }

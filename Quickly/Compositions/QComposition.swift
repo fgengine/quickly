@@ -2,22 +2,22 @@
 //  Quickly
 //
 
-open class QCompositionData: IQCompositionData {
+open class QComposable : IQComposable {
 
     public var edgeInsets: UIEdgeInsets
 
-    public init() {
-        self.edgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+    public init(edgeInsets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)) {
+        self.edgeInsets = edgeInsets
     }
 
 }
 
-open class QComposition< DataType: IQCompositionData >: IQComposition {
+open class QComposition< Composable: IQComposable > : IQComposition {
 
     public var contentView: UIView
-    public private(set) var data: DataType!
+    public private(set) var composable: Composable!
 
-    public class func size(data: DataType, size: CGSize) -> CGSize {
+    open class func size(composable: Composable, size: CGSize) -> CGSize {
         return CGSize.zero
     }
 
@@ -34,12 +34,12 @@ open class QComposition< DataType: IQCompositionData >: IQComposition {
     open func setup() {
     }
 
-    open func prepare(data: DataType, animated: Bool) {
-        self.data = data
+    open func prepare(composable: Composable, animated: Bool) {
+        self.composable = composable
     }
 
     open func cleanup() {
-        self.data = nil
+        self.composable = nil
     }
 
 }

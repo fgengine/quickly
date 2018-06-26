@@ -6,9 +6,10 @@ open class QSpaceCollectionItem : QBackgroundColorCollectionItem {
 
     public var size: CGSize
 
-    public init(size: CGSize) {
+    public init(size: CGSize, backgroundColor: UIColor? = nil) {
         self.size = size
-        super.init()
+        super.init(backgroundColor: backgroundColor)
+        self.canSelect = false
     }
 
 }

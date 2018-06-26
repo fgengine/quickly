@@ -2,10 +2,10 @@
 //  Quickly
 //
 
-open class QListFieldCompositionData : QCompositionData {
+open class QListFieldComposable : QComposable {
 
-    public typealias ShouldClosure = (_ data: QListFieldCompositionData) -> Bool
-    public typealias Closure = (_ data: QListFieldCompositionData) -> Void
+    public typealias ShouldClosure = (_ composable: QListFieldComposable) -> Bool
+    public typealias Closure = (_ composable: QListFieldComposable) -> Void
 
     public var field: QListFieldStyleSheet
     public var fieldHeight: CGFloat
@@ -31,7 +31,7 @@ open class QListFieldCompositionData : QCompositionData {
 
 }
 
-public class QListFieldComposition< DataType: QListFieldCompositionData >: QComposition< DataType > {
+open class QListFieldComposition< Composable: QListFieldComposable > : QComposition< Composable > {
 
     public private(set) var listField: QListField!
 
@@ -42,10 +42,10 @@ public class QListFieldComposition< DataType: QListFieldCompositionData >: QComp
         didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
-    open override class func size(data: DataType, size: CGSize) -> CGSize {
+    open override class func size(composable: Composable, size: CGSize) -> CGSize {
         return CGSize(
             width: size.width,
-            height: data.edgeInsets.top + data.fieldHeight + data.edgeInsets.bottom
+            height: composable.edgeInsets.top + composable.fieldHeight + composable.edgeInsets.bottom
         )
     }
 
@@ -62,9 +62,9 @@ public class QListFieldComposition< DataType: QListFieldCompositionData >: QComp
             guard let strong = self else { return }
             strong.beginEditing()
         }
-        self.listField.onSelect = { [weak self] (listField: QListField, data: QListFieldPickerRow) in
+        self.listField.onSelect = { [weak self] (listField: QListField, composable: QListFieldPickerRow) in
             guard let strong = self else { return }
-            strong.select(data)
+            strong.select(composable)
         }
         self.listField.onShouldEndEditing = { [weak self] (listField: QListField) in
             guard let strong = self else { return true }
@@ -77,61 +77,61 @@ public class QListFieldComposition< DataType: QListFieldCompositionData >: QComp
         self.contentView.addSubview(self.listField)
     }
 
-    open override func prepare(data: DataType, animated: Bool) {
-        super.prepare(data: data, animated: animated)
+    open override func prepare(composable: Composable, animated: Bool) {
+        super.prepare(composable: composable, animated: animated)
         
-        if self.currentEdgeInsets != data.edgeInsets {
-            self.currentEdgeInsets = data.edgeInsets
+        if self.currentEdgeInsets != composable.edgeInsets {
+            self.currentEdgeInsets = composable.edgeInsets
 
             var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self.listField.topLayout == self.contentView.topLayout + data.edgeInsets.top)
-            selfConstraints.append(self.listField.leadingLayout == self.contentView.leadingLayout + data.edgeInsets.left)
-            selfConstraints.append(self.listField.trailingLayout == self.contentView.trailingLayout - data.edgeInsets.right)
-            selfConstraints.append(self.listField.bottomLayout == self.contentView.bottomLayout - data.edgeInsets.bottom)
+            selfConstraints.append(self.listField.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
+            selfConstraints.append(self.listField.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
+            selfConstraints.append(self.listField.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
+            selfConstraints.append(self.listField.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
             self.selfConstraints = selfConstraints
         }
-        data.field.apply(target: self.listField)
-        self.listField.selectedRow = data.fieldSelectedRow
+        composable.field.apply(target: self.listField)
+        self.listField.selectedRow = composable.fieldSelectedRow
     }
 
     private func shouldBeginEditing() -> Bool {
-        guard let data = self.data else { return true }
-        if let closure = data.fieldShouldBeginEditing {
-            return closure(data)
+        guard let composable = self.composable else { return true }
+        if let closure = composable.fieldShouldBeginEditing {
+            return closure(composable)
         }
         return true
     }
 
     private func beginEditing() {
-        guard let data = self.data else { return }
-        data.fieldIsEditing = self.listField.isEditing
-        if let closure = data.fieldBeginEditing {
-            closure(data)
+        guard let composable = self.composable else { return }
+        composable.fieldIsEditing = self.listField.isEditing
+        if let closure = composable.fieldBeginEditing {
+            closure(composable)
         }
     }
 
     private func select(_ pickerRow: QListFieldPickerRow) {
-        guard let data = self.data else { return }
-        data.fieldIsValid = self.listField.isValid
-        data.fieldSelectedRow = pickerRow
-        if let closure = data.fieldSelect {
-            closure(data)
+        guard let composable = self.composable else { return }
+        composable.fieldIsValid = self.listField.isValid
+        composable.fieldSelectedRow = pickerRow
+        if let closure = composable.fieldSelect {
+            closure(composable)
         }
     }
 
     private func shouldEndEditing() -> Bool {
-        guard let data = self.data else { return true }
-        if let closure = data.fieldShouldEndEditing {
-            return closure(data)
+        guard let composable = self.composable else { return true }
+        if let closure = composable.fieldShouldEndEditing {
+            return closure(composable)
         }
         return true
     }
 
     private func endEditing() {
-        guard let data = self.data else { return }
-        data.fieldIsEditing = self.listField.isEditing
-        if let closure = data.fieldEndEditing {
-            closure(data)
+        guard let composable = self.composable else { return }
+        composable.fieldIsEditing = self.listField.isEditing
+        if let closure = composable.fieldEndEditing {
+            closure(composable)
         }
     }
 

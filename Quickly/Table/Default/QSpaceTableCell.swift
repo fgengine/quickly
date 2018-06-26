@@ -6,9 +6,10 @@ open class QSpaceTableRow : QBackgroundColorTableRow {
 
     public var size: CGFloat
 
-    public init(_ size: CGFloat) {
+    public init(size: CGFloat, backgroundColor: UIColor? = nil) {
         self.size = size
-        super.init()
+        super.init(backgroundColor: backgroundColor)
+        self.canSelect = false
     }
 
 }
