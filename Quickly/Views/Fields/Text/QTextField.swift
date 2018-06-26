@@ -367,7 +367,13 @@ public class QTextField : QDisplayView, IQField {
             } else {
                 unformat = text
             }
-            if field.requireValidator == false || string.isEmpty == true || field.isValid == true {
+            var isValid: Bool
+            if let validator = field.validator {
+                isValid = validator.validate(unformat)
+            } else {
+                isValid = true
+            }
+            if field.requireValidator == false || string.isEmpty == true || isValid == true {
                 var location: UITextPosition?
                 if let formatter = field.formatter {
                     let format = formatter.format(unformat, caret: &caret)
