@@ -76,7 +76,7 @@ public class QPageViewControllerInteractiveAnimation : IQPageViewControllerInter
     }
     public private(set) var finishMode: QPageViewControllerAnimationMode
 
-    public init(overlapping: CGFloat = 0.8, acceleration: CGFloat = 1200, finishDistanceRate: CGFloat = 0.4, deceleration: CGFloat = 0.35) {
+    public init(overlapping: CGFloat = 1, acceleration: CGFloat = 1200, finishDistanceRate: CGFloat = 0.4, deceleration: CGFloat = 0.35) {
         self.position = CGPoint.zero
         self.deltaPosition = 0
         self.velocity = CGPoint.zero

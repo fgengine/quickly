@@ -43,6 +43,29 @@ public class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
         super.init()
     }
 
+    public init(_ styleSheet: QTextFieldStyleSheet) {
+        self.requireValidator = styleSheet.requireValidator
+        self.validator = styleSheet.validator
+        self.formatter = styleSheet.formatter
+        self.textInsets = styleSheet.textInsets
+        self.textStyle = styleSheet.textStyle
+        self.editingInsets = styleSheet.editingInsets
+        self.placeholderInsets = styleSheet.placeholderInsets
+        self.placeholder = styleSheet.placeholder
+        self.autocapitalizationType = styleSheet.autocapitalizationType
+        self.autocorrectionType = styleSheet.autocorrectionType
+        self.spellCheckingType = styleSheet.spellCheckingType
+        self.keyboardType = styleSheet.keyboardType
+        self.keyboardAppearance = styleSheet.keyboardAppearance
+        self.returnKeyType = styleSheet.returnKeyType
+        self.enablesReturnKeyAutomatically = styleSheet.enablesReturnKeyAutomatically
+        self.isSecureTextEntry = styleSheet.isSecureTextEntry
+        self.textContentType = styleSheet.textContentType
+        self.isEnabled = styleSheet.isEnabled
+
+        super.init(styleSheet)
+    }
+
     public override func apply(target: QTextField) {
         super.apply(target: target)
 

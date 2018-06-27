@@ -11,14 +11,23 @@ open class QImageViewStyleSheet : QDisplayViewStyleSheet< QImageView > {
     public var loader: QImageLoader?
 
     public init(
-        _ source: QImageSource,
+        source: QImageSource,
         verticalAlignment: QViewVerticalAlignment = .center,
         horizontalAlignment: QViewHorizontalAlignment = .center
     ) {
         self.source = source
         self.verticalAlignment = verticalAlignment
         self.horizontalAlignment = horizontalAlignment
+        
         super.init()
+    }
+
+    public init(_ styleSheet: QImageViewStyleSheet) {
+        self.source = styleSheet.source
+        self.verticalAlignment = styleSheet.verticalAlignment
+        self.horizontalAlignment = styleSheet.horizontalAlignment
+
+        super.init(styleSheet)
     }
 
     public override func apply(target: QImageView) {

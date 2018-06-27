@@ -21,6 +21,13 @@ open class QDisplayViewStyleSheet< TargetType: QDisplayView > : IQStyleSheet {
         self.shadow = shadow
     }
 
+    public init(_ styleSheet: QDisplayViewStyleSheet) {
+        self.backgroundColor = styleSheet.backgroundColor
+        self.cornerRadius = styleSheet.cornerRadius
+        self.border = styleSheet.border
+        self.shadow = styleSheet.shadow
+    }
+
     public func apply(target: TargetType) {
         target.backgroundColor = self.backgroundColor
         target.cornerRadius = self.cornerRadius

@@ -33,6 +33,25 @@ open class QButtonStyleSheet : IQStyleSheet {
         self.isEnabled = true
     }
 
+    public init(_ styleSheet: QButtonStyleSheet) {
+        self.contentHorizontalAlignment = styleSheet.contentHorizontalAlignment
+        self.contentVerticalAlignment = styleSheet.contentVerticalAlignment
+        self.contentInsets = styleSheet.contentInsets
+        self.imagePosition = styleSheet.imagePosition
+        self.imageInsets = styleSheet.imageInsets
+        self.textInsets = styleSheet.textInsets
+        self.normalStyle = styleSheet.normalStyle
+        self.highlightedStyle = styleSheet.highlightedStyle
+        self.disabledStyle = styleSheet.disabledStyle
+        self.selectedStyle = styleSheet.selectedStyle
+        self.selectedHighlightedStyle = styleSheet.selectedHighlightedStyle
+        self.selectedDisabledStyle = styleSheet.selectedDisabledStyle
+        self.spinnerPosition = styleSheet.spinnerPosition
+        self.spinnerViewType = styleSheet.spinnerViewType
+        self.isSelected = styleSheet.isSelected
+        self.isEnabled = styleSheet.isEnabled
+    }
+
     public func apply(target: QButton) {
         target.contentHorizontalAlignment = self.contentHorizontalAlignment
         target.contentVerticalAlignment = self.contentVerticalAlignment

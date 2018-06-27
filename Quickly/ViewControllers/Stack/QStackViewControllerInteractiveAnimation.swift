@@ -46,7 +46,7 @@ public class QStackViewControllerinteractiveDismissAnimation : IQStackViewContro
     internal var acceleration: CGFloat
     public private(set) var canFinish: Bool
 
-    public init(overlapping: CGFloat = 0.75, acceleration: CGFloat = 1200, dismissDistanceRate: CGFloat = 0.4) {
+    public init(overlapping: CGFloat = 1, acceleration: CGFloat = 1200, dismissDistanceRate: CGFloat = 0.4) {
         self.position = CGPoint.zero
         self.deltaPosition = 0
         self.velocity = CGPoint.zero

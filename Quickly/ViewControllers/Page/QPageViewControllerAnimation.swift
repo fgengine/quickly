@@ -25,7 +25,7 @@ public class QPageViewControllerAnimation : IQPageViewControllerAnimation {
         get { return TimeInterval(abs(self.targetBeginFrame.midX - self.targetEndFrame.midX) / self.acceleration) }
     }
 
-    public init(overlapping: CGFloat = 0.8, acceleration: CGFloat = 1200) {
+    public init(overlapping: CGFloat = 1, acceleration: CGFloat = 1200) {
         self.overlapping = overlapping
         self.acceleration = acceleration
     }

@@ -33,25 +33,25 @@ class PageViewController : QPageContainerViewController, IQRoutable {
         self.setViewControllers([
             QPageViewController(
                 QPagebarTitleItem(
+                    title: QLabelStyleSheet(text: QText("Page #1", color: .red)),
                     backgroundColor: UIColor.gray,
-                    selectedBackgroundColor: UIColor.darkGray,
-                    title: QLabelStyleSheet(text: QText("Page #1", color: .red))
+                    selectedBackgroundColor: UIColor.darkGray
                 ),
                 PageContentViewController(self.routePath, self.routeContext)
             ),
             QPageViewController(
                 QPagebarTitleItem(
+                    title: QLabelStyleSheet(text: QText("Page #2", color: .green)),
                     backgroundColor: UIColor.gray,
-                    selectedBackgroundColor: UIColor.darkGray,
-                    title: QLabelStyleSheet(text: QText("Page #2", color: .green))
+                    selectedBackgroundColor: UIColor.darkGray
                 ),
                 PageContentViewController(self.routePath, self.routeContext)
             ),
             QPageViewController(
                 QPagebarTitleItem(
+                    title: QLabelStyleSheet(text: QText("Page #3", color: .blue)),
                     backgroundColor: UIColor.gray,
-                    selectedBackgroundColor: UIColor.darkGray,
-                    title: QLabelStyleSheet(text: QText("Page #3", color: .blue))
+                    selectedBackgroundColor: UIColor.darkGray
                 ),
                 PageContentViewController(self.routePath, self.routeContext)
             )

@@ -6,13 +6,14 @@ open class QPagebarTitleItem : QPagebarItem {
 
     public var backgroundColor: UIColor?
     public var selectedBackgroundColor: UIColor?
-    public var edgeInsets: UIEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
+    public var edgeInsets: UIEdgeInsets
     public var title: QLabelStyleSheet
 
-    public init(backgroundColor: UIColor? = nil, selectedBackgroundColor: UIColor? = nil, title: QLabelStyleSheet) {
+    public init(title: QLabelStyleSheet, backgroundColor: UIColor? = nil, selectedBackgroundColor: UIColor? = nil, edgeInsets: UIEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)) {
+        self.title = title
         self.backgroundColor = backgroundColor
         self.selectedBackgroundColor = selectedBackgroundColor
-        self.title = title
+        self.edgeInsets = edgeInsets
         super.init()
         self.canSelect = true
         self.canDeselect = true

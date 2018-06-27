@@ -23,8 +23,19 @@ open class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
         self.padding = 0
         self.numberOfLines = 0
         self.lineBreakMode = lineBreakMode
-
+        
         super.init()
+    }
+
+    public init(styleSheet: QLabelStyleSheet) {
+        self.text = styleSheet.text
+        self.verticalAlignment = styleSheet.verticalAlignment
+        self.horizontalAlignment = styleSheet.horizontalAlignment
+        self.padding = styleSheet.padding
+        self.numberOfLines = styleSheet.numberOfLines
+        self.lineBreakMode = styleSheet.lineBreakMode
+
+        super.init(styleSheet)
     }
 
     public override func apply(target: QLabel) {

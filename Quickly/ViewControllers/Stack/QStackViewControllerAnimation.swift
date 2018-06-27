@@ -16,7 +16,7 @@ public class QStackViewControllerPresentAnimation : IQStackViewControllerPresent
         get { return TimeInterval(abs(self.nextBeginFrame.midX - self.nextEndFrame.midX) / self.acceleration) }
     }
 
-    public init(overlapping: CGFloat = 0.5, acceleration: CGFloat = 1200) {
+    public init(overlapping: CGFloat = 1, acceleration: CGFloat = 1200) {
         self.currentBeginFrame = CGRect.zero
         self.currentEndFrame = CGRect.zero
         self.nextBeginFrame = CGRect.zero
