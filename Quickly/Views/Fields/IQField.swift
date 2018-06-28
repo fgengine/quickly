@@ -9,6 +9,8 @@ public protocol IQField : class {
     var isEnabled: Bool { set get }
     var isEditing: Bool { get }
 
+    func beginEditing()
+
 }
 
 public typealias QFieldType = UIView & IQField

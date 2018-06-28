@@ -36,7 +36,7 @@ class DateFieldViewController : QNibViewController, IQRoutable {
 
     override func didPresent(animated: Bool) {
         super.didPresent(animated: animated)
-        self.dateField.becomeFirstResponder()
+        self.dateField.beginEditing()
     }
 
     override func prepareInteractiveDismiss() {
@@ -46,7 +46,7 @@ class DateFieldViewController : QNibViewController, IQRoutable {
 
     override func cancelInteractiveDismiss() {
         super.cancelInteractiveDismiss()
-        self.dateField.becomeFirstResponder()
+        self.dateField.beginEditing()
     }
 
     override func finishInteractiveDismiss() {

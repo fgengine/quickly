@@ -94,10 +94,10 @@ public class QListField : QDisplayView, IQField {
     public var onShouldEndEditing: ShouldClosure?
     public var onEndEditing: Closure?
 
-    private var label: QLabel!
-    private var picker: QPickerView!
-    private var pickerSection: QPickerSection!
-    private var pickerController: QPickerController!
+    internal var label: QLabel!
+    internal var picker: QPickerView!
+    internal var pickerSection: QPickerSection!
+    internal var pickerController: QPickerController!
 
     open override var intrinsicContentSize: CGSize {
         get { return self.label.intrinsicContentSize }
@@ -120,6 +120,10 @@ public class QListField : QDisplayView, IQField {
         self.pickerController.sections = [ self.pickerSection ]
         self.pickerController.delegate = self
         self.picker.pickerController = self.pickerController
+    }
+
+    open func beginEditing() {
+        self.becomeFirstResponder()
     }
 
     open override func sizeThatFits(_ size: CGSize) -> CGSize {

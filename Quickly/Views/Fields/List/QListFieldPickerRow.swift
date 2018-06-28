@@ -23,7 +23,6 @@ open class QListFieldPickerRow : QPickerRow {
             row: QLabelStyleSheet(
                 text: row,
                 verticalAlignment: .center,
-                horizontalAlignment: .center,
                 lineBreakMode: .byWordWrapping
             )
         )
@@ -35,7 +34,6 @@ open class QListFieldPickerRow : QPickerRow {
             row: QLabelStyleSheet(
                 text: text,
                 verticalAlignment: .center,
-                horizontalAlignment: .center,
                 lineBreakMode: .byWordWrapping
             )
         )

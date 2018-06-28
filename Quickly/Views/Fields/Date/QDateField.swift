@@ -135,8 +135,8 @@ public class QDateField : QDisplayView, IQField {
     public var onShouldEndEditing: ShouldClosure?
     public var onEndEditing: Closure?
 
-    private var label: QLabel!
-    private var picker: UIDatePicker!
+    internal var label: QLabel!
+    internal var picker: UIDatePicker!
 
     open override var intrinsicContentSize: CGSize {
         get { return self.label.intrinsicContentSize }
@@ -154,6 +154,10 @@ public class QDateField : QDisplayView, IQField {
         self.picker = UIDatePicker()
         self.picker.datePickerMode = self.mode.datePickerMode
         self.picker.addValueChanged(self, action: #selector(self.changeDate(_:)))
+    }
+
+    open func beginEditing() {
+        self.becomeFirstResponder()
     }
 
     open override func sizeThatFits(_ size: CGSize) -> CGSize {

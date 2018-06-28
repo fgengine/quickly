@@ -270,7 +270,7 @@ public class QTextField : QDisplayView, IQField {
     public var onShouldReturn: ShouldClosure?
     public var onPressedReturn: Closure?
 
-    public private(set) var field: Field!
+    internal private(set) var field: Field!
     private var fieldDelegate: FieldDelegate!
 
     open override var intrinsicContentSize: CGSize {
@@ -290,6 +290,10 @@ public class QTextField : QDisplayView, IQField {
         self.field.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
         self.field.delegate = self.fieldDelegate
         self.addSubview(self.field)
+    }
+
+    open func beginEditing() {
+        self.field.becomeFirstResponder()
     }
 
     open override func sizeThatFits(_ size: CGSize) -> CGSize {

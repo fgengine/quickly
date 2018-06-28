@@ -6,7 +6,6 @@ open class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
 
     public var text: IQText
     public var verticalAlignment: QViewVerticalAlignment
-    public var horizontalAlignment: QViewHorizontalAlignment
     public var padding: CGFloat
     public var numberOfLines: Int
     public var lineBreakMode: NSLineBreakMode
@@ -14,12 +13,10 @@ open class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
     public init(
         text: IQText,
         verticalAlignment: QViewVerticalAlignment = .center,
-        horizontalAlignment: QViewHorizontalAlignment = .left,
         lineBreakMode: NSLineBreakMode = .byWordWrapping
     ) {
         self.text = text
         self.verticalAlignment = verticalAlignment
-        self.horizontalAlignment = horizontalAlignment
         self.padding = 0
         self.numberOfLines = 0
         self.lineBreakMode = lineBreakMode
@@ -30,7 +27,6 @@ open class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
     public init(styleSheet: QLabelStyleSheet) {
         self.text = styleSheet.text
         self.verticalAlignment = styleSheet.verticalAlignment
-        self.horizontalAlignment = styleSheet.horizontalAlignment
         self.padding = styleSheet.padding
         self.numberOfLines = styleSheet.numberOfLines
         self.lineBreakMode = styleSheet.lineBreakMode
@@ -43,7 +39,6 @@ open class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
 
         target.text = self.text
         target.verticalAlignment = self.verticalAlignment
-        target.horizontalAlignment = self.horizontalAlignment
         target.padding = self.padding
         target.numberOfLines = self.numberOfLines
         target.lineBreakMode = self.lineBreakMode
@@ -54,9 +49,6 @@ open class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
 open class QLabel : QDisplayView {
 
     public var verticalAlignment: QViewVerticalAlignment = .center {
-        didSet { self.setNeedsDisplay() }
-    }
-    public var horizontalAlignment: QViewHorizontalAlignment = .left {
         didSet { self.setNeedsDisplay() }
     }
     public var padding: CGFloat {
@@ -299,19 +291,13 @@ open class QLabel : QDisplayView {
     }
 
     private func alignmentPoint(size: CGSize, textSize: CGSize) -> CGPoint {
-        var x = size.width - textSize.width
         var y = size.height - textSize.height
         switch self.verticalAlignment {
         case .top: y = 0
         case .center: y = max(y / 2, 0)
         case .bottom: y = max(y, 0)
         }
-        switch self.horizontalAlignment {
-        case .left: x = 0
-        case .center: x = max(x / 2, 0)
-        case .right: x = max(x, 0)
-        }
-        return CGPoint(x: x, y: y)
+        return CGPoint(x: 0, y: y)
     }
 
 }

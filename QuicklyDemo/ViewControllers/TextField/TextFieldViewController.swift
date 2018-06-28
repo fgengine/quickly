@@ -63,7 +63,7 @@ class TextFieldViewController : QNibViewController, IQRoutable {
 
     override func didPresent(animated: Bool) {
         super.didPresent(animated: animated)
-        self.textField.field.becomeFirstResponder()
+        self.textField.beginEditing()
     }
 
     override func willDismiss(animated: Bool) {
@@ -78,7 +78,7 @@ class TextFieldViewController : QNibViewController, IQRoutable {
 
     override func cancelInteractiveDismiss() {
         super.cancelInteractiveDismiss()
-        self.textField.field.becomeFirstResponder()
+        self.textField.beginEditing()
     }
 
     override func finishInteractiveDismiss() {

@@ -46,7 +46,7 @@ class ListFieldViewController : QNibViewController, IQRoutable {
 
     override func didPresent(animated: Bool) {
         super.didPresent(animated: animated)
-        self.listField.becomeFirstResponder()
+        self.listField.beginEditing()
     }
 
     override func prepareInteractiveDismiss() {
@@ -56,7 +56,7 @@ class ListFieldViewController : QNibViewController, IQRoutable {
 
     override func cancelInteractiveDismiss() {
         super.cancelInteractiveDismiss()
-        self.listField.becomeFirstResponder()
+        self.listField.beginEditing()
     }
 
     override func finishInteractiveDismiss() {
