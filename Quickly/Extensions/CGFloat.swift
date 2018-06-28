@@ -5,7 +5,7 @@
 public extension CGFloat {
 
     public func lerp(_ to: CGFloat, progress: CGFloat) -> CGFloat {
-        return ((1 - progress) * self) + (progress * to)
+        return CGFloat(self.native.lerp(to.native, progress: progress.native))
     }
 
 }

@@ -4,15 +4,15 @@
 
 public class QStackViewControllerPresentAnimation : IQStackViewControllerPresentAnimation {
 
-    internal var currentBeginFrame: CGRect
-    internal var currentEndFrame: CGRect
-    internal var currentViewController: IQStackViewController!
-    internal var nextBeginFrame: CGRect
-    internal var nextEndFrame: CGRect
-    internal var nextViewController: IQStackViewController!
-    internal var overlapping: CGFloat
-    internal var acceleration: CGFloat
-    internal var duration: TimeInterval {
+    public var currentBeginFrame: CGRect
+    public var currentEndFrame: CGRect
+    public var currentViewController: IQStackViewController!
+    public var nextBeginFrame: CGRect
+    public var nextEndFrame: CGRect
+    public var nextViewController: IQStackViewController!
+    public var overlapping: CGFloat
+    public var acceleration: CGFloat
+    public var duration: TimeInterval {
         get { return TimeInterval(abs(self.nextBeginFrame.midX - self.nextEndFrame.midX) / self.acceleration) }
     }
 
@@ -76,15 +76,15 @@ public class QStackViewControllerPresentAnimation : IQStackViewControllerPresent
 
 public class QStackViewControllerDismissAnimation : IQStackViewControllerDismissAnimation {
 
-    internal var currentBeginFrame: CGRect
-    internal var currentEndFrame: CGRect
-    internal var currentViewController: IQStackViewController!
-    internal var previousBeginFrame: CGRect
-    internal var previousEndFrame: CGRect
-    internal var previousViewController: IQStackViewController!
-    internal var overlapping: CGFloat
-    internal var acceleration: CGFloat
-    internal var duration: TimeInterval {
+    public var currentBeginFrame: CGRect
+    public var currentEndFrame: CGRect
+    public var currentViewController: IQStackViewController!
+    public var previousBeginFrame: CGRect
+    public var previousEndFrame: CGRect
+    public var previousViewController: IQStackViewController!
+    public var overlapping: CGFloat
+    public var acceleration: CGFloat
+    public var duration: TimeInterval {
         get { return TimeInterval(abs(self.currentBeginFrame.midX - self.currentEndFrame.midX) / self.acceleration) }
     }
 

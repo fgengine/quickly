@@ -4,9 +4,9 @@
 
 public class QDialogViewControllerAnimation : IQDialogViewControllerFixedAnimation {
 
-    internal var viewController: IQDialogViewController!
-    internal var duration: TimeInterval
-    internal var verticalOffset: CGFloat
+    public var viewController: IQDialogViewController!
+    public var duration: TimeInterval
+    public var verticalOffset: CGFloat
 
     public init(duration: TimeInterval, verticalOffset: CGFloat) {
         self.duration = duration
@@ -20,7 +20,7 @@ public class QDialogViewControllerAnimation : IQDialogViewControllerFixedAnimati
     public func update(animated: Bool, complete: @escaping (Bool) -> Void) {
     }
 
-    internal func contentVerticalAlignment(_ contentVerticalAlignment: QDialogViewControllerVerticalAlignment) -> QDialogViewControllerVerticalAlignment {
+    public func contentVerticalAlignment(_ contentVerticalAlignment: QDialogViewControllerVerticalAlignment) -> QDialogViewControllerVerticalAlignment {
         switch contentVerticalAlignment {
         case .top(let offset): return .top(offset: offset - self.verticalOffset)
         case .center(let offset): return .center(offset: offset - self.verticalOffset)

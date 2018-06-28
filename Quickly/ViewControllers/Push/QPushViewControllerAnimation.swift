@@ -4,8 +4,8 @@
 
 public class QPushViewControllerAnimation : IQPushViewControllerFixedAnimation {
 
-    internal var duration: TimeInterval
-    internal var viewController: IQPushViewController!
+    public var duration: TimeInterval
+    public var viewController: IQPushViewController!
 
     public init(duration: TimeInterval = 0.2) {
         self.duration = duration

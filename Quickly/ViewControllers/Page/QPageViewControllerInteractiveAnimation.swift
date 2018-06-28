@@ -4,8 +4,8 @@
 
 public class QPageViewControllerInteractiveAnimation : IQPageViewControllerInteractiveAnimation {
 
-    internal var contentView: UIView!
-    internal var backwardBeginFrame: CGRect {
+    public var contentView: UIView!
+    public var backwardBeginFrame: CGRect {
         get {
             let frame = self.contentView.bounds
             return CGRect(
@@ -16,14 +16,14 @@ public class QPageViewControllerInteractiveAnimation : IQPageViewControllerInter
             )
         }
     }
-    internal var backwardEndFrame: CGRect {
+    public var backwardEndFrame: CGRect {
         get { return self.contentView.bounds }
     }
-    internal var backwardViewController: IQPageViewController?
-    internal var currentBeginFrame: CGRect {
+    public var backwardViewController: IQPageViewController?
+    public var currentBeginFrame: CGRect {
         get { return self.contentView.bounds }
     }
-    internal var currentBackwardEndFrame: CGRect {
+    public var currentBackwardEndFrame: CGRect {
         get {
             let frame = self.contentView.bounds
             return CGRect(
@@ -34,7 +34,7 @@ public class QPageViewControllerInteractiveAnimation : IQPageViewControllerInter
             )
         }
     }
-    internal var currentForwardEndFrame: CGRect {
+    public var currentForwardEndFrame: CGRect {
         get {
             let frame = self.contentView.bounds
             return CGRect(
@@ -45,8 +45,8 @@ public class QPageViewControllerInteractiveAnimation : IQPageViewControllerInter
             )
         }
     }
-    internal var currentViewController: IQPageViewController!
-    internal var forwardBeginFrame: CGRect {
+    public var currentViewController: IQPageViewController!
+    public var forwardBeginFrame: CGRect {
         get {
             let frame = self.contentView.bounds
             return CGRect(
@@ -57,23 +57,24 @@ public class QPageViewControllerInteractiveAnimation : IQPageViewControllerInter
             )
         }
     }
-    internal var forwardEndFrame: CGRect {
+    public var forwardEndFrame: CGRect {
         get { return self.contentView.bounds }
     }
-    internal var forwardViewController: IQPageViewController?
-    internal var position: CGPoint
-    internal var deltaPosition: CGFloat
-    internal var velocity: CGPoint
-    internal var distance: CGFloat {
+    public var forwardViewController: IQPageViewController?
+    public var position: CGPoint
+    public var deltaPosition: CGFloat
+    public var velocity: CGPoint
+    public var distance: CGFloat {
         get { return self.contentView.bounds.width }
     }
-    internal var finishDistanceRate: CGFloat
-    internal var overlapping: CGFloat
-    internal var acceleration: CGFloat
-    internal var deceleration: CGFloat
+    public var finishDistanceRate: CGFloat
+    public var overlapping: CGFloat
+    public var acceleration: CGFloat
+    public var deceleration: CGFloat
     public var canFinish: Bool {
         get { return self.finishMode != .none }
     }
+    public var ease: IQAnimationEase
     public private(set) var finishMode: QPageViewControllerAnimationMode
 
     public init(overlapping: CGFloat = 1, acceleration: CGFloat = 1200, finishDistanceRate: CGFloat = 0.4, deceleration: CGFloat = 0.35) {
@@ -84,6 +85,7 @@ public class QPageViewControllerInteractiveAnimation : IQPageViewControllerInter
         self.overlapping = overlapping
         self.acceleration = acceleration
         self.deceleration = deceleration
+        self.ease = QAnimationEaseQuadraticOut()
         self.finishMode = .none
     }
 
@@ -122,13 +124,13 @@ public class QPageViewControllerInteractiveAnimation : IQPageViewControllerInter
     public func update(position: CGPoint, velocity: CGPoint) {
         self.deltaPosition = position.x - self.position.x
         if self.deltaPosition > CGFloat.leastNonzeroMagnitude {
-            let delta = self.deltaPosition
-            let progress = delta / self.distance
+            self.deltaPosition = self.ease.lerp(self.deltaPosition, from: 0, to: self.distance)
+            let progress = CGFloat(self.ease.perform(TimeInterval(self.deltaPosition / self.distance)))
             if let vc = self.backwardViewController {
                 vc.view.frame = self.backwardBeginFrame.lerp(self.backwardEndFrame, progress: progress)
                 vc.view.isHidden = false
                 self.currentViewController.view.frame = self.currentBeginFrame.lerp(self.currentBackwardEndFrame, progress: progress)
-                self.finishMode = (delta > self.distance * self.finishDistanceRate) ? .backward : .none
+                self.finishMode = (self.deltaPosition > self.distance * self.finishDistanceRate) ? .backward : .none
             } else {
                 self.currentViewController.view.frame = self.currentBeginFrame.lerp(self.currentBackwardEndFrame, progress: progress * self.deceleration)
                 self.finishMode = .none
@@ -138,13 +140,13 @@ public class QPageViewControllerInteractiveAnimation : IQPageViewControllerInter
                 vc.view.isHidden = true
             }
         } else if self.deltaPosition < CGFloat.leastNonzeroMagnitude {
-            let delta = -self.deltaPosition
-            let progress = delta / self.distance
+            self.deltaPosition = self.ease.lerp(self.deltaPosition, from: 0, to: -self.distance)
+            let progress = -self.deltaPosition / self.distance
             if let vc = self.forwardViewController {
                 vc.view.frame = self.forwardBeginFrame.lerp(self.forwardEndFrame, progress: progress)
                 vc.view.isHidden = false
                 self.currentViewController.view.frame = self.currentBeginFrame.lerp(self.currentForwardEndFrame, progress: progress)
-                self.finishMode = (delta > self.distance * self.finishDistanceRate) ? .forward : .none
+                self.finishMode = (-self.deltaPosition > self.distance * self.finishDistanceRate) ? .forward : .none
             } else {
                 self.currentViewController.view.frame = self.currentBeginFrame.lerp(self.currentForwardEndFrame, progress: progress * self.deceleration)
                 self.finishMode = .none

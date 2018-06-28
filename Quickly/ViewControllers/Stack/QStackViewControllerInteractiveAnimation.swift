@@ -4,11 +4,11 @@
 
 public class QStackViewControllerinteractiveDismissAnimation : IQStackViewControllerInteractiveDismissAnimation {
 
-    internal var contentView: UIView!
-    internal var currentBeginFrame: CGRect {
+    public var contentView: UIView!
+    public var currentBeginFrame: CGRect {
         get { return self.contentView.bounds }
     }
-    internal var currentEndFrame: CGRect {
+    public var currentEndFrame: CGRect {
         get {
             let bounds = self.contentView.bounds
             return CGRect(
@@ -19,8 +19,8 @@ public class QStackViewControllerinteractiveDismissAnimation : IQStackViewContro
             )
         }
     }
-    internal var currentViewController: IQStackViewController!
-    internal var previousBeginFrame: CGRect {
+    public var currentViewController: IQStackViewController!
+    public var previousBeginFrame: CGRect {
         get {
             let bounds = self.contentView.bounds
             return CGRect(
@@ -31,19 +31,20 @@ public class QStackViewControllerinteractiveDismissAnimation : IQStackViewContro
             )
         }
     }
-    internal var previousEndFrame: CGRect {
+    public var previousEndFrame: CGRect {
         get { return self.contentView.bounds }
     }
-    internal var previousViewController: IQStackViewController!
-    internal var position: CGPoint
-    internal var deltaPosition: CGFloat
-    internal var velocity: CGPoint
-    internal var distance: CGFloat {
+    public var previousViewController: IQStackViewController!
+    public var position: CGPoint
+    public var deltaPosition: CGFloat
+    public var velocity: CGPoint
+    public var distance: CGFloat {
         get { return contentView.bounds.width }
     }
-    internal var dismissDistanceRate: CGFloat
-    internal var overlapping: CGFloat
-    internal var acceleration: CGFloat
+    public var dismissDistanceRate: CGFloat
+    public var overlapping: CGFloat
+    public var acceleration: CGFloat
+    public var ease: IQAnimationEase
     public private(set) var canFinish: Bool
 
     public init(overlapping: CGFloat = 1, acceleration: CGFloat = 1200, dismissDistanceRate: CGFloat = 0.4) {
@@ -53,6 +54,7 @@ public class QStackViewControllerinteractiveDismissAnimation : IQStackViewContro
         self.dismissDistanceRate = dismissDistanceRate
         self.overlapping = overlapping
         self.acceleration = acceleration
+        self.ease = QAnimationEaseQuadraticOut()
         self.canFinish = false
     }
 
@@ -77,7 +79,7 @@ public class QStackViewControllerinteractiveDismissAnimation : IQStackViewContro
     }
 
     public func update(position: CGPoint, velocity: CGPoint) {
-        self.deltaPosition = max(0, position.x - self.position.x)
+        self.deltaPosition = self.ease.lerp(max(0, position.x - self.position.x), from: 0, to: self.distance)
         let progress = self.deltaPosition / self.distance
         self.currentViewController.view.frame = self.currentBeginFrame.lerp(self.currentEndFrame, progress: progress)
         self.previousViewController.view.frame = self.previousBeginFrame.lerp(self.previousEndFrame, progress: progress)

@@ -4,24 +4,24 @@
 
 public class QPageViewControllerAnimation : IQPageViewControllerAnimation {
 
-    internal var contentView: UIView!
-    internal var currentViewController: IQPageViewController!
-    internal var currentBeginFrame: CGRect {
+    public var contentView: UIView!
+    public var currentViewController: IQPageViewController!
+    public var currentBeginFrame: CGRect {
         get { return self.contentView.bounds }
     }
-    internal var currentEndFrame: CGRect {
+    public var currentEndFrame: CGRect {
         get { return self.contentView.bounds }
     }
-    internal var targetViewController: IQPageViewController!
-    internal var targetBeginFrame: CGRect {
+    public var targetViewController: IQPageViewController!
+    public var targetBeginFrame: CGRect {
         get { return self.contentView.bounds }
     }
-    internal var targetEndFrame: CGRect {
+    public var targetEndFrame: CGRect {
         get { return self.contentView.bounds }
     }
-    internal var overlapping: CGFloat
-    internal var acceleration: CGFloat
-    internal var duration: TimeInterval {
+    public var overlapping: CGFloat
+    public var acceleration: CGFloat
+    public var duration: TimeInterval {
         get { return TimeInterval(abs(self.targetBeginFrame.midX - self.targetEndFrame.midX) / self.acceleration) }
     }
 
@@ -78,7 +78,7 @@ public class QPageViewControllerAnimation : IQPageViewControllerAnimation {
 
 public class QPageViewControllerForwardAnimation : QPageViewControllerAnimation {
 
-    internal override var currentEndFrame: CGRect {
+    public override var currentEndFrame: CGRect {
         get {
             let frame = super.currentEndFrame
             return CGRect(
@@ -89,7 +89,7 @@ public class QPageViewControllerForwardAnimation : QPageViewControllerAnimation 
             )
         }
     }
-    internal override var targetBeginFrame: CGRect {
+    public override var targetBeginFrame: CGRect {
         get {
             let frame = super.targetBeginFrame
             return CGRect(
@@ -105,7 +105,7 @@ public class QPageViewControllerForwardAnimation : QPageViewControllerAnimation 
 
 public class QPageViewControllerBackwardAnimation : QPageViewControllerAnimation {
 
-    internal override var currentEndFrame: CGRect {
+    public override var currentEndFrame: CGRect {
         get {
             let frame = super.currentEndFrame
             return CGRect(
@@ -116,7 +116,7 @@ public class QPageViewControllerBackwardAnimation : QPageViewControllerAnimation
             )
         }
     }
-    internal override var targetBeginFrame: CGRect {
+    public override var targetBeginFrame: CGRect {
         get {
             let frame = super.targetBeginFrame
             return CGRect(

@@ -4,18 +4,18 @@
 
 public class QModalViewControllerInteractiveDismissAnimation : IQModalViewControllerInteractiveAnimation {
 
-    internal var contentView: UIView!
-    internal var previousBeginFrame: CGRect {
+    public var contentView: UIView!
+    public var previousBeginFrame: CGRect {
         get { return self.contentView.bounds }
     }
-    internal var previousEndFrame: CGRect {
+    public var previousEndFrame: CGRect {
         get { return self.contentView.bounds }
     }
-    internal var previousViewController: IQModalViewController?
-    internal var currentBeginFrame: CGRect {
+    public var previousViewController: IQModalViewController?
+    public var currentBeginFrame: CGRect {
         get { return self.contentView.bounds }
     }
-    internal var currentEndFrame: CGRect {
+    public var currentEndFrame: CGRect {
         get {
             let bounds = self.contentView.bounds
             return CGRect(
@@ -26,15 +26,16 @@ public class QModalViewControllerInteractiveDismissAnimation : IQModalViewContro
             )
         }
     }
-    internal var currentViewController: IQModalViewController!
-    internal var position: CGPoint
-    internal var deltaPosition: CGFloat
-    internal var velocity: CGPoint
-    internal var distance: CGFloat {
+    public var currentViewController: IQModalViewController!
+    public var position: CGPoint
+    public var deltaPosition: CGFloat
+    public var velocity: CGPoint
+    public var distance: CGFloat {
         get { return contentView.bounds.height }
     }
-    internal var dismissDistanceRate: CGFloat
-    internal var acceleration: CGFloat
+    public var dismissDistanceRate: CGFloat
+    public var acceleration: CGFloat
+    public var ease: IQAnimationEase
     public private(set) var canFinish: Bool
 
     public init(acceleration: CGFloat = 1200, dismissDistanceRate: CGFloat = 0.4) {
@@ -43,6 +44,7 @@ public class QModalViewControllerInteractiveDismissAnimation : IQModalViewContro
         self.velocity = CGPoint.zero
         self.dismissDistanceRate = dismissDistanceRate
         self.acceleration = acceleration
+        self.ease = QAnimationEaseQuadraticOut()
         self.canFinish = false
     }
 
@@ -73,7 +75,7 @@ public class QModalViewControllerInteractiveDismissAnimation : IQModalViewContro
     }
 
     public func update(position: CGPoint, velocity: CGPoint) {
-        self.deltaPosition = max(0, position.y - self.position.y)
+        self.deltaPosition = self.ease.lerp(max(0, position.y - self.position.y), from: 0, to: self.distance)
         let progress = self.deltaPosition / self.distance
         self.currentViewController.view.frame = self.currentBeginFrame.lerp(self.currentEndFrame, progress: progress)
         if let vc = self.previousViewController {

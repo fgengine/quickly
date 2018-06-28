@@ -4,32 +4,30 @@
 
 public class QModalViewControllerAnimation : IQModalViewControllerFixedAnimation {
 
-    internal var contentView: UIView!
-    internal var previousBeginFrame: CGRect {
+    public var contentView: UIView!
+    public var previousBeginFrame: CGRect {
         get { return self.contentView.bounds }
     }
-    internal var previousEndFrame: CGRect {
+    public var previousEndFrame: CGRect {
         get { return self.contentView.bounds }
     }
-    internal var previousViewController: IQModalViewController?
-    internal var currentBeginFrame: CGRect {
+    public var previousViewController: IQModalViewController?
+    public var currentBeginFrame: CGRect {
         get { return self.contentView.bounds }
     }
-    internal var currentEndFrame: CGRect {
+    public var currentEndFrame: CGRect {
         get { return self.contentView.bounds }
     }
-    internal var currentViewController: IQModalViewController!
-    internal var overlapping: CGFloat
-    internal var acceleration: CGFloat
-    internal var duration: TimeInterval {
+    public var currentViewController: IQModalViewController!
+    public var acceleration: CGFloat
+    public var duration: TimeInterval {
         get {
             let distance = self.currentBeginFrame.centerPoint.distance(to: self.currentEndFrame.centerPoint)
             return TimeInterval(abs(distance) / self.acceleration)
         }
     }
 
-    public init(overlapping: CGFloat = 0.5, acceleration: CGFloat = 1200) {
-        self.overlapping = overlapping
+    public init(acceleration: CGFloat = 1400) {
         self.acceleration = acceleration
     }
 
@@ -60,7 +58,7 @@ public class QModalViewControllerAnimation : IQModalViewControllerFixedAnimation
 
 public class QModalViewControllerPresentAnimation : QModalViewControllerAnimation {
 
-    internal override var currentBeginFrame: CGRect {
+    public override var currentBeginFrame: CGRect {
         get {
             let bounds = super.currentBeginFrame
             return CGRect(
@@ -78,7 +76,7 @@ public class QModalViewControllerPresentAnimation : QModalViewControllerAnimatio
                 vc.willDismiss(animated: animated)
             }
             self.currentViewController.willPresent(animated: animated)
-            UIView.animate(withDuration: self.duration, animations: {
+            UIView.animate(withDuration: self.duration, delay: 0, options: [ .curveEaseOut ], animations: {
                 if let vc = self.previousViewController {
                     vc.view.frame = self.previousEndFrame
                 }
@@ -111,7 +109,7 @@ public class QModalViewControllerPresentAnimation : QModalViewControllerAnimatio
 
 public class QModalViewControllerDismissAnimation : QModalViewControllerAnimation {
 
-    internal override var currentEndFrame: CGRect {
+    public override var currentEndFrame: CGRect {
         get {
             let bounds = super.currentEndFrame
             return CGRect(
@@ -129,7 +127,7 @@ public class QModalViewControllerDismissAnimation : QModalViewControllerAnimatio
                 vc.willPresent(animated: animated)
             }
             self.currentViewController.willDismiss(animated: animated)
-            UIView.animate(withDuration: self.duration, animations: {
+            UIView.animate(withDuration: self.duration, delay: 0, options: [ .curveEaseOut ], animations: {
                 if let vc = self.previousViewController {
                     vc.view.frame = self.previousEndFrame
                 }

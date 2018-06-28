@@ -13,7 +13,7 @@
 		4006EDB11F61363E0050AD91 /* QBackgroundColorCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4006EDA51F61363E0050AD91 /* QBackgroundColorCollectionCell.swift */; };
 		4006EDB91F61363E0050AD91 /* QSeparatorCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4006EDAD1F61363E0050AD91 /* QSeparatorCollectionCell.swift */; };
 		4006EDBB1F61363E0050AD91 /* QSpaceCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4006EDAF1F61363E0050AD91 /* QSpaceCollectionCell.swift */; };
-		400DDF701F5622EB00D11991 /* CGFloat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400DDF6E1F5622EB00D11991 /* CGFloat.swift */; };
+		400DDF701F5622EB00D11991 /* Float.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400DDF6E1F5622EB00D11991 /* Float.swift */; };
 		400DDF711F5622EB00D11991 /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400DDF6F1F5622EB00D11991 /* CGRect.swift */; };
 		400DDF731F5623D400D11991 /* CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400DDF721F5623D400D11991 /* CGSize.swift */; };
 		400DDF761F56913100D11991 /* QCompositionTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400DDF741F56913100D11991 /* QCompositionTableCell.swift */; };
@@ -146,6 +146,20 @@
 		4080083A206BD46F00B5C9A7 /* IQCollectionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40800838206BD46F00B5C9A7 /* IQCollectionLayout.swift */; };
 		40800845206BE8AD00B5C9A7 /* ListFieldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4080083F206BE80300B5C9A7 /* ListFieldViewController.swift */; };
 		40800846206BE8B100B5C9A7 /* ListFieldViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40800840206BE80300B5C9A7 /* ListFieldViewController.xib */; };
+		4085C05E20E4C7680079AF90 /* IQAnimationEase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4085C05D20E4C7680079AF90 /* IQAnimationEase.swift */; };
+		4085C06120E4C88B0079AF90 /* QAnimationEaseQuadratic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4085C06020E4C88B0079AF90 /* QAnimationEaseQuadratic.swift */; };
+		4085C06320E4C9290079AF90 /* QAnimationEaseCubic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4085C06220E4C9290079AF90 /* QAnimationEaseCubic.swift */; };
+		4085C06520E4C9800079AF90 /* QAnimationEaseQuartic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4085C06420E4C9800079AF90 /* QAnimationEaseQuartic.swift */; };
+		4085C06720E4CCA80079AF90 /* QAnimationEaseQuintic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4085C06620E4CCA80079AF90 /* QAnimationEaseQuintic.swift */; };
+		4085C06920E4CCE80079AF90 /* QAnimationEaseSine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4085C06820E4CCE80079AF90 /* QAnimationEaseSine.swift */; };
+		4085C06B20E4CD990079AF90 /* QAnimationEaseCircular.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4085C06A20E4CD990079AF90 /* QAnimationEaseCircular.swift */; };
+		4085C06D20E4CDCD0079AF90 /* QAnimationEaseExponencial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4085C06C20E4CDCD0079AF90 /* QAnimationEaseExponencial.swift */; };
+		4085C06F20E4CE5C0079AF90 /* QAnimationEaseElastic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4085C06E20E4CE5C0079AF90 /* QAnimationEaseElastic.swift */; };
+		4085C07120E4CEDF0079AF90 /* QAnimationEaseBack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4085C07020E4CEDF0079AF90 /* QAnimationEaseBack.swift */; };
+		4085C07320E4CF300079AF90 /* QAnimationEaseBounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4085C07220E4CF300079AF90 /* QAnimationEaseBounce.swift */; };
+		4085C07520E4D1C20079AF90 /* QAnimationEaseLinear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4085C07420E4D1C10079AF90 /* QAnimationEaseLinear.swift */; };
+		4085C07720E4D5580079AF90 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4085C07620E4D5580079AF90 /* Double.swift */; };
+		4085C07920E4D56A0079AF90 /* CGFloat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4085C07820E4D56A0079AF90 /* CGFloat.swift */; };
 		408B575520BC2D920045C0B2 /* IQContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 408B575420BC2D920045C0B2 /* IQContentViewController.swift */; };
 		4092ADC920E0FFF20020F278 /* QImageTitleComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4062C8D6208A04A20098F809 /* QImageTitleComposition.swift */; };
 		4092ADCA20E0FFF20020F278 /* QImageTitleIconComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406C772F20DA346500C4E086 /* QImageTitleIconComposition.swift */; };
@@ -317,7 +331,7 @@
 		4006EDA51F61363E0050AD91 /* QBackgroundColorCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QBackgroundColorCollectionCell.swift; sourceTree = "<group>"; };
 		4006EDAD1F61363E0050AD91 /* QSeparatorCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSeparatorCollectionCell.swift; sourceTree = "<group>"; };
 		4006EDAF1F61363E0050AD91 /* QSpaceCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSpaceCollectionCell.swift; sourceTree = "<group>"; };
-		400DDF6E1F5622EB00D11991 /* CGFloat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGFloat.swift; sourceTree = "<group>"; };
+		400DDF6E1F5622EB00D11991 /* Float.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Float.swift; sourceTree = "<group>"; };
 		400DDF6F1F5622EB00D11991 /* CGRect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
 		400DDF721F5623D400D11991 /* CGSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGSize.swift; sourceTree = "<group>"; };
 		400DDF741F56913100D11991 /* QCompositionTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCompositionTableCell.swift; sourceTree = "<group>"; };
@@ -467,6 +481,20 @@
 		40800838206BD46F00B5C9A7 /* IQCollectionLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionLayout.swift; sourceTree = "<group>"; };
 		4080083F206BE80300B5C9A7 /* ListFieldViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListFieldViewController.swift; sourceTree = "<group>"; };
 		40800840206BE80300B5C9A7 /* ListFieldViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListFieldViewController.xib; sourceTree = "<group>"; };
+		4085C05D20E4C7680079AF90 /* IQAnimationEase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQAnimationEase.swift; sourceTree = "<group>"; };
+		4085C06020E4C88B0079AF90 /* QAnimationEaseQuadratic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QAnimationEaseQuadratic.swift; sourceTree = "<group>"; };
+		4085C06220E4C9290079AF90 /* QAnimationEaseCubic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QAnimationEaseCubic.swift; sourceTree = "<group>"; };
+		4085C06420E4C9800079AF90 /* QAnimationEaseQuartic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QAnimationEaseQuartic.swift; sourceTree = "<group>"; };
+		4085C06620E4CCA80079AF90 /* QAnimationEaseQuintic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QAnimationEaseQuintic.swift; sourceTree = "<group>"; };
+		4085C06820E4CCE80079AF90 /* QAnimationEaseSine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QAnimationEaseSine.swift; sourceTree = "<group>"; };
+		4085C06A20E4CD990079AF90 /* QAnimationEaseCircular.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QAnimationEaseCircular.swift; sourceTree = "<group>"; };
+		4085C06C20E4CDCD0079AF90 /* QAnimationEaseExponencial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QAnimationEaseExponencial.swift; sourceTree = "<group>"; };
+		4085C06E20E4CE5C0079AF90 /* QAnimationEaseElastic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QAnimationEaseElastic.swift; sourceTree = "<group>"; };
+		4085C07020E4CEDF0079AF90 /* QAnimationEaseBack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QAnimationEaseBack.swift; sourceTree = "<group>"; };
+		4085C07220E4CF300079AF90 /* QAnimationEaseBounce.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QAnimationEaseBounce.swift; sourceTree = "<group>"; };
+		4085C07420E4D1C10079AF90 /* QAnimationEaseLinear.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QAnimationEaseLinear.swift; sourceTree = "<group>"; };
+		4085C07620E4D5580079AF90 /* Double.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
+		4085C07820E4D56A0079AF90 /* CGFloat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGFloat.swift; sourceTree = "<group>"; };
 		408B575420BC2D920045C0B2 /* IQContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQContentViewController.swift; sourceTree = "<group>"; };
 		409403541F4DEB6C008A8B90 /* QuicklyPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuicklyPrivate.h; sourceTree = "<group>"; };
 		409403571F4E129F008A8B90 /* QApiProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QApiProvider.swift; sourceTree = "<group>"; };
@@ -1184,6 +1212,24 @@
 			path = ListField;
 			sourceTree = "<group>";
 		};
+		4085C05F20E4C7980079AF90 /* Ease */ = {
+			isa = PBXGroup;
+			children = (
+				4085C07420E4D1C10079AF90 /* QAnimationEaseLinear.swift */,
+				4085C06020E4C88B0079AF90 /* QAnimationEaseQuadratic.swift */,
+				4085C06220E4C9290079AF90 /* QAnimationEaseCubic.swift */,
+				4085C06420E4C9800079AF90 /* QAnimationEaseQuartic.swift */,
+				4085C06620E4CCA80079AF90 /* QAnimationEaseQuintic.swift */,
+				4085C06820E4CCE80079AF90 /* QAnimationEaseSine.swift */,
+				4085C06A20E4CD990079AF90 /* QAnimationEaseCircular.swift */,
+				4085C06C20E4CDCD0079AF90 /* QAnimationEaseExponencial.swift */,
+				4085C06E20E4CE5C0079AF90 /* QAnimationEaseElastic.swift */,
+				4085C07020E4CEDF0079AF90 /* QAnimationEaseBack.swift */,
+				4085C07220E4CF300079AF90 /* QAnimationEaseBounce.swift */,
+			);
+			path = Ease;
+			sourceTree = "<group>";
+		};
 		409403561F4E125E008A8B90 /* Api */ = {
 			isa = PBXGroup;
 			children = (
@@ -1306,6 +1352,8 @@
 				404BC19E2080D06A0071FC2F /* Object.swift */,
 				40E2D6051F6785F300B954E4 /* Data.swift */,
 				40CF45801F4DE6AB004D00D8 /* String.swift */,
+				400DDF6E1F5622EB00D11991 /* Float.swift */,
+				4085C07620E4D5580079AF90 /* Double.swift */,
 				40A75B67208FAE13000E5FBE /* NSNumber.swift */,
 				40A75B69208FAF81000E5FBE /* NSDecimalNumber.swift */,
 				40CF457E1F4DE6AB004D00D8 /* NSAttributedString.swift */,
@@ -1313,7 +1361,7 @@
 				40407178205688B300F6ECC2 /* UIControl.swift */,
 				40BFDAE51F87B8EE00ECED22 /* UIImage.swift */,
 				40E7382B1F556AF600B192C6 /* UIDevice.swift */,
-				400DDF6E1F5622EB00D11991 /* CGFloat.swift */,
+				4085C07820E4D56A0079AF90 /* CGFloat.swift */,
 				4040718020569F4500F6ECC2 /* CGPoint.swift */,
 				400DDF721F5623D400D11991 /* CGSize.swift */,
 				400DDF6F1F5622EB00D11991 /* CGRect.swift */,
@@ -1454,7 +1502,9 @@
 		40E52943204E7F0E002EDB0A /* Animation */ = {
 			isa = PBXGroup;
 			children = (
+				4085C05F20E4C7980079AF90 /* Ease */,
 				40E52944204E7F1F002EDB0A /* IQAnimation.swift */,
+				4085C05D20E4C7680079AF90 /* IQAnimationEase.swift */,
 			);
 			path = Animation;
 			sourceTree = "<group>";
@@ -1731,6 +1781,7 @@
 				40CF45C01F4DE6AB004D00D8 /* QCollectionItem.swift in Sources */,
 				403DF8F420CA72A8003C5D6D /* QModalViewController.swift in Sources */,
 				4062C8CD2088DD4C0098F809 /* QStackWireframe.swift in Sources */,
+				4085C05E20E4C7680079AF90 /* IQAnimationEase.swift in Sources */,
 				409403621F4E26D1008A8B90 /* IQApiQuery.swift in Sources */,
 				401E8F85206D3CC1008A5BE4 /* QPickerCell.swift in Sources */,
 				40FBE6A41F543EFD00F5194B /* QStyledText.swift in Sources */,
@@ -1739,7 +1790,9 @@
 				4092ADC920E0FFF20020F278 /* QImageTitleComposition.swift in Sources */,
 				402BCEBC20B8571100748D60 /* QPageViewControllerAnimation.swift in Sources */,
 				400DDF711F5622EB00D11991 /* CGRect.swift in Sources */,
+				4085C07920E4D56A0079AF90 /* CGFloat.swift in Sources */,
 				4094035B1F4E12BF008A8B90 /* QApiRequest.swift in Sources */,
+				4085C06D20E4CDCD0079AF90 /* QAnimationEaseExponencial.swift in Sources */,
 				4092ADCB20E0FFF20020F278 /* QImageTitleValueComposition.swift in Sources */,
 				402720D02074C88A00094287 /* IQStyleSheet.swift in Sources */,
 				4092ADCF20E0FFF20020F278 /* QImageTitleDetailShapeComposition.swift in Sources */,
@@ -1763,6 +1816,7 @@
 				4019002A204D66AB00608B4F /* QMainViewController.swift in Sources */,
 				40134F041F63129E009F81A6 /* QCardNumberStringFormatter.swift in Sources */,
 				4062C8C02088AFF80098F809 /* QPushViewControllerAnimation.swift in Sources */,
+				4085C06F20E4CE5C0079AF90 /* QAnimationEaseElastic.swift in Sources */,
 				40E2D6041F67850600B954E4 /* QImageResponse.swift in Sources */,
 				40E738561F5606C500B192C6 /* QSeparatorTableCell.swift in Sources */,
 				40CF45BD1F4DE6AB004D00D8 /* QCollectionController.swift in Sources */,
@@ -1783,21 +1837,25 @@
 				40979EC21F62C88A0003ED1C /* IQStringValidator.swift in Sources */,
 				40CF45CF1F4DE6AB004D00D8 /* QAppWireframe.swift in Sources */,
 				404C90FB20D1641C001DE192 /* QStackViewControllerInteractiveAnimation.swift in Sources */,
-				400DDF701F5622EB00D11991 /* CGFloat.swift in Sources */,
+				400DDF701F5622EB00D11991 /* Float.swift in Sources */,
 				40CF45D71F4DE6AB004D00D8 /* IQTableCell.swift in Sources */,
 				40E2D6011F67850600B954E4 /* QImageCache.swift in Sources */,
 				40CF45C11F4DE6AB004D00D8 /* QCollectionSection.swift in Sources */,
 				4092ADD320E0FFF20020F278 /* QTitleValueComposition.swift in Sources */,
 				4039F8DB2072629D00A88E45 /* QListFieldPickerRow.swift in Sources */,
+				4085C07120E4CEDF0079AF90 /* QAnimationEaseBack.swift in Sources */,
 				4062C8CC2088DBC40098F809 /* QTableViewController.swift in Sources */,
 				40CF45E41F4DE6AB004D00D8 /* QTableView.swift in Sources */,
 				4062C8C22088B9660098F809 /* QDialogViewControllerAnimation.swift in Sources */,
+				4085C06720E4CCA80079AF90 /* QAnimationEaseQuintic.swift in Sources */,
 				4039F8E32072636A00A88E45 /* QDateFieldFormatter.swift in Sources */,
 				403B3D9720D39837008F80D4 /* IQWireframe.swift in Sources */,
 				40FBE6A31F543EFD00F5194B /* QFormatText.swift in Sources */,
 				4062A51820737D2B00B190BE /* QShapeModel.swift in Sources */,
 				40CF45ED1F4DE6AB004D00D8 /* QPinCodeView.swift in Sources */,
 				40CF45B51F4DE6AB004D00D8 /* IQCollectionCell.swift in Sources */,
+				4085C07520E4D1C20079AF90 /* QAnimationEaseLinear.swift in Sources */,
+				4085C07320E4CF300079AF90 /* QAnimationEaseBounce.swift in Sources */,
 				4092ADCD20E0FFF20020F278 /* QImageTitleValueIconComposition.swift in Sources */,
 				4062C8C12088B41A0098F809 /* QPushViewController.swift in Sources */,
 				40BFDAE61F87B8EE00ECED22 /* UIImage.swift in Sources */,
@@ -1835,6 +1893,7 @@
 				40134EFB1F62DAE3009F81A6 /* IQInputValidator.swift in Sources */,
 				40E738541F5606C500B192C6 /* QBackgroundColorTableCell.swift in Sources */,
 				402BCEBA20B855EA00748D60 /* QPageContainerViewController.swift in Sources */,
+				4085C06520E4C9800079AF90 /* QAnimationEaseQuartic.swift in Sources */,
 				406258E420B3F73E000E3AB2 /* QCompositionViewController.swift in Sources */,
 				4039BCB51F516F1B00E38090 /* QButton.swift in Sources */,
 				4062C8BC208882540098F809 /* QViewController.swift in Sources */,
@@ -1857,13 +1916,16 @@
 				40FC3F0820C7F46A0013B71A /* QModalContainerViewController.swift in Sources */,
 				402315361F7B9FD3001B0AF7 /* QAmountStringFormatter.swift in Sources */,
 				406101681F8D79A700A5463E /* QFontInfo.swift in Sources */,
+				4085C07720E4D5580079AF90 /* Double.swift in Sources */,
 				401B1BC120B32E8600DC247F /* QApplication.swift in Sources */,
 				402F1FB41F4EE237007625CA /* IQApiProvider.swift in Sources */,
 				4094035C1F4E12BF008A8B90 /* QApiResponse.swift in Sources */,
 				40CF45B71F4DE6AB004D00D8 /* IQCollectionData.swift in Sources */,
 				40B8A1961F4F6BED00204E5A /* QShapeView+iOS.swift in Sources */,
+				4085C06920E4CCE80079AF90 /* QAnimationEaseSine.swift in Sources */,
 				40FBE6A21F543EFD00F5194B /* IQText.swift in Sources */,
 				40CF45D81F4DE6AB004D00D8 /* IQTableController.swift in Sources */,
+				4085C06B20E4CD990079AF90 /* QAnimationEaseCircular.swift in Sources */,
 				4092ADD920E0FFF20020F278 /* QTextFieldComposition.swift in Sources */,
 				40E7382C1F556AF600B192C6 /* UIDevice.swift in Sources */,
 				4006EDB11F61363E0050AD91 /* QBackgroundColorCollectionCell.swift in Sources */,
@@ -1909,6 +1971,7 @@
 				406FDF6B20908071004178CC /* QApiPagination.swift in Sources */,
 				40224617207662C50020B357 /* QDisplayView.swift in Sources */,
 				40134F021F63129E009F81A6 /* IQStringFormatter.swift in Sources */,
+				4085C06320E4C9290079AF90 /* QAnimationEaseCubic.swift in Sources */,
 				401E8F7C206D34C4008A5BE4 /* IQPickerCell.swift in Sources */,
 				4092ADD820E0FFF20020F278 /* QButtonComposition.swift in Sources */,
 				405ABE0D20C1745A005E1192 /* QPagebarTitleCell.swift in Sources */,
@@ -1924,6 +1987,7 @@
 				40CF45B91F4DE6AB004D00D8 /* IQCollectionItem.swift in Sources */,
 				40C8F8251F55109100C75D34 /* IQSpinnerView.swift in Sources */,
 				4092ADD220E0FFF20020F278 /* QTitleComposition.swift in Sources */,
+				4085C06120E4C88B0079AF90 /* QAnimationEaseQuadratic.swift in Sources */,
 				40CF45D91F4DE6AB004D00D8 /* IQTableData.swift in Sources */,
 				4062C8D3208A02030098F809 /* QComposition.swift in Sources */,
 				409403581F4E129F008A8B90 /* QApiProvider.swift in Sources */,

@@ -4,13 +4,13 @@
 
 public class QPushViewControllerInteractiveDismissAnimation : IQPushViewControllerInteractiveAnimation {
 
-    internal var viewController: IQPushViewController!
-    internal var position: CGPoint
-    internal var deltaPosition: CGFloat
-    internal var velocity: CGPoint
-    internal var dismissDistance: CGFloat
-    internal var acceleration: CGFloat
-    internal var deceleration: CGFloat
+    public var viewController: IQPushViewController!
+    public var position: CGPoint
+    public var deltaPosition: CGFloat
+    public var velocity: CGPoint
+    public var dismissDistance: CGFloat
+    public var acceleration: CGFloat
+    public var deceleration: CGFloat
     public private(set) var canFinish: Bool
 
     public init(dismissDistance: CGFloat = 40, acceleration: CGFloat = 600, deceleration: CGFloat = 0.25) {
