@@ -18,8 +18,8 @@ open class QImageViewStyleSheet : QDisplayViewStyleSheet< QImageView > {
         self.source = source
         self.verticalAlignment = verticalAlignment
         self.horizontalAlignment = horizontalAlignment
-        
-        super.init()
+
+        super.init(backgroundColor: UIColor.clear)
     }
 
     public init(_ styleSheet: QImageViewStyleSheet) {

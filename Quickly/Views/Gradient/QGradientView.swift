@@ -8,12 +8,16 @@ open class QGradientViewStyleSheet : QDisplayViewStyleSheet< QGradientView > {
     public var startPoint: CGPoint
     public var endPoint: CGPoint
 
-    public init(gradientPoints: [QGradientPoint]) {
-        self.points = gradientPoints
-        self.startPoint = CGPoint(x: 0, y: 0)
-        self.endPoint = CGPoint(x: 0, y: 1)
+    public init(
+        points: [QGradientPoint],
+        startPoint: CGPoint = CGPoint(x: 0, y: 0),
+        endPoint: CGPoint = CGPoint(x: 0, y: 1)
+    ) {
+        self.points = points
+        self.startPoint = startPoint
+        self.endPoint = endPoint
 
-        super.init()
+        super.init(backgroundColor: UIColor.clear)
     }
 
     public init(_ styleSheet: QGradientViewStyleSheet) {

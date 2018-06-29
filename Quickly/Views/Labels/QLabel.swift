@@ -7,30 +7,31 @@ open class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
     public var text: IQText
     public var verticalAlignment: QViewVerticalAlignment
     public var padding: CGFloat
-    public var numberOfLines: Int
     public var lineBreakMode: NSLineBreakMode
+    public var numberOfLines: Int
 
     public init(
         text: IQText,
         verticalAlignment: QViewVerticalAlignment = .center,
+        padding: CGFloat = 0,
         lineBreakMode: NSLineBreakMode = .byWordWrapping,
         numberOfLines: Int = 0
     ) {
         self.text = text
         self.verticalAlignment = verticalAlignment
-        self.padding = 0
-        self.numberOfLines = numberOfLines
+        self.padding = padding
         self.lineBreakMode = lineBreakMode
+        self.numberOfLines = numberOfLines
         
-        super.init()
+        super.init(backgroundColor: UIColor.clear)
     }
 
     public init(_ styleSheet: QLabelStyleSheet) {
         self.text = styleSheet.text
         self.verticalAlignment = styleSheet.verticalAlignment
         self.padding = styleSheet.padding
-        self.numberOfLines = styleSheet.numberOfLines
         self.lineBreakMode = styleSheet.lineBreakMode
+        self.numberOfLines = styleSheet.numberOfLines
 
         super.init(styleSheet)
     }
@@ -41,8 +42,8 @@ open class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
         target.text = self.text
         target.verticalAlignment = self.verticalAlignment
         target.padding = self.padding
-        target.numberOfLines = self.numberOfLines
         target.lineBreakMode = self.lineBreakMode
+        target.numberOfLines = self.numberOfLines
     }
 
 }

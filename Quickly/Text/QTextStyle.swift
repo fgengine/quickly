@@ -389,7 +389,7 @@ public final class QTextStyle : IQTextStyle {
     public init() {
     }
 
-    public init(parent: QTextStyle) {
+    public init(parent: IQTextStyle) {
         parent.addChild(self)
     }
 

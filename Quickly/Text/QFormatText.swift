@@ -4,7 +4,7 @@
 
 public final class QFormatText : QText {
 
-    public init(_ text: String, style: QTextStyle, parts: [String: IQText]) {
+    public init(_ text: String, style: IQTextStyle, parts: [String: IQText]) {
         let attributed = style.mutableAttributed(text)
         parts.forEach { (key: String, value: IQText) in
             if let range = attributed.string.range(of: key) {

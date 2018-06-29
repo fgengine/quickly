@@ -66,21 +66,22 @@ public final class QButtonStyle : IQButtonStyle {
     }
     private var _text: IQText?
 
-    public init() {
-    }
-
-    public init(parent: IQButtonStyle) {
+    public init(
+        parent: IQButtonStyle? = nil,
+        color: UIColor? = nil,
+        border: QViewBorder? = nil,
+        cornerRadius: QViewCornerRadius? = nil,
+        shadow: QViewShadow? = nil,
+        image: IQImageSource? = nil,
+        text: IQText? = nil
+    ) {
         self.parent = parent
-    }
-
-    public init(parent: IQButtonStyle, text: IQText) {
-        self.parent = parent
-        self.text = text
-    }
-
-    public init(parent: IQButtonStyle, image: IQImageSource) {
-        self.parent = parent
+        self.color = color
+        self.border = border
+        self.cornerRadius = cornerRadius
+        self.shadow = shadow
         self.image = image
+        self.text = text
     }
 
 }

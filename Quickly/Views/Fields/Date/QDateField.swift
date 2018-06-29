@@ -33,7 +33,7 @@ open class QDateFieldStyleSheet : QDisplayViewStyleSheet< QDateField > {
         self.mode = .date
         self.isEnabled = true
 
-        super.init()
+        super.init(backgroundColor: UIColor.clear)
     }
 
     public init(_ styleSheet: QDateFieldStyleSheet) {

@@ -43,22 +43,22 @@ public class QButton : QControl {
     public var textInsets: UIEdgeInsets = UIEdgeInsets.zero {
         didSet { self.invalidate() }
     }
-    public var normalStyle: QButtonStyle? {
+    public var normalStyle: IQButtonStyle? {
         didSet { self.invalidate() }
     }
-    public var highlightedStyle: QButtonStyle? {
+    public var highlightedStyle: IQButtonStyle? {
         didSet { self.invalidate() }
     }
-    public var disabledStyle: QButtonStyle? {
+    public var disabledStyle: IQButtonStyle? {
         didSet { self.invalidate() }
     }
-    public var selectedStyle: QButtonStyle? {
+    public var selectedStyle: IQButtonStyle? {
         didSet { self.invalidate() }
     }
-    public var selectedHighlightedStyle: QButtonStyle? {
+    public var selectedHighlightedStyle: IQButtonStyle? {
         didSet { self.invalidate() }
     }
-    public var selectedDisabledStyle: QButtonStyle? {
+    public var selectedDisabledStyle: IQButtonStyle? {
         didSet { self.invalidate() }
     }
     public private(set) var backgroundView: QDisplayView!
@@ -392,7 +392,7 @@ public class QButton : QControl {
         self._applyStyle()
     }
 
-    private func _currentStyle() -> QButtonStyle? {
+    private func _currentStyle() -> IQButtonStyle? {
         if self.isEnabled == false {
             if self.isSelected == true && self.selectedDisabledStyle != nil {
                 return self.selectedDisabledStyle
@@ -417,7 +417,7 @@ public class QButton : QControl {
         }
     }
 
-    private func _applyStyle(_ style: QButtonStyle) {
+    private func _applyStyle(_ style: IQButtonStyle) {
         if let color = style.color {
             self.backgroundView.backgroundColor = color
         }
@@ -449,7 +449,7 @@ public class QButton : QControl {
         }
     }
 
-    private func _applyImageStyle(_ style: QButtonStyle) {
+    private func _applyImageStyle(_ style: IQButtonStyle) {
         if let image = style.image {
             self.imageView.source = image
             self.imageView.alpha = 1
@@ -462,7 +462,7 @@ public class QButton : QControl {
         self.imageView.alpha = 0
     }
 
-    private func _applyTextStyle(_ style: QButtonStyle) {
+    private func _applyTextStyle(_ style: IQButtonStyle) {
         if let text = style.text {
             self.textLabel.text = text
             self.textLabel.alpha = 1

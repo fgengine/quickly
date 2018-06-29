@@ -13,8 +13,8 @@ public class QListFieldStyleSheet : QDisplayViewStyleSheet< QListField > {
         self.rows = rows
         self.rowHeight = 40
         self.isEnabled = true
-
-        super.init()
+        
+        super.init(backgroundColor: UIColor.clear)
     }
 
     public init(_ styleSheet: QListFieldStyleSheet) {

@@ -8,11 +8,11 @@ open class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
     public var validator: IQInputValidator?
     public var formatter: IQStringFormatter?
     public var textInsets: UIEdgeInsets
-    public var textStyle: QTextStyle?
+    public var textStyle: IQTextStyle?
     public var editingInsets: UIEdgeInsets
     public var placeholderInsets: UIEdgeInsets
     public var placeholder: IQText?
-    public var typingStyle: QTextStyle?
+    public var typingStyle: IQTextStyle?
     public var autocapitalizationType: UITextAutocapitalizationType
     public var autocorrectionType: UITextAutocorrectionType
     public var spellCheckingType: UITextSpellCheckingType
@@ -40,7 +40,7 @@ open class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
         self.textContentType = nil
         self.isEnabled = true
 
-        super.init()
+        super.init(backgroundColor: UIColor.clear)
     }
 
     public init(_ styleSheet: QTextFieldStyleSheet) {
@@ -142,7 +142,7 @@ public class QTextField : QDisplayView, IQField {
         set(value) { self.field.textInsets = value }
         get { return self.field.textInsets }
     }
-    public var textStyle: QTextStyle? {
+    public var textStyle: IQTextStyle? {
         didSet {
             var attributes: [NSAttributedStringKey: Any] = [:]
             if let textStyle = self.textStyle {
@@ -218,7 +218,7 @@ public class QTextField : QDisplayView, IQField {
         set(value) { self.field.placeholderInsets = value }
         get { return self.field.placeholderInsets }
     }
-    public var typingStyle: QTextStyle? {
+    public var typingStyle: IQTextStyle? {
         didSet {
             if let typingStyle = self.typingStyle {
                 self.field.allowsEditingTextAttributes = true
