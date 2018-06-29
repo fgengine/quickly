@@ -8,7 +8,7 @@ open class QPagebarItem : QCollectionItem {
 open class QPagebarCell< Type: QPagebarItem > : QCollectionCell< Type > {
 }
 
-public class QPagebar : QView {
+open class QPagebar : QView {
 
     public typealias ItemType = IQCollectionController.Cell
 
@@ -50,7 +50,7 @@ public class QPagebar : QView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func setup() {
+    open override func setup() {
         super.setup()
 
         self.backgroundColor = UIColor.clear

@@ -18,7 +18,7 @@ public enum QDateFieldMode {
     }
 }
 
-public class QDateFieldStyleSheet : QDisplayViewStyleSheet< QDateField > {
+open class QDateFieldStyleSheet : QDisplayViewStyleSheet< QDateField > {
 
     public var formatter: IQDateFieldFormatter?
     public var mode: QDateFieldMode
@@ -34,6 +34,19 @@ public class QDateFieldStyleSheet : QDisplayViewStyleSheet< QDateField > {
         self.isEnabled = true
 
         super.init()
+    }
+
+    public init(_ styleSheet: QDateFieldStyleSheet) {
+        self.formatter = styleSheet.formatter
+        self.mode = styleSheet.mode
+        self.calendar = styleSheet.calendar
+        self.locale = styleSheet.locale
+        self.minimumDate = styleSheet.minimumDate
+        self.maximumDate = styleSheet.maximumDate
+        self.placeholder = styleSheet.placeholder
+        self.isEnabled = styleSheet.isEnabled
+
+        super.init(styleSheet)
     }
 
     public override func apply(target: QDateField) {

@@ -5,7 +5,7 @@
 public class QApiQuery<
     RequestType: IQApiRequest,
     ResponseType: IQApiResponse
->: IQApiQuery {
+> : IQApiQuery {
 
     public typealias ProgressClosure = (_ progress: Progress) -> Void
     public typealias CompleteClosure = (_ request: RequestType, _ response: ResponseType) -> Void

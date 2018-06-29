@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
+open class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
 
     public var requireValidator: Bool
     public var validator: IQInputValidator?

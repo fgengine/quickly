@@ -2,9 +2,9 @@
 //  Quickly
 //
 
-public class QButtonStyle {
+public final class QButtonStyle : IQButtonStyle {
 
-    public weak var parent: QButtonStyle?
+    public weak var parent: IQButtonStyle?
 
     public var color: UIColor? {
         set(value) { self._color = value }
@@ -46,7 +46,7 @@ public class QButtonStyle {
     }
     private var _shadow: QViewShadow?
 
-    public var image: QImageSource? {
+    public var image: IQImageSource? {
         set(value) { self._image = value }
         get {
             if let value = self._image { return value }
@@ -54,7 +54,7 @@ public class QButtonStyle {
             return nil
         }
     }
-    private var _image: QImageSource?
+    private var _image: IQImageSource?
 
     public var text: IQText? {
         set(value) { self._text = value }
@@ -69,13 +69,18 @@ public class QButtonStyle {
     public init() {
     }
 
-    public init(parent: QButtonStyle) {
+    public init(parent: IQButtonStyle) {
         self.parent = parent
     }
 
-    public init(parent: QButtonStyle, text: IQText) {
+    public init(parent: IQButtonStyle, text: IQText) {
         self.parent = parent
         self.text = text
+    }
+
+    public init(parent: IQButtonStyle, image: IQImageSource) {
+        self.parent = parent
+        self.image = image
     }
 
 }

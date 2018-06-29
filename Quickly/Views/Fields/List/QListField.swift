@@ -17,6 +17,14 @@ public class QListFieldStyleSheet : QDisplayViewStyleSheet< QListField > {
         super.init()
     }
 
+    public init(_ styleSheet: QListFieldStyleSheet) {
+        self.rows = styleSheet.rows
+        self.rowHeight = styleSheet.rowHeight
+        self.isEnabled = styleSheet.isEnabled
+
+        super.init(styleSheet)
+    }
+
     public override func apply(target: QListField) {
         super.apply(target: target)
 

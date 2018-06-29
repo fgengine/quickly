@@ -2,9 +2,9 @@
 //  Quickly
 //
 
-public final class QTextStyle {
+public final class QTextStyle : IQTextStyle {
 
-    public var parent: QTextStyle? {
+    public weak var parent: IQTextStyle? {
         set(value) {
             if self._parent !== value {
                 if let parent = self._parent {
@@ -20,11 +20,11 @@ public final class QTextStyle {
             return self._parent
         }
     }
-    private var _parent: QTextStyle? {
+    private weak var _parent: IQTextStyle? {
         didSet { self.setNeedRebuildAttributes() }
     }
 
-    public private(set) var children: [QTextStyle] = []
+    public private(set) var children: [IQTextStyle] = []
 
     public var font: UIFont? {
         set(value) { self._font = value }
@@ -406,42 +406,42 @@ public final class QTextStyle {
         return NSMutableAttributedString(string: string, attributes: self.attributes)
     }
 
-    private func addChild(_ child: QTextStyle) {
+    public func addChild(_ child: IQTextStyle) {
         let index = self.children.index { $0 === child }
         if index == nil {
             self.children.append(child)
-            child._parent = self
+            child.parent = self
         }
     }
 
-    private func removeChild(_ child: QTextStyle) {
+    public func removeChild(_ child: IQTextStyle) {
         let index = self.children.index(where: { (textStyle) -> Bool in
             return textStyle === child
         })
         if let safeIndex = index {
             self.children.remove(at: safeIndex)
-            child._parent = nil
+            child.parent = nil
         }
     }
 
-    private func removeFromParent() {
+    public func removeFromParent() {
         if let parent = self._parent {
             parent.removeChild(self)
         }
     }
 
-    private func removeAllChildren() {
+    public func removeAllChildren() {
         let copyChildren = self.children
         self.children.removeAll()
         for child in copyChildren {
-            child._parent = nil
+            child.parent = nil
         }
     }
 
-    private func setNeedRebuildAttributes() {
+    public func setNeedRebuildAttributes() {
         self._rebuildAttributes = true
         for child in self.children {
-            child._rebuildAttributes = true
+            child.setNeedRebuildAttributes()
         }
     }
 

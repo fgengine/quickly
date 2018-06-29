@@ -17,7 +17,7 @@ open class QGroupbarCell< Type: IQGroupbarItem > : QCollectionCell< Type > {
 
 }
 
-public class QGroupbar : QView {
+open class QGroupbar : QView {
 
     public typealias ItemType = IQCollectionController.Cell
 
@@ -62,7 +62,7 @@ public class QGroupbar : QView {
     private lazy var collectionController: CollectionController! = self.prepareCollectionController()
     private lazy var collectionSection: QCollectionSection! = self.prepareCollectionSection()
 
-    public override func setup() {
+    open override func setup() {
         super.setup()
 
         self.backgroundColor = UIColor.clear

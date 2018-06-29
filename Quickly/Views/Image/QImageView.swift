@@ -4,14 +4,14 @@
 
 open class QImageViewStyleSheet : QDisplayViewStyleSheet< QImageView > {
 
-    public var source: QImageSource
+    public var source: IQImageSource
     public var verticalAlignment: QViewVerticalAlignment
     public var horizontalAlignment: QViewHorizontalAlignment
     public var filter: IQImageLoaderFilter?
     public var loader: QImageLoader?
 
     public init(
-        source: QImageSource,
+        source: IQImageSource,
         verticalAlignment: QViewVerticalAlignment = .center,
         horizontalAlignment: QViewHorizontalAlignment = .center
     ) {
@@ -42,7 +42,7 @@ open class QImageViewStyleSheet : QDisplayViewStyleSheet< QImageView > {
 
 }
 
-public class QImageView : QDisplayView, IQImageLoaderTarget {
+open class QImageView : QDisplayView, IQImageLoaderTarget {
 
     public private(set) var isDownloading: Bool = false
     public var verticalAlignment: QViewVerticalAlignment = .center {
@@ -51,7 +51,7 @@ public class QImageView : QDisplayView, IQImageLoaderTarget {
     public var horizontalAlignment: QViewHorizontalAlignment = .center {
         didSet { self.setNeedsDisplay() }
     }
-    public var source: QImageSource? {
+    public var source: IQImageSource? {
         willSet { self.stopDownloading() }
         didSet {
             if let source = self.source {
@@ -60,12 +60,10 @@ public class QImageView : QDisplayView, IQImageLoaderTarget {
                 } else {
                     self.image = nil
                 }
-                self.backgroundColor = source.backgroundColor
                 self.tintColor = source.tintColor
                 self.startDownloading()
             } else {
                 self.image = nil
-                self.backgroundColor = UIColor.clear
                 self.tintColor = nil
             }
         }
@@ -95,9 +93,9 @@ public class QImageView : QDisplayView, IQImageLoaderTarget {
     open override func setup() {
         super.setup()
 
-        self.loader = QImageLoader.shared
-
         self.backgroundColor = UIColor.clear
+
+        self.loader = QImageLoader.shared
     }
 
     open override func draw(_ rect: CGRect) {

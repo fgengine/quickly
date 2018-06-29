@@ -13,18 +13,19 @@ open class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
     public init(
         text: IQText,
         verticalAlignment: QViewVerticalAlignment = .center,
-        lineBreakMode: NSLineBreakMode = .byWordWrapping
+        lineBreakMode: NSLineBreakMode = .byWordWrapping,
+        numberOfLines: Int = 0
     ) {
         self.text = text
         self.verticalAlignment = verticalAlignment
         self.padding = 0
-        self.numberOfLines = 0
+        self.numberOfLines = numberOfLines
         self.lineBreakMode = lineBreakMode
         
         super.init()
     }
 
-    public init(styleSheet: QLabelStyleSheet) {
+    public init(_ styleSheet: QLabelStyleSheet) {
         self.text = styleSheet.text
         self.verticalAlignment = styleSheet.verticalAlignment
         self.padding = styleSheet.padding
