@@ -13,11 +13,15 @@ open class QImageViewStyleSheet : QDisplayViewStyleSheet< QImageView > {
     public init(
         source: IQImageSource,
         verticalAlignment: QViewVerticalAlignment = .center,
-        horizontalAlignment: QViewHorizontalAlignment = .center
+        horizontalAlignment: QViewHorizontalAlignment = .center,
+        filter: IQImageLoaderFilter? = nil,
+        loader: QImageLoader? = nil
     ) {
         self.source = source
         self.verticalAlignment = verticalAlignment
         self.horizontalAlignment = horizontalAlignment
+        self.filter = filter
+        self.loader = loader
 
         super.init(backgroundColor: UIColor.clear)
     }

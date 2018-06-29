@@ -9,10 +9,16 @@ public class QListFieldStyleSheet : QDisplayViewStyleSheet< QListField > {
     public var placeholder: IQText?
     public var isEnabled: Bool
 
-    public init(rows: [QListFieldPickerRow]) {
+    public init(
+        rows: [QListFieldPickerRow],
+        rowHeight: CGFloat = 40,
+        placeholder: IQText? = nil,
+        isEnabled: Bool = true
+    ) {
         self.rows = rows
-        self.rowHeight = 40
-        self.isEnabled = true
+        self.rowHeight = rowHeight
+        self.placeholder = placeholder
+        self.isEnabled = isEnabled
         
         super.init(backgroundColor: UIColor.clear)
     }
@@ -20,6 +26,7 @@ public class QListFieldStyleSheet : QDisplayViewStyleSheet< QListField > {
     public init(_ styleSheet: QListFieldStyleSheet) {
         self.rows = styleSheet.rows
         self.rowHeight = styleSheet.rowHeight
+        self.placeholder = styleSheet.placeholder
         self.isEnabled = styleSheet.isEnabled
 
         super.init(styleSheet)

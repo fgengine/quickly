@@ -24,21 +24,45 @@ open class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
     public var textContentType: UITextContentType!
     public var isEnabled: Bool
 
-    public init() {
-        self.requireValidator = true
-        self.textInsets = UIEdgeInsets.zero
-        self.editingInsets = UIEdgeInsets.zero
-        self.placeholderInsets = UIEdgeInsets.zero
-        self.autocapitalizationType = .none
-        self.autocorrectionType = .default
-        self.spellCheckingType = .default
-        self.keyboardType = .default
-        self.keyboardAppearance = .default
-        self.returnKeyType = .default
-        self.enablesReturnKeyAutomatically = true
-        self.isSecureTextEntry = false
-        self.textContentType = nil
-        self.isEnabled = true
+    public init(
+        requireValidator: Bool = true,
+        validator: IQInputValidator? = nil,
+        formatter: IQStringFormatter? = nil,
+        textInsets: UIEdgeInsets = UIEdgeInsets.zero,
+        textStyle: IQTextStyle? = nil,
+        editingInsets: UIEdgeInsets = UIEdgeInsets.zero,
+        placeholderInsets: UIEdgeInsets = UIEdgeInsets.zero,
+        placeholder: IQText? = nil,
+        typingStyle: IQTextStyle? = nil,
+        autocapitalizationType: UITextAutocapitalizationType = .none,
+        autocorrectionType: UITextAutocorrectionType = .default,
+        spellCheckingType: UITextSpellCheckingType = .default,
+        keyboardType: UIKeyboardType = .default,
+        keyboardAppearance: UIKeyboardAppearance = .default,
+        returnKeyType: UIReturnKeyType = .default,
+        enablesReturnKeyAutomatically: Bool = true,
+        isSecureTextEntry: Bool = false,
+        textContentType: UITextContentType! = nil,
+        isEnabled: Bool = true
+    ) {
+        self.requireValidator = requireValidator
+        self.validator = validator
+        self.formatter = formatter
+        self.textInsets = textInsets
+        self.textStyle = textStyle
+        self.editingInsets = editingInsets
+        self.placeholderInsets = placeholderInsets
+        self.placeholder = placeholder
+        self.autocapitalizationType = autocapitalizationType
+        self.autocorrectionType = autocorrectionType
+        self.spellCheckingType = spellCheckingType
+        self.keyboardType = keyboardType
+        self.keyboardAppearance = keyboardAppearance
+        self.returnKeyType = returnKeyType
+        self.enablesReturnKeyAutomatically = enablesReturnKeyAutomatically
+        self.isSecureTextEntry = isSecureTextEntry
+        self.textContentType = textContentType
+        self.isEnabled = isEnabled
 
         super.init(backgroundColor: UIColor.clear)
     }
