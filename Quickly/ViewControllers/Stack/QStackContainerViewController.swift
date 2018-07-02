@@ -5,6 +5,9 @@
 open class QStackContainerViewController : QViewController, IQStackContainerViewController {
 
     open private(set) var viewControllers: [IQStackViewController]
+    open var rootViewController: IQStackViewController? {
+        get { return self.viewControllers.first }
+    }
     open var currentViewController: IQStackViewController? {
         get { return self.viewControllers.last }
     }
@@ -156,6 +159,30 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     open func dismissStack(_ viewController: IQStackContentViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
         guard let stackPageViewController = viewController.stackPageViewController else { return }
         self.dismissStack(stackPageViewController, animated: animated, completion: completion)
+    }
+
+    open func dismissStack(to viewController: IQStackViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
+        if self.previousViewController === viewController {
+            self._dismiss(self.currentViewController!, animated: animated, completion: completion)
+        } else if self.viewControllers.count > 3 {
+            if let index = self.viewControllers.index(where: { return $0 === viewController }) {
+                let startIndex = self.viewControllers.index(index, offsetBy: 2)
+                let endIndex = self.viewControllers.index(self.viewControllers.endIndex, offsetBy: -1)
+                if endIndex - startIndex > 2 {
+                    let hiddenViewControllers = self.viewControllers[startIndex..<endIndex]
+                    hiddenViewControllers.forEach({ (hiddenViewController) in
+                        self._dismiss(hiddenViewController, animated: false, completion: nil)
+                    })
+                } else {
+
+                }
+            }
+        }
+    }
+
+    open func dismissStack(to viewController: IQStackContentViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
+        guard let stackPageViewController = viewController.stackPageViewController else { return }
+        self.dismissStack(to: stackPageViewController, animated: animated, completion: completion)
     }
 
     private func _present(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?) {

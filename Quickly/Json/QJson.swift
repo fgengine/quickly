@@ -268,8 +268,9 @@ public final class QJson {
         guard path.contains(Const.pathSeparator) == true else {
             return [ path ]
         }
-        return path.components(separatedBy: Const.pathSeparator).compactMap({ (subpath: String) -> IQJsonPath? in
-            guard let subPathRange = NSRange(subpath) else { return nil }
+        let components = path.components(separatedBy: Const.pathSeparator)
+        return components.compactMap({ (subpath: String) -> IQJsonPath? in
+            guard let subPathRange = NSRange(subpath) else { return subpath }
             guard let match = Const.pathIndexPattern.firstMatch(in: subpath, options: [], range: subPathRange) else {
                 return subpath
             }

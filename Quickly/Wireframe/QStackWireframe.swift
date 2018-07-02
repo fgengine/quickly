@@ -29,20 +29,28 @@ open class QStackWireframe< RouteContextType: IQRouteContext, WireframeType: IQW
         fatalError("Please override prepareRootContentViewController()")
     }
 
-    open func present(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+    open func presentStack(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         self.containerViewController.presentStack(viewController, animated: animated, completion: completion)
     }
 
-    open func present(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+    open func presentStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         self.containerViewController.presentStack(viewController, animated: animated, completion: completion)
     }
 
-    open func dismiss(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+    open func dismissStack(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         self.containerViewController.dismissStack(viewController, animated: animated, completion: completion)
     }
 
-    open func dismiss(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+    open func dismissStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         self.containerViewController.dismissStack(viewController, animated: animated, completion: completion)
+    }
+
+    open func dismissStack(to viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        self.containerViewController.dismissStack(to: viewController, animated: animated, completion: completion)
+    }
+
+    open func dismissStack(to viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        self.containerViewController.dismissStack(to: viewController, animated: animated, completion: completion)
     }
 
 }

@@ -26,6 +26,10 @@ public final class QObserver< T > {
         self.items.forEach({ closure($0.observer) })
     }
 
+    public func reverseNotify(_ closure: (_ observer: T) -> Void) {
+        self.items.reversed().forEach({ closure($0.observer) })
+    }
+
     private final class Item {
 
         let priority: UInt

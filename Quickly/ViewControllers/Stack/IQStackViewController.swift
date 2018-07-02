@@ -41,6 +41,7 @@ public protocol IQStackViewControllerInteractiveDismissAnimation : IQInteractive
 public protocol IQStackContainerViewController : IQViewController {
 
     var viewControllers: [IQStackViewController] { get }
+    var rootViewController: IQStackViewController? { get }
     var currentViewController: IQStackViewController? { get }
     var previousViewController: IQStackViewController? { get }
     var presentAnimation: IQStackViewControllerPresentAnimation { get }
@@ -53,6 +54,9 @@ public protocol IQStackContainerViewController : IQViewController {
 
     func dismissStack(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?)
     func dismissStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?)
+
+    func dismissStack(to viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func dismissStack(to viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?)
 
 }
 
