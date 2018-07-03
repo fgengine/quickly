@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QText : IQText {
+open class QText : IQText {
 
     public private(set) var attributed: NSAttributedString
 

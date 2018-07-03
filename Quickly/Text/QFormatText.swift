@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public final class QFormatText : QText {
+open class QFormatText : QText {
 
     public init(_ text: String, style: IQTextStyle, parts: [String: IQText]) {
         let attributed = style.mutableAttributed(text)

@@ -107,6 +107,25 @@ public class QButton : QControl {
         }
     }
 
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+
+    public convenience init(frame: CGRect, styleSheet: QButtonStyleSheet) {
+        self.init(frame: frame)
+        styleSheet.apply(target: self)
+    }
+
+    public convenience init(styleSheet: QButtonStyleSheet) {
+        self.init(frame: CGRect.zero)
+        styleSheet.apply(target: self)
+        self.sizeToFit()
+    }
+
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
     open override func setup() {
         super.setup()
 

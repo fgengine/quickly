@@ -81,12 +81,16 @@ open class QStackbar : QView {
         self.backgroundColor = UIColor.white
 
         self.leftView = WrapView(frame: self.bounds)
+        self.leftView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        self.leftView.setContentHuggingPriority(.defaultHigh, for: .vertical)
         self.addSubview(self.leftView)
 
         self.centerView = WrapView(frame: self.bounds)
         self.addSubview(self.centerView)
 
         self.rightView = WrapView(frame: self.bounds)
+        self.rightView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        self.rightView.setContentHuggingPriority(.defaultHigh, for: .vertical)
         self.addSubview(self.rightView)
     }
 
@@ -123,7 +127,6 @@ open class QStackbar : QView {
                 selfConstraints.append(self.centerView.trailingLayout == self.trailingLayout - self.edgeInsets.right)
             }
         } else {
-            selfConstraints.append(self.centerView.centerXLayout == self.centerXLayout)
             if leftViewsCount > 0 && rightViewsCount > 0 {
                 selfConstraints.append(self.leftView.trailingLayout == self.rightView.trailingLayout + self.leftViewsOffset + self.rightViewsOffset)
             } else if leftViewsCount > 0 {
@@ -152,6 +155,9 @@ open class QStackbar : QView {
             }
             didSet {
                 for view in self.views {
+                    view.setContentHuggingPriority(self.contentHuggingPriority(for: .horizontal), for: .horizontal)
+                    view.setContentHuggingPriority(self.contentHuggingPriority(for: .vertical), for: .vertical)
+                    view.translatesAutoresizingMaskIntoConstraints = false
                     self.addSubview(view)
                 }
                 self.setNeedsUpdateConstraints()

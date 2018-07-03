@@ -25,11 +25,13 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
     }
 
     open override func layout(bounds: CGRect) {
-        self.composition.contentView.frame = bounds
+        self.composition.contentView.frame = UIEdgeInsetsInsetRect(self.view.bounds, self.inheritedEdgeInsets)
     }
 
     private func _prepareComposition() -> Composition {
-        return Composition(contentView: self.view)
+        let composition = Composition(frame: UIEdgeInsetsInsetRect(self.view.bounds, self.inheritedEdgeInsets))
+        self.view.addSubview(composition.contentView)
+        return composition
     }
 
 }

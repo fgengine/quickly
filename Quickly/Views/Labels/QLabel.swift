@@ -138,6 +138,17 @@ open class QLabel : QDisplayView {
         self.setContentHuggingPriority(UILayoutPriority(rawValue: 251), for: .vertical)
     }
 
+    public convenience init(frame: CGRect, styleSheet: QLabelStyleSheet) {
+        self.init(frame: frame)
+        styleSheet.apply(target: self)
+    }
+
+    public convenience init(styleSheet: QLabelStyleSheet) {
+        self.init(frame: CGRect.zero)
+        styleSheet.apply(target: self)
+        self.sizeToFit()
+    }
+
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
