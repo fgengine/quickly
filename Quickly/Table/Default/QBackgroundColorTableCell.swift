@@ -20,17 +20,31 @@ open class QBackgroundColorTableCell< RowType: QBackgroundColorTableRow >: QTabl
     open override func set(row: RowType, animated: Bool) {
         super.set(row: row, animated: animated)
 
-        if let backgroundColor = row.backgroundColor {
-            self.backgroundColor = backgroundColor
-            self.contentView.backgroundColor = backgroundColor
-        }
+        self._applyContentBackgroundColor(selected: self.isSelected, highlighted: self.isHighlighted)
+    }
+
+    open override func setSelected(_ selected: Bool, animated: Bool) {
+        self._applyContentBackgroundColor(selected: selected, highlighted: self.isHighlighted)
+    }
+
+    open override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        self._applyContentBackgroundColor(selected: self.isSelected, highlighted: highlighted)
+    }
+
+    private func _applyContentBackgroundColor(selected: Bool, highlighted: Bool) {
+        let backgroundColor = self._currentContentBackgroundColor(selected: selected, highlighted: highlighted)
+        self.backgroundColor = backgroundColor
+        self.contentView.backgroundColor = backgroundColor
+    }
+
+    private func _currentContentBackgroundColor(selected: Bool, highlighted: Bool) -> UIColor? {
+        guard let row = self.row else { return nil }
         if let selectedBackgroundColor = row.selectedBackgroundColor {
-            let view = UIView(frame: self.bounds)
-            view.backgroundColor = selectedBackgroundColor
-            self.selectedBackgroundView = view
-        } else {
-            self.selectedBackgroundView = nil
+            if selected == true || highlighted == true {
+                return selectedBackgroundColor
+            }
         }
+        return row.backgroundColor
     }
 
 }
