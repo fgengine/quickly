@@ -17,57 +17,58 @@ public enum QButtonImagePosition: Int {
 public class QButton : QControl {
 
     open override var isHighlighted: Bool {
-        didSet { self.invalidate() }
+        didSet { self._invalidate() }
     }
     open override var isSelected: Bool {
-        didSet { self.invalidate() }
+        didSet { self._invalidate() }
     }
     open override var isEnabled: Bool {
-        didSet { self.invalidate() }
+        didSet { self._invalidate() }
     }
     open override var contentHorizontalAlignment: UIControlContentHorizontalAlignment {
-        didSet { self.invalidate() }
+        didSet { self._invalidate() }
     }
     open override var contentVerticalAlignment: UIControlContentVerticalAlignment {
-        didSet { self.invalidate() }
+        didSet { self._invalidate() }
     }
     @IBInspectable public var contentInsets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8) {
-        didSet { self.invalidate() }
+        didSet { self._invalidate() }
     }
     public var imagePosition: QButtonImagePosition = .left {
-        didSet { self.invalidate() }
+        didSet { self._invalidate() }
     }
     public var imageInsets: UIEdgeInsets = UIEdgeInsets.zero {
-        didSet { self.invalidate() }
+        didSet { self._invalidate() }
     }
     public var textInsets: UIEdgeInsets = UIEdgeInsets.zero {
-        didSet { self.invalidate() }
+        didSet { self._invalidate() }
     }
     public var normalStyle: IQButtonStyle? {
-        didSet { self.invalidate() }
+        didSet { self._invalidate() }
     }
     public var highlightedStyle: IQButtonStyle? {
-        didSet { self.invalidate() }
+        didSet { self._invalidate() }
     }
     public var disabledStyle: IQButtonStyle? {
-        didSet { self.invalidate() }
+        didSet { self._invalidate() }
     }
     public var selectedStyle: IQButtonStyle? {
-        didSet { self.invalidate() }
+        didSet { self._invalidate() }
     }
     public var selectedHighlightedStyle: IQButtonStyle? {
-        didSet { self.invalidate() }
+        didSet { self._invalidate() }
     }
     public var selectedDisabledStyle: IQButtonStyle? {
-        didSet { self.invalidate() }
+        didSet { self._invalidate() }
     }
+    public var durationChangeState: TimeInterval = 0.075
     public private(set) var backgroundView: QDisplayView!
     public private(set) var contentView: QView!
     public private(set) var imageView: QImageView!
     public private(set) var textLabel: QLabel!
     public private(set) var tapGesture: UITapGestureRecognizer!
     public var spinnerPosition: QButtonSpinnerPosition = .fill {
-        didSet { self.invalidate() }
+        didSet { self._invalidate() }
     }
     public var spinnerView: QSpinnerViewType? {
         willSet {
@@ -80,7 +81,7 @@ public class QButton : QControl {
                 spinnerView.translatesAutoresizingMaskIntoConstraints = false
                 self.contentView.addSubview(spinnerView)
             }
-            self.invalidate()
+            self._invalidate()
         }
     }
     private var selfConstraints: [NSLayoutConstraint] = [] {
@@ -160,7 +161,7 @@ public class QButton : QControl {
         self.tapGesture.delegate = self
         self.addGestureRecognizer(self.tapGesture)
         
-        self.invalidate()
+        self._invalidate()
     }
 
     public func isSpinnerAnimating() -> Bool {
@@ -173,14 +174,14 @@ public class QButton : QControl {
     public func startSpinner() {
         if let spinnerView = self.spinnerView {
             spinnerView.start()
-            self.invalidate()
+            self._invalidate()
         }
     }
 
     public func stopSpinner() {
         if let spinnerView = self.spinnerView {
             spinnerView.stop()
-            self.invalidate()
+            self._invalidate()
         }
     }
 
@@ -404,7 +405,37 @@ public class QButton : QControl {
         super.updateConstraints()
     }
 
-    private func invalidate() {
+    open override func touchesBegan(_ touches: Set< UITouch >, with event: UIEvent?) {
+        if self.durationChangeState > .leastNonzeroMagnitude {
+            UIView.animate(withDuration: self.durationChangeState, delay: 0, options: [ .beginFromCurrentState ], animations: {
+                super.touchesBegan(touches, with: event)
+            })
+        } else {
+            super.touchesBegan(touches, with: event)
+        }
+    }
+
+    open override func touchesMoved(_ touches: Set< UITouch >, with event: UIEvent?) {
+        if self.durationChangeState > .leastNonzeroMagnitude {
+            UIView.animate(withDuration: self.durationChangeState, delay: 0, options: [ .beginFromCurrentState ], animations: {
+                super.touchesMoved(touches, with: event)
+            })
+        } else {
+            super.touchesMoved(touches, with: event)
+        }
+    }
+
+    open override func touchesEnded(_ touches: Set< UITouch >, with event: UIEvent?) {
+        if self.durationChangeState > .leastNonzeroMagnitude {
+            UIView.animate(withDuration: self.durationChangeState, delay: 0, options: [ .beginFromCurrentState ], animations: {
+                super.touchesEnded(touches, with: event)
+            })
+        } else {
+            super.touchesEnded(touches, with: event)
+        }
+    }
+
+    private func _invalidate() {
         self.invalidateIntrinsicContentSize()
         self.setNeedsUpdateConstraints()
         self.setNeedsLayout()

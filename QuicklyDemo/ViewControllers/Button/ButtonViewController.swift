@@ -64,28 +64,28 @@ class ButtonViewController : QNibViewController, IQRoutable {
 
     @objc
     func pressedButton(_ sender: Any) {
-        switch self.button.imagePosition {
-        case .top: self.button.imagePosition = .right
-        case .right: self.button.imagePosition = .bottom
-        case .bottom: self.button.imagePosition = .left
-        case .left: self.button.imagePosition = .top
-        }
-        UIView.animate(withDuration: 2.0) {
+        UIView.animate(withDuration: 0.2, delay: 0, options: [ .beginFromCurrentState ], animations: {
+            switch self.button.imagePosition {
+            case .top: self.button.imagePosition = .right
+            case .right: self.button.imagePosition = .bottom
+            case .bottom: self.button.imagePosition = .left
+            case .left: self.button.imagePosition = .top
+            }
             self.button.layoutIfNeeded()
-        }
+        })
     }
 
     @objc
     func pressedSpinnerButton(_ sender: Any) {
-        UIView.animate(withDuration: 2.0) {
+        UIView.animate(withDuration: 0.2, delay: 0, options: [ .beginFromCurrentState ], animations: {
             self.spinnerButton.startSpinner()
             self.spinnerButton.layoutIfNeeded()
-        }
+        })
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
-            UIView.animate(withDuration: 2.0) {
+            UIView.animate(withDuration: 0.2, delay: 0, options: [ .beginFromCurrentState ], animations: {
                 self.spinnerButton.stopSpinner()
                 self.spinnerButton.layoutIfNeeded()
-            }
+            })
         }
     }
 
