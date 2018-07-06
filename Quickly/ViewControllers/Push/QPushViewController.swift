@@ -118,6 +118,16 @@ open class QPushViewController : QViewController, IQPushViewController {
         self.pushContentViewController.didDismiss(animated: animated)
     }
 
+    open override func willTransition(size: CGSize) {
+        super.willTransition(size: size)
+        self.pushContentViewController.willTransition(size: size)
+    }
+
+    open override func didTransition(size: CGSize) {
+        super.didTransition(size: size)
+        self.pushContentViewController.didTransition(size: size)
+    }
+
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
         return self.pushContentViewController.supportedOrientations()
     }

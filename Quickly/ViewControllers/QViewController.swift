@@ -232,6 +232,22 @@ open class QViewController : NSObject, IQViewController {
         #endif
     }
 
+    open func willTransition(size: CGSize) {
+        #if DEBUG
+        if self.logging == true {
+            print("\(String(describing: self.classForCoder)).willTransition(size: \(size))")
+        }
+        #endif
+    }
+
+    open func didTransition(size: CGSize) {
+        #if DEBUG
+        if self.logging == true {
+            print("\(String(describing: self.classForCoder)).didTransition(size: \(size))")
+        }
+        #endif
+    }
+
     open func addViewController(_ viewController: IQViewController) {
         viewController.parent = self
     }

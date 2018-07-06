@@ -92,15 +92,23 @@ open class QWindow : UIWindow, IQView {
         open override func viewDidLayoutSubviews() {
             super.viewDidLayoutSubviews()
 
-            self.contentViewController.additionalEdgeInsets = self.currentAdditionalEdgeInsets()
+            self.contentViewController.additionalEdgeInsets = self._currentAdditionalEdgeInsets()
             self.contentViewController.view.frame = self.view.bounds
         }
 
         open override func viewSafeAreaInsetsDidChange() {
-            self.contentViewController.additionalEdgeInsets = self.currentAdditionalEdgeInsets()
+            self.contentViewController.additionalEdgeInsets = self._currentAdditionalEdgeInsets()
         }
 
-        private func currentAdditionalEdgeInsets() -> UIEdgeInsets {
+        open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+            coordinator.animate(alongsideTransition: { [unowned self] _ in
+                self.contentViewController.willTransition(size: size)
+            }, completion: { [unowned self] _ in
+                self.contentViewController.didTransition(size: size)
+            })
+        }
+
+        private func _currentAdditionalEdgeInsets() -> UIEdgeInsets {
             if #available(iOS 11.0, *) {
                 return view.safeAreaInsets
             } else {

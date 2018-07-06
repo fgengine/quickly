@@ -108,6 +108,16 @@ open class QDialogViewController : QViewController, IQDialogViewController {
         self.dialogContentViewController.didDismiss(animated: animated)
     }
 
+    open override func willTransition(size: CGSize) {
+        super.willTransition(size: size)
+        self.dialogContentViewController.willTransition(size: size)
+    }
+
+    open override func didTransition(size: CGSize) {
+        super.didTransition(size: size)
+        self.dialogContentViewController.didTransition(size: size)
+    }
+
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
         return self.dialogContentViewController.supportedOrientations()
     }

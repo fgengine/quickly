@@ -79,6 +79,16 @@ open class QModalViewController : QViewController, IQModalViewController {
         self.modalContentViewController.didDismiss(animated: animated)
     }
 
+    open override func willTransition(size: CGSize) {
+        super.willTransition(size: size)
+        self.modalContentViewController.willTransition(size: size)
+    }
+
+    open override func didTransition(size: CGSize) {
+        super.didTransition(size: size)
+        self.modalContentViewController.didTransition(size: size)
+    }
+
     open func updateContent() {
     }
 

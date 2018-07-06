@@ -86,6 +86,16 @@ open class QPageViewController : QViewController, IQPageViewController {
         self.pageContentViewController.didDismiss(animated: animated)
     }
 
+    open override func willTransition(size: CGSize) {
+        super.willTransition(size: size)
+        self.pageContentViewController.willTransition(size: size)
+    }
+
+    open override func didTransition(size: CGSize) {
+        super.didTransition(size: size)
+        self.pageContentViewController.didTransition(size: size)
+    }
+
     open func setPageItem(_ item: QPagebarItem?, animated: Bool) {
         self.pageItem = item
         if let vc = self.pageContainerViewController {

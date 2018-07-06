@@ -91,29 +91,6 @@ open class QTableViewController : QViewController, IQStackContentViewController,
         self.tableView = QTableView(frame: self.view.bounds)
     }
 
-    open override func layout(bounds: CGRect) {
-        super.layout(bounds : bounds)
-
-        if let view = self.tableView {
-            let edgeInsets = self.inheritedEdgeInsets
-            let beforeContentInset = view.contentInset
-            let beforeContentOffset = view.contentOffset
-            let beforeContentSize = view.contentSize
-            let progress = CGPoint(
-                x: (beforeContentSize.width > CGFloat.leastNonzeroMagnitude) ? ((beforeContentInset.left + beforeContentOffset.x) / beforeContentSize.width) : 0,
-                y: (beforeContentSize.height > CGFloat.leastNonzeroMagnitude) ? ((beforeContentInset.top + beforeContentOffset.y) / beforeContentSize.height) : 0
-            )
-            view.frame = bounds
-            view.contentInset = edgeInsets
-            view.scrollIndicatorInsets = edgeInsets
-            let afterContentSize = view.contentSize
-            view.contentOffset = CGPoint(
-                x: (afterContentSize.width > CGFloat.leastNonzeroMagnitude) ? (-edgeInsets.left + (afterContentSize.width * progress.x)) : 0,
-                y: (afterContentSize.height > CGFloat.leastNonzeroMagnitude) ? (-edgeInsets.top + (afterContentSize.height * progress.y)) : 0
-            )
-        }
-    }
-
     open override func willPresent(animated: Bool) {
         super.willPresent(animated: animated)
         self._updateRefreshControlState()
@@ -122,6 +99,37 @@ open class QTableViewController : QViewController, IQStackContentViewController,
     open override func didDismiss(animated: Bool) {
         super.didDismiss(animated: animated)
         self._updateRefreshControlState()
+    }
+
+    open override func willTransition(size: CGSize) {
+        super.willTransition(size: size)
+
+        /*if let view = self.tableView {
+            let edgeInsets = self.inheritedEdgeInsets
+            let beforeContentInset = view.contentInset
+            let beforeContentOffset = view.contentOffset
+            let beforeContentSize = view.contentSize
+            let progress = CGPoint(
+                x: (beforeContentSize.width > CGFloat.leastNonzeroMagnitude) ? ((beforeContentInset.left + beforeContentOffset.x) / beforeContentSize.width) : 0,
+                y: (beforeContentSize.height > CGFloat.leastNonzeroMagnitude) ? ((beforeContentInset.top + beforeContentOffset.y) / beforeContentSize.height) : 0
+            )
+            let afterContentSize = view.contentSize
+            view.contentOffset = CGPoint(
+                x: (afterContentSize.width > CGFloat.leastNonzeroMagnitude) ? (-edgeInsets.left + (afterContentSize.width * progress.x)) : 0,
+                y: (afterContentSize.height > CGFloat.leastNonzeroMagnitude) ? (-edgeInsets.top + (afterContentSize.height * progress.y)) : 0
+            )
+        }*/
+    }
+
+    open override func layout(bounds: CGRect) {
+        super.layout(bounds: bounds)
+
+        if let view = self.tableView {
+            let edgeInsets = self.inheritedEdgeInsets
+            view.frame = bounds
+            view.contentInset = edgeInsets
+            view.scrollIndicatorInsets = edgeInsets
+        }
     }
 
     open func beginRefreshing() {

@@ -87,10 +87,20 @@ open class QCollectionViewController : QViewController, IQStackContentViewContro
         self.collectionView = QCollectionView(frame: self.view.bounds, layout: QCollectionFlowLayout())
     }
 
-    open override func layout(bounds: CGRect) {
-        super.layout(bounds : bounds)
+    open override func willPresent(animated: Bool) {
+        super.willPresent(animated: animated)
+        self._updateRefreshControlState()
+    }
 
-        if let view = self.collectionView {
+    open override func didDismiss(animated: Bool) {
+        super.didDismiss(animated: animated)
+        self._updateRefreshControlState()
+    }
+
+    open override func willTransition(size: CGSize) {
+        super.willTransition(size: size)
+
+        /*if let view = self.collectionView {
             let edgeInsets = self.inheritedEdgeInsets
             if let layout = view.collectionLayout {
                 let beforeContentInset = view.contentInset
@@ -100,7 +110,6 @@ open class QCollectionViewController : QViewController, IQStackContentViewContro
                     x: (beforeContentSize.width > CGFloat.leastNonzeroMagnitude) ? ((beforeContentInset.left + beforeContentOffset.x) / beforeContentSize.width) : 0,
                     y: (beforeContentSize.height > CGFloat.leastNonzeroMagnitude) ? ((beforeContentInset.top + beforeContentOffset.y) / beforeContentSize.height) : 0
                 )
-                view.frame = bounds
                 view.contentInset = edgeInsets
                 view.scrollIndicatorInsets = edgeInsets
                 let afterContentSize = view.contentSize
@@ -109,21 +118,21 @@ open class QCollectionViewController : QViewController, IQStackContentViewContro
                     y: (afterContentSize.height > CGFloat.leastNonzeroMagnitude) ? (-edgeInsets.top + (afterContentSize.height * progress.y)) : 0
                 )
             } else {
-                view.frame = bounds
                 view.contentInset = edgeInsets
                 view.scrollIndicatorInsets = edgeInsets
             }
+        }*/
+    }
+
+    open override func layout(bounds: CGRect) {
+        super.layout(bounds : bounds)
+
+        if let view = self.collectionView {
+            let edgeInsets = self.inheritedEdgeInsets
+            view.frame = bounds
+            view.contentInset = edgeInsets
+            view.scrollIndicatorInsets = edgeInsets
         }
-    }
-
-    open override func willPresent(animated: Bool) {
-        super.willPresent(animated: animated)
-        self._updateRefreshControlState()
-    }
-
-    open override func didDismiss(animated: Bool) {
-        super.didDismiss(animated: animated)
-        self._updateRefreshControlState()
     }
 
     open func beginRefreshing() {

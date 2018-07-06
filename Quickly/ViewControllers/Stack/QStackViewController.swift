@@ -95,6 +95,16 @@ open class QStackViewController : QViewController, IQStackViewController {
         self.stackContentViewController.didDismiss(animated: animated)
     }
 
+    open override func willTransition(size: CGSize) {
+        super.willTransition(size: size)
+        self.stackContentViewController.willTransition(size: size)
+    }
+
+    open override func didTransition(size: CGSize) {
+        super.didTransition(size: size)
+        self.stackContentViewController.didTransition(size: size)
+    }
+
     open func setStackbar(_ stackbar: QStackbar?, animated: Bool = false) {
         if self.isLoaded == true {
             if let stackbar = self.stackbar {

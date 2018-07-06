@@ -158,6 +158,20 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
         }
     }
 
+    open override func willTransition(size: CGSize) {
+        super.willTransition(size: size)
+        if let vc = self.currentViewController {
+            vc.willTransition(size: size)
+        }
+    }
+
+    open override func didTransition(size: CGSize) {
+        super.didTransition(size: size)
+        if let vc = self.currentViewController {
+            vc.didTransition(size: size)
+        }
+    }
+
     open func setPagebar(_ pagebar: QPagebar?, animated: Bool = false) {
         if self.isLoaded == true {
             if let pagebar = self.pagebar {

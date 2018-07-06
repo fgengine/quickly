@@ -47,6 +47,9 @@ public protocol IQViewController : class {
     func willDismiss(animated: Bool)
     func didDismiss(animated: Bool)
 
+    func willTransition(size: CGSize)
+    func didTransition(size: CGSize)
+
     func parentOf< ParentType >() -> ParentType?
 
     func addChild(_ viewController: IQViewController)

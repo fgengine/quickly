@@ -341,6 +341,44 @@ open class QMainViewController : QViewController {
         }
     }
 
+    open override func willTransition(size: CGSize) {
+        super.willTransition(size: size)
+        if let vc = self.backgroundViewController {
+            vc.willTransition(size: size)
+        }
+        if let vc = self.contentViewController {
+            vc.willTransition(size: size)
+        }
+        if let vc = self.modalContainerViewController {
+            vc.willTransition(size: size)
+        }
+        if let vc = self.pushContainerViewController {
+            vc.willTransition(size: size)
+        }
+        if let vc = self.dialogContainerViewController {
+            vc.willTransition(size: size)
+        }
+    }
+
+    open override func didTransition(size: CGSize) {
+        super.didTransition(size: size)
+        if let vc = self.backgroundViewController {
+            vc.didTransition(size: size)
+        }
+        if let vc = self.contentViewController {
+            vc.didTransition(size: size)
+        }
+        if let vc = self.modalContainerViewController {
+            vc.didTransition(size: size)
+        }
+        if let vc = self.pushContainerViewController {
+            vc.didTransition(size: size)
+        }
+        if let vc = self.dialogContainerViewController {
+            vc.didTransition(size: size)
+        }
+    }
+
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
         guard let cvc = self.contentViewController else { return super.supportedOrientations() }
         return cvc.supportedOrientations()

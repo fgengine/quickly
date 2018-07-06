@@ -142,6 +142,20 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
         }
     }
 
+    open override func willTransition(size: CGSize) {
+        super.willTransition(size: size)
+        if let vc = self.currentViewController {
+            vc.willTransition(size: size)
+        }
+    }
+
+    open override func didTransition(size: CGSize) {
+        super.didTransition(size: size)
+        if let vc = self.currentViewController {
+            vc.didTransition(size: size)
+        }
+    }
+
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
         guard let vc = self.currentViewController else { return super.supportedOrientations() }
         return vc.supportedOrientations()
