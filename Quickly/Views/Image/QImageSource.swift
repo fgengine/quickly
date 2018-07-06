@@ -14,7 +14,7 @@ public class QImageSource : IQImageSource {
     public init(
         _ image: UIImage,
         renderingMode: UIImageRenderingMode = .automatic,
-        scale: QImageSourceScale = .aspectFit,
+        scale: QImageSourceScale = .origin,
         tintColor: UIColor? = nil
     ) {
         self.image = image
@@ -27,7 +27,7 @@ public class QImageSource : IQImageSource {
     public init(
         _ imageNamed: String,
         renderingMode: UIImageRenderingMode = .automatic,
-        scale: QImageSourceScale = .aspectFit,
+        scale: QImageSourceScale = .origin,
         tintColor: UIColor? = nil
     ) {
         if let image = UIImage(named: imageNamed) {
@@ -45,7 +45,7 @@ public class QImageSource : IQImageSource {
         _ url: URL,
         size: CGSize,
         renderingMode: UIImageRenderingMode = .automatic,
-        scale: QImageSourceScale = .aspectFit,
+        scale: QImageSourceScale = .origin,
         tintColor: UIColor? = nil
     ) {
         self.size = size

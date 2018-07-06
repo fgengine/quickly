@@ -54,26 +54,32 @@ open class QLabel : QDisplayView {
         didSet { self.setNeedsDisplay() }
     }
     public var padding: CGFloat {
-        set {
-            self.textContainer.lineFragmentPadding = newValue
-            self.invalidateIntrinsicContentSize()
-            self.setNeedsDisplay()
+        set(value) {
+            if self.textContainer.lineFragmentPadding != value {
+                self.textContainer.lineFragmentPadding = value
+                self.invalidateIntrinsicContentSize()
+                self.setNeedsDisplay()
+            }
         }
         get { return self.textContainer.lineFragmentPadding }
     }
     public var numberOfLines: Int {
         set(value) {
-            self.textContainer.maximumNumberOfLines = value
-            self.invalidateIntrinsicContentSize()
-            self.setNeedsDisplay()
+            if self.textContainer.maximumNumberOfLines != value {
+                self.textContainer.maximumNumberOfLines = value
+                self.invalidateIntrinsicContentSize()
+                self.setNeedsDisplay()
+            }
         }
         get { return self.textContainer.maximumNumberOfLines }
     }
     public var lineBreakMode: NSLineBreakMode {
-        set {
-            self.textContainer.lineBreakMode = newValue
-            self.invalidateIntrinsicContentSize()
-            self.setNeedsDisplay()
+        set(value) {
+            if self.textContainer.lineBreakMode != value {
+                self.textContainer.lineBreakMode = value
+                self.invalidateIntrinsicContentSize()
+                self.setNeedsDisplay()
+            }
         }
         get { return self.textContainer.lineBreakMode }
     }
@@ -85,23 +91,36 @@ open class QLabel : QDisplayView {
         }
     }
     public var preferredMaxLayoutWidth: CGFloat = 0 {
-        didSet {
-            self.invalidateIntrinsicContentSize()
-            self.setNeedsDisplay()
+        didSet(oldValue) {
+            if self.preferredMaxLayoutWidth != oldValue {
+                self.invalidateIntrinsicContentSize()
+                self.setNeedsDisplay()
+            }
         }
     }
     open override var frame: CGRect {
-        didSet { self.invalidateIntrinsicContentSize() }
+        didSet(oldValue) {
+            if self.frame != oldValue {
+                self.invalidateIntrinsicContentSize()
+            }
+        }
     }
     open override var bounds: CGRect {
-        didSet { self.invalidateIntrinsicContentSize() }
+        didSet(oldValue) {
+            if self.bounds != oldValue {
+                self.invalidateIntrinsicContentSize()
+            }
+        }
     }
     open override var intrinsicContentSize: CGSize {
         get {
-            return self.sizeThatFits(CGSize(
-                width: self.currentPreferredMaxLayoutWidth(),
-                height: CGFloat.greatestFiniteMagnitude
-            ))
+            if self.cacheIntrinsicContentSize == nil {
+                self.cacheIntrinsicContentSize = self.sizeThatFits(CGSize(
+                    width: self.currentPreferredMaxLayoutWidth(),
+                    height: CGFloat.greatestFiniteMagnitude
+                ))
+            }
+            return self.cacheIntrinsicContentSize!
         }
     }
     open override var forFirstBaselineLayout: UIView {
@@ -131,6 +150,8 @@ open class QLabel : QDisplayView {
     internal let textStorage: NSTextStorage = NSTextStorage()
     internal var firstBaselineView: UIView!
     internal var lastBaselineView: UIView!
+
+    private var cacheIntrinsicContentSize: CGSize?
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -188,6 +209,11 @@ open class QLabel : QDisplayView {
             return string.index(string.startIndex, offsetBy: index)
         }
         return nil
+    }
+
+    open override func invalidateIntrinsicContentSize() {
+        super.invalidateIntrinsicContentSize()
+        self.cacheIntrinsicContentSize = nil
     }
 
     open override func layoutSubviews() {
@@ -252,6 +278,8 @@ open class QLabel : QDisplayView {
     }
 
     open override func draw(_ rect: CGRect) {
+        super.draw(rect)
+
         let viewRect = self.bounds.integral
         let textSize = self.layoutManager.usedRect(for: self.textContainer).integral.size
         let textOffset = self.alignmentPoint(size: viewRect.size, textSize: textSize)

@@ -70,7 +70,7 @@ open class QTitleDetailComposition< Composable: QTitleDetailComposable >: QCompo
             selfConstraints.append(self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
             selfConstraints.append(self.titleLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
             selfConstraints.append(self.titleLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
-            selfConstraints.append(self.titleLabel.bottomLayout == self.detailLabel.topLayout - composable.titleSpacing)
+            selfConstraints.append(self.detailLabel.topLayout == self.titleLabel.bottomLayout + composable.titleSpacing)
             selfConstraints.append(self.detailLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
             selfConstraints.append(self.detailLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
             selfConstraints.append(self.detailLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)

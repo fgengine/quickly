@@ -28,15 +28,17 @@ open class QViewController : NSObject, IQViewController {
     }
     open private(set) var child: [IQViewController] = []
     open var edgesForExtendedLayout: UIRectEdge {
-        didSet {
-            guard self.isLoaded == true else { return }
-            self.setNeedLayout()
+        didSet(oldValue) {
+            if self.edgesForExtendedLayout != oldValue {
+                self.setNeedLayout()
+            }
         }
     }
     open var additionalEdgeInsets: UIEdgeInsets {
-        didSet {
-            guard self.isLoaded == true else { return }
-            self.setNeedLayout()
+        didSet(oldValue) {
+            if self.additionalEdgeInsets != oldValue {
+                self.setNeedLayout()
+            }
         }
     }
     open var inheritedEdgeInsets: UIEdgeInsets {
@@ -134,11 +136,15 @@ open class QViewController : NSObject, IQViewController {
     }
 
     open func setNeedLayout() {
-        self.view.setNeedsLayout()
+        if self.isLoaded == true {
+            self.view.setNeedsLayout()
+        }
     }
 
     open func layoutIfNeeded() {
-        self.view.layoutIfNeeded()
+        if self.isLoaded == true {
+            self.view.layoutIfNeeded()
+        }
     }
 
     open func layout(bounds: CGRect) {
@@ -326,6 +332,10 @@ open class QViewControllerTransparentView : QTransparentView, IQViewControllerVi
 
     public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    open override func setNeedsLayout() {
+        super.setNeedsLayout()
     }
 
     open override func layoutSubviews() {

@@ -88,7 +88,7 @@ public class QStackViewControllerDismissAnimation : IQStackViewControllerDismiss
         get { return TimeInterval(abs(self.currentBeginFrame.midX - self.currentEndFrame.midX) / self.acceleration) }
     }
 
-    public init(overlapping: CGFloat = 0.5, acceleration: CGFloat = 1200) {
+    public init(overlapping: CGFloat = 1, acceleration: CGFloat = 1200) {
         self.currentBeginFrame = CGRect.zero
         self.currentEndFrame = CGRect.zero
         self.previousBeginFrame = CGRect.zero

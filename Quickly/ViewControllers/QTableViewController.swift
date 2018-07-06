@@ -83,6 +83,10 @@ open class QTableViewController : QViewController, IQStackContentViewController,
         }
     }
 
+    deinit {
+        self.tableController = nil
+    }
+
     open override func didLoad() {
         self.tableView = QTableView(frame: self.view.bounds)
     }

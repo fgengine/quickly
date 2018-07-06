@@ -5,36 +5,63 @@
 open class QStackbar : QView {
 
     public var edgeInsets: UIEdgeInsets = UIEdgeInsets() {
-        didSet { self.setNeedsUpdateConstraints() }
+        didSet(oldValue) {
+            if self.edgeInsets != oldValue {
+                self.setNeedsUpdateConstraints()
+            }
+        }
     }
     public var leftViewsOffset: CGFloat = 0 {
-        didSet { self.setNeedsUpdateConstraints() }
+        didSet(oldValue) {
+            if self.leftViewsOffset != oldValue {
+                self.setNeedsUpdateConstraints()
+            }
+        }
     }
     public var leftViewsSpacing: CGFloat {
-        set(value) { self.leftView.spacing = value; self.setNeedsUpdateConstraints() }
+        set(value) { self.leftView.spacing = value }
         get { return self.leftView.spacing }
     }
     public var leftViews: [UIView] {
-        set(value) { self.leftView.views = value; self.setNeedsUpdateConstraints() }
+        set(value) {
+            if self.leftView.views != value {
+                self.leftView.views = value
+                self.setNeedsUpdateConstraints()
+            }
+        }
         get { return self.leftView.views }
     }
     public var centerViewsSpacing: CGFloat {
-        set(value) { self.centerView.spacing = value; self.setNeedsUpdateConstraints() }
+        set(value) { self.centerView.spacing = value }
         get { return self.centerView.spacing }
     }
     public var centerViews: [UIView] {
-        set(value) { self.centerView.views = value; self.setNeedsUpdateConstraints() }
+        set(value) {
+            if self.centerView.views != value {
+                self.centerView.views = value
+                self.setNeedsUpdateConstraints()
+            }
+        }
         get { return self.centerView.views }
     }
     public var rightViewsOffset: CGFloat = 0 {
-        didSet { self.setNeedsUpdateConstraints() }
+        didSet(oldValue) {
+            if self.rightViewsOffset != oldValue {
+                self.setNeedsUpdateConstraints()
+            }
+        }
     }
     public var rightViewsSpacing: CGFloat {
-        set(value) { self.rightView.spacing = value; self.setNeedsUpdateConstraints() }
+        set(value) { self.rightView.spacing = value }
         get { return self.rightView.spacing }
     }
     public var rightViews: [UIView] {
-        set(value) { self.rightView.views = value; self.setNeedsUpdateConstraints() }
+        set(value) {
+            if self.rightView.views != value {
+                self.rightView.views = value
+                self.setNeedsUpdateConstraints()
+            }
+        }
         get { return self.rightView.views }
     }
     public var backgroundView: UIView? {
@@ -145,7 +172,11 @@ open class QStackbar : QView {
     private class WrapView : QInvisibleView {
 
         public var spacing: CGFloat = 0 {
-            didSet { self.setNeedsUpdateConstraints() }
+            didSet(oldValue) {
+                if self.spacing != oldValue {
+                    self.setNeedsUpdateConstraints()
+                }
+            }
         }
         public var views: [UIView] = [] {
             willSet {

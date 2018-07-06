@@ -55,6 +55,12 @@ open class QDisplayView : QView {
         didSet { self.updateCornerRadius() }
     }
 
+    open override func setup() {
+        super.setup()
+
+        self.clipsToBounds = true
+    }
+
     private func updateCornerRadius() {
         self.layer.cornerRadius = self.cornerRadius.compute(self.bounds)
         self.updateShadowPath()
