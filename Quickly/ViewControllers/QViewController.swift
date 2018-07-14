@@ -30,14 +30,14 @@ open class QViewController : NSObject, IQViewController {
     open var edgesForExtendedLayout: UIRectEdge {
         didSet(oldValue) {
             if self.edgesForExtendedLayout != oldValue {
-                self.setNeedLayout()
+                self.didChangeAdditionalEdgeInsets()
             }
         }
     }
     open var additionalEdgeInsets: UIEdgeInsets {
         didSet(oldValue) {
             if self.additionalEdgeInsets != oldValue {
-                self.setNeedLayout()
+                self.didChangeAdditionalEdgeInsets()
             }
         }
     }
@@ -148,6 +148,18 @@ open class QViewController : NSObject, IQViewController {
     }
 
     open func layout(bounds: CGRect) {
+        #if DEBUG
+        if self.logging == true {
+            print("\(String(describing: self.classForCoder)).layout(bounds: \(bounds)")
+        }
+        #endif
+    }
+
+    open func didChangeAdditionalEdgeInsets() {
+        self.setNeedLayout()
+        self.child.forEach({
+            $0.didChangeAdditionalEdgeInsets()
+        })
     }
 
     open func prepareInteractivePresent() {

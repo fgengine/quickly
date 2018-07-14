@@ -33,6 +33,8 @@ public protocol IQViewController : class {
     func layoutIfNeeded()
     func layout(bounds: CGRect)
 
+    func didChangeAdditionalEdgeInsets()
+
     func prepareInteractivePresent()
     func cancelInteractivePresent()
     func finishInteractivePresent()

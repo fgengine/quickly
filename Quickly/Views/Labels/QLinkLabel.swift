@@ -46,19 +46,19 @@ open class QLinkLabel : QLabel {
         }
     }
     public var links: [Link] = [] {
-        didSet { self.updateTextStorage() }
+        didSet { self._updateTextStorage() }
     }
 
     public func appendLink(_ string: String, normal: QTextStyle, highlight: QTextStyle?, onPressed: @escaping PressedClosure) {
         guard let text = self.text else { return }
         guard let range = text.attributed.string.range(of: string) else { return }
         self.links.append(Link(range, normal: normal, highlight: highlight, onPressed: onPressed))
-        self.updateTextStorage()
+        self._updateTextStorage()
     }
 
     public func appendLink(_ range: Range< String.Index >, normal: QTextStyle, highlight: QTextStyle?, onPressed: @escaping PressedClosure) {
         self.links.append(Link(range, normal: normal, highlight: highlight, onPressed: onPressed))
-        self.updateTextStorage()
+        self._updateTextStorage()
     }
 
     public func removeLink(_ range: Range< String.Index >) {
@@ -73,12 +73,12 @@ open class QLinkLabel : QLabel {
         for removeIndex in removeIndeces {
             self.links.remove(at: removeIndex)
         }
-        self.updateTextStorage()
+        self._updateTextStorage()
     }
 
     public func removeAllLinks() {
         self.links.removeAll()
-        self.updateTextStorage()
+        self._updateTextStorage()
     }
 
     @IBAction private func handlePressGesture(_ gesture: UILongPressGestureRecognizer) {
@@ -110,7 +110,7 @@ open class QLinkLabel : QLabel {
         default: break
         }
         if needUpdate == true {
-            self.updateTextStorage()
+            self._updateTextStorage()
         }
     }
 
@@ -128,8 +128,8 @@ open class QLinkLabel : QLabel {
         self.pressGestureRecognizer = gestureRecognizer
     }
 
-    internal override func updateTextStorage() {
-        super.updateTextStorage()
+    internal override func _updateTextStorage() {
+        super._updateTextStorage()
 
         let string = self.textStorage.string
         let stringRange = string.startIndex ..< string.endIndex

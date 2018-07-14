@@ -135,7 +135,7 @@ public class QButton : QControl {
         self.backgroundView = QDisplayView(frame: self.bounds)
         self.backgroundView.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundView.isUserInteractionEnabled = false
-        self.backgroundView.backgroundColor = UIColor.clear
+        self.backgroundView.clipsToBounds = false
         self.addSubview(self.backgroundView)
 
         self.contentView = QView(frame: self.bounds)

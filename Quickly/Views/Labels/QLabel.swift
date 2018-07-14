@@ -85,7 +85,7 @@ open class QLabel : QDisplayView {
     }
     public var text: IQText? {
         didSet {
-            self.updateTextStorage()
+            self._updateTextStorage()
             self.invalidateIntrinsicContentSize()
             self.setNeedsDisplay()
         }
@@ -116,7 +116,7 @@ open class QLabel : QDisplayView {
         get {
             if self.cacheIntrinsicContentSize == nil {
                 self.cacheIntrinsicContentSize = self.sizeThatFits(CGSize(
-                    width: self.currentPreferredMaxLayoutWidth(),
+                    width: self._currentPreferredMaxLayoutWidth(),
                     height: CGFloat.greatestFiniteMagnitude
                 ))
             }
@@ -152,6 +152,22 @@ open class QLabel : QDisplayView {
     internal var lastBaselineView: UIView!
 
     private var cacheIntrinsicContentSize: CGSize?
+    private var layoutEngine: Any? {
+        let objcMethodName = "nsli_layoutEngine"
+        let objcSelector = Selector(objcMethodName)
+        typealias targetCFunction = @convention(c) (AnyObject, Selector) -> Any
+        let target = class_getMethodImplementation(type(of: self).self, objcSelector)
+        let casted = unsafeBitCast(target, to: targetCFunction.self)
+        return casted(self, objcSelector)
+    }
+    private var compatibleBounds: CGRect? {
+        let objcMethodName = "_nsis_compatibleBoundsInEngine:"
+        let objcSelector = Selector(objcMethodName)
+        typealias targetCFunction = @convention(c) (AnyObject, Selector, Any) -> CGRect
+        let target = class_getMethodImplementation(type(of: self).self, objcSelector)
+        let casted = unsafeBitCast(target, to: targetCFunction.self)
+        return layoutEngine.flatMap { casted(self, objcSelector, $0) }
+    }
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -193,7 +209,7 @@ open class QLabel : QDisplayView {
     public func characterIndex(point: CGPoint) -> String.Index? {
         let viewRect = self.bounds
         let textSize = self.layoutManager.usedRect(for: self.textContainer).integral.size
-        let textOffset = self.alignmentPoint(size: viewRect.size, textSize: textSize)
+        let textOffset = self._alignmentPoint(size: viewRect.size, textSize: textSize)
         let textRect = CGRect(x: textOffset.x, y: textOffset.y, width: textSize.width, height: textSize.height)
         if textRect.contains(point) == true {
             let location = CGPoint(
@@ -224,7 +240,7 @@ open class QLabel : QDisplayView {
         if self.firstBaselineView != nil || self.lastBaselineView != nil {
             let viewRect = self.bounds.integral
             let textSize = self.layoutManager.usedRect(for: self.textContainer).integral.size
-            let textOffset = self.alignmentPoint(size: viewRect.size, textSize: textSize)
+            let textOffset = self._alignmentPoint(size: viewRect.size, textSize: textSize)
             let length = self.textStorage.length
             if length > 0 {
                 var firstLineRange = NSRange()
@@ -282,7 +298,7 @@ open class QLabel : QDisplayView {
 
         let viewRect = self.bounds.integral
         let textSize = self.layoutManager.usedRect(for: self.textContainer).integral.size
-        let textOffset = self.alignmentPoint(size: viewRect.size, textSize: textSize)
+        let textOffset = self._alignmentPoint(size: viewRect.size, textSize: textSize)
         let textRange = self.layoutManager.glyphRange(for: self.textContainer)
         self.layoutManager.drawBackground(forGlyphRange: textRange, at: textOffset)
         self.layoutManager.drawGlyphs(forGlyphRange: textRange, at: textOffset)
@@ -307,31 +323,36 @@ open class QLabel : QDisplayView {
         super.sizeToFit()
 
         self.frame.size = self.sizeThatFits(CGSize(
-            width: self.currentPreferredMaxLayoutWidth(),
+            width: self._currentPreferredMaxLayoutWidth(),
             height: CGFloat.greatestFiniteMagnitude
         ))
     }
 
-    internal func currentPreferredMaxLayoutWidth() -> CGFloat {
+    internal func _currentPreferredMaxLayoutWidth() -> CGFloat {
         let maxLayoutWidth = self.preferredMaxLayoutWidth
         if maxLayoutWidth > CGFloat.leastNonzeroMagnitude {
             return maxLayoutWidth
         }
-        if self.numberOfLines == 1 {
-            return CGFloat.greatestFiniteMagnitude
+        if let compatibleBounds = self.compatibleBounds {
+            return compatibleBounds.width
         }
         return self.bounds.width
     }
 
-    internal func updateTextStorage() {
+    internal func _updateTextStorage() {
         if let text = self.text {
             self.textStorage.setAttributedString(text.attributed)
         } else {
             self.textStorage.deleteAllCharacters()
         }
     }
+    
+    @objc
+    private func _needsDoubleUpdateConstraintsPass() -> Bool {
+        return true
+    }
 
-    private func alignmentPoint(size: CGSize, textSize: CGSize) -> CGPoint {
+    private func _alignmentPoint(size: CGSize, textSize: CGSize) -> CGPoint {
         var y = size.height - textSize.height
         switch self.verticalAlignment {
         case .top: y = 0
