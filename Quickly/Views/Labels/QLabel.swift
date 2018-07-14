@@ -152,10 +152,10 @@ open class QLabel : QDisplayView {
     internal var lastBaselineView: UIView!
 
     private var cacheIntrinsicContentSize: CGSize?
-    private var layoutEngine: Any? {
+    private var layoutEngine: AnyObject? {
         let objcMethodName = "nsli_layoutEngine"
         let objcSelector = Selector(objcMethodName)
-        typealias targetCFunction = @convention(c) (AnyObject, Selector) -> Any
+        typealias targetCFunction = @convention(c) (AnyObject, Selector) -> AnyObject
         let target = class_getMethodImplementation(type(of: self).self, objcSelector)
         let casted = unsafeBitCast(target, to: targetCFunction.self)
         return casted(self, objcSelector)
@@ -166,7 +166,10 @@ open class QLabel : QDisplayView {
         typealias targetCFunction = @convention(c) (AnyObject, Selector, Any) -> CGRect
         let target = class_getMethodImplementation(type(of: self).self, objcSelector)
         let casted = unsafeBitCast(target, to: targetCFunction.self)
-        return layoutEngine.flatMap { casted(self, objcSelector, $0) }
+        if let layoutEngine = self.layoutEngine {
+            return casted(self, objcSelector, layoutEngine)
+        }
+        return nil
     }
 
     public override init(frame: CGRect) {

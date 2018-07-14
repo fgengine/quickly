@@ -12,7 +12,11 @@ public final class QObserver< T > {
 
     public func add(_ observer: T, priority: UInt) {
         let pointer = Unmanaged.passUnretained(observer as AnyObject).toOpaque()
-        self.items.append(Item(priority: priority, pointer: pointer))
+        if let index = self.items.index(where: { $0.pointer == pointer }) {
+            self.items[index].priority = priority
+        } else {
+            self.items.append(Item(priority: priority, pointer: pointer))
+        }
         self.items.sort(by: { return $0.priority < $1.priority })
     }
 
@@ -32,8 +36,8 @@ public final class QObserver< T > {
 
     private final class Item {
 
-        let priority: UInt
-        let pointer: UnsafeMutableRawPointer
+        var priority: UInt
+        var pointer: UnsafeMutableRawPointer
         var observer: T {
             get { return Unmanaged< AnyObject >.fromOpaque(self.pointer).takeUnretainedValue() as! T }
         }
