@@ -43,7 +43,11 @@ open class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
         enablesReturnKeyAutomatically: Bool = true,
         isSecureTextEntry: Bool = false,
         textContentType: UITextContentType! = nil,
-        isEnabled: Bool = true
+        isEnabled: Bool = true,
+        backgroundColor: UIColor? = UIColor.clear,
+        cornerRadius: QViewCornerRadius = .none,
+        border: QViewBorder = .none,
+        shadow: QViewShadow? = nil
     ) {
         self.requireValidator = requireValidator
         self.validator = validator
@@ -64,7 +68,12 @@ open class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
         self.textContentType = textContentType
         self.isEnabled = isEnabled
 
-        super.init(backgroundColor: UIColor.clear)
+        super.init(
+            backgroundColor: backgroundColor,
+            cornerRadius: cornerRadius,
+            border: border,
+            shadow: shadow
+        )
     }
 
     public init(_ styleSheet: QTextFieldStyleSheet) {

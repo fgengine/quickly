@@ -29,11 +29,35 @@ open class QDateFieldStyleSheet : QDisplayViewStyleSheet< QDateField > {
     public var placeholder: IQText?
     public var isEnabled: Bool
 
-    public init() {
-        self.mode = .date
-        self.isEnabled = true
-
-        super.init(backgroundColor: UIColor.clear)
+    public init(
+        formatter: IQDateFieldFormatter? = nil,
+        mode: QDateFieldMode = .date,
+        calendar: Calendar? = nil,
+        locale: Locale? = nil,
+        minimumDate: Date? = nil,
+        maximumDate: Date? = nil,
+        placeholder: IQText? = nil,
+        isEnabled: Bool = true,
+        backgroundColor: UIColor? = UIColor.clear,
+        cornerRadius: QViewCornerRadius = .none,
+        border: QViewBorder = .none,
+        shadow: QViewShadow? = nil
+    ) {
+        self.formatter = formatter
+        self.mode = mode
+        self.calendar = calendar
+        self.locale = locale
+        self.minimumDate = minimumDate
+        self.maximumDate = maximumDate
+        self.placeholder = placeholder
+        self.isEnabled = isEnabled
+        
+        super.init(
+            backgroundColor: backgroundColor,
+            cornerRadius: cornerRadius,
+            border: border,
+            shadow: shadow
+        )
     }
 
     public init(_ styleSheet: QDateFieldStyleSheet) {

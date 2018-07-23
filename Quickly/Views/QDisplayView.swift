@@ -10,7 +10,7 @@ open class QDisplayViewStyleSheet< TargetType: QDisplayView > : IQStyleSheet {
     public var shadow: QViewShadow?
 
     public init(
-        backgroundColor: UIColor? = nil,
+        backgroundColor: UIColor? = UIColor.clear,
         cornerRadius: QViewCornerRadius = .none,
         border: QViewBorder = .none,
         shadow: QViewShadow? = nil

@@ -13,14 +13,23 @@ public class QListFieldStyleSheet : QDisplayViewStyleSheet< QListField > {
         rows: [QListFieldPickerRow],
         rowHeight: CGFloat = 40,
         placeholder: IQText? = nil,
-        isEnabled: Bool = true
+        isEnabled: Bool = true,
+        backgroundColor: UIColor? = UIColor.clear,
+        cornerRadius: QViewCornerRadius = .none,
+        border: QViewBorder = .none,
+        shadow: QViewShadow? = nil
     ) {
         self.rows = rows
         self.rowHeight = rowHeight
         self.placeholder = placeholder
         self.isEnabled = isEnabled
         
-        super.init(backgroundColor: UIColor.clear)
+        super.init(
+            backgroundColor: backgroundColor,
+            cornerRadius: cornerRadius,
+            border: border,
+            shadow: shadow
+        )
     }
 
     public init(_ styleSheet: QListFieldStyleSheet) {
