@@ -44,7 +44,7 @@ open class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
         isSecureTextEntry: Bool = false,
         textContentType: UITextContentType! = nil,
         isEnabled: Bool = true,
-        backgroundColor: UIColor? = UIColor.clear,
+        backgroundColor: UIColor? = nil,
         cornerRadius: QViewCornerRadius = .none,
         border: QViewBorder = .none,
         shadow: QViewShadow? = nil

@@ -16,7 +16,7 @@ open class QImageViewStyleSheet : QDisplayViewStyleSheet< QImageView > {
         horizontalAlignment: QViewHorizontalAlignment = .center,
         filter: IQImageLoaderFilter? = nil,
         loader: QImageLoader? = nil,
-        backgroundColor: UIColor? = UIColor.clear
+        backgroundColor: UIColor? = nil
     ) {
         self.source = source
         self.verticalAlignment = verticalAlignment

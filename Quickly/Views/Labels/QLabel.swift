@@ -16,7 +16,10 @@ open class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
         padding: CGFloat = 0,
         lineBreakMode: NSLineBreakMode = .byWordWrapping,
         numberOfLines: Int = 0,
-        backgroundColor: UIColor? = UIColor.clear
+        backgroundColor: UIColor? = nil,
+        cornerRadius: QViewCornerRadius = .none,
+        border: QViewBorder = .none,
+        shadow: QViewShadow? = nil
     ) {
         self.text = text
         self.verticalAlignment = verticalAlignment
@@ -24,7 +27,12 @@ open class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
         self.lineBreakMode = lineBreakMode
         self.numberOfLines = numberOfLines
         
-        super.init(backgroundColor: backgroundColor)
+        super.init(
+            backgroundColor: backgroundColor,
+            cornerRadius: cornerRadius,
+            border: border,
+            shadow: shadow
+        )
     }
 
     public init(_ styleSheet: QLabelStyleSheet) {

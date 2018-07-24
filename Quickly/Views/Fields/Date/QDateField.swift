@@ -38,7 +38,7 @@ open class QDateFieldStyleSheet : QDisplayViewStyleSheet< QDateField > {
         maximumDate: Date? = nil,
         placeholder: IQText? = nil,
         isEnabled: Bool = true,
-        backgroundColor: UIColor? = UIColor.clear,
+        backgroundColor: UIColor? = nil,
         cornerRadius: QViewCornerRadius = .none,
         border: QViewBorder = .none,
         shadow: QViewShadow? = nil

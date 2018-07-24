@@ -14,7 +14,7 @@ open class QComposable : IQComposable {
 
 open class QComposition< Composable: IQComposable > : IQComposition {
 
-    public var contentView: UIView
+    public private(set) var contentView: UIView
     public private(set) var composable: Composable!
 
     open class func size(composable: Composable, size: CGSize) -> CGSize {

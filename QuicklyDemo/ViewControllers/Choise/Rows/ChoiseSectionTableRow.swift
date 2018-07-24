@@ -68,10 +68,10 @@ class ChoiseSectionTableRow : QCompositionTableRow< QTitleDetailShapeComposable 
                 title: QLabelStyleSheet(text: QStyledText(mode.name, style: TextStyle.title)),
                 detail: QLabelStyleSheet(text: QStyledText(mode.detail, style: TextStyle.subtitle)),
                 shape: DisclosureShape(color: UIColor.black)
-            )
+            ),
+            backgroundColor: UIColor(white: 1, alpha: 1),
+            selectedBackgroundColor: UIColor(white: 0, alpha: 0.1)
         )
-
-        self.selectedBackgroundColor = UIColor(white: 0, alpha: 0.1)
     }
 
 }
