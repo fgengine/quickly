@@ -174,6 +174,7 @@ public class QDateField : QDisplayView, IQField {
 
     internal var label: QLabel!
     internal var picker: UIDatePicker!
+    internal var tapGesture: UITapGestureRecognizer!
 
     open override var intrinsicContentSize: CGSize {
         get { return self.label.intrinsicContentSize }
@@ -191,6 +192,9 @@ public class QDateField : QDisplayView, IQField {
         self.picker = UIDatePicker()
         self.picker.datePickerMode = self.mode.datePickerMode
         self.picker.addValueChanged(self, action: #selector(self.changeDate(_:)))
+        
+        self.tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture(_:)))
+        self.addGestureRecognizer(self.tapGesture)
     }
 
     open func beginEditing() {
@@ -254,6 +258,13 @@ public class QDateField : QDisplayView, IQField {
         self.date = self.picker.date
         self.updateText()
         self.onSelect?(self, self.picker.date)
+    }
+    
+    @objc
+    private func tapGesture(_ sender: Any) {
+        if self.canBecomeFirstResponder == true {
+            self.becomeFirstResponder()
+        }
     }
 
 }

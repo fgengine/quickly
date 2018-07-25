@@ -12,14 +12,16 @@ open class QButtonComposable : QComposable {
     public var buttonPressed: Closure
 
     public init(
+        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
         button: QButtonStyleSheet,
+        buttonHeight: CGFloat = 44,
         buttonPressed: @escaping Closure
     ) {
         self.button = button
-        self.buttonHeight = 44
+        self.buttonHeight = buttonHeight
         self.buttonIsSpinnerAnimating = false
         self.buttonPressed = buttonPressed
-        super.init()
+        super.init(edgeInsets: edgeInsets)
     }
 
 }

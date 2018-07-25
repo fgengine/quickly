@@ -9,7 +9,7 @@ open class QImageTitleDetailShapeComposable : QComposable {
     public var imageSpacing: CGFloat
 
     public var title: QLabelStyleSheet
-    public var titleSpacing: CGFloat = 0
+    public var titleSpacing: CGFloat
 
     public var detail: QLabelStyleSheet
 
@@ -18,21 +18,27 @@ open class QImageTitleDetailShapeComposable : QComposable {
     public var shapeSpacing: CGFloat
 
     public init(
+        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
         image: QImageViewStyleSheet,
+        imageWidth: CGFloat = 96,
+        imageSpacing: CGFloat = 4,
         title: QLabelStyleSheet,
+        titleSpacing: CGFloat = 4,
         detail: QLabelStyleSheet,
-        shape: IQShapeModel
+        shape: IQShapeModel,
+        shapeWidth: CGFloat = 16,
+        shapeSpacing: CGFloat = 4
     ) {
         self.image = image
-        self.imageWidth = 96
-        self.imageSpacing = 0
+        self.imageWidth = imageWidth
+        self.imageSpacing = imageSpacing
         self.title = title
-        self.titleSpacing = 0
+        self.titleSpacing = titleSpacing
         self.detail = detail
         self.shape = shape
-        self.shapeWidth = 16
-        self.shapeSpacing = 0
-        super.init()
+        self.shapeWidth = shapeWidth
+        self.shapeSpacing = shapeSpacing
+        super.init(edgeInsets: edgeInsets)
     }
 
 }
@@ -71,7 +77,7 @@ open class QImageTitleDetailShapeComposition< Composable: QImageTitleDetailShape
         let detailTextSize = composable.detail.text.size(width: availableWidth - (composable.imageWidth + composable.imageSpacing + composable.shapeWidth + composable.shapeSpacing))
         return CGSize(
             width: size.width,
-            height: composable.edgeInsets.top + max(imageSize.height, titleTextSize.height + composable.titleSpacing + detailTextSize.height, composable.shape.size.height) + composable.edgeInsets.bottom
+            height: composable.edgeInsets.top + max(imageSize.height, ceil(titleTextSize.height) + composable.titleSpacing + ceil(detailTextSize.height), composable.shape.size.height) + composable.edgeInsets.bottom
         )
     }
 
@@ -115,16 +121,16 @@ open class QImageTitleDetailShapeComposition< Composable: QImageTitleDetailShape
             var selfConstraints: [NSLayoutConstraint] = []
             selfConstraints.append(self.imageView.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
             selfConstraints.append(self.imageView.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
-            selfConstraints.append(self.imageView.trailingLayout == self.titleLabel.leadingLayout - composable.imageSpacing)
             selfConstraints.append(self.imageView.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
             selfConstraints.append(self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
+            selfConstraints.append(self.titleLabel.leadingLayout == self.imageView.trailingLayout + composable.imageSpacing)
             selfConstraints.append(self.titleLabel.trailingLayout == self.shapeView.leadingLayout - composable.shapeSpacing)
-            selfConstraints.append(self.titleLabel.bottomLayout == self.detailLabel.topLayout - composable.titleSpacing)
-            selfConstraints.append(self.detailLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
+            selfConstraints.append(self.titleLabel.bottomLayout <= self.detailLabel.topLayout - composable.titleSpacing)
+            selfConstraints.append(self.detailLabel.leadingLayout == self.imageView.trailingLayout + composable.imageSpacing)
             selfConstraints.append(self.detailLabel.trailingLayout == self.shapeView.leadingLayout - composable.shapeSpacing)
             selfConstraints.append(self.detailLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
             selfConstraints.append(self.shapeView.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
-            selfConstraints.append(self.shapeView.leadingLayout == self.titleLabel.trailingLayout + composable.shapeSpacing)
+            selfConstraints.append(self.shapeView.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
             selfConstraints.append(self.shapeView.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
             self.selfConstraints = selfConstraints
         }

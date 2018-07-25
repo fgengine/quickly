@@ -18,21 +18,27 @@ open class QImageTitleValueIconComposable : QComposable {
     public var iconSpacing: CGFloat
 
     public init(
+        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
         image: QImageViewStyleSheet,
+        imageWidth: CGFloat = 96,
+        imageSpacing: CGFloat = 4,
         title: QLabelStyleSheet,
+        titleSpacing: CGFloat = 4,
         value: QLabelStyleSheet,
-        icon: QImageViewStyleSheet
+        icon: QImageViewStyleSheet,
+        iconWidth: CGFloat = 16,
+        iconSpacing: CGFloat = 4
     ) {
         self.image = image
-        self.imageWidth = 96
-        self.imageSpacing = 8
+        self.imageWidth = imageWidth
+        self.imageSpacing = imageSpacing
         self.title = title
-        self.titleSpacing = 4
+        self.titleSpacing = titleSpacing
         self.value = value
         self.icon = icon
-        self.iconWidth = 16
-        self.iconSpacing = 8
-        super.init()
+        self.iconWidth = iconWidth
+        self.iconSpacing = iconSpacing
+        super.init(edgeInsets: edgeInsets)
     }
 
 }
@@ -125,7 +131,6 @@ open class QImageTitleValueIconComposition< Composable: QImageTitleValueIconComp
             selfConstraints.append(self.valueLabel.trailingLayout == self.iconView.leadingLayout - composable.iconSpacing)
             selfConstraints.append(self.valueLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
             selfConstraints.append(self.iconView.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
-            selfConstraints.append(self.iconView.leadingLayout == self.titleLabel.trailingLayout + composable.iconSpacing)
             selfConstraints.append(self.iconView.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
             selfConstraints.append(self.iconView.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
             self.selfConstraints = selfConstraints

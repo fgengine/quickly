@@ -15,6 +15,7 @@ class ChoiseSectionTableRow : QCompositionTableRow< QTitleDetailShapeComposable 
         case listField
         case dateField
         case image
+        case table
         case page
         case modal
         case dialog
@@ -29,6 +30,7 @@ class ChoiseSectionTableRow : QCompositionTableRow< QTitleDetailShapeComposable 
                 case .listField: return "ListField"
                 case .dateField: return "DateField"
                 case .image: return "Image"
+                case .table: return "Table"
                 case .page: return "Page"
                 case .modal: return "Modal"
                 case .dialog: return "Dialog"
@@ -45,6 +47,7 @@ class ChoiseSectionTableRow : QCompositionTableRow< QTitleDetailShapeComposable 
                 case .listField: return "Pressed to open the QListField component demonstration screen"
                 case .dateField: return "Pressed to open the QDateField component demonstration screen"
                 case .image: return "Pressed to open the QImageView component demonstration screen"
+                case .table: return "Pressed to open the QTable component demonstration screen"
                 case .page: return "Pressed to open the QPageViewController component demonstration screen"
                 case .modal: return "Pressed to open the QModalViewController component demonstration screen"
                 case .dialog: return "Pressed to open the QDialogViewController component demonstration screen"

@@ -10,13 +10,15 @@ open class QTitleValueComposable : QComposable {
     public var value: QLabelStyleSheet
 
     public init(
+        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
         title: QLabelStyleSheet,
+        titleSpacing: CGFloat = 4,
         value: QLabelStyleSheet
     ) {
         self.title = title
-        self.titleSpacing = 8
+        self.titleSpacing = titleSpacing
         self.value = value
-        super.init()
+        super.init(edgeInsets: edgeInsets)
     }
 
 }

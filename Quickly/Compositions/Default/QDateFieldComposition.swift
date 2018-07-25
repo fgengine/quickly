@@ -14,20 +14,33 @@ open class QDateFieldComposable : QComposable {
     public var fieldIsEditing: Bool
     public var fieldShouldBeginEditing: ShouldClosure?
     public var fieldBeginEditing: Closure?
-    public var fieldSelect: Closure?
+    public var fieldSelect: Closure
     public var fieldShouldEndEditing: ShouldClosure?
     public var fieldEndEditing: Closure?
 
     public init(
+        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
         field: QDateFieldStyleSheet,
-        date: Date?
+        fieldDate: Date? = nil,
+        fieldHeight: CGFloat = 44,
+        fieldSelectedRow: QListFieldPickerRow? = nil,
+        fieldShouldBeginEditing: ShouldClosure? = nil,
+        fieldBeginEditing: Closure? = nil,
+        fieldSelect: @escaping Closure,
+        fieldShouldEndEditing: ShouldClosure? = nil,
+        fieldEndEditing: Closure? = nil
     ) {
         self.field = field
-        self.fieldHeight = 44
-        self.fieldDate = date
+        self.fieldDate = fieldDate
+        self.fieldHeight = fieldHeight
         self.fieldIsValid = true
         self.fieldIsEditing = false
-        super.init()
+        self.fieldShouldBeginEditing = fieldShouldBeginEditing
+        self.fieldBeginEditing = fieldBeginEditing
+        self.fieldSelect = fieldSelect
+        self.fieldShouldEndEditing = fieldShouldEndEditing
+        self.fieldEndEditing = fieldEndEditing
+        super.init(edgeInsets: edgeInsets)
     }
 
 }
@@ -115,9 +128,7 @@ open class QDateFieldComposition< Composable: QDateFieldComposable >: QCompositi
         guard let composable = self.composable else { return }
         composable.fieldIsValid = self.dateField.isValid
         composable.fieldDate = date
-        if let closure = composable.fieldSelect {
-            closure(composable)
-        }
+        composable.fieldSelect(composable)
     }
 
     private func shouldEndEditing() -> Bool {

@@ -12,22 +12,38 @@ open class QImageTitleComposable : QComposable {
     public var title: QLabelStyleSheet
 
     public init(
-        direction: QViewDirection,
+        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
         image: QImageViewStyleSheet,
-        imageSize: CGSize,
+        imageWidth: CGFloat = 96,
+        imageSpacing: CGFloat = 4,
         title: QLabelStyleSheet
     ) {
-        self.direction = direction
+        self.direction = .horizontal
         self.image = image
-        self.imageSize = imageSize
-        self.imageSpacing = 8
+        self.imageSize = CGSize(width: imageWidth, height: imageWidth)
+        self.imageSpacing = imageSpacing
         self.title = title
-        super.init()
+        super.init(edgeInsets: edgeInsets)
+    }
+    
+    public init(
+        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
+        image: QImageViewStyleSheet,
+        imageHeight: CGFloat = 96,
+        imageSpacing: CGFloat = 8,
+        title: QLabelStyleSheet
+    ) {
+        self.direction = .vertical
+        self.image = image
+        self.imageSize = CGSize(width: imageHeight, height: imageHeight)
+        self.imageSpacing = imageSpacing
+        self.title = title
+        super.init(edgeInsets: edgeInsets)
     }
 
 }
 
-open class QImageTitleCompositionCell< Composable: QImageTitleComposable > : QComposition< Composable > {
+open class QImageTitleComposition< Composable: QImageTitleComposable > : QComposition< Composable > {
 
     public private(set) var imageView: QImageView!
     public private(set) var titleLabel: QLabel!

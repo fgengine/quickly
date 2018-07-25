@@ -15,18 +15,23 @@ open class QImageTitleShapeComposable : QComposable {
     public var shapeSpacing: CGFloat
 
     public init(
+        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
         image: QImageViewStyleSheet,
+        imageWidth: CGFloat = 96,
+        imageSpacing: CGFloat = 4,
         title: QLabelStyleSheet,
-        shape: IQShapeModel
+        shape: IQShapeModel,
+        shapeWidth: CGFloat = 16,
+        shapeSpacing: CGFloat = 4
     ) {
         self.image = image
-        self.imageWidth = 96
-        self.imageSpacing = 0
+        self.imageWidth = imageWidth
+        self.imageSpacing = imageSpacing
         self.title = title
         self.shape = shape
-        self.shapeWidth = 16
-        self.shapeSpacing = 0
-        super.init()
+        self.shapeWidth = shapeWidth
+        self.shapeSpacing = shapeSpacing
+        super.init(edgeInsets: edgeInsets)
     }
 
 }

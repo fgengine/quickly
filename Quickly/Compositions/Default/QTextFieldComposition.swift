@@ -14,7 +14,7 @@ open class QTextFieldComposable : QComposable {
     public var fieldIsEditing: Bool
     public var fieldShouldBeginEditing: ShouldClosure?
     public var fieldBeginEditing: Closure?
-    public var fieldEditing: Closure?
+    public var fieldEditing: Closure
     public var fieldShouldEndEditing: ShouldClosure?
     public var fieldEndEditing: Closure?
     public var fieldShouldClear: ShouldClosure?
@@ -23,15 +23,35 @@ open class QTextFieldComposable : QComposable {
     public var fieldPressedReturn: Closure?
 
     public init(
+        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
         field: QTextFieldStyleSheet,
-        text: String
+        fieldText: String,
+        fieldHeight: CGFloat = 44,
+        fieldShouldBeginEditing: ShouldClosure? = nil,
+        fieldBeginEditing: Closure? = nil,
+        fieldEditing: @escaping Closure,
+        fieldShouldEndEditing: ShouldClosure? = nil,
+        fieldEndEditing: Closure? = nil,
+        fieldShouldClear: ShouldClosure? = nil,
+        fieldPressedClear: Closure? = nil,
+        fieldShouldReturn: ShouldClosure? = nil,
+        fieldPressedReturn: Closure? = nil
     ) {
         self.field = field
-        self.fieldHeight = 44
-        self.fieldText = text
+        self.fieldText = fieldText
+        self.fieldHeight = fieldHeight
         self.fieldIsValid = true
         self.fieldIsEditing = false
-        super.init()
+        self.fieldShouldBeginEditing = fieldShouldBeginEditing
+        self.fieldBeginEditing = fieldBeginEditing
+        self.fieldEditing = fieldEditing
+        self.fieldShouldEndEditing = fieldShouldEndEditing
+        self.fieldEndEditing = fieldEndEditing
+        self.fieldShouldClear = fieldShouldClear
+        self.fieldPressedClear = fieldPressedClear
+        self.fieldShouldReturn = fieldShouldReturn
+        self.fieldPressedReturn = fieldPressedReturn
+        super.init(edgeInsets: edgeInsets)
     }
 
 }
@@ -135,9 +155,7 @@ open class QTextFieldComposition< Composable: QTextFieldComposable >: QCompositi
         guard let composable = self.composable else { return }
         composable.fieldIsValid = self.textField.isValid
         composable.fieldText = self.textField.unformatText
-        if let closure = composable.fieldEditing {
-            closure(composable)
-        }
+        composable.fieldEditing(composable)
     }
 
     private func shouldEndEditing() -> Bool {

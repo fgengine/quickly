@@ -122,6 +122,7 @@ public class QListField : QDisplayView, IQField {
     internal var picker: QPickerView!
     internal var pickerSection: QPickerSection!
     internal var pickerController: QPickerController!
+    internal var tapGesture: UITapGestureRecognizer!
 
     open override var intrinsicContentSize: CGSize {
         get { return self.label.intrinsicContentSize }
@@ -144,6 +145,9 @@ public class QListField : QDisplayView, IQField {
         self.pickerController.sections = [ self.pickerSection ]
         self.pickerController.delegate = self
         self.picker.pickerController = self.pickerController
+        
+        self.tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture(_:)))
+        self.addGestureRecognizer(self.tapGesture)
     }
 
     open func beginEditing() {
@@ -173,6 +177,13 @@ public class QListField : QDisplayView, IQField {
         guard super.resignFirstResponder() == true else { return false }
         self.onEndEditing?(self)
         return true
+    }
+    
+    @objc
+    private func tapGesture(_ sender: Any) {
+        if self.canBecomeFirstResponder == true {
+            self.becomeFirstResponder()
+        }
     }
 
 }

@@ -5,8 +5,11 @@
 open class QComposable : IQComposable {
 
     public var edgeInsets: UIEdgeInsets
+    public class var defaultEdgeInsets: UIEdgeInsets {
+        get { return UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16) }
+    }
 
-    public init(edgeInsets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)) {
+    public init(edgeInsets: UIEdgeInsets = defaultEdgeInsets) {
         self.edgeInsets = edgeInsets
     }
 

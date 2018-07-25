@@ -15,17 +15,20 @@ open class QTitleButtonComposable : QComposable {
     public var buttonPressed: Closure
 
     public init(
+        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
         title: QLabelStyleSheet,
         button: QButtonStyleSheet,
+        buttonHeight: CGFloat = 44,
+        buttonSpacing: CGFloat = 4,
         buttonPressed: @escaping Closure
     ) {
         self.title = title
         self.button = button
-        self.buttonHeight = 44
-        self.buttonSpacing = 8
+        self.buttonHeight = buttonHeight
+        self.buttonSpacing = buttonSpacing
         self.buttonIsSpinnerAnimating = false
         self.buttonPressed = buttonPressed
-        super.init()
+        super.init(edgeInsets: edgeInsets)
     }
 
 }

@@ -111,6 +111,7 @@ open class QLabel : QDisplayView {
         didSet(oldValue) {
             if self.frame != oldValue {
                 self.invalidateIntrinsicContentSize()
+                self.setNeedsDisplay()
             }
         }
     }
@@ -118,6 +119,7 @@ open class QLabel : QDisplayView {
         didSet(oldValue) {
             if self.bounds != oldValue {
                 self.invalidateIntrinsicContentSize()
+                self.setNeedsDisplay()
             }
         }
     }
@@ -206,7 +208,7 @@ open class QLabel : QDisplayView {
         super.setup()
 
         self.backgroundColor = UIColor.clear
-        self.contentMode = .redraw
+        self.contentMode = .center
 
         self.textContainer.lineBreakMode = .byTruncatingTail
         self.textContainer.lineFragmentPadding = 0

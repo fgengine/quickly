@@ -46,6 +46,11 @@ extension ChoiseWireframe : IChoiseViewControllerRoutePath {
         let vc = ImageViewController(self, self.routeContext)
         self.presentStack(vc, animated: true)
     }
+    
+    func presentTableViewController() {
+        let vc = TableViewController(self, self.routeContext)
+        self.presentStack(vc, animated: true)
+    }
 
     func presentPageViewController() {
         let vc = PageViewController(self, self.routeContext)
@@ -112,6 +117,14 @@ extension ChoiseWireframe : IDateFieldViewControllerRoutePath {
 extension ChoiseWireframe : IImageViewControllerRoutePath {
 
     func dismiss(viewController: ImageViewController) {
+        self.dismissStack(viewController, animated: true)
+    }
+    
+}
+
+extension ChoiseWireframe : ITableViewControllerRoutePath {
+    
+    func dismiss(viewController: TableViewController) {
         self.dismissStack(viewController, animated: true)
     }
     

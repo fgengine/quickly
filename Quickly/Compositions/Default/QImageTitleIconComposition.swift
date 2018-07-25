@@ -15,18 +15,23 @@ open class QImageTitleIconComposable : QComposable {
     public var iconSpacing: CGFloat
 
     public init(
+        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
         image: QImageViewStyleSheet,
+        imageWidth: CGFloat = 96,
+        imageSpacing: CGFloat = 4,
         title: QLabelStyleSheet,
-        icon: QImageViewStyleSheet
+        icon: QImageViewStyleSheet,
+        iconWidth: CGFloat = 16,
+        iconSpacing: CGFloat = 4
     ) {
         self.image = image
-        self.imageWidth = 96
-        self.imageSpacing = 8
+        self.imageWidth = imageWidth
+        self.imageSpacing = imageSpacing
         self.title = title
         self.icon = icon
-        self.iconWidth = 16
-        self.iconSpacing = 8
-        super.init()
+        self.iconWidth = iconWidth
+        self.iconSpacing = iconSpacing
+        super.init(edgeInsets: edgeInsets)
     }
 
 }

@@ -85,7 +85,27 @@ open class QImageView : QDisplayView, IQImageLoaderTarget {
             self.setNeedsDisplay()
         }
     }
-
+    
+    open override var frame: CGRect {
+        set(value) {
+            if(super.frame != value) {
+                super.frame = value
+                self.invalidateIntrinsicContentSize()
+                self.setNeedsDisplay()
+            }
+        }
+        get { return super.frame }
+    }
+    open override var bounds: CGRect {
+        set(value) {
+            if(super.bounds != value) {
+                super.bounds = value
+                self.invalidateIntrinsicContentSize()
+                self.setNeedsDisplay()
+            }
+        }
+        get { return super.bounds }
+    }
     open override var intrinsicContentSize: CGSize {
         get {
             if let source = self.source {
@@ -99,6 +119,7 @@ open class QImageView : QDisplayView, IQImageLoaderTarget {
         super.setup()
 
         self.backgroundColor = UIColor.clear
+        self.contentMode = .center
 
         self.loader = QImageLoader.shared
     }

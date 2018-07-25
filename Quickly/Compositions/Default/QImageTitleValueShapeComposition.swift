@@ -18,21 +18,27 @@ open class QImageTitleValueShapeComposable : QComposable {
     public var shapeSpacing: CGFloat
 
     public init(
+        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
         image: QImageViewStyleSheet,
+        imageWidth: CGFloat = 96,
+        imageSpacing: CGFloat = 4,
         title: QLabelStyleSheet,
+        titleSpacing: CGFloat = 4,
         value: QLabelStyleSheet,
-        shape: IQShapeModel
+        shape: IQShapeModel,
+        shapeWidth: CGFloat = 16,
+        shapeSpacing: CGFloat = 4
     ) {
         self.image = image
-        self.imageWidth = 96
-        self.imageSpacing = 8
+        self.imageWidth = imageWidth
+        self.imageSpacing = titleSpacing
         self.title = title
-        self.titleSpacing = 4
+        self.titleSpacing = titleSpacing
         self.value = value
         self.shape = shape
-        self.shapeWidth = 16
-        self.shapeSpacing = 8
-        super.init()
+        self.shapeWidth = shapeWidth
+        self.shapeSpacing = shapeSpacing
+        super.init(edgeInsets: edgeInsets)
     }
 
 }
@@ -124,7 +130,7 @@ open class QImageTitleValueShapeComposition< Composable: QImageTitleValueShapeCo
             selfConstraints.append(self.valueLabel.trailingLayout == self.shapeView.leadingLayout - composable.shapeSpacing)
             selfConstraints.append(self.valueLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
             selfConstraints.append(self.shapeView.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
-            selfConstraints.append(self.shapeView.leadingLayout == self.titleLabel.trailingLayout + composable.shapeSpacing)
+            selfConstraints.append(self.shapeView.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
             selfConstraints.append(self.shapeView.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
             self.selfConstraints = selfConstraints
         }

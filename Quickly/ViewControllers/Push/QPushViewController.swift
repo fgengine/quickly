@@ -58,6 +58,11 @@ open class QPushViewController : QViewController, IQPushViewController {
 
         self._layoutContentViewController()
     }
+    
+    open override func didChangeAdditionalEdgeInsets() {
+        super.didChangeAdditionalEdgeInsets()
+        self._relayoutContentViewController()
+    }
 
     open override func prepareInteractivePresent() {
         super.prepareInteractivePresent()
@@ -156,13 +161,6 @@ open class QPushViewController : QViewController, IQPushViewController {
         self._layoutContentViewController()
     }
 
-    private func _unlayoutContentViewController() {
-        if self.contentLayoutConstraints.count > 0 {
-            self.view.removeConstraints(self.contentLayoutConstraints)
-            self.contentLayoutConstraints.removeAll()
-        }
-    }
-
     private func _layoutContentViewController() {
         let additionalEdgeInsets = self.additionalEdgeInsets
         let inheritedEdgeInsets = self.inheritedEdgeInsets
@@ -183,6 +181,13 @@ open class QPushViewController : QViewController, IQPushViewController {
         self.contentLayoutConstraints.append(self.view.bottomLayout <= self.pushContentViewController.view.bottomLayout - edgeInsets.bottom ~ .defaultLow)
         if self.contentLayoutConstraints.count > 0 {
             self.view.addConstraints(self.contentLayoutConstraints)
+        }
+    }
+    
+    private func _unlayoutContentViewController() {
+        if self.contentLayoutConstraints.count > 0 {
+            self.view.removeConstraints(self.contentLayoutConstraints)
+            self.contentLayoutConstraints.removeAll()
         }
     }
 

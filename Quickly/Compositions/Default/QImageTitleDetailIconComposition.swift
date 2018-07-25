@@ -18,21 +18,27 @@ open class QImageTitleDetailIconComposable : QComposable {
     public var iconSpacing: CGFloat
 
     public init(
+        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
         image: QImageViewStyleSheet,
+        imageWidth: CGFloat = 96,
+        imageSpacing: CGFloat = 4,
         title: QLabelStyleSheet,
+        titleSpacing: CGFloat = 4,
         detail: QLabelStyleSheet,
-        icon: QImageViewStyleSheet
+        icon: QImageViewStyleSheet,
+        iconWidth: CGFloat = 16,
+        iconSpacing: CGFloat = 4
     ) {
         self.image = image
-        self.imageWidth = 96
-        self.imageSpacing = 4
+        self.imageWidth = imageWidth
+        self.imageSpacing = imageSpacing
         self.title = title
-        self.titleSpacing = 4
+        self.titleSpacing = titleSpacing
         self.detail = detail
         self.icon = icon
-        self.iconWidth = 16
-        self.iconSpacing = 4
-        super.init()
+        self.iconWidth = iconWidth
+        self.iconSpacing = iconSpacing
+        super.init(edgeInsets: edgeInsets)
     }
 
 }
@@ -72,7 +78,7 @@ open class QImageTitleDetailIconComposition< Composable: QImageTitleDetailIconCo
         let iconSize = composable.icon.source.size(CGSize(width: composable.iconWidth, height: availableWidth))
         return CGSize(
             width: size.width,
-            height: composable.edgeInsets.top + max(imageSize.height, titleTextSize.height + composable.titleSpacing + detailTextSize.height, iconSize.height) + composable.edgeInsets.bottom
+            height: composable.edgeInsets.top + max(imageSize.height, ceil(titleTextSize.height) + composable.titleSpacing + ceil(detailTextSize.height), iconSize.height) + composable.edgeInsets.bottom
         )
     }
 
@@ -120,7 +126,7 @@ open class QImageTitleDetailIconComposition< Composable: QImageTitleDetailIconCo
             selfConstraints.append(self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
             selfConstraints.append(self.titleLabel.leadingLayout == self.imageView.trailingLayout + composable.imageSpacing)
             selfConstraints.append(self.titleLabel.trailingLayout == self.iconView.leadingLayout - composable.iconSpacing)
-            selfConstraints.append(self.detailLabel.topLayout == self.titleLabel.bottomLayout + composable.titleSpacing)
+            selfConstraints.append(self.titleLabel.bottomLayout <= self.detailLabel.topLayout - composable.titleSpacing)
             selfConstraints.append(self.detailLabel.leadingLayout == self.imageView.trailingLayout + composable.imageSpacing)
             selfConstraints.append(self.detailLabel.trailingLayout == self.iconView.leadingLayout - composable.iconSpacing)
             selfConstraints.append(self.detailLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
