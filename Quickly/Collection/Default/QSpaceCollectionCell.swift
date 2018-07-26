@@ -14,13 +14,13 @@ open class QSpaceCollectionItem : QBackgroundColorCollectionItem {
 
 }
 
-open class QSpaceCollectionCell< ItemType: QSpaceCollectionItem > : QBackgroundColorCollectionCell< ItemType > {
+open class QSpaceCollectionCell< Item: QSpaceCollectionItem > : QBackgroundColorCollectionCell< Item > {
 
     open override class func size(
-        item: ItemType,
+        item: Item,
         layout: UICollectionViewLayout,
         section: IQCollectionSection,
-        size: CGSize
+        spec: IQContainerSpec
     ) -> CGSize {
         return item.size
     }

@@ -98,7 +98,14 @@ open class QCollectionViewController : QViewController, IQStackContentViewContro
         super.didChangeAdditionalEdgeInsets()
         if let view = self.collectionView {
             let edgeInsets = self.inheritedEdgeInsets
-            view.contentInset = edgeInsets
+            view.leftEdgeInset = edgeInsets.left
+            view.rightEdgeInset = edgeInsets.right
+            view.contentInset = UIEdgeInsets(
+                top: edgeInsets.top,
+                left: 0,
+                bottom: edgeInsets.bottom,
+                right: 0
+            )
             view.scrollIndicatorInsets = edgeInsets
             view.contentOffset = CGPoint(
                 x: -edgeInsets.left,
@@ -115,6 +122,13 @@ open class QCollectionViewController : QViewController, IQStackContentViewContro
     open override func didDismiss(animated: Bool) {
         super.didDismiss(animated: animated)
         self._updateRefreshControlState()
+    }
+    
+    open override func willTransition(size: CGSize) {
+        super.willTransition(size: size)
+        if let collectionLayout = self.collectionView.collectionLayout {
+            collectionLayout.invalidateLayout()
+        }
     }
 
     open func beginRefreshing() {

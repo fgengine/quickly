@@ -15,10 +15,10 @@ open class QBackgroundColorCollectionItem : QCollectionItem {
 
 }
 
-open class QBackgroundColorCollectionCell< ItemType: QBackgroundColorCollectionItem > : QCollectionCell< ItemType > {
+open class QBackgroundColorCollectionCell< Item: QBackgroundColorCollectionItem > : QCollectionCell< Item > {
 
-    open override func set(item: ItemType, animated: Bool) {
-        super.set(item: item, animated: animated)
+    open override func set(item: Item, spec: IQContainerSpec, animated: Bool) {
+        super.set(item: item, spec: spec, animated: animated)
         
         if let backgroundColor = item.backgroundColor {
             self.backgroundColor = backgroundColor

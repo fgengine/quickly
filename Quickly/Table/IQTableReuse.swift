@@ -11,7 +11,7 @@ public protocol IQTableReuse : IQView {
 
     static func register(tableView: UITableView)
 
-    static func height(any: Any, width: CGFloat) -> CGFloat
+    static func height(any: Any, spec: IQContainerSpec) -> CGFloat
 
     static func using(any: Any) -> Bool
     static func usingLevel(any: AnyClass) -> UInt?

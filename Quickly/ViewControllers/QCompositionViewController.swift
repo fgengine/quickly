@@ -20,10 +20,6 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
     }
     public private(set) lazy var composition: Composition = self._prepareComposition()
 
-    open override func load() -> ViewType {
-        return QViewControllerDefaultView(viewController: self, backgroundColor: .clear)
-    }
-
     open override func layout(bounds: CGRect) {
         self.composition.contentView.frame = UIEdgeInsetsInsetRect(self.view.bounds, self.inheritedEdgeInsets)
     }

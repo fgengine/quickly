@@ -3,11 +3,12 @@
 //
 
 open class QCollectionController : NSObject, IQCollectionController, CollectionCellDelegate, IQCollectionDecorDelegate {
+    
+    public typealias CollectionView = IQCollectionController.CollectionView
+    public typealias Decor = IQCollectionController.Decor
+    public typealias Cell = IQCollectionController.Cell
 
-    public typealias DecorType = IQCollectionController.Decor
-    public typealias CellType = IQCollectionController.Cell
-
-    public weak var collectionView: UICollectionView? = nil {
+    public weak var collectionView: CollectionView? = nil {
         didSet {
             self.configure()
         }
@@ -207,7 +208,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
         return nil
     }
 
-    open func dequeue(data: IQCollectionData, kind: String, indexPath: IndexPath) -> DecorType? {
+    open func dequeue(data: IQCollectionData, kind: String, indexPath: IndexPath) -> Decor? {
         guard
             let collectionView = self.collectionView,
             let decorClass = self.decorClass(data: data),
@@ -217,7 +218,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
         return decorView
     }
 
-    open func dequeue(item: IQCollectionItem, indexPath: IndexPath) -> CellType? {
+    open func dequeue(item: IQCollectionItem, indexPath: IndexPath) -> Cell? {
         guard
             let collectionView = self.collectionView,
             let cellClass = self.cellClass(item: item),
@@ -342,7 +343,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
                 let index = self.index(header: header),
                 let decor = collectionView.supplementaryView(forElementKind: UICollectionElementKindSectionHeader, at: IndexPath(item: 0, section: index)) as? IQCollectionDecor
                 else { return }
-            decor.set(any: header, animated: animated)
+            decor.set(any: header, spec: collectionView, animated: animated)
             if self.isBatchUpdating == false {
                 self.notifyUpdate()
             }
@@ -356,7 +357,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
                 let index = self.index(footer: footer),
                 let decor = collectionView.supplementaryView(forElementKind: UICollectionElementKindSectionFooter, at: IndexPath(item: 0, section: index)) as? IQCollectionDecor
                 else { return }
-            decor.set(any: footer, animated: animated)
+            decor.set(any: footer, spec: collectionView, animated: animated)
             if self.isBatchUpdating == false {
                 self.notifyUpdate()
             }
@@ -369,7 +370,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
             let indexPath = self.indexPath(item: item),
             let cell = collectionView.cellForItem(at: indexPath) as? IQCollectionCell
             else { return }
-        cell.set(any: item, animated: animated)
+        cell.set(any: item, spec: collectionView, animated: animated)
         if self.isBatchUpdating == false {
             self.notifyUpdate()
         }
@@ -478,7 +479,7 @@ extension QCollectionController : UICollectionViewDelegate {
     ) {
         if let collectionCell = cell as? IQCollectionCell {
             let item = self.item(indexPath: indexPath)
-            collectionCell.set(any: item, animated: false)
+            collectionCell.set(any: item, spec: collectionView as! IQContainerSpec, animated: false)
         }
     }
 
@@ -496,7 +497,7 @@ extension QCollectionController : UICollectionViewDelegate {
         }
         if let safeData = data {
             if let collectionDecor = view as? IQCollectionDecor {
-                collectionDecor.set(any: safeData, animated: false)
+                collectionDecor.set(any: safeData, spec: collectionView as! IQContainerSpec, animated: false)
             }
         }
     }
@@ -537,7 +538,7 @@ extension QCollectionController : UICollectionViewDelegateFlowLayout {
         let section = self.section(index: indexPath.section)
         let item = self.item(indexPath: indexPath)
         if let cellClass = self.cellClass(item: item) {
-            return cellClass.size(any: item, layout: collectionViewLayout, section: section, size: collectionView.frame.size)
+            return cellClass.size(any: item, layout: collectionViewLayout, section: section, spec: collectionView as! IQContainerSpec)
         }
         return CGSize.zero
     }
@@ -577,7 +578,7 @@ extension QCollectionController : UICollectionViewDelegateFlowLayout {
         let section = self.section(index: sectionIndex)
         if let data = section.header {
             if let decorClass = self.decorClass(data: data) {
-                return decorClass.size(any: data, layout: collectionViewLayout, section: section, size: collectionView.frame.size)
+                return decorClass.size(any: data, layout: collectionViewLayout, section: section, spec: collectionView as! IQContainerSpec)
             }
         }
         return CGSize.zero
@@ -591,7 +592,7 @@ extension QCollectionController : UICollectionViewDelegateFlowLayout {
         let section = self.section(index: sectionIndex)
         if let data = section.footer {
             if let decorClass = self.decorClass(data: data) {
-                return decorClass.size(any: data, layout: collectionViewLayout, section: section, size: collectionView.frame.size)
+                return decorClass.size(any: data, layout: collectionViewLayout, section: section, spec: collectionView as! IQContainerSpec)
             }
         }
         return CGSize.zero

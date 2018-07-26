@@ -11,11 +11,12 @@ public protocol IQCollectionControllerObserver : class {
 }
 
 public protocol IQCollectionController : UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
+    
+    typealias CollectionView = UICollectionView & IQContainerSpec
     typealias Decor = IQCollectionDecor.Dequeue
     typealias Cell = IQCollectionCell.Dequeue
 
-    var collectionView: UICollectionView? { set get }
+    var collectionView: CollectionView? { set get }
     var sections: [IQCollectionSection] { set get }
     var items: [IQCollectionItem] { get }
     var selectedItems: [IQCollectionItem] { set get }

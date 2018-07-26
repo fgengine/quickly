@@ -26,14 +26,14 @@ open class QCollectionCell< Type: IQCollectionItem > : UICollectionViewCell, IQT
     public weak var collectionDelegate: CollectionCellDelegate? = nil
     public var item: Type? = nil
 
-    open class func size(item: Type, layout: UICollectionViewLayout, section: IQCollectionSection, size: CGSize) -> CGSize {
+    open class func size(item: Type, layout: UICollectionViewLayout, section: IQCollectionSection, spec: IQContainerSpec) -> CGSize {
         return CGSize.zero
     }
 
     open func configure() {
     }
 
-    open func set(item: Type, animated: Bool) {
+    open func set(item: Type, spec: IQContainerSpec, animated: Bool) {
         self.item = item
     }
 

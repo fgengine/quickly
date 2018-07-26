@@ -15,7 +15,7 @@ public protocol IQTableDecor : IQTableReuse {
 
     func configure()
 
-    func set(any: Any, animated: Bool)
+    func set(any: Any, spec: IQContainerSpec, animated: Bool)
 
 }
 
@@ -41,9 +41,9 @@ public protocol IQTypedTableDecor : IQTableDecor {
 
     associatedtype Data: IQTableData
 
-    static func height(data: Data, width: CGFloat) -> CGFloat
+    static func height(data: Data, spec: IQContainerSpec) -> CGFloat
 
-    func set(data: Data, animated: Bool)
+    func set(data: Data, spec: IQContainerSpec, animated: Bool)
 
 }
 
@@ -57,12 +57,12 @@ extension IQTypedTableDecor {
         return inheritanceLevel(any, Data.self)
     }
 
-    public static func height(any: Any, width: CGFloat) -> CGFloat {
-        return self.height(data: any as! Data, width: width)
+    public static func height(any: Any, spec: IQContainerSpec) -> CGFloat {
+        return self.height(data: any as! Data, spec: spec)
     }
 
-    public func set(any: Any, animated: Bool) {
-        self.set(data: any as! Data, animated: animated)
+    public func set(any: Any, spec: IQContainerSpec, animated: Bool) {
+        self.set(data: any as! Data, spec: spec, animated: animated)
     }
 
 }

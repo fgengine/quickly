@@ -15,7 +15,7 @@ public protocol IQTableCell : IQTableReuse {
 
     func configure()
 
-    func set(any: Any, animated: Bool)
+    func set(any: Any, spec: IQContainerSpec, animated: Bool)
 
 }
 
@@ -44,9 +44,9 @@ public protocol IQTypedTableCell : IQTableCell {
 
     var row: Row? { get }
 
-    static func height(row: Row, width: CGFloat) -> CGFloat
+    static func height(row: Row, spec: IQContainerSpec) -> CGFloat
 
-    func set(row: Row, animated: Bool)
+    func set(row: Row, spec: IQContainerSpec, animated: Bool)
 
 }
 
@@ -60,12 +60,12 @@ extension IQTypedTableCell {
         return inheritanceLevel(any, Row.self)
     }
 
-    public static func height(any: Any, width: CGFloat) -> CGFloat {
-        return self.height(row: any as! Row, width: width)
+    public static func height(any: Any, spec: IQContainerSpec) -> CGFloat {
+        return self.height(row: any as! Row, spec: spec)
     }
 
-    public func set(any: Any, animated: Bool) {
-        self.set(row: any as! Row, animated: animated)
+    public func set(any: Any, spec: IQContainerSpec, animated: Bool) {
+        self.set(row: any as! Row, spec: spec, animated: animated)
     }
 
 }

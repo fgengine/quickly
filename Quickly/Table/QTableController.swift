@@ -3,11 +3,12 @@
 //
 
 open class QTableController : NSObject, IQTableController, IQTableCellDelegate, IQTableDecorDelegate {
+    
+    public typealias TableView = IQTableController.TableView
+    public typealias Decor = IQTableController.Decor
+    public typealias Cell = IQTableController.Cell
 
-    public typealias DecorType = IQTableController.Decor
-    public typealias CellType = IQTableController.Cell
-
-    public weak var tableView: UITableView? {
+    public weak var tableView: TableView? {
         didSet { self.configure() }
     }
     public var rowHeight: CGFloat {
@@ -250,7 +251,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         return tableView.cellForRow(at: indexPath) as? IQTableCell
     }
 
-    open func dequeue(data: IQTableData) -> DecorType? {
+    open func dequeue(data: IQTableData) -> Decor? {
         guard
             let tableView = self.tableView,
             let decorClass = self.decorClass(data: data),
@@ -260,7 +261,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         return decorView
     }
 
-    open func dequeue(row: IQTableRow, indexPath: IndexPath) -> CellType? {
+    open func dequeue(row: IQTableRow, indexPath: IndexPath) -> Cell? {
         guard
             let tableView = self.tableView,
             let cellClass = self.cellClass(row: row),
@@ -390,7 +391,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
             let index = self.index(header: header),
             let decorView = tableView.headerView(forSection: index) as? IQTableDecor
             else { return }
-        decorView.set(any: header, animated: animated)
+        decorView.set(any: header, spec: tableView, animated: animated)
         if self.isBatchUpdating == false {
             self.notifyUpdate()
         }
@@ -402,7 +403,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
             let index = self.index(footer: footer),
             let decorView = tableView.headerView(forSection: index) as? IQTableDecor
             else { return }
-        decorView.set(any: footer, animated: animated)
+        decorView.set(any: footer, spec: tableView, animated: animated)
         if self.isBatchUpdating == false {
             self.notifyUpdate()
         }
@@ -414,7 +415,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
             let indexPath = self.indexPath(row: row),
             let cell = tableView.cellForRow(at: indexPath) as? IQTableCell
             else { return }
-        cell.set(any: row, animated: animated)
+        cell.set(any: row, spec: tableView, animated: animated)
         if self.isBatchUpdating == false {
             self.notifyUpdate()
         }
@@ -520,7 +521,7 @@ extension QTableController : UITableViewDelegate {
     ) {
         if let tableCell = cell as? IQTableCell {
             let row = self.row(indexPath: indexPath)
-            tableCell.set(any: row, animated: false)
+            tableCell.set(any: row, spec: tableView as! TableView, animated: false)
         }
     }
 
@@ -531,7 +532,7 @@ extension QTableController : UITableViewDelegate {
     ) {
         if let data = self.header(index: section) {
             if let decorView = view as? IQTableDecor {
-                decorView.set(any: data, animated: false)
+                decorView.set(any: data, spec: tableView as! TableView, animated: false)
             }
         }
     }
@@ -543,7 +544,7 @@ extension QTableController : UITableViewDelegate {
     ) {
         if let data = self.footer(index: section) {
             if let decorView = view as? IQTableDecor {
-                decorView.set(any: data, animated: false)
+                decorView.set(any: data, spec: tableView as! TableView, animated: false)
             }
         }
     }
@@ -554,7 +555,7 @@ extension QTableController : UITableViewDelegate {
     ) -> CGFloat {
         let row = self.row(indexPath: indexPath)
         if let cellClass = self.cellClass(row: row) {
-            return cellClass.height(any: row, width: tableView.frame.size.width)
+            return cellClass.height(any: row, spec: tableView as! TableView)
         }
         return 0
     }
@@ -565,7 +566,7 @@ extension QTableController : UITableViewDelegate {
     ) -> CGFloat {
         if let data = self.header(index: section) {
             if let decorClass = self.decorClass(data: data) {
-                return decorClass.height(any: data, width: tableView.frame.size.width)
+                return decorClass.height(any: data, spec: tableView as! TableView)
             }
         }
         return 0
@@ -577,7 +578,7 @@ extension QTableController : UITableViewDelegate {
     ) -> CGFloat {
         if let data = self.footer(index: section) {
             if let decorClass = self.decorClass(data: data) {
-                return decorClass.height(any: data, width: tableView.frame.size.width)
+                return decorClass.height(any: data, spec: tableView as! TableView)
             }
         }
         return 0

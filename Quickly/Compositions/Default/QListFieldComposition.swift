@@ -54,10 +54,10 @@ open class QListFieldComposition< Composable: QListFieldComposable > : QComposit
         willSet { self.contentView.removeConstraints(self.selfConstraints) }
         didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
-
-    open override class func size(composable: Composable, size: CGSize) -> CGSize {
+    
+    open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         return CGSize(
-            width: size.width,
+            width: spec.containerSize.width,
             height: composable.edgeInsets.top + composable.fieldHeight + composable.edgeInsets.bottom
         )
     }
@@ -89,18 +89,24 @@ open class QListFieldComposition< Composable: QListFieldComposable > : QComposit
         }
         self.contentView.addSubview(self.listField)
     }
-
-    open override func prepare(composable: Composable, animated: Bool) {
-        super.prepare(composable: composable, animated: animated)
+    
+    open override func prepare(composable: Composable, spec: IQContainerSpec, animated: Bool) {
+        super.prepare(composable: composable, spec: spec, animated: animated)
         
-        if self.currentEdgeInsets != composable.edgeInsets {
-            self.currentEdgeInsets = composable.edgeInsets
+        let edgeInsets = UIEdgeInsets(
+            top: composable.edgeInsets.top,
+            left: spec.containerLeftEdgeInset + composable.edgeInsets.left,
+            bottom: composable.edgeInsets.bottom,
+            right: spec.containerRightEdgeInset + composable.edgeInsets.right
+        )
+        if self.currentEdgeInsets != edgeInsets {
+            self.currentEdgeInsets = edgeInsets
 
             var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self.listField.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
-            selfConstraints.append(self.listField.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
-            selfConstraints.append(self.listField.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
-            selfConstraints.append(self.listField.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
+            selfConstraints.append(self.listField.topLayout == self.contentView.topLayout + edgeInsets.top)
+            selfConstraints.append(self.listField.leadingLayout == self.contentView.leadingLayout + edgeInsets.left)
+            selfConstraints.append(self.listField.trailingLayout == self.contentView.trailingLayout - edgeInsets.right)
+            selfConstraints.append(self.listField.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom)
             self.selfConstraints = selfConstraints
         }
         composable.field.apply(target: self.listField)

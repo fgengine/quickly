@@ -327,7 +327,7 @@ open class QViewControllerDefaultView : QView, IQViewControllerView {
 
     public weak var viewController: IQViewController?
 
-    public init(viewController: QViewController, backgroundColor: UIColor = .white) {
+    public init(viewController: QViewController, backgroundColor: UIColor = .clear) {
         self.viewController = viewController
         super.init(frame: UIScreen.main.bounds)
         self.backgroundColor = backgroundColor

@@ -10,11 +10,12 @@ public protocol IQTableControllerObserver : class {
 }
 
 public protocol IQTableController : UITableViewDataSource, UITableViewDelegate {
-
+    
+    typealias TableView = UITableView & IQContainerSpec
     typealias Decor = IQTableDecor.Dequeue
     typealias Cell = IQTableCell.DequeueType
 
-    var tableView: UITableView? { set get }
+    var tableView: TableView? { set get }
     var rowHeight: CGFloat { set get }
     var sectionHeaderHeight: CGFloat { set get }
     var sectionFooterHeight: CGFloat { set get }

@@ -7,11 +7,11 @@ public protocol IQGroupbarItem : IQCollectionItem {
 
 open class QGroupbarCell< Type: IQGroupbarItem > : QCollectionCell< Type > {
 
-    open class override func size(item: Type, layout: UICollectionViewLayout, section: IQCollectionSection, size: CGSize) -> CGSize {
-        guard let flowLayout = layout as? UICollectionViewFlowLayout else { return size }
+    open class override func size(item: Type, layout: UICollectionViewLayout, section: IQCollectionSection, spec: IQContainerSpec) -> CGSize {
+        guard let flowLayout = layout as? UICollectionViewFlowLayout else { return spec.containerSize }
         switch flowLayout.scrollDirection {
-        case .vertical: return CGSize(width: size.width, height: size.height / CGFloat(section.items.count))
-        case .horizontal: return CGSize(width: size.width / CGFloat(section.items.count), height: size.height)
+        case .vertical: return CGSize(width: spec.containerSize.width, height: spec.containerSize.height / CGFloat(section.items.count))
+        case .horizontal: return CGSize(width: spec.containerSize.width / CGFloat(section.items.count), height: spec.containerSize.height)
         }
     }
 

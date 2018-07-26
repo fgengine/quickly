@@ -34,9 +34,9 @@ open class QPagebarTitleCell< ItemType: QPagebarTitleItem > : QPagebarCell< Item
         item: ItemType,
         layout: UICollectionViewLayout,
         section: IQCollectionSection,
-        size: CGSize
+        spec: IQContainerSpec
     ) -> CGSize {
-        let availableWidth = size.width - (item.edgeInsets.left + item.edgeInsets.right)
+        let availableWidth = spec.containerAvailableSize.width - (item.edgeInsets.left + item.edgeInsets.right)
         let textSize = item.title.text.size(width: availableWidth)
         let fitSize = CGSize(
             width: item.edgeInsets.left + textSize.width + item.edgeInsets.right,
@@ -52,7 +52,7 @@ open class QPagebarTitleCell< ItemType: QPagebarTitleItem > : QPagebarCell< Item
             case .vertical:
                 return CGSize(
                     width: fitSize.width,
-                    height: size.height
+                    height: spec.containerSize.height
                 )
             }
         }
@@ -67,8 +67,8 @@ open class QPagebarTitleCell< ItemType: QPagebarTitleItem > : QPagebarCell< Item
         self.contentView.addSubview(self._titleLabel)
     }
 
-    open override func set(item: ItemType, animated: Bool) {
-        super.set(item: item, animated: animated)
+    open override func set(item: ItemType, spec: IQContainerSpec, animated: Bool) {
+        super.set(item: item, spec: spec, animated: animated)
 
         if let backgroundColor = item.backgroundColor {
             self.backgroundColor = backgroundColor

@@ -26,7 +26,7 @@ open class QCollectionTableRow : QBackgroundColorTableRow {
 
 }
 
-open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundColorTableCell< RowType >, IQCollectionControllerObserver, IQCollectionLayoutObserver {
+open class QCollectionTableCell< Row: QCollectionTableRow > : QBackgroundColorTableCell< Row >, IQCollectionControllerObserver, IQCollectionLayoutObserver {
 
     private var _collectionView: QCollectionView!
 
@@ -42,7 +42,7 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
         }
         get { return self._collectionView.collectionController }
     }
-    private weak var currentLayout: RowType.LayoutType? {
+    private weak var currentLayout: Row.LayoutType? {
         set(value) {
             if let layout = self._collectionView.collectionLayout {
                 layout.removeObserver(self)
@@ -65,7 +65,7 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
         didSet { self._collectionView.addConstraint(self.collectionHeightConstraint) }
     }
 
-    open override class func height(row: RowType, width: CGFloat) -> CGFloat {
+    open override class func height(row: Row, spec: IQContainerSpec) -> CGFloat {
         switch row.sizeBehaviour {
         case .fixed(let size): return row.edgeInsets.top + size + row.edgeInsets.bottom
         case .dynamic: return UITableViewAutomaticDimension
@@ -86,9 +86,9 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
 
         super.prepareForReuse()
     }
-
-    open override func set(row: RowType, animated: Bool) {
-        super.set(row: row, animated: animated)
+    
+    open override func set(row: Row, spec: IQContainerSpec, animated: Bool) {
+        super.set(row: row, spec: spec, animated: animated)
 
         if self.currentEdgeInsets != row.edgeInsets {
             self.currentEdgeInsets = row.edgeInsets

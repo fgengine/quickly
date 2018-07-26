@@ -46,7 +46,7 @@ open class QDialogViewController : QViewController, IQDialogViewController {
     }
 
     open override func load() -> ViewType {
-        return QViewControllerDefaultView(viewController: self, backgroundColor: UIColor.clear)
+        return QViewControllerDefaultView(viewController: self)
     }
 
     open override func didLoad() {

@@ -18,7 +18,7 @@ open class QSeparatorCollectionItem : QBackgroundColorCollectionItem {
 
 }
 
-open class QSeparatorCollectionCell< ItemType: QSeparatorCollectionItem > : QBackgroundColorCollectionCell< ItemType > {
+open class QSeparatorCollectionCell< Item: QSeparatorCollectionItem > : QBackgroundColorCollectionCell< Item > {
 
     private var _separator: QView!
 
@@ -30,21 +30,21 @@ open class QSeparatorCollectionCell< ItemType: QSeparatorCollectionItem > : QBac
     }
 
     open override class func size(
-        item: ItemType,
+        item: Item,
         layout: UICollectionViewLayout,
         section: IQCollectionSection,
-        size: CGSize
+        spec: IQContainerSpec
     ) -> CGSize {
         let separatorSize = (1 / UIScreen.main.scale)
         switch item.axis {
         case .horizontal:
             return CGSize(
                 width: item.edgeInsets.left + separatorSize + item.edgeInsets.right,
-                height: size.height
+                height: spec.containerSize.height
             )
         case .vertical:
             return CGSize(
-                width: size.width,
+                width: spec.containerSize.width,
                 height: item.edgeInsets.top + separatorSize + item.edgeInsets.bottom
             )
         }
@@ -62,8 +62,8 @@ open class QSeparatorCollectionCell< ItemType: QSeparatorCollectionItem > : QBac
         return QView(frame: self.contentView.bounds)
     }
 
-    open override func set(item: ItemType, animated: Bool) {
-        super.set(item: item, animated: animated)
+    open override func set(item: Item, spec: IQContainerSpec, animated: Bool) {
+        super.set(item: item, spec: spec, animated: animated)
 
         if self.currentEdgeInsets != item.edgeInsets {
             self.currentEdgeInsets = item.edgeInsets

@@ -39,10 +39,6 @@ open class QNibViewController : QViewController, IQStackContentViewController, I
         return Bundle.main
     }
 
-    open override func load() -> ViewType {
-        return QViewControllerDefaultView(viewController: self, backgroundColor: .clear)
-    }
-
     open override func didLoad() {
         let nib = UINib(nibName: self.nibName(), bundle: self.nibBundle())
         _ = nib.instantiate(withOwner: self, options: nil)

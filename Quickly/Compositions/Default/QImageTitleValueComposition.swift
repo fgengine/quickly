@@ -52,14 +52,14 @@ open class QImageTitleValueComposition< Composable: QImageTitleValueComposable >
         willSet { self.imageView.removeConstraints(self.imageConstraints) }
         didSet { self.imageView.addConstraints(self.imageConstraints) }
     }
-
-    open override class func size(composable: Composable, size: CGSize) -> CGSize {
-        let availableWidth = size.width - (composable.edgeInsets.left + composable.edgeInsets.right)
+    
+    open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
+        let availableWidth = spec.containerAvailableSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
         let imageSize = composable.image.source.size(CGSize(width: composable.imageWidth, height: availableWidth))
         let valueTextSize = composable.title.text.size(width: availableWidth - (composable.imageWidth + composable.imageSpacing))
         let titleTextSize = composable.value.text.size(width: availableWidth - (composable.imageWidth + composable.imageSpacing + valueTextSize.width + composable.titleSpacing))
         return CGSize(
-            width: size.width,
+            width: spec.containerSize.width,
             height: composable.edgeInsets.top + max(imageSize.height, titleTextSize.height, valueTextSize.height) + composable.edgeInsets.bottom
         )
     }
@@ -85,26 +85,32 @@ open class QImageTitleValueComposition< Composable: QImageTitleValueComposable >
         self.valueLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 252), for: .vertical)
         self.contentView.addSubview(self.valueLabel)
     }
-
-    open override func prepare(composable: Composable, animated: Bool) {
-        super.prepare(composable: composable, animated: animated)
+    
+    open override func prepare(composable: Composable, spec: IQContainerSpec, animated: Bool) {
+        super.prepare(composable: composable, spec: spec, animated: animated)
         
-        if self.currentEdgeInsets != composable.edgeInsets || self.currentImageSpacing != composable.imageSpacing || self.currentTitleSpacing != composable.titleSpacing {
-            self.currentEdgeInsets = composable.edgeInsets
+        let edgeInsets = UIEdgeInsets(
+            top: composable.edgeInsets.top,
+            left: spec.containerLeftEdgeInset + composable.edgeInsets.left,
+            bottom: composable.edgeInsets.bottom,
+            right: spec.containerRightEdgeInset + composable.edgeInsets.right
+        )
+        if self.currentEdgeInsets != edgeInsets || self.currentImageSpacing != composable.imageSpacing || self.currentTitleSpacing != composable.titleSpacing {
+            self.currentEdgeInsets = edgeInsets
             self.currentImageSpacing = composable.imageSpacing
             self.currentTitleSpacing = composable.titleSpacing
 
             var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self.imageView.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
-            selfConstraints.append(self.imageView.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
+            selfConstraints.append(self.imageView.topLayout == self.contentView.topLayout + edgeInsets.top)
+            selfConstraints.append(self.imageView.leadingLayout == self.contentView.leadingLayout + edgeInsets.left)
             selfConstraints.append(self.imageView.trailingLayout == self.titleLabel.leadingLayout - composable.imageSpacing)
-            selfConstraints.append(self.imageView.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
-            selfConstraints.append(self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
+            selfConstraints.append(self.imageView.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom)
+            selfConstraints.append(self.titleLabel.topLayout == self.contentView.topLayout + edgeInsets.top)
             selfConstraints.append(self.titleLabel.trailingLayout == self.valueLabel.leadingLayout - composable.titleSpacing)
-            selfConstraints.append(self.titleLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
-            selfConstraints.append(self.valueLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
-            selfConstraints.append(self.valueLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
-            selfConstraints.append(self.valueLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
+            selfConstraints.append(self.titleLabel.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom)
+            selfConstraints.append(self.valueLabel.topLayout == self.contentView.topLayout + edgeInsets.top)
+            selfConstraints.append(self.valueLabel.trailingLayout == self.contentView.trailingLayout - edgeInsets.right)
+            selfConstraints.append(self.valueLabel.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom)
             self.selfConstraints = selfConstraints
         }
         if self.currentImageWidth != composable.imageWidth {

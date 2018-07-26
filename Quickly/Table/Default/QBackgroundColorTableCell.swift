@@ -15,10 +15,10 @@ open class QBackgroundColorTableRow : QTableRow {
 
 }
 
-open class QBackgroundColorTableCell< RowType: QBackgroundColorTableRow >: QTableCell< RowType > {
+open class QBackgroundColorTableCell< Row: QBackgroundColorTableRow >: QTableCell< Row > {
 
-    open override func set(row: RowType, animated: Bool) {
-        super.set(row: row, animated: animated)
+    open override func set(row: Row, spec: IQContainerSpec, animated: Bool) {
+        super.set(row: row, spec: spec, animated: animated)
 
         self._applyContentBackgroundColor(selected: self.isSelected, highlighted: self.isHighlighted)
     }

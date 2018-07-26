@@ -17,8 +17,8 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
 
     public private(set) var composition: Composition!
 
-    open override class func height(row: Row, width: CGFloat) -> CGFloat {
-        return Composition.height(composable: row.composable, width: width)
+    open override class func height(row: Row, spec: IQContainerSpec) -> CGFloat {
+        return Composition.height(composable: row.composable, spec: spec)
     }
 
     open override func setup() {
@@ -30,10 +30,10 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
         self.composition.cleanup()
         super.prepareForReuse()
     }
-
-    open override func set(row: Row, animated: Bool) {
-        super.set(row: row, animated: animated)
-        self.composition.prepare(composable: row.composable, animated: animated)
+    
+    open override func set(row: Row, spec: IQContainerSpec, animated: Bool) {
+        super.set(row: row, spec: spec, animated: animated)
+        self.composition.prepare(composable: row.composable, spec: spec, animated: animated)
     }
 
 }

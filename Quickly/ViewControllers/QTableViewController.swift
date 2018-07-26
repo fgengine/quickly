@@ -102,7 +102,14 @@ open class QTableViewController : QViewController, IQStackContentViewController,
         super.didChangeAdditionalEdgeInsets()
         if let view = self.tableView {
             let edgeInsets = self.inheritedEdgeInsets
-            view.contentInset = edgeInsets
+            view.leftEdgeInset = edgeInsets.left
+            view.rightEdgeInset = edgeInsets.right
+            view.contentInset = UIEdgeInsets(
+                top: edgeInsets.top,
+                left: 0,
+                bottom: edgeInsets.bottom,
+                right: 0
+            )
             view.scrollIndicatorInsets = edgeInsets
             view.contentOffset = CGPoint(
                 x: -edgeInsets.left,
@@ -119,6 +126,11 @@ open class QTableViewController : QViewController, IQStackContentViewController,
     open override func didDismiss(animated: Bool) {
         super.didDismiss(animated: animated)
         self._updateRefreshControlState()
+    }
+    
+    open override func willTransition(size: CGSize) {
+        super.willTransition(size: size)
+        self.tableView.reloadData()
     }
 
     open func beginRefreshing() {

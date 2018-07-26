@@ -47,6 +47,8 @@ open class QCollectionView : UICollectionView, IQView {
             }
         }
     }
+    open var leftEdgeInset: CGFloat = 0
+    open var rightEdgeInset: CGFloat = 0
 
     private var legacyRefreshControl: UIRefreshControl? {
         willSet {
@@ -75,10 +77,24 @@ open class QCollectionView : UICollectionView, IQView {
 
     open func setup() {
         self.backgroundColor = UIColor.clear
-        
+
         if #available(iOS 11.0, *) {
             self.contentInsetAdjustmentBehavior = .never
         }
     }
 
+}
+
+extension QCollectionView : IQContainerSpec {
+    
+    open var containerSize: CGSize {
+        get { return self.bounds.size }
+    }
+    open var containerLeftEdgeInset: CGFloat {
+        get { return self.leftEdgeInset }
+    }
+    open var containerRightEdgeInset: CGFloat {
+        get { return self.rightEdgeInset }
+    }
+    
 }

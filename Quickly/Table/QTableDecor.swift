@@ -26,14 +26,14 @@ open class QTableDecor< Type: IQTableData > : UITableViewHeaderFooterView, IQTyp
         self.configure()
     }
 
-    open class func height(data: Type, width: CGFloat) -> CGFloat {
+    open class func height(data: Type, spec: IQContainerSpec) -> CGFloat {
         return UITableViewAutomaticDimension
     }
 
     open func configure() {
     }
 
-    open func set(data: Type, animated: Bool) {
+    open func set(data: Type, spec: IQContainerSpec, animated: Bool) {
         self.data = data
     }
 

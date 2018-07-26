@@ -17,7 +17,7 @@ public protocol IQCollectionDecor : IQCollectionReuse {
 
     func configure()
 
-    func set(any: Any, animated: Bool)
+    func set(any: Any, spec: IQContainerSpec, animated: Bool)
 
 }
 
@@ -45,9 +45,9 @@ public protocol IQTypedCollectionDecor : IQCollectionDecor {
 
     associatedtype DataType: IQCollectionData
 
-    static func size(data: DataType, layout: UICollectionViewLayout, section: IQCollectionSection, size: CGSize) -> CGSize
+    static func size(data: DataType, layout: UICollectionViewLayout, section: IQCollectionSection, spec: IQContainerSpec) -> CGSize
 
-    func set(data: DataType, animated: Bool)
+    func set(data: DataType, spec: IQContainerSpec, animated: Bool)
 
 }
 
@@ -61,12 +61,12 @@ extension IQTypedCollectionDecor {
         return inheritanceLevel(any, DataType.self)
     }
 
-    public static func size(any: Any, layout: UICollectionViewLayout, section: IQCollectionSection, size: CGSize) -> CGSize {
-        return self.size(data: any as! DataType, layout: layout, section: section, size: size)
+    public static func size(any: Any, layout: UICollectionViewLayout, section: IQCollectionSection, spec: IQContainerSpec) -> CGSize {
+        return self.size(data: any as! DataType, layout: layout, section: section, spec: spec)
     }
 
-    public func set(any: Any, animated: Bool) {
-        self.set(data: any as! DataType, animated: animated)
+    public func set(any: Any, spec: IQContainerSpec, animated: Bool) {
+        self.set(data: any as! DataType, spec: spec, animated: animated)
     }
 
 }

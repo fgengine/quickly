@@ -26,14 +26,14 @@ open class QCollectionDecor< Type: IQCollectionData > : UICollectionReusableView
     public weak var collectionDelegate: IQCollectionDecorDelegate? = nil
     public var data: Type? = nil
 
-    open class func size(data: Type, layout: UICollectionViewLayout, section: IQCollectionSection, size: CGSize) -> CGSize {
+    open class func size(data: Type, layout: UICollectionViewLayout, section: IQCollectionSection, spec: IQContainerSpec) -> CGSize {
         return CGSize.zero
     }
 
     open func configure() {
     }
 
-    open func set(data: Type, animated: Bool) {
+    open func set(data: Type, spec: IQContainerSpec, animated: Bool) {
         self.data = data
     }
 

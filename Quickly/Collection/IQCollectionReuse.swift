@@ -9,7 +9,7 @@ public protocol IQCollectionReuse : IQView {
     static func currentNibName() -> String
     static func currentNibBundle() -> Bundle
 
-    static func size(any: Any, layout: UICollectionViewLayout, section: IQCollectionSection, size: CGSize) -> CGSize
+    static func size(any: Any, layout: UICollectionViewLayout, section: IQCollectionSection, spec: IQContainerSpec) -> CGSize
 
     static func using(any: Any) -> Bool
     static func usingLevel(any: AnyClass) -> UInt?

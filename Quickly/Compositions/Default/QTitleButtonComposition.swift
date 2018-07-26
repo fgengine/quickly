@@ -45,12 +45,12 @@ open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComp
         willSet { self.contentView.removeConstraints(self.selfConstraints) }
         didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
-
-    open override class func size(composable: Composable, size: CGSize) -> CGSize {
-        let availableWidth = size.width - (composable.edgeInsets.left + composable.edgeInsets.right)
+    
+    open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
+        let availableWidth = spec.containerAvailableSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
         let textSize = composable.title.text.size(width: availableWidth)
         return CGSize(
-            width: size.width,
+            width: spec.containerSize.width,
             height: composable.edgeInsets.top + max(textSize.height, composable.buttonHeight) + composable.edgeInsets.bottom
         )
     }
@@ -71,22 +71,28 @@ open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComp
         self.button.addTouchUpInside(self, action: #selector(self.pressedButton(_:)))
         self.contentView.addSubview(self.button)
     }
-
-    open override func prepare(composable: Composable, animated: Bool) {
-        super.prepare(composable: composable, animated: animated)
+    
+    open override func prepare(composable: Composable, spec: IQContainerSpec, animated: Bool) {
+        super.prepare(composable: composable, spec: spec, animated: animated)
         
-        if self.currentEdgeInsets != composable.edgeInsets || self.currentButtonSpacing != composable.buttonSpacing {
-            self.currentEdgeInsets = composable.edgeInsets
+        let edgeInsets = UIEdgeInsets(
+            top: composable.edgeInsets.top,
+            left: spec.containerLeftEdgeInset + composable.edgeInsets.left,
+            bottom: composable.edgeInsets.bottom,
+            right: spec.containerRightEdgeInset + composable.edgeInsets.right
+        )
+        if self.currentEdgeInsets != edgeInsets || self.currentButtonSpacing != composable.buttonSpacing {
+            self.currentEdgeInsets = edgeInsets
             self.currentButtonSpacing = composable.buttonSpacing
 
             var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
-            selfConstraints.append(self.titleLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
+            selfConstraints.append(self.titleLabel.topLayout == self.contentView.topLayout + edgeInsets.top)
+            selfConstraints.append(self.titleLabel.leadingLayout == self.contentView.leadingLayout + edgeInsets.left)
             selfConstraints.append(self.titleLabel.trailingLayout == self.button.leadingLayout - composable.buttonSpacing)
-            selfConstraints.append(self.titleLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
-            selfConstraints.append(self.button.topLayout == self.contentView.topLayout + composable.edgeInsets.top)
-            selfConstraints.append(self.button.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
-            selfConstraints.append(self.button.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
+            selfConstraints.append(self.titleLabel.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom)
+            selfConstraints.append(self.button.topLayout == self.contentView.topLayout + edgeInsets.top)
+            selfConstraints.append(self.button.trailingLayout == self.contentView.trailingLayout - edgeInsets.right)
+            selfConstraints.append(self.button.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom)
             self.selfConstraints = selfConstraints
         }
         composable.title.apply(target: self.titleLabel)

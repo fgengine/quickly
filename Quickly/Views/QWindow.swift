@@ -13,6 +13,7 @@ open class QWindow : UIWindow, IQView {
     public init(_ contentViewController: IQViewController) {
         self.viewController = RootViewController(contentViewController)
         super.init(frame: UIScreen.main.bounds)
+        self.backgroundColor = UIColor.black
         self.setup()
     }
 
@@ -71,8 +72,6 @@ open class QWindow : UIWindow, IQView {
         }
 
         open func setup() {
-            self.automaticallyAdjustsScrollViewInsets = false
-
             self.contentViewController.delegate = self
         }
 
@@ -110,7 +109,7 @@ open class QWindow : UIWindow, IQView {
 
         private func _currentAdditionalEdgeInsets() -> UIEdgeInsets {
             if #available(iOS 11.0, *) {
-                return view.safeAreaInsets
+                return self.view.safeAreaInsets
             } else {
                 return UIEdgeInsets(
                     top: self.topLayoutGuide.length,

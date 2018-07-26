@@ -11,7 +11,7 @@ open class QTableCell< Type: IQTableRow > : UITableViewCell, IQTypedTableCell {
         return String(describing: self.classForCoder())
     }
 
-    open class func height(row: Type, width: CGFloat) -> CGFloat {
+    open class func height(row: Type, spec: IQContainerSpec) -> CGFloat {
         return UITableViewAutomaticDimension
     }
 
@@ -37,7 +37,7 @@ open class QTableCell< Type: IQTableRow > : UITableViewCell, IQTypedTableCell {
     open func configure() {
     }
 
-    open func set(row: Type, animated: Bool) {
+    open func set(row: Type, spec: IQContainerSpec, animated: Bool) {
         self.row = row
         self.selectionStyle = row.selectionStyle
     }

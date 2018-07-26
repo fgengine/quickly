@@ -20,7 +20,7 @@ open class QComposition< Composable: IQComposable > : IQComposition {
     public private(set) var contentView: UIView
     public private(set) var composable: Composable!
 
-    open class func size(composable: Composable, size: CGSize) -> CGSize {
+    open class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         return CGSize.zero
     }
 
@@ -37,7 +37,7 @@ open class QComposition< Composable: IQComposable > : IQComposition {
     open func setup() {
     }
 
-    open func prepare(composable: Composable, animated: Bool) {
+    open func prepare(composable: Composable, spec: IQContainerSpec, animated: Bool) {
         self.composable = composable
     }
 

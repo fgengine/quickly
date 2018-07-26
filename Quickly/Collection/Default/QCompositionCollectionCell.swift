@@ -21,9 +21,9 @@ open class QCompositionCollectionCell< Composition: IQComposition > : QBackgroun
         item: Item,
         layout: UICollectionViewLayout,
         section: IQCollectionSection,
-        size: CGSize
+        spec: IQContainerSpec
     ) -> CGSize {
-        return Composition.size(composable: item.composable, size: size)
+        return Composition.size(composable: item.composable, spec: spec)
     }
 
     open override func setup() {
@@ -35,10 +35,10 @@ open class QCompositionCollectionCell< Composition: IQComposition > : QBackgroun
         self.composition.cleanup()
         super.prepareForReuse()
     }
-
-    open override func set(item: Item, animated: Bool) {
-        super.set(item: item, animated: animated)
-        self.composition.prepare(composable: item.composable, animated: animated)
+    
+    open override func set(item: Item, spec: IQContainerSpec, animated: Bool) {
+        super.set(item: item, spec: spec, animated: animated)
+        self.composition.prepare(composable: item.composable, spec: spec, animated: animated)
     }
 
 }
