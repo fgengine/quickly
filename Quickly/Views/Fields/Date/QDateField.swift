@@ -30,7 +30,7 @@ open class QDateFieldStyleSheet : QDisplayViewStyleSheet< QDateField > {
     public var isEnabled: Bool
 
     public init(
-        formatter: IQDateFieldFormatter? = nil,
+        formatter: IQDateFieldFormatter? = QDateFieldFormatter(),
         mode: QDateFieldMode = .date,
         calendar: Calendar? = nil,
         locale: Locale? = nil,
@@ -86,6 +86,14 @@ open class QDateFieldStyleSheet : QDisplayViewStyleSheet< QDateField > {
         target.isEnabled = self.isEnabled
     }
 
+}
+
+public protocol IQDateFieldObserver : class {
+    
+    func beginEditing(dateField: QDateField)
+    func select(dateField: QDateField, date: Date)
+    func endEditing(dateField: QDateField)
+    
 }
 
 public class QDateField : QDisplayView, IQField {
@@ -165,6 +173,9 @@ public class QDateField : QDisplayView, IQField {
     open override var inputView: UIView? {
         get { return self.picker }
     }
+    open override var intrinsicContentSize: CGSize {
+        get { return self.label.intrinsicContentSize }
+    }
 
     public var onShouldBeginEditing: ShouldClosure?
     public var onBeginEditing: Closure?
@@ -175,9 +186,17 @@ public class QDateField : QDisplayView, IQField {
     internal var label: QLabel!
     internal var picker: UIDatePicker!
     internal var tapGesture: UITapGestureRecognizer!
-
-    open override var intrinsicContentSize: CGSize {
-        get { return self.label.intrinsicContentSize }
+    
+    private var observer: QObserver< IQDateFieldObserver >
+    
+    public override init(frame: CGRect) {
+        self.observer = QObserver< IQDateFieldObserver >()
+        super.init(frame: frame)
+    }
+    
+    public required init?(coder: NSCoder) {
+        self.observer = QObserver< IQDateFieldObserver >()
+        super.init(coder: coder)
     }
 
     open override func setup() {
@@ -195,6 +214,14 @@ public class QDateField : QDisplayView, IQField {
         
         self.tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture(_:)))
         self.addGestureRecognizer(self.tapGesture)
+    }
+    
+    public func addObserver(_ observer: IQDateFieldObserver, priority: UInt) {
+        self.observer.add(observer, priority: priority)
+    }
+    
+    public func removeObserver(_ observer: IQDateFieldObserver) {
+        self.observer.remove(observer)
     }
 
     open func beginEditing() {
@@ -216,6 +243,9 @@ public class QDateField : QDisplayView, IQField {
             self.date = self.picker.date
         }
         self.onBeginEditing?(self)
+        self.observer.reverseNotify({ (observer) in
+            observer.beginEditing(dateField: self)
+        })
         return true
     }
 
@@ -223,6 +253,9 @@ public class QDateField : QDisplayView, IQField {
     open override func resignFirstResponder() -> Bool {
         guard super.resignFirstResponder() == true else { return false }
         self.onEndEditing?(self)
+        self.observer.reverseNotify({ (observer) in
+            observer.endEditing(dateField: self)
+        })
         return true
     }
 
@@ -257,7 +290,12 @@ public class QDateField : QDisplayView, IQField {
     private func changeDate(_ sender: Any) {
         self.date = self.picker.date
         self.updateText()
-        self.onSelect?(self, self.picker.date)
+        if let closure = self.onSelect {
+            closure(self, self.picker.date)
+        }
+        self.observer.reverseNotify({ (observer) in
+            observer.select(dateField: self, date: self.picker.date)
+        })
     }
     
     @objc

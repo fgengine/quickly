@@ -82,9 +82,22 @@ open class QCollectionViewController : QViewController, IQStackContentViewContro
             refreshControl.addValueChanged(self, action: #selector(self._triggeredRefreshControl(_:)))
         }
     }
+    private var keyboard: QKeyboard!
+    
+    deinit {
+        self.collectionController = nil
+        self.keyboard.removeObserver(self)
+    }
+    
+    open override func setup() {
+        super.setup()
+        
+        self.keyboard = QKeyboard()
+    }
 
     open override func didLoad() {
         self.collectionView = QCollectionView(frame: self.view.bounds, layout: QCollectionFlowLayout())
+        self.keyboard.addObserver(self, priority: 0)
     }
 
     open override func layout(bounds: CGRect) {
@@ -97,26 +110,23 @@ open class QCollectionViewController : QViewController, IQStackContentViewContro
     open override func didChangeAdditionalEdgeInsets() {
         super.didChangeAdditionalEdgeInsets()
         if let view = self.collectionView {
-            let edgeInsets = self.inheritedEdgeInsets
-            view.leftEdgeInset = edgeInsets.left
-            view.rightEdgeInset = edgeInsets.right
-            view.contentInset = UIEdgeInsets(
-                top: edgeInsets.top,
-                left: 0,
-                bottom: edgeInsets.bottom,
-                right: 0
-            )
-            view.scrollIndicatorInsets = edgeInsets
-            view.contentOffset = CGPoint(
-                x: -edgeInsets.left,
-                y: -edgeInsets.top
-            )
+            self._updateContentInsets(view)
         }
     }
 
     open override func willPresent(animated: Bool) {
         super.willPresent(animated: animated)
         self._updateRefreshControlState()
+    }
+    
+    open override func prepareInteractiveDismiss() {
+        super.prepareInteractiveDismiss()
+        self.collectionView.endEditing(false)
+    }
+    
+    open override func willDismiss(animated: Bool) {
+        super.willDismiss(animated: animated)
+        self.collectionView.endEditing(false)
     }
 
     open override func didDismiss(animated: Bool) {
@@ -126,6 +136,9 @@ open class QCollectionViewController : QViewController, IQStackContentViewContro
     
     open override func willTransition(size: CGSize) {
         super.willTransition(size: size)
+        if let view = self.collectionView {
+            self._updateContentInsets(view)
+        }
         if let collectionLayout = self.collectionView.collectionLayout {
             collectionLayout.invalidateLayout()
         }
@@ -161,6 +174,24 @@ open class QCollectionViewController : QViewController, IQStackContentViewContro
             }
         }
     }
+    
+    private func _updateContentInsets(_ view: QCollectionView) {
+        let edgeInsets = self.adjustedContentInset
+        view.leftEdgeInset = edgeInsets.left
+        view.rightEdgeInset = edgeInsets.right
+        view.contentInset = UIEdgeInsets(
+            top: edgeInsets.top,
+            left: 0,
+            bottom: edgeInsets.bottom,
+            right: 0
+        )
+        view.scrollIndicatorInsets = edgeInsets
+        if view.contentOffset.x < 0 || view.contentOffset.y < 0 {
+            let x = (view.contentOffset.x < 0) ? -edgeInsets.left : view.contentOffset.x
+            let y = (view.contentOffset.y < 0) ? -edgeInsets.top : view.contentOffset.y
+            view.contentOffset = CGPoint(x: x, y: y)
+        }
+    }
 
 }
 
@@ -181,4 +212,40 @@ extension QCollectionViewController : IQCollectionControllerObserver {
     open func update(_ controller: IQCollectionController) {
     }
 
+}
+
+extension QCollectionViewController : IQKeyboardObserver {
+    
+    open func willShowKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
+        var options: UIViewAnimationOptions = []
+        switch  animationInfo.curve {
+        case .linear: options = [ .curveLinear ]
+        case .easeIn: options = [ .curveEaseIn ]
+        case .easeOut: options = [ .curveEaseOut ]
+        case .easeInOut: options = [ .curveEaseInOut ]
+        }
+        UIView.animate(withDuration: animationInfo.duration, delay: 0, options: options, animations: {
+            self.additionalEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: animationInfo.endFrame.height, right: 0)
+        })
+    }
+    
+    open func didShowKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
+    }
+    
+    open func willHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
+        var options: UIViewAnimationOptions = []
+        switch  animationInfo.curve {
+        case .linear: options = [ .curveLinear ]
+        case .easeIn: options = [ .curveEaseIn ]
+        case .easeOut: options = [ .curveEaseOut ]
+        case .easeInOut: options = [ .curveEaseInOut ]
+        }
+        UIView.animate(withDuration: animationInfo.duration, delay: 0, options: options, animations: {
+            self.additionalEdgeInsets = UIEdgeInsets.zero
+        })
+    }
+    
+    open func didHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
+    }
+    
 }

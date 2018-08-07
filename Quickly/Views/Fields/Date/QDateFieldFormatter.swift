@@ -6,6 +6,12 @@ public class QDateFieldFormatter : IQDateFieldFormatter {
 
     public var formatter: DateFormatter
     public var textStyle: QTextStyle?
+    
+    public init() {
+        self.formatter = DateFormatter()
+        self.formatter.dateStyle = .full
+        self.formatter.timeStyle = .full
+    }
 
     public init(_ formatter: DateFormatter) {
         self.formatter = formatter

@@ -82,6 +82,17 @@ open class QViewController : NSObject, IQViewController {
             return edgeInsets
         }
     }
+    open var adjustedContentInset: UIEdgeInsets {
+        get {
+            let inheritedEdgeInsets = self.inheritedEdgeInsets
+            return UIEdgeInsets(
+                top: self.additionalEdgeInsets.top + inheritedEdgeInsets.top,
+                left: self.additionalEdgeInsets.left + inheritedEdgeInsets.left,
+                bottom: self.additionalEdgeInsets.bottom + inheritedEdgeInsets.bottom,
+                right: self.additionalEdgeInsets.right + inheritedEdgeInsets.right
+            )
+        }
+    }
     open var view: ViewType {
         get {
             self.loadViewIfNeeded()
@@ -156,6 +167,11 @@ open class QViewController : NSObject, IQViewController {
     }
 
     open func didChangeAdditionalEdgeInsets() {
+        #if DEBUG
+        if self.logging == true {
+            print("\(String(describing: self.classForCoder)).didChangeAdditionalEdgeInsets()")
+        }
+        #endif
         self.setNeedLayout()
         self.child.forEach({
             $0.didChangeAdditionalEdgeInsets()

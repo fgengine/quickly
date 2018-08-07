@@ -56,8 +56,20 @@ open class QTextFieldComposable : QComposable {
 
 }
 
-open class QTextFieldComposition< Composable: QTextFieldComposable >: QComposition< Composable > {
+open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposition< Composable > {
 
+    open override weak var delegate: IQCompositionDelegate? {
+        willSet {
+            if let delegate = self.delegate {
+                self.textField.removeObserver(delegate)
+            }
+        }
+        didSet {
+            if let delegate = self.delegate {
+                self.textField.addObserver(delegate, priority: 0)
+            }
+        }
+    }
     public private(set) var textField: QTextField!
 
     private var currentEdgeInsets: UIEdgeInsets?
@@ -114,6 +126,9 @@ open class QTextFieldComposition< Composable: QTextFieldComposable >: QCompositi
         self.textField.onPressedReturn = { [weak self] (textField: QTextField) in
             guard let strong = self else { return }
             strong.pressedReturn()
+        }
+        if let delegate = self.delegate {
+            self.textField.addObserver(delegate, priority: 0)
         }
         self.contentView.addSubview(self.textField)
     }

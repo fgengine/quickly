@@ -127,6 +127,16 @@ open class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
 
 }
 
+public protocol IQTextFieldObserver : class {
+    
+    func beginEditing(textField: QTextField)
+    func editing(textField: QTextField)
+    func endEditing(textField: QTextField)
+    func pressedClear(textField: QTextField)
+    func pressedReturn(textField: QTextField)
+    
+}
+
 public class QTextField : QDisplayView, IQField {
 
     public typealias ShouldClosure = (_ textField: QTextField) -> Bool
@@ -292,6 +302,9 @@ public class QTextField : QDisplayView, IQField {
     public var isEditing: Bool {
         get { return self.field.isEditing }
     }
+    open override var intrinsicContentSize: CGSize {
+        get { return self.field.intrinsicContentSize }
+    }
 
     public var onShouldBeginEditing: ShouldClosure?
     public var onBeginEditing: Closure?
@@ -304,12 +317,18 @@ public class QTextField : QDisplayView, IQField {
     public var onPressedReturn: Closure?
 
     internal private(set) var field: Field!
+    
     private var fieldDelegate: FieldDelegate!
-
-    open override var intrinsicContentSize: CGSize {
-        get {
-            return self.field.intrinsicContentSize
-        }
+    private var observer: QObserver< IQTextFieldObserver >
+    
+    public override init(frame: CGRect) {
+        self.observer = QObserver< IQTextFieldObserver >()
+        super.init(frame: frame)
+    }
+    
+    public required init?(coder: NSCoder) {
+        self.observer = QObserver< IQTextFieldObserver >()
+        super.init(coder: coder)
     }
 
     open override func setup() {
@@ -323,6 +342,14 @@ public class QTextField : QDisplayView, IQField {
         self.field.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
         self.field.delegate = self.fieldDelegate
         self.addSubview(self.field)
+    }
+    
+    public func addObserver(_ observer: IQTextFieldObserver, priority: UInt) {
+        self.observer.add(observer, priority: priority)
+    }
+    
+    public func removeObserver(_ observer: IQTextFieldObserver) {
+        self.observer.remove(observer)
     }
 
     open func beginEditing() {
@@ -400,8 +427,13 @@ public class QTextField : QDisplayView, IQField {
         }
 
         public func textFieldDidBeginEditing(_ textField: UITextField) {
-            guard let field = self.field, let closure = field.onBeginEditing else { return }
-            closure(field)
+            guard let field = self.field else { return }
+            if let closure = field.onBeginEditing {
+                closure(field)
+            }
+            field.observer.reverseNotify({ (observer) in
+                observer.beginEditing(textField: field)
+            })
         }
 
         public func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
@@ -410,8 +442,13 @@ public class QTextField : QDisplayView, IQField {
         }
 
         public func textFieldDidEndEditing(_ textField: UITextField) {
-            guard let field = self.field, let closure = field.onEndEditing else { return }
-            closure(field)
+            guard let field = self.field else { return }
+            if let closure = field.onEndEditing {
+                closure(field)
+            }
+            field.observer.reverseNotify({ (observer) in
+                observer.endEditing(textField: field)
+            })
         }
 
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -451,30 +488,53 @@ public class QTextField : QDisplayView, IQField {
                 if let closure = field.onEditing {
                     closure(field)
                 }
+                field.observer.reverseNotify({ (observer) in
+                    observer.editing(textField: field)
+                })
             }
             return false
         }
 
         public func textFieldShouldClear(_ textField: UITextField) -> Bool {
             guard let field = self.field else { return true }
-            if let shouldClosure = field.onShouldClear, let pressedClosure = field.onPressedClear {
+            if let shouldClosure = field.onShouldClear {
                 if shouldClosure(field) == true {
+                    if let pressedClosure = field.onPressedClear {
+                        pressedClosure(field)
+                    }
+                    field.observer.reverseNotify({ (observer) in
+                        observer.pressedClear(textField: field)
+                    })
+                }
+            } else {
+                if let pressedClosure = field.onPressedClear {
                     pressedClosure(field)
                 }
-            } else if let pressedClosure = field.onPressedClear {
-                pressedClosure(field)
+                field.observer.reverseNotify({ (observer) in
+                    observer.pressedClear(textField: field)
+                })
             }
             return true
         }
 
         public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
             guard let field = self.field else { return true }
-            if let shouldClosure = field.onShouldReturn, let pressedClosure = field.onPressedReturn {
+            if let shouldClosure = field.onShouldReturn {
                 if shouldClosure(field) == true {
+                    if let pressedClosure = field.onPressedReturn {
+                        pressedClosure(field)
+                    }
+                    field.observer.reverseNotify({ (observer) in
+                        observer.pressedReturn(textField: field)
+                    })
+                }
+            } else {
+                if let pressedClosure = field.onPressedReturn {
                     pressedClosure(field)
                 }
-            } else if let pressedClosure = field.onPressedReturn {
-                pressedClosure(field)
+                field.observer.reverseNotify({ (observer) in
+                    observer.pressedReturn(textField: field)
+                })
             }
             return true
         }

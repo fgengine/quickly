@@ -82,13 +82,22 @@ open class QTableViewController : QViewController, IQStackContentViewController,
             refreshControl.addValueChanged(self, action: #selector(self._triggeredRefreshControl(_:)))
         }
     }
+    private var keyboard: QKeyboard!
 
     deinit {
         self.tableController = nil
+        self.keyboard.removeObserver(self)
+    }
+    
+    open override func setup() {
+        super.setup()
+        
+        self.keyboard = QKeyboard()
     }
 
     open override func didLoad() {
         self.tableView = QTableView(frame: self.view.bounds)
+        self.keyboard.addObserver(self, priority: 0)
     }
 
     open override func layout(bounds: CGRect) {
@@ -101,26 +110,23 @@ open class QTableViewController : QViewController, IQStackContentViewController,
     open override func didChangeAdditionalEdgeInsets() {
         super.didChangeAdditionalEdgeInsets()
         if let view = self.tableView {
-            let edgeInsets = self.inheritedEdgeInsets
-            view.leftEdgeInset = edgeInsets.left
-            view.rightEdgeInset = edgeInsets.right
-            view.contentInset = UIEdgeInsets(
-                top: edgeInsets.top,
-                left: 0,
-                bottom: edgeInsets.bottom,
-                right: 0
-            )
-            view.scrollIndicatorInsets = edgeInsets
-            view.contentOffset = CGPoint(
-                x: -edgeInsets.left,
-                y: -edgeInsets.top
-            )
+            self._updateContentInsets(view)
         }
     }
 
     open override func willPresent(animated: Bool) {
         super.willPresent(animated: animated)
         self._updateRefreshControlState()
+    }
+    
+    open override func prepareInteractiveDismiss() {
+        super.prepareInteractiveDismiss()
+        self.tableView.endEditing(false)
+    }
+    
+    open override func willDismiss(animated: Bool) {
+        super.willDismiss(animated: animated)
+        self.tableView.endEditing(false)
     }
 
     open override func didDismiss(animated: Bool) {
@@ -130,7 +136,10 @@ open class QTableViewController : QViewController, IQStackContentViewController,
     
     open override func willTransition(size: CGSize) {
         super.willTransition(size: size)
-        self.tableView.reloadData()
+        if let view = self.tableView {
+            self._updateContentInsets(view)
+            view.reloadData()
+        }
     }
 
     open func beginRefreshing() {
@@ -163,6 +172,22 @@ open class QTableViewController : QViewController, IQStackContentViewController,
             }
         }
     }
+    
+    private func _updateContentInsets(_ view: QTableView) {
+        let edgeInsets = self.adjustedContentInset
+        view.leftEdgeInset = edgeInsets.left
+        view.rightEdgeInset = edgeInsets.right
+        view.contentInset = UIEdgeInsets(
+            top: edgeInsets.top,
+            left: 0,
+            bottom: edgeInsets.bottom,
+            right: 0
+        )
+        view.scrollIndicatorInsets = edgeInsets
+        if view.contentOffset.y <= CGFloat.leastNonzeroMagnitude {
+            view.contentOffset = CGPoint(x: 0, y: -edgeInsets.top)
+        }
+    }
 
 }
 
@@ -177,4 +202,40 @@ extension QTableViewController : IQTableControllerObserver {
     open func update(_ controller: IQTableController) {
     }
 
+}
+
+extension QTableViewController : IQKeyboardObserver {
+    
+    open func willShowKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
+        var options: UIViewAnimationOptions = []
+        switch  animationInfo.curve {
+        case .linear: options = [ .curveLinear ]
+        case .easeIn: options = [ .curveEaseIn ]
+        case .easeOut: options = [ .curveEaseOut ]
+        case .easeInOut: options = [ .curveEaseInOut ]
+        }
+        UIView.animate(withDuration: animationInfo.duration, delay: 0, options: options, animations: {
+            self.additionalEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: animationInfo.endFrame.height, right: 0)
+        })
+    }
+    
+    open func didShowKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
+    }
+    
+    open func willHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
+        var options: UIViewAnimationOptions = []
+        switch  animationInfo.curve {
+        case .linear: options = [ .curveLinear ]
+        case .easeIn: options = [ .curveEaseIn ]
+        case .easeOut: options = [ .curveEaseOut ]
+        case .easeInOut: options = [ .curveEaseInOut ]
+        }
+        UIView.animate(withDuration: animationInfo.duration, delay: 0, options: options, animations: {
+            self.additionalEdgeInsets = UIEdgeInsets.zero
+        })
+    }
+    
+    open func didHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
+    }
+    
 }

@@ -18,6 +18,7 @@ public protocol IQViewController : class {
     var edgesForExtendedLayout: UIRectEdge { set get }
     var additionalEdgeInsets: UIEdgeInsets { set get }
     var inheritedEdgeInsets: UIEdgeInsets { get }
+    var adjustedContentInset: UIEdgeInsets { get }
     var view: ViewType { get }
     var isLoaded: Bool { get }
     var isPresented: Bool { get }

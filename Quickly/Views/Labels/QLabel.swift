@@ -163,25 +163,6 @@ open class QLabel : QDisplayView {
     internal var lastBaselineView: UIView!
 
     private var cacheIntrinsicContentSize: CGSize?
-    private var layoutEngine: AnyObject? {
-        let objcMethodName = "nsli_layoutEngine"
-        let objcSelector = Selector(objcMethodName)
-        typealias targetCFunction = @convention(c) (AnyObject, Selector) -> AnyObject
-        let target = class_getMethodImplementation(type(of: self).self, objcSelector)
-        let casted = unsafeBitCast(target, to: targetCFunction.self)
-        return casted(self, objcSelector)
-    }
-    private var compatibleBounds: CGRect? {
-        let objcMethodName = "_nsis_compatibleBoundsInEngine:"
-        let objcSelector = Selector(objcMethodName)
-        typealias targetCFunction = @convention(c) (AnyObject, Selector, Any) -> CGRect
-        let target = class_getMethodImplementation(type(of: self).self, objcSelector)
-        let casted = unsafeBitCast(target, to: targetCFunction.self)
-        if let layoutEngine = self.layoutEngine {
-            return casted(self, objcSelector, layoutEngine)
-        }
-        return nil
-    }
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -346,9 +327,6 @@ open class QLabel : QDisplayView {
         if maxLayoutWidth > CGFloat.leastNonzeroMagnitude {
             return maxLayoutWidth
         }
-        if let compatibleBounds = self.compatibleBounds {
-            return compatibleBounds.width
-        }
         return self.bounds.width
     }
 
@@ -360,11 +338,6 @@ open class QLabel : QDisplayView {
         }
     }
     
-    @objc
-    private func _needsDoubleUpdateConstraintsPass() -> Bool {
-        return true
-    }
-
     private func _alignmentPoint(size: CGSize, textSize: CGSize) -> CGPoint {
         var y = size.height - textSize.height
         switch self.verticalAlignment {

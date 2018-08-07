@@ -16,7 +16,8 @@ open class QComposable : IQComposable {
 }
 
 open class QComposition< Composable: IQComposable > : IQComposition {
-
+    
+    open weak var delegate: IQCompositionDelegate?
     public private(set) var contentView: UIView
     public private(set) var composable: Composable!
 
@@ -24,12 +25,14 @@ open class QComposition< Composable: IQComposable > : IQComposition {
         return CGSize.zero
     }
 
-    public required init(contentView: UIView) {
+    public required init(contentView: UIView, delegate: IQCompositionDelegate? = nil) {
+        self.delegate = delegate
         self.contentView = contentView
         self.setup()
     }
 
-    public required init(frame: CGRect) {
+    public required init(frame: CGRect, delegate: IQCompositionDelegate? = nil) {
+        self.delegate = delegate
         self.contentView = QTransparentView(frame: frame)
         self.setup()
     }

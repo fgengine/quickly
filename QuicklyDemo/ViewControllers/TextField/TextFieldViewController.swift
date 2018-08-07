@@ -92,7 +92,7 @@ class TextFieldViewController : QNibViewController, IQRoutable {
 
 }
 
-extension TextFieldViewController : QKeyboardObserver {
+extension TextFieldViewController : IQKeyboardObserver {
 
     func willShowKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
     }

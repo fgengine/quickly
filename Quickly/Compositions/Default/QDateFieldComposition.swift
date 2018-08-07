@@ -47,6 +47,18 @@ open class QDateFieldComposable : QComposable {
 
 open class QDateFieldComposition< Composable: QDateFieldComposable >: QComposition< Composable > {
 
+    open override weak var delegate: IQCompositionDelegate? {
+        willSet {
+            if let delegate = self.delegate {
+                self.dateField.removeObserver(delegate)
+            }
+        }
+        didSet {
+            if let delegate = self.delegate {
+                self.dateField.addObserver(delegate, priority: 0)
+            }
+        }
+    }
     public private(set) var dateField: QDateField!
 
     private var currentEdgeInsets: UIEdgeInsets?
@@ -87,6 +99,9 @@ open class QDateFieldComposition< Composable: QDateFieldComposable >: QCompositi
         self.dateField.onEndEditing = { [weak self] (dateField: QDateField) in
             guard let strong = self else { return }
             strong.endEditing()
+        }
+        if let delegate = self.delegate {
+            self.dateField.addObserver(delegate, priority: 0)
         }
         self.contentView.addSubview(self.dateField)
     }

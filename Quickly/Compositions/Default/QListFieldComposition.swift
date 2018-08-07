@@ -46,6 +46,18 @@ open class QListFieldComposable : QComposable {
 
 open class QListFieldComposition< Composable: QListFieldComposable > : QComposition< Composable > {
 
+    open override weak var delegate: IQCompositionDelegate? {
+        willSet {
+            if let delegate = self.delegate {
+                self.listField.removeObserver(delegate)
+            }
+        }
+        didSet {
+            if let delegate = self.delegate {
+                self.listField.addObserver(delegate, priority: 0)
+            }
+        }
+    }
     public private(set) var listField: QListField!
 
     private var currentEdgeInsets: UIEdgeInsets?
@@ -86,6 +98,9 @@ open class QListFieldComposition< Composable: QListFieldComposable > : QComposit
         self.listField.onEndEditing = { [weak self] (listField: QListField) in
             guard let strong = self else { return }
             strong.endEditing()
+        }
+        if let delegate = self.delegate {
+            self.listField.addObserver(delegate, priority: 0)
         }
         self.contentView.addSubview(self.listField)
     }
