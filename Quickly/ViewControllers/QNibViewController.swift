@@ -18,6 +18,8 @@ open class QNibViewController : QViewController, IQStackContentViewController, I
             return self.view.bounds.size
         }
     }
+    public var leftEdgeInset: CGFloat = 0
+    public var rightEdgeInset: CGFloat = 0
     @IBOutlet
     public var rootView: UIView! {
         willSet {
@@ -38,6 +40,10 @@ open class QNibViewController : QViewController, IQStackContentViewController, I
     open func nibBundle() -> Bundle {
         return Bundle.main
     }
+    
+    open override func load() -> ViewType {
+        return QViewControllerDefaultView(viewController: self)
+    }
 
     open override func didLoad() {
         let nib = UINib(nibName: self.nibName(), bundle: self.nibBundle())
@@ -50,4 +56,18 @@ open class QNibViewController : QViewController, IQStackContentViewController, I
         }
     }
 
+}
+
+extension QNibViewController : IQContainerSpec {
+    
+    open var containerSize: CGSize {
+        get { return self.view.bounds.size }
+    }
+    open var containerLeftEdgeInset: CGFloat {
+        get { return self.leftEdgeInset }
+    }
+    open var containerRightEdgeInset: CGFloat {
+        get { return self.rightEdgeInset }
+    }
+    
 }

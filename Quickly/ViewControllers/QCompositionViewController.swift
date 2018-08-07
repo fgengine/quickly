@@ -18,7 +18,13 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
             return self.view.bounds.size
         }
     }
+    public var leftEdgeInset: CGFloat = 0
+    public var rightEdgeInset: CGFloat = 0
     public private(set) lazy var composition: Composition = self._prepareComposition()
+    
+    open override func load() -> ViewType {
+        return QViewControllerDefaultView(viewController: self)
+    }
 
     open override func layout(bounds: CGRect) {
         self.composition.contentView.frame = UIEdgeInsetsInsetRect(self.view.bounds, self.inheritedEdgeInsets)
@@ -30,6 +36,20 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
         return composition
     }
 
+}
+
+extension QCompositionViewController : IQContainerSpec {
+    
+    open var containerSize: CGSize {
+        get { return self.view.bounds.size }
+    }
+    open var containerLeftEdgeInset: CGFloat {
+        get { return self.leftEdgeInset }
+    }
+    open var containerRightEdgeInset: CGFloat {
+        get { return self.rightEdgeInset }
+    }
+    
 }
 
 extension QCompositionViewController : IQCompositionDelegate {
