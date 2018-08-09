@@ -124,9 +124,29 @@ open class QStackViewController : QViewController, IQStackViewController {
     }
 
     open func setStackbarHeight(_ value: CGFloat, animated: Bool = false) {
+        self.stackbarHeight = value
+        self.setNeedLayout()
+        self._updateAdditionalEdgeInsets()
+        if self.isLoaded == true {
+            if animated == true {
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.layoutIfNeeded()
+                })
+            }
+        }
     }
 
     open func setStackbarHidden(_ value: Bool, animated: Bool = false) {
+        self.stackbarHidden = value
+        self.setNeedLayout()
+        self._updateAdditionalEdgeInsets()
+        if self.isLoaded == true {
+            if animated == true {
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.layoutIfNeeded()
+                })
+            }
+        }
     }
 
     open func updateContent() {

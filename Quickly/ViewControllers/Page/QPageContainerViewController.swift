@@ -199,9 +199,29 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
     }
 
     open func setPagebarHeight(_ value: CGFloat, animated: Bool = false) {
+        self.pagebarHeight = value
+        self.setNeedLayout()
+        self._updateAdditionalEdgeInsets()
+        if self.isLoaded == true {
+            if animated == true {
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.layoutIfNeeded()
+                })
+            }
+        }
     }
 
     open func setPagebarHidden(_ value: Bool, animated: Bool = false) {
+        self.pagebarHidden = value
+        self.setNeedLayout()
+        self._updateAdditionalEdgeInsets()
+        if self.isLoaded == true {
+            if animated == true {
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.layoutIfNeeded()
+                })
+            }
+        }
     }
 
     open func setViewControllers(_ viewControllers: [IQPageViewController], mode: QPageViewControllerAnimationMode = .none, completion: (() -> Swift.Void)? = nil) {
