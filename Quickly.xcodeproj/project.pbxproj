@@ -91,6 +91,7 @@
 		403DF8F420CA72A8003C5D6D /* QModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403DF8F320CA72A8003C5D6D /* QModalViewController.swift */; };
 		403EBD5520567042004CCB29 /* DialogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 403EBD5320567042004CCB29 /* DialogViewController.xib */; };
 		403EBD5620567042004CCB29 /* DialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403EBD5420567042004CCB29 /* DialogViewController.swift */; };
+		403FA9D1212436C2004E3DD8 /* QWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403FA9D0212436C2004E3DD8 /* QWebViewController.swift */; };
 		4040717A205688B300F6ECC2 /* UIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40407178205688B300F6ECC2 /* UIControl.swift */; };
 		4040717E20568C2800F6ECC2 /* ConfirmDialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4040717C20568C2800F6ECC2 /* ConfirmDialogViewController.swift */; };
 		4040717F20568C2800F6ECC2 /* ConfirmDialogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4040717D20568C2800F6ECC2 /* ConfirmDialogViewController.xib */; };
@@ -431,6 +432,7 @@
 		403DF8F320CA72A8003C5D6D /* QModalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QModalViewController.swift; sourceTree = "<group>"; };
 		403EBD5320567042004CCB29 /* DialogViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DialogViewController.xib; sourceTree = "<group>"; };
 		403EBD5420567042004CCB29 /* DialogViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogViewController.swift; sourceTree = "<group>"; };
+		403FA9D0212436C2004E3DD8 /* QWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QWebViewController.swift; sourceTree = "<group>"; };
 		40407178205688B300F6ECC2 /* UIControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIControl.swift; sourceTree = "<group>"; };
 		4040717C20568C2800F6ECC2 /* ConfirmDialogViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmDialogViewController.swift; sourceTree = "<group>"; };
 		4040717D20568C2800F6ECC2 /* ConfirmDialogViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfirmDialogViewController.xib; sourceTree = "<group>"; };
@@ -1498,6 +1500,7 @@
 				406258E320B3F73E000E3AB2 /* QCompositionViewController.swift */,
 				40CF45AA1F4DE6AB004D00D8 /* QCollectionViewController.swift */,
 				40CF45AE1F4DE6AB004D00D8 /* QTableViewController.swift */,
+				403FA9D0212436C2004E3DD8 /* QWebViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1986,6 +1989,7 @@
 				401E8F84206D3CC1008A5BE4 /* QPickerRow.swift in Sources */,
 				404C910120D164A4001DE192 /* QPushViewControllerInteractiveAnimation.swift in Sources */,
 				4092ADD520E0FFF20020F278 /* QTitleDetailShapeComposition.swift in Sources */,
+				403FA9D1212436C2004E3DD8 /* QWebViewController.swift in Sources */,
 				404C90FD20D1644F001DE192 /* QPageViewControllerInteractiveAnimation.swift in Sources */,
 				40A75B68208FAE13000E5FBE /* NSNumber.swift in Sources */,
 				40E52949204E9466002EDB0A /* QBlurView.swift in Sources */,

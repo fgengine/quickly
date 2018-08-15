@@ -4,6 +4,7 @@
 
 @import Foundation;
 @import UIKit;
+@import WebKit;
 @import SystemConfiguration;
 
 //! Project version number for Quickly.

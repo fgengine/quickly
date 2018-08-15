@@ -386,11 +386,70 @@ public final class QTextStyle : IQTextStyle {
     private var _rebuildAttributes: Bool = true
     private var _attributes: [NSAttributedStringKey: Any] = [:]
 
-    public init() {
-    }
-
-    public init(parent: IQTextStyle) {
-        parent.addChild(self)
+    public init(
+        parent: IQTextStyle? = nil,
+        font: UIFont? = nil,
+        color: UIColor? = nil,
+        backgroundColor: UIColor? = nil,
+        strikeColor: UIColor? = nil,
+        strikeWidth: Float? = nil,
+        strikeThrough: Int? = nil,
+        underlineColor: UIColor? = nil,
+        underlineStyle: NSUnderlineStyle? = nil,
+        shadowOffset: CGSize? = nil,
+        shadowBlurRadius: Float? = nil,
+        shadowColor: UIColor? = nil,
+        ligature: Int? = nil,
+        kerning: Float? = nil,
+        baselineOffset: Float? = nil,
+        obliqueness: Float? = nil,
+        expansion: Float? = nil,
+        lineSpacing: Float? = nil,
+        paragraphBetween: Float? = nil,
+        alignment: NSTextAlignment? = nil,
+        firstLineHeadIndent: Float? = nil,
+        headIndent: Float? = nil,
+        tailIndent: Float? = nil,
+        lineBreakMode: NSLineBreakMode? = nil,
+        minimumLineHeight: Float? = nil,
+        maximumLineHeight: Float? = nil,
+        baseWritingDirection: NSWritingDirection? = nil,
+        lineHeightMultiple: Float? = nil,
+        paragraphSpacingBefore: Float? = nil,
+        hyphenationFactor: Float? = nil
+    ) {
+        if let parent = parent {
+            parent.addChild(self)
+        }
+        self._font = font
+        self._color = color
+        self._backgroundColor = backgroundColor
+        self._strikeColor = strikeColor
+        self._strikeWidth = strikeWidth
+        self._strikeThrough = strikeThrough
+        self._underlineColor = underlineColor
+        self._underlineStyle = underlineStyle
+        self._shadowOffset = shadowOffset
+        self._shadowBlurRadius = shadowBlurRadius
+        self._shadowColor = shadowColor
+        self._ligature = ligature
+        self._kerning = kerning
+        self._baselineOffset = baselineOffset
+        self._obliqueness = obliqueness
+        self._expansion = expansion
+        self._lineSpacing = lineSpacing
+        self._paragraphBetween = paragraphBetween
+        self._alignment = alignment
+        self._firstLineHeadIndent = firstLineHeadIndent
+        self._headIndent = headIndent
+        self._tailIndent = tailIndent
+        self._lineBreakMode = lineBreakMode
+        self._minimumLineHeight = minimumLineHeight
+        self._maximumLineHeight = maximumLineHeight
+        self._baseWritingDirection = baseWritingDirection
+        self._lineHeightMultiple = lineHeightMultiple
+        self._paragraphSpacingBefore = paragraphSpacingBefore
+        self._hyphenationFactor = hyphenationFactor
     }
 
     deinit {
