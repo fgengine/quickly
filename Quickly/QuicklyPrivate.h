@@ -2,4 +2,4 @@
 //  Quickly
 //
 
-#import "QApiImpl.h"
+#import "QImplAuthenticationChallenge.h"

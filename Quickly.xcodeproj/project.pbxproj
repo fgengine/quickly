@@ -63,7 +63,7 @@
 		402F1FB41F4EE237007625CA /* IQApiProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402F1FB31F4EE237007625CA /* IQApiProvider.swift */; };
 		402F1FB61F4EF525007625CA /* QApiError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402F1FB51F4EF525007625CA /* QApiError.swift */; };
 		402F1FBA1F4F380B007625CA /* QApiProvider+Internal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402F1FB91F4F380B007625CA /* QApiProvider+Internal.swift */; };
-		402F1FBD1F4F446F007625CA /* QApiImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = 402F1FBB1F4F446F007625CA /* QApiImpl.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		402F1FBD1F4F446F007625CA /* QImplAuthenticationChallenge.h in Headers */ = {isa = PBXBuildFile; fileRef = 402F1FBB1F4F446F007625CA /* QImplAuthenticationChallenge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40386F5620ADA982005F5349 /* QuicklyTimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40386F5520ADA982005F5349 /* QuicklyTimerTests.swift */; };
 		40386F5820ADC0EE005F5349 /* QuicklyObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40386F5720ADC0EE005F5349 /* QuicklyObserverTests.swift */; };
 		4039BCB51F516F1B00E38090 /* QButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4039BCB41F516F1B00E38090 /* QButton.swift */; };
@@ -204,7 +204,7 @@
 		40A907A8206F603D00655D2A /* QLabelPickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A907A6206F603D00655D2A /* QLabelPickerSection.swift */; };
 		40A907AB206F6C3800655D2A /* IQField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A907A9206F6C3800655D2A /* IQField.swift */; };
 		40A97ED02063C1A900594DE2 /* DisclosureShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A97ECD2063C1A100594DE2 /* DisclosureShape.swift */; };
-		40B8A1921F4F49AC00204E5A /* QApiImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 402F1FBC1F4F446F007625CA /* QApiImpl.m */; };
+		40B8A1921F4F49AC00204E5A /* QImplAuthenticationChallenge.m in Sources */ = {isa = PBXBuildFile; fileRef = 402F1FBC1F4F446F007625CA /* QImplAuthenticationChallenge.m */; };
 		40B8A1941F4F4AFB00204E5A /* QuicklyApiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B8A1931F4F4AFB00204E5A /* QuicklyApiTests.swift */; };
 		40B8A1961F4F6BED00204E5A /* QShapeView+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B8A1951F4F6BED00204E5A /* QShapeView+iOS.swift */; };
 		40B8A1991F4F806A00204E5A /* IQJsonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B8A1981F4F806A00204E5A /* IQJsonModel.swift */; };
@@ -399,8 +399,8 @@
 		402F1FB31F4EE237007625CA /* IQApiProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQApiProvider.swift; sourceTree = "<group>"; };
 		402F1FB51F4EF525007625CA /* QApiError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QApiError.swift; sourceTree = "<group>"; };
 		402F1FB91F4F380B007625CA /* QApiProvider+Internal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QApiProvider+Internal.swift"; sourceTree = "<group>"; };
-		402F1FBB1F4F446F007625CA /* QApiImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QApiImpl.h; sourceTree = "<group>"; };
-		402F1FBC1F4F446F007625CA /* QApiImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QApiImpl.m; sourceTree = "<group>"; };
+		402F1FBB1F4F446F007625CA /* QImplAuthenticationChallenge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QImplAuthenticationChallenge.h; sourceTree = "<group>"; };
+		402F1FBC1F4F446F007625CA /* QImplAuthenticationChallenge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QImplAuthenticationChallenge.m; sourceTree = "<group>"; };
 		4030A7522068D51000326D5A /* QTextFieldComposition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTextFieldComposition.swift; sourceTree = "<group>"; };
 		40386F5520ADA982005F5349 /* QuicklyTimerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuicklyTimerTests.swift; sourceTree = "<group>"; };
 		40386F5720ADC0EE005F5349 /* QuicklyObserverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuicklyObserverTests.swift; sourceTree = "<group>"; };
@@ -686,6 +686,15 @@
 			path = Default;
 			sourceTree = "<group>";
 		};
+		400CF9E52125646700F9238D /* AuthenticationChallenge */ = {
+			isa = PBXGroup;
+			children = (
+				402F1FBB1F4F446F007625CA /* QImplAuthenticationChallenge.h */,
+				402F1FBC1F4F446F007625CA /* QImplAuthenticationChallenge.m */,
+			);
+			path = AuthenticationChallenge;
+			sourceTree = "<group>";
+		};
 		4011E03D1F4CAD3A0056CA79 /* QuicklyTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -756,6 +765,7 @@
 				40C94A251F69514500439961 /* Observer */,
 				4070B6AA206297BB00B568A9 /* Keyboard */,
 				4070B6A620628E2D00B568A9 /* Reachability */,
+				400CF9E52125646700F9238D /* AuthenticationChallenge */,
 				409403561F4E125E008A8B90 /* Api */,
 				40CF458B1F4DE6AB004D00D8 /* Router */,
 				403B3D9520D39825008F80D4 /* Wireframe */,
@@ -1286,8 +1296,6 @@
 				4094035A1F4E12BF008A8B90 /* QApiResponse.swift */,
 				406FDF6A20908071004178CC /* QApiPagination.swift */,
 				402F1FB51F4EF525007625CA /* QApiError.swift */,
-				402F1FBB1F4F446F007625CA /* QApiImpl.h */,
-				402F1FBC1F4F446F007625CA /* QApiImpl.m */,
 			);
 			path = Api;
 			sourceTree = "<group>";
@@ -1646,7 +1654,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				402F1FBD1F4F446F007625CA /* QApiImpl.h in Headers */,
+				402F1FBD1F4F446F007625CA /* QImplAuthenticationChallenge.h in Headers */,
 				409403551F4DEB6C008A8B90 /* QuicklyPrivate.h in Headers */,
 				4018295E1F4C1C0A005C9949 /* Quickly.h in Headers */,
 			);
@@ -1820,7 +1828,7 @@
 				40134EFD1F62DC75009F81A6 /* QInputValidator.swift in Sources */,
 				40CF45E61F4DE6AB004D00D8 /* IQViewController.swift in Sources */,
 				4062C8CA2088DA0A0098F809 /* QNibViewController.swift in Sources */,
-				40B8A1921F4F49AC00204E5A /* QApiImpl.m in Sources */,
+				40B8A1921F4F49AC00204E5A /* QImplAuthenticationChallenge.m in Sources */,
 				40CF45C01F4DE6AB004D00D8 /* QCollectionItem.swift in Sources */,
 				403DF8F420CA72A8003C5D6D /* QModalViewController.swift in Sources */,
 				4062C8CD2088DD4C0098F809 /* QStackWireframe.swift in Sources */,

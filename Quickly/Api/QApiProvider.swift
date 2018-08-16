@@ -8,7 +8,7 @@ open class QApiProvider : NSObject, IQApiProvider, URLSessionDelegate, URLSessio
     public var urlParams: [String: Any] = [:]
     public var headers: [String: String] = [:]
     public var bodyParams: [String: Any]?
-    public var allowInvalidCertificates: Bool = true
+    public var allowInvalidCertificates: Bool = false
     public var localCertificateUrls: [URL] = []
     public var isLogging: Bool = false
 
@@ -271,7 +271,7 @@ open class QApiProvider : NSObject, IQApiProvider, URLSessionDelegate, URLSessio
         didReceive challenge: URLAuthenticationChallenge,
         completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Swift.Void
     ) {
-        let challenge = QApiImplAuthenticationChallenge(
+        let challenge = QImplAuthenticationChallenge(
             localCertificateUrls: self.localCertificateUrls,
             allowInvalidCertificates: self.allowInvalidCertificates,
             challenge: challenge
@@ -295,7 +295,7 @@ open class QApiProvider : NSObject, IQApiProvider, URLSessionDelegate, URLSessio
         didReceive challenge: URLAuthenticationChallenge,
         completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Swift.Void
     ) {
-        let challenge = QApiImplAuthenticationChallenge(
+        let challenge = QImplAuthenticationChallenge(
             localCertificateUrls: self.localCertificateUrls,
             allowInvalidCertificates: self.allowInvalidCertificates,
             challenge: challenge

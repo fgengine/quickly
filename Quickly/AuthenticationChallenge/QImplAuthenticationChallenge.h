@@ -4,7 +4,7 @@
 
 @import Foundation;
 
-@interface QApiImplAuthenticationChallenge : NSObject
+@interface QImplAuthenticationChallenge : NSObject
 
 @property(nonatomic, readonly) NSURLSessionAuthChallengeDisposition disposition;
 @property(nonatomic, nullable, readonly) NSURLCredential* credential;

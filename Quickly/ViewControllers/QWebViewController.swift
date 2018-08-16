@@ -23,6 +23,8 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
     }
     public var leftEdgeInset: CGFloat = 0
     public var rightEdgeInset: CGFloat = 0
+    public var allowInvalidCertificates: Bool = false
+    public var localCertificateUrls: [URL] = []
     public private(set) lazy var webView: WKWebView = self._prepareWebView()
     public private(set) var configuration: WKWebViewConfiguration
     
@@ -70,6 +72,16 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
     @discardableResult
     open func load(data: Data, mimeType: String, encoding: String, baseUrl: URL) -> WKNavigation? {
         return self.webView.load(data, mimeType: mimeType, characterEncodingName: encoding, baseURL: baseUrl)
+    }
+    
+    open func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        let challenge = QImplAuthenticationChallenge(
+            localCertificateUrls: self.localCertificateUrls,
+            allowInvalidCertificates: self.allowInvalidCertificates,
+            challenge: challenge
+        )
+        completionHandler(challenge.disposition, challenge.credential)
+        
     }
     
     private func _prepareWebView() -> WKWebView {
