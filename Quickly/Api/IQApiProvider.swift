@@ -8,7 +8,7 @@ public protocol IQApiProvider : class {
     var urlParams: [String: Any] { get }
     var headers: [String: String] { get }
     var bodyParams: [String: Any]? { get }
-    var isLogging: Bool { get }
+    var logging: QApiLogging { get }
 
     func send(query: IQApiQuery)
 

@@ -18,7 +18,7 @@ open class QApiRequest : IQApiRequest {
     public var retries: TimeInterval = 0
     public var delay: TimeInterval = 1
     public var cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
-    public var isLogging: Bool = false
+    public var logging: QApiLogging = .never
 
     public init(method: String) {
         self.method = method

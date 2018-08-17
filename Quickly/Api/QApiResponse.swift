@@ -97,7 +97,7 @@ extension QApiResponse : IQDebug {
         if let error = self.error as IQDebug? {
             var debug = String()
             error.debugString(&debug, 0, nextIndent, indent)
-            QDebugString("error: \(debug)\n", &buffer, indent, nextIndent, indent)
+            QDebugString("Error: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
 
         if footerIndent > 0 {

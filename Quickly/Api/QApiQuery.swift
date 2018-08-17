@@ -209,11 +209,28 @@ public class QApiQuery<
     }
 
     private func complete() {
-        if (self.request.isLogging == true) || (self.provider.isLogging == true) {
-            print(self.debugString())
+        if self.logging(self.request.logging) == false {
+            self.logging(self.provider.logging)
         }
         self.queue.async {
             self.completed(self.request, self.response)
+        }
+    }
+    
+    @discardableResult
+    private func logging(_ logging: QApiLogging) -> Bool {
+        switch logging {
+        case .never:
+            return false
+        case .whenError:
+            if self.response.error != nil {
+                print(self.debugString())
+                return true
+            }
+            return false
+        case .always:
+            print(self.debugString())
+            return true
         }
     }
 

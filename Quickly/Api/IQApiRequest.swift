@@ -8,7 +8,7 @@ public protocol IQApiRequest : class {
     var retries: TimeInterval { get }
     var delay: TimeInterval { get }
     var cachePolicy: URLRequest.CachePolicy { get }
-    var isLogging: Bool { get }
+    var logging: QApiLogging { get }
 
     func urlRequest(provider: IQApiProvider) -> URLRequest?
     

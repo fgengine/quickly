@@ -173,10 +173,27 @@ extension UIImage : IQDebug {
 extension NSError : IQDebug {
 
     public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+        let nextIndent = indent + 1
+        
         if headerIndent > 0 {
             buffer.append(String(repeating: "\t", count: headerIndent))
         }
-        buffer.append("<NSError domain: \(self.domain) code: \(self.code)>")
+        buffer.append("<NSError\n")
+        
+        buffer.append(String(repeating: "\t", count: indent))
+        buffer.append("Domain: \(self.domain)\n")
+        
+        buffer.append(String(repeating: "\t", count: indent))
+        buffer.append("Code: \(self.code)\n")
+        
+        var userInfoDebug = String()
+        self.userInfo.debugString(&userInfoDebug, 0, nextIndent, indent)
+        QDebugString("UserInfo: \(userInfoDebug)\n", &buffer, indent, nextIndent, indent)
+        
+        if footerIndent > 0 {
+            buffer.append(String(repeating: "\t", count: footerIndent))
+        }
+        buffer.append(">\n")
     }
 
 }

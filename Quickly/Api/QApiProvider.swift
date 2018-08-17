@@ -10,7 +10,7 @@ open class QApiProvider : NSObject, IQApiProvider, URLSessionDelegate, URLSessio
     public var bodyParams: [String: Any]?
     public var allowInvalidCertificates: Bool = false
     public var localCertificateUrls: [URL] = []
-    public var isLogging: Bool = false
+    public var logging: QApiLogging = .never
 
     public private(set) lazy var session: URLSession = self.prepareSession()
     public private(set) lazy var sessionConfiguration: URLSessionConfiguration = self.prepareSessionConfiguration()

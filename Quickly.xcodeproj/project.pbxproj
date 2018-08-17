@@ -42,6 +42,7 @@
 		401E8F87206D3E88008A5BE4 /* QListField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401E8F41206D0FBA008A5BE4 /* QListField.swift */; };
 		401E8F8C206D429D008A5BE4 /* QLabelPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401E8F89206D429C008A5BE4 /* QLabelPickerRow.swift */; };
 		401E8F8E206D429D008A5BE4 /* QLabelPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401E8F8A206D429C008A5BE4 /* QLabelPickerCell.swift */; };
+		401F46B92126D1AD004DB8A2 /* QApiLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401F46B82126D1AD004DB8A2 /* QApiLogging.swift */; };
 		40224611207651CD0020B357 /* QGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4022460F207651CD0020B357 /* QGradientView.swift */; };
 		40224614207652E60020B357 /* QGradientPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40224612207652E60020B357 /* QGradientPoint.swift */; };
 		40224617207662C50020B357 /* QDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40224615207662C50020B357 /* QDisplayView.swift */; };
@@ -375,6 +376,7 @@
 		401E8F57206D1207008A5BE4 /* QPickerRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QPickerRow.swift; sourceTree = "<group>"; };
 		401E8F89206D429C008A5BE4 /* QLabelPickerRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QLabelPickerRow.swift; sourceTree = "<group>"; };
 		401E8F8A206D429C008A5BE4 /* QLabelPickerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QLabelPickerCell.swift; sourceTree = "<group>"; };
+		401F46B82126D1AD004DB8A2 /* QApiLogging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QApiLogging.swift; sourceTree = "<group>"; };
 		4020DD3820861EFE002083A9 /* QStackWireframe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QStackWireframe.swift; sourceTree = "<group>"; };
 		4022460F207651CD0020B357 /* QGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QGradientView.swift; sourceTree = "<group>"; };
 		40224612207652E60020B357 /* QGradientPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QGradientPoint.swift; sourceTree = "<group>"; };
@@ -1284,6 +1286,7 @@
 		409403561F4E125E008A8B90 /* Api */ = {
 			isa = PBXGroup;
 			children = (
+				401F46B82126D1AD004DB8A2 /* QApiLogging.swift */,
 				402F1FB31F4EE237007625CA /* IQApiProvider.swift */,
 				409403611F4E26D1008A8B90 /* IQApiQuery.swift */,
 				402F1FAF1F4EE0AB007625CA /* IQApiRequest.swift */,
@@ -1836,6 +1839,7 @@
 				409403621F4E26D1008A8B90 /* IQApiQuery.swift in Sources */,
 				401E8F85206D3CC1008A5BE4 /* QPickerCell.swift in Sources */,
 				40FBE6A41F543EFD00F5194B /* QStyledText.swift in Sources */,
+				401F46B92126D1AD004DB8A2 /* QApiLogging.swift in Sources */,
 				409CAC3E207B640D00EA54A5 /* QStackbar.swift in Sources */,
 				4062C8C82088CE400098F809 /* QStackViewController.swift in Sources */,
 				4092ADC920E0FFF20020F278 /* QImageTitleComposition.swift in Sources */,
