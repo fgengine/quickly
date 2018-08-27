@@ -177,8 +177,8 @@ open class QCollectionViewController : QViewController, IQStackContentViewContro
     
     private func _updateContentInsets(_ view: QCollectionView) {
         let edgeInsets = self.adjustedContentInset
-        view.leftEdgeInset = edgeInsets.left
-        view.rightEdgeInset = edgeInsets.right
+        view.contentLeftInset = edgeInsets.left
+        view.contentRightInset = edgeInsets.right
         view.contentInset = UIEdgeInsets(
             top: edgeInsets.top,
             left: 0,

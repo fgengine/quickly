@@ -155,11 +155,11 @@ open class QStackbar : QView {
             }
         } else {
             if leftViewsCount > 0 && rightViewsCount > 0 {
-                selfConstraints.append(self.leftView.trailingLayout == self.rightView.trailingLayout + self.leftViewsOffset + self.rightViewsOffset)
+                selfConstraints.append(self.leftView.trailingLayout >= self.rightView.trailingLayout + self.leftViewsOffset + self.rightViewsOffset)
             } else if leftViewsCount > 0 {
-                selfConstraints.append(self.leftView.trailingLayout == self.trailingLayout - self.edgeInsets.right)
+                selfConstraints.append(self.leftView.trailingLayout <= self.trailingLayout - self.edgeInsets.right)
             } else if rightViewsCount > 0 {
-                selfConstraints.append(self.rightView.leadingLayout == self.leadingLayout + self.edgeInsets.left)
+                selfConstraints.append(self.rightView.leadingLayout >= self.leadingLayout + self.edgeInsets.left)
             }
         }
         selfConstraints.append(self.centerView.bottomLayout == self.bottomLayout - self.edgeInsets.bottom)

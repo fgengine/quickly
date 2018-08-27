@@ -270,14 +270,14 @@ public final class QJson {
         }
         let components = path.components(separatedBy: Const.pathSeparator)
         return components.compactMap({ (subpath: String) -> IQJsonPath? in
-            guard let subPathRange = NSRange(subpath) else { return subpath }
-            guard let match = Const.pathIndexPattern.firstMatch(in: subpath, options: [], range: subPathRange) else {
+            guard let match = Const.pathIndexPattern.firstMatch(in: subpath, options: [], range: NSRange(location: 0, length: subpath.count)) else {
                 return subpath
             }
             if((match.range.location != NSNotFound) && (match.range.length > 0)) {
                 let startIndex = subpath.index(subpath.startIndex, offsetBy: 1)
-                let endIndex = subpath.index(subpath.endIndex, offsetBy: -2)
-                return NSNumber.number(from: String(subpath[startIndex..<endIndex]))
+                let endIndex = subpath.index(subpath.endIndex, offsetBy: -1)
+                let indexString = String(subpath[startIndex..<endIndex])
+                return NSNumber.number(from: indexString)
             }
             return subpath
         })

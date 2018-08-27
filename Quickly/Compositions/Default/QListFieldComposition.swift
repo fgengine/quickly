@@ -46,18 +46,6 @@ open class QListFieldComposable : QComposable {
 
 open class QListFieldComposition< Composable: QListFieldComposable > : QComposition< Composable > {
 
-    open override weak var delegate: IQCompositionDelegate? {
-        willSet {
-            if let delegate = self.delegate {
-                self.listField.removeObserver(delegate)
-            }
-        }
-        didSet {
-            if let delegate = self.delegate {
-                self.listField.addObserver(delegate, priority: 0)
-            }
-        }
-    }
     public private(set) var listField: QListField!
 
     private var currentEdgeInsets: UIEdgeInsets?
@@ -73,9 +61,15 @@ open class QListFieldComposition< Composable: QListFieldComposable > : QComposit
             height: composable.edgeInsets.top + composable.fieldHeight + composable.edgeInsets.bottom
         )
     }
-
-    open override func setup() {
-        super.setup()
+    
+    deinit {
+        if let observer = owner as? IQListFieldObserver {
+            self.listField.removeObserver(observer)
+        }
+    }
+    
+    open override func setup(owner: AnyObject) {
+        super.setup(owner: owner)
 
         self.listField = QListField(frame: self.contentView.bounds)
         self.listField.translatesAutoresizingMaskIntoConstraints = false
@@ -99,10 +93,11 @@ open class QListFieldComposition< Composable: QListFieldComposable > : QComposit
             guard let strong = self else { return }
             strong.endEditing()
         }
-        if let delegate = self.delegate {
-            self.listField.addObserver(delegate, priority: 0)
-        }
         self.contentView.addSubview(self.listField)
+        
+        if let observer = owner as? IQListFieldObserver {
+            self.listField.addObserver(observer, priority: 0)
+        }
     }
     
     open override func prepare(composable: Composable, spec: IQContainerSpec, animated: Bool) {
@@ -110,9 +105,9 @@ open class QListFieldComposition< Composable: QListFieldComposable > : QComposit
         
         let edgeInsets = UIEdgeInsets(
             top: composable.edgeInsets.top,
-            left: spec.containerLeftEdgeInset + composable.edgeInsets.left,
+            left: spec.containerLeftInset + composable.edgeInsets.left,
             bottom: composable.edgeInsets.bottom,
-            right: spec.containerRightEdgeInset + composable.edgeInsets.right
+            right: spec.containerRightInset + composable.edgeInsets.right
         )
         if self.currentEdgeInsets != edgeInsets {
             self.currentEdgeInsets = edgeInsets

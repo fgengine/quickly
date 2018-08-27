@@ -42,9 +42,9 @@ open class QButtonComposition< Composable: QButtonComposable > : QComposition< C
             height: composable.edgeInsets.top + composable.buttonHeight + composable.edgeInsets.bottom
         )
     }
-
-    open override func setup() {
-        super.setup()
+    
+    open override func setup(owner: AnyObject) {
+        super.setup(owner: owner)
 
         self.button = QButton(frame: self.contentView.bounds)
         self.button.translatesAutoresizingMaskIntoConstraints = false
@@ -57,9 +57,9 @@ open class QButtonComposition< Composable: QButtonComposable > : QComposition< C
         
         let edgeInsets = UIEdgeInsets(
             top: composable.edgeInsets.top,
-            left: spec.containerLeftEdgeInset + composable.edgeInsets.left,
+            left: spec.containerLeftInset + composable.edgeInsets.left,
             bottom: composable.edgeInsets.bottom,
-            right: spec.containerRightEdgeInset + composable.edgeInsets.right
+            right: spec.containerRightInset + composable.edgeInsets.right
         )
         if self.currentEdgeInsets != edgeInsets {
             self.currentEdgeInsets = edgeInsets

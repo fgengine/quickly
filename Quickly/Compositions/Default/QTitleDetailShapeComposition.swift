@@ -33,7 +33,7 @@ open class QTitleDetailShapeComposable : QComposable {
 
 }
 
-open class QTitleDetailShapeComposition< Composable: QTitleDetailShapeComposable >: QComposition< Composable > {
+open class QTitleDetailShapeComposition< Composable: QTitleDetailShapeComposable > : QComposition< Composable > {
 
     public private(set) var titleLabel: QLabel!
     public private(set) var detailLabel: QLabel!
@@ -62,9 +62,9 @@ open class QTitleDetailShapeComposition< Composable: QTitleDetailShapeComposable
             height: composable.edgeInsets.top + max(ceil(titleTextSize.height) + composable.titleSpacing + ceil(detailTextSize.height), composable.shape.size.height) + composable.edgeInsets.bottom
         )
     }
-
-    open override func setup() {
-        super.setup()
+    
+    open override func setup(owner: AnyObject) {
+        super.setup(owner: owner)
 
         self.titleLabel = QLabel(frame: self.contentView.bounds)
         self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -90,9 +90,9 @@ open class QTitleDetailShapeComposition< Composable: QTitleDetailShapeComposable
         
         let edgeInsets = UIEdgeInsets(
             top: composable.edgeInsets.top,
-            left: spec.containerLeftEdgeInset + composable.edgeInsets.left,
+            left: spec.containerLeftInset + composable.edgeInsets.left,
             bottom: composable.edgeInsets.bottom,
-            right: spec.containerRightEdgeInset + composable.edgeInsets.right
+            right: spec.containerRightInset + composable.edgeInsets.right
         )
         if self.currentEdgeInsets != edgeInsets || self.currentTitleSpacing != composable.titleSpacing || self.currentShapeSpacing != composable.shapeSpacing {
             self.currentEdgeInsets = edgeInsets

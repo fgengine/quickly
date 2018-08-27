@@ -45,20 +45,8 @@ open class QDateFieldComposable : QComposable {
 
 }
 
-open class QDateFieldComposition< Composable: QDateFieldComposable >: QComposition< Composable > {
+open class QDateFieldComposition< Composable: QDateFieldComposable > : QComposition< Composable > {
 
-    open override weak var delegate: IQCompositionDelegate? {
-        willSet {
-            if let delegate = self.delegate {
-                self.dateField.removeObserver(delegate)
-            }
-        }
-        didSet {
-            if let delegate = self.delegate {
-                self.dateField.addObserver(delegate, priority: 0)
-            }
-        }
-    }
     public private(set) var dateField: QDateField!
 
     private var currentEdgeInsets: UIEdgeInsets?
@@ -74,9 +62,15 @@ open class QDateFieldComposition< Composable: QDateFieldComposable >: QCompositi
             height: composable.edgeInsets.top + composable.fieldHeight + composable.edgeInsets.bottom
         )
     }
-
-    open override func setup() {
-        super.setup()
+    
+    deinit {
+        if let observer = owner as? IQDateFieldObserver {
+            self.dateField.removeObserver(observer)
+        }
+    }
+    
+    open override func setup(owner: AnyObject) {
+        super.setup(owner: owner)
 
         self.dateField = QDateField(frame: self.contentView.bounds)
         self.dateField.translatesAutoresizingMaskIntoConstraints = false
@@ -100,10 +94,11 @@ open class QDateFieldComposition< Composable: QDateFieldComposable >: QCompositi
             guard let strong = self else { return }
             strong.endEditing()
         }
-        if let delegate = self.delegate {
-            self.dateField.addObserver(delegate, priority: 0)
-        }
         self.contentView.addSubview(self.dateField)
+        
+        if let observer = owner as? IQDateFieldObserver {
+            self.dateField.addObserver(observer, priority: 0)
+        }
     }
     
     open override func prepare(composable: Composable, spec: IQContainerSpec, animated: Bool) {
@@ -111,9 +106,9 @@ open class QDateFieldComposition< Composable: QDateFieldComposable >: QCompositi
         
         let edgeInsets = UIEdgeInsets(
             top: composable.edgeInsets.top,
-            left: spec.containerLeftEdgeInset + composable.edgeInsets.left,
+            left: spec.containerLeftInset + composable.edgeInsets.left,
             bottom: composable.edgeInsets.bottom,
-            right: spec.containerRightEdgeInset + composable.edgeInsets.right
+            right: spec.containerRightInset + composable.edgeInsets.right
         )
         if self.currentEdgeInsets != edgeInsets {
             self.currentEdgeInsets = edgeInsets

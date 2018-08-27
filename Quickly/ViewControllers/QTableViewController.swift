@@ -175,8 +175,8 @@ open class QTableViewController : QViewController, IQStackContentViewController,
     
     private func _updateContentInsets(_ view: QTableView) {
         let edgeInsets = self.adjustedContentInset
-        view.leftEdgeInset = edgeInsets.left
-        view.rightEdgeInset = edgeInsets.right
+        view.contentLeftInset = edgeInsets.left
+        view.contentRightInset = edgeInsets.right
         view.contentInset = UIEdgeInsets(
             top: edgeInsets.top,
             left: 0,

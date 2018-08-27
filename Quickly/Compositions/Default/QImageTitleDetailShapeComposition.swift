@@ -80,9 +80,9 @@ open class QImageTitleDetailShapeComposition< Composable: QImageTitleDetailShape
             height: composable.edgeInsets.top + max(imageSize.height, ceil(titleTextSize.height) + composable.titleSpacing + ceil(detailTextSize.height), composable.shape.size.height) + composable.edgeInsets.bottom
         )
     }
-
-    open override func setup() {
-        super.setup()
+    
+    open override func setup(owner: AnyObject) {
+        super.setup(owner: owner)
 
         self.imageView = QImageView(frame: self.contentView.bounds)
         self.imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -114,9 +114,9 @@ open class QImageTitleDetailShapeComposition< Composable: QImageTitleDetailShape
         
         let edgeInsets = UIEdgeInsets(
             top: composable.edgeInsets.top,
-            left: spec.containerLeftEdgeInset + composable.edgeInsets.left,
+            left: spec.containerLeftInset + composable.edgeInsets.left,
             bottom: composable.edgeInsets.bottom,
-            right: spec.containerRightEdgeInset + composable.edgeInsets.right
+            right: spec.containerRightInset + composable.edgeInsets.right
         )
         if self.currentEdgeInsets != edgeInsets || self.currentImageSpacing != composable.imageSpacing || self.currentTitleSpacing != composable.titleSpacing || self.currentShapeSpacing != composable.shapeSpacing {
             self.currentEdgeInsets = edgeInsets

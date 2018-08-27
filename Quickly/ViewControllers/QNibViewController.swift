@@ -18,8 +18,8 @@ open class QNibViewController : QViewController, IQStackContentViewController, I
             return self.view.bounds.size
         }
     }
-    public var leftEdgeInset: CGFloat = 0
-    public var rightEdgeInset: CGFloat = 0
+    public var screenLeftInset: CGFloat = 0
+    public var screenRightInset: CGFloat = 0
     @IBOutlet
     public var rootView: UIView! {
         willSet {
@@ -63,11 +63,11 @@ extension QNibViewController : IQContainerSpec {
     open var containerSize: CGSize {
         get { return self.view.bounds.size }
     }
-    open var containerLeftEdgeInset: CGFloat {
-        get { return self.leftEdgeInset }
+    open var containerLeftInset: CGFloat {
+        get { return self.screenLeftInset }
     }
-    open var containerRightEdgeInset: CGFloat {
-        get { return self.rightEdgeInset }
+    open var containerRightInset: CGFloat {
+        get { return self.screenRightInset }
     }
     
 }

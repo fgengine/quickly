@@ -28,7 +28,7 @@ open class QCompositionCollectionCell< Composition: IQComposition > : QBackgroun
 
     open override func setup() {
         super.setup()
-        self.composition = Composition(contentView: self.contentView, delegate: self)
+        self.composition = Composition(contentView: self.contentView, owner: self)
     }
 
     open override func prepareForReuse() {
@@ -46,9 +46,6 @@ open class QCompositionCollectionCell< Composition: IQComposition > : QBackgroun
         controller.scroll(item: item, scroll: .centeredVertically, animated: animated)
     }
 
-}
-
-extension QCompositionCollectionCell : IQCompositionDelegate {
 }
 
 extension QCompositionCollectionCell : IQTextFieldObserver {

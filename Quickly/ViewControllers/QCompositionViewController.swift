@@ -18,8 +18,8 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
             return self.view.bounds.size
         }
     }
-    public var leftEdgeInset: CGFloat = 0
-    public var rightEdgeInset: CGFloat = 0
+    public var screenLeftInset: CGFloat = 0
+    public var screenRightInset: CGFloat = 0
     public private(set) lazy var composition: Composition = self._prepareComposition()
     
     open override func load() -> ViewType {
@@ -31,7 +31,7 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
     }
 
     private func _prepareComposition() -> Composition {
-        let composition = Composition(frame: UIEdgeInsetsInsetRect(self.view.bounds, self.inheritedEdgeInsets), delegate: self)
+        let composition = Composition(frame: UIEdgeInsetsInsetRect(self.view.bounds, self.inheritedEdgeInsets), owner: self)
         self.view.addSubview(composition.contentView)
         return composition
     }
@@ -43,16 +43,13 @@ extension QCompositionViewController : IQContainerSpec {
     open var containerSize: CGSize {
         get { return self.view.bounds.size }
     }
-    open var containerLeftEdgeInset: CGFloat {
-        get { return self.leftEdgeInset }
+    open var containerLeftInset: CGFloat {
+        get { return self.screenLeftInset }
     }
-    open var containerRightEdgeInset: CGFloat {
-        get { return self.rightEdgeInset }
+    open var containerRightInset: CGFloat {
+        get { return self.screenRightInset }
     }
     
-}
-
-extension QCompositionViewController : IQCompositionDelegate {
 }
 
 extension QCompositionViewController : IQTextFieldObserver {

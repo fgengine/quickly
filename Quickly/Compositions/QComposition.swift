@@ -16,35 +16,41 @@ open class QComposable : IQComposable {
 }
 
 open class QComposition< Composable: IQComposable > : IQComposition {
-    
-    open weak var delegate: IQCompositionDelegate?
+
+    public private(set) weak var owner: AnyObject?
     public private(set) var contentView: UIView
-    public private(set) var composable: Composable!
+    public private(set) var composable: Composable?
+    public private(set) weak var spec: IQContainerSpec?
 
     open class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         return CGSize.zero
     }
 
-    public required init(contentView: UIView, delegate: IQCompositionDelegate? = nil) {
-        self.delegate = delegate
+    public required init(contentView: UIView, owner: AnyObject) {
         self.contentView = contentView
-        self.setup()
+        self.setup(owner: owner)
     }
 
-    public required init(frame: CGRect, delegate: IQCompositionDelegate? = nil) {
-        self.delegate = delegate
+    public required init(frame: CGRect, owner: AnyObject) {
         self.contentView = QTransparentView(frame: frame)
-        self.setup()
+        self.setup(owner: owner)
+    }
+    
+    deinit {
+        self.owner = nil
     }
 
-    open func setup() {
+    open func setup(owner: AnyObject) {
+        self.owner = owner
     }
 
     open func prepare(composable: Composable, spec: IQContainerSpec, animated: Bool) {
         self.composable = composable
+        self.spec = spec
     }
 
     open func cleanup() {
+        self.spec = nil
         self.composable = nil
     }
 

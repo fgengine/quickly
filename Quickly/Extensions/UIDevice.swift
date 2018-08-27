@@ -29,7 +29,7 @@ public extension UIDevice {
                 } else if screenWidth >= 568 && screenHeight >= 320 {
                     return .iPhone_4
                 } else if screenWidth >= 480 && screenHeight >= 320 {
-                    return .iPhone_4
+                    return .iPhone_3_5
                 }
             case .pad:
                 if screenWidth >= 1366 && screenHeight >= 1024 {
