@@ -11,6 +11,7 @@ public enum QDeviceDisplaySize : Int {
     case iPhone_4
     case iPhone_4_7
     case iPhone_5_5
+    case iPhone_5_8
 }
 
 public extension UIDevice {
@@ -18,25 +19,27 @@ public extension UIDevice {
     public var displaySize: QDeviceDisplaySize {
         get {
             let screenSize = UIScreen.main.bounds.integral.size
-            let screenWidth = max(screenSize.width, screenSize.height)
-            let screenHeight = min(screenSize.width, screenSize.height)
+            let screenWidth = min(screenSize.width, screenSize.height)
+            let screenHeight = max(screenSize.width, screenSize.height)
             switch self.userInterfaceIdiom {
             case .phone:
-                if screenWidth >= 736 && screenHeight >= 414 {
+                if screenHeight >= 812 && screenWidth >= 375 {
+                    return .iPhone_5_8
+                } else if screenHeight >= 736 && screenWidth >= 414 {
                     return .iPhone_5_5
-                } else if screenWidth >= 667 && screenHeight >= 375 {
+                } else if screenHeight >= 667 && screenWidth >= 375 {
                     return .iPhone_4_7
-                } else if screenWidth >= 568 && screenHeight >= 320 {
+                } else if screenHeight >= 568 && screenWidth >= 320 {
                     return .iPhone_4
-                } else if screenWidth >= 480 && screenHeight >= 320 {
+                } else if screenHeight >= 480 && screenWidth >= 320 {
                     return .iPhone_3_5
                 }
             case .pad:
-                if screenWidth >= 1366 && screenHeight >= 1024 {
+                if screenHeight >= 1366 && screenWidth >= 1024 {
                     return .iPad_10_5
-                } else if screenWidth >= 1112 && screenHeight >= 834 {
+                } else if screenHeight >= 1112 && screenWidth >= 834 {
                     return .iPad_10_5
-                } else if screenWidth >= 1024 && screenHeight >= 768 {
+                } else if screenHeight >= 1024 && screenWidth >= 768 {
                     return .iPad
                 }
             default:

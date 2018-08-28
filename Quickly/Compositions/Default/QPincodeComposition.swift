@@ -81,6 +81,7 @@ open class QPincodeComposable : QComposable {
 
 public protocol QPincodeCompositionDelegate : class {
     
+    func pincodeCompositionUpdated(_ composition: QPincodeComposition, pin: String)
     func pincodeCompositionCompited(_ composition: QPincodeComposition, pin: String)
     func pincodeCompositionLeftPressed(_ composition: QPincodeComposition)
     func pincodeCompositionRightPressed(_ composition: QPincodeComposition)
@@ -91,23 +92,23 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
     
     open weak var delegate: QPincodeCompositionDelegate?
     
-    public private(set) var error: QLabelStyleSheet?
+    private var error: QLabelStyleSheet?
     
-    public private(set) var titleLabel: QLabel!
-    public private(set) var pincode: QPincodeView!
-    public private(set) var errorLabel: QLabel!
-    public private(set) var button1: QButton!
-    public private(set) var button2: QButton!
-    public private(set) var button3: QButton!
-    public private(set) var button4: QButton!
-    public private(set) var button5: QButton!
-    public private(set) var button6: QButton!
-    public private(set) var button7: QButton!
-    public private(set) var button8: QButton!
-    public private(set) var button9: QButton!
-    public private(set) var button0: QButton!
-    public private(set) var buttonLeft: QButton!
-    public private(set) var buttonRight: QButton!
+    private var titleLabel: QLabel!
+    private var pincode: QPincodeView!
+    private var errorLabel: QLabel!
+    private var button1: QButton!
+    private var button2: QButton!
+    private var button3: QButton!
+    private var button4: QButton!
+    private var button5: QButton!
+    private var button6: QButton!
+    private var button7: QButton!
+    private var button8: QButton!
+    private var button9: QButton!
+    private var button0: QButton!
+    private var buttonLeft: QButton!
+    private var buttonRight: QButton!
     
     private var currentEdgeInsets: UIEdgeInsets?
     private var currentTitleSpacing: CGFloat?
@@ -283,25 +284,36 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
         self.postLayout(composable: composable, spec: spec)
     }
     
+    public func resetPincode() {
+        self.pincode.text = ""
+        self.updateRightButton()
+    }
+    
     public func showError(text: String) {
-        guard let composable = self.composable, let spec = self.spec else { return }
-        self.error = QLabelStyleSheet(text: QStyledText(text, style: composable.error))
-        self.error!.apply(target: self.errorLabel)
-        self.preLayout(composable: composable, spec: spec)
-        UIView.animate(withDuration: 0.125, animations: {
-            self.postLayout(composable: composable, spec: spec)
-            self.contentView.layoutIfNeeded()
-        })
+        if let composable = self.composable, let spec = self.spec {
+            self.error = QLabelStyleSheet(text: QStyledText(text, style: composable.error))
+            self.error!.apply(target: self.errorLabel)
+            self.preLayout(composable: composable, spec: spec)
+            UIView.animate(withDuration: 0.125, animations: {
+                self.postLayout(composable: composable, spec: spec)
+                self.contentView.layoutIfNeeded()
+            })
+        } else {
+            self.error = nil
+        }
     }
     
     public func hideError() {
-        guard let composable = self.composable, let spec = self.spec else { return }
-        self.error = nil
-        self.preLayout(composable: composable, spec: spec)
-        UIView.animate(withDuration: 0.125, animations: {
-            self.postLayout(composable: composable, spec: spec)
-            self.contentView.layoutIfNeeded()
-        })
+        if self.error != nil {
+            self.error = nil
+            if let composable = self.composable, let spec = self.spec {
+                self.preLayout(composable: composable, spec: spec)
+                UIView.animate(withDuration: 0.125, animations: {
+                    self.postLayout(composable: composable, spec: spec)
+                    self.contentView.layoutIfNeeded()
+                })
+            }
+        }
     }
     
     private func preLayout(composable: Composable, spec: IQContainerSpec) {
@@ -336,14 +348,14 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
             selfConstraints.append(self.pincode.leadingLayout == self.contentView.leadingLayout + edgeInsets.left)
             selfConstraints.append(self.pincode.trailingLayout == self.contentView.trailingLayout - edgeInsets.right)
             
-            selfConstraints.append(self.errorLabel.topLayout == self.pincode.bottomLayout + composable.pincodeSpacing)
+            selfConstraints.append(self.errorLabel.topLayout == self.pincode.bottomLayout + composable.errorSpacing)
             selfConstraints.append(self.errorLabel.leadingLayout == self.contentView.leadingLayout + edgeInsets.left)
             selfConstraints.append(self.errorLabel.trailingLayout == self.contentView.trailingLayout - edgeInsets.right)
             
             if errorVisible == true {
-                selfConstraints.append(self.button1.topLayout == self.errorLabel.bottomLayout + composable.errorSpacing)
+                selfConstraints.append(self.button1.topLayout == self.errorLabel.bottomLayout + composable.pincodeSpacing)
             } else {
-                selfConstraints.append(self.button1.topLayout == self.pincode.bottomLayout + composable.errorSpacing)
+                selfConstraints.append(self.button1.topLayout == self.pincode.bottomLayout + composable.pincodeSpacing)
             }
             selfConstraints.append(self.button1.leadingLayout >= self.contentView.leadingLayout + edgeInsets.left)
             selfConstraints.append(self.button1.trailingLayout == self.button2.leadingLayout - composable.buttonsSpacing.horizontal)
@@ -541,6 +553,10 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
         if self.pincode.isFilled == true {
             if let delegate = self.delegate {
                 delegate.pincodeCompositionCompited(self, pin: self.pincode.text)
+            }
+        } else {
+            if let delegate = self.delegate {
+                delegate.pincodeCompositionUpdated(self, pin: self.pincode.text)
             }
         }
     }
