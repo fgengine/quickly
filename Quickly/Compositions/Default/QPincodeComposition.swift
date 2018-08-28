@@ -370,7 +370,7 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
             selfConstraints.append(self.button3.bottomLayout == self.button2.bottomLayout)
 
             selfConstraints.append(self.button4.topLayout == self.button1.bottomLayout + composable.buttonsSpacing.vertical)
-            selfConstraints.append(self.button4.leadingLayout == self.button1.leadingLayout)
+            selfConstraints.append(self.button4.leadingLayout >= self.contentView.leadingLayout + edgeInsets.left)
             selfConstraints.append(self.button4.trailingLayout == self.button1.trailingLayout)
             
             selfConstraints.append(self.button5.topLayout == self.button4.topLayout)
@@ -380,11 +380,11 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
             
             selfConstraints.append(self.button6.topLayout == self.button5.topLayout)
             selfConstraints.append(self.button6.leadingLayout == self.button3.leadingLayout)
-            selfConstraints.append(self.button6.trailingLayout == self.button3.trailingLayout)
+            selfConstraints.append(self.button6.trailingLayout <= self.contentView.trailingLayout - edgeInsets.right)
             selfConstraints.append(self.button6.bottomLayout == self.button5.bottomLayout)
             
             selfConstraints.append(self.button7.topLayout == self.button4.bottomLayout + composable.buttonsSpacing.vertical)
-            selfConstraints.append(self.button7.leadingLayout == self.button4.leadingLayout)
+            selfConstraints.append(self.button7.leadingLayout >= self.contentView.leadingLayout + edgeInsets.left)
             selfConstraints.append(self.button7.trailingLayout == self.button4.trailingLayout)
             
             selfConstraints.append(self.button8.topLayout == self.button7.topLayout)
@@ -394,12 +394,12 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
             
             selfConstraints.append(self.button9.topLayout == self.button8.topLayout)
             selfConstraints.append(self.button9.leadingLayout == self.button6.leadingLayout)
-            selfConstraints.append(self.button9.trailingLayout == self.button6.trailingLayout)
+            selfConstraints.append(self.button9.trailingLayout <= self.contentView.trailingLayout - edgeInsets.right)
             selfConstraints.append(self.button9.bottomLayout == self.button8.bottomLayout)
             
             selfConstraints.append(self.buttonLeft.topLayout == self.button0.topLayout)
             selfConstraints.append(self.buttonLeft.bottomLayout == self.button0.bottomLayout)
-            selfConstraints.append(self.buttonLeft.leadingLayout == self.button7.leadingLayout)
+            selfConstraints.append(self.buttonLeft.leadingLayout >= self.contentView.leadingLayout + edgeInsets.left)
             selfConstraints.append(self.buttonLeft.trailingLayout == self.button7.trailingLayout)
             
             selfConstraints.append(self.button0.topLayout == self.button8.bottomLayout + composable.buttonsSpacing.vertical)
@@ -410,7 +410,7 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
             selfConstraints.append(self.buttonRight.topLayout == self.button0.topLayout)
             selfConstraints.append(self.buttonRight.bottomLayout == self.button0.bottomLayout)
             selfConstraints.append(self.buttonRight.leadingLayout == self.button9.leadingLayout)
-            selfConstraints.append(self.buttonRight.trailingLayout == self.button9.trailingLayout)
+            selfConstraints.append(self.buttonRight.trailingLayout <= self.contentView.trailingLayout - edgeInsets.right)
             
             self.selfConstraints = selfConstraints
         }
@@ -458,12 +458,12 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
                 self.button0.heightLayout == composable.buttonsSize
             ]
             self.buttonLeftConstraints = [
-                self.buttonLeft.widthLayout == composable.buttonsSize,
-                self.buttonLeft.heightLayout == composable.buttonsSize
+                self.buttonLeft.widthLayout >= composable.buttonsSize,
+                self.buttonLeft.heightLayout >= composable.buttonsSize
             ]
             self.buttonRightConstraints = [
-                self.buttonRight.widthLayout == composable.buttonsSize,
-                self.buttonRight.heightLayout == composable.buttonsSize
+                self.buttonRight.widthLayout >= composable.buttonsSize,
+                self.buttonRight.heightLayout >= composable.buttonsSize
             ]
         }
     }
