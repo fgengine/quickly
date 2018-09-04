@@ -72,13 +72,13 @@ open class QImageTitleDetailIconComposition< Composable: QImageTitleDetailIconCo
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         let availableWidth = spec.containerAvailableSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
-        let imageSize = composable.image.source.size(CGSize(width: composable.imageWidth, height: availableWidth))
-        let titleTextSize = composable.title.text.size(width: availableWidth - (composable.imageWidth + composable.imageSpacing + composable.iconWidth + composable.iconSpacing))
-        let detailTextSize = composable.detail.text.size(width: availableWidth - (composable.imageWidth + composable.imageSpacing + composable.iconWidth + composable.iconSpacing))
-        let iconSize = composable.icon.source.size(CGSize(width: composable.iconWidth, height: availableWidth))
+        let imageSize = composable.image.source.size(CGSize(width: composable.imageWidth, height: availableWidth)).ceil()
+        let titleTextSize = composable.title.text.size(width: availableWidth - (composable.imageWidth + composable.imageSpacing + composable.iconWidth + composable.iconSpacing)).ceil()
+        let detailTextSize = composable.detail.text.size(width: availableWidth - (composable.imageWidth + composable.imageSpacing + composable.iconWidth + composable.iconSpacing)).ceil()
+        let iconSize = composable.icon.source.size(CGSize(width: composable.iconWidth, height: availableWidth)).ceil()
         return CGSize(
             width: spec.containerSize.width,
-            height: composable.edgeInsets.top + max(imageSize.height, ceil(titleTextSize.height) + composable.titleSpacing + ceil(detailTextSize.height), iconSize.height) + composable.edgeInsets.bottom
+            height: composable.edgeInsets.top + max(imageSize.height, titleTextSize.height + composable.titleSpacing + detailTextSize.height, iconSize.height) + composable.edgeInsets.bottom
         )
     }
     

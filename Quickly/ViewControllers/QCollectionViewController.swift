@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QCollectionViewController : QViewController, IQStackContentViewController, IQPageContentViewController {
+open class QCollectionViewController : QViewController, IQStackContentViewController, IQPageContentViewController, IQCollectionControllerObserver {
 
     #if DEBUG
     open override var logging: Bool {
@@ -156,6 +156,21 @@ open class QCollectionViewController : QViewController, IQStackContentViewContro
 
     open func triggeredRefreshControl() {
     }
+    
+    open func scroll(_ controller: IQCollectionController, collectionView: UICollectionView) {
+        if let vc = self.contentOwnerViewController {
+            vc.updateContent()
+        }
+    }
+    
+    open func zoom(_ controller: IQCollectionController, collectionView: UICollectionView) {
+        if let vc = self.contentOwnerViewController {
+            vc.updateContent()
+        }
+    }
+    
+    open func update(_ controller: IQCollectionController) {
+    }
 
     @objc
     private func _triggeredRefreshControl(_ sender: Any) {
@@ -191,25 +206,6 @@ open class QCollectionViewController : QViewController, IQStackContentViewContro
             let y = (view.contentOffset.y < 0) ? -edgeInsets.top : view.contentOffset.y
             view.contentOffset = CGPoint(x: x, y: y)
         }
-    }
-
-}
-
-extension QCollectionViewController : IQCollectionControllerObserver {
-
-    open func scroll(_ controller: IQCollectionController, collectionView: UICollectionView) {
-        if let vc = self.contentOwnerViewController {
-            vc.updateContent()
-        }
-    }
-
-    open func zoom(_ controller: IQCollectionController, collectionView: UICollectionView) {
-        if let vc = self.contentOwnerViewController {
-            vc.updateContent()
-        }
-    }
-
-    open func update(_ controller: IQCollectionController) {
     }
 
 }

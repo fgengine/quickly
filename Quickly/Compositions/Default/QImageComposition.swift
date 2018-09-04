@@ -29,7 +29,7 @@ open class QImageComposition< Composable: QImageComposable > : QComposition< Com
 
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         let availableWidth = spec.containerAvailableSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
-        let imageSize = composable.image.source.size(CGSize(width: availableWidth, height: availableWidth))
+        let imageSize = composable.image.source.size(CGSize(width: availableWidth, height: availableWidth)).ceil()
         return CGSize(
             width: spec.containerSize.width,
             height: composable.edgeInsets.top + imageSize.height + composable.edgeInsets.bottom

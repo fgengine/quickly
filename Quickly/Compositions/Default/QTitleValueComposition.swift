@@ -38,8 +38,8 @@ open class QTitleValueComposition< Composable: QTitleValueComposable > : QCompos
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         let availableWidth = spec.containerAvailableSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
-        let valueTextSize = composable.value.text.size(width: availableWidth)
-        let titleTextSize = composable.title.text.size(width: availableWidth - (valueTextSize.width + composable.titleSpacing))
+        let valueTextSize = composable.value.text.size(width: availableWidth).ceil()
+        let titleTextSize = composable.title.text.size(width: availableWidth - (valueTextSize.width + composable.titleSpacing)).ceil()
         return CGSize(
             width: spec.containerSize.width,
             height: composable.edgeInsets.top + max(titleTextSize.height, valueTextSize.height) + composable.edgeInsets.bottom

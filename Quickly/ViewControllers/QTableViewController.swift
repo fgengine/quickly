@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QTableViewController : QViewController, IQStackContentViewController, IQPageContentViewController {
+open class QTableViewController : QViewController, IQStackContentViewController, IQPageContentViewController, IQTableControllerObserver {
 
     #if DEBUG
     open override var logging: Bool {
@@ -154,6 +154,15 @@ open class QTableViewController : QViewController, IQStackContentViewController,
 
     open func triggeredRefreshControl() {
     }
+    
+    open func scroll(_ controller: IQTableController, tableView: UITableView) {
+        if let vc = self.contentOwnerViewController {
+            vc.updateContent()
+        }
+    }
+    
+    open func update(_ controller: IQTableController) {
+    }
 
     @objc
     private func _triggeredRefreshControl(_ sender: Any) {
@@ -187,19 +196,6 @@ open class QTableViewController : QViewController, IQStackContentViewController,
         if view.contentOffset.y <= CGFloat.leastNonzeroMagnitude {
             view.contentOffset = CGPoint(x: 0, y: -edgeInsets.top)
         }
-    }
-
-}
-
-extension QTableViewController : IQTableControllerObserver {
-
-    open func scroll(_ controller: IQTableController, tableView: UITableView) {
-        if let vc = self.contentOwnerViewController {
-            vc.updateContent()
-        }
-    }
-
-    open func update(_ controller: IQTableController) {
     }
 
 }

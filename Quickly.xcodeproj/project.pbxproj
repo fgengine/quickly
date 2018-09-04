@@ -117,6 +117,8 @@
 		405ABE0A20C14921005E1192 /* PageContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405ABE0820C14921005E1192 /* PageContentViewController.swift */; };
 		405ABE0D20C1745A005E1192 /* QPagebarTitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405ABE0C20C1745A005E1192 /* QPagebarTitleCell.swift */; };
 		405D78AE2131856400923F5C /* QPincodeComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4071D6CE212FFEC20049637F /* QPincodeComposition.swift */; };
+		405F41A0213E67750014A84C /* QTitleShapeComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405F419E213E67750014A84C /* QTitleShapeComposition.swift */; };
+		405F41A1213E67750014A84C /* QTitleIconComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405F419F213E67750014A84C /* QTitleIconComposition.swift */; };
 		406101681F8D79A700A5463E /* QFontInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406101671F8D798F00A5463E /* QFontInfo.swift */; };
 		4061016A1F8DFEEF00A5463E /* QuicklyModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406101691F8DFEEE00A5463E /* QuicklyModelTests.swift */; };
 		4061E1A91F4ECDFA00AC3217 /* NSError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4061E1A81F4ECDFA00AC3217 /* NSError.swift */; };
@@ -462,6 +464,8 @@
 		405ABE0720C14921005E1192 /* PageContentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PageContentViewController.xib; sourceTree = "<group>"; };
 		405ABE0820C14921005E1192 /* PageContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageContentViewController.swift; sourceTree = "<group>"; };
 		405ABE0C20C1745A005E1192 /* QPagebarTitleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QPagebarTitleCell.swift; sourceTree = "<group>"; };
+		405F419E213E67750014A84C /* QTitleShapeComposition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTitleShapeComposition.swift; sourceTree = "<group>"; };
+		405F419F213E67750014A84C /* QTitleIconComposition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTitleIconComposition.swift; sourceTree = "<group>"; };
 		406101671F8D798F00A5463E /* QFontInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QFontInfo.swift; sourceTree = "<group>"; };
 		406101691F8DFEEE00A5463E /* QuicklyModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuicklyModelTests.swift; sourceTree = "<group>"; };
 		4061E1A81F4ECDFA00AC3217 /* NSError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSError.swift; sourceTree = "<group>"; };
@@ -1196,6 +1200,8 @@
 				4062C8E5208A04A20098F809 /* QImageTitleDetailShapeComposition.swift */,
 				40ED37FC20D7C934001352D7 /* QImageTitleDetailIconComposition.swift */,
 				4062C8D9208A04A20098F809 /* QTitleComposition.swift */,
+				405F419F213E67750014A84C /* QTitleIconComposition.swift */,
+				405F419E213E67750014A84C /* QTitleShapeComposition.swift */,
 				4062C8EB208A04A20098F809 /* QTitleValueComposition.swift */,
 				405A42E62108611C000F8CC9 /* QTitleValueShapeComposition.swift */,
 				405A42E52108611C000F8CC9 /* QTitleValueIconComposition.swift */,
@@ -1996,6 +2002,7 @@
 				4006EDB11F61363E0050AD91 /* QBackgroundColorCollectionCell.swift in Sources */,
 				40CF45F01F4DE6AB004D00D8 /* QWindow.swift in Sources */,
 				401E8F8C206D429D008A5BE4 /* QLabelPickerRow.swift in Sources */,
+				405F41A1213E67750014A84C /* QTitleIconComposition.swift in Sources */,
 				40CF45BC1F4DE6AB004D00D8 /* QCollectionCell.swift in Sources */,
 				4003595B207F5BB800D7F449 /* QPagebar.swift in Sources */,
 				409403601F4E2663008A8B90 /* QApiQuery.swift in Sources */,
@@ -2054,6 +2061,7 @@
 				40C8F8251F55109100C75D34 /* IQSpinnerView.swift in Sources */,
 				4092ADD220E0FFF20020F278 /* QTitleComposition.swift in Sources */,
 				4085C06120E4C88B0079AF90 /* QAnimationEaseQuadratic.swift in Sources */,
+				405F41A0213E67750014A84C /* QTitleShapeComposition.swift in Sources */,
 				40CF45D91F4DE6AB004D00D8 /* IQTableData.swift in Sources */,
 				4062C8D3208A02030098F809 /* QComposition.swift in Sources */,
 				409403581F4E129F008A8B90 /* QApiProvider.swift in Sources */,

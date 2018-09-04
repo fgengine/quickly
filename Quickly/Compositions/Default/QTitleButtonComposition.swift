@@ -48,7 +48,7 @@ open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComp
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         let availableWidth = spec.containerAvailableSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
-        let textSize = composable.title.text.size(width: availableWidth)
+        let textSize = composable.title.text.size(width: availableWidth).ceil()
         return CGSize(
             width: spec.containerSize.width,
             height: composable.edgeInsets.top + max(textSize.height, composable.buttonHeight) + composable.edgeInsets.bottom

@@ -136,7 +136,7 @@ open class QApiRequest : IQApiRequest {
         return nil
     }
 
-    private func prepareUrlQuery(query: String?, provider: IQApiProvider) -> String {
+    private func prepareUrlQuery(query: String?, provider: IQApiProvider) -> String? {
         var result = String()
         var allParams: [String: Any] = [:]
         provider.urlParams.forEach({ (key: String, value: Any) in
@@ -164,7 +164,10 @@ open class QApiRequest : IQApiRequest {
                 result.append("\(encodeKey)=\(encodeValue)")
             }
         })
-        return result
+        if result.count > 0 {
+            return result
+        }
+        return nil
     }
 
     private func prepareHeaders(provider: IQApiProvider) -> [String: String] {

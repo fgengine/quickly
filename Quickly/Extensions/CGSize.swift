@@ -3,6 +3,13 @@
 //
 
 public extension CGSize {
+    
+    public func ceil() -> CGSize {
+        return CGSize(
+            width: self.width.ceil(),
+            height: self.height.ceil()
+        )
+    }
 
     public func lerp(_ to: CGSize, progress: CGFloat) -> CGSize {
         return CGSize(

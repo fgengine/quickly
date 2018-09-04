@@ -66,17 +66,18 @@ open class QImageTitleComposition< Composable: QImageTitleComposable > : QCompos
         let availableWidth = spec.containerAvailableSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
         switch composable.direction {
         case .horizontal:
-            let imageSize = composable.image.source.size(CGSize(width: composable.imageSize.width, height: availableWidth))
-            let titleTextSize = composable.title.text.size(width: availableWidth - (composable.imageSize.width + composable.imageSpacing))
+            let imageSize = composable.image.source.size(CGSize(width: composable.imageSize.width, height: availableWidth)).ceil()
+            let titleTextSize = composable.title.text.size(width: availableWidth - (composable.imageSize.width + composable.imageSpacing)).ceil()
             return CGSize(
                 width: spec.containerSize.width,
                 height: composable.edgeInsets.top + max(imageSize.height, titleTextSize.height) + composable.edgeInsets.bottom
             )
         case .vertical:
-            let titleTextSize = composable.title.text.size(width: availableWidth)
+            let imageSize = composable.imageSize.ceil()
+            let titleTextSize = composable.title.text.size(width: availableWidth).ceil()
             return CGSize(
-                width: composable.edgeInsets.left + max(composable.imageSize.width, titleTextSize.width) + composable.edgeInsets.right,
-                height: composable.edgeInsets.top + composable.imageSize.height + composable.imageSpacing + titleTextSize.height + composable.edgeInsets.bottom
+                width: composable.edgeInsets.left + max(imageSize.width, titleTextSize.width) + composable.edgeInsets.right,
+                height: composable.edgeInsets.top + imageSize.height + composable.imageSpacing + titleTextSize.height + composable.edgeInsets.bottom
             )
         }
     }
