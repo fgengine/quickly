@@ -73,8 +73,8 @@ open class QDateFieldStyleSheet : QDisplayViewStyleSheet< QDateField > {
         super.init(styleSheet)
     }
 
-    public override func apply(target: QDateField) {
-        super.apply(target: target)
+    public override func apply(_ target: QDateField) {
+        super.apply(target)
 
         target.formatter = self.formatter
         target.mode = self.mode
@@ -188,6 +188,11 @@ public class QDateField : QDisplayView, IQField {
     internal var tapGesture: UITapGestureRecognizer!
     
     private var observer: QObserver< IQDateFieldObserver >
+    
+    public required init() {
+        self.observer = QObserver< IQDateFieldObserver >()
+        super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+    }
     
     public override init(frame: CGRect) {
         self.observer = QObserver< IQDateFieldObserver >()

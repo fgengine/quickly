@@ -28,8 +28,8 @@ open class QGradientViewStyleSheet : QDisplayViewStyleSheet< QGradientView > {
         super.init(styleSheet)
     }
 
-    public override func apply(target: QGradientView) {
-        super.apply(target: target)
+    public override func apply(_ target: QGradientView) {
+        super.apply(target)
 
         target.points = self.points
         target.startPoint = self.startPoint

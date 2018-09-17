@@ -76,7 +76,7 @@ open class QButtonStyleSheet : IQStyleSheet {
         self.isEnabled = styleSheet.isEnabled
     }
 
-    public func apply(target: QButton) {
+    public func apply(_ target: QButton) {
         target.contentHorizontalAlignment = self.contentHorizontalAlignment
         target.contentVerticalAlignment = self.contentVerticalAlignment
         target.contentInsets = self.contentInsets

@@ -36,13 +36,7 @@ open class QCollectionSection : IQCollectionSection {
             self.reloadSection()
         }
     }
-    public var items: [IQCollectionItem] {
-        willSet { self.unbindItems() }
-        didSet {
-            self.bindItems()
-            self.reloadSection()
-        }
-    }
+    public private(set) var items: [IQCollectionItem]
     
     public init(items: [IQCollectionItem]) {
         self.header = nil
@@ -92,6 +86,10 @@ open class QCollectionSection : IQCollectionSection {
         }
         self.index = nil
         self.controller = nil
+    }
+    
+    public func setItems(_ items: [IQCollectionItem]) {
+        self.items = items
     }
     
     public func insertItem(_ items: [IQCollectionItem], index: Int) {

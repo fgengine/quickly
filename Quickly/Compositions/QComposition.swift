@@ -47,6 +47,19 @@ open class QComposition< Composable: IQComposable > : IQComposition {
     open func prepare(composable: Composable, spec: IQContainerSpec, animated: Bool) {
         self.composable = composable
         self.spec = spec
+        
+        self.preLayout(composable: composable, spec: spec)
+        self.apply(composable: composable, spec: spec)
+        self.postLayout(composable: composable, spec: spec)
+    }
+    
+    open func preLayout(composable: Composable, spec: IQContainerSpec) {
+    }
+
+    open func apply(composable: Composable, spec: IQContainerSpec) {
+    }
+
+    open func postLayout(composable: Composable, spec: IQContainerSpec) {
     }
 
     open func cleanup() {

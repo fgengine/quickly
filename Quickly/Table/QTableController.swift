@@ -58,6 +58,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
     private var aliasDecors: [QMetatype : IQTableDecor.Type]
     private var cells: [IQTableCell.Type]
     private var aliasCells: [QMetatype : IQTableCell.Type]
+    private var cacheHeight: [Int : [Int : CGFloat]]
     private var observer: QObserver< IQTableControllerObserver >
 
     public init(
@@ -74,6 +75,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         self.aliasDecors = [:]
         self.cells = cells
         self.aliasCells = [:]
+        self.cacheHeight = [:]
         self.observer = QObserver< IQTableControllerObserver >()
         super.init()
     }
@@ -93,6 +95,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         self.aliasDecors = [:]
         self.cells = cells
         self.aliasCells = [:]
+        self.cacheHeight = [:]
         self.observer = QObserver< IQTableControllerObserver >()
         super.init()
     }
@@ -277,7 +280,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         self.notifyUpdate()
     }
 
-    open func insertSection(_ sections: [IQTableSection], index: Int, with animation: UITableViewRowAnimation) {
+    open func insertSection(_ sections: [IQTableSection], index: Int, with animation: UITableViewRowAnimation? = nil) {
         self.sections.insert(contentsOf: sections, at: index)
         self.rebindSections(from: index, to: self.sections.endIndex)
         var indexSet = IndexSet()
@@ -287,7 +290,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
             }
         }
         if indexSet.count > 0 {
-            if let tableView = self.tableView {
+            if let tableView = self.tableView, let animation = animation {
                 tableView.insertSections(indexSet, with: animation)
             }
         }
@@ -296,7 +299,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         }
     }
 
-    open func deleteSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation) {
+    open func deleteSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation? = nil) {
         var indexSet = IndexSet()
         for section in self.sections {
             if let index = self.sections.index(where: { return ($0 === section) }) {
@@ -310,7 +313,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
                 section.unbind()
             }
             self.rebindSections(from: indexSet.first!, to: self.sections.endIndex)
-            if let tableView = self.tableView {
+            if let tableView = self.tableView, let animation = animation {
                 tableView.deleteSections(indexSet, with: animation)
             }
         }
@@ -319,7 +322,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         }
     }
 
-    open func reloadSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation) {
+    open func reloadSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation? = nil) {
         var indexSet = IndexSet()
         for section in self.sections {
             if let index = self.sections.index(where: { return ($0 === section) }) {
@@ -327,7 +330,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
             }
         }
         if indexSet.count > 0 {
-            if let tableView = self.tableView {
+            if let tableView = self.tableView, let animation = animation {
                 tableView.reloadSections(indexSet, with: animation)
             }
         }
@@ -338,7 +341,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
 
     open func performBatchUpdates(_ updates: (() -> Void)) {
         #if DEBUG
-            assert(self.isBatchUpdating == true, "Recurcive calling IQTableController.performBatchUpdates()")
+            assert(self.isBatchUpdating == false, "Recurcive calling IQTableController.performBatchUpdates()")
         #endif
         self.isBatchUpdating = true
         if let tableView = self.tableView {
@@ -554,34 +557,53 @@ extension QTableController : UITableViewDelegate {
         heightForRowAt indexPath: IndexPath
     ) -> CGFloat {
         let row = self.row(indexPath: indexPath)
-        if let cellClass = self.cellClass(row: row) {
-            return cellClass.height(any: row, spec: tableView as! TableView)
+        if let cacheHeight = row.cacheHeight {
+            return cacheHeight
         }
-        return 0
+        var caclulatedHeight: CGFloat = 0
+        if let cellClass = self.cellClass(row: row) {
+            caclulatedHeight = cellClass.height(any: row, spec: tableView as! TableView)
+        } else {
+            caclulatedHeight = 0
+        }
+        row.cacheHeight = caclulatedHeight
+        return caclulatedHeight
     }
 
     open func tableView(
         _ tableView: UITableView,
         heightForHeaderInSection section: Int
     ) -> CGFloat {
-        if let data = self.header(index: section) {
-            if let decorClass = self.decorClass(data: data) {
-                return decorClass.height(any: data, spec: tableView as! TableView)
-            }
+        guard let data = self.header(index: section) else { return 0 }
+        if let cacheHeight = data.cacheHeight {
+            return cacheHeight
         }
-        return 0
+        var caclulatedHeight: CGFloat = 0
+        if let decorClass = self.decorClass(data: data) {
+            caclulatedHeight = decorClass.height(any: data, spec: tableView as! TableView)
+        } else {
+            caclulatedHeight = 0
+        }
+        data.cacheHeight = caclulatedHeight
+        return caclulatedHeight
     }
 
     open func tableView(
         _ tableView: UITableView,
         heightForFooterInSection section: Int
     ) -> CGFloat {
-        if let data = self.footer(index: section) {
-            if let decorClass = self.decorClass(data: data) {
-                return decorClass.height(any: data, spec: tableView as! TableView)
-            }
+        guard let data = self.footer(index: section) else { return 0 }
+        if let cacheHeight = data.cacheHeight {
+            return cacheHeight
         }
-        return 0
+        var caclulatedHeight: CGFloat = 0
+        if let decorClass = self.decorClass(data: data) {
+            caclulatedHeight = decorClass.height(any: data, spec: tableView as! TableView)
+        } else {
+            caclulatedHeight = 0
+        }
+        data.cacheHeight = caclulatedHeight
+        return caclulatedHeight
     }
 
     open func tableView(

@@ -57,7 +57,9 @@ public extension IQImageSource {
         } else {
             size = self.size
         }
-        guard let scaleRect = self.scale.rect(bounds, size: size) else { return bounds }
+        guard let scaleRect = self.scale.rect(bounds, size: size) else {
+            return bounds.integral
+        }
         return scaleRect
     }
 
@@ -68,7 +70,9 @@ public extension IQImageSource {
         } else {
             size = self.size
         }
-        guard let scaleSize = self.scale.size(available, size: size) else { return self.size }
+        guard let scaleSize = self.scale.size(available, size: size) else {
+            return self.size.ceil()
+        }
         return scaleSize
     }
 

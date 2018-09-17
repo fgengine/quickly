@@ -9,7 +9,7 @@ public enum QScrollViewDirection {
 }
 
 open class QScrollView : UIScrollView, IQView {
-
+    
     public var direction: QScrollViewDirection {
         didSet { self.setNeedsUpdateConstraints() }
     }
@@ -23,6 +23,12 @@ open class QScrollView : UIScrollView, IQView {
     private var contentConstraints: [NSLayoutConstraint] = [] {
         willSet { self.contentView.removeConstraints(self.contentConstraints) }
         didSet { self.contentView.addConstraints(self.contentConstraints) }
+    }
+    
+    public required init() {
+        self.direction = .vertical
+        super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        self.setup()
     }
 
     public init(frame: CGRect, direction: QScrollViewDirection) {

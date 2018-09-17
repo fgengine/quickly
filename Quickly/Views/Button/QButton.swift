@@ -114,12 +114,12 @@ public class QButton : QControl {
 
     public convenience init(frame: CGRect, styleSheet: QButtonStyleSheet) {
         self.init(frame: frame)
-        styleSheet.apply(target: self)
+        styleSheet.apply(self)
     }
 
     public convenience init(styleSheet: QButtonStyleSheet) {
         self.init(frame: CGRect.zero)
-        styleSheet.apply(target: self)
+        styleSheet.apply(self)
         self.sizeToFit()
     }
 

@@ -9,6 +9,10 @@ open class QWindow : UIWindow, IQView {
         get { return self.viewController.contentViewController }
     }
     private var viewController: RootViewController
+    
+    public required init() {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     public init(_ contentViewController: IQViewController) {
         self.viewController = RootViewController(contentViewController)

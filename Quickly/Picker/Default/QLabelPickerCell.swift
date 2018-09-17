@@ -37,7 +37,7 @@ public class QLabelPickerCell< RowType: QLabelPickerRow > : QPickerCell< RowType
             selfConstraints.append(self._label.bottomLayout == self.bottomLayout - row.edgeInsets.bottom)
             self.selfConstraints = selfConstraints
         }
-        row.label.apply(target: self._label)
+        row.label.apply(self._label)
     }
 
 }

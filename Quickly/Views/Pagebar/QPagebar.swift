@@ -30,7 +30,7 @@ open class QPagebar : QView {
         get { return self.collectionLayout.minimumInteritemSpacing }
     }
     public var items: [QPagebarItem] {
-        set(value) { self.collectionSection.items = value }
+        set(value) { self.collectionSection.setItems(value) }
         get { return self.collectionSection.items as! [QPagebarItem] }
     }
     public var selectedItem: QPagebarItem? {
@@ -40,6 +40,10 @@ open class QPagebar : QView {
     private lazy var collectionLayout: CollectionLayout! = self.prepareCollectionLayout()
     private lazy var collectionController: CollectionController! = self.prepareCollectionController()
     private lazy var collectionSection: QCollectionSection! = self.prepareCollectionSection()
+    
+    public required init() {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     public init(cellTypes: [ItemType.Type]) {
         self.cellTypes = cellTypes

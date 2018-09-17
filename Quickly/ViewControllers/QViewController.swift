@@ -342,6 +342,10 @@ open class QViewController : NSObject, IQViewController {
 open class QViewControllerDefaultView : QView, IQViewControllerView {
 
     public weak var viewController: IQViewController?
+    
+    public required init() {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     public init(viewController: QViewController, backgroundColor: UIColor = .clear) {
         self.viewController = viewController
@@ -367,6 +371,10 @@ open class QViewControllerDefaultView : QView, IQViewControllerView {
 open class QViewControllerTransparentView : QTransparentView, IQViewControllerView {
 
     public weak var viewController: IQViewController?
+    
+    public required init() {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     public init(viewController: QViewController) {
         self.viewController = viewController

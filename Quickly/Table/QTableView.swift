@@ -74,7 +74,7 @@ open class QTableView : UITableView, IQView {
 extension QTableView : IQContainerSpec {
     
     open var containerSize: CGSize {
-        get { return self.bounds.size }
+        get { return UIEdgeInsetsInsetRect(self.bounds, self.contentInset).size }
     }
     open var containerLeftInset: CGFloat {
         get { return self.contentLeftInset }

@@ -45,8 +45,8 @@ open class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
         super.init(styleSheet)
     }
 
-    public override func apply(target: QLabel) {
-        super.apply(target: target)
+    public override func apply(_ target: QLabel) {
+        super.apply(target)
 
         target.text = self.text
         target.verticalAlignment = self.verticalAlignment
@@ -163,6 +163,10 @@ open class QLabel : QDisplayView {
     internal var lastBaselineView: UIView!
 
     private var cacheIntrinsicContentSize: CGSize?
+    
+    public required init() {
+        super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+    }
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -172,12 +176,12 @@ open class QLabel : QDisplayView {
 
     public convenience init(frame: CGRect, styleSheet: QLabelStyleSheet) {
         self.init(frame: frame)
-        styleSheet.apply(target: self)
+        styleSheet.apply(self)
     }
 
     public convenience init(styleSheet: QLabelStyleSheet) {
         self.init(frame: CGRect.zero)
-        styleSheet.apply(target: self)
+        styleSheet.apply(self)
         self.sizeToFit()
     }
 
@@ -201,7 +205,8 @@ open class QLabel : QDisplayView {
     }
 
     public func characterIndex(point: CGPoint) -> String.Index? {
-        let viewRect = self.bounds
+        let viewRect = self.bounds.integral
+        self.textContainer.size = viewRect.size
         let textSize = self.layoutManager.usedRect(for: self.textContainer).integral.size
         let textOffset = self._alignmentPoint(size: viewRect.size, textSize: textSize)
         let textRect = CGRect(x: textOffset.x, y: textOffset.y, width: textSize.width, height: textSize.height)
@@ -289,8 +294,9 @@ open class QLabel : QDisplayView {
 
     open override func draw(_ rect: CGRect) {
         super.draw(rect)
-
+        
         let viewRect = self.bounds.integral
+        self.textContainer.size = viewRect.size
         let textSize = self.layoutManager.usedRect(for: self.textContainer).integral.size
         let textOffset = self._alignmentPoint(size: viewRect.size, textSize: textSize)
         let textRange = self.layoutManager.glyphRange(for: self.textContainer)
@@ -305,12 +311,18 @@ open class QLabel : QDisplayView {
         let textContainer = NSTextContainer(size: size)
         textContainer.lineBreakMode = self.textContainer.lineBreakMode
         textContainer.lineFragmentPadding = self.textContainer.lineFragmentPadding
+        
         let layoutManager = NSLayoutManager()
         layoutManager.addTextContainer(textContainer)
+        
         let textStorage: NSTextStorage = NSTextStorage(attributedString: self.textStorage)
         textStorage.addLayoutManager(layoutManager)
-        let frame = layoutManager.usedRect(for: textContainer)
-        return frame.integral.size
+        
+        let rect = layoutManager.boundingRect(
+            forGlyphRange: layoutManager.glyphRange(for: textContainer),
+            in: textContainer
+        )
+        return rect.integral.size
     }
 
     open override func sizeToFit() {

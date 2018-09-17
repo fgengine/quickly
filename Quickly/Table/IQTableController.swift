@@ -59,16 +59,16 @@ public protocol IQTableController : UITableViewDataSource, UITableViewDelegate {
 
     func reload()
 
-    func prependSection(_ section: IQTableSection, with animation: UITableViewRowAnimation)
-    func prependSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation)
-    func appendSection(_ section: IQTableSection, with animation: UITableViewRowAnimation)
-    func appendSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation)
-    func insertSection(_ section: IQTableSection, index: Int, with animation: UITableViewRowAnimation)
-    func insertSection(_ sections: [IQTableSection], index: Int, with animation: UITableViewRowAnimation)
-    func deleteSection(_ section: IQTableSection, with animation: UITableViewRowAnimation)
-    func deleteSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation)
-    func reloadSection(_ section: IQTableSection, with animation: UITableViewRowAnimation)
-    func reloadSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation)
+    func prependSection(_ section: IQTableSection, with animation: UITableViewRowAnimation?)
+    func prependSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation?)
+    func appendSection(_ section: IQTableSection, with animation: UITableViewRowAnimation?)
+    func appendSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation?)
+    func insertSection(_ section: IQTableSection, index: Int, with animation: UITableViewRowAnimation?)
+    func insertSection(_ sections: [IQTableSection], index: Int, with animation: UITableViewRowAnimation?)
+    func deleteSection(_ section: IQTableSection, with animation: UITableViewRowAnimation?)
+    func deleteSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation?)
+    func reloadSection(_ section: IQTableSection, with animation: UITableViewRowAnimation?)
+    func reloadSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation?)
 
     func performBatchUpdates(_ updates: (() -> Void))
 
@@ -86,31 +86,31 @@ public protocol IQTableController : UITableViewDataSource, UITableViewDelegate {
 
 public extension IQTableController {
 
-    public func prependSection(_ section: IQTableSection, with animation: UITableViewRowAnimation) {
+    public func prependSection(_ section: IQTableSection, with animation: UITableViewRowAnimation? = nil) {
         self.insertSection([ section ], index: self.sections.startIndex, with: animation)
     }
 
-    public func prependSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation) {
+    public func prependSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation? = nil) {
         self.insertSection(sections, index: self.sections.startIndex, with: animation)
     }
 
-    public func appendSection(_ section: IQTableSection, with animation: UITableViewRowAnimation) {
+    public func appendSection(_ section: IQTableSection, with animation: UITableViewRowAnimation? = nil) {
         self.insertSection([ section ], index: self.sections.endIndex, with: animation)
     }
 
-    public func appendSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation) {
+    public func appendSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation? = nil) {
         self.insertSection(sections, index: self.sections.endIndex, with: animation)
     }
 
-    public func insertSection(_ section: IQTableSection, index: Int, with animation: UITableViewRowAnimation) {
+    public func insertSection(_ section: IQTableSection, index: Int, with animation: UITableViewRowAnimation? = nil) {
         self.insertSection([ section ], index: index, with: animation)
     }
 
-    public func deleteSection(_ section: IQTableSection, with animation: UITableViewRowAnimation) {
+    public func deleteSection(_ section: IQTableSection, with animation: UITableViewRowAnimation? = nil) {
         self.deleteSection([ section ], with: animation)
     }
 
-    public func reloadSection(_ section: IQTableSection, with animation: UITableViewRowAnimation) {
+    public func reloadSection(_ section: IQTableSection, with animation: UITableViewRowAnimation? = nil) {
         self.reloadSection([ section ], with: animation)
     }
 

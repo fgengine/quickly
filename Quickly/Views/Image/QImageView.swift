@@ -35,8 +35,8 @@ open class QImageViewStyleSheet : QDisplayViewStyleSheet< QImageView > {
         super.init(styleSheet)
     }
 
-    public override func apply(target: QImageView) {
-        super.apply(target: target)
+    public override func apply(_ target: QImageView) {
+        super.apply(target)
 
         target.verticalAlignment = self.verticalAlignment
         target.horizontalAlignment = self.horizontalAlignment

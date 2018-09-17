@@ -41,8 +41,8 @@ public class QListFieldStyleSheet : QDisplayViewStyleSheet< QListField > {
         super.init(styleSheet)
     }
 
-    public override func apply(target: QListField) {
-        super.apply(target: target)
+    public override func apply(_ target: QListField) {
+        super.apply(target)
 
         target.rows = self.rows
         target.rowHeight = self.rowHeight
@@ -73,7 +73,7 @@ public class QListField : QDisplayView, IQField {
     public var selectedRow: QListFieldPickerRow? {
         didSet {
             if let selectedRow = self.selectedRow {
-                selectedRow.field.apply(target: self.label)
+                selectedRow.field.apply(self.label)
                 self.pickerController.select(row: selectedRow, animated: self.isEditing)
             } else {
                 self.label.text = self.placeholder
@@ -136,6 +136,11 @@ public class QListField : QDisplayView, IQField {
     internal var tapGesture: UITapGestureRecognizer!
     
     private var observer: QObserver< IQListFieldObserver >
+    
+    public required init() {
+        self.observer = QObserver< IQListFieldObserver >()
+        super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+    }
     
     public override init(frame: CGRect) {
         self.observer = QObserver< IQListFieldObserver >()

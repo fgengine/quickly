@@ -4,8 +4,8 @@
 
 public protocol IQStyleSheet : class {
 
-    associatedtype TargetType
+    associatedtype Target
 
-    func apply(target: TargetType)
+    func apply(_ target: Target)
 
 }

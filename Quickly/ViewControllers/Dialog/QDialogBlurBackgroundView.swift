@@ -6,7 +6,7 @@ open class QDialogBlurBackgroundView : QBlurView, IQDialogContainerBackgroundVie
 
     open weak var dialogContainerViewController: IQDialogContainerViewController?
 
-    public init() {
+    public required init() {
         super.init(blurRadius: Const.hiddenBlurRadius)
     }
 

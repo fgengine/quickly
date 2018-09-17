@@ -13,14 +13,16 @@ public protocol IQCollectionSection : class {
     var canMove: Bool { get }
     var hidden: Bool { get }
 
-    var header: IQCollectionData? { get }
-    var footer: IQCollectionData? { get }
+    var header: IQCollectionData? { set get }
+    var footer: IQCollectionData? { set get }
     var items: [IQCollectionItem] { get }
 
     func bind(_ controller: IQCollectionController, _ index: Int)
     func rebind(_ index: Int)
     func unbind()
-
+    
+    func setItems(_ items: [IQCollectionItem])
+    
     func prependItem(_ item: IQCollectionItem)
     func prependItem(_ items: [IQCollectionItem])
     func appendItem(_ item: IQCollectionItem)

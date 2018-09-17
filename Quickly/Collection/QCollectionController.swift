@@ -236,7 +236,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
 
     open func performBatchUpdates(_ updates: (() -> Void)?, completion: ((Bool) -> Void)? = nil) {
         #if DEBUG
-            assert(self.isBatchUpdating == true, "Recurcive calling IQCollectionController.performBatchUpdates()")
+            assert(self.isBatchUpdating == false, "Recurcive calling IQCollectionController.performBatchUpdates()")
         #endif
         guard let collectionView = self.collectionView else { return }
         self.isBatchUpdating = true

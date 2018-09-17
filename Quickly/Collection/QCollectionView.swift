@@ -60,6 +60,11 @@ open class QCollectionView : UICollectionView, IQView {
             refreshControl.removeFromSuperview()
         }
     }
+    
+    public required init() {
+        super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100), collectionViewLayout: QCollectionFlowLayout())
+        self.setup()
+    }
 
     public init(frame: CGRect, layout: CollectionLayoutType) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -88,7 +93,7 @@ open class QCollectionView : UICollectionView, IQView {
 extension QCollectionView : IQContainerSpec {
     
     open var containerSize: CGSize {
-        get { return self.bounds.size }
+        get { return UIEdgeInsetsInsetRect(self.bounds, self.contentInset).size }
     }
     open var containerLeftInset: CGFloat {
         get { return self.contentLeftInset }

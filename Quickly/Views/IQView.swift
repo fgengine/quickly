@@ -59,6 +59,8 @@ public struct QViewShadow {
 }
 
 public protocol IQView : class {
+    
+    init()
 
     func setup()
     

@@ -5,6 +5,7 @@
 open class QTableData : IQTableData {
 
     public private(set) weak var section: IQTableSection?
+    public var cacheHeight: CGFloat?
 
     public init() {
     }
@@ -15,6 +16,10 @@ open class QTableData : IQTableData {
 
     public func unbind() {
         self.section = nil
+    }
+    
+    open func resetCacheHeight() {
+        self.cacheHeight = 0
     }
 
 }

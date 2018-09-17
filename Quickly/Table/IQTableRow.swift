@@ -11,9 +11,12 @@ public protocol IQTableRow : class {
     var canMove: Bool { get }
     var selectionStyle: UITableViewCellSelectionStyle { get }
     var editingStyle: UITableViewCellEditingStyle { get }
+    var cacheHeight: CGFloat? { set get }
 
     func bind(_ section: IQTableSection, _ indexPath: IndexPath)
     func rebind(_ indexPath: IndexPath)
     func unbind()
+    
+    func resetCacheHeight()
 
 }

@@ -11,6 +11,7 @@ open class QTableRow : IQTableRow {
     public var canMove: Bool = false
     public var selectionStyle: UITableViewCellSelectionStyle = .default
     public var editingStyle: UITableViewCellEditingStyle = .none
+    public var cacheHeight: CGFloat?
 
     public init() {
     }
@@ -27,6 +28,10 @@ open class QTableRow : IQTableRow {
     public func unbind() {
         self.indexPath = nil
         self.section = nil
+    }
+    
+    open func resetCacheHeight() {
+        self.cacheHeight = 0
     }
 
 }

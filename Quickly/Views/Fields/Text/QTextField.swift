@@ -99,8 +99,8 @@ open class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
         super.init(styleSheet)
     }
 
-    public override func apply(target: QTextField) {
-        super.apply(target: target)
+    public override func apply(_ target: QTextField) {
+        super.apply(target)
 
         target.requireValidator = self.requireValidator
         target.validator = self.validator
@@ -320,6 +320,11 @@ public class QTextField : QDisplayView, IQField {
     
     private var fieldDelegate: FieldDelegate!
     private var observer: QObserver< IQTextFieldObserver >
+    
+    public required init() {
+        self.observer = QObserver< IQTextFieldObserver >()
+        super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+    }
     
     public override init(frame: CGRect) {
         self.observer = QObserver< IQTextFieldObserver >()

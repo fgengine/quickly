@@ -45,8 +45,8 @@ open class QPincodeViewStyleSheet : QDisplayViewStyleSheet< QPincodeView > {
         super.init(styleSheet)
     }
     
-    public override func apply(target: QPincodeView) {
-        super.apply(target: target)
+    public override func apply(_ target: QPincodeView) {
+        super.apply(target)
         
         target.length = self.length
         target.color = self.color
@@ -102,6 +102,10 @@ open class QPincodeView : QDisplayView {
             let height = self.diameter + self.thickness
             return CGSize(width: width, height: height)
         }
+    }
+    
+    public required init() {
+        super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
     }
 
     public override init(frame: CGRect) {

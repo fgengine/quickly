@@ -5,6 +5,10 @@
 open class QDialogBackgroundView : QView, IQDialogContainerBackgroundView {
 
     open weak var dialogContainerViewController: IQDialogContainerViewController?
+    
+    public required init() {
+        super.init(frame: CGRect())
+    }
 
     public init(backgroundColor: UIColor) {
         super.init(frame: CGRect())

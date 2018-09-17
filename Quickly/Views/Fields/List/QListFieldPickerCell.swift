@@ -37,7 +37,7 @@ public class QListFieldPickerCell : QPickerCell< QListFieldPickerRow > {
             selfConstraints.append(self._title.bottomLayout == self.bottomLayout - row.rowEdgeInsets.bottom)
             self.selfConstraints = selfConstraints
         }
-        row.row.apply(target: self._title)
+        row.row.apply(self._title)
     }
 
 }

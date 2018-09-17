@@ -43,7 +43,7 @@ open class QGroupbar : QView {
         get { return self.collectionLayout.minimumInteritemSpacing }
     }
     public var items: [IQGroupbarItem] {
-        set(value) { self.collectionSection.items = value }
+        set(value) { self.collectionSection.setItems(value) }
         get { return self.collectionSection.items as! [IQGroupbarItem] }
     }
     public var selectedItem: IQGroupbarItem? {

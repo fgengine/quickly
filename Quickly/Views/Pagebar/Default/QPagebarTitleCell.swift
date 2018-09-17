@@ -91,7 +91,7 @@ open class QPagebarTitleCell< ItemType: QPagebarTitleItem > : QPagebarCell< Item
             selfConstraints.append(self._titleLabel.bottomLayout == self.contentView.bottomLayout - item.edgeInsets.bottom)
             self.selfConstraints = selfConstraints
         }
-        item.title.apply(target: self._titleLabel)
+        item.title.apply(self._titleLabel)
     }
 
 }

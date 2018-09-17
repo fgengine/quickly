@@ -66,6 +66,11 @@ open class QBlurView : UIVisualEffectView, IQView {
         set(value) { self.setCGFloat(value, blurKeyPath: BlurKeyPath.zoom) }
         get { return self.getCGFloat(blurKeyPath: BlurKeyPath.zoom, empty: 0) }
     }
+    
+    public required init() {
+        super.init(effect: nil)
+        self.setup()
+    }
 
     public init(blurRadius: CGFloat) {
         super.init(effect: nil)

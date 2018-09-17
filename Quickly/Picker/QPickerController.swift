@@ -111,7 +111,7 @@ open class QPickerController : NSObject, IQPickerController {
 
     public func performBatchUpdates(_ updates: (() -> Void)) {
         #if DEBUG
-            assert(self.isBatchUpdating == true, "Recurcive calling IQPickerController.performBatchUpdates()")
+            assert(self.isBatchUpdating == false, "Recurcive calling IQPickerController.performBatchUpdates()")
         #endif
         self.isBatchUpdating = true
         updates()
