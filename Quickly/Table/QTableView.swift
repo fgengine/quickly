@@ -50,7 +50,7 @@ open class QTableView : UITableView, IQView {
         }
     }
 
-    public override init(frame: CGRect, style: UITableViewStyle) {
+    public override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
         self.setup()
     }
@@ -74,7 +74,7 @@ open class QTableView : UITableView, IQView {
 extension QTableView : IQContainerSpec {
     
     open var containerSize: CGSize {
-        get { return UIEdgeInsetsInsetRect(self.bounds, self.contentInset).size }
+        get { return self.bounds.inset(by: self.contentInset).size }
     }
     open var containerLeftInset: CGFloat {
         get { return self.contentLeftInset }

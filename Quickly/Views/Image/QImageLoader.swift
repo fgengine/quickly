@@ -73,7 +73,7 @@ public class QImageLoader {
         success: SuccessClosure? = nil,
         failure: FailureClosure? = nil
     ) {
-        if let data = UIImagePNGRepresentation(image) {
+        if let data = image.pngData() {
             self.set(data, image: image, url: url, filter: filter, success: success, failure: failure)
         }
     }

@@ -130,8 +130,8 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
     open func configure() {
         if let collectionView = self.collectionView {
             for type in self.decors {
-                type.register(collectionView: collectionView, kind: UICollectionElementKindSectionHeader)
-                type.register(collectionView: collectionView, kind: UICollectionElementKindSectionFooter)
+                type.register(collectionView: collectionView, kind: UICollectionView.elementKindSectionHeader)
+                type.register(collectionView: collectionView, kind: UICollectionView.elementKindSectionFooter)
             }
             for type in self.cells {
                 type.register(collectionView: collectionView)
@@ -303,7 +303,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
         }
     }
 
-    open func scroll(item: IQCollectionItem, scroll: UICollectionViewScrollPosition, animated: Bool) {
+    open func scroll(item: IQCollectionItem, scroll: UICollectionView.ScrollPosition, animated: Bool) {
         guard
             let collectionView = self.collectionView,
             let indexPath = self.indexPath(item: item)
@@ -320,7 +320,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
         return selectedIndexPaths.contains(indexPath)
     }
 
-    open func select(item: IQCollectionItem, scroll: UICollectionViewScrollPosition, animated: Bool) {
+    open func select(item: IQCollectionItem, scroll: UICollectionView.ScrollPosition, animated: Bool) {
         guard
             let collectionView = self.collectionView,
             let indexPath = self.indexPath(item: item)
@@ -341,7 +341,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
             guard
                 let collectionView = self.collectionView,
                 let index = self.index(header: header),
-                let decor = collectionView.supplementaryView(forElementKind: UICollectionElementKindSectionHeader, at: IndexPath(item: 0, section: index)) as? IQCollectionDecor
+                let decor = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: index)) as? IQCollectionDecor
                 else { return }
             decor.set(any: header, spec: collectionView, animated: animated)
             if self.isBatchUpdating == false {
@@ -355,7 +355,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
             guard
                 let collectionView = self.collectionView,
                 let index = self.index(footer: footer),
-                let decor = collectionView.supplementaryView(forElementKind: UICollectionElementKindSectionFooter, at: IndexPath(item: 0, section: index)) as? IQCollectionDecor
+                let decor = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionFooter, at: IndexPath(item: 0, section: index)) as? IQCollectionDecor
                 else { return }
             decor.set(any: footer, spec: collectionView, animated: animated)
             if self.isBatchUpdating == false {
@@ -451,9 +451,9 @@ extension QCollectionController : UICollectionViewDataSource {
         at indexPath: IndexPath
     ) -> UICollectionReusableView {
         var data: IQCollectionData? = nil
-        if kind == UICollectionElementKindSectionHeader {
+        if kind == UICollectionView.elementKindSectionHeader {
             data = self.header(index: indexPath.section)
-        } else if kind == UICollectionElementKindSectionFooter {
+        } else if kind == UICollectionView.elementKindSectionFooter {
             data = self.footer(index: indexPath.section)
         }
         return self.dequeue(data: data!, kind: kind, indexPath: indexPath).unsafelyUnwrapped
@@ -490,9 +490,9 @@ extension QCollectionController : UICollectionViewDelegate {
         at indexPath: IndexPath
     ) {
         var data: IQCollectionData? = nil
-        if elementKind == UICollectionElementKindSectionHeader {
+        if elementKind == UICollectionView.elementKindSectionHeader {
             data = self.header(index: indexPath.section)
-        } else if elementKind == UICollectionElementKindSectionFooter {
+        } else if elementKind == UICollectionView.elementKindSectionFooter {
             data = self.footer(index: indexPath.section)
         }
         if let safeData = data {

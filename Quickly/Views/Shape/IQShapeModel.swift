@@ -9,8 +9,8 @@ public enum QShapeModelFillRule {
     public var string: String {
         get {
             switch self {
-            case .nonZero: return kCAFillRuleNonZero
-            case .evenOdd: return kCAFillRuleEvenOdd
+            case .nonZero: return CAShapeLayerFillRule.nonZero.rawValue
+            case .evenOdd: return CAShapeLayerFillRule.evenOdd.rawValue
             }
         }
     }
@@ -24,9 +24,9 @@ public enum QShapeModelLineCap {
     public var string: String {
         get {
             switch self {
-            case .butt: return kCALineCapButt
-            case .round: return kCALineCapRound
-            case .square: return kCALineCapSquare
+            case .butt: return CAShapeLayerLineCap.butt.rawValue
+            case .round: return CAShapeLayerLineCap.round.rawValue
+            case .square: return CAShapeLayerLineCap.square.rawValue
             }
         }
     }
@@ -40,9 +40,9 @@ public enum QShapeModelLineJoid {
     public var string: String {
         get {
             switch self {
-            case .miter: return kCALineJoinMiter
-            case .round: return kCALineJoinRound
-            case .bevel: return kCALineJoinBevel
+            case .miter: return CAShapeLayerLineJoin.miter.rawValue
+            case .round: return CAShapeLayerLineJoin.round.rawValue
+            case .bevel: return CAShapeLayerLineJoin.bevel.rawValue
             }
         }
     }

@@ -7,12 +7,12 @@ public enum QDateFieldMode {
     case time
     case dateAndTime
 
-    public var datePickerMode: UIDatePickerMode {
+    public var datePickerMode: UIDatePicker.Mode {
         get {
             switch self {
-            case .date: return UIDatePickerMode.date
-            case .time: return UIDatePickerMode.time
-            case .dateAndTime: return UIDatePickerMode.dateAndTime
+            case .date: return UIDatePicker.Mode.date
+            case .time: return UIDatePicker.Mode.time
+            case .dateAndTime: return UIDatePicker.Mode.dateAndTime
             }
         }
     }

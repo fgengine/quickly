@@ -61,10 +61,10 @@ public protocol IQCollectionController : UICollectionViewDataSource, UICollectio
 
     func performBatchUpdates(_ updates: (() -> Void)?, completion: ((Bool) -> Void)?)
 
-    func scroll(item: IQCollectionItem, scroll: UICollectionViewScrollPosition, animated: Bool)
+    func scroll(item: IQCollectionItem, scroll: UICollectionView.ScrollPosition, animated: Bool)
 
     func isSelected(item: IQCollectionItem) -> Bool
-    func select(item: IQCollectionItem, scroll: UICollectionViewScrollPosition, animated: Bool)
+    func select(item: IQCollectionItem, scroll: UICollectionView.ScrollPosition, animated: Bool)
     func deselect(item: IQCollectionItem, animated: Bool)
 
     func update(header: IQCollectionData, animated: Bool)

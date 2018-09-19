@@ -35,7 +35,7 @@ public protocol IQTextStyle : class {
     var lineHeightMultiple: Float? { set get }
     var paragraphSpacingBefore: Float? { set get }
     var hyphenationFactor: Float? { set get }
-    var attributes: [NSAttributedStringKey: Any] { get }
+    var attributes: [NSAttributedString.Key: Any] { get }
 
     func attributed(_ string: String) -> NSAttributedString
     func mutableAttributed(_ string: String) -> NSMutableAttributedString

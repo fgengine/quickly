@@ -113,7 +113,7 @@ open class QPagebar : QView {
     open override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.collectionView.frame = UIEdgeInsetsInsetRect(self.bounds, self.edgeInsets)
+        self.collectionView.frame = self.bounds.inset(by: self.edgeInsets)
     }
 
     public func setSelectedItem(_ selectedItem: QPagebarItem?, animated: Bool) {
@@ -127,7 +127,7 @@ open class QPagebar : QView {
     }
 
     private func prepareCollectionView() -> QCollectionView {
-        let collectionView = QCollectionView(frame: UIEdgeInsetsInsetRect(self.bounds, self.edgeInsets), layout: self.collectionLayout)
+        let collectionView = QCollectionView(frame: self.bounds.inset(by: self.edgeInsets), layout: self.collectionLayout)
         collectionView.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false

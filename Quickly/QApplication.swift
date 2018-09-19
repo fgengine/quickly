@@ -19,7 +19,7 @@ open class QApplication< RouteContextType: IQRouteContext, WireframeType: QAppWi
         fatalError("Required override function '\(#function)'")
     }
 
-    open func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
+    open func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         self.wireframe.launch(launchOptions)
         return true
     }

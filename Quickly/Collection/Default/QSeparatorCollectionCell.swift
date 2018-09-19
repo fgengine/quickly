@@ -5,10 +5,10 @@
 open class QSeparatorCollectionItem : QBackgroundColorCollectionItem {
 
     public var edgeInsets: UIEdgeInsets
-    public var axis: UILayoutConstraintAxis
+    public var axis: NSLayoutConstraint.Axis
     public var color: UIColor
 
-    public init(axis: UILayoutConstraintAxis, color: UIColor, backgroundColor: UIColor? = nil, edgeInsets: UIEdgeInsets = UIEdgeInsets.zero) {
+    public init(axis: NSLayoutConstraint.Axis, color: UIColor, backgroundColor: UIColor? = nil, edgeInsets: UIEdgeInsets = UIEdgeInsets.zero) {
         self.edgeInsets = edgeInsets
         self.axis = axis
         self.color = color

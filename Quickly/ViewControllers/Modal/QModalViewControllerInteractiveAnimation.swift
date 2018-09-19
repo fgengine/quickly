@@ -70,7 +70,7 @@ public class QModalViewControllerInteractiveDismissAnimation : IQModalViewContro
         if let vc = self.previousViewController {
             contentView.insertSubview(currentViewController.view, aboveSubview: vc.view)
         } else {
-            contentView.bringSubview(toFront: currentViewController.view)
+            contentView.bringSubviewToFront(currentViewController.view)
         }
     }
 

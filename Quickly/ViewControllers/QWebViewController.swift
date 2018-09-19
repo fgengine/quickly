@@ -46,7 +46,7 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
     }
     
     open override func layout(bounds: CGRect) {
-        self.webView.frame = UIEdgeInsetsInsetRect(self.view.bounds, self.inheritedEdgeInsets)
+        self.webView.frame = view.bounds.inset(by: self.inheritedEdgeInsets)
     }
     
     @discardableResult
@@ -85,7 +85,7 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
     }
     
     private func _prepareWebView() -> WKWebView {
-        let webView = WKWebView(frame: UIEdgeInsetsInsetRect(self.view.bounds, self.inheritedEdgeInsets), configuration: self.configuration)
+        let webView = WKWebView(frame: (view.bounds).inset(by: self.inheritedEdgeInsets), configuration: self.configuration)
         webView.uiDelegate = self
         webView.navigationDelegate = self
         webView.scrollView.delegate = self

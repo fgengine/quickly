@@ -28,7 +28,7 @@ public class QImageCache {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(self.didReceiveMemoryWarning(_:)),
-            name: NSNotification.Name.UIApplicationDidReceiveMemoryWarning,
+            name: UIApplication.didReceiveMemoryWarningNotification,
             object: nil
         )
     }

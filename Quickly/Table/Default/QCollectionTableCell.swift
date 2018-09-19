@@ -68,7 +68,7 @@ open class QCollectionTableCell< Row: QCollectionTableRow > : QBackgroundColorTa
     open override class func height(row: Row, spec: IQContainerSpec) -> CGFloat {
         switch row.sizeBehaviour {
         case .fixed(let size): return row.edgeInsets.top + size + row.edgeInsets.bottom
-        case .dynamic: return UITableViewAutomaticDimension
+        case .dynamic: return UITableView.automaticDimension
         }
     }
 

@@ -9,8 +9,8 @@ public protocol IQTableRow : class {
     var canSelect: Bool { get }
     var canEdit: Bool { get }
     var canMove: Bool { get }
-    var selectionStyle: UITableViewCellSelectionStyle { get }
-    var editingStyle: UITableViewCellEditingStyle { get }
+    var selectionStyle: UITableViewCell.SelectionStyle { get }
+    var editingStyle: UITableViewCell.EditingStyle { get }
     var cacheHeight: CGFloat? { set get }
 
     func bind(_ section: IQTableSection, _ indexPath: IndexPath)

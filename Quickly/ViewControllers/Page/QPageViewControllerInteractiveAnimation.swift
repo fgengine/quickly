@@ -114,10 +114,10 @@ public class QPageViewControllerInteractiveAnimation : IQPageViewControllerInter
         self.velocity = velocity
 
         if let vc = self.backwardViewController {
-            contentView.sendSubview(toBack: vc.view)
+            contentView.sendSubviewToBack(vc.view)
         }
         if let vc = forwardViewController {
-            contentView.sendSubview(toBack: vc.view)
+            contentView.sendSubviewToBack(vc.view)
         }
     }
 

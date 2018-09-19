@@ -39,7 +39,7 @@ public protocol IQImageSource : class {
     var image: UIImage? { get }
     var size: CGSize { get }
     var url: URL? { get }
-    var renderingMode: UIImageRenderingMode { get }
+    var renderingMode: UIImage.RenderingMode { get }
     var scale: QImageSourceScale { get }
     var tintColor: UIColor? { get }
 

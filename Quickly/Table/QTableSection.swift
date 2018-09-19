@@ -78,7 +78,7 @@ open class QTableSection : IQTableSection {
         self.controller = nil
     }
 
-    public func insertRow(_ rows: [IQTableRow], index: Int, with animation: UITableViewRowAnimation? = nil) {
+    public func insertRow(_ rows: [IQTableRow], index: Int, with animation: UITableView.RowAnimation? = nil) {
         self.rows.insert(contentsOf: rows, at: index)
         self.rebindRows(from: index, to: self.rows.endIndex)
         let indexPaths = rows.compactMap({ return $0.indexPath })
@@ -89,7 +89,7 @@ open class QTableSection : IQTableSection {
         }
     }
 
-    public func deleteRow(_ rows: [IQTableRow], with animation: UITableViewRowAnimation? = nil) {
+    public func deleteRow(_ rows: [IQTableRow], with animation: UITableView.RowAnimation? = nil) {
         var indices: [Int] = []
         for row in rows {
             if let index = self.rows.index(where: { return ($0 === row) }) {
@@ -112,7 +112,7 @@ open class QTableSection : IQTableSection {
         }
     }
 
-    public func reloadRow(_ rows: [IQTableRow], with animation: UITableViewRowAnimation? = nil) {
+    public func reloadRow(_ rows: [IQTableRow], with animation: UITableView.RowAnimation? = nil) {
         let indexPaths = rows.compactMap({ return $0.indexPath })
         if indexPaths.count > 0 {
             if let controller = self.controller, let tableView = controller.tableView, let animation = animation {

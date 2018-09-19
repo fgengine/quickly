@@ -64,12 +64,12 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
     public init(
         cells: [IQTableCell.Type]
     ) {
-        self.rowHeight = UITableViewAutomaticDimension
-        self.sectionHeaderHeight = UITableViewAutomaticDimension
-        self.sectionFooterHeight = UITableViewAutomaticDimension
-        self.estimatedRowHeight = UITableViewAutomaticDimension
-        self.estimatedSectionHeaderHeight = UITableViewAutomaticDimension
-        self.estimatedSectionFooterHeight = UITableViewAutomaticDimension
+        self.rowHeight = UITableView.automaticDimension
+        self.sectionHeaderHeight = UITableView.automaticDimension
+        self.sectionFooterHeight = UITableView.automaticDimension
+        self.estimatedRowHeight = UITableView.automaticDimension
+        self.estimatedSectionHeaderHeight = UITableView.automaticDimension
+        self.estimatedSectionFooterHeight = UITableView.automaticDimension
 
         self.decors = []
         self.aliasDecors = [:]
@@ -84,12 +84,12 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         decors: [IQTableDecor.Type],
         cells: [IQTableCell.Type]
     ) {
-        self.rowHeight = UITableViewAutomaticDimension
-        self.sectionHeaderHeight = UITableViewAutomaticDimension
-        self.sectionFooterHeight = UITableViewAutomaticDimension
-        self.estimatedRowHeight = UITableViewAutomaticDimension
-        self.estimatedSectionHeaderHeight = UITableViewAutomaticDimension
-        self.estimatedSectionFooterHeight = UITableViewAutomaticDimension
+        self.rowHeight = UITableView.automaticDimension
+        self.sectionHeaderHeight = UITableView.automaticDimension
+        self.sectionFooterHeight = UITableView.automaticDimension
+        self.estimatedRowHeight = UITableView.automaticDimension
+        self.estimatedSectionHeaderHeight = UITableView.automaticDimension
+        self.estimatedSectionFooterHeight = UITableView.automaticDimension
 
         self.decors = decors
         self.aliasDecors = [:]
@@ -280,7 +280,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         self.notifyUpdate()
     }
 
-    open func insertSection(_ sections: [IQTableSection], index: Int, with animation: UITableViewRowAnimation? = nil) {
+    open func insertSection(_ sections: [IQTableSection], index: Int, with animation: UITableView.RowAnimation? = nil) {
         self.sections.insert(contentsOf: sections, at: index)
         self.rebindSections(from: index, to: self.sections.endIndex)
         var indexSet = IndexSet()
@@ -299,7 +299,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         }
     }
 
-    open func deleteSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation? = nil) {
+    open func deleteSection(_ sections: [IQTableSection], with animation: UITableView.RowAnimation? = nil) {
         var indexSet = IndexSet()
         for section in self.sections {
             if let index = self.sections.index(where: { return ($0 === section) }) {
@@ -322,7 +322,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         }
     }
 
-    open func reloadSection(_ sections: [IQTableSection], with animation: UITableViewRowAnimation? = nil) {
+    open func reloadSection(_ sections: [IQTableSection], with animation: UITableView.RowAnimation? = nil) {
         var indexSet = IndexSet()
         for section in self.sections {
             if let index = self.sections.index(where: { return ($0 === section) }) {
@@ -355,7 +355,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         self.notifyUpdate()
     }
 
-    open func scroll(row: IQTableRow, scroll: UITableViewScrollPosition, animated: Bool) {
+    open func scroll(row: IQTableRow, scroll: UITableView.ScrollPosition, animated: Bool) {
         guard
             let tableView = self.tableView,
             let indexPath = self.indexPath(row: row)
@@ -372,7 +372,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         return selectedIndexPaths.contains(indexPath)
     }
 
-    open func select(row: IQTableRow, scroll: UITableViewScrollPosition, animated: Bool) {
+    open func select(row: IQTableRow, scroll: UITableView.ScrollPosition, animated: Bool) {
         guard
             let tableView = self.tableView,
             let indexPath = self.indexPath(row: row)
@@ -663,7 +663,7 @@ extension QTableController : UITableViewDelegate {
     open func tableView(
         _ tableView: UITableView,
         editingStyleForRowAt indexPath: IndexPath
-    ) -> UITableViewCellEditingStyle {
+    ) -> UITableViewCell.EditingStyle {
         let row = self.row(indexPath: indexPath)
         return row.editingStyle
     }

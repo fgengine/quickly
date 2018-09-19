@@ -187,7 +187,7 @@ public class QTextField : QDisplayView, IQField {
     }
     public var textStyle: IQTextStyle? {
         didSet {
-            var attributes: [NSAttributedStringKey: Any] = [:]
+            var attributes: [NSAttributedString.Key: Any] = [:]
             if let textStyle = self.textStyle {
                 attributes = textStyle.attributes
                 self.field.font = attributes[.font] as? UIFont
@@ -209,7 +209,7 @@ public class QTextField : QDisplayView, IQField {
                 attributes[.paragraphStyle] = paragraphStyle
             }
             self.field.defaultTextAttributes = Dictionary(uniqueKeysWithValues:
-                attributes.lazy.map { ($0.key.rawValue, $0.value) }
+                attributes.lazy.map { (NSAttributedString.Key(rawValue: $0.key.rawValue), $0.value) }
             )
         }
     }
@@ -266,7 +266,7 @@ public class QTextField : QDisplayView, IQField {
             if let typingStyle = self.typingStyle {
                 self.field.allowsEditingTextAttributes = true
                 self.field.typingAttributes = Dictionary(uniqueKeysWithValues:
-                    typingStyle.attributes.lazy.map { ($0.key.rawValue, $0.value) }
+                    typingStyle.attributes.lazy.map { (NSAttributedString.Key(rawValue: $0.key.rawValue), $0.value) }
                 )
             } else {
                 self.field.allowsEditingTextAttributes = false
@@ -404,15 +404,15 @@ public class QTextField : QDisplayView, IQField {
         }
 
         open override func textRect(forBounds bounds: CGRect) -> CGRect {
-            return UIEdgeInsetsInsetRect(bounds, self.textInsets)
+            return bounds.inset(by: self.textInsets)
         }
 
         open override func editingRect(forBounds bounds: CGRect) -> CGRect {
-            return UIEdgeInsetsInsetRect(bounds, self.editingInsets)
+            return bounds.inset(by: self.editingInsets)
         }
 
         open override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-            return UIEdgeInsetsInsetRect(bounds, self.placeholderInsets)
+            return bounds.inset(by: self.placeholderInsets)
         }
 
     }
@@ -489,7 +489,7 @@ public class QTextField : QDisplayView, IQField {
                     textField.selectedTextRange = textField.textRange(from: location, to: location)
                 }
                 textField.sendActions(for: .editingChanged)
-                NotificationCenter.default.post(name: NSNotification.Name.UITextFieldTextDidChange, object: textField)
+                NotificationCenter.default.post(name: UITextField.textDidChangeNotification, object: textField)
                 if let closure = field.onEditing {
                     closure(field)
                 }

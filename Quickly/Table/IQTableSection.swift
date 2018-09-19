@@ -18,16 +18,16 @@ public protocol IQTableSection : class {
     func rebind(_ index: Int)
     func unbind()
 
-    func prependRow(_ row: IQTableRow, with animation: UITableViewRowAnimation?)
-    func prependRow(_ rows: [IQTableRow], with animation: UITableViewRowAnimation?)
-    func appendRow(_ row: IQTableRow, with animation: UITableViewRowAnimation?)
-    func appendRow(_ rows: [IQTableRow], with animation: UITableViewRowAnimation?)
-    func insertRow(_ row: IQTableRow, index: Int, with animation: UITableViewRowAnimation?)
-    func insertRow(_ rows: [IQTableRow], index: Int, with animation: UITableViewRowAnimation?)
-    func deleteRow(_ row: IQTableRow, with animation: UITableViewRowAnimation?)
-    func deleteRow(_ rows: [IQTableRow], with animation: UITableViewRowAnimation?)
-    func reloadRow(_ row: IQTableRow, with animation: UITableViewRowAnimation?)
-    func reloadRow(_ rows: [IQTableRow], with animation: UITableViewRowAnimation?)
+    func prependRow(_ row: IQTableRow, with animation: UITableView.RowAnimation?)
+    func prependRow(_ rows: [IQTableRow], with animation: UITableView.RowAnimation?)
+    func appendRow(_ row: IQTableRow, with animation: UITableView.RowAnimation?)
+    func appendRow(_ rows: [IQTableRow], with animation: UITableView.RowAnimation?)
+    func insertRow(_ row: IQTableRow, index: Int, with animation: UITableView.RowAnimation?)
+    func insertRow(_ rows: [IQTableRow], index: Int, with animation: UITableView.RowAnimation?)
+    func deleteRow(_ row: IQTableRow, with animation: UITableView.RowAnimation?)
+    func deleteRow(_ rows: [IQTableRow], with animation: UITableView.RowAnimation?)
+    func reloadRow(_ row: IQTableRow, with animation: UITableView.RowAnimation?)
+    func reloadRow(_ rows: [IQTableRow], with animation: UITableView.RowAnimation?)
 
     func moveRow(_ fromRow: IQTableRow, toIndex: Int) -> Bool
     func moveRow(_ fromIndex: Int, toIndex: Int)
@@ -36,31 +36,31 @@ public protocol IQTableSection : class {
 
 public extension IQTableSection {
 
-    public func prependRow(_ row: IQTableRow, with animation: UITableViewRowAnimation? = nil) {
+    public func prependRow(_ row: IQTableRow, with animation: UITableView.RowAnimation? = nil) {
         self.insertRow([ row ], index: self.rows.startIndex, with: animation)
     }
 
-    public func prependRow(_ rows: [IQTableRow], with animation: UITableViewRowAnimation? = nil) {
+    public func prependRow(_ rows: [IQTableRow], with animation: UITableView.RowAnimation? = nil) {
         self.insertRow(rows, index: self.rows.startIndex, with: animation)
     }
 
-    public func appendRow(_ row: IQTableRow, with animation: UITableViewRowAnimation? = nil) {
+    public func appendRow(_ row: IQTableRow, with animation: UITableView.RowAnimation? = nil) {
         self.insertRow([ row ], index: self.rows.endIndex, with: animation)
     }
 
-    public func appendRow(_ rows: [IQTableRow], with animation: UITableViewRowAnimation? = nil) {
+    public func appendRow(_ rows: [IQTableRow], with animation: UITableView.RowAnimation? = nil) {
         self.insertRow(rows, index: self.rows.endIndex, with: animation)
     }
 
-    public func insertRow(_ row: IQTableRow, index: Int, with animation: UITableViewRowAnimation? = nil) {
+    public func insertRow(_ row: IQTableRow, index: Int, with animation: UITableView.RowAnimation? = nil) {
         self.insertRow([ row ], index: index, with: animation)
     }
 
-    public func deleteRow(_ row: IQTableRow, with animation: UITableViewRowAnimation? = nil) {
+    public func deleteRow(_ row: IQTableRow, with animation: UITableView.RowAnimation? = nil) {
         self.deleteRow([ row ], with: animation)
     }
 
-    public func reloadRow(_ row: IQTableRow, with animation: UITableViewRowAnimation? = nil) {
+    public func reloadRow(_ row: IQTableRow, with animation: UITableView.RowAnimation? = nil) {
         self.reloadRow([ row ], with: animation)
     }
 

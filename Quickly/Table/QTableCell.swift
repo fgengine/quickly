@@ -12,10 +12,10 @@ open class QTableCell< Type: IQTableRow > : UITableViewCell, IQTypedTableCell {
     }
 
     open class func height(row: Type, spec: IQContainerSpec) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
 
-    public override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    public override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.setup()
         self.configure()

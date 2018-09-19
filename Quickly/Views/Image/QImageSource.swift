@@ -7,13 +7,13 @@ public class QImageSource : IQImageSource {
     public var image: UIImage?
     public var size: CGSize
     public var url: URL?
-    public var renderingMode: UIImageRenderingMode
+    public var renderingMode: UIImage.RenderingMode
     public var scale: QImageSourceScale
     public var tintColor: UIColor?
 
     public init(
         _ image: UIImage,
-        renderingMode: UIImageRenderingMode = .automatic,
+        renderingMode: UIImage.RenderingMode = .automatic,
         scale: QImageSourceScale = .originOrAspectFit,
         tintColor: UIColor? = nil
     ) {
@@ -26,7 +26,7 @@ public class QImageSource : IQImageSource {
 
     public init(
         _ imageNamed: String,
-        renderingMode: UIImageRenderingMode = .automatic,
+        renderingMode: UIImage.RenderingMode = .automatic,
         scale: QImageSourceScale = .originOrAspectFit,
         tintColor: UIColor? = nil
     ) {
@@ -44,7 +44,7 @@ public class QImageSource : IQImageSource {
     public init(
         _ url: URL,
         size: CGSize,
-        renderingMode: UIImageRenderingMode = .automatic,
+        renderingMode: UIImage.RenderingMode = .automatic,
         scale: QImageSourceScale = .originOrAspectFit,
         tintColor: UIColor? = nil
     ) {

@@ -93,7 +93,7 @@ open class QCollectionView : UICollectionView, IQView {
 extension QCollectionView : IQContainerSpec {
     
     open var containerSize: CGSize {
-        get { return UIEdgeInsetsInsetRect(self.bounds, self.contentInset).size }
+        get { return self.bounds.inset(by: self.contentInset).size }
     }
     open var containerLeftInset: CGFloat {
         get { return self.contentLeftInset }

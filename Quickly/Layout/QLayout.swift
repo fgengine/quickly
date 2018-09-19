@@ -24,13 +24,13 @@ public struct QLayoutDimension {
 public struct QLayoutItem< T > {
 
     public let item: Any
-    public let attribute: NSLayoutAttribute
+    public let attribute: NSLayoutConstraint.Attribute
     public let constant: CGFloat
     public let multiplier: CGFloat
 
     public init(
         _ item: Any,
-        _ attribute: NSLayoutAttribute,
+        _ attribute: NSLayoutConstraint.Attribute,
         _ constant: CGFloat = 0,
         _ multiplier: CGFloat = 1
     ) {
@@ -42,7 +42,7 @@ public struct QLayoutItem< T > {
 
     fileprivate func constrain(
         _ secondItem: QLayoutItem,
-        relation: NSLayoutRelation
+        relation: NSLayoutConstraint.Relation
     ) -> NSLayoutConstraint {
         return NSLayoutConstraint(
             item: self.item,
@@ -57,7 +57,7 @@ public struct QLayoutItem< T > {
 
     fileprivate func constrain(
         _ constant: CGFloat,
-        relation: NSLayoutRelation
+        relation: NSLayoutConstraint.Relation
     ) -> NSLayoutConstraint {
         return NSLayoutConstraint(
             item: self.item,

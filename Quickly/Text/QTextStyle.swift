@@ -374,7 +374,7 @@ public final class QTextStyle : IQTextStyle {
         didSet { self.setNeedRebuildAttributes() }
     }
 
-    public var attributes: [NSAttributedStringKey: Any] {
+    public var attributes: [NSAttributedString.Key: Any] {
         get {
             if self._rebuildAttributes == true {
                 self._rebuildAttributes = false
@@ -384,7 +384,7 @@ public final class QTextStyle : IQTextStyle {
         }
     }
     private var _rebuildAttributes: Bool = true
-    private var _attributes: [NSAttributedStringKey: Any] = [:]
+    private var _attributes: [NSAttributedString.Key: Any] = [:]
 
     public init(
         parent: IQTextStyle? = nil,
@@ -504,8 +504,8 @@ public final class QTextStyle : IQTextStyle {
         }
     }
 
-    private func rebuildAttributes() -> [NSAttributedStringKey: Any] {
-        var attributes: [NSAttributedStringKey: Any] = [:]
+    private func rebuildAttributes() -> [NSAttributedString.Key: Any] {
+        var attributes: [NSAttributedString.Key: Any] = [:]
         if let font = self.font {
             attributes[.font] = font
         }

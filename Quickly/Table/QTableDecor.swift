@@ -27,7 +27,7 @@ open class QTableDecor< Type: IQTableData > : UITableViewHeaderFooterView, IQTyp
     }
 
     open class func height(data: Type, spec: IQContainerSpec) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
 
     open func configure() {

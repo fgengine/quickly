@@ -50,7 +50,7 @@ open class QAppWireframe< RouteContextType: IQRouteContext > : IQRootWireframe {
         self.routeContext = routeContext
     }
 
-    open func launch(_ options: [UIApplicationLaunchOptionsKey : Any]?) {
+    open func launch(_ options: [UIApplication.LaunchOptionsKey : Any]?) {
         fatalError("Required override function '\(#function)'")
     }
 

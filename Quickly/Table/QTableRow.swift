@@ -9,8 +9,8 @@ open class QTableRow : IQTableRow {
     public var canSelect: Bool = true
     public var canEdit: Bool = false
     public var canMove: Bool = false
-    public var selectionStyle: UITableViewCellSelectionStyle = .default
-    public var editingStyle: UITableViewCellEditingStyle = .none
+    public var selectionStyle: UITableViewCell.SelectionStyle = .default
+    public var editingStyle: UITableViewCell.EditingStyle = .none
     public var cacheHeight: CGFloat?
 
     public init() {

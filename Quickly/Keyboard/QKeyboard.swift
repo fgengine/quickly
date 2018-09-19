@@ -17,21 +17,21 @@ public final class QKeyboardAnimationInfo {
     public let beginFrame: CGRect
     public let endFrame: CGRect
     public let duration: TimeInterval
-    public let curve: UIViewAnimationCurve
+    public let curve: UIView.AnimationCurve
     public let local: Bool
 
     public init?(_ userInfo: [ AnyHashable: Any ]) {
         guard
-            let beginFrameValue = userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue,
-            let endFrameValue = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue,
-            let durationValue = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber,
-            let curveValue = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber,
-            let localValue = userInfo[UIKeyboardIsLocalUserInfoKey] as? NSNumber
+            let beginFrameValue = userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue,
+            let endFrameValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
+            let durationValue = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber,
+            let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber,
+            let localValue = userInfo[UIResponder.keyboardIsLocalUserInfoKey] as? NSNumber
             else { return nil }
         self.beginFrame = beginFrameValue.cgRectValue
         self.endFrame = endFrameValue.cgRectValue
         self.duration = TimeInterval(durationValue.doubleValue)
-        self.curve = UIViewAnimationCurve(rawValue: curveValue.intValue)!
+        self.curve = UIView.AnimationCurve(rawValue: curveValue.intValue) ?? .easeInOut
         self.local = localValue.boolValue
     }
 
@@ -59,17 +59,17 @@ public final class QKeyboard {
     }
 
     private func start() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.willShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didShow(_:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.willHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didHide(_:)), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.willShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didShow(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.willHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didHide(_:)), name: UIResponder.keyboardDidHideNotification, object: nil)
     }
 
     private func stop() {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidHideNotification, object: nil)
     }
 
     @objc

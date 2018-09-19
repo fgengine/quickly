@@ -25,10 +25,10 @@ public class QButton : QControl {
     open override var isEnabled: Bool {
         didSet { self._invalidate() }
     }
-    open override var contentHorizontalAlignment: UIControlContentHorizontalAlignment {
+    open override var contentHorizontalAlignment: UIControl.ContentHorizontalAlignment {
         didSet { self._invalidate() }
     }
-    open override var contentVerticalAlignment: UIControlContentVerticalAlignment {
+    open override var contentVerticalAlignment: UIControl.ContentVerticalAlignment {
         didSet { self._invalidate() }
     }
     @IBInspectable public var contentInsets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8) {

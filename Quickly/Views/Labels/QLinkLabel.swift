@@ -22,7 +22,7 @@ open class QLinkLabel : QLabel {
             self.isHighlighted = false
         }
 
-        public func attributes() -> [NSAttributedStringKey: Any] {
+        public func attributes() -> [NSAttributedString.Key: Any] {
             if self.isHighlighted == true {
                 if let highlight = self.highlight {
                     return highlight.attributes

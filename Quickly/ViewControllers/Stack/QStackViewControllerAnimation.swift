@@ -42,7 +42,7 @@ public class QStackViewControllerPresentAnimation : IQStackViewControllerPresent
         self.nextViewController = nextViewController
         self.nextViewController.view.frame = self.nextBeginFrame
 
-        contentView.bringSubview(toFront: self.nextViewController.view)
+        contentView.bringSubviewToFront(self.nextViewController.view)
     }
 
     public func update(animated: Bool, complete: @escaping (Bool) -> Void) {
@@ -114,7 +114,7 @@ public class QStackViewControllerDismissAnimation : IQStackViewControllerDismiss
         self.previousViewController = previousViewController
         self.previousViewController.view.frame = self.previousBeginFrame
 
-        contentView.bringSubview(toFront: self.currentViewController.view)
+        contentView.bringSubviewToFront(self.currentViewController.view)
     }
 
     public func update(animated: Bool, complete: @escaping (Bool) -> Void) {

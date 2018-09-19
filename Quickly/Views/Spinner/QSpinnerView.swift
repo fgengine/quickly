@@ -4,9 +4,9 @@
 
 open class QSpinnerView : QView, IQSpinnerView {
     
-    public var style: UIActivityIndicatorViewStyle {
-        set(value) { self._indicator.activityIndicatorViewStyle = value }
-        get { return self._indicator.activityIndicatorViewStyle }
+    public var style: UIActivityIndicatorView.Style {
+        set(value) { self._indicator.style = value }
+        get { return self._indicator.style }
     }
     public var color: UIColor? {
         set(value) { self._indicator.color = value }

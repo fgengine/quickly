@@ -85,7 +85,7 @@ public final class QTimer : NSObject {
                     closure(self)
                 }
             }
-            RunLoop.main.add(self.timer!, forMode: .commonModes)
+            RunLoop.main.add(self.timer!, forMode: RunLoop.Mode.common)
         }
     }
 
@@ -138,7 +138,7 @@ public final class QTimer : NSObject {
             if let closure = self.onResumed {
                 closure(self)
             }
-            RunLoop.main.add(self.timer!, forMode: .commonModes)
+            RunLoop.main.add(self.timer!, forMode: RunLoop.Mode.common)
         }
     }
 
