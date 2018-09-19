@@ -396,7 +396,7 @@ public final class QJson {
 
 extension QJson : IQDebug {
 
-    open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+    public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         if self.isArray() == true {
             let array = try! self.array()
             array.debugString(&buffer, headerIndent, indent, footerIndent)

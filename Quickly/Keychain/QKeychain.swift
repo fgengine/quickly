@@ -32,15 +32,15 @@ public enum QKeychainAccessOptions {
 
 public final class QKeychain {
 
-    open var accessGroup: String?
-    open var synchronizable: Bool
+    public var accessGroup: String?
+    public var synchronizable: Bool
 
     public init() {
         self.synchronizable = false
     }
 
     @discardableResult
-    open func set(_ value: Data?, key: String, access: QKeychainAccessOptions = .defaultOption) -> Bool {
+    public func set(_ value: Data?, key: String, access: QKeychainAccessOptions = .defaultOption) -> Bool {
         guard let value = value else {
             return self.processDelete(key)
         }
@@ -48,7 +48,7 @@ public final class QKeychain {
     }
 
     @discardableResult
-    open func set(_ value: String?, key: String, access: QKeychainAccessOptions = .defaultOption) -> Bool {
+    public func set(_ value: String?, key: String, access: QKeychainAccessOptions = .defaultOption) -> Bool {
         guard let value = value else {
             return self.processDelete(key)
         }
@@ -56,14 +56,14 @@ public final class QKeychain {
     }
 
     @discardableResult
-    open func set(_ value: Bool?, key: String, access: QKeychainAccessOptions = .defaultOption) -> Bool {
+    public func set(_ value: Bool?, key: String, access: QKeychainAccessOptions = .defaultOption) -> Bool {
         guard let value = value else {
             return self.processDelete(key)
         }
         return self.processSet(value, key: key, access: access)
     }
 
-    open func get(_ key: String) -> Data? {
+    public func get(_ key: String) -> Data? {
         let query = self.process(query: [
             Constants.klass : kSecClassGenericPassword,
             Constants.attrAccount : key,
@@ -80,20 +80,20 @@ public final class QKeychain {
         return nil
     }
 
-    open func get(_ key: String) -> String? {
+    public func get(_ key: String) -> String? {
         guard let data: Data = self.get(key) else { return nil }
         guard let string = String(data: data, encoding: .utf8) else { return nil }
         return string
     }
 
-    open func get(_ key: String) -> Bool? {
+    public func get(_ key: String) -> Bool? {
         guard let data: Data = self.get(key) else { return nil }
         guard let firstBit = data.first else { return nil }
         return firstBit != 0
     }
 
     @discardableResult
-    open func clear() -> Bool {
+    public func clear() -> Bool {
         let query = self.process(
             query: [
                 Constants.klass : kSecClassGenericPassword
