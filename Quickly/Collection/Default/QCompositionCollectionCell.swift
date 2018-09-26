@@ -6,9 +6,16 @@ open class QCompositionCollectionItem< Composable: IQComposable > : QBackgroundC
 
     public var composable: Composable
 
-    public init(composable: Composable) {
+    public init(
+        composable: Composable,
+        backgroundColor: UIColor? = nil,
+        selectedBackgroundColor: UIColor? = nil
+    ) {
         self.composable = composable
-        super.init()
+        super.init(
+            backgroundColor: backgroundColor,
+            selectedBackgroundColor: selectedBackgroundColor
+        )
     }
 
 }

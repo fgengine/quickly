@@ -19,6 +19,7 @@ open class QViewController : NSObject, IQViewController {
                 if let parent = self.parent {
                     parent.addChild(self)
                 }
+                self.didChangeAdditionalEdgeInsets()
                 self._parentChanging = false
             } else {
                 self._parent = value

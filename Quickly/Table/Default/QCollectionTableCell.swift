@@ -11,63 +11,73 @@ open class QCollectionTableRow : QBackgroundColorTableRow {
 
     public typealias LayoutType = UICollectionViewLayout & IQCollectionLayout
 
-    public var edgeInsets: UIEdgeInsets = UIEdgeInsets.zero
+    public var edgeInsets: UIEdgeInsets
 
-    public var sizeBehaviour: QCollectionTableRowSizeBehaviour = .dynamic
+    public var sizeBehaviour: QCollectionTableRowSizeBehaviour
     public var controller: IQCollectionController
     public var layout: LayoutType
 
-    public init(_ controller: IQCollectionController, layout: LayoutType) {
+    public init(
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
+        sizeBehaviour: QCollectionTableRowSizeBehaviour = .dynamic,
+        controller: IQCollectionController,
+        layout: LayoutType
+    ) {
+        self.edgeInsets = edgeInsets
+        self.sizeBehaviour = sizeBehaviour
         self.controller = controller
         self.layout = layout
         super.init()
+        self.canSelect = false
     }
-
 
 }
 
 open class QCollectionTableCell< Row: QCollectionTableRow > : QBackgroundColorTableCell< Row >, IQCollectionControllerObserver, IQCollectionLayoutObserver {
 
-    private var _collectionView: QCollectionView!
+    public private(set) var collectionView: QCollectionView!
 
     private weak var currentController: IQCollectionController? {
         set(value) {
-            if let controller = self._collectionView.collectionController {
+            if let controller = self.collectionView.collectionController {
                 controller.removeObserver(self)
             }
-            self._collectionView.collectionController = value
-            if let controller = self._collectionView.collectionController {
+            self.collectionView.collectionController = value
+            if let controller = self.collectionView.collectionController {
                 controller.addObserver(self, priority: 0)
             }
         }
-        get { return self._collectionView.collectionController }
+        get { return self.collectionView.collectionController }
     }
     private weak var currentLayout: Row.LayoutType? {
         set(value) {
-            if let layout = self._collectionView.collectionLayout {
+            if let layout = self.collectionView.collectionLayout {
                 layout.removeObserver(self)
             }
-            self._collectionView.collectionLayout = value
-            if let layout = self._collectionView.collectionLayout {
+            self.collectionView.collectionLayout = value
+            if let layout = self.collectionView.collectionLayout {
                 layout.addObserver(self, priority: 0)
             }
         }
-        get { return self._collectionView.collectionLayout }
+        get { return self.collectionView.collectionLayout }
     }
-    private var currentEdgeInsets: UIEdgeInsets?
 
-    private var selfConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.selfConstraints) }
-        didSet {self.contentView.addConstraints(self.selfConstraints) }
-    }
     private var collectionHeightConstraint: NSLayoutConstraint! {
-        willSet { self._collectionView.removeConstraint(self.collectionHeightConstraint) }
-        didSet { self._collectionView.addConstraint(self.collectionHeightConstraint) }
+        willSet {
+            if let constraint = self.collectionHeightConstraint {
+                self.collectionView.removeConstraint(constraint)
+            }
+        }
+        didSet {
+            if let constraint = self.collectionHeightConstraint {
+                self.collectionView.addConstraint(constraint)
+            }
+        }
     }
 
     open override class func height(row: Row, spec: IQContainerSpec) -> CGFloat {
         switch row.sizeBehaviour {
-        case .fixed(let size): return row.edgeInsets.top + size + row.edgeInsets.bottom
+        case .fixed(let size): return size
         case .dynamic: return UITableView.automaticDimension
         }
     }
@@ -75,36 +85,26 @@ open class QCollectionTableCell< Row: QCollectionTableRow > : QBackgroundColorTa
     open override func setup() {
         super.setup()
 
-        self._collectionView = QCollectionView(frame: self.bounds, layout: QCollectionFlowLayout())
-        self._collectionView.translatesAutoresizingMaskIntoConstraints = false
-        self.contentView.addSubview(self._collectionView)
-    }
-
-    open override func prepareForReuse() {
-        self.currentLayout = nil
-        self.currentController = nil
-
-        super.prepareForReuse()
+        self.collectionView = QCollectionView(frame: self.bounds, layout: QCollectionFlowLayout())
+        self.collectionView.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(self.collectionView)
+        
+        self.contentView.addConstraints([
+            self.collectionView.topLayout == self.contentView.topLayout,
+            self.collectionView.leadingLayout == self.contentView.leadingLayout,
+            self.collectionView.trailingLayout == self.contentView.trailingLayout,
+            self.collectionView.bottomLayout == self.contentView.bottomLayout
+        ])
     }
     
     open override func set(row: Row, spec: IQContainerSpec, animated: Bool) {
         super.set(row: row, spec: spec, animated: animated)
 
-        if self.currentEdgeInsets != row.edgeInsets {
-            self.currentEdgeInsets = row.edgeInsets
-
-            var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self._collectionView.topLayout == self.contentView.topLayout + row.edgeInsets.top)
-            selfConstraints.append(self._collectionView.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
-            selfConstraints.append(self._collectionView.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
-            selfConstraints.append(self._collectionView.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
-            self.selfConstraints = selfConstraints
-        }
-
         self.collectionHeightConstraint = nil
-
         self.currentLayout = row.layout
         self.currentController = row.controller
+        self.collectionView.contentInset = row.edgeInsets
+        self.collectionView.scrollIndicatorInsets = row.edgeInsets
     }
 
     open func scroll(_ controller: IQCollectionController, collectionView: UICollectionView) {
@@ -114,7 +114,7 @@ open class QCollectionTableCell< Row: QCollectionTableRow > : QBackgroundColorTa
     }
 
     public func update(_ controller: IQCollectionController) {
-        self.apply(contentSize: self._collectionView.collectionViewLayout.collectionViewContentSize)
+        self.apply(contentSize: self.collectionView.collectionViewLayout.collectionViewContentSize)
     }
 
     public func update(_ layout: IQCollectionLayout, contentSize: CGSize) {
@@ -124,7 +124,7 @@ open class QCollectionTableCell< Row: QCollectionTableRow > : QBackgroundColorTa
     private func apply(contentSize: CGSize) {
         guard let row = self.row else { return }
         switch row.sizeBehaviour {
-        case .dynamic: self.collectionHeightConstraint = (self._collectionView.heightLayout == contentSize.height)
+        case .dynamic: self.collectionHeightConstraint = (self.collectionView.heightLayout == contentSize.height)
         default: break
         }
     }
