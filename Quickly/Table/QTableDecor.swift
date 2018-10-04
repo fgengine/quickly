@@ -2,10 +2,10 @@
 //  Quickly
 //
 
-open class QTableDecor< Type: IQTableData > : UITableViewHeaderFooterView, IQTypedTableDecor {
+open class QTableDecor< DataType: IQTableData > : UITableViewHeaderFooterView, IQTypedTableDecor {
 
     open weak var tableDelegate: IQTableDecorDelegate?
-    open var data: Type?
+    open var data: DataType?
 
     public override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
@@ -26,14 +26,14 @@ open class QTableDecor< Type: IQTableData > : UITableViewHeaderFooterView, IQTyp
         self.configure()
     }
 
-    open class func height(data: Type, spec: IQContainerSpec) -> CGFloat {
+    open class func height(data: DataType, spec: IQContainerSpec) -> CGFloat {
         return UITableView.automaticDimension
     }
 
     open func configure() {
     }
 
-    open func set(data: Type, spec: IQContainerSpec, animated: Bool) {
+    open func set(data: DataType, spec: IQContainerSpec, animated: Bool) {
         self.data = data
     }
 

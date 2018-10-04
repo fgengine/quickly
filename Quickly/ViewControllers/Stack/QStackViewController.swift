@@ -4,7 +4,6 @@
 
 open class QStackViewController : QViewController, IQStackViewController {
 
-    open weak var stackContainerViewController: IQStackContainerViewController?
     open private(set) var stackbar: QStackbar?
     open private(set) var stackbarHeight: CGFloat
     open private(set) var stackbarHidden: Bool

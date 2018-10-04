@@ -171,7 +171,7 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     }
 
     open func dismissStack(_ viewController: IQStackContentViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
-        guard let stackPageViewController = viewController.stackPageViewController else { return }
+        guard let stackPageViewController = viewController.stackViewController else { return }
         self.dismissStack(stackPageViewController, animated: animated, completion: completion)
     }
 
@@ -195,7 +195,7 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     }
 
     open func dismissStack(to viewController: IQStackContentViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
-        guard let stackPageViewController = viewController.stackPageViewController else { return }
+        guard let stackPageViewController = viewController.stackViewController else { return }
         self.dismissStack(to: stackPageViewController, animated: animated, completion: completion)
     }
 

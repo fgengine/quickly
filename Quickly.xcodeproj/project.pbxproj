@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		400102BA208A7D4A00C64069 /* QCompositionCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400102B9208A7D4A00C64069 /* QCompositionCollectionCell.swift */; };
+		40020828216645C700BD04D5 /* QCompositionTableDecor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40020827216645C700BD04D5 /* QCompositionTableDecor.swift */; };
+		4002082C2166462D00BD04D5 /* QBackgroundColorTableDecor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4002082B2166462D00BD04D5 /* QBackgroundColorTableDecor.swift */; };
 		4003595B207F5BB800D7F449 /* QPagebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40035959207F5BB800D7F449 /* QPagebar.swift */; };
 		40035968207FA4A900D7F449 /* QScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40035966207FA4A900D7F449 /* QScrollView.swift */; };
 		4006EDB11F61363E0050AD91 /* QBackgroundColorCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4006EDA51F61363E0050AD91 /* QBackgroundColorCollectionCell.swift */; };
@@ -144,6 +146,8 @@
 		404C910120D164A4001DE192 /* QPushViewControllerInteractiveAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404C910020D164A4001DE192 /* QPushViewControllerInteractiveAnimation.swift */; };
 		404C910320D164F5001DE192 /* QModalViewControllerInteractiveAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404C910220D164F5001DE192 /* QModalViewControllerInteractiveAnimation.swift */; };
 		404EC1ED2077798100761BBD /* QMetatype.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404EC1EB2077798100761BBD /* QMetatype.swift */; };
+		4055E9CB215E21BE00D66AA6 /* QTitleSwitchComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4055E9CA215E21BE00D66AA6 /* QTitleSwitchComposition.swift */; };
+		4055E9CE215E21EF00D66AA6 /* QSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4055E9CD215E21EF00D66AA6 /* QSwitch.swift */; };
 		4057FFEF205027DC004F3EDB /* IQDialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4057FFEA205027DB004F3EDB /* IQDialogViewController.swift */; };
 		405A490E201F19020001D684 /* QTransparentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405A490C201F19020001D684 /* QTransparentView.swift */; };
 		405ABE0220C13009005E1192 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 405ABE0120C13009005E1192 /* PageViewController.swift */; };
@@ -360,6 +364,8 @@
 
 /* Begin PBXFileReference section */
 		400102B9208A7D4A00C64069 /* QCompositionCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QCompositionCollectionCell.swift; sourceTree = "<group>"; };
+		40020827216645C700BD04D5 /* QCompositionTableDecor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCompositionTableDecor.swift; sourceTree = "<group>"; };
+		4002082B2166462D00BD04D5 /* QBackgroundColorTableDecor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QBackgroundColorTableDecor.swift; sourceTree = "<group>"; };
 		40035959207F5BB800D7F449 /* QPagebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QPagebar.swift; sourceTree = "<group>"; };
 		40035966207FA4A900D7F449 /* QScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QScrollView.swift; sourceTree = "<group>"; };
 		4006EDA51F61363E0050AD91 /* QBackgroundColorCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QBackgroundColorCollectionCell.swift; sourceTree = "<group>"; };
@@ -516,6 +522,8 @@
 		404C910020D164A4001DE192 /* QPushViewControllerInteractiveAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QPushViewControllerInteractiveAnimation.swift; sourceTree = "<group>"; };
 		404C910220D164F5001DE192 /* QModalViewControllerInteractiveAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QModalViewControllerInteractiveAnimation.swift; sourceTree = "<group>"; };
 		404EC1EB2077798100761BBD /* QMetatype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QMetatype.swift; sourceTree = "<group>"; };
+		4055E9CA215E21BE00D66AA6 /* QTitleSwitchComposition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTitleSwitchComposition.swift; sourceTree = "<group>"; };
+		4055E9CD215E21EF00D66AA6 /* QSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSwitch.swift; sourceTree = "<group>"; };
 		4057FFEA205027DB004F3EDB /* IQDialogViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQDialogViewController.swift; sourceTree = "<group>"; };
 		4057FFEB205027DB004F3EDB /* QDialogContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QDialogContainerViewController.swift; sourceTree = "<group>"; };
 		4057FFEC205027DB004F3EDB /* QDialogViewControllerAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QDialogViewControllerAnimation.swift; sourceTree = "<group>"; };
@@ -708,6 +716,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		40020829216645D300BD04D5 /* Decor */ = {
+			isa = PBXGroup;
+			children = (
+				4002082B2166462D00BD04D5 /* QBackgroundColorTableDecor.swift */,
+				40020827216645C700BD04D5 /* QCompositionTableDecor.swift */,
+			);
+			path = Decor;
+			sourceTree = "<group>";
+		};
+		4002082A216645DD00BD04D5 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				40E7384E1F5606C500B192C6 /* QBackgroundColorTableCell.swift */,
+				40E738521F5606C500B192C6 /* QSpaceTableCell.swift */,
+				40E738501F5606C500B192C6 /* QSeparatorTableCell.swift */,
+				400DDF741F56913100D11991 /* QCompositionTableCell.swift */,
+				40800828206A9BEF00B5C9A7 /* QCollectionTableCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		40035958207F5B9F00D7F449 /* Pagebar */ = {
 			isa = PBXGroup;
 			children = (
@@ -760,6 +789,7 @@
 				4007B07B2144236900AE17DC /* QTitleDetailIconComposition.swift */,
 				4007B0502144236900AE17DC /* QTitleDetailShapeComposition.swift */,
 				4007B07A2144236900AE17DC /* QTitleButtonComposition.swift */,
+				4055E9CA215E21BE00D66AA6 /* QTitleSwitchComposition.swift */,
 				4043EA562148458900AA5F98 /* QSpinnerComposition.swift */,
 				4007B0572144236900AE17DC /* QTextFieldComposition.swift */,
 				4007B0522144236900AE17DC /* QDateFieldComposition.swift */,
@@ -1097,11 +1127,8 @@
 		4039BCE31F52392600E38090 /* Default */ = {
 			isa = PBXGroup;
 			children = (
-				40E7384E1F5606C500B192C6 /* QBackgroundColorTableCell.swift */,
-				40E738521F5606C500B192C6 /* QSpaceTableCell.swift */,
-				40E738501F5606C500B192C6 /* QSeparatorTableCell.swift */,
-				400DDF741F56913100D11991 /* QCompositionTableCell.swift */,
-				40800828206A9BEF00B5C9A7 /* QCollectionTableCell.swift */,
+				40020829216645D300BD04D5 /* Decor */,
+				4002082A216645DD00BD04D5 /* Cell */,
 			);
 			path = Default;
 			sourceTree = "<group>";
@@ -1206,6 +1233,14 @@
 				404C90F420D11659001DE192 /* ConfirmModalViewController.xib */,
 			);
 			path = Confirm;
+			sourceTree = "<group>";
+		};
+		4055E9CC215E21DD00D66AA6 /* Switch */ = {
+			isa = PBXGroup;
+			children = (
+				4055E9CD215E21EF00D66AA6 /* QSwitch.swift */,
+			);
+			path = Switch;
 			sourceTree = "<group>";
 		};
 		4057FFE9205027DB004F3EDB /* Dialog */ = {
@@ -1614,6 +1649,7 @@
 				4039BCB81F51B1D800E38090 /* Image */,
 				4062A51420737D1100B190BE /* Shape */,
 				4039BCB31F516EF500E38090 /* Button */,
+				4055E9CC215E21DD00D66AA6 /* Switch */,
 				40CF45811F4DE6AB004D00D8 /* Fields */,
 				40C8F8221F55109100C75D34 /* Spinner */,
 				4022460A2076516F0020B357 /* Pincode */,
@@ -1931,6 +1967,7 @@
 				401E8F85206D3CC1008A5BE4 /* QPickerCell.swift in Sources */,
 				40FBE6A41F543EFD00F5194B /* QStyledText.swift in Sources */,
 				401F46B92126D1AD004DB8A2 /* QApiLogging.swift in Sources */,
+				4002082C2166462D00BD04D5 /* QBackgroundColorTableDecor.swift in Sources */,
 				409CAC3E207B640D00EA54A5 /* QStackbar.swift in Sources */,
 				4062C8C82088CE400098F809 /* QStackViewController.swift in Sources */,
 				402BCEBC20B8571100748D60 /* QPageViewControllerAnimation.swift in Sources */,
@@ -1953,6 +1990,7 @@
 				4007B07E2144236900AE17DC /* QTitleDetailShapeComposition.swift in Sources */,
 				40784DDD207DED22001828E3 /* IQJsonEnum.swift in Sources */,
 				40A907AB206F6C3800655D2A /* IQField.swift in Sources */,
+				4055E9CE215E21EF00D66AA6 /* QSwitch.swift in Sources */,
 				40691540208487BE008934D5 /* IQStackViewController.swift in Sources */,
 				40CF45EF1F4DE6AB004D00D8 /* QView.swift in Sources */,
 				40CF45CA1F4DE6AB004D00D8 /* QLabel.swift in Sources */,
@@ -2139,6 +2177,7 @@
 				40134EF81F62D20C009F81A6 /* QRegularExpressionStringValidator.swift in Sources */,
 				4023D97C2146FCE9005F915D /* QPlaceholderImageTitleIconComposition.swift in Sources */,
 				40CF45DA1F4DE6AB004D00D8 /* IQTableDecor.swift in Sources */,
+				40020828216645C700BD04D5 /* QCompositionTableDecor.swift in Sources */,
 				4007B09C2144236900AE17DC /* QListFieldComposition.swift in Sources */,
 				406FDF6B20908071004178CC /* QApiPagination.swift in Sources */,
 				40224617207662C50020B357 /* QDisplayView.swift in Sources */,
@@ -2154,6 +2193,7 @@
 				4039BCB71F516F5900E38090 /* QControl.swift in Sources */,
 				40B8A1991F4F806A00204E5A /* IQJsonModel.swift in Sources */,
 				4007B0802144236900AE17DC /* QDateFieldComposition.swift in Sources */,
+				4055E9CB215E21BE00D66AA6 /* QTitleSwitchComposition.swift in Sources */,
 				40C94A271F69514500439961 /* QObserver.swift in Sources */,
 				400DDF761F56913100D11991 /* QCompositionTableCell.swift in Sources */,
 				4062C8C92088CF4B0098F809 /* QStackContainerViewController.swift in Sources */,

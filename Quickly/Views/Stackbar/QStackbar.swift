@@ -141,18 +141,19 @@ open class QStackbar : QView {
         selfConstraints.append(self.centerView.topLayout == self.topLayout + self.edgeInsets.top)
         if centerViewsCount > 0 {
             if leftViewsCount > 0 && rightViewsCount > 0 {
-                selfConstraints.append(self.centerView.leadingLayout == self.leftView.trailingLayout + self.leftViewsOffset)
-                selfConstraints.append(self.centerView.trailingLayout == self.rightView.leadingLayout - self.rightViewsOffset)
+                selfConstraints.append(self.centerView.leadingLayout >= self.leftView.trailingLayout + self.leftViewsOffset)
+                selfConstraints.append(self.centerView.trailingLayout <= self.rightView.leadingLayout - self.rightViewsOffset)
             } else if leftViewsCount > 0 {
                 selfConstraints.append(self.centerView.leadingLayout == self.leftView.trailingLayout + self.leftViewsOffset)
-                selfConstraints.append(self.centerView.trailingLayout == self.trailingLayout - self.edgeInsets.right)
+                selfConstraints.append(self.centerView.trailingLayout <= self.trailingLayout - self.edgeInsets.right)
             } else if rightViewsCount > 0 {
-                selfConstraints.append(self.centerView.leadingLayout == self.leadingLayout + self.edgeInsets.left)
+                selfConstraints.append(self.centerView.leadingLayout >= self.leadingLayout + self.edgeInsets.left)
                 selfConstraints.append(self.centerView.trailingLayout == self.rightView.leadingLayout - self.rightViewsOffset)
             } else {
                 selfConstraints.append(self.centerView.leadingLayout == self.leadingLayout + self.edgeInsets.left)
                 selfConstraints.append(self.centerView.trailingLayout == self.trailingLayout - self.edgeInsets.right)
             }
+            selfConstraints.append(self.centerView.centerXLayout == self.centerXLayout)
         } else {
             if leftViewsCount > 0 && rightViewsCount > 0 {
                 selfConstraints.append(self.leftView.trailingLayout >= self.rightView.trailingLayout + self.leftViewsOffset + self.rightViewsOffset)

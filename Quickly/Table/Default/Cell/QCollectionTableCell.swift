@@ -27,13 +27,14 @@ open class QCollectionTableRow : QBackgroundColorTableRow {
         self.sizeBehaviour = sizeBehaviour
         self.controller = controller
         self.layout = layout
-        super.init()
-        self.canSelect = false
+        super.init(
+            canSelect: false
+        )
     }
 
 }
 
-open class QCollectionTableCell< Row: QCollectionTableRow > : QBackgroundColorTableCell< Row >, IQCollectionControllerObserver, IQCollectionLayoutObserver {
+open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundColorTableCell< RowType >, IQCollectionControllerObserver, IQCollectionLayoutObserver {
 
     public private(set) var collectionView: QCollectionView!
 
@@ -49,7 +50,7 @@ open class QCollectionTableCell< Row: QCollectionTableRow > : QBackgroundColorTa
         }
         get { return self.collectionView.collectionController }
     }
-    private weak var currentLayout: Row.LayoutType? {
+    private weak var currentLayout: RowType.LayoutType? {
         set(value) {
             if let layout = self.collectionView.collectionLayout {
                 layout.removeObserver(self)
@@ -75,7 +76,7 @@ open class QCollectionTableCell< Row: QCollectionTableRow > : QBackgroundColorTa
         }
     }
 
-    open override class func height(row: Row, spec: IQContainerSpec) -> CGFloat {
+    open override class func height(row: RowType, spec: IQContainerSpec) -> CGFloat {
         switch row.sizeBehaviour {
         case .fixed(let size): return size
         case .dynamic: return UITableView.automaticDimension
@@ -97,7 +98,7 @@ open class QCollectionTableCell< Row: QCollectionTableRow > : QBackgroundColorTa
         ])
     }
     
-    open override func set(row: Row, spec: IQContainerSpec, animated: Bool) {
+    open override func set(row: RowType, spec: IQContainerSpec, animated: Bool) {
         super.set(row: row, spec: spec, animated: animated)
 
         self.collectionHeightConstraint = nil

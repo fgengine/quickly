@@ -16,7 +16,7 @@ open class QSeparatorTableRow : QBackgroundColorTableRow {
 
 }
 
-open class QSeparatorTableCell< Row: QSeparatorTableRow > : QBackgroundColorTableCell< Row > {
+open class QSeparatorTableCell< RowType: QSeparatorTableRow > : QBackgroundColorTableCell< RowType > {
 
     private var _separator: QView!
 
@@ -27,7 +27,7 @@ open class QSeparatorTableCell< Row: QSeparatorTableRow > : QBackgroundColorTabl
         didSet { self.contentView.addConstraints(self.selfConstraints) }
     }
 
-    open override class func height(row: Row, spec: IQContainerSpec) -> CGFloat {
+    open override class func height(row: RowType, spec: IQContainerSpec) -> CGFloat {
         return row.edgeInsets.top + (1 / UIScreen.main.scale) + row.edgeInsets.bottom
     }
 
@@ -39,7 +39,7 @@ open class QSeparatorTableCell< Row: QSeparatorTableRow > : QBackgroundColorTabl
         self.contentView.addSubview(self._separator)
     }
 
-    open override func set(row: Row, spec: IQContainerSpec, animated: Bool) {
+    open override func set(row: RowType, spec: IQContainerSpec, animated: Bool) {
         super.set(row: row, spec: spec, animated: animated)
         
         if self.currentEdgeInsets != row.edgeInsets {

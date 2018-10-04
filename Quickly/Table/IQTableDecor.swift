@@ -39,30 +39,30 @@ extension IQTableDecor where Self : UITableViewHeaderFooterView {
 
 public protocol IQTypedTableDecor : IQTableDecor {
 
-    associatedtype Data: IQTableData
+    associatedtype DataType: IQTableData
 
-    static func height(data: Data, spec: IQContainerSpec) -> CGFloat
+    static func height(data: DataType, spec: IQContainerSpec) -> CGFloat
 
-    func set(data: Data, spec: IQContainerSpec, animated: Bool)
+    func set(data: DataType, spec: IQContainerSpec, animated: Bool)
 
 }
 
 extension IQTypedTableDecor {
 
     public static func using(any: Any) -> Bool {
-        return any is Data
+        return any is DataType
     }
 
     public static func usingLevel(any: AnyClass) -> UInt? {
-        return inheritanceLevel(any, Data.self)
+        return inheritanceLevel(any, DataType.self)
     }
 
     public static func height(any: Any, spec: IQContainerSpec) -> CGFloat {
-        return self.height(data: any as! Data, spec: spec)
+        return self.height(data: any as! DataType, spec: spec)
     }
 
     public func set(any: Any, spec: IQContainerSpec, animated: Bool) {
-        self.set(data: any as! Data, spec: spec, animated: animated)
+        self.set(data: any as! DataType, spec: spec, animated: animated)
     }
 
 }

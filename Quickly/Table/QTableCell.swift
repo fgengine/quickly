@@ -2,16 +2,16 @@
 //  Quickly
 //
 
-open class QTableCell< Type: IQTableRow > : UITableViewCell, IQTypedTableCell {
+open class QTableCell< RowType: IQTableRow > : UITableViewCell, IQTypedTableCell {
 
     open weak var tableDelegate: IQTableCellDelegate?
-    open var row: Type?
+    open var row: RowType?
 
     open class func currentNibName() -> String {
         return String(describing: self.classForCoder())
     }
 
-    open class func height(row: Type, spec: IQContainerSpec) -> CGFloat {
+    open class func height(row: RowType, spec: IQContainerSpec) -> CGFloat {
         return UITableView.automaticDimension
     }
 
@@ -37,7 +37,7 @@ open class QTableCell< Type: IQTableRow > : UITableViewCell, IQTypedTableCell {
     open func configure() {
     }
 
-    open func set(row: Type, spec: IQContainerSpec, animated: Bool) {
+    open func set(row: RowType, spec: IQContainerSpec, animated: Bool) {
         self.row = row
         self.selectionStyle = row.selectionStyle
     }

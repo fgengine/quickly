@@ -14,9 +14,9 @@ open class QSpaceTableRow : QBackgroundColorTableRow {
 
 }
 
-open class QSpaceTableCell< Row: QSpaceTableRow >: QBackgroundColorTableCell< Row > {
+open class QSpaceTableCell< RowType: QSpaceTableRow >: QBackgroundColorTableCell< RowType > {
 
-    open override class func height(row: Row, spec: IQContainerSpec) -> CGFloat {
+    open override class func height(row: RowType, spec: IQContainerSpec) -> CGFloat {
         return row.size
     }
 

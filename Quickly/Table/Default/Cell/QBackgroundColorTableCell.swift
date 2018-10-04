@@ -7,17 +7,31 @@ open class QBackgroundColorTableRow : QTableRow {
     public var backgroundColor: UIColor?
     public var selectedBackgroundColor: UIColor?
 
-    public init(backgroundColor: UIColor? = nil, selectedBackgroundColor: UIColor? = nil) {
+    public init(
+        backgroundColor: UIColor? = nil,
+        selectedBackgroundColor: UIColor? = nil,
+        canSelect: Bool = true,
+        canEdit: Bool = false,
+        canMove: Bool = false,
+        selectionStyle: UITableViewCell.SelectionStyle = .default,
+        editingStyle: UITableViewCell.EditingStyle = .none
+    ) {
         self.backgroundColor = backgroundColor
         self.selectedBackgroundColor = selectedBackgroundColor
-        super.init()
+        super.init(
+            canSelect: canSelect,
+            canEdit: canEdit,
+            canMove: canMove,
+            selectionStyle: selectionStyle,
+            editingStyle: editingStyle
+        )
     }
 
 }
 
-open class QBackgroundColorTableCell< Row: QBackgroundColorTableRow >: QTableCell< Row > {
+open class QBackgroundColorTableCell< RowType: QBackgroundColorTableRow > : QTableCell< RowType > {
 
-    open override func set(row: Row, spec: IQContainerSpec, animated: Bool) {
+    open override func set(row: RowType, spec: IQContainerSpec, animated: Bool) {
         super.set(row: row, spec: spec, animated: animated)
 
         self._applyContentBackgroundColor(selected: self.isSelected, highlighted: self.isHighlighted)

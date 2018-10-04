@@ -40,32 +40,32 @@ extension IQTableCell where Self : UITableViewCell {
 
 public protocol IQTypedTableCell : IQTableCell {
 
-    associatedtype Row: IQTableRow
+    associatedtype RowType: IQTableRow
 
-    var row: Row? { get }
+    var row: RowType? { get }
 
-    static func height(row: Row, spec: IQContainerSpec) -> CGFloat
+    static func height(row: RowType, spec: IQContainerSpec) -> CGFloat
 
-    func set(row: Row, spec: IQContainerSpec, animated: Bool)
+    func set(row: RowType, spec: IQContainerSpec, animated: Bool)
 
 }
 
 extension IQTypedTableCell {
 
     public static func using(any: Any) -> Bool {
-        return any is Row
+        return any is RowType
     }
 
     public static func usingLevel(any: AnyClass) -> UInt? {
-        return inheritanceLevel(any, Row.self)
+        return inheritanceLevel(any, RowType.self)
     }
 
     public static func height(any: Any, spec: IQContainerSpec) -> CGFloat {
-        return self.height(row: any as! Row, spec: spec)
+        return self.height(row: any as! RowType, spec: spec)
     }
 
     public func set(any: Any, spec: IQContainerSpec, animated: Bool) {
-        self.set(row: any as! Row, spec: spec, animated: animated)
+        self.set(row: any as! RowType, spec: spec, animated: animated)
     }
 
 }

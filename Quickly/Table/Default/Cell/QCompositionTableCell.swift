@@ -17,11 +17,24 @@ open class QCompositionTableRow< Composable: IQComposable > : QBackgroundColorTa
         composable: Composable,
         sizeBehaviour: QCompositionTableRowSizeBehaviour = .dynamic,
         backgroundColor: UIColor? = nil,
-        selectedBackgroundColor: UIColor? = nil
+        selectedBackgroundColor: UIColor? = nil,
+        canSelect: Bool = true,
+        canEdit: Bool = false,
+        canMove: Bool = false,
+        selectionStyle: UITableViewCell.SelectionStyle = .default,
+        editingStyle: UITableViewCell.EditingStyle = .none
     ) {
         self.composable = composable
         self.sizeBehaviour = sizeBehaviour
-        super.init(backgroundColor: backgroundColor, selectedBackgroundColor: selectedBackgroundColor)
+        super.init(
+            backgroundColor: backgroundColor,
+            selectedBackgroundColor: selectedBackgroundColor,
+            canSelect: canSelect,
+            canEdit: canEdit,
+            canMove: canMove,
+            selectionStyle: selectionStyle,
+            editingStyle: editingStyle
+        )
     }
 
 }
@@ -30,7 +43,7 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
 
     public private(set) var composition: Composition!
 
-    open override class func height(row: Row, spec: IQContainerSpec) -> CGFloat {
+    open override class func height(row: RowType, spec: IQContainerSpec) -> CGFloat {
         switch row.sizeBehaviour {
         case .dynamic:
             return Composition.height(composable: row.composable, spec: spec)
@@ -52,7 +65,7 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
         super.prepareForReuse()
     }
     
-    open override func set(row: Row, spec: IQContainerSpec, animated: Bool) {
+    open override func set(row: RowType, spec: IQContainerSpec, animated: Bool) {
         super.set(row: row, spec: spec, animated: animated)
         self.composition.prepare(composable: row.composable, spec: spec, animated: animated)
     }

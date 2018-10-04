@@ -98,7 +98,7 @@ extension IQStackViewController {
 
 public protocol IQStackContentViewController : IQContentViewController {
 
-    var stackPageViewController: IQStackViewController? { get }
+    var stackViewController: IQStackViewController? { get }
 
     var stackbar: QStackbar? { get }
     var stackbarHeight: CGFloat { get }
@@ -117,55 +117,55 @@ public protocol IQStackContentViewController : IQContentViewController {
 
 extension IQStackContentViewController {
 
-    public var stackPageViewController: IQStackViewController? {
+    public var stackViewController: IQStackViewController? {
         get { return self.parentOf() }
     }
     public var stackbar: QStackbar? {
-        get { return self.stackPageViewController?.stackbar }
+        get { return self.stackViewController?.stackbar }
     }
     public var stackbarHeight: CGFloat {
         get {
-            guard let vc = self.stackPageViewController else { return 0 }
+            guard let vc = self.stackViewController else { return 0 }
             return vc.stackbarHeight
         }
     }
     public var stackbarHidden: Bool {
         get {
-            guard let vc = self.stackPageViewController else { return false }
+            guard let vc = self.stackViewController else { return false }
             return vc.stackbarHidden
         }
     }
     public var stackPresentAnimation: IQStackViewControllerPresentAnimation? {
-        set(value) { self.stackPageViewController?.stackPresentAnimation = value }
-        get { return self.stackPageViewController?.stackPresentAnimation }
+        set(value) { self.stackViewController?.stackPresentAnimation = value }
+        get { return self.stackViewController?.stackPresentAnimation }
     }
 
     public var stackDismissAnimation: IQStackViewControllerDismissAnimation? {
-        set(value) { self.stackPageViewController?.stackDismissAnimation = value }
-        get { return self.stackPageViewController?.stackDismissAnimation }
+        set(value) { self.stackViewController?.stackDismissAnimation = value }
+        get { return self.stackViewController?.stackDismissAnimation }
     }
     public var stackInteractiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation? {
-        set(value) { self.stackPageViewController?.stackInteractiveDismissAnimation = value }
-        get { return self.stackPageViewController?.stackInteractiveDismissAnimation }
+        set(value) { self.stackViewController?.stackInteractiveDismissAnimation = value }
+        get { return self.stackViewController?.stackInteractiveDismissAnimation }
     }
 
     public func setStackbar(_ stackbar: QStackbar?, animated: Bool) {
-        guard let vc = self.stackPageViewController else { return }
+        guard let vc = self.stackViewController else { return }
         vc.setStackbar(stackbar, animated: animated)
     }
 
     public func setStackbarHeight(_ height: CGFloat, animated: Bool) {
-        guard let vc = self.stackPageViewController else { return }
+        guard let vc = self.stackViewController else { return }
         vc.setStackbarHeight(height, animated: animated)
     }
 
     public func setStackbarHidden(_ hidden: Bool, animated: Bool) {
-        guard let vc = self.stackPageViewController else { return }
+        guard let vc = self.stackViewController else { return }
         vc.setStackbarHidden(hidden, animated: animated)
     }
 
     public func dismissStack(animated: Bool, completion: (() -> Swift.Void)?) {
-        guard let vc = self.stackPageViewController else { return }
+        guard let vc = self.stackViewController else { return }
         vc.dismissStack(animated: animated, completion: completion)
     }
 
