@@ -5,10 +5,15 @@
 open class QPageViewController : QViewController, IQPageViewController {
     
     open private(set) var pageContentViewController: IQPageContentViewController
-    open var pageItem: QPagebarItem?
+    open var pageItem: QPagebarItem? {
+        set(value) { self.setPageItem(value) }
+        get { return self._pageItem }
+    }
     open var pageForwardAnimation: IQPageViewControllerAnimation?
     open var pageBackwardAnimation: IQPageViewControllerAnimation?
     open var pageInteractiveAnimation: IQPageViewControllerInteractiveAnimation?
+    
+    private var _pageItem: QPagebarItem?
 
     public init(_ contentViewController: IQPageContentViewController) {
         self.pageContentViewController = contentViewController
@@ -16,7 +21,7 @@ open class QPageViewController : QViewController, IQPageViewController {
     }
 
     public init(_ pagebarItem: QPagebarItem?, _ contentViewController: IQPageContentViewController) {
-        self.pageItem = pagebarItem
+        self._pageItem = pagebarItem
         self.pageContentViewController = contentViewController
         super.init()
     }
@@ -96,10 +101,12 @@ open class QPageViewController : QViewController, IQPageViewController {
         self.pageContentViewController.didTransition(size: size)
     }
 
-    open func setPageItem(_ item: QPagebarItem?, animated: Bool) {
-        self.pageItem = item
-        if let vc = self.pageContainerViewController {
-            vc.updatePageItem(self, animated: animated)
+    open func setPageItem(_ item: QPagebarItem?, animated: Bool = false) {
+        if self._pageItem !== item {
+            self._pageItem = item
+            if let vc = self.pageContainerViewController {
+                vc.updatePageItem(self, animated: animated)
+            }
         }
     }
 

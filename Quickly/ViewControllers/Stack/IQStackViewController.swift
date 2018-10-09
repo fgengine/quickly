@@ -65,9 +65,9 @@ public protocol IQStackContainerViewController : IQViewController {
 public protocol IQStackViewController : IQContentOwnerViewController {
 
     var stackContainerViewController: IQStackContainerViewController? { get }
-    var stackbar: QStackbar? { get }
-    var stackbarHeight: CGFloat { get }
-    var stackbarHidden: Bool { get }
+    var stackbar: QStackbar? { set get }
+    var stackbarHeight: CGFloat { set get }
+    var stackbarHidden: Bool { set get }
     var stackContentViewController: IQStackContentViewController { get }
 
     var stackPresentAnimation: IQStackViewControllerPresentAnimation? { set get }
@@ -100,9 +100,9 @@ public protocol IQStackContentViewController : IQContentViewController {
 
     var stackViewController: IQStackViewController? { get }
 
-    var stackbar: QStackbar? { get }
-    var stackbarHeight: CGFloat { get }
-    var stackbarHidden: Bool { get }
+    var stackbar: QStackbar? { set get }
+    var stackbarHeight: CGFloat { set get }
+    var stackbarHidden: Bool { set get }
     var stackPresentAnimation: IQStackViewControllerPresentAnimation? { set get }
     var stackDismissAnimation: IQStackViewControllerDismissAnimation? { set get }
     var stackInteractiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation? { set get }
@@ -121,19 +121,16 @@ extension IQStackContentViewController {
         get { return self.parentOf() }
     }
     public var stackbar: QStackbar? {
+        set(value) { self.stackViewController?.stackbar = value }
         get { return self.stackViewController?.stackbar }
     }
     public var stackbarHeight: CGFloat {
-        get {
-            guard let vc = self.stackViewController else { return 0 }
-            return vc.stackbarHeight
-        }
+        set(value) { self.stackViewController?.stackbarHeight = value }
+        get { return self.stackViewController?.stackbarHeight ?? 0 }
     }
     public var stackbarHidden: Bool {
-        get {
-            guard let vc = self.stackViewController else { return false }
-            return vc.stackbarHidden
-        }
+        set(value) { self.stackViewController?.stackbarHidden = value }
+        get { return self.stackViewController?.stackbarHidden ?? false }
     }
     public var stackPresentAnimation: IQStackViewControllerPresentAnimation? {
         set(value) { self.stackViewController?.stackPresentAnimation = value }
