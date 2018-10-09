@@ -9,7 +9,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
     public typealias Cell = IQTableController.Cell
 
     public weak var tableView: TableView? {
-        didSet { self.configure() }
+        didSet { if self.tableView != nil { self.configure() } }
     }
     public var rowHeight: CGFloat {
         didSet { if let tableView = self.tableView { tableView.rowHeight = self.rowHeight } }

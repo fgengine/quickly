@@ -9,9 +9,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
     public typealias Cell = IQCollectionController.Cell
 
     public weak var collectionView: CollectionView? = nil {
-        didSet {
-            self.configure()
-        }
+        didSet { if self.collectionView != nil { self.configure() } }
     }
     public var sections: [IQCollectionSection] = [] {
         willSet { self.unbindSections() }
