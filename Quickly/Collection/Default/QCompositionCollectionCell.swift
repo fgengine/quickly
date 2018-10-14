@@ -9,12 +9,18 @@ open class QCompositionCollectionItem< Composable: IQComposable > : QBackgroundC
     public init(
         composable: Composable,
         backgroundColor: UIColor? = nil,
-        selectedBackgroundColor: UIColor? = nil
+        selectedBackgroundColor: UIColor? = nil,
+        canSelect: Bool = true,
+        canDeselect: Bool = true,
+        canMove: Bool = false
     ) {
         self.composable = composable
         super.init(
             backgroundColor: backgroundColor,
-            selectedBackgroundColor: selectedBackgroundColor
+            selectedBackgroundColor: selectedBackgroundColor,
+            canSelect: canSelect,
+            canDeselect: canDeselect,
+            canMove: canMove
         )
     }
 

@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDelegate, UIScrollViewDelegate, IQStackContentViewController, IQPageContentViewController {
+open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDelegate, UIScrollViewDelegate, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController {
     
     #if DEBUG
     open override var logging: Bool {

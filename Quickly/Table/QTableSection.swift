@@ -77,6 +77,12 @@ open class QTableSection : IQTableSection {
         self.index = nil
         self.controller = nil
     }
+    
+    public func setRows(_ rows: [IQTableRow]) {
+        self.unbindRows()
+        self.rows = rows
+        self.bindRows()
+    }
 
     public func insertRow(_ rows: [IQTableRow], index: Int, with animation: UITableView.RowAnimation? = nil) {
         self.rows.insert(contentsOf: rows, at: index)

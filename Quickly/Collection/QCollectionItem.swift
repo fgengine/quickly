@@ -4,13 +4,20 @@
 
 open class QCollectionItem : IQCollectionItem {
 
-    public weak var section: IQCollectionSection? = nil
-    public var indexPath: IndexPath? = nil
+    public weak var section: IQCollectionSection?
+    public var indexPath: IndexPath?
     public var canSelect: Bool = true
     public var canDeselect: Bool = true
     public var canMove: Bool = false
 
-    public init() {
+    public init(
+        canSelect: Bool = true,
+        canDeselect: Bool = true,
+        canMove: Bool = false
+    ) {
+        self.canSelect = canSelect
+        self.canDeselect = canDeselect
+        self.canSelect = canSelect
     }
 
     public func bind(_ section: IQCollectionSection, _ indexPath: IndexPath) {

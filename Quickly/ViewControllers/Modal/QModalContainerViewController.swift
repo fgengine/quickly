@@ -166,6 +166,7 @@ open class QModalContainerViewController : QViewController, IQModalContainerView
             }
         } else {
             self.viewControllers.append(viewController)
+            self._addChildViewController(viewController)
             completion?()
         }
     }
@@ -181,6 +182,7 @@ open class QModalContainerViewController : QViewController, IQModalContainerView
     private func _present(_ viewController: IQModalViewController, animated: Bool, completion: (() -> Void)?) {
         if self.viewControllers.contains(where: { return $0 === viewController }) == false {
             self.viewControllers.append(viewController)
+            self._addChildViewController(viewController)
         }
         self.isAnimating = true
         self._appearViewController(viewController)
@@ -242,6 +244,7 @@ open class QModalContainerViewController : QViewController, IQModalContainerView
         dismissAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
             if let strong = self {
                 strong._disappearViewController(currentViewController)
+                strong._removeChildViewController(currentViewController)
                 strong.isAnimating = false
                 strong._processDeferred()
             }
@@ -259,16 +262,22 @@ open class QModalContainerViewController : QViewController, IQModalContainerView
             }
         }
     }
+    
+    private func _addChildViewController(_ viewController: IQModalViewController) {
+        viewController.parent = self
+    }
+    
+    private func _removeChildViewController(_ viewController: IQModalViewController) {
+        viewController.parent = nil
+    }
 
     private func _appearViewController(_ viewController: IQModalViewController) {
-        viewController.parent = self
         viewController.view.frame = self.view.bounds
         self.view.addSubview(viewController.view)
     }
 
     private func _disappearViewController(_ viewController: IQModalViewController) {
         viewController.view.removeFromSuperview()
-        viewController.parent = nil
     }
 
     private func _preparePresentAnimation(_ viewController: IQModalViewController) -> IQModalViewControllerFixedAnimation {

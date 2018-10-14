@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QCollectionViewController : QViewController, IQStackContentViewController, IQPageContentViewController, IQCollectionControllerObserver {
+open class QCollectionViewController : QViewController, IQCollectionControllerObserver, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController {
 
     #if DEBUG
     open override var logging: Bool {
@@ -11,9 +11,9 @@ open class QCollectionViewController : QViewController, IQStackContentViewContro
     #endif
     public var contentOffset: CGPoint {
         get {
-            guard self.isLoaded == true else { return CGPoint.zero }
-            let contentOffset = self.collectionView.contentOffset
-            let contentInset = self.collectionView.contentInset
+            guard let collectionView = self.collectionView else { return CGPoint.zero }
+            let contentOffset = collectionView.contentOffset
+            let contentInset = collectionView.contentInset
             return CGPoint(
                 x: contentInset.left + contentOffset.x,
                 y: contentInset.top + contentOffset.y
@@ -22,21 +22,24 @@ open class QCollectionViewController : QViewController, IQStackContentViewContro
     }
     public var contentSize: CGSize {
         get {
-            guard self.isLoaded == true else { return CGSize.zero }
-            return self.collectionView.contentSize
+            guard let collectionView = self.collectionView else { return CGSize.zero }
+            return collectionView.contentSize
         }
     }
     public var collectionController: IQCollectionController? {
-        set(value) {
-            if let controller = self.collectionView.collectionController {
-                controller.removeObserver(self)
-            }
-            self.collectionView.collectionController = value
-            if let controller = self.collectionView.collectionController {
-                controller.addObserver(self, priority: 0)
+        willSet {
+            if let collectionController = self.collectionController {
+                collectionController.removeObserver(self)
             }
         }
-        get {return self.collectionView.collectionController }
+        didSet {
+            if let collectionView = self.collectionView {
+                collectionView.collectionController = self.collectionController
+            }
+            if let collectionController = self.collectionController {
+                collectionController.addObserver(self, priority: 0)
+            }
+        }
     }
     public var refreshControlHidden: Bool = false {
         didSet { self._updateRefreshControlState() }
@@ -97,6 +100,7 @@ open class QCollectionViewController : QViewController, IQStackContentViewContro
 
     open override func didLoad() {
         self.collectionView = QCollectionView(frame: self.view.bounds, layout: QCollectionFlowLayout())
+        self.collectionView.collectionController = self.collectionController
         self.keyboard.addObserver(self, priority: 0)
     }
 

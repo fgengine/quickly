@@ -13,7 +13,7 @@ class QuicklyApiTests : XCTestCase {
         let provider = QApiProvider(baseUrl: URL(string: "https://habrahabr.ru")!)
 
         let request = QApiRequest(method: "GET")
-        request.isLogging = true
+        request.logging = .always
 
         let response = QApiResponse()
 

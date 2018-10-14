@@ -4,10 +4,10 @@
 
 import Quickly
 
-class AppWireframe: QAppWireframe< AppRouteContext > {
+class AppWireframe: QAppWireframe< AppContext > {
 
-    override init(_ routeContext: AppRouteContext) {
-        super.init(routeContext)
+    override init(context: AppContext) {
+        super.init(context: context)
 
         self.modalContainerViewController = QModalContainerViewController()
 
@@ -17,12 +17,13 @@ class AppWireframe: QAppWireframe< AppRouteContext > {
         self.pushContainerViewController = QPushContainerViewController()
     }
 
-    override func launch(_ options: [UIApplicationLaunchOptionsKey : Any]?) {
+    override func launch(_ options: [UIApplication.LaunchOptionsKey : Any]?) {
         self.presentChoise()
+        super.launch(options)
     }
 
     func presentChoise() {
-        self.currentWireframe = ChoiseWireframe(self.routeContext, self)
+        self.current = ChoiseWireframe(context: self.context, parent: self)
     }
 
 }

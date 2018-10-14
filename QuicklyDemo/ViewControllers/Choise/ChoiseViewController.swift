@@ -4,7 +4,7 @@
 
 import Quickly
 
-protocol IChoiseViewControllerRoutePath : IQRoutePath {
+protocol IChoiseViewControllerRouter : IQRouter {
 
     func presentLabelViewController()
     func presentButtonViewController()
@@ -20,17 +20,17 @@ protocol IChoiseViewControllerRoutePath : IQRoutePath {
 
 }
 
-class ChoiseViewController : QTableViewController, IQRoutable {
+class ChoiseViewController : QTableViewController, IQRouterable, IQContextable {
 
-    weak var routePath: IChoiseViewControllerRoutePath!
-    weak var routeContext: AppRouteContext!
+    weak var router: IChoiseViewControllerRouter!
+    weak var context: AppContext!
     var choiseTableController: ChoiseTableController! {
-        get { return self.tableController as! ChoiseTableController }
+        didSet { self.tableController = self.choiseTableController }
     }
 
-    init(_ routePath: IChoiseViewControllerRoutePath, _ routeContext: AppRouteContext) {
-        self.routePath = routePath
-        self.routeContext = routeContext
+    init(router: RouterType, context: ContextType) {
+        self.router = router
+        self.context = context
         super.init()
     }
 
@@ -41,7 +41,7 @@ class ChoiseViewController : QTableViewController, IQRoutable {
     override func didLoad() {
         super.didLoad()
 
-        self.tableController = ChoiseTableController(self)
+        self.choiseTableController = ChoiseTableController(self)
         self.refreshControl = UIRefreshControl()
     }
     
@@ -51,17 +51,17 @@ extension ChoiseViewController : ChoiseTableControllerDelegate {
 
     func pressedChoiseSectionRow(_ row: ChoiseSectionTableRow) {
         switch row.mode {
-        case .label: self.routePath.presentLabelViewController()
-        case .button: self.routePath.presentButtonViewController()
-        case .textField: self.routePath.presentTextFieldViewController()
-        case .listField: self.routePath.presentListFieldViewController()
-        case .dateField: self.routePath.presentDateFieldViewController()
-        case .image: self.routePath.presentImageViewController()
-        case .table: self.routePath.presentTableViewController()
-        case .page: self.routePath.presentPageViewController()
-        case .modal: self.routePath.presentModalViewController()
-        case .dialog: self.routePath.presentDialogViewController()
-        case .push: self.routePath.presentPushViewController()
+        case .label: self.router.presentLabelViewController()
+        case .button: self.router.presentButtonViewController()
+        case .textField: self.router.presentTextFieldViewController()
+        case .listField: self.router.presentListFieldViewController()
+        case .dateField: self.router.presentDateFieldViewController()
+        case .image: self.router.presentImageViewController()
+        case .table: self.router.presentTableViewController()
+        case .page: self.router.presentPageViewController()
+        case .modal: self.router.presentModalViewController()
+        case .dialog: self.router.presentDialogViewController()
+        case .push: self.router.presentPushViewController()
         }
     }
     

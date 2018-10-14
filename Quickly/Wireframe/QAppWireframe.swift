@@ -2,64 +2,62 @@
 //  Quickly
 //
 
-open class QAppWireframe< RouteContextType: IQRouteContext > : IQRootWireframe {
-
-    open private(set) var routeContext: RouteContextType
-    open var viewController: IQViewController {
-        get { return self.mainViewController }
+open class QAppWireframe< ContextType: IQContext > : IQRootWireframe {
+    
+    open var baseViewController: IQViewController {
+        get { return self.viewController }
     }
+    open private(set) var viewController: QMainViewController = QMainViewController()
+    open private(set) var context: ContextType
     open var backgroundViewController: IQViewController? {
-        set(value) { self.mainViewController.backgroundViewController = value }
-        get { return self.mainViewController.backgroundViewController }
+        set(value) { self.viewController.backgroundViewController = value }
+        get { return self.viewController.backgroundViewController }
     }
     open var contentViewController: IQViewController? {
-        set(value) { self.mainViewController.contentViewController = value }
-        get { return self.mainViewController.contentViewController }
+        set(value) { self.viewController.contentViewController = value }
+        get { return self.viewController.contentViewController }
     }
     open var modalContainerViewController: IQModalContainerViewController? {
-        set(value) { self.mainViewController.modalContainerViewController = value }
-        get { return self.mainViewController.modalContainerViewController }
+        set(value) { self.viewController.modalContainerViewController = value }
+        get { return self.viewController.modalContainerViewController }
     }
     open var dialogContainerViewController: IQDialogContainerViewController? {
-        set(value) { self.mainViewController.dialogContainerViewController = value }
-        get { return self.mainViewController.dialogContainerViewController }
+        set(value) { self.viewController.dialogContainerViewController = value }
+        get { return self.viewController.dialogContainerViewController }
     }
     open var pushContainerViewController: IQPushContainerViewController? {
-        set(value) { self.mainViewController.pushContainerViewController = value }
-        get { return self.mainViewController.pushContainerViewController }
+        set(value) { self.viewController.pushContainerViewController = value }
+        get { return self.viewController.pushContainerViewController }
     }
 
-    open private(set) lazy var window: QWindow? = self.prepareWindow()
-    open private(set) lazy var mainViewController: QMainViewController = self.prepareMainViewController()
-    open var currentWireframe: IQWireframe? {
+    open private(set) var window: QWindow
+    
+    open var current: IQBaseWireframe? {
         didSet {
-            if let currentWireframe = self.currentWireframe {
-                self.mainViewController.contentViewController = currentWireframe.viewController
+            if let current = self.current {
+                self.viewController.contentViewController = current.baseViewController
             } else {
-                self.mainViewController.contentViewController = nil
-            }
-            if let window = self.window {
-                if window.isKeyWindow == false {
-                    window.makeKeyAndVisible()
-                }
+                self.viewController.contentViewController = nil
             }
         }
     }
 
-    public init(_ routeContext: RouteContextType) {
-        self.routeContext = routeContext
+    public init(
+        context: ContextType
+    ) {
+        self.viewController = QMainViewController()
+        self.context = context
+        self.window = QWindow(self.viewController)
+        self.setup()
+    }
+    
+    open func setup() {
     }
 
     open func launch(_ options: [UIApplication.LaunchOptionsKey : Any]?) {
-        fatalError("Required override function '\(#function)'")
-    }
-
-    private func prepareWindow() -> QWindow? {
-        return QWindow(self.mainViewController)
-    }
-
-    private func prepareMainViewController() -> QMainViewController {
-        return QMainViewController()
+        if self.window.isKeyWindow == false {
+            self.window.makeKeyAndVisible()
+        }
     }
 
 }

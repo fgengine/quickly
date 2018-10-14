@@ -2,19 +2,28 @@
 //  Quickly
 //
 
-open class QStackContainerViewController : QViewController, IQStackContainerViewController {
+open class QStackContainerViewController : QViewController, IQStackContainerViewController, IQGroupContentViewController {
 
-    open private(set) var viewControllers: [IQStackViewController]
+    public var contentOffset: CGPoint {
+        get { return CGPoint.zero }
+    }
+    public var contentSize: CGSize {
+        get { return CGSize.zero }
+    }
+    open var viewControllers: [IQStackViewController] {
+        set(value) { self.setViewControllers(value, animated: false, completion: nil) }
+        get { return self._viewControllers }
+    }
     open var rootViewController: IQStackViewController? {
-        get { return self.viewControllers.first }
+        get { return self._viewControllers.first }
     }
     open var currentViewController: IQStackViewController? {
-        get { return self.viewControllers.last }
+        get { return self._viewControllers.last }
     }
     open var previousViewController: IQStackViewController? {
         get {
-            guard self.viewControllers.count > 1 else { return nil }
-            return self.viewControllers[self.viewControllers.endIndex - 2]
+            guard self._viewControllers.count > 1 else { return nil }
+            return self._viewControllers[self._viewControllers.endIndex - 2]
         }
     }
     open var presentAnimation: IQStackViewControllerPresentAnimation
@@ -22,16 +31,23 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     open var interactiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation?
     open private(set) var isAnimating: Bool
     public private(set) lazy var interactiveDismissGesture: UIScreenEdgePanGestureRecognizer = self._prepareInteractiveDismissGesture()
+    
+    private var _viewControllers: [IQStackViewController]
     private var activeInteractiveCurrentViewController: IQStackViewController?
     private var activeInteractivePreviousViewController: IQStackViewController?
     private var activeInteractiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation?
 
-    public init(_ rootViewController: IQStackViewController) {
-        self.viewControllers = [ rootViewController ]
-        self.presentAnimation = QStackViewControllerPresentAnimation()
-        self.dismissAnimation = QStackViewControllerDismissAnimation()
+    public init(
+        _viewControllers: [IQStackViewController] = [],
+        presentAnimation: IQStackViewControllerPresentAnimation = QStackViewControllerPresentAnimation(),
+        dismissAnimation: IQStackViewControllerDismissAnimation = QStackViewControllerDismissAnimation(),
+        interactiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation? = QStackViewControllerinteractiveDismissAnimation()
+    ) {
+        self._viewControllers = _viewControllers
+        self.presentAnimation = presentAnimation
+        self.dismissAnimation = dismissAnimation
+        self.interactiveDismissAnimation = interactiveDismissAnimation
         self.isAnimating = false
-        self.interactiveDismissAnimation = QStackViewControllerinteractiveDismissAnimation()
         super.init()
     }
 
@@ -155,35 +171,79 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
         guard let vc = self.currentViewController else { return super.preferedStatusBarAnimation() }
         return vc.preferedStatusBarAnimation()
     }
+    
+    open func setViewControllers(_ viewControllers: [IQStackViewController], animated: Bool, completion: (() -> Swift.Void)?) {
+        if self.isLoaded == true {
+            self._viewControllers.forEach({
+                self._disappearViewController($0)
+                self._removeChildViewController($0)
+            })
+            self._viewControllers = viewControllers
+            self._viewControllers.forEach({
+                self._addChildViewController($0)
+            })
+            if let vc = self.currentViewController {
+                self._present(vc, animated: false, completion: completion)
+            } else {
+                completion?()
+            }
+        } else {
+            self._viewControllers.forEach({
+                self._removeChildViewController($0)
+            })
+            self._viewControllers = viewControllers
+            self._viewControllers.forEach({
+                self._addChildViewController($0)
+            })
+            completion?()
+        }
+    }
 
-    open func presentStack(_ viewController: IQStackViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
-        self.viewControllers.append(viewController)
+    open func presentStack(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        self._viewControllers.append(viewController)
+        self._addChildViewController(viewController)
         self._present(viewController, animated: animated, completion: completion)
     }
 
-    open func presentStack(_ viewController: IQStackContentViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
-        let stackPageViewController = QStackViewController(viewController)
-        self.presentStack(stackPageViewController, animated: animated, completion: completion)
+    open func presentStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        let stackViewController = QStackViewController(viewController)
+        self.presentStack(stackViewController, animated: animated, completion: completion)
+    }
+    
+    open func replaceStack(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        let currentViewController = self.currentViewController
+        self.presentStack(viewController, animated: animated, completion: { [weak self] in
+            guard let strong = self else { return }
+            if let currentViewController = currentViewController {
+                strong.dismissStack(currentViewController, animated: false)
+            }
+        })
+    }
+    
+    open func replaceStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        guard let stackViewController = viewController.stackViewController else { return }
+        self.replaceStack(stackViewController, animated: animated, completion: completion)
     }
 
-    open func dismissStack(_ viewController: IQStackViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
+    open func dismissStack(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         self._dismiss(viewController, animated: animated, completion: completion)
     }
 
-    open func dismissStack(_ viewController: IQStackContentViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
-        guard let stackPageViewController = viewController.stackViewController else { return }
-        self.dismissStack(stackPageViewController, animated: animated, completion: completion)
+    open func dismissStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        guard let stackViewController = viewController.stackViewController else { return }
+        self.dismissStack(stackViewController, animated: animated, completion: completion)
     }
 
-    open func dismissStack(to viewController: IQStackViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
-        if self.previousViewController === viewController {
+    open func dismissStack(to viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        if self.currentViewController === viewController {
+        } else if self.previousViewController === viewController {
             self._dismiss(self.currentViewController!, animated: animated, completion: completion)
-        } else if self.viewControllers.count > 3 {
-            if let index = self.viewControllers.index(where: { return $0 === viewController }) {
-                let startIndex = self.viewControllers.index(index, offsetBy: 2)
-                let endIndex = self.viewControllers.index(self.viewControllers.endIndex, offsetBy: -1)
+        } else if self._viewControllers.count > 2 {
+            if let index = self._viewControllers.index(where: { return $0 === viewController }) {
+                let startIndex = self._viewControllers.index(index, offsetBy: 2)
+                let endIndex = self._viewControllers.index(self._viewControllers.endIndex, offsetBy: -1)
                 if endIndex - startIndex > 2 {
-                    let hiddenViewControllers = self.viewControllers[startIndex..<endIndex]
+                    let hiddenViewControllers = self._viewControllers[startIndex..<endIndex]
                     hiddenViewControllers.forEach({ (hiddenViewController) in
                         self._dismiss(hiddenViewController, animated: false, completion: nil)
                     })
@@ -194,7 +254,7 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
         }
     }
 
-    open func dismissStack(to viewController: IQStackContentViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
+    open func dismissStack(to viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         guard let stackPageViewController = viewController.stackViewController else { return }
         self.dismissStack(to: stackPageViewController, animated: animated, completion: completion)
     }
@@ -229,10 +289,10 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     }
 
     private func _dismiss(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Void)?) {
-        if let index = self.viewControllers.index(where: { return $0 === viewController }) {
+        if let index = self._viewControllers.index(where: { return $0 === viewController }) {
             let currentViewController = self.currentViewController
             let previousViewController = self.previousViewController
-            self.viewControllers.remove(at: index)
+            self._viewControllers.remove(at: index)
             if self.isLoaded == true {
                 self.setNeedUpdateStatusBar()
                 if currentViewController === viewController, let previousViewController = previousViewController {
@@ -252,12 +312,14 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
                     dismissAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
                         if let strong = self {
                             strong._disappearViewController(viewController)
+                            strong._removeChildViewController(viewController)
                             strong.isAnimating = false
                         }
                         completion?()
                     })
                 } else {
                     self._disappearViewController(viewController)
+                    self._removeChildViewController(viewController)
                     completion?()
                 }
             } else {
@@ -267,20 +329,22 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
             completion?()
         }
     }
+    
+    private func _addChildViewController(_ viewController: IQStackViewController) {
+        viewController.parent = self
+    }
+    
+    private func _removeChildViewController(_ viewController: IQStackViewController) {
+        viewController.parent = nil
+    }
 
     private func _appearViewController(_ viewController: IQStackViewController) {
-        if viewController.parent !== self {
-            viewController.parent = self
-            viewController.view.bounds = self.view.bounds
-            self.view.addSubview(viewController.view)
-        }
+        viewController.view.bounds = self.view.bounds
+        self.view.addSubview(viewController.view)
     }
 
     private func _disappearViewController(_ viewController: IQStackViewController) {
-        if viewController.parent === self {
-            viewController.view.removeFromSuperview()
-            viewController.parent = nil
-        }
+        viewController.view.removeFromSuperview()
     }
 
     private func _preparePresentAnimation(_ viewController: IQStackViewController) -> IQStackViewControllerPresentAnimation {
@@ -355,8 +419,8 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
 
     private func _finishInteractiveDismiss() {
         if let vc = self.activeInteractiveCurrentViewController {
-            if let index = self.viewControllers.index(where: { return $0 === vc }) {
-                self.viewControllers.remove(at: index)
+            if let index = self._viewControllers.index(where: { return $0 === vc }) {
+                self._viewControllers.remove(at: index)
             }
             self._disappearViewController(vc)
         }
@@ -384,7 +448,7 @@ extension QStackContainerViewController : UIGestureRecognizerDelegate {
 
     open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard gestureRecognizer == self.interactiveDismissGesture else { return false }
-        guard self.viewControllers.count > 1 else { return false }
+        guard self._viewControllers.count > 1 else { return false }
         return true
     }
 

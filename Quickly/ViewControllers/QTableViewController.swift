@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QTableViewController : QViewController, IQStackContentViewController, IQPageContentViewController, IQTableControllerObserver {
+open class QTableViewController : QViewController, IQTableControllerObserver, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController {
 
     #if DEBUG
     open override var logging: Bool {
@@ -11,9 +11,9 @@ open class QTableViewController : QViewController, IQStackContentViewController,
     #endif
     public var contentOffset: CGPoint {
         get {
-            guard self.isLoaded == true else { return CGPoint.zero }
-            let contentOffset = self.tableView.contentOffset
-            let contentInset = self.tableView.contentInset
+            guard let tableView = self.tableView else { return CGPoint.zero }
+            let contentOffset = tableView.contentOffset
+            let contentInset = tableView.contentInset
             return CGPoint(
                 x: contentInset.left + contentOffset.x,
                 y: contentInset.top + contentOffset.y
@@ -22,34 +22,37 @@ open class QTableViewController : QViewController, IQStackContentViewController,
     }
     public var contentSize: CGSize {
         get {
-            guard self.isLoaded == true else { return CGSize.zero }
-            return self.tableView.contentSize
+            guard let tableView = self.tableView else { return CGSize.zero }
+            return tableView.contentSize
         }
     }
     public private(set) var tableView: QTableView! {
         willSet {
-            guard let view = self.tableView else { return }
-            view.removeFromSuperview()
+            guard let tableView = self.tableView else { return }
+            tableView.removeFromSuperview()
         }
         didSet {
-            guard let view = self.tableView else { return }
+            guard let tableView = self.tableView else { return }
             let edgeInsets = self.inheritedEdgeInsets
-            view.contentInset = edgeInsets
-            view.scrollIndicatorInsets = edgeInsets
-            self.view.addSubview(view)
+            tableView.contentInset = edgeInsets
+            tableView.scrollIndicatorInsets = edgeInsets
+            self.view.addSubview(tableView)
         }
     }
     public var tableController: IQTableController? {
-        set(value) {
-            if let controller = self.tableView.tableController {
-                controller.removeObserver(self)
-            }
-            self.tableView.tableController = value
-            if let controller = self.tableView.tableController {
-                controller.addObserver(self, priority: 0)
+        willSet {
+            if let tableController = self.tableController {
+                tableController.removeObserver(self)
             }
         }
-        get { return self.tableView.tableController }
+        didSet {
+            if let tableView = self.tableView {
+                tableView.tableController = self.tableController
+            }
+            if let tableController = self.tableController {
+                tableController.addObserver(self, priority: 0)
+            }
+        }
     }
     public var refreshControlHidden: Bool = false {
         didSet { self._updateRefreshControlState() }
@@ -97,6 +100,7 @@ open class QTableViewController : QViewController, IQStackContentViewController,
 
     open override func didLoad() {
         self.tableView = QTableView(frame: self.view.bounds)
+        self.tableView.tableController = self.tableController
         self.keyboard.addObserver(self, priority: 0)
     }
 

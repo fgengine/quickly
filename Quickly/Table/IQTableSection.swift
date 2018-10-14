@@ -17,6 +17,8 @@ public protocol IQTableSection : class {
     func bind(_ controller: IQTableController, _ index: Int)
     func rebind(_ index: Int)
     func unbind()
+    
+    func setRows(_ rows: [IQTableRow])
 
     func prependRow(_ row: IQTableRow, with animation: UITableView.RowAnimation?)
     func prependRow(_ rows: [IQTableRow], with animation: UITableView.RowAnimation?)

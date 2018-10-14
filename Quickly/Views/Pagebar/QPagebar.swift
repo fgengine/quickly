@@ -13,16 +13,9 @@ open class QPagebar : QView {
     public typealias ItemType = IQCollectionController.Cell
 
     public weak var delegate: QPagebarDelegate?
-    public var edgeInsets: UIEdgeInsets = UIEdgeInsets.zero {
-        didSet { self.setNeedsLayout() }
-    }
-    public var direction: QViewDirection = .horizontal {
-        didSet {
-            switch self.direction {
-            case .vertical: self.collectionLayout.scrollDirection = .horizontal
-            case .horizontal: self.collectionLayout.scrollDirection = .vertical
-            }
-        }
+    public var edgeInsets: UIEdgeInsets {
+        set(value) { self.collectionView.contentInset = value }
+        get { return self.collectionView.contentInset }
     }
     public private(set) var cellTypes: [ItemType.Type]
     public var itemsSpacing: CGFloat {
@@ -36,18 +29,44 @@ open class QPagebar : QView {
     public var selectedItem: QPagebarItem? {
         get { return self.collectionController.selectedItems.first as? QPagebarItem }
     }
-    private lazy var collectionView: QCollectionView! = self.prepareCollectionView()
-    private lazy var collectionLayout: CollectionLayout! = self.prepareCollectionLayout()
-    private lazy var collectionController: CollectionController! = self.prepareCollectionController()
-    private lazy var collectionSection: QCollectionSection! = self.prepareCollectionSection()
+    private lazy var collectionView: QCollectionView = {
+        let view = QCollectionView(frame: self.bounds, layout: self.collectionLayout)
+        view.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
+        view.showsHorizontalScrollIndicator = false
+        view.showsVerticalScrollIndicator = false
+        view.allowsMultipleSelection = false
+        view.collectionController = self.collectionController
+        return view
+    }()
+    private lazy var collectionLayout: CollectionLayout = {
+        let layout = CollectionLayout()
+        layout.scrollDirection = .horizontal
+        return layout
+    }()
+    private lazy var collectionController: CollectionController = {
+        let controller = CollectionController(self, cells: self.cellTypes)
+        controller.sections = [ self.collectionSection ]
+        return controller
+    }()
+    private lazy var collectionSection: QCollectionSection = {
+        return QCollectionSection(items: [])
+    }()
     
     public required init() {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public init(cellTypes: [ItemType.Type]) {
+    public init(
+        cellTypes: [ItemType.Type],
+        itemsSpacing: CGFloat = 0,
+        backgroundColor: UIColor? = nil
+    ) {
         self.cellTypes = cellTypes
-        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44))
+        super.init(
+            frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
+        )
+        self.itemsSpacing = itemsSpacing
+        self.backgroundColor = backgroundColor
     }
 
     public required init?(coder: NSCoder) {
@@ -110,12 +129,6 @@ open class QPagebar : QView {
         self.collectionSection.reloadItem(items)
     }
 
-    open override func layoutSubviews() {
-        super.layoutSubviews()
-
-        self.collectionView.frame = self.bounds.inset(by: self.edgeInsets)
-    }
-
     public func setSelectedItem(_ selectedItem: QPagebarItem?, animated: Bool) {
         if let item = selectedItem {
             if self.collectionController.isSelected(item: item) == false {
@@ -126,67 +139,23 @@ open class QPagebar : QView {
         }
     }
 
-    private func prepareCollectionView() -> QCollectionView {
-        let collectionView = QCollectionView(frame: self.bounds.inset(by: self.edgeInsets), layout: self.collectionLayout)
-        collectionView.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.allowsMultipleSelection = false
-        collectionView.collectionController = self.collectionController
-        return collectionView
-    }
-
-    private func prepareCollectionLayout() -> CollectionLayout {
-        let collectionLayout = CollectionLayout()
-        switch self.direction {
-        case .vertical: collectionLayout.scrollDirection = .horizontal
-        case .horizontal: collectionLayout.scrollDirection = .vertical
-        }
-        return collectionLayout
-    }
-
-    private func prepareCollectionController() -> CollectionController? {
-        let collectionController = CollectionController(self, cells: self.cellTypes)
-        collectionController.sections = [ self.collectionSection ]
-        return collectionController
-    }
-
-    private func prepareCollectionSection() -> QCollectionSection {
-        let collectionSection = QCollectionSection(items: [])
-        return collectionSection
-    }
-
     private class CollectionLayout : QCollectionFlowLayout {
 
         public override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-            guard let superAttributes = super.layoutAttributesForElements(in: rect) else { return nil }
-            if superAttributes.count < 1 { return [] }
-            guard let attributes = NSArray(array: superAttributes, copyItems: true) as? [UICollectionViewLayoutAttributes] else { return nil }
-            var boundsMin, boundsMax: CGPoint?
-            attributes.forEach { layoutAttribute in
-                let layoutFrame = layoutAttribute.frame
-                if boundsMin == nil {
-                    boundsMin = CGPoint(x: layoutFrame.minX, y: layoutFrame.minY)
-                } else {
-                    boundsMin = CGPoint(x: min(boundsMin!.x, layoutFrame.minX), y: min(boundsMin!.y, layoutFrame.minY))
-                }
-                if boundsMax == nil {
-                    boundsMax = CGPoint(x: layoutFrame.maxX, y: layoutFrame.maxY)
-                } else {
-                    boundsMax = CGPoint(x: max(boundsMax!.x, layoutFrame.maxX), y: max(boundsMax!.y, layoutFrame.maxY))
-                }
-            }
-            if let boundsMin = boundsMin, let boundsMax = boundsMax {
-                let contentSize = self.collectionViewContentSize
-                let boundsSize = CGSize(width: boundsMax.x - boundsMin.x, height: boundsMax.y - boundsMin.y)
-                if (boundsSize.width < contentSize.width) || (boundsSize.height < contentSize.height) {
-                    let offset = CGPoint(
-                        x: (contentSize.width - boundsSize.width) / 2,
-                        y: (contentSize.height - boundsSize.height) / 2
-                    )
-                    attributes.forEach { layoutAttribute in
-                        layoutAttribute.frame = layoutAttribute.frame.offsetBy(dx: offset.x, dy: offset.y)
-                    }
+            guard
+                let collectionView = self.collectionView,
+                let superAttributes = super.layoutAttributesForElements(in: rect),
+                let attributes = NSArray(array: superAttributes, copyItems: true) as? [UICollectionViewLayoutAttributes]
+                else { return nil }
+            let contentSize = self.collectionViewContentSize
+            let boundsSize = collectionView.bounds.inset(by: collectionView.contentInset).size
+            if (contentSize.width < boundsSize.width) || (contentSize.height < boundsSize.height) {
+                let offset = CGPoint(
+                    x: (boundsSize.width - contentSize.width) / 2,
+                    y: (boundsSize.height - contentSize.height) / 2
+                )
+                attributes.forEach { layoutAttribute in
+                    layoutAttribute.frame = layoutAttribute.frame.offsetBy(dx: offset.x, dy: offset.y)
                 }
             }
             return attributes

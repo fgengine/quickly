@@ -5,24 +5,24 @@
 
 import Quickly
 
-protocol IConfirmPushViewControllerRoutePath : IQRoutePath {
+protocol IConfirmPushViewControllerRouter : IQRouter {
 
     func dismiss(viewController: ConfirmPushViewController)
     
 }
 
-class ConfirmPushViewController : QNibViewController, IQPushContentViewController, IQRoutable {
+class ConfirmPushViewController : QNibViewController, IQPushContentViewController, IQRouterable, IQContextable {
 
-    weak var routePath: IConfirmPushViewControllerRoutePath!
-    weak var routeContext: AppRouteContext!
+    weak var router: IConfirmPushViewControllerRouter!
+    weak var context: AppContext!
 
     @IBOutlet private weak var imageView: QImageView!
     @IBOutlet private weak var titleLabel: QLabel!
     @IBOutlet private weak var subtitleLabel: QLabel!
 
-    init(_ routePath: IConfirmPushViewControllerRoutePath, _ routeContext: AppRouteContext) {
-        self.routePath = routePath
-        self.routeContext = routeContext
+    init(router: RouterType, context: ContextType) {
+        self.router = router
+        self.context = context
         super.init()
     }
 
@@ -45,11 +45,11 @@ class ConfirmPushViewController : QNibViewController, IQPushContentViewControlle
     }
 
     func didTimeout() {
-        self.routePath.dismiss(viewController: self)
+        self.router.dismiss(viewController: self)
     }
 
     func didPressed() {
-        self.routePath.dismiss(viewController: self)
+        self.router.dismiss(viewController: self)
     }
 
 }

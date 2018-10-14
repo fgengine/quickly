@@ -5,76 +5,78 @@
 import Quickly
 
 class ChoiseWireframe: QStackWireframe<
-    AppRouteContext,
+    AppContext,
     AppWireframe
 > {
-
-    override func prepareRootContentViewController() -> IQStackContentViewController {
-        return ChoiseViewController(self, self.routeContext)
+    
+    override func setup() {
+        self.viewController.viewControllers = [
+            QStackViewController(ChoiseViewController(router: self, context: self.context))
+        ]
     }
 
 }
 
-extension ChoiseWireframe : IChoiseViewControllerRoutePath {
+extension ChoiseWireframe : IChoiseViewControllerRouter {
 
     func presentLabelViewController() {
-        let vc = LabelViewController(self, self.routeContext)
+        let vc = LabelViewController(router: self, context: self.context)
         self.presentStack(vc, animated: true)
     }
 
     func presentButtonViewController() {
-        let vc = ButtonViewController(self, self.routeContext)
+        let vc = ButtonViewController(router: self, context: self.context)
         self.presentStack(vc, animated: true)
     }
 
     func presentTextFieldViewController() {
-        let vc = TextFieldViewController(self, self.routeContext)
+        let vc = TextFieldViewController(router: self, context: self.context)
         self.presentStack(vc, animated: true)
     }
 
     func presentListFieldViewController() {
-        let vc = ListFieldViewController(self, self.routeContext)
+        let vc = ListFieldViewController(router: self, context: self.context)
         self.presentStack(vc, animated: true)
     }
 
     func presentDateFieldViewController() {
-        let vc = DateFieldViewController(self, self.routeContext)
+        let vc = DateFieldViewController(router: self, context: self.context)
         self.presentStack(vc, animated: true)
     }
 
     func presentImageViewController() {
-        let vc = ImageViewController(self, self.routeContext)
+        let vc = ImageViewController(router: self, context: self.context)
         self.presentStack(vc, animated: true)
     }
     
     func presentTableViewController() {
-        let vc = TableViewController(self, self.routeContext)
+        let vc = TableViewController(router: self, context: self.context)
         self.presentStack(vc, animated: true)
     }
 
     func presentPageViewController() {
-        let vc = PageViewController(self, self.routeContext)
+        let vc = PageViewController(router: self, context: self.context)
         self.presentStack(vc, animated: true)
     }
 
     func presentModalViewController() {
-        let vc = ModalViewController(self, self.routeContext)
+        let vc = ModalViewController(router: self, context: self.context)
         self.presentStack(vc, animated: true)
     }
 
     func presentDialogViewController() {
-        let vc = DialogViewController(self, self.routeContext)
+        let vc = DialogViewController(router: self, context: self.context)
         self.presentStack(vc, animated: true)
     }
 
     func presentPushViewController() {
-        let vc = PushViewController(self, self.routeContext)
+        let vc = PushViewController(router: self, context: self.context)
         self.presentStack(vc, animated: true)
     }
 
 }
 
-extension ChoiseWireframe : ILabelViewControllerRoutePath {
+extension ChoiseWireframe : ILabelViewControllerRouter {
 
     func dismiss(viewController: LabelViewController) {
         self.dismissStack(viewController, animated: true)
@@ -82,7 +84,7 @@ extension ChoiseWireframe : ILabelViewControllerRoutePath {
 
 }
 
-extension ChoiseWireframe : IButtonViewControllerRoutePath {
+extension ChoiseWireframe : IButtonViewControllerRouter {
 
     func dismiss(viewController: ButtonViewController) {
         self.dismissStack(viewController, animated: true)
@@ -90,7 +92,7 @@ extension ChoiseWireframe : IButtonViewControllerRoutePath {
     
 }
 
-extension ChoiseWireframe : ITextFieldViewControllerRoutePath {
+extension ChoiseWireframe : ITextFieldViewControllerRouter {
 
     func dismiss(viewController: TextFieldViewController) {
         self.dismissStack(viewController, animated: true)
@@ -98,7 +100,7 @@ extension ChoiseWireframe : ITextFieldViewControllerRoutePath {
     
 }
 
-extension ChoiseWireframe : IListFieldViewControllerRoutePath {
+extension ChoiseWireframe : IListFieldViewControllerRouter {
 
     func dismiss(viewController: ListFieldViewController) {
         self.dismissStack(viewController, animated: true)
@@ -106,7 +108,7 @@ extension ChoiseWireframe : IListFieldViewControllerRoutePath {
 
 }
 
-extension ChoiseWireframe : IDateFieldViewControllerRoutePath {
+extension ChoiseWireframe : IDateFieldViewControllerRouter {
 
     func dismiss(viewController: DateFieldViewController) {
         self.dismissStack(viewController, animated: true)
@@ -114,7 +116,7 @@ extension ChoiseWireframe : IDateFieldViewControllerRoutePath {
 
 }
 
-extension ChoiseWireframe : IImageViewControllerRoutePath {
+extension ChoiseWireframe : IImageViewControllerRouter {
 
     func dismiss(viewController: ImageViewController) {
         self.dismissStack(viewController, animated: true)
@@ -122,7 +124,7 @@ extension ChoiseWireframe : IImageViewControllerRoutePath {
     
 }
 
-extension ChoiseWireframe : ITableViewControllerRoutePath {
+extension ChoiseWireframe : ITableViewControllerRouter {
     
     func dismiss(viewController: TableViewController) {
         self.dismissStack(viewController, animated: true)
@@ -130,7 +132,7 @@ extension ChoiseWireframe : ITableViewControllerRoutePath {
     
 }
 
-extension ChoiseWireframe : IPageViewControllerRoutePath {
+extension ChoiseWireframe : IPageViewControllerRouter {
 
     func dismiss(viewController: PageViewController) {
         self.dismissStack(viewController, animated: true)
@@ -138,14 +140,12 @@ extension ChoiseWireframe : IPageViewControllerRoutePath {
 
 }
 
-extension ChoiseWireframe : IModalViewControllerRoutePath {
+extension ChoiseWireframe : IModalViewControllerRouter {
 
     func presentConfirmModal() {
-        if let wireframe = self.parentWireframe {
-            let contentViewController = ConfirmModalViewController(self, self.routeContext)
-            let modalViewController = QModalViewController(contentViewController)
-            wireframe.presentModal(modalViewController, animated: true, completion: nil)
-        }
+        let contentViewController = ConfirmModalViewController(router: self, context: self.context)
+        let modalViewController = QModalViewController(contentViewController)
+        self.presentModal(modalViewController, animated: true, completion: nil)
     }
 
     func dismiss(viewController: ModalViewController) {
@@ -154,7 +154,7 @@ extension ChoiseWireframe : IModalViewControllerRoutePath {
 
 }
 
-extension ChoiseWireframe : IConfirmModalViewControllerRoutePath {
+extension ChoiseWireframe : IConfirmModalViewControllerRouter {
 
     func dismiss(viewController: ConfirmModalViewController) {
         guard let modalViewController = viewController.modalViewController else { return }
@@ -163,18 +163,16 @@ extension ChoiseWireframe : IConfirmModalViewControllerRoutePath {
 
 }
 
-extension ChoiseWireframe : IDialogViewControllerRoutePath {
+extension ChoiseWireframe : IDialogViewControllerRouter {
 
     func presentConfirmDialog() {
-        if let wireframe = self.parentWireframe {
-            let contentViewController = ConfirmDialogViewController(self, self.routeContext)
-            let dialogViewController = QDialogViewController(
-                contentViewController,
-                widthBehaviour: .fit(min: 160, max: 300),
-                heightBehaviour: .fit(min: 240, max: 480)
-            )
-            wireframe.presentDialog(dialogViewController, animated: true, completion: nil)
-        }
+        let contentViewController = ConfirmDialogViewController(router: self, context: self.context)
+        let dialogViewController = QDialogViewController(
+            contentViewController,
+            widthBehaviour: .fit(min: 160, max: 300),
+            heightBehaviour: .fit(min: 240, max: 480)
+        )
+        self.presentDialog(dialogViewController, animated: true, completion: nil)
     }
 
     func dismiss(viewController: DialogViewController) {
@@ -183,7 +181,7 @@ extension ChoiseWireframe : IDialogViewControllerRoutePath {
 
 }
 
-extension ChoiseWireframe : IConfirmDialogViewControllerRoutePath {
+extension ChoiseWireframe : IConfirmDialogViewControllerRouter {
 
     func dismiss(viewController: ConfirmDialogViewController) {
         guard let dialogViewController = viewController.dialogViewController else { return }
@@ -192,14 +190,12 @@ extension ChoiseWireframe : IConfirmDialogViewControllerRoutePath {
 
 }
 
-extension ChoiseWireframe : IPushViewControllerRoutePath {
+extension ChoiseWireframe : IPushViewControllerRouter {
 
     func presentConfirmPush() {
-        if let wireframe = self.parentWireframe {
-            let contentViewController = ConfirmPushViewController(self, self.routeContext)
-            let pushViewController = QPushViewController(contentViewController, displayTime: 7)
-            wireframe.presentPush(pushViewController, animated: true, completion: nil)
-        }
+        let contentViewController = ConfirmPushViewController(router: self, context: self.context)
+        let pushViewController = QPushViewController(contentViewController, displayTime: 7)
+        self.presentPush(pushViewController, animated: true, completion: nil)
     }
 
     func dismiss(viewController: PushViewController) {
@@ -208,7 +204,7 @@ extension ChoiseWireframe : IPushViewControllerRoutePath {
 
 }
 
-extension ChoiseWireframe : IConfirmPushViewControllerRoutePath {
+extension ChoiseWireframe : IConfirmPushViewControllerRouter {
 
     func dismiss(viewController: ConfirmPushViewController) {
         guard let pushViewController = viewController.pushViewController else { return }

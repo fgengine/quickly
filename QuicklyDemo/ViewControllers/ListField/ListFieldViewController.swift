@@ -5,22 +5,22 @@
 
 import Quickly
 
-protocol IListFieldViewControllerRoutePath : IQRoutePath {
+protocol IListFieldViewControllerRouter : IQRouter {
 
     func dismiss(viewController: ListFieldViewController)
     
 }
 
-class ListFieldViewController : QNibViewController, IQRoutable {
+class ListFieldViewController : QNibViewController, IQRouterable, IQContextable {
 
-    weak var routePath: IListFieldViewControllerRoutePath!
-    weak var routeContext: AppRouteContext!
+    weak var router: IListFieldViewControllerRouter!
+    weak var context: AppContext!
 
     @IBOutlet private weak var listField: QListField!
 
-    init(_ routePath: IListFieldViewControllerRoutePath, _ routeContext: AppRouteContext) {
-        self.routePath = routePath
-        self.routeContext = routeContext
+    init(router: RouterType, context: ContextType) {
+        self.router = router
+        self.context = context
         super.init()
     }
 

@@ -2,16 +2,16 @@
 //  Quickly
 //
 
-open class QApplication< RouteContextType: IQRouteContext, WireframeType: QAppWireframe< RouteContextType > > : UIResponder, UIApplicationDelegate {
+open class QApplication< ContextType: IQContext, WireframeType: QAppWireframe< ContextType > > : UIResponder, UIApplicationDelegate {
 
-    public private(set) lazy var routeContext: RouteContextType = self.prepareRouteContext()
+    public private(set) lazy var context: ContextType = self.prepareContext()
     public private(set) lazy var wireframe: WireframeType = self.prepareWireframe()
     public var window: UIWindow? {
         set(value) { fatalError("Unsupported method '\(#function)'") }
         get { return self.wireframe.window }
     }
 
-    open func prepareRouteContext() -> RouteContextType {
+    open func prepareContext() -> ContextType {
         fatalError("Required override function '\(#function)'")
     }
 

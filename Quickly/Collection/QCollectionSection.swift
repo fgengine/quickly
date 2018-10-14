@@ -89,7 +89,9 @@ open class QCollectionSection : IQCollectionSection {
     }
     
     public func setItems(_ items: [IQCollectionItem]) {
+        self.unbindItems()
         self.items = items
+        self.bindItems()
     }
     
     public func insertItem(_ items: [IQCollectionItem], index: Int) {

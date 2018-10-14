@@ -4,23 +4,23 @@
 
 import Quickly
 
-protocol IModalViewControllerRoutePath : IQRoutePath {
+protocol IModalViewControllerRouter : IQRouter {
 
     func presentConfirmModal()
     func dismiss(viewController: ModalViewController)
     
 }
 
-class ModalViewController : QNibViewController, IQRoutable {
+class ModalViewController : QNibViewController, IQRouterable, IQContextable {
 
-    weak var routePath: IModalViewControllerRoutePath!
-    weak var routeContext: AppRouteContext!
+    weak var router: IModalViewControllerRouter!
+    weak var context: AppContext!
 
     @IBOutlet private weak var showModalButton: QButton!
 
-    init(_ routePath: IModalViewControllerRoutePath, _ routeContext: AppRouteContext) {
-        self.routePath = routePath
-        self.routeContext = routeContext
+    init(router: RouterType, context: ContextType) {
+        self.router = router
+        self.context = context
         super.init()
     }
 
@@ -45,7 +45,7 @@ class ModalViewController : QNibViewController, IQRoutable {
 
     @objc
     private func pressedShowModal(_ sender: Any) {
-        self.routePath.presentConfirmModal()
+        self.router.presentConfirmModal()
     }
 
 }

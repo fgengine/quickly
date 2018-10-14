@@ -8,8 +8,10 @@ open class QSpaceCollectionItem : QBackgroundColorCollectionItem {
 
     public init(size: CGSize, backgroundColor: UIColor? = nil) {
         self.size = size
-        super.init(backgroundColor: backgroundColor)
-        self.canSelect = false
+        super.init(
+            backgroundColor: backgroundColor,
+            canSelect: false
+        )
     }
 
 }

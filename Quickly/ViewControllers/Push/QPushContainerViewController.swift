@@ -146,6 +146,7 @@ open class QPushContainerViewController : QViewController, IQPushContainerViewCo
     open func presentPush(viewController: IQPushViewController, animated: Bool, completion: (() -> Void)?) {
         let currentViewController = self.currentViewController
         self.viewControllers.append(viewController)
+        self._addChildViewController(viewController)
         if currentViewController == nil {
             self._present(viewController, animated: animated, completion: completion)
         } else {
@@ -216,14 +217,22 @@ open class QPushContainerViewController : QViewController, IQPushContainerViewCo
         dismissAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
             if let strong = self {
                 strong._disappearViewController(viewController)
+                strong._removeChildViewController(viewController)
                 strong.isAnimating = false
             }
             completion?()
         })
     }
+    
+    private func _addChildViewController(_ viewController: IQPushViewController) {
+        viewController.parent = self
+    }
+    
+    private func _removeChildViewController(_ viewController: IQPushViewController) {
+        viewController.parent = nil
+    }
 
     private func _appearViewController(_ viewController: IQPushViewController) {
-        viewController.parent = self
         viewController.view.frame = self.view.bounds
         viewController.view.addGestureRecognizer(self.interactiveDismissGesture)
         self.view.addSubview(viewController.view)
@@ -232,7 +241,6 @@ open class QPushContainerViewController : QViewController, IQPushContainerViewCo
     private func _disappearViewController(_ viewController: IQPushViewController) {
         viewController.view.removeGestureRecognizer(self.interactiveDismissGesture)
         viewController.view.removeFromSuperview()
-        viewController.parent = nil
     }
 
     private func _preparePresentAnimation(_ viewController: IQPushViewController) -> IQPushViewControllerFixedAnimation {

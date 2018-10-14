@@ -4,20 +4,20 @@
 
 import Quickly
 
-protocol IPageViewControllerRoutePath : IPageContentViewControllerRoutePath {
+protocol IPageViewControllerRouter : IPageContentViewControllerRouter {
 
     func dismiss(viewController: PageViewController)
 
 }
 
-class PageViewController : QPageContainerViewController, IQRoutable {
+class PageViewController : QPageContainerViewController, IQRouterable, IQContextable {
 
-    weak var routePath: IPageViewControllerRoutePath!
-    weak var routeContext: AppRouteContext!
+    weak var router: IPageViewControllerRouter!
+    weak var context: AppContext!
 
-    init(_ routePath: IPageViewControllerRoutePath, _ routeContext: AppRouteContext) {
-        self.routePath = routePath
-        self.routeContext = routeContext
+    init(router: RouterType, context: ContextType) {
+        self.router = router
+        self.context = context
         super.init()
     }
 
@@ -37,7 +37,10 @@ class PageViewController : QPageContainerViewController, IQRoutable {
                     backgroundColor: UIColor.gray,
                     selectedBackgroundColor: UIColor.darkGray
                 ),
-                PageContentViewController(self.routePath, self.routeContext)
+                PageContentViewController(
+                    router: self.router,
+                    context: self.context
+                )
             ),
             QPageViewController(
                 QPagebarTitleItem(
@@ -45,7 +48,10 @@ class PageViewController : QPageContainerViewController, IQRoutable {
                     backgroundColor: UIColor.gray,
                     selectedBackgroundColor: UIColor.darkGray
                 ),
-                PageContentViewController(self.routePath, self.routeContext)
+                PageContentViewController(
+                    router: self.router,
+                    context: self.context
+                )
             ),
             QPageViewController(
                 QPagebarTitleItem(
@@ -53,7 +59,10 @@ class PageViewController : QPageContainerViewController, IQRoutable {
                     backgroundColor: UIColor.gray,
                     selectedBackgroundColor: UIColor.darkGray
                 ),
-                PageContentViewController(self.routePath, self.routeContext)
+                PageContentViewController(
+                    router: self.router,
+                    context: self.context
+                )
             )
         ])
     }

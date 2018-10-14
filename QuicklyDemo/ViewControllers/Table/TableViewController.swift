@@ -4,20 +4,20 @@
 
 import Quickly
 
-protocol ITableViewControllerRoutePath : IQRoutePath {
+protocol ITableViewControllerRouter : IQRouter {
     
     func dismiss(viewController: TableViewController)
     
 }
 
-class TableViewController : QTableViewController, IQRoutable {
+class TableViewController : QTableViewController, IQRouterable, IQContextable {
 
-    weak var routePath: ITableViewControllerRoutePath!
-    weak var routeContext: AppRouteContext!
+    weak var router: ITableViewControllerRouter!
+    weak var context: AppContext!
 
-    init(_ routePath: ITableViewControllerRoutePath, _ routeContext: AppRouteContext) {
-        self.routePath = routePath
-        self.routeContext = routeContext
+    init(router: RouterType, context: ContextType) {
+        self.router = router
+        self.context = context
         super.init()
     }
 

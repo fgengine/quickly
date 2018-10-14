@@ -9,10 +9,9 @@ class QuicklyTimerTests : XCTestCase {
 
     func testSimple() {
         let trigger = self.expectation(description: "")
-        let timer = QTimer(interval: 1)
-        timer.onFinished = { (_) in
+        let timer = QTimer(interval: 1, onFinished: { (timer) in
             trigger.fulfill()
-        }
+        })
         timer.start()
         self.wait(for: [ trigger ], timeout: 10)
     }

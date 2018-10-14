@@ -4,20 +4,20 @@
 
 import Quickly
 
-protocol IPageContentViewControllerRoutePath : IQRoutePath {
+protocol IPageContentViewControllerRouter : IQRouter {
 }
 
-class PageContentViewController : QNibViewController, IQRoutable {
+class PageContentViewController : QNibViewController, IQRouterable, IQContextable {
 
-    weak var routePath: IPageContentViewControllerRoutePath!
-    weak var routeContext: AppRouteContext!
+    weak var router: IPageContentViewControllerRouter!
+    weak var context: AppContext!
 
     @IBOutlet private weak var imageView: QImageView!
     @IBOutlet private weak var closeButton: QButton!
 
-    init(_ routePath: IPageContentViewControllerRoutePath, _ routeContext: AppRouteContext) {
-        self.routePath = routePath
-        self.routeContext = routeContext
+    init(router: RouterType, context: ContextType) {
+        self.router = router
+        self.context = context
         super.init()
     }
 

@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QCompositionViewController< Composition: IQComposition > : QViewController, IQStackContentViewController, IQPageContentViewController {
+open class QCompositionViewController< Composition: IQComposition > : QViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController {
 
     #if DEBUG
     open override var logging: Bool {
@@ -20,20 +20,18 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
     }
     public var screenLeftInset: CGFloat = 0
     public var screenRightInset: CGFloat = 0
-    public private(set) lazy var composition: Composition = self._prepareComposition()
+    public private(set) lazy var composition: Composition = {
+        let composition = Composition(frame: self.view.bounds.inset(by: self.inheritedEdgeInsets), owner: self)
+        self.view.addSubview(composition.contentView)
+        return composition
+    }()
     
     open override func load() -> ViewType {
         return QViewControllerDefaultView(viewController: self)
     }
 
     open override func layout(bounds: CGRect) {
-        self.composition.contentView.frame = view.bounds.inset(by: self.inheritedEdgeInsets)
-    }
-
-    private func _prepareComposition() -> Composition {
-        let composition = Composition(frame: view.bounds.inset(by: self.inheritedEdgeInsets), owner: self)
-        self.view.addSubview(composition.contentView)
-        return composition
+        self.composition.contentView.frame = self.view.bounds.inset(by: self.inheritedEdgeInsets)
     }
 
 }

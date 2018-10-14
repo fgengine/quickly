@@ -174,6 +174,7 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
     open func presentDialog(viewController: IQDialogViewController, animated: Bool, completion: (() -> Void)?) {
         let currentViewController = self.currentViewController
         self.viewControllers.append(viewController)
+        self._addChildViewController(viewController)
         if currentViewController == nil {
             self._present(viewController, animated: animated, completion: completion)
         } else {
@@ -257,14 +258,22 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
         dismissAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
             if let strong = self {
                 strong._disappearViewController(viewController)
+                strong._removeChildViewController(viewController)
                 strong.isAnimating = true
             }
             completion?()
         })
     }
+    
+    private func _addChildViewController(_ viewController: IQDialogViewController) {
+        viewController.parent = self
+    }
+    
+    private func _removeChildViewController(_ viewController: IQDialogViewController) {
+        viewController.parent = nil
+    }
 
     private func _appearViewController(_ viewController: IQDialogViewController) {
-        viewController.parent = self
         viewController.view.bounds = self.view.bounds
         viewController.view.addGestureRecognizer(self.interactiveDismissGesture)
         self.view.addSubview(viewController.view)
@@ -273,7 +282,6 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
     private func _disappearViewController(_ viewController: IQDialogViewController) {
         viewController.view.removeGestureRecognizer(self.interactiveDismissGesture)
         viewController.view.removeFromSuperview()
-        viewController.parent = nil
     }
 
     private func _preparePresentAnimation(_ viewController: IQDialogViewController) -> IQDialogViewControllerFixedAnimation {

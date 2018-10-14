@@ -87,14 +87,8 @@ open class QStackbar : QView {
     }
 
     public required init() {
-        let bounds = UIScreen.main.bounds
         super.init(
-            frame: CGRect(
-                x: bounds.origin.x,
-                y: bounds.origin.y,
-                width: bounds.width,
-                height: 50
-            )
+            frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50)
         )
     }
 

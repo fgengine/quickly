@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QNibViewController : QViewController, IQStackContentViewController, IQPageContentViewController {
+open class QNibViewController : QViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController {
 
     #if DEBUG
     open override var logging: Bool {
@@ -51,8 +51,8 @@ open class QNibViewController : QViewController, IQStackContentViewController, I
     }
 
     open override func layout(bounds: CGRect) {
-        if let view = self.rootView {
-            view.frame = view.bounds.inset(by: self.inheritedEdgeInsets)
+        if let rootView = self.rootView {
+            rootView.frame = self.view.bounds.inset(by: self.inheritedEdgeInsets)
         }
     }
 

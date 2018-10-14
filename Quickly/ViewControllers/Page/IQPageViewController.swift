@@ -51,11 +51,11 @@ public protocol IQPageViewControllerInteractiveAnimation : IQInteractiveAnimatio
 
 public protocol IQPageContainerViewController : IQViewController {
 
-    var pagebar: QPagebar? { get }
-    var pagebarHeight: CGFloat { get }
-    var pagebarHidden: Bool { get }
+    var pagebar: QPagebar? { set get }
+    var pagebarHeight: CGFloat { set get }
+    var pagebarHidden: Bool { set get }
 
-    var viewControllers: [IQPageViewController] { get }
+    var viewControllers: [IQPageViewController] { set get }
     var currentViewController: IQPageViewController? { get }
     var forwardViewController: IQPageViewController? { get }
     var backwardViewController: IQPageViewController? { get }
