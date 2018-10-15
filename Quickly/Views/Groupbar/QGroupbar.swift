@@ -18,10 +18,6 @@ open class QGroupbar : QView {
         get { return self.collectionView.contentInset }
     }
     public private(set) var cellTypes: [ItemType.Type]
-    public var itemsSpacing: CGFloat {
-        set(value) { self.collectionLayout.minimumInteritemSpacing = value }
-        get { return self.collectionLayout.minimumInteritemSpacing }
-    }
     public var items: [QGroupbarItem] {
         set(value) { self.collectionSection.setItems(value) }
         get { return self.collectionSection.items as! [QGroupbarItem] }
@@ -39,9 +35,7 @@ open class QGroupbar : QView {
         return view
     }()
     private lazy var collectionLayout: CollectionLayout = {
-        let layout = CollectionLayout()
-        layout.scrollDirection = .horizontal
-        return layout
+        return CollectionLayout()
     }()
     private lazy var collectionController: CollectionController = {
         let controller = CollectionController(self, cells: self.cellTypes)
@@ -58,14 +52,12 @@ open class QGroupbar : QView {
     
     public init(
         cellTypes: [ItemType.Type],
-        itemsSpacing: CGFloat = 0,
         backgroundColor: UIColor? = nil
     ) {
         self.cellTypes = cellTypes
         super.init(
             frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
         )
-        self.itemsSpacing = itemsSpacing
         self.backgroundColor = backgroundColor
     }
     
@@ -139,23 +131,61 @@ open class QGroupbar : QView {
         }
     }
     
-    private class CollectionLayout : QCollectionFlowLayout {
+    private class CollectionLayout : QCollectionLayout {
+        
+        public override var collectionViewContentSize: CGSize {
+            get {
+                var contentSize = CGSize.zero
+                self.cache.forEach({
+                    let frameSize = $0.value.frame.size
+                    contentSize = CGSize(
+                        width: contentSize.width + frameSize.width,
+                        height: max(contentSize.height, frameSize.height)
+                    )
+                })
+                return contentSize
+            }
+        }
+        private var bounds = CGRect.zero
+        private var cache: [IndexPath: UICollectionViewLayoutAttributes] = [:]
+        
+        public override func prepare() {
+            guard let collectionView = self.collectionView, self.cache.isEmpty == true else { return }
+            self.cache = [:]
+            self.bounds = collectionView.bounds
+            
+            var numberOfCells: Int = 0
+            for sectionIndex in 0..<collectionView.numberOfSections {
+                numberOfCells += collectionView.numberOfItems(inSection: sectionIndex)
+            }
+            let cellSize = CGSize(
+                width: self.bounds.width / CGFloat(numberOfCells),
+                height: self.bounds.height
+            )
+            var offset: CGFloat = 0
+            for sectionIndex in 0..<collectionView.numberOfSections {
+                for itemIndex in 0..<collectionView.numberOfItems(inSection: sectionIndex) {
+                    let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
+                    let attribute = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+                    attribute.frame = CGRect(x: offset, y: 0, width: cellSize.width, height: cellSize.height)
+                    self.cache[indexPath] = attribute
+                    offset += cellSize.width
+                }
+            }
+        }
+        
+        override public func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+            if self.bounds.size != newBounds.size {
+                self.cache.removeAll(keepingCapacity: true)
+            }
+            return true
+        }
         
         public override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-            guard
-                let collectionView = self.collectionView,
-                let superAttributes = super.layoutAttributesForElements(in: rect),
-                let attributes = NSArray(array: superAttributes, copyItems: true) as? [UICollectionViewLayoutAttributes]
-                else { return nil }
-            let contentSize = self.collectionViewContentSize
-            let boundsSize = collectionView.bounds.inset(by: collectionView.contentInset).size
-            if (contentSize.width < boundsSize.width) || (contentSize.height < boundsSize.height) {
-                let offset = CGPoint(
-                    x: (boundsSize.width - contentSize.width) / 2,
-                    y: (boundsSize.height - contentSize.height) / 2
-                )
-                attributes.forEach { layoutAttribute in
-                    layoutAttribute.frame = layoutAttribute.frame.offsetBy(dx: offset.x, dy: offset.y)
+            var attributes: [UICollectionViewLayoutAttributes] = []
+            for attribute in self.cache {
+                if attribute.value.frame.intersects(rect) == true {
+                    attributes.append(attribute.value)
                 }
             }
             return attributes

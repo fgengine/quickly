@@ -189,6 +189,26 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
             vc.didTransition(size: size)
         }
     }
+    
+    open override func supportedOrientations() -> UIInterfaceOrientationMask {
+        guard let vc = self.currentViewController else { return super.supportedOrientations() }
+        return vc.supportedOrientations()
+    }
+    
+    open override func preferedStatusBarHidden() -> Bool {
+        guard let vc = self.currentViewController else { return super.preferedStatusBarHidden() }
+        return vc.preferedStatusBarHidden()
+    }
+    
+    open override func preferedStatusBarStyle() -> UIStatusBarStyle {
+        guard let vc = self.currentViewController else { return super.preferedStatusBarStyle() }
+        return vc.preferedStatusBarStyle()
+    }
+    
+    open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
+        guard let vc = self.currentViewController else { return super.preferedStatusBarAnimation() }
+        return vc.preferedStatusBarAnimation()
+    }
 
     open func setPagebar(_ pagebar: QPagebar?, animated: Bool = false) {
         if self.isLoaded == true {
