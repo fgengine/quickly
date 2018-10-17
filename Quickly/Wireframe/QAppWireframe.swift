@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QAppWireframe< ContextType: IQContext > : IQRootWireframe {
+open class QAppWireframe< ContextType: IQContext > : IQAppWireframe {
     
     open var baseViewController: IQViewController {
         get { return self.viewController }
