@@ -61,7 +61,11 @@ open class QImageView : QDisplayView, IQImageLoaderTarget {
         didSet {
             if let source = self.source {
                 if let image = source.image {
-                    self.image = image.withRenderingMode(source.renderingMode)
+                    if source.tintColor != nil {
+                        self.image = image.withRenderingMode(.alwaysTemplate)
+                    } else {
+                        self.image = image.withRenderingMode(.alwaysOriginal)
+                    }
                 } else {
                     self.image = nil
                 }

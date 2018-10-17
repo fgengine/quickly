@@ -34,25 +34,42 @@ open class QBackgroundColorTableCell< RowType: QBackgroundColorTableRow > : QTab
     open override func set(row: RowType, spec: IQContainerSpec, animated: Bool) {
         super.set(row: row, spec: spec, animated: animated)
 
-        self._applyContentBackgroundColor(selected: self.isSelected, highlighted: self.isHighlighted)
-    }
-
-    open override func setSelected(_ selected: Bool, animated: Bool) {
-        self._applyContentBackgroundColor(selected: selected, highlighted: self.isHighlighted)
+        self._applyContentBackgroundColor(
+            row: row,
+            highlighted: self.isHighlighted,
+            selected: self.isSelected
+        )
     }
 
     open override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        self._applyContentBackgroundColor(selected: self.isSelected, highlighted: highlighted)
+        super.setHighlighted(highlighted, animated: animated)
+        if let row = self.row {
+            self._applyContentBackgroundColor(
+                row: row,
+                highlighted: highlighted,
+                selected: self.isSelected
+            )
+        }
+    }
+    
+    open override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        if let row = self.row {
+            self._applyContentBackgroundColor(
+                row: row,
+                highlighted: self.isHighlighted,
+                selected: selected
+            )
+        }
     }
 
-    private func _applyContentBackgroundColor(selected: Bool, highlighted: Bool) {
-        let backgroundColor = self._currentContentBackgroundColor(selected: selected, highlighted: highlighted)
+    private func _applyContentBackgroundColor(row: RowType, highlighted: Bool, selected: Bool) {
+        let backgroundColor = self._currentContentBackgroundColor(row: row, highlighted: highlighted, selected: selected)
         self.backgroundColor = backgroundColor
         self.contentView.backgroundColor = backgroundColor
     }
 
-    private func _currentContentBackgroundColor(selected: Bool, highlighted: Bool) -> UIColor? {
-        guard let row = self.row else { return nil }
+    private func _currentContentBackgroundColor(row: RowType, highlighted: Bool, selected: Bool) -> UIColor? {
         if let selectedBackgroundColor = row.selectedBackgroundColor {
             if selected == true || highlighted == true {
                 return selectedBackgroundColor

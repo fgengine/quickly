@@ -30,10 +30,24 @@ public class QImageLoader {
     public private(set) var operationQueue: OperationQueue
     public private(set) var syncQueue: DispatchQueue
 
-    public static let shared: QImageLoader = try! QImageLoader(name: "QImageLoader")
+    public static let shared: QImageLoader = {
+        let sessionConfiguration = URLSessionConfiguration.default
+        sessionConfiguration.timeoutIntervalForRequest = 30
+        sessionConfiguration.timeoutIntervalForResource = 60
+        let sessionQueue = OperationQueue()
+        sessionQueue.maxConcurrentOperationCount = 1
+        return try! QImageLoader(
+            name: "QImageLoader",
+            sessionConfiguration: sessionConfiguration,
+            sessionQueue: sessionQueue
+        )
+    }()
 
-    public init(name: String) throws {
-        self.provider = QApiProvider()
+    public init(name: String, sessionConfiguration: URLSessionConfiguration, sessionQueue: OperationQueue) throws {
+        self.provider = QApiProvider(
+            sessionConfiguration: sessionConfiguration,
+            sessionQueue: sessionQueue
+        )
         self.cache = try QImageCache(name: name)
         self.operationQueue = OperationQueue()
         self.operationQueue.maxConcurrentOperationCount = 5

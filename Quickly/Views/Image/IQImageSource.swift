@@ -37,9 +37,8 @@ public enum QImageSourceScale : Int {
 public protocol IQImageSource : class {
 
     var image: UIImage? { get }
-    var size: CGSize { get }
     var url: URL? { get }
-    var renderingMode: UIImage.RenderingMode { get }
+    var size: CGSize { get }
     var scale: QImageSourceScale { get }
     var tintColor: UIColor? { get }
 

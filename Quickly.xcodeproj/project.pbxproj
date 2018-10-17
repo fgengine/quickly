@@ -188,6 +188,8 @@
 		4062C8D1208A005F0098F809 /* IQComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4062C8D0208A005F0098F809 /* IQComposition.swift */; };
 		4062C8D3208A02030098F809 /* QComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4062C8D2208A02030098F809 /* QComposition.swift */; };
 		40691540208487BE008934D5 /* IQStackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4069153C208487BD008934D5 /* IQStackViewController.swift */; };
+		406BC12C217722EA00164485 /* QProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406BC12B217722EA00164485 /* QProxy.swift */; };
+		406BC12E2177231C00164485 /* IQProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406BC12D2177231C00164485 /* IQProxy.swift */; };
 		406FDF6B20908071004178CC /* QApiPagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406FDF6A20908071004178CC /* QApiPagination.swift */; };
 		406FDF6F209082E4004178CC /* IQApiPagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406FDF6E209082E4004178CC /* IQApiPagination.swift */; };
 		4070B6A920628E4E00B568A9 /* QReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4070B6A720628E4E00B568A9 /* QReachability.swift */; };
@@ -565,6 +567,8 @@
 		4069153C208487BD008934D5 /* IQStackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQStackViewController.swift; sourceTree = "<group>"; };
 		406915432084C904008934D5 /* QStackContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QStackContainerViewController.swift; sourceTree = "<group>"; };
 		406915452084CA26008934D5 /* QStackViewControllerAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QStackViewControllerAnimation.swift; sourceTree = "<group>"; };
+		406BC12B217722EA00164485 /* QProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QProxy.swift; sourceTree = "<group>"; };
+		406BC12D2177231C00164485 /* IQProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQProxy.swift; sourceTree = "<group>"; };
 		406FDF6A20908071004178CC /* QApiPagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QApiPagination.swift; sourceTree = "<group>"; };
 		406FDF6E209082E4004178CC /* IQApiPagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQApiPagination.swift; sourceTree = "<group>"; };
 		4070B6A720628E4E00B568A9 /* QReachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QReachability.swift; sourceTree = "<group>"; };
@@ -934,6 +938,7 @@
 				4070B6AA206297BB00B568A9 /* Keyboard */,
 				4070B6A620628E2D00B568A9 /* Reachability */,
 				400CF9E52125646700F9238D /* AuthenticationChallenge */,
+				406BC14721773BD600164485 /* Proxy */,
 				409403561F4E125E008A8B90 /* Api */,
 				40CF458B1F4DE6AB004D00D8 /* Router */,
 				40266D282170D3E5009CC9B4 /* Context */,
@@ -1397,6 +1402,15 @@
 			path = Stack;
 			sourceTree = "<group>";
 		};
+		406BC14721773BD600164485 /* Proxy */ = {
+			isa = PBXGroup;
+			children = (
+				406BC12D2177231C00164485 /* IQProxy.swift */,
+				406BC12B217722EA00164485 /* QProxy.swift */,
+			);
+			path = Proxy;
+			sourceTree = "<group>";
+		};
 		4070B6A620628E2D00B568A9 /* Reachability */ = {
 			isa = PBXGroup;
 			children = (
@@ -1444,18 +1458,18 @@
 			isa = PBXGroup;
 			children = (
 				401F46B82126D1AD004DB8A2 /* QApiLogging.swift */,
+				402F1FB51F4EF525007625CA /* QApiError.swift */,
 				402F1FB31F4EE237007625CA /* IQApiProvider.swift */,
-				409403611F4E26D1008A8B90 /* IQApiQuery.swift */,
-				402F1FAF1F4EE0AB007625CA /* IQApiRequest.swift */,
-				402F1FB11F4EE0F8007625CA /* IQApiResponse.swift */,
-				406FDF6E209082E4004178CC /* IQApiPagination.swift */,
 				409403571F4E129F008A8B90 /* QApiProvider.swift */,
 				402F1FB91F4F380B007625CA /* QApiProvider+Internal.swift */,
+				409403611F4E26D1008A8B90 /* IQApiQuery.swift */,
 				4094035F1F4E2663008A8B90 /* QApiQuery.swift */,
+				402F1FAF1F4EE0AB007625CA /* IQApiRequest.swift */,
 				409403591F4E12BF008A8B90 /* QApiRequest.swift */,
+				402F1FB11F4EE0F8007625CA /* IQApiResponse.swift */,
 				4094035A1F4E12BF008A8B90 /* QApiResponse.swift */,
+				406FDF6E209082E4004178CC /* IQApiPagination.swift */,
 				406FDF6A20908071004178CC /* QApiPagination.swift */,
-				402F1FB51F4EF525007625CA /* QApiError.swift */,
 			);
 			path = Api;
 			sourceTree = "<group>";
@@ -2003,6 +2017,7 @@
 				40CF45C01F4DE6AB004D00D8 /* QCollectionItem.swift in Sources */,
 				403DF8F420CA72A8003C5D6D /* QModalViewController.swift in Sources */,
 				4007B0A42144236900AE17DC /* QImageTitleShapeComposition.swift in Sources */,
+				406BC12C217722EA00164485 /* QProxy.swift in Sources */,
 				4062C8CD2088DD4C0098F809 /* QStackWireframe.swift in Sources */,
 				4007B0A12144236900AE17DC /* QTitleValueShapeComposition.swift in Sources */,
 				4007B09E2144236900AE17DC /* QTitleShapeComposition.swift in Sources */,
@@ -2027,6 +2042,7 @@
 				4007B0A92144236900AE17DC /* QTitleValueComposition.swift in Sources */,
 				402720D02074C88A00094287 /* IQStyleSheet.swift in Sources */,
 				40035968207FA4A900D7F449 /* QScrollView.swift in Sources */,
+				406BC12E2177231C00164485 /* IQProxy.swift in Sources */,
 				40E2D6061F6785F300B954E4 /* Data.swift in Sources */,
 				40C8F8281F55145D00C75D34 /* QSpinnerView.swift in Sources */,
 				40CF45E11F4DE6AB004D00D8 /* QTableDecor.swift in Sources */,

@@ -5,9 +5,11 @@
 open class QCompositionCollectionItem< Composable: IQComposable > : QBackgroundColorCollectionItem {
 
     public var composable: Composable
+    public var selectedComposable: Composable?
 
     public init(
         composable: Composable,
+        selectedComposable: Composable? = nil,
         backgroundColor: UIColor? = nil,
         selectedBackgroundColor: UIColor? = nil,
         canSelect: Bool = true,
@@ -15,6 +17,7 @@ open class QCompositionCollectionItem< Composable: IQComposable > : QBackgroundC
         canMove: Bool = false
     ) {
         self.composable = composable
+        self.selectedComposable = selectedComposable
         super.init(
             backgroundColor: backgroundColor,
             selectedBackgroundColor: selectedBackgroundColor,
@@ -28,6 +31,20 @@ open class QCompositionCollectionItem< Composable: IQComposable > : QBackgroundC
 
 open class QCompositionCollectionCell< Composition: IQComposition > : QBackgroundColorCollectionCell< QCompositionCollectionItem< Composition.Composable > > {
 
+    open override var isHighlighted: Bool {
+        didSet {
+            if let item = self.item, let spec = self.composition.spec {
+                self._prepareComposition(item: item, spec: spec, highlighted: self.isHighlighted, selected: self.isSelected, animated: false)
+            }
+        }
+    }
+    open override var isSelected: Bool {
+        didSet {
+            if let item = self.item, let spec = self.composition.spec {
+                self._prepareComposition(item: item, spec: spec, highlighted: self.isHighlighted, selected: self.isSelected, animated: false)
+            }
+        }
+    }
     public private(set) var composition: Composition!
 
     open override class func size(
@@ -51,10 +68,27 @@ open class QCompositionCollectionCell< Composition: IQComposition > : QBackgroun
     
     open override func set(item: Item, spec: IQContainerSpec, animated: Bool) {
         super.set(item: item, spec: spec, animated: animated)
-        self.composition.prepare(composable: item.composable, spec: spec, animated: animated)
+        self._prepareComposition(item: item, spec: spec, highlighted: self.isHighlighted, selected: self.isSelected, animated: animated)
     }
     
-    private func scroll(animated: Bool) {
+    private func _prepareComposition(item: Item, spec: IQContainerSpec, highlighted: Bool, selected: Bool, animated: Bool) {
+        self.composition.prepare(
+            composable: self._currentComposable(item: item, highlighted: highlighted, selected: selected),
+            spec: spec,
+            animated: animated
+        )
+    }
+    
+    private func _currentComposable(item: Item, highlighted: Bool, selected: Bool) -> Composition.Composable {
+        if selected == true || highlighted == true {
+            if let selectedComposable = item.selectedComposable {
+                return selectedComposable
+            }
+        }
+        return item.composable
+    }
+    
+    private func _scroll(animated: Bool) {
         guard let item = self.item, let controller = item.section?.controller else { return }
         controller.scroll(item: item, scroll: .centeredVertically, animated: animated)
     }
@@ -64,7 +98,7 @@ open class QCompositionCollectionCell< Composition: IQComposition > : QBackgroun
 extension QCompositionCollectionCell : IQTextFieldObserver {
     
     open func beginEditing(textField: QTextField) {
-        self.scroll(animated: true)
+        self._scroll(animated: true)
     }
     
     open func editing(textField: QTextField) {
@@ -84,7 +118,7 @@ extension QCompositionCollectionCell : IQTextFieldObserver {
 extension QCompositionCollectionCell : IQListFieldObserver {
     
     open func beginEditing(listField: QListField) {
-        self.scroll(animated: true)
+        self._scroll(animated: true)
     }
     
     open func select(listField: QListField, row: QListFieldPickerRow) {
@@ -98,7 +132,7 @@ extension QCompositionCollectionCell : IQListFieldObserver {
 extension QCompositionCollectionCell : IQDateFieldObserver {
     
     open func beginEditing(dateField: QDateField) {
-        self.scroll(animated: true)
+        self._scroll(animated: true)
     }
     
     open func select(dateField: QDateField, date: Date) {

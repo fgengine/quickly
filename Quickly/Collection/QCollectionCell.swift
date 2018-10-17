@@ -3,6 +3,9 @@
 //
 
 open class QCollectionCell< Type: IQCollectionItem > : UICollectionViewCell, IQTypedCollectionCell {
+    
+    public weak var collectionDelegate: CollectionCellDelegate?
+    public var item: Type?
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,9 +25,6 @@ open class QCollectionCell< Type: IQCollectionItem > : UICollectionViewCell, IQT
         super.awakeFromNib()
         self.configure()
     }
-
-    public weak var collectionDelegate: CollectionCellDelegate? = nil
-    public var item: Type? = nil
 
     open class func size(item: Type, layout: UICollectionViewLayout, section: IQCollectionSection, spec: IQContainerSpec) -> CGSize {
         return CGSize.zero

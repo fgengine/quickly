@@ -5,28 +5,24 @@
 public class QImageSource : IQImageSource {
 
     public var image: UIImage?
-    public var size: CGSize
     public var url: URL?
-    public var renderingMode: UIImage.RenderingMode
+    public var size: CGSize
     public var scale: QImageSourceScale
     public var tintColor: UIColor?
 
     public init(
         _ image: UIImage,
-        renderingMode: UIImage.RenderingMode = .automatic,
         scale: QImageSourceScale = .originOrAspectFit,
         tintColor: UIColor? = nil
     ) {
         self.image = image
         self.size = image.size
-        self.renderingMode = renderingMode
         self.scale = scale
         self.tintColor = tintColor
     }
 
     public init(
         _ imageNamed: String,
-        renderingMode: UIImage.RenderingMode = .automatic,
         scale: QImageSourceScale = .originOrAspectFit,
         tintColor: UIColor? = nil
     ) {
@@ -36,7 +32,6 @@ public class QImageSource : IQImageSource {
         } else {
             self.size = CGSize.zero
         }
-        self.renderingMode = renderingMode
         self.scale = scale
         self.tintColor = tintColor
     }
@@ -44,15 +39,26 @@ public class QImageSource : IQImageSource {
     public init(
         _ url: URL,
         size: CGSize,
-        renderingMode: UIImage.RenderingMode = .automatic,
         scale: QImageSourceScale = .originOrAspectFit,
         tintColor: UIColor? = nil
     ) {
-        self.size = size
         self.url = url
-        self.renderingMode = renderingMode
+        self.size = size
         self.scale = scale
         self.tintColor = tintColor
+    }
+    
+    public init(
+        _ source: IQImageSource,
+        size: CGSize? = nil,
+        scale: QImageSourceScale? = nil,
+        tintColor: UIColor? = nil
+    ) {
+        self.image = source.image
+        self.url = source.url
+        self.size = size ?? source.size
+        self.scale = scale ?? source.scale
+        self.tintColor = tintColor ?? source.tintColor
     }
 
 }

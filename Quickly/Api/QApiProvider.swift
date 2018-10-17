@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QApiProvider : NSObject, IQApiProvider, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate, URLSessionDownloadDelegate, URLSessionStreamDelegate {
+open class QApiProvider : NSObject, IQApiProvider {
 
     public var baseUrl: URL? = nil
     public var urlParams: [String: Any] = [:]
@@ -13,18 +13,22 @@ open class QApiProvider : NSObject, IQApiProvider, URLSessionDelegate, URLSessio
     public var logging: QApiLogging = .never
 
     public private(set) lazy var session: URLSession = self.prepareSession()
-    public private(set) lazy var sessionConfiguration: URLSessionConfiguration = self.prepareSessionConfiguration()
-    public private(set) lazy var sessionQueue: OperationQueue = self.prepareSessionQueue()
+    public private(set) var sessionConfiguration: URLSessionConfiguration
+    public private(set) var sessionQueue: OperationQueue
+    
     internal var queue: DispatchQueue = DispatchQueue(label: "QApiProvider")
     internal var queries: [Int: IQApiQuery] = [:]
 
-    public override init() {
+    public init(sessionConfiguration: URLSessionConfiguration, sessionQueue: OperationQueue) {
+        self.sessionConfiguration = sessionConfiguration
+        self.sessionQueue = sessionQueue
         super.init()
     }
 
-    public init(baseUrl: URL) {
+    public init(baseUrl: URL, sessionConfiguration: URLSessionConfiguration, sessionQueue: OperationQueue) {
         self.baseUrl = baseUrl
-
+        self.sessionConfiguration = sessionConfiguration
+        self.sessionQueue = sessionQueue
         super.init()
     }
 
@@ -235,6 +239,10 @@ open class QApiProvider : NSObject, IQApiProvider, URLSessionDelegate, URLSessio
             query.cancel()
         }
     }
+    
+}
+
+extension QApiProvider {
 
     private func prepareSession() -> URLSession {
         return URLSession(
@@ -243,19 +251,10 @@ open class QApiProvider : NSObject, IQApiProvider, URLSessionDelegate, URLSessio
             delegateQueue: self.sessionQueue
         )
     }
+    
+}
 
-    private func prepareSessionConfiguration() -> URLSessionConfiguration {
-        let sessionConfiguration = URLSessionConfiguration.default
-        sessionConfiguration.timeoutIntervalForRequest = 30
-        sessionConfiguration.timeoutIntervalForResource = 60
-        return sessionConfiguration
-    }
-
-    private func prepareSessionQueue() -> OperationQueue {
-        let queue = OperationQueue()
-        queue.maxConcurrentOperationCount = 1
-        return queue;
-    }
+extension QApiProvider : URLSessionDelegate {
 
     public func urlSession(
         _ session: URLSession,
@@ -278,6 +277,10 @@ open class QApiProvider : NSObject, IQApiProvider, URLSessionDelegate, URLSessio
         )
         completionHandler(challenge.disposition, challenge.credential)
     }
+    
+}
+
+extension QApiProvider : URLSessionTaskDelegate {
 
     public func urlSession(
         _ session: URLSession,
@@ -338,6 +341,10 @@ open class QApiProvider : NSObject, IQApiProvider, URLSessionDelegate, URLSessio
             query.finish(error: error)
         }
     }
+    
+}
+
+extension QApiProvider : URLSessionDataDelegate {
 
     public func urlSession(
         _ session: URLSession,
@@ -380,6 +387,10 @@ open class QApiProvider : NSObject, IQApiProvider, URLSessionDelegate, URLSessio
             query.receive(data: data)
         }
     }
+    
+}
+
+extension QApiProvider : URLSessionDownloadDelegate {
 
     public func urlSession(
         _ session: URLSession,

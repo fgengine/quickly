@@ -11,10 +11,12 @@ public enum QCompositionTableRowSizeBehaviour {
 open class QCompositionTableRow< Composable: IQComposable > : QBackgroundColorTableRow {
 
     public var composable: Composable
+    public var selectedComposable: Composable?
     public var sizeBehaviour: QCompositionTableRowSizeBehaviour
 
     public init(
         composable: Composable,
+        selectedComposable: Composable? = nil,
         sizeBehaviour: QCompositionTableRowSizeBehaviour = .dynamic,
         backgroundColor: UIColor? = nil,
         selectedBackgroundColor: UIColor? = nil,
@@ -25,6 +27,7 @@ open class QCompositionTableRow< Composable: IQComposable > : QBackgroundColorTa
         editingStyle: UITableViewCell.EditingStyle = .none
     ) {
         self.composable = composable
+        self.selectedComposable = selectedComposable
         self.sizeBehaviour = sizeBehaviour
         super.init(
             backgroundColor: backgroundColor,
@@ -67,10 +70,41 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
     
     open override func set(row: RowType, spec: IQContainerSpec, animated: Bool) {
         super.set(row: row, spec: spec, animated: animated)
-        self.composition.prepare(composable: row.composable, spec: spec, animated: animated)
+        self._prepareComposition(row: row, spec: spec, highlighted: self.isHighlighted, selected: self.isSelected, animated: animated)
     }
     
-    private func scroll(animated: Bool) {
+    open override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        if let row = self.row, let spec = self.composition.spec {
+            self._prepareComposition(row: row, spec: spec, highlighted: highlighted, selected: self.isSelected, animated: animated)
+        }
+    }
+    
+    open override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        if let row = self.row, let spec = self.composition.spec {
+            self._prepareComposition(row: row, spec: spec, highlighted: self.isHighlighted, selected: selected, animated: animated)
+        }
+    }
+    
+    private func _prepareComposition(row: RowType, spec: IQContainerSpec, highlighted: Bool, selected: Bool, animated: Bool) {
+        self.composition.prepare(
+            composable: self._currentComposable(row: row, highlighted: highlighted, selected: selected),
+            spec: spec,
+            animated: animated
+        )
+    }
+    
+    private func _currentComposable(row: RowType, highlighted: Bool, selected: Bool) -> Composition.Composable {
+        if selected == true || highlighted == true {
+            if let selectedComposable = row.selectedComposable {
+                return selectedComposable
+            }
+        }
+        return row.composable
+    }
+    
+    private func _scroll(animated: Bool) {
         guard let row = self.row, let controller = row.section?.controller else { return }
         controller.scroll(row: row, scroll: .middle, animated: animated)
     }
@@ -80,7 +114,7 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
 extension QCompositionTableCell : IQTextFieldObserver {
     
     open func beginEditing(textField: QTextField) {
-        self.scroll(animated: true)
+        self._scroll(animated: true)
     }
     
     open func editing(textField: QTextField) {
@@ -100,7 +134,7 @@ extension QCompositionTableCell : IQTextFieldObserver {
 extension QCompositionTableCell : IQListFieldObserver {
     
     open func beginEditing(listField: QListField) {
-        self.scroll(animated: true)
+        self._scroll(animated: true)
     }
     
     open func select(listField: QListField, row: QListFieldPickerRow) {
@@ -114,7 +148,7 @@ extension QCompositionTableCell : IQListFieldObserver {
 extension QCompositionTableCell : IQDateFieldObserver {
     
     open func beginEditing(dateField: QDateField) {
-        self.scroll(animated: true)
+        self._scroll(animated: true)
     }
     
     open func select(dateField: QDateField, date: Date) {

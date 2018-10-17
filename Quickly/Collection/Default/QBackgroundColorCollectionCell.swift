@@ -27,27 +27,37 @@ open class QBackgroundColorCollectionItem : QCollectionItem {
 
 open class QBackgroundColorCollectionCell< Item: QBackgroundColorCollectionItem > : QCollectionCell< Item > {
     
-    open override var isSelected: Bool {
-        didSet { self._applyContentBackgroundColor(selected: self.isSelected, highlighted: self.isHighlighted) }
-    }
     open override var isHighlighted: Bool {
-        didSet { self._applyContentBackgroundColor(selected: self.isSelected, highlighted: self.isHighlighted) }
+        didSet {
+            if let item = self.item {
+                self._applyContentBackgroundColor(item: item)
+            }
+        }
+    }
+    open override var isSelected: Bool {
+        didSet {
+            if let item = self.item {
+                self._applyContentBackgroundColor(item: item)
+            }
+        }
     }
 
     open override func set(item: Item, spec: IQContainerSpec, animated: Bool) {
         super.set(item: item, spec: spec, animated: animated)
-        
-        self._applyContentBackgroundColor(selected: self.isSelected, highlighted: self.isHighlighted)
+        self._applyContentBackgroundColor(item: item)
     }
     
-    private func _applyContentBackgroundColor(selected: Bool, highlighted: Bool) {
-        let backgroundColor = self._currentContentBackgroundColor(selected: selected, highlighted: highlighted)
+    private func _applyContentBackgroundColor(item: Item) {
+        self._applyContentBackgroundColor(item: item, highlighted: self.isHighlighted, selected: self.isSelected)
+    }
+    
+    private func _applyContentBackgroundColor(item: Item, highlighted: Bool, selected: Bool) {
+        let backgroundColor = self._currentContentBackgroundColor(item: item, highlighted: highlighted, selected: selected)
         self.backgroundColor = backgroundColor
         self.contentView.backgroundColor = backgroundColor
     }
     
-    private func _currentContentBackgroundColor(selected: Bool, highlighted: Bool) -> UIColor? {
-        guard let item = self.item else { return nil }
+    private func _currentContentBackgroundColor(item: Item, highlighted: Bool, selected: Bool) -> UIColor? {
         if let selectedBackgroundColor = item.selectedBackgroundColor {
             if selected == true || highlighted == true {
                 return selectedBackgroundColor
