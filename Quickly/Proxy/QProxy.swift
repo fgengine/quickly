@@ -26,8 +26,8 @@ open class QProxy : IQProxy {
     public init(
         host: String,
         port: Int,
-        username: String?,
-        password: String?
+        username: String? = nil,
+        password: String? = nil
     ) {
         self.host = host
         self.port = port
