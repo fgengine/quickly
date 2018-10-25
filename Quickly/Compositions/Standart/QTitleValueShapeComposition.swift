@@ -14,7 +14,7 @@ open class QTitleValueShapeComposable : QComposable {
     public var shapeSpacing: CGFloat
 
     public init(
-        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         title: QLabelStyleSheet,
         titleSpacing: CGFloat = 4,
         value: QLabelStyleSheet,

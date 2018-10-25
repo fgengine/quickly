@@ -13,7 +13,7 @@ open class QTitleDetailValueComposable : QComposable {
     public var valueSpacing: CGFloat
 
     public init(
-        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         title: QLabelStyleSheet,
         titleSpacing: CGFloat = 4,
         detail: QLabelStyleSheet,

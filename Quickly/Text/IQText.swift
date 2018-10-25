@@ -2,10 +2,12 @@
 //  Quickly
 //
 
-public protocol IQText {
+public protocol IQText : class {
 
-    var attributed: NSAttributedString { get }
     var string: String { get }
+    var font: UIFont? { get }
+    var color: UIColor? { get }
+    var attributed: NSAttributedString? { get }
 
     func size() -> CGSize
     func size(width: CGFloat) -> CGSize
@@ -15,10 +17,6 @@ public protocol IQText {
 }
 
 extension IQText {
-
-    public var string: String {
-        get { return self.attributed.string }
-    }
 
     public func size() -> CGSize {
         return self.size(size: CGSize(
@@ -39,15 +37,6 @@ extension IQText {
             width: CGFloat.greatestFiniteMagnitude,
             height: height
         ))
-    }
-
-    public func size(size: CGSize) -> CGSize {
-        let rect = self.attributed.boundingRect(
-            with: size,
-            options: [.usesLineFragmentOrigin],
-            context: nil
-        )
-        return rect.integral.size
     }
 
 }

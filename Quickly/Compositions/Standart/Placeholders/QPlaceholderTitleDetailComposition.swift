@@ -12,7 +12,7 @@ open class QPlaceholderTitleDetailComposable : QComposable {
     public var detailHeight: CGFloat
     
     public init(
-        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         title: QPlaceholderViewStyleSheet,
         titleHeight: CGFloat,
         titleSpacing: CGFloat = 4,

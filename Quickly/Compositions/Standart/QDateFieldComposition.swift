@@ -19,7 +19,7 @@ open class QDateFieldComposable : QComposable {
     public var fieldEndEditing: Closure?
 
     public init(
-        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         field: QDateFieldStyleSheet,
         fieldDate: Date? = nil,
         fieldHeight: CGFloat = 44,

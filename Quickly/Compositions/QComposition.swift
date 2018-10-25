@@ -5,17 +5,20 @@
 open class QComposable : IQComposable {
 
     public var edgeInsets: UIEdgeInsets
-    public class var defaultEdgeInsets: UIEdgeInsets {
-        get { return UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16) }
-    }
+    public var animationDuration: TimeInterval
+    public var animationDelay: TimeInterval
+    public var animationOptions: UIView.AnimationOptions
 
-    public init(edgeInsets: UIEdgeInsets = defaultEdgeInsets) {
+    public init(edgeInsets: UIEdgeInsets = UIEdgeInsets.zero) {
         self.edgeInsets = edgeInsets
+        self.animationDuration = 0.1
+        self.animationDelay = 0
+        self.animationOptions = [ .beginFromCurrentState ]
     }
 
 }
 
-open class QComposition< Composable: IQComposable > : IQComposition {
+open class QComposition< Composable: QComposable > : IQComposition {
 
     public private(set) weak var owner: AnyObject?
     public private(set) var contentView: UIView
@@ -48,9 +51,19 @@ open class QComposition< Composable: IQComposable > : IQComposition {
         self.composable = composable
         self.spec = spec
         
-        self.preLayout(composable: composable, spec: spec)
-        self.apply(composable: composable, spec: spec)
-        self.postLayout(composable: composable, spec: spec)
+        if animated == true {
+            self.preLayout(composable: composable, spec: spec)
+            UIView.animate(withDuration: composable.animationDuration, delay: composable.animationDelay, options: composable.animationOptions, animations: {
+                self.apply(composable: composable, spec: spec)
+                self.contentView.layoutIfNeeded()
+            }, completion: { (_) in
+                self.postLayout(composable: composable, spec: spec)
+            })
+        } else {
+            self.preLayout(composable: composable, spec: spec)
+            self.apply(composable: composable, spec: spec)
+            self.postLayout(composable: composable, spec: spec)
+        }
     }
     
     open func preLayout(composable: Composable, spec: IQContainerSpec) {

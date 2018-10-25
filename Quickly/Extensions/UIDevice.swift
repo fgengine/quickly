@@ -2,6 +2,14 @@
 //  Quickly
 //
 
+public enum QDeviceFamily : Int {
+    case unknown
+    case iPhone
+    case iPad
+    case iPod
+    case simulator
+}
+
 public enum QDeviceDisplaySize : Int {
     case unknown
     case iPad
@@ -15,6 +23,36 @@ public enum QDeviceDisplaySize : Int {
 }
 
 public extension UIDevice {
+    
+    public var identifier: String {
+        get {
+            var systemInfo = utsname()
+            uname(&systemInfo)
+            let machineMirror = Mirror(reflecting: systemInfo.machine)
+            return machineMirror.children.reduce("") { identifier, element in
+                guard let value = element.value as? Int8, value != 0 else { return identifier }
+                return identifier + String(UnicodeScalar(UInt8(value)))
+            }
+        }
+    }
+    
+    public var family: QDeviceFamily {
+        get {
+            #if targetEnvironment(simulator)
+            return .simulator
+            #else
+            let identifier = self.identifier
+            if identifier.hasPrefix("iPhone") {
+                return .iPhone
+            } else if identifier.hasPrefix("iPad") {
+                return .iPad
+            } else if identifier.hasPrefix("iPod") {
+                return .iPod
+            }
+            return .unknown
+            #endif
+        }
+    }
 
     public var displaySize: QDeviceDisplaySize {
         get {

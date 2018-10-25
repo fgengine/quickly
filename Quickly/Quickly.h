@@ -7,6 +7,8 @@
 @import WebKit;
 @import SystemConfiguration;
 
+#import <sys/utsname.h>
+
 //! Project version number for Quickly.
 FOUNDATION_EXPORT double QuicklyVersionNumber;
 

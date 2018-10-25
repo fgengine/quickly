@@ -626,12 +626,6 @@ extension QPageContainerViewController : QPagebarDelegate {
 }
 
 extension QPageContainerViewController : UIGestureRecognizerDelegate {
-
-    open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard gestureRecognizer == self.interactiveGesture else { return false }
-        guard let gestureRecognizerView = gestureRecognizer.view, let otherGestureRecognizerView = otherGestureRecognizer.view else { return false }
-        return otherGestureRecognizerView.isDescendant(of: gestureRecognizerView)
-    }
     
     open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         guard gestureRecognizer == self.interactiveGesture else { return false }

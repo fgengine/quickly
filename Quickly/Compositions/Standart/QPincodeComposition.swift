@@ -51,7 +51,7 @@ open class QPincodeComposable : QComposable {
         buttonBackspace: QButtonStyleSheet,
         buttonsSpacing: UIOffset,
         buttonsSize: CGFloat,
-        edgeInsets: UIEdgeInsets = defaultEdgeInsets
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero
     ) {
         self.title = title
         self.titleSpacing = titleSpacing
@@ -449,7 +449,7 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
     
     public func showError(text: String) {
         if let composable = self.composable, let spec = self.spec {
-            self.error = QLabelStyleSheet(text: QStyledText(text, style: composable.error))
+            self.error = QLabelStyleSheet(text: QAttributedText(text, style: composable.error))
             self.error!.apply(self.errorLabel)
             self.preLayout(composable: composable, spec: spec)
             UIView.animate(withDuration: 0.125, animations: {

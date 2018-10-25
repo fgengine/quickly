@@ -46,7 +46,7 @@ public final class QButtonStyle : IQButtonStyle {
     }
     private var _shadow: QViewShadow?
 
-    public var image: IQImageSource? {
+    public var image: QImageViewStyleSheet? {
         set(value) { self._image = value }
         get {
             if let value = self._image { return value }
@@ -54,9 +54,9 @@ public final class QButtonStyle : IQButtonStyle {
             return nil
         }
     }
-    private var _image: IQImageSource?
+    private var _image: QImageViewStyleSheet?
 
-    public var text: IQText? {
+    public var text: QLabelStyleSheet? {
         set(value) { self._text = value }
         get {
             if let value = self._text { return value }
@@ -64,7 +64,7 @@ public final class QButtonStyle : IQButtonStyle {
             return nil
         }
     }
-    private var _text: IQText?
+    private var _text: QLabelStyleSheet?
 
     public init(
         parent: IQButtonStyle? = nil,
@@ -72,8 +72,8 @@ public final class QButtonStyle : IQButtonStyle {
         border: QViewBorder? = nil,
         cornerRadius: QViewCornerRadius? = nil,
         shadow: QViewShadow? = nil,
-        image: IQImageSource? = nil,
-        text: IQText? = nil
+        image: QImageViewStyleSheet? = nil,
+        text: QLabelStyleSheet? = nil
     ) {
         self.parent = parent
         self.color = color

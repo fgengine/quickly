@@ -8,7 +8,7 @@ open class QSpinnerComposable : QComposable {
     public var isAnimating: Bool
     
     public init(
-        edgeInsets: UIEdgeInsets = defaultEdgeInsets,
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         size: CGFloat,
         isAnimating: Bool = true
     ) {

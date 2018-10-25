@@ -8,7 +8,7 @@ open class QPlaceholderTitleComposable : QComposable {
     public var titleHeight: CGFloat
     
     public init(
-        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         title: QPlaceholderViewStyleSheet,
         titleHeight: CGFloat
     ) {

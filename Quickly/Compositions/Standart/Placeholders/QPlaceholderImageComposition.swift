@@ -8,7 +8,7 @@ open class QPlaceholderImageComposable : QComposable {
     public var imageHeight: CGFloat
 
     public init(
-        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         image: QPlaceholderViewStyleSheet,
         imageHeight: CGFloat
     ) {

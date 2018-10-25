@@ -61,8 +61,8 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
             self.currentViewController = vc
         }
         if let groupbar = self._groupbar {
-            groupbar.items = self._viewControllers.compactMap({ return $0.groupItem })
-            groupbar.setSelectedItem(self.currentViewController?.groupItem, animated: false)
+            groupbar.items = self._viewControllers.compactMap({ return $0.groupbarItem })
+            groupbar.setSelectedItem(self.currentViewController?.groupbarItem, animated: false)
             self.view.addSubview(groupbar)
         }
     }
@@ -243,8 +243,8 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
         if self.isLoaded == true {
             self._updateViewControllers(self.currentViewController, animated: animated, updation: {
                 if let groupbar = self._groupbar {
-                    let groupbarItems = self._viewControllers.compactMap({ return $0.groupItem })
-                    let selectedGroupbarItem = self.currentViewController?.groupItem
+                    let groupbarItems = self._viewControllers.compactMap({ return $0.groupbarItem })
+                    let selectedGroupbarItem = self.currentViewController?.groupbarItem
                     if animated == true {
                         groupbar.performBatchUpdates({
                             groupbar.deleteItem(groupbar.items)
@@ -266,7 +266,7 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
         if self.isLoaded == true {
             self._updateViewControllers(viewController, animated: animated, updation: {
                 if let groupbar = self._groupbar {
-                    groupbar.setSelectedItem(viewController.groupItem, animated: animated)
+                    groupbar.setSelectedItem(viewController.groupbarItem, animated: animated)
                 }
             }, completion: completion)
         } else {
@@ -277,7 +277,7 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
     open func updateGroupItem(_ viewController: IQGroupViewController, animated: Bool) {
         guard let groupbar = self._groupbar else { return }
         guard let index = self._viewControllers.index(where: { $0 === viewController }) else { return }
-        guard let groupbarItem = viewController.groupItem else { return }
+        guard let groupbarItem = viewController.groupbarItem else { return }
         groupbar.replaceItem(groupbarItem, index: index)
     }
 
@@ -390,7 +390,7 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
 extension QGroupContainerViewController : QGroupbarDelegate {
 
     public func groupbar(_ groupbar: QGroupbar, didSelectItem: QGroupbarItem) {
-        guard let index = self._viewControllers.index(where: { return $0.groupItem === didSelectItem }) else { return }
+        guard let index = self._viewControllers.index(where: { return $0.groupbarItem === didSelectItem }) else { return }
         let viewController = self._viewControllers[index]
         self._updateViewControllers(viewController, animated: true)
     }

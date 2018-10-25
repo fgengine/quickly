@@ -19,7 +19,7 @@ open class QListFieldComposable : QComposable {
     public var fieldEndEditing: Closure?
 
     public init(
-        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         field: QListFieldStyleSheet,
         fieldHeight: CGFloat = 44,
         fieldSelectedRow: QListFieldPickerRow? = nil,

@@ -14,7 +14,7 @@ open class QPlaceholderImageTitleComposable : QComposable {
     public var titleHeight: CGFloat
 
     public init(
-        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         image: QImageViewStyleSheet,
         imageWidth: CGFloat = 96,
         imageSpacing: CGFloat = 4,
@@ -31,7 +31,7 @@ open class QPlaceholderImageTitleComposable : QComposable {
     }
     
     public init(
-        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         image: QImageViewStyleSheet,
         imageHeight: CGFloat = 96,
         imageSpacing: CGFloat = 8,

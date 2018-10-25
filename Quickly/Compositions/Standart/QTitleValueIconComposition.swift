@@ -14,7 +14,7 @@ open class QTitleValueIconComposable : QComposable {
     public var iconSpacing: CGFloat
 
     public init(
-        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         title: QLabelStyleSheet,
         titleSpacing: CGFloat = 4,
         value: QLabelStyleSheet,

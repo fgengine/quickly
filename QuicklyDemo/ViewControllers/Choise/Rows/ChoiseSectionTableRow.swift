@@ -68,8 +68,8 @@ class ChoiseSectionTableRow : QCompositionTableRow< QTitleDetailShapeComposable 
 
         super.init(
             composable: QTitleDetailShapeComposable(
-                title: QLabelStyleSheet(text: QStyledText(mode.name, style: TextStyle.title)),
-                detail: QLabelStyleSheet(text: QStyledText(mode.detail, style: TextStyle.subtitle)),
+                title: QLabelStyleSheet(text: QAttributedText(mode.name, style: TextStyle.title)),
+                detail: QLabelStyleSheet(text: QAttributedText(mode.detail, style: TextStyle.subtitle)),
                 shape: DisclosureShape(color: UIColor.black)
             ),
             backgroundColor: UIColor(white: 1, alpha: 1),

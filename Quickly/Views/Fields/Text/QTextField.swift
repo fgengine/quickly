@@ -290,7 +290,7 @@ public class QTextField : QDisplayView, IQField {
         }
         get {
             if let attributed = self.field.attributedPlaceholder {
-                return QText(attributed)
+                return QAttributedText(attributed)
             }
             return nil
         }

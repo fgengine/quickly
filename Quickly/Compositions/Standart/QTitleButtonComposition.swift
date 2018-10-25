@@ -15,7 +15,7 @@ open class QTitleButtonComposable : QComposable {
     public var buttonPressed: Closure
 
     public init(
-        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         title: QLabelStyleSheet,
         button: QButtonStyleSheet,
         buttonHeight: CGFloat = 44,

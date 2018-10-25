@@ -9,7 +9,7 @@ public protocol IQButtonStyle : class {
     var border: QViewBorder? { set get }
     var cornerRadius: QViewCornerRadius? { set get }
     var shadow: QViewShadow? { set get }
-    var image: IQImageSource? { set get }
-    var text: IQText? { set get }
+    var image: QImageViewStyleSheet? { set get }
+    var text: QLabelStyleSheet? { set get }
 
 }

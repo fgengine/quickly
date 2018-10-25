@@ -16,7 +16,7 @@ open class QPlaceholderTitleValueIconComposable : QComposable {
     public var iconSpacing: CGFloat
     
     public init(
-        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         title: QPlaceholderViewStyleSheet,
         titleHeight: CGFloat,
         titleSpacing: CGFloat = 4,

@@ -20,26 +20,4 @@ open class QListFieldPickerRow : QPickerRow {
         super.init()
     }
 
-    public convenience init(field: IQText, row: IQText) {
-        self.init(
-            field: QLabelStyleSheet(text: field),
-            row: QLabelStyleSheet(
-                text: row,
-                verticalAlignment: .center,
-                lineBreakMode: .byWordWrapping
-            )
-        )
-    }
-
-    public convenience init(text: IQText) {
-        self.init(
-            field: QLabelStyleSheet(text: text),
-            row: QLabelStyleSheet(
-                text: text,
-                verticalAlignment: .center,
-                lineBreakMode: .byWordWrapping
-            )
-        )
-    }
-
 }

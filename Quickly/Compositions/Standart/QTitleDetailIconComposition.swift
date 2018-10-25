@@ -14,7 +14,7 @@ open class QTitleDetailIconComposable : QComposable {
     public var iconSpacing: CGFloat
 
     public init(
-        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         title: QLabelStyleSheet,
         titleSpacing: CGFloat = 4,
         detail: QLabelStyleSheet,

@@ -85,7 +85,7 @@ public class QPageViewControllerInteractiveAnimation : IQPageViewControllerInter
         self.overlapping = overlapping
         self.acceleration = acceleration
         self.deceleration = deceleration
-        self.ease = QAnimationEaseQuadraticOut()
+        self.ease = QAnimationEaseSineOut()
         self.finishMode = .none
     }
 

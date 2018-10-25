@@ -40,24 +40,28 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
 
     private weak var currentController: IQCollectionController? {
         set(value) {
-            if let controller = self.collectionView.collectionController {
-                controller.removeObserver(self)
-            }
-            self.collectionView.collectionController = value
-            if let controller = self.collectionView.collectionController {
-                controller.addObserver(self, priority: 0)
+            if self.currentController !== value {
+                if let controller = self.collectionView.collectionController {
+                    controller.removeObserver(self)
+                }
+                self.collectionView.collectionController = value
+                if let controller = self.collectionView.collectionController {
+                    controller.addObserver(self, priority: 0)
+                }
             }
         }
         get { return self.collectionView.collectionController }
     }
     private weak var currentLayout: RowType.LayoutType? {
         set(value) {
-            if let layout = self.collectionView.collectionLayout {
-                layout.removeObserver(self)
-            }
-            self.collectionView.collectionLayout = value
-            if let layout = self.collectionView.collectionLayout {
-                layout.addObserver(self, priority: 0)
+            if self.currentLayout !== value {
+                if let layout = self.collectionView.collectionLayout {
+                    layout.removeObserver(self)
+                }
+                self.collectionView.collectionLayout = value
+                if let layout = self.collectionView.collectionLayout {
+                    layout.addObserver(self, priority: 0)
+                }
             }
         }
         get { return self.collectionView.collectionLayout }

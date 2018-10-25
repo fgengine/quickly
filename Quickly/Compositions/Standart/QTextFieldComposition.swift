@@ -23,7 +23,7 @@ open class QTextFieldComposable : QComposable {
     public var fieldPressedReturn: Closure?
 
     public init(
-        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         field: QTextFieldStyleSheet,
         fieldText: String,
         fieldHeight: CGFloat = 44,

@@ -174,6 +174,7 @@ open class QPagebar : QView {
 
         public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
             guard let pagebar = self.pagebar, let delegate = pagebar.delegate else { return }
+            collectionView.scrollToItem(at: indexPath, at: [ .centeredHorizontally, .centeredVertically ], animated: true)
             delegate.pagebar(pagebar, didSelectItem: pagebar.selectedItem!)
         }
 

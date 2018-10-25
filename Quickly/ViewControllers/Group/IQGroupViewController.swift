@@ -43,7 +43,8 @@ public protocol IQGroupViewController : IQContentOwnerViewController {
 
     var groupContainerViewController: IQGroupContainerViewController? { get }
     var groupContentViewController: IQGroupContentViewController { get }
-    var groupItem: QGroupbarItem? { set get }
+    var groupbarHidden: Bool { set get }
+    var groupbarItem: QGroupbarItem? { set get }
     var groupAnimation: IQGroupViewControllerAnimation? { set get }
 
     func setGroupItem(_ item: QGroupbarItem?, animated: Bool)
@@ -63,7 +64,8 @@ extension IQGroupViewController {
 public protocol IQGroupContentViewController : IQContentViewController {
 
     var groupViewController: IQGroupViewController? { get }
-    var groupItem: QGroupbarItem? { set get }
+    var groupbarHidden: Bool { set get }
+    var groupbarItem: QGroupbarItem? { set get }
     var groupAnimation: IQGroupViewControllerAnimation? { set get }
 
     func setGroupItem(_ item: QGroupbarItem, animated: Bool)
@@ -75,9 +77,13 @@ extension IQGroupContentViewController {
     public var groupViewController: IQGroupViewController? {
         get { return self.parentOf() }
     }
-    public var groupItem: QGroupbarItem? {
-        set(value) { self.groupViewController?.groupItem = value }
-        get { return self.groupViewController?.groupItem }
+    public var groupbarHidden: Bool {
+        set(value) { self.groupViewController?.groupbarHidden = value }
+        get { return self.groupViewController?.groupbarHidden ?? false }
+    }
+    public var groupbarItem: QGroupbarItem? {
+        set(value) { self.groupViewController?.groupbarItem = value }
+        get { return self.groupViewController?.groupbarItem }
     }
     public var groupAnimation: IQGroupViewControllerAnimation? {
         set(value) { self.groupViewController?.groupAnimation = value }

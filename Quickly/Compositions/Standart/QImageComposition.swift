@@ -7,7 +7,7 @@ open class QImageComposable : QComposable {
     public var image: QImageViewStyleSheet
 
     public init(
-        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         image: QImageViewStyleSheet
     ) {
         self.image = image

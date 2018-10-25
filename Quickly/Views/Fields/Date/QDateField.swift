@@ -20,7 +20,7 @@ public enum QDateFieldMode {
 
 open class QDateFieldStyleSheet : QDisplayViewStyleSheet< QDateField > {
 
-    public var formatter: IQDateFieldFormatter?
+    public var formatter: IQDateFieldFormatter
     public var mode: QDateFieldMode
     public var calendar: Calendar?
     public var locale: Locale?
@@ -30,7 +30,7 @@ open class QDateFieldStyleSheet : QDisplayViewStyleSheet< QDateField > {
     public var isEnabled: Bool
 
     public init(
-        formatter: IQDateFieldFormatter? = QDateFieldFormatter(),
+        formatter: IQDateFieldFormatter,
         mode: QDateFieldMode = .date,
         calendar: Calendar? = nil,
         locale: Locale? = nil,

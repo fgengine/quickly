@@ -221,7 +221,7 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     }
     
     open func replaceStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?) {
-        guard let stackViewController = viewController.stackViewController else { return }
+        let stackViewController = QStackViewController(viewController)
         self.replaceStack(stackViewController, animated: animated, completion: completion)
     }
 

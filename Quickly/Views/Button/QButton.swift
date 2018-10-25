@@ -191,7 +191,7 @@ public class QButton : QControl {
             imageView.invalidateIntrinsicContentSize()
         }
         if let textLabel = self.textLabel {
-            textLabel.preferredMaxLayoutWidth = self.bounds.width
+            textLabel.invalidateIntrinsicContentSize()
         }
     }
 
@@ -501,7 +501,7 @@ public class QButton : QControl {
 
     private func _applyImageStyle(_ style: IQButtonStyle) {
         if let image = style.image {
-            self.imageView.source = image
+            image.apply(self.imageView)
             self.imageView.alpha = 1
         } else {
             self._resetImageStyle()
@@ -514,7 +514,7 @@ public class QButton : QControl {
 
     private func _applyTextStyle(_ style: IQButtonStyle) {
         if let text = style.text {
-            self.textLabel.text = text
+            text.apply(self.textLabel)
             self.textLabel.alpha = 1
         } else {
             self._resetTextStyle()

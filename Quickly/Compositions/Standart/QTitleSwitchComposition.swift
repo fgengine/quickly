@@ -15,7 +15,7 @@ open class QTitleSwitchComposable : QComposable {
     public var switchChanged: Closure
 
     public init(
-        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         title: QLabelStyleSheet,
         switch: QSwitchStyleSheet,
         switchHeight: CGFloat = 44,

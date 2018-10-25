@@ -13,7 +13,7 @@ open class QImageTitleComposable : QComposable {
     public var title: QLabelStyleSheet
 
     public init(
-        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         image: QImageViewStyleSheet,
         imageWidth: CGFloat = 96,
         imageSpacing: CGFloat = 4,
@@ -28,7 +28,7 @@ open class QImageTitleComposable : QComposable {
     }
     
     public init(
-        edgeInsets: UIEdgeInsets = QComposable.defaultEdgeInsets,
+        edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         image: QImageViewStyleSheet,
         imageHeight: CGFloat = 96,
         imageSpacing: CGFloat = 8,

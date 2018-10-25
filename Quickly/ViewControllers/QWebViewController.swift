@@ -25,13 +25,14 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
     public var rightEdgeInset: CGFloat = 0
     public var allowInvalidCertificates: Bool = false
     public var localCertificateUrls: [URL] = []
-    public private(set) lazy var webView: WKWebView = self._prepareWebView()
-    public private(set) var configuration: WKWebViewConfiguration
-    
-    public init(configuration: WKWebViewConfiguration) {
-        self.configuration = configuration
-        super.init()
-    }
+    public private(set) lazy var webView: WKWebView = {
+        let webView = WKWebView(frame: self.view.bounds.inset(by: self.inheritedEdgeInsets), configuration: self.prepareConfiguration())
+        webView.uiDelegate = self
+        webView.navigationDelegate = self
+        webView.scrollView.delegate = self
+        self.view.addSubview(webView)
+        return webView
+    }()
     
     deinit {
         if self.isLoaded == true {
@@ -47,6 +48,10 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
     
     open override func layout(bounds: CGRect) {
         self.webView.frame = view.bounds.inset(by: self.inheritedEdgeInsets)
+    }
+    
+    open func prepareConfiguration() -> WKWebViewConfiguration {
+        return WKWebViewConfiguration()
     }
     
     @discardableResult
@@ -82,15 +87,6 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
         )
         completionHandler(challenge.disposition, challenge.credential)
         
-    }
-    
-    private func _prepareWebView() -> WKWebView {
-        let webView = WKWebView(frame: (view.bounds).inset(by: self.inheritedEdgeInsets), configuration: self.configuration)
-        webView.uiDelegate = self
-        webView.navigationDelegate = self
-        webView.scrollView.delegate = self
-        self.view.addSubview(webView)
-        return webView
     }
     
 }

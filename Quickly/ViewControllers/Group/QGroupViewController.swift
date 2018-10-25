@@ -5,7 +5,8 @@
 open class QGroupViewController : QViewController, IQGroupViewController {
     
     open private(set) var groupContentViewController: IQGroupContentViewController
-    open var groupItem: QGroupbarItem? {
+    open var groupbarHidden: Bool
+    open var groupbarItem: QGroupbarItem? {
         set(value) { self.setGroupItem(value) }
         get { return self._groupItem }
     }
@@ -13,14 +14,10 @@ open class QGroupViewController : QViewController, IQGroupViewController {
     
     private var _groupItem: QGroupbarItem?
 
-    public init(_ contentViewController: IQGroupContentViewController) {
+    public init(_ contentViewController: IQGroupContentViewController, _ groupbarItem: QGroupbarItem? = nil) {
         self.groupContentViewController = contentViewController
-        super.init()
-    }
-
-    public init(_ groupbarItem: QGroupbarItem?, _ contentViewController: IQGroupContentViewController) {
+        self.groupbarHidden = false
         self._groupItem = groupbarItem
-        self.groupContentViewController = contentViewController
         super.init()
     }
 

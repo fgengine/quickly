@@ -4,31 +4,31 @@
 
 public class QDateFieldFormatter : IQDateFieldFormatter {
 
-    public var formatter: DateFormatter
-    public var textStyle: QTextStyle?
+    public private(set) var formatter: DateFormatter
+    public private(set) var textStyle: IQTextStyle
     
-    public init() {
-        self.formatter = DateFormatter()
-        self.formatter.dateStyle = .full
-        self.formatter.timeStyle = .full
-    }
-
-    public init(_ formatter: DateFormatter) {
+    public init(formatter: DateFormatter, textStyle: IQTextStyle) {
         self.formatter = formatter
+        self.textStyle = textStyle
+    }
+    
+    public convenience init(textStyle: IQTextStyle) {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .full
+        formatter.timeStyle = .full
+        
+        self.init(formatter: formatter, textStyle: textStyle)
     }
 
-    public convenience init(dateFormat: String) {
+    public convenience init(dateFormat: String, textStyle: IQTextStyle) {
         let formatter = DateFormatter()
         formatter.dateFormat = dateFormat
-        self.init(formatter)
+        self.init(formatter: formatter, textStyle: textStyle)
     }
 
     public func from(_ date: Date) -> IQText {
         let string = self.formatter.string(from: date)
-        guard let textStyle = self.textStyle else {
-            return QText(string)
-        }
-        return QStyledText(string, style: textStyle)
+        return QAttributedText(string, style: self.textStyle)
     }
 
 }

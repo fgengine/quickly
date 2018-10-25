@@ -15,7 +15,7 @@ class QuicklyTextTests : XCTestCase {
     func testStyledText() {
         let style = QTextStyle()
         style.font = UIFont.systemFont(ofSize: 10)
-        let text = QStyledText("Test", style: style)
+        let text = QAttributedText("Test", style: style)
         XCTAssertTrue(text.attributed.length == 4)
     }
 
@@ -28,7 +28,7 @@ class QuicklyTextTests : XCTestCase {
         linkStyle.color = UIColor.black
 
         let text = QFormatText("The test {link}", style: style, parts: [
-            "{link}": QStyledText("example.com", style: linkStyle)
+            "{link}": QAttributedText("example.com", style: linkStyle)
        ])
         XCTAssertTrue(text.attributed.length == 20)
     }
