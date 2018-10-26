@@ -49,7 +49,7 @@ public class QStackViewControllerPresentAnimation : IQStackViewControllerPresent
         if animated == true {
             self.currentViewController.willDismiss(animated: animated)
             self.nextViewController.willPresent(animated: animated)
-            UIView.animate(withDuration: self.duration, animations: {
+            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
                 self.currentViewController.view.frame = self.currentEndFrame
                 self.nextViewController.view.frame = self.nextEndFrame
             }, completion: { (completed: Bool) in
@@ -121,7 +121,7 @@ public class QStackViewControllerDismissAnimation : IQStackViewControllerDismiss
         if animated == true {
             self.currentViewController.willDismiss(animated: animated)
             self.previousViewController.willPresent(animated: animated)
-            UIView.animate(withDuration: self.duration, animations: {
+            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
                 self.currentViewController.view.frame = self.currentEndFrame
                 self.previousViewController.view.frame = self.previousEndFrame
             }, completion: { (completed: Bool) in

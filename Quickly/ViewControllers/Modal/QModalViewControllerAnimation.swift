@@ -76,7 +76,7 @@ public class QModalViewControllerPresentAnimation : QModalViewControllerAnimatio
                 vc.willDismiss(animated: animated)
             }
             self.currentViewController.willPresent(animated: animated)
-            UIView.animate(withDuration: self.duration, delay: 0, options: [ .curveEaseOut ], animations: {
+            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState, .curveEaseOut ], animations: {
                 if let vc = self.previousViewController {
                     vc.view.frame = self.previousEndFrame
                 }
@@ -127,7 +127,7 @@ public class QModalViewControllerDismissAnimation : QModalViewControllerAnimatio
                 vc.willPresent(animated: animated)
             }
             self.currentViewController.willDismiss(animated: animated)
-            UIView.animate(withDuration: self.duration, delay: 0, options: [ .curveEaseOut ], animations: {
+            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState, .curveEaseOut ], animations: {
                 if let vc = self.previousViewController {
                     vc.view.frame = self.previousEndFrame
                 }

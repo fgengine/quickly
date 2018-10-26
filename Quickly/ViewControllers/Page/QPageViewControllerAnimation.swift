@@ -48,7 +48,7 @@ public class QPageViewControllerAnimation : IQPageViewControllerAnimation {
         if animated == true {
             self.currentViewController.willDismiss(animated: animated)
             self.targetViewController.willPresent(animated: animated)
-            UIView.animate(withDuration: self.duration, animations: {
+            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
                 self.currentViewController.view.frame = self.currentEndFrame
                 self.targetViewController.view.frame = self.targetEndFrame
             }, completion: { [weak self] (completed: Bool) in

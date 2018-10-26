@@ -45,6 +45,7 @@ open class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
         textContentType: UITextContentType! = nil,
         isEnabled: Bool = true,
         backgroundColor: UIColor? = nil,
+        tintColor: UIColor? = nil,
         cornerRadius: QViewCornerRadius = .none,
         border: QViewBorder = .none,
         shadow: QViewShadow? = nil
@@ -70,6 +71,7 @@ open class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
 
         super.init(
             backgroundColor: backgroundColor,
+            tintColor: tintColor,
             cornerRadius: cornerRadius,
             border: border,
             shadow: shadow
@@ -283,7 +285,16 @@ public class QTextField : QDisplayView, IQField {
     public var placeholder: IQText? {
         set(value) {
             if let text = value {
-                self.field.attributedPlaceholder = text.attributed
+                if let attributed = text.attributed {
+                    self.field.attributedPlaceholder = attributed
+                } else if let font = text.font, let color = text.color {
+                    self.field.attributedPlaceholder = NSAttributedString(string: text.string, attributes: [
+                        .font: font,
+                        .foregroundColor: color
+                    ])
+                } else {
+                    self.field.attributedPlaceholder = nil
+                }
             } else {
                 self.field.attributedPlaceholder = nil
             }

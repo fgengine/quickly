@@ -25,7 +25,7 @@ open class QDialogBlurBackgroundView : QBlurView, IQDialogContainerBackgroundVie
         if isFirst == true {
             self.isHidden = false
             if animated == true {
-                UIView.animate(withDuration: Const.duration, animations: {
+                UIView.animate(withDuration: Const.duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
                     self.blurRadius = Const.visibleBlurRadius
                 })
             } else {
@@ -37,7 +37,7 @@ open class QDialogBlurBackgroundView : QBlurView, IQDialogContainerBackgroundVie
     public func dismissDialog(viewController: IQDialogViewController, isLast: Bool, animated: Bool) {
         if isLast == true {
             if animated == true {
-                UIView.animate(withDuration: Const.duration, animations: {
+                UIView.animate(withDuration: Const.duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
                     self.blurRadius = Const.hiddenBlurRadius
                 }, completion: { (_) in
                     self.isHidden = true

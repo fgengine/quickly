@@ -42,10 +42,14 @@ public class QGroupViewControllerAnimation : IQGroupViewControllerAnimation {
     public var overlapping: CGFloat
     public var acceleration: CGFloat
     public var duration: TimeInterval {
-        get { return TimeInterval(abs(self.targetBeginFrame.midX - self.targetEndFrame.midX) / self.acceleration) }
+        get {
+            let currentDelta = abs(self.currentBeginFrame.centerPoint.distance(to: self.currentEndFrame.centerPoint))
+            let targetDelta = abs(self.targetBeginFrame.centerPoint.distance(to: self.targetEndFrame.centerPoint))
+            return TimeInterval(max(currentDelta, targetDelta) / self.acceleration)
+        }
     }
 
-    public init(overlapping: CGFloat = 0.1, acceleration: CGFloat = UIScreen.main.bounds.height) {
+    public init(overlapping: CGFloat = 0.1, acceleration: CGFloat = UIScreen.main.bounds.height * 0.85) {
         self.overlapping = overlapping
         self.acceleration = acceleration
     }
@@ -70,7 +74,7 @@ public class QGroupViewControllerAnimation : IQGroupViewControllerAnimation {
         if animated == true {
             self.currentViewController.willDismiss(animated: animated)
             self.targetViewController.willPresent(animated: animated)
-            UIView.animate(withDuration: self.duration, animations: {
+            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
                 self.currentViewController.view.frame = self.currentEndFrame
                 self.currentViewController.view.alpha = self.currentEndAlpha
                 self.targetViewController.view.frame = self.targetEndFrame

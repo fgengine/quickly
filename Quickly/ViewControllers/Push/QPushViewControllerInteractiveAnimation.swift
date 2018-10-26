@@ -56,7 +56,7 @@ public class QPushViewControllerInteractiveDismissAnimation : IQPushViewControll
 
     public func cancel(_ complete: @escaping (_ completed: Bool) -> Void) {
         let duration = TimeInterval(self.deltaPosition / self.acceleration)
-        UIView.animate(withDuration: duration, animations: {
+        UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
             self.viewController.pushOffset = 0
             self.viewController.view.layoutIfNeeded()
         }, completion: { (completed: Bool) in
@@ -73,7 +73,7 @@ public class QPushViewControllerInteractiveDismissAnimation : IQPushViewControll
         let edgeInsets = self.viewController.inheritedEdgeInsets
         let hideOffset = height + edgeInsets.top
         let duration = TimeInterval((hideOffset - offset) / self.acceleration)
-        UIView.animate(withDuration: duration, animations: {
+        UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
             self.viewController.pushOffset = -hideOffset
             self.viewController.view.layoutIfNeeded()
         }, completion: { (completed: Bool) in

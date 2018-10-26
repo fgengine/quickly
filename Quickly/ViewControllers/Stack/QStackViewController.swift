@@ -141,7 +141,7 @@ open class QStackViewController : QViewController, IQStackViewController {
         self._updateAdditionalEdgeInsets()
         if self.isLoaded == true {
             if animated == true {
-                UIView.animate(withDuration: 0.1, animations: {
+                UIView.animate(withDuration: 0.1, delay: 0, options: [ .beginFromCurrentState ], animations: {
                     self.layoutIfNeeded()
                 })
             }
@@ -154,7 +154,7 @@ open class QStackViewController : QViewController, IQStackViewController {
         self._updateAdditionalEdgeInsets()
         if self.isLoaded == true {
             if animated == true {
-                UIView.animate(withDuration: 0.1, animations: {
+                UIView.animate(withDuration: 0.1, delay: 0, options: [ .beginFromCurrentState ], animations: {
                     self.layoutIfNeeded()
                 })
             }

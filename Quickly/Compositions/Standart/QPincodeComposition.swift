@@ -452,7 +452,7 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
             self.error = QLabelStyleSheet(text: QAttributedText(text, style: composable.error))
             self.error!.apply(self.errorLabel)
             self.preLayout(composable: composable, spec: spec)
-            UIView.animate(withDuration: 0.125, animations: {
+            UIView.animate(withDuration: 0.125, delay: 0, options: [ .beginFromCurrentState ], animations: {
                 self.postLayout(composable: composable, spec: spec)
                 self.contentView.layoutIfNeeded()
             })
@@ -466,7 +466,7 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
             self.error = nil
             if let composable = self.composable, let spec = self.spec {
                 self.preLayout(composable: composable, spec: spec)
-                UIView.animate(withDuration: 0.125, animations: {
+                UIView.animate(withDuration: 0.125, delay: 0, options: [ .beginFromCurrentState ], animations: {
                     self.postLayout(composable: composable, spec: spec)
                     self.contentView.layoutIfNeeded()
                 })

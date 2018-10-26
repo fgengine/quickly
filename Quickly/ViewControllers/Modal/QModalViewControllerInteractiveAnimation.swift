@@ -86,7 +86,7 @@ public class QModalViewControllerInteractiveDismissAnimation : IQModalViewContro
 
     public func cancel(_ complete: @escaping (_ completed: Bool) -> Void) {
         let duration = TimeInterval(self.deltaPosition / self.acceleration)
-        UIView.animate(withDuration: duration, animations: {
+        UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
             self.currentViewController.view.frame = self.currentBeginFrame
             if let vc = self.previousViewController {
                 vc.view.frame = self.previousBeginFrame
@@ -111,7 +111,7 @@ public class QModalViewControllerInteractiveDismissAnimation : IQModalViewContro
         if let vc = self.previousViewController {
             vc.willPresent(animated: true)
         }
-        UIView.animate(withDuration: duration, animations: {
+        UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
             self.currentViewController.view.frame = self.currentEndFrame
             if let vc = self.previousViewController {
                 vc.view.frame = self.previousEndFrame

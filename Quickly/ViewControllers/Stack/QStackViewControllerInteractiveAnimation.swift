@@ -88,7 +88,7 @@ public class QStackViewControllerinteractiveDismissAnimation : IQStackViewContro
 
     public func cancel(_ complete: @escaping (_ completed: Bool) -> Void) {
         let duration = TimeInterval(self.deltaPosition / self.acceleration)
-        UIView.animate(withDuration: duration, animations: {
+        UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
             self.currentViewController.view.frame = self.currentBeginFrame
             self.previousViewController.view.frame = self.previousBeginFrame
         }, completion: { [weak self] (completed: Bool) in
@@ -107,7 +107,7 @@ public class QStackViewControllerinteractiveDismissAnimation : IQStackViewContro
         let duration = TimeInterval((self.distance - self.deltaPosition) / self.acceleration)
         self.currentViewController.willDismiss(animated: true)
         self.previousViewController.willPresent(animated: true)
-        UIView.animate(withDuration: duration, animations: {
+        UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
             self.currentViewController.view.frame = self.currentEndFrame
             self.previousViewController.view.frame = self.previousEndFrame
         }, completion: { [weak self] (completed: Bool) in

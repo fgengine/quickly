@@ -171,7 +171,7 @@ public class QPageViewControllerInteractiveAnimation : IQPageViewControllerInter
 
     public func cancel(_ complete: @escaping (Bool) -> Void) {
         let duration = TimeInterval(abs(self.deltaPosition) / self.acceleration)
-        UIView.animate(withDuration: duration, animations: {
+        UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
             if let vc = self.backwardViewController {
                 vc.view.frame = self.backwardBeginFrame
             }
@@ -204,7 +204,7 @@ public class QPageViewControllerInteractiveAnimation : IQPageViewControllerInter
                 vc.willDismiss(animated: true)
             }
             self.currentViewController.willDismiss(animated: true)
-            UIView.animate(withDuration: duration, animations: {
+            UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
                 if let vc = self.backwardViewController {
                     vc.view.frame = self.backwardEndFrame
                 }
@@ -228,7 +228,7 @@ public class QPageViewControllerInteractiveAnimation : IQPageViewControllerInter
                 vc.willDismiss(animated: true)
             }
             self.currentViewController.willDismiss(animated: true)
-            UIView.animate(withDuration: duration, animations: {
+            UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
                 if let vc = self.forwardViewController {
                     vc.view.frame = self.forwardEndFrame
                 }

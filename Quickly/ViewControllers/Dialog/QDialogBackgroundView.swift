@@ -31,7 +31,7 @@ open class QDialogBackgroundView : QView, IQDialogContainerBackgroundView {
         if isFirst == true {
             self.isHidden = false
             if animated == true {
-                UIView.animate(withDuration: Const.duration, animations: {
+                UIView.animate(withDuration: Const.duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
                     self.alpha = Const.visibleAlpha
                 })
             } else {
@@ -43,7 +43,7 @@ open class QDialogBackgroundView : QView, IQDialogContainerBackgroundView {
     public func dismissDialog(viewController: IQDialogViewController, isLast: Bool, animated: Bool) {
         if isLast == true {
             if animated == true {
-                UIView.animate(withDuration: Const.duration, animations: {
+                UIView.animate(withDuration: Const.duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
                     self.alpha = Const.hiddenAlpha
                 }, completion: { (_) in
                     self.isHidden = true

@@ -185,53 +185,49 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
     }
 
     open func setGroupbar(_ groupbar: QGroupbar?, animated: Bool = false) {
-        if self.isLoaded == true {
-            if let groupbar = self._groupbar {
-                groupbar.removeFromSuperview()
-                groupbar.delegate = nil
+        if self._groupbar !== groupbar {
+            if self.isLoaded == true {
+                if let groupbar = self._groupbar {
+                    groupbar.removeFromSuperview()
+                    groupbar.delegate = nil
+                }
+                self._groupbar = groupbar
+                if let groupbar = self._groupbar {
+                    groupbar.frame = self._groupbarFrame(bounds: self.view.bounds)
+                    groupbar.edgeInsets = self._groupbarEdgeInsets()
+                    groupbar.delegate = self
+                    self.view.addSubview(groupbar)
+                }
+                self.setNeedLayout()
+            } else {
+                if let groupbar = self._groupbar {
+                    groupbar.delegate = nil
+                }
+                self._groupbar = groupbar
+                if let groupbar = self._groupbar {
+                    groupbar.delegate = self
+                }
             }
-            self._groupbar = groupbar
-            if let groupbar = self._groupbar {
-                groupbar.frame = self._groupbarFrame(bounds: self.view.bounds)
-                groupbar.edgeInsets = self._groupbarEdgeInsets()
-                groupbar.delegate = self
-                self.view.addSubview(groupbar)
-            }
-            self.setNeedLayout()
-        } else {
-            if let groupbar = self._groupbar {
-                groupbar.delegate = nil
-            }
-            self._groupbar = groupbar
-            if let groupbar = self._groupbar {
-                groupbar.delegate = self
-            }
+            self._updateAdditionalEdgeInsets()
         }
-        self._updateAdditionalEdgeInsets()
     }
 
     open func setGroupbarHeight(_ value: CGFloat, animated: Bool = false) {
-        self._groupbarHeight = value
-        self.setNeedLayout()
-        self._updateAdditionalEdgeInsets()
-        if self.isLoaded == true {
-            if animated == true {
-                UIView.animate(withDuration: 0.1, animations: {
-                    self.layoutIfNeeded()
-                })
+        if self._groupbarHeight != value {
+            self._groupbarHeight = value
+            self._updateAdditionalEdgeInsets()
+            if self.isLoaded == true {
+                self._updateGroupbar(bounds: self.view.bounds, animated: animated)
             }
         }
     }
 
     open func setGroupbarHidden(_ value: Bool, animated: Bool = false) {
-        self._groupbarHidden = value
-        self.setNeedLayout()
-        self._updateAdditionalEdgeInsets()
-        if self.isLoaded == true {
-            if animated == true {
-                UIView.animate(withDuration: 0.1, animations: {
-                    self.layoutIfNeeded()
-                })
+        if self._groupbarHidden != value {
+            self._groupbarHidden = value
+            self._updateAdditionalEdgeInsets()
+            if self.isLoaded == true {
+                self._updateGroupbar(bounds: self.view.bounds, animated: animated)
             }
         }
     }
@@ -289,7 +285,7 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
                 self._appearViewController(vc)
             }
             updation?()
-            if animated == true, let currentViewController = previousViewController, let targetViewController = viewController {
+            if let currentViewController = previousViewController, let targetViewController = viewController {
                 let animation = self._prepareAnimation(currentViewController)
                 self.isAnimating = true
                 animation.prepare(
@@ -297,7 +293,7 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
                     currentViewController: currentViewController,
                     targetViewController: targetViewController
                 )
-                animation.update(animated: true, complete: { [weak self] _ in
+                animation.update(animated: animated, complete: { [weak self] _ in
                     guard let strong = self else { return }
                     strong._disappearViewController(currentViewController)
                     strong.isAnimating = false
@@ -354,6 +350,19 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
             bottom: (self._groupbar != nil && self._groupbarHidden == false) ? self._groupbarHeight : 0,
             right: 0
         )
+    }
+    
+    private func _updateGroupbar(bounds: CGRect, animated: Bool) {
+        guard let groupbar = self._groupbar else { return }
+        if animated == true {
+            UIView.animate(withDuration: 0.1, delay: 0, options: [ .beginFromCurrentState ], animations: {
+                groupbar.edgeInsets = self._groupbarEdgeInsets()
+                groupbar.frame = self._groupbarFrame(bounds: bounds)
+            })
+        } else {
+            groupbar.edgeInsets = self._groupbarEdgeInsets()
+            groupbar.frame = self._groupbarFrame(bounds: bounds)
+        }
     }
 
     private func _groupbarFrame(bounds: CGRect) -> CGRect {

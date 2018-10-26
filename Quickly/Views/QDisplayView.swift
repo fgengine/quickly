@@ -5,17 +5,20 @@
 open class QDisplayViewStyleSheet< TargetType: QDisplayView > : IQStyleSheet {
 
     public var backgroundColor: UIColor?
+    public var tintColor: UIColor?
     public var cornerRadius: QViewCornerRadius
     public var border: QViewBorder
     public var shadow: QViewShadow?
 
     public init(
         backgroundColor: UIColor? = nil,
+        tintColor: UIColor? = nil,
         cornerRadius: QViewCornerRadius = .none,
         border: QViewBorder = .none,
         shadow: QViewShadow? = nil
     ) {
         self.backgroundColor = backgroundColor
+        self.tintColor = tintColor
         self.cornerRadius = cornerRadius
         self.border = border
         self.shadow = shadow
@@ -23,6 +26,7 @@ open class QDisplayViewStyleSheet< TargetType: QDisplayView > : IQStyleSheet {
 
     public init(_ styleSheet: QDisplayViewStyleSheet) {
         self.backgroundColor = styleSheet.backgroundColor
+        self.tintColor = styleSheet.tintColor
         self.cornerRadius = styleSheet.cornerRadius
         self.border = styleSheet.border
         self.shadow = styleSheet.shadow
@@ -30,6 +34,7 @@ open class QDisplayViewStyleSheet< TargetType: QDisplayView > : IQStyleSheet {
 
     public func apply(_ target: TargetType) {
         target.backgroundColor = self.backgroundColor
+        target.tintColor = self.tintColor
         target.cornerRadius = self.cornerRadius
         target.border = self.border
         target.shadow = self.shadow

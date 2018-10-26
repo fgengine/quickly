@@ -48,7 +48,7 @@ public class QDialogViewControllerinteractiveDismissAnimation : IQDialogViewCont
 
     public func cancel(_ complete: @escaping (_ completed: Bool) -> Void) {
         let duration = TimeInterval(self.deltaPosition / self.acceleration)
-        UIView.animate(withDuration: duration, animations: {
+        UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
             self.viewController.dialogVerticalAlignment = self.verticalAlignment
             self.viewController.view.layoutIfNeeded()
         }, completion: { (completed: Bool) in
@@ -65,7 +65,7 @@ public class QDialogViewControllerinteractiveDismissAnimation : IQDialogViewCont
         self.viewController.willDismiss(animated: true)
         let duration = TimeInterval(self.deltaPosition / self.acceleration)
         let deceleration = self.deltaPosition * 2.5
-        UIView.animate(withDuration: duration, animations: {
+        UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
             switch self.verticalAlignment {
             case .top(let offset): self.viewController.dialogVerticalAlignment = .top(offset: offset + deceleration)
             case .center(let offset): self.viewController.dialogVerticalAlignment = .center(offset: offset + deceleration)

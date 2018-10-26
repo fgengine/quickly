@@ -27,7 +27,7 @@ public class QPushViewControllerPresentAnimation : QPushViewControllerAnimation 
         if animated == true {
             self.viewController.willPresent(animated: animated)
             self.viewController.view.layoutIfNeeded()
-            UIView.animate(withDuration: self.duration, animations: {
+            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
                 self.viewController.pushState = .show
                 self.viewController.view.layoutIfNeeded()
             }, completion: { (completed: Bool) in
@@ -51,7 +51,7 @@ public class QPushViewControllerDismissAnimation : QPushViewControllerAnimation 
     public override func update(animated: Bool, complete: @escaping (_ completed: Bool) -> Void) {
         if animated == true {
             self.viewController.willDismiss(animated: animated)
-            UIView.animate(withDuration: self.duration, animations: {
+            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
                 self.viewController.pushState = .hide
                 self.viewController.view.layoutIfNeeded()
             }, completion: { (completed: Bool) in
