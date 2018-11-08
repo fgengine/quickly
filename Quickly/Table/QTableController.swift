@@ -459,6 +459,9 @@ extension QTableController : UIScrollViewDelegate {
     open func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.observer.notify({ $0.scroll(self, tableView: self.tableView!) })
     }
+    
+    open func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+    }
 
 }
 

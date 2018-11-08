@@ -117,8 +117,10 @@ open class QLabel : QDisplayView {
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        self.setContentHuggingPriority(UILayoutPriority(rawValue: 251), for: .horizontal)
-        self.setContentHuggingPriority(UILayoutPriority(rawValue: 251), for: .vertical)
+        self.setContentHuggingPriority(
+            horizontal: UILayoutPriority(rawValue: 251),
+            vertical: UILayoutPriority(rawValue: 251)
+        )
     }
 
     public convenience init(frame: CGRect, styleSheet: QLabelStyleSheet) {

@@ -44,8 +44,10 @@ open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComp
     lazy private var button: QButton = {
         let view = QButton(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.setContentHuggingPriority(UILayoutPriority(rawValue: 252), for: .horizontal)
-        view.setContentHuggingPriority(UILayoutPriority(rawValue: 252), for: .vertical)
+        view.setContentHuggingPriority(
+            horizontal: UILayoutPriority(rawValue: 252),
+            vertical: UILayoutPriority(rawValue: 252)
+        )
         view.addTouchUpInside(self, action: #selector(self.pressedButton(_:)))
         self.contentView.addSubview(view)
         return view

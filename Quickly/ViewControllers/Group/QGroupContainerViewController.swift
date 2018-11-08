@@ -22,6 +22,10 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
         set(value) { self.setGroupbarHidden(value) }
         get { return self._groupbarHidden }
     }
+    open var groupbarVisibility: CGFloat {
+        set(value) { self.setGroupbarVisibility(value) }
+        get { return self._groupbarVisibility }
+    }
     open var viewControllers: [IQGroupViewController] {
         set(value) { self.setViewControllers(value) }
         get { return self._viewControllers }
@@ -39,11 +43,13 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
     private var _groupbar: QGroupbar?
     private var _groupbarHeight: CGFloat
     private var _groupbarHidden: Bool
+    private var _groupbarVisibility: CGFloat
     private var _viewControllers: [IQGroupViewController]
 
     public override init() {
         self._groupbarHeight = 44
         self._groupbarHidden = false
+        self._groupbarVisibility = 1
         self._viewControllers = []
         self.animation = QGroupViewControllerAnimation()
         self.isAnimating = false
@@ -232,6 +238,16 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
         }
     }
 
+    open func setGroupbarVisibility(_ visibility: CGFloat, animated: Bool = false) {
+        if self._groupbarVisibility != visibility {
+            self._groupbarVisibility = visibility
+            self._updateAdditionalEdgeInsets()
+            if self.isLoaded == true {
+                self._updateGroupbar(bounds: self.view.bounds, animated: animated)
+            }
+        }
+    }
+
     open func setViewControllers(_ viewControllers: [IQGroupViewController], animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
         self._viewControllers.forEach({ self._removeChildViewController($0) })
         self._viewControllers = viewControllers
@@ -347,7 +363,7 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
         self.additionalEdgeInsets = UIEdgeInsets(
             top: 0,
             left: 0,
-            bottom: (self._groupbar != nil && self._groupbarHidden == false) ? self._groupbarHeight : 0,
+            bottom: (self._groupbar != nil && self._groupbarHidden == false) ? self._groupbarHeight * self._groupbarVisibility : 0,
             right: 0
         )
     }
@@ -378,7 +394,7 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
         }
         return CGRect(
             x: bounds.origin.x,
-            y: bounds.maxY - fullHeight,
+            y: bounds.maxY - (fullHeight * self._groupbarVisibility),
             width: bounds.size.width,
             height: fullHeight
         )

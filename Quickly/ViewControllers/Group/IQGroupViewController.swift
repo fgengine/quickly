@@ -21,6 +21,7 @@ public protocol IQGroupContainerViewController : IQViewController {
     var groupbar: QGroupbar? { set get }
     var groupbarHeight: CGFloat { set get }
     var groupbarHidden: Bool { set get }
+    var groupbarVisibility: CGFloat { set get }
 
     var viewControllers: [IQGroupViewController] { set get }
     var currentViewController: IQGroupViewController? { get }
@@ -30,6 +31,7 @@ public protocol IQGroupContainerViewController : IQViewController {
     func setGroupbar(_ groupbar: QGroupbar?, animated: Bool)
     func setGroupbarHeight(_ height: CGFloat, animated: Bool)
     func setGroupbarHidden(_ hidden: Bool, animated: Bool)
+    func setGroupbarVisibility(_ visibility: CGFloat, animated: Bool)
 
     func setViewControllers(_ viewControllers: [IQGroupViewController], animated: Bool, completion: (() -> Swift.Void)?)
     func setCurrentViewController(_ viewController: IQGroupViewController, animated: Bool, completion: (() -> Swift.Void)?)
@@ -44,6 +46,7 @@ public protocol IQGroupViewController : IQContentOwnerViewController {
     var groupContainerViewController: IQGroupContainerViewController? { get }
     var groupContentViewController: IQGroupContentViewController { get }
     var groupbarHidden: Bool { set get }
+    var groupbarVisibility: CGFloat { set get }
     var groupbarItem: QGroupbarItem? { set get }
     var groupAnimation: IQGroupViewControllerAnimation? { set get }
 
@@ -56,6 +59,14 @@ extension IQGroupViewController {
     public var groupContainerViewController: IQGroupContainerViewController? {
         get { return self.parent as? IQGroupContainerViewController }
     }
+    public var groupbarHidden: Bool {
+        set(value) { self.groupContainerViewController?.groupbarHidden = value }
+        get { return self.groupContainerViewController?.groupbarHidden ?? true }
+    }
+    public var groupbarVisibility: CGFloat {
+        set(value) { self.groupContainerViewController?.groupbarVisibility = value }
+        get { return self.groupContainerViewController?.groupbarVisibility ?? 0 }
+    }
 
 }
 
@@ -65,6 +76,7 @@ public protocol IQGroupContentViewController : IQContentViewController {
 
     var groupViewController: IQGroupViewController? { get }
     var groupbarHidden: Bool { set get }
+    var groupbarVisibility: CGFloat { set get }
     var groupbarItem: QGroupbarItem? { set get }
     var groupAnimation: IQGroupViewControllerAnimation? { set get }
 
@@ -79,7 +91,11 @@ extension IQGroupContentViewController {
     }
     public var groupbarHidden: Bool {
         set(value) { self.groupViewController?.groupbarHidden = value }
-        get { return self.groupViewController?.groupbarHidden ?? false }
+        get { return self.groupViewController?.groupbarHidden ?? true }
+    }
+    public var groupbarVisibility: CGFloat {
+        set(value) { self.groupViewController?.groupbarVisibility = value }
+        get { return self.groupViewController?.groupbarVisibility ?? 0 }
     }
     public var groupbarItem: QGroupbarItem? {
         set(value) { self.groupViewController?.groupbarItem = value }

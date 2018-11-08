@@ -9,6 +9,9 @@ public protocol IQBaseWireframe : class {
     var baseViewController: IQViewController { get }
     
     func setup()
+    
+    func present(_ viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func dismiss(_ viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?)
 
     func presentModal(_ viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?)
     func dismissModal(_ viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?)
@@ -87,6 +90,16 @@ public protocol IQChildWireframe : IQWireframe {
 }
 
 extension IQChildWireframe {
+    
+    public func present(_ viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        guard let parentWireframe = self.parent else { return }
+        parentWireframe.present(viewController, animated: animated, completion: completion)
+    }
+    
+    public func dismiss(_ viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        guard let parentWireframe = self.parent else { return }
+        parentWireframe.dismiss(viewController, animated: animated, completion: completion)
+    }
 
     public func presentModal(_ viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         guard let parentWireframe = self.parent else { return }

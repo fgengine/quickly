@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QStackContainerViewController : QViewController, IQStackContainerViewController, IQGroupContentViewController {
+open class QStackContainerViewController : QViewController, IQStackContainerViewController {
 
     public var contentOffset: CGPoint {
         get { return CGPoint.zero }
@@ -29,6 +29,7 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     open var presentAnimation: IQStackViewControllerPresentAnimation
     open var dismissAnimation: IQStackViewControllerDismissAnimation
     open var interactiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation?
+    open var hidesGroupbarWhenPushed: Bool
     open private(set) var isAnimating: Bool
     public private(set) lazy var interactiveDismissGesture: UIScreenEdgePanGestureRecognizer = self._prepareInteractiveDismissGesture()
     
@@ -47,6 +48,7 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
         self.presentAnimation = presentAnimation
         self.dismissAnimation = dismissAnimation
         self.interactiveDismissAnimation = interactiveDismissAnimation
+        self.hidesGroupbarWhenPushed = false
         self.isAnimating = false
         super.init()
     }
@@ -199,23 +201,23 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
         }
     }
 
-    open func presentStack(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+    open func pushStack(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         self._viewControllers.append(viewController)
         self._addChildViewController(viewController)
         self._present(viewController, animated: animated, completion: completion)
     }
 
-    open func presentStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+    open func pushStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         let stackViewController = QStackViewController(viewController)
-        self.presentStack(stackViewController, animated: animated, completion: completion)
+        self.pushStack(stackViewController, animated: animated, completion: completion)
     }
     
     open func replaceStack(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         let currentViewController = self.currentViewController
-        self.presentStack(viewController, animated: animated, completion: { [weak self] in
+        self.pushStack(viewController, animated: animated, completion: { [weak self] in
             guard let strong = self else { return }
             if let currentViewController = currentViewController {
-                strong.dismissStack(currentViewController, animated: false)
+                strong.popStack(currentViewController, animated: false)
             }
         })
     }
@@ -225,16 +227,16 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
         self.replaceStack(stackViewController, animated: animated, completion: completion)
     }
 
-    open func dismissStack(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+    open func popStack(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         self._dismiss(viewController, animated: animated, completion: completion)
     }
 
-    open func dismissStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+    open func popStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         guard let stackViewController = viewController.stackViewController else { return }
-        self.dismissStack(stackViewController, animated: animated, completion: completion)
+        self.popStack(stackViewController, animated: animated, completion: completion)
     }
 
-    open func dismissStack(to viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+    open func popStack(to viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         if self.currentViewController === viewController {
         } else if self.previousViewController === viewController {
             self._dismiss(self.currentViewController!, animated: animated, completion: completion)
@@ -254,9 +256,9 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
         }
     }
 
-    open func dismissStack(to viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+    open func popStack(to viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         guard let stackPageViewController = viewController.stackViewController else { return }
-        self.dismissStack(to: stackPageViewController, animated: animated, completion: completion)
+        self.popStack(to: stackPageViewController, animated: animated, completion: completion)
     }
 
     private func _present(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?) {
@@ -267,9 +269,12 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
                 self.isAnimating = true
                 let presentAnimation = self._preparePresentAnimation(viewController)
                 presentAnimation.prepare(
+                    containerViewController: self,
                     contentView: self.view,
                     currentViewController: previousViewController,
-                    nextViewController: viewController
+                    currentGroupbarVisibility: self._groupbarVisibility(previousViewController),
+                    nextViewController: viewController,
+                    nextGroupbarVisibility: self._groupbarVisibility(viewController)
                 )
                 presentAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
                     if let strong = self {
@@ -305,9 +310,12 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
                     self.isAnimating = true
                     let dismissAnimation = self._prepareDismissAnimation(previousViewController)
                     dismissAnimation.prepare(
+                        containerViewController: self,
                         contentView: self.view,
                         currentViewController: viewController,
-                        previousViewController: previousViewController
+                        currentGroupbarVisibility: self._groupbarVisibility(viewController),
+                        previousViewController: previousViewController,
+                        previousGroupbarVisibility: self._groupbarVisibility(previousViewController)
                     )
                     dismissAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
                         if let strong = self {
@@ -345,6 +353,13 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
 
     private func _disappearViewController(_ viewController: IQStackViewController) {
         viewController.view.removeFromSuperview()
+    }
+    
+    private func _groupbarVisibility(_ viewController: IQStackViewController) -> CGFloat {
+        if self.hidesGroupbarWhenPushed == true {
+            return self._viewControllers.first === viewController ? 1 : 0
+        }
+        return 1
     }
 
     private func _preparePresentAnimation(_ viewController: IQStackViewController) -> IQStackViewControllerPresentAnimation {
@@ -387,9 +402,12 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
             self._appearViewController(previousViewController)
             self.isAnimating = true
             dismissAnimation.prepare(
+                containerViewController: self,
                 contentView: self.view,
                 currentViewController: currentViewController,
+                currentGroupbarVisibility: self._groupbarVisibility(currentViewController),
                 previousViewController: previousViewController,
+                previousGroupbarVisibility: self._groupbarVisibility(previousViewController),
                 position: position,
                 velocity: velocity
             )

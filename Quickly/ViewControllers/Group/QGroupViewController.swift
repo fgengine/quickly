@@ -5,7 +5,6 @@
 open class QGroupViewController : QViewController, IQGroupViewController {
     
     open private(set) var groupContentViewController: IQGroupContentViewController
-    open var groupbarHidden: Bool
     open var groupbarItem: QGroupbarItem? {
         set(value) { self.setGroupItem(value) }
         get { return self._groupItem }
@@ -16,7 +15,6 @@ open class QGroupViewController : QViewController, IQGroupViewController {
 
     public init(_ contentViewController: IQGroupContentViewController, _ groupbarItem: QGroupbarItem? = nil) {
         self.groupContentViewController = contentViewController
-        self.groupbarHidden = false
         self._groupItem = groupbarItem
         super.init()
     }

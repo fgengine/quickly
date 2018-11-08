@@ -52,8 +52,23 @@ open class QNibViewController : QViewController, IQStackContentViewController, I
 
     open override func layout(bounds: CGRect) {
         if let rootView = self.rootView {
-            rootView.frame = self.view.bounds.inset(by: self.inheritedEdgeInsets)
+            self._updateRootFrame(rootView, bounds: bounds)
         }
+    }
+    
+    open override func didChangeAdditionalEdgeInsets() {
+        if let rootView = self.rootView {
+            self._updateRootFrame(rootView, bounds: self.view.bounds)
+        }
+    }
+
+}
+
+extension QNibViewController {
+
+    private func _updateRootFrame(_ rootView: UIView, bounds: CGRect) {
+        let edgeInsets = self.inheritedEdgeInsets
+        rootView.frame = bounds.inset(by: edgeInsets)
     }
 
 }

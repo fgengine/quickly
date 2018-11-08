@@ -21,57 +21,57 @@ extension ChoiseWireframe : IChoiseViewControllerRouter {
 
     func presentLabelViewController() {
         let vc = LabelViewController(router: self, context: self.context)
-        self.presentStack(vc, animated: true)
+        self.pushStack(vc, animated: true)
     }
 
     func presentButtonViewController() {
         let vc = ButtonViewController(router: self, context: self.context)
-        self.presentStack(vc, animated: true)
+        self.pushStack(vc, animated: true)
     }
 
     func presentTextFieldViewController() {
         let vc = TextFieldViewController(router: self, context: self.context)
-        self.presentStack(vc, animated: true)
+        self.pushStack(vc, animated: true)
     }
 
     func presentListFieldViewController() {
         let vc = ListFieldViewController(router: self, context: self.context)
-        self.presentStack(vc, animated: true)
+        self.pushStack(vc, animated: true)
     }
 
     func presentDateFieldViewController() {
         let vc = DateFieldViewController(router: self, context: self.context)
-        self.presentStack(vc, animated: true)
+        self.pushStack(vc, animated: true)
     }
 
     func presentImageViewController() {
         let vc = ImageViewController(router: self, context: self.context)
-        self.presentStack(vc, animated: true)
+        self.pushStack(vc, animated: true)
     }
     
     func presentTableViewController() {
         let vc = TableViewController(router: self, context: self.context)
-        self.presentStack(vc, animated: true)
+        self.pushStack(vc, animated: true)
     }
 
     func presentPageViewController() {
         let vc = PageViewController(router: self, context: self.context)
-        self.presentStack(vc, animated: true)
+        self.pushStack(vc, animated: true)
     }
 
     func presentModalViewController() {
         let vc = ModalViewController(router: self, context: self.context)
-        self.presentStack(vc, animated: true)
+        self.pushStack(vc, animated: true)
     }
 
     func presentDialogViewController() {
         let vc = DialogViewController(router: self, context: self.context)
-        self.presentStack(vc, animated: true)
+        self.pushStack(vc, animated: true)
     }
 
     func presentPushViewController() {
         let vc = PushViewController(router: self, context: self.context)
-        self.presentStack(vc, animated: true)
+        self.pushStack(vc, animated: true)
     }
 
 }
@@ -79,7 +79,7 @@ extension ChoiseWireframe : IChoiseViewControllerRouter {
 extension ChoiseWireframe : ILabelViewControllerRouter {
 
     func dismiss(viewController: LabelViewController) {
-        self.dismissStack(viewController, animated: true)
+        self.popStack(viewController, animated: true)
     }
 
 }
@@ -87,7 +87,7 @@ extension ChoiseWireframe : ILabelViewControllerRouter {
 extension ChoiseWireframe : IButtonViewControllerRouter {
 
     func dismiss(viewController: ButtonViewController) {
-        self.dismissStack(viewController, animated: true)
+        self.popStack(viewController, animated: true)
     }
     
 }
@@ -95,7 +95,7 @@ extension ChoiseWireframe : IButtonViewControllerRouter {
 extension ChoiseWireframe : ITextFieldViewControllerRouter {
 
     func dismiss(viewController: TextFieldViewController) {
-        self.dismissStack(viewController, animated: true)
+        self.popStack(viewController, animated: true)
     }
     
 }
@@ -103,7 +103,7 @@ extension ChoiseWireframe : ITextFieldViewControllerRouter {
 extension ChoiseWireframe : IListFieldViewControllerRouter {
 
     func dismiss(viewController: ListFieldViewController) {
-        self.dismissStack(viewController, animated: true)
+        self.popStack(viewController, animated: true)
     }
 
 }
@@ -111,7 +111,7 @@ extension ChoiseWireframe : IListFieldViewControllerRouter {
 extension ChoiseWireframe : IDateFieldViewControllerRouter {
 
     func dismiss(viewController: DateFieldViewController) {
-        self.dismissStack(viewController, animated: true)
+        self.popStack(viewController, animated: true)
     }
 
 }
@@ -119,7 +119,7 @@ extension ChoiseWireframe : IDateFieldViewControllerRouter {
 extension ChoiseWireframe : IImageViewControllerRouter {
 
     func dismiss(viewController: ImageViewController) {
-        self.dismissStack(viewController, animated: true)
+        self.popStack(viewController, animated: true)
     }
     
 }
@@ -127,7 +127,7 @@ extension ChoiseWireframe : IImageViewControllerRouter {
 extension ChoiseWireframe : ITableViewControllerRouter {
     
     func dismiss(viewController: TableViewController) {
-        self.dismissStack(viewController, animated: true)
+        self.popStack(viewController, animated: true)
     }
     
 }
@@ -135,7 +135,7 @@ extension ChoiseWireframe : ITableViewControllerRouter {
 extension ChoiseWireframe : IPageViewControllerRouter {
 
     func dismiss(viewController: PageViewController) {
-        self.dismissStack(viewController, animated: true)
+        self.popStack(viewController, animated: true)
     }
 
 }
@@ -149,7 +149,7 @@ extension ChoiseWireframe : IModalViewControllerRouter {
     }
 
     func dismiss(viewController: ModalViewController) {
-        self.dismissStack(viewController, animated: true)
+        self.popStack(viewController, animated: true)
     }
 
 }
@@ -176,7 +176,7 @@ extension ChoiseWireframe : IDialogViewControllerRouter {
     }
 
     func dismiss(viewController: DialogViewController) {
-        self.dismissStack(viewController, animated: true)
+        self.popStack(viewController, animated: true)
     }
 
 }
@@ -199,7 +199,7 @@ extension ChoiseWireframe : IPushViewControllerRouter {
     }
 
     func dismiss(viewController: PushViewController) {
-        self.dismissStack(viewController, animated: true)
+        self.popStack(viewController, animated: true)
     }
 
 }

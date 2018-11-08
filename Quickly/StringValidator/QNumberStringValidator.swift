@@ -7,19 +7,24 @@ open class QNumberStringValidator : QLengthStringValidator {
     open var formatter: NumberFormatter {
         didSet { self.formatter.generatesDecimalNumbers = true }
     }
-    open var maximumValue: Decimal?
     open var minimumValue: Decimal?
+    open var maximumValue: Decimal?
 
-    public override init() {
-        self.formatter = NumberFormatter()
-        self.formatter.generatesDecimalNumbers = true
-        super.init()
-    }
-
-    public init(formatter: NumberFormatter) {
+    public init(
+        formatter: NumberFormatter,
+        minimumValue: Decimal? = nil,
+        maximumValue: Decimal? = nil,
+        minimumLength: Int,
+        maximumLength: Int? = nil
+    ) {
         self.formatter = formatter
         self.formatter.generatesDecimalNumbers = true
-        super.init()
+        self.minimumValue = minimumValue
+        self.maximumValue = maximumValue
+        super.init(
+            minimumLength: minimumLength,
+            maximumLength: maximumLength
+        )
     }
 
     open override func validate(_ string: String, complete: Bool) -> Bool {

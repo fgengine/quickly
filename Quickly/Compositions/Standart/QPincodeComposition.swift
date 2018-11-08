@@ -10,7 +10,6 @@ open class QPincodeComposable : QComposable {
     public let pincode: QPincodeViewStyleSheet
     public let pincodeSpacing: CGFloat
     
-    public let error: IQTextStyle
     public let errorSpacing: CGFloat
     
     public let button1: QButtonStyleSheet
@@ -34,7 +33,6 @@ open class QPincodeComposable : QComposable {
         titleSpacing: CGFloat,
         pincode: QPincodeViewStyleSheet,
         pincodeSpacing: CGFloat,
-        error: IQTextStyle,
         errorSpacing: CGFloat,
         button1: QButtonStyleSheet,
         button2: QButtonStyleSheet,
@@ -57,7 +55,6 @@ open class QPincodeComposable : QComposable {
         self.titleSpacing = titleSpacing
         self.pincode = pincode
         self.pincodeSpacing = pincodeSpacing
-        self.error = error
         self.errorSpacing = errorSpacing
         self.button1 = button1
         self.button2 = button2
@@ -75,6 +72,10 @@ open class QPincodeComposable : QComposable {
         self.buttonsSpacing = buttonsSpacing
         self.buttonsSize = buttonsSize
         super.init(edgeInsets: edgeInsets)
+    }
+    
+    open func styleSheet(error: String) -> QLabelStyleSheet {
+        return QLabelStyleSheet(text: QText(error, font: UIFont.systemFont(ofSize: UIFont.systemFontSize), color: UIColor.red))
     }
 
 }
@@ -449,7 +450,7 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
     
     public func showError(text: String) {
         if let composable = self.composable, let spec = self.spec {
-            self.error = QLabelStyleSheet(text: QAttributedText(text, style: composable.error))
+            self.error = composable.styleSheet(error: text)
             self.error!.apply(self.errorLabel)
             self.preLayout(composable: composable, spec: spec)
             UIView.animate(withDuration: 0.125, delay: 0, options: [ .beginFromCurrentState ], animations: {

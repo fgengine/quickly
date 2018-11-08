@@ -48,9 +48,9 @@ public class QDialogViewControllerinteractiveDismissAnimation : IQDialogViewCont
 
     public func cancel(_ complete: @escaping (_ completed: Bool) -> Void) {
         let duration = TimeInterval(self.deltaPosition / self.acceleration)
-        UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
+        UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews ], animations: {
             self.viewController.dialogVerticalAlignment = self.verticalAlignment
-            self.viewController.view.layoutIfNeeded()
+            self.viewController.layoutIfNeeded()
         }, completion: { (completed: Bool) in
             self.viewController.cancelInteractiveDismiss()
             self.viewController = nil
@@ -65,14 +65,14 @@ public class QDialogViewControllerinteractiveDismissAnimation : IQDialogViewCont
         self.viewController.willDismiss(animated: true)
         let duration = TimeInterval(self.deltaPosition / self.acceleration)
         let deceleration = self.deltaPosition * 2.5
-        UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
+        UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews ], animations: {
             switch self.verticalAlignment {
             case .top(let offset): self.viewController.dialogVerticalAlignment = .top(offset: offset + deceleration)
             case .center(let offset): self.viewController.dialogVerticalAlignment = .center(offset: offset + deceleration)
             case .bottom(let offset): self.viewController.dialogVerticalAlignment = .bottom(offset: offset + deceleration)
             }
             self.viewController.view.alpha = 0
-            self.viewController.view.layoutIfNeeded()
+            self.viewController.layoutIfNeeded()
         }, completion: { (completed: Bool) in
             self.viewController.dialogVerticalAlignment = originalVerticalAlignment
             self.viewController.dialogHorizontalAlignment = originalHorizontalAlignment

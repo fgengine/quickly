@@ -319,6 +319,7 @@
 		40E738581F5606C500B192C6 /* QSpaceTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E738521F5606C500B192C6 /* QSpaceTableCell.swift */; };
 		40EBC12D1F4DC40200D42A64 /* QuicklyJsonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EBC12C1F4DC40200D42A64 /* QuicklyJsonTests.swift */; };
 		40EC44A11F983DD2005233F1 /* Quickly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 401829591F4C1C0A005C9949 /* Quickly.framework */; };
+		40EC87962189A71D00B5F806 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EC87952189A71D00B5F806 /* UIView.swift */; };
 		40EFD0BF20E60E0700473D17 /* IQTextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EFD0BE20E60E0700473D17 /* IQTextStyle.swift */; };
 		40EFD0C120E610E100473D17 /* IQButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EFD0C020E610E000473D17 /* IQButtonStyle.swift */; };
 		40EFD0C320E613A400473D17 /* IQImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EFD0C220E613A400473D17 /* IQImageSource.swift */; };
@@ -697,6 +698,7 @@
 		40E738501F5606C500B192C6 /* QSeparatorTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSeparatorTableCell.swift; sourceTree = "<group>"; };
 		40E738521F5606C500B192C6 /* QSpaceTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSpaceTableCell.swift; sourceTree = "<group>"; };
 		40EBC12C1F4DC40200D42A64 /* QuicklyJsonTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuicklyJsonTests.swift; sourceTree = "<group>"; };
+		40EC87952189A71D00B5F806 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		40EFD0BE20E60E0700473D17 /* IQTextStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQTextStyle.swift; sourceTree = "<group>"; };
 		40EFD0C020E610E000473D17 /* IQButtonStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQButtonStyle.swift; sourceTree = "<group>"; };
 		40EFD0C220E613A400473D17 /* IQImageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQImageSource.swift; sourceTree = "<group>"; };
@@ -1593,14 +1595,15 @@
 				40CF457E1F4DE6AB004D00D8 /* NSAttributedString.swift */,
 				4061E1A81F4ECDFA00AC3217 /* NSError.swift */,
 				40571363217DB408009ED2E3 /* Bundle.swift */,
+				40EC87952189A71D00B5F806 /* UIView.swift */,
 				40407178205688B300F6ECC2 /* UIControl.swift */,
 				40BFDAE51F87B8EE00ECED22 /* UIImage.swift */,
 				40E7382B1F556AF600B192C6 /* UIDevice.swift */,
+				40CF457F1F4DE6AB004D00D8 /* UIColor.swift */,
 				4085C07820E4D56A0079AF90 /* CGFloat.swift */,
 				4040718020569F4500F6ECC2 /* CGPoint.swift */,
 				400DDF721F5623D400D11991 /* CGSize.swift */,
 				400DDF6F1F5622EB00D11991 /* CGRect.swift */,
-				40CF457F1F4DE6AB004D00D8 /* UIColor.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2092,6 +2095,7 @@
 				40EFD0BF20E60E0700473D17 /* IQTextStyle.swift in Sources */,
 				40CF45CF1F4DE6AB004D00D8 /* QAppWireframe.swift in Sources */,
 				40D9C5B22147E4610086DD57 /* QPlaceholderTitleValueComposition.swift in Sources */,
+				40EC87962189A71D00B5F806 /* UIView.swift in Sources */,
 				404C90FB20D1641C001DE192 /* QStackViewControllerInteractiveAnimation.swift in Sources */,
 				400DDF701F5622EB00D11991 /* Float.swift in Sources */,
 				40CF45D71F4DE6AB004D00D8 /* IQTableCell.swift in Sources */,

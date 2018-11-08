@@ -38,8 +38,10 @@ open class QTitleDetailIconComposition< Composable: QTitleDetailIconComposable >
     lazy private var titleLabel: QLabel = {
         let view = QLabel(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.setContentHuggingPriority(UILayoutPriority(rawValue: 252), for: .horizontal)
-        view.setContentHuggingPriority(UILayoutPriority(rawValue: 252), for: .vertical)
+        view.setContentHuggingPriority(
+            horizontal: UILayoutPriority(rawValue: 252),
+            vertical: UILayoutPriority(rawValue: 252)
+        )
         self.contentView.addSubview(view)
         return view
     }()

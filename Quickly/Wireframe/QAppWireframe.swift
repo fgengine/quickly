@@ -53,6 +53,15 @@ open class QAppWireframe< ContextType: IQContext > : IQAppWireframe {
     
     open func setup() {
     }
+    
+    open func present(_ viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        guard let rootViewController = self.window.rootViewController else { return }
+        rootViewController.present(viewController, animated: animated, completion: completion)
+    }
+    
+    open func dismiss(_ viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        viewController.dismiss(animated: animated, completion: completion)
+    }
 
     open func launch(_ options: [UIApplication.LaunchOptionsKey : Any]?) {
         if self.window.isKeyWindow == false {

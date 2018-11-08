@@ -63,9 +63,11 @@ public class QGroupViewControllerAnimation : IQGroupViewControllerAnimation {
         self.currentViewController = currentViewController
         self.currentViewController.view.frame = self.currentBeginFrame
         self.currentViewController.view.alpha = self.currentBeginAlpha
+        self.currentViewController.layoutIfNeeded()
         self.targetViewController = targetViewController
         self.targetViewController.view.frame = self.targetBeginFrame
         self.targetViewController.view.alpha = self.targetBeginAlpha
+        self.targetViewController.layoutIfNeeded()
 
         contentView.insertSubview(targetViewController.view, belowSubview: currentViewController.view)
     }
@@ -74,7 +76,7 @@ public class QGroupViewControllerAnimation : IQGroupViewControllerAnimation {
         if animated == true {
             self.currentViewController.willDismiss(animated: animated)
             self.targetViewController.willPresent(animated: animated)
-            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
+            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews ], animations: {
                 self.currentViewController.view.frame = self.currentEndFrame
                 self.currentViewController.view.alpha = self.currentEndAlpha
                 self.targetViewController.view.frame = self.targetEndFrame

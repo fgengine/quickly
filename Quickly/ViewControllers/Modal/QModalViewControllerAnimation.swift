@@ -40,9 +40,11 @@ public class QModalViewControllerAnimation : IQModalViewControllerFixedAnimation
         self.previousViewController = previousViewController
         if let vc = self.previousViewController {
             vc.view.frame = self.previousBeginFrame
+            vc.layoutIfNeeded()
         }
         self.currentViewController = currentViewController
         self.currentViewController.view.frame = self.currentBeginFrame
+        self.currentViewController.layoutIfNeeded()
 
         if let vc = self.previousViewController {
             contentView.insertSubview(currentViewController.view, aboveSubview: vc.view)
@@ -76,7 +78,7 @@ public class QModalViewControllerPresentAnimation : QModalViewControllerAnimatio
                 vc.willDismiss(animated: animated)
             }
             self.currentViewController.willPresent(animated: animated)
-            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState, .curveEaseOut ], animations: {
+            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews, .curveEaseOut ], animations: {
                 if let vc = self.previousViewController {
                     vc.view.frame = self.previousEndFrame
                 }
@@ -127,7 +129,7 @@ public class QModalViewControllerDismissAnimation : QModalViewControllerAnimatio
                 vc.willPresent(animated: animated)
             }
             self.currentViewController.willDismiss(animated: animated)
-            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState, .curveEaseOut ], animations: {
+            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews, .curveEaseOut ], animations: {
                 if let vc = self.previousViewController {
                     vc.view.frame = self.previousEndFrame
                 }

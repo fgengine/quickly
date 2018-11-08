@@ -42,9 +42,9 @@ public class QDialogViewControllerPresentAnimation : QDialogViewControllerAnimat
             let originalAlpha = self.viewController.view.alpha
             self.viewController.willPresent(animated: animated)
             self.viewController.dialogVerticalAlignment = self.contentVerticalAlignment(originalVerticalAlignment)
-            self.viewController.view.layoutIfNeeded()
+            self.viewController.layoutIfNeeded()
             self.viewController.view.alpha = 0
-            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
+            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews ], animations: {
                 self.viewController.dialogVerticalAlignment = originalVerticalAlignment
                 self.viewController.view.alpha = originalAlpha
                 self.viewController.view.layoutIfNeeded()
@@ -74,10 +74,10 @@ public class QDialogViewControllerDismissAnimation : QDialogViewControllerAnimat
             let originalVerticalAlignment = self.viewController.dialogVerticalAlignment
             let originalAlpha = self.viewController.view.alpha
             self.viewController.willDismiss(animated: animated)
-            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
+            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews ], animations: {
                 self.viewController.dialogVerticalAlignment = self.contentVerticalAlignment(originalVerticalAlignment)
                 self.viewController.view.alpha = 0
-                self.viewController.view.layoutIfNeeded()
+                self.viewController.layoutIfNeeded()
             }, completion: { (completed: Bool) in
                 self.viewController.dialogVerticalAlignment = originalVerticalAlignment
                 self.viewController.view.alpha = originalAlpha

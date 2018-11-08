@@ -14,7 +14,7 @@ open class QListFieldComposable : QComposable {
     public var fieldIsEditing: Bool
     public var fieldShouldBeginEditing: ShouldClosure?
     public var fieldBeginEditing: Closure?
-    public var fieldSelect: Closure
+    public var fieldSelect: Closure?
     public var fieldShouldEndEditing: ShouldClosure?
     public var fieldEndEditing: Closure?
 
@@ -25,7 +25,7 @@ open class QListFieldComposable : QComposable {
         fieldSelectedRow: QListFieldPickerRow? = nil,
         fieldShouldBeginEditing: ShouldClosure? = nil,
         fieldBeginEditing: Closure? = nil,
-        fieldSelect: @escaping Closure,
+        fieldSelect: Closure? = nil,
         fieldShouldEndEditing: ShouldClosure? = nil,
         fieldEndEditing: Closure? = nil
     ) {
@@ -46,7 +46,7 @@ open class QListFieldComposable : QComposable {
 
 open class QListFieldComposition< Composable: QListFieldComposable > : QComposition< Composable > {
 
-    lazy private var listField: QListField = {
+    public lazy private(set) var listField: QListField = {
         let view = QListField(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onShouldBeginEditing = { [weak self] (listField: QListField) in
@@ -147,7 +147,9 @@ open class QListFieldComposition< Composable: QListFieldComposable > : QComposit
         guard let composable = self.composable else { return }
         composable.fieldIsValid = self.listField.isValid
         composable.fieldSelectedRow = pickerRow
-        composable.fieldSelect(composable)
+        if let closure = composable.fieldSelect {
+            closure(composable)
+        }
     }
 
     private func shouldEndEditing() -> Bool {

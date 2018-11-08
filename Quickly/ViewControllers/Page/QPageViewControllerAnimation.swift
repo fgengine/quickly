@@ -38,8 +38,10 @@ public class QPageViewControllerAnimation : IQPageViewControllerAnimation {
         self.contentView = contentView
         self.currentViewController = currentViewController
         self.currentViewController.view.frame = self.currentBeginFrame
+        self.currentViewController.layoutIfNeeded()
         self.targetViewController = targetViewController
         self.targetViewController.view.frame = self.targetBeginFrame
+        self.targetViewController.layoutIfNeeded()
 
         contentView.insertSubview(targetViewController.view, belowSubview: currentViewController.view)
     }
@@ -48,7 +50,7 @@ public class QPageViewControllerAnimation : IQPageViewControllerAnimation {
         if animated == true {
             self.currentViewController.willDismiss(animated: animated)
             self.targetViewController.willPresent(animated: animated)
-            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
+            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews ], animations: {
                 self.currentViewController.view.frame = self.currentEndFrame
                 self.targetViewController.view.frame = self.targetEndFrame
             }, completion: { [weak self] (completed: Bool) in

@@ -25,9 +25,10 @@ public class QPushViewControllerInteractiveDismissAnimation : IQPushViewControll
 
     public func prepare(viewController: IQPushViewController, position: CGPoint, velocity: CGPoint) {
         self.viewController = viewController
+        self.viewController.layoutIfNeeded()
+        self.viewController.prepareInteractiveDismiss()
         self.position = position
         self.velocity = velocity
-        self.viewController.prepareInteractiveDismiss()
     }
 
     public func update(position: CGPoint, velocity: CGPoint) {
@@ -56,9 +57,9 @@ public class QPushViewControllerInteractiveDismissAnimation : IQPushViewControll
 
     public func cancel(_ complete: @escaping (_ completed: Bool) -> Void) {
         let duration = TimeInterval(self.deltaPosition / self.acceleration)
-        UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
+        UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews ], animations: {
             self.viewController.pushOffset = 0
-            self.viewController.view.layoutIfNeeded()
+            self.viewController.layoutIfNeeded()
         }, completion: { (completed: Bool) in
             self.viewController.cancelInteractiveDismiss()
             self.viewController = nil
@@ -73,9 +74,9 @@ public class QPushViewControllerInteractiveDismissAnimation : IQPushViewControll
         let edgeInsets = self.viewController.inheritedEdgeInsets
         let hideOffset = height + edgeInsets.top
         let duration = TimeInterval((hideOffset - offset) / self.acceleration)
-        UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
+        UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews ], animations: {
             self.viewController.pushOffset = -hideOffset
-            self.viewController.view.layoutIfNeeded()
+            self.viewController.layoutIfNeeded()
         }, completion: { (completed: Bool) in
             self.viewController.didDismiss(animated: true)
             self.viewController.finishInteractiveDismiss()

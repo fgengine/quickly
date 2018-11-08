@@ -24,12 +24,12 @@ open class QStackWireframe< ContextType: IQContext, WireframeType: IQWireframe >
     open func setup() {
     }
     
-    open func presentStack(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.viewController.presentStack(viewController, animated: animated, completion: completion)
+    open func pushStack(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        self.viewController.pushStack(viewController, animated: animated, completion: completion)
     }
     
-    open func presentStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.viewController.presentStack(viewController, animated: animated, completion: completion)
+    open func pushStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        self.viewController.pushStack(viewController, animated: animated, completion: completion)
     }
 
     open func replaceStack(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
@@ -40,20 +40,20 @@ open class QStackWireframe< ContextType: IQContext, WireframeType: IQWireframe >
         self.viewController.replaceStack(viewController, animated: animated, completion: completion)
     }
 
-    open func dismissStack(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.viewController.dismissStack(viewController, animated: animated, completion: completion)
+    open func popStack(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        self.viewController.popStack(viewController, animated: animated, completion: completion)
     }
 
-    open func dismissStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.viewController.dismissStack(viewController, animated: animated, completion: completion)
+    open func popStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        self.viewController.popStack(viewController, animated: animated, completion: completion)
     }
 
-    open func dismissStack(to viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.viewController.dismissStack(to: viewController, animated: animated, completion: completion)
+    open func popStack(to viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        self.viewController.popStack(to: viewController, animated: animated, completion: completion)
     }
 
-    open func dismissStack(to viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.viewController.dismissStack(to: viewController, animated: animated, completion: completion)
+    open func popStack(to viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        self.viewController.popStack(to: viewController, animated: animated, completion: completion)
     }
 
 }

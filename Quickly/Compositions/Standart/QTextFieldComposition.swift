@@ -14,7 +14,7 @@ open class QTextFieldComposable : QComposable {
     public var fieldIsEditing: Bool
     public var fieldShouldBeginEditing: ShouldClosure?
     public var fieldBeginEditing: Closure?
-    public var fieldEditing: Closure
+    public var fieldEditing: Closure?
     public var fieldShouldEndEditing: ShouldClosure?
     public var fieldEndEditing: Closure?
     public var fieldShouldClear: ShouldClosure?
@@ -29,7 +29,7 @@ open class QTextFieldComposable : QComposable {
         fieldHeight: CGFloat = 44,
         fieldShouldBeginEditing: ShouldClosure? = nil,
         fieldBeginEditing: Closure? = nil,
-        fieldEditing: @escaping Closure,
+        fieldEditing: Closure? = nil,
         fieldShouldEndEditing: ShouldClosure? = nil,
         fieldEndEditing: Closure? = nil,
         fieldShouldClear: ShouldClosure? = nil,
@@ -58,7 +58,7 @@ open class QTextFieldComposable : QComposable {
 
 open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposition< Composable > {
 
-    lazy private var textField: QTextField = {
+    public lazy private(set) var textField: QTextField = {
         let view = QTextField(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onShouldBeginEditing = { [weak self] (textField: QTextField) in
@@ -171,7 +171,9 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
         guard let composable = self.composable else { return }
         composable.fieldIsValid = self.textField.isValid
         composable.fieldText = self.textField.unformatText
-        composable.fieldEditing(composable)
+        if let closure = composable.fieldEditing {
+            closure(composable)
+        }
     }
 
     private func shouldEndEditing() -> Bool {

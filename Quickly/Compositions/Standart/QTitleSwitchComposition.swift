@@ -45,8 +45,10 @@ open class QTitleSwitchComposition< Composable: QTitleSwitchComposable > : QComp
     lazy private var `switch`: QSwitch = {
         let view = QSwitch(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.setContentHuggingPriority(UILayoutPriority(rawValue: 252), for: .horizontal)
-        view.setContentHuggingPriority(UILayoutPriority(rawValue: 252), for: .vertical)
+        view.setContentHuggingPriority(
+            horizontal: UILayoutPriority(rawValue: 252),
+            vertical: UILayoutPriority(rawValue: 252)
+        )
         view.addValueChanged(self, action: #selector(self.pressedSwitch(_:)))
         self.contentView.addSubview(view)
         return view

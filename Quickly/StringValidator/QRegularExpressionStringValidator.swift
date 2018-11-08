@@ -6,13 +6,28 @@ open class QRegularExpressionStringValidator : QLengthStringValidator {
 
     public var expression: NSRegularExpression
 
-    public init(expression: NSRegularExpression) {
+    public init(
+        expression: NSRegularExpression,
+        minimumLength: Int,
+        maximumLength: Int? = nil
+    ) {
         self.expression = expression
-        super.init()
+        super.init(
+            minimumLength: minimumLength,
+            maximumLength: maximumLength
+        )
     }
 
-    public convenience init(pattern: String) throws {
-        self.init(expression: try NSRegularExpression(pattern: pattern, options: [ .caseInsensitive ]))
+    public convenience init(
+        pattern: String,
+        minimumLength: Int,
+        maximumLength: Int? = nil
+    ) throws {
+        self.init(
+            expression: try NSRegularExpression(pattern: pattern, options: [ .caseInsensitive ]),
+            minimumLength: minimumLength,
+            maximumLength: maximumLength
+        )
     }
 
     public override func validate(_ string: String, complete: Bool) -> Bool {

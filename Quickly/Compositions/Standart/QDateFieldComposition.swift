@@ -14,7 +14,7 @@ open class QDateFieldComposable : QComposable {
     public var fieldIsEditing: Bool
     public var fieldShouldBeginEditing: ShouldClosure?
     public var fieldBeginEditing: Closure?
-    public var fieldSelect: Closure
+    public var fieldSelect: Closure?
     public var fieldShouldEndEditing: ShouldClosure?
     public var fieldEndEditing: Closure?
 
@@ -26,7 +26,7 @@ open class QDateFieldComposable : QComposable {
         fieldSelectedRow: QListFieldPickerRow? = nil,
         fieldShouldBeginEditing: ShouldClosure? = nil,
         fieldBeginEditing: Closure? = nil,
-        fieldSelect: @escaping Closure,
+        fieldSelect: Closure? = nil,
         fieldShouldEndEditing: ShouldClosure? = nil,
         fieldEndEditing: Closure? = nil
     ) {
@@ -47,7 +47,7 @@ open class QDateFieldComposable : QComposable {
 
 open class QDateFieldComposition< Composable: QDateFieldComposable > : QComposition< Composable > {
 
-    lazy private var dateField: QDateField = {
+    public lazy private(set) var dateField: QDateField = {
         let view = QDateField(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onShouldBeginEditing = { [weak self] (dateField: QDateField) in
@@ -148,7 +148,9 @@ open class QDateFieldComposition< Composable: QDateFieldComposable > : QComposit
         guard let composable = self.composable else { return }
         composable.fieldIsValid = self.dateField.isValid
         composable.fieldDate = date
-        composable.fieldSelect(composable)
+        if let closure = composable.fieldSelect {
+            closure(composable)
+        }
     }
 
     private func shouldEndEditing() -> Bool {

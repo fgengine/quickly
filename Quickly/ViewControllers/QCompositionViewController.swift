@@ -31,7 +31,22 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
     }
 
     open override func layout(bounds: CGRect) {
-        self.composition.contentView.frame = self.view.bounds.inset(by: self.inheritedEdgeInsets)
+        self._updateContentFrame(self.composition.contentView, bounds: bounds)
+    }
+    
+    open override func didChangeAdditionalEdgeInsets() {
+        if self.isLoaded == true {
+            self._updateContentFrame(self.composition.contentView, bounds: self.view.bounds)
+        }
+    }
+    
+}
+
+extension QCompositionViewController {
+    
+    private func _updateContentFrame(_ contentView: UIView, bounds: CGRect) {
+        let edgeInsets = self.inheritedEdgeInsets
+        contentView.frame = bounds.inset(by: edgeInsets)
     }
 
 }
