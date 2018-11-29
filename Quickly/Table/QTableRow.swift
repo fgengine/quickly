@@ -42,7 +42,7 @@ open class QTableRow : IQTableRow {
     }
     
     open func resetCacheHeight() {
-        self.cacheHeight = 0
+        self.cacheHeight = nil
     }
 
 }

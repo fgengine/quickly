@@ -4,8 +4,8 @@
 
 open class QButtonStyleSheet : IQStyleSheet {
 
-    public var contentHorizontalAlignment: UIControl.ContentHorizontalAlignment
-    public var contentVerticalAlignment: UIControl.ContentVerticalAlignment
+    public var contentHorizontalAlignment: QButtonContentHorizontalAlignment
+    public var contentVerticalAlignment: QButtonContentVerticalAlignment
     public var contentInsets: UIEdgeInsets
     public var imagePosition: QButtonImagePosition
     public var imageInsets: UIEdgeInsets
@@ -22,8 +22,8 @@ open class QButtonStyleSheet : IQStyleSheet {
     public var isEnabled: Bool
 
     public init(
-        contentHorizontalAlignment: UIControl.ContentHorizontalAlignment = .center,
-        contentVerticalAlignment: UIControl.ContentVerticalAlignment = .center,
+        contentHorizontalAlignment: QButtonContentHorizontalAlignment = .center,
+        contentVerticalAlignment: QButtonContentVerticalAlignment = .center,
         contentInsets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8),
         imagePosition: QButtonImagePosition = .left,
         imageInsets: UIEdgeInsets = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2),

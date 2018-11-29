@@ -2,14 +2,13 @@
 //  Quickly
 //
 
-open class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
+open class QMultiTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
 
     public var requireValidator: Bool
     public var validator: IQInputValidator?
     public var formatter: IQStringFormatter?
     public var textInsets: UIEdgeInsets
     public var textStyle: IQTextStyle?
-    public var editingInsets: UIEdgeInsets
     public var placeholderInsets: UIEdgeInsets
     public var placeholder: IQText?
     public var typingStyle: IQTextStyle?
@@ -23,14 +22,13 @@ open class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
     public var isSecureTextEntry: Bool
     public var textContentType: UITextContentType!
     public var isEnabled: Bool
-
+    
     public init(
-        requireValidator: Bool = false,
+        requireValidator: Bool = true,
         validator: IQInputValidator? = nil,
         formatter: IQStringFormatter? = nil,
         textInsets: UIEdgeInsets = UIEdgeInsets.zero,
         textStyle: IQTextStyle? = nil,
-        editingInsets: UIEdgeInsets = UIEdgeInsets.zero,
         placeholderInsets: UIEdgeInsets = UIEdgeInsets.zero,
         placeholder: IQText? = nil,
         typingStyle: IQTextStyle? = nil,
@@ -55,7 +53,6 @@ open class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
         self.formatter = formatter
         self.textInsets = textInsets
         self.textStyle = textStyle
-        self.editingInsets = editingInsets
         self.placeholderInsets = placeholderInsets
         self.placeholder = placeholder
         self.autocapitalizationType = autocapitalizationType
@@ -68,7 +65,7 @@ open class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
         self.isSecureTextEntry = isSecureTextEntry
         self.textContentType = textContentType
         self.isEnabled = isEnabled
-
+        
         super.init(
             backgroundColor: backgroundColor,
             tintColor: tintColor,
@@ -78,13 +75,12 @@ open class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
         )
     }
 
-    public init(_ styleSheet: QTextFieldStyleSheet) {
+    public init(_ styleSheet: QMultiTextFieldStyleSheet) {
         self.requireValidator = styleSheet.requireValidator
         self.validator = styleSheet.validator
         self.formatter = styleSheet.formatter
         self.textInsets = styleSheet.textInsets
         self.textStyle = styleSheet.textStyle
-        self.editingInsets = styleSheet.editingInsets
         self.placeholderInsets = styleSheet.placeholderInsets
         self.placeholder = styleSheet.placeholder
         self.autocapitalizationType = styleSheet.autocapitalizationType
@@ -97,53 +93,30 @@ open class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
         self.isSecureTextEntry = styleSheet.isSecureTextEntry
         self.textContentType = styleSheet.textContentType
         self.isEnabled = styleSheet.isEnabled
-
+        
         super.init(styleSheet)
     }
 
     public override func apply(_ target: QTextField) {
         super.apply(target)
-
-        target.requireValidator = self.requireValidator
-        target.validator = self.validator
-        target.formatter = self.formatter
-        target.textInsets = self.textInsets
-        target.textStyle = self.textStyle
-        target.editingInsets = self.editingInsets
-        target.placeholderInsets = self.placeholderInsets
-        target.placeholder = self.placeholder
-        target.typingStyle = self.typingStyle
-        target.autocapitalizationType = self.autocapitalizationType
-        target.autocorrectionType = self.autocorrectionType
-        target.spellCheckingType = self.spellCheckingType
-        target.keyboardType = self.keyboardType
-        target.keyboardAppearance = self.keyboardAppearance
-        target.returnKeyType = self.returnKeyType
-        target.enablesReturnKeyAutomatically = self.enablesReturnKeyAutomatically
-        target.isSecureTextEntry = self.isSecureTextEntry
-        if #available(iOS 10.0, *) {
-            target.textContentType = self.textContentType
-        }
-        target.isEnabled = self.isEnabled
     }
 
 }
 
-public protocol IQTextFieldObserver : class {
+public protocol IQMultiTextFieldObserver : class {
     
-    func beginEditing(textField: QTextField)
-    func editing(textField: QTextField)
-    func endEditing(textField: QTextField)
-    func pressedClear(textField: QTextField)
-    func pressedReturn(textField: QTextField)
+    func beginEditing(textField: QMultiTextField)
+    func editing(textField: QMultiTextField)
+    func endEditing(textField: QMultiTextField)
+    func pressedReturn(textField: QMultiTextField)
     
 }
 
-public class QTextField : QDisplayView, IQField {
-
-    public typealias ShouldClosure = (_ textField: QTextField) -> Bool
-    public typealias Closure = (_ textField: QTextField) -> Void
-
+public class QMultiTextField : QDisplayView, IQField {
+    
+    public typealias ShouldClosure = (_ multiTextField: QMultiTextField) -> Bool
+    public typealias Closure = (_ multiTextField: QMultiTextField) -> Void
+    
     public var requireValidator: Bool = false
     public var validator: IQInputValidator? {
         willSet { self.fieldView.delegate = nil }
@@ -165,6 +138,7 @@ public class QTextField : QDisplayView, IQField {
                     }
                 }
             }
+            self._updatePlaceholderVisibility()
         }
         didSet {
             if let formatter = self.formatter {
@@ -183,46 +157,19 @@ public class QTextField : QDisplayView, IQField {
             }
         }
     }
-    public var textInsets: UIEdgeInsets {
-        set(value) { self.fieldView.textInsets = value }
-        get { return self.fieldView.textInsets }
-    }
     public var textStyle: IQTextStyle? {
         didSet {
-            var attributes: [NSAttributedString.Key: Any] = [:]
-            if let textStyle = self.textStyle {
-                attributes = textStyle.attributes
-                self.fieldView.font = attributes[.font] as? UIFont
-                self.fieldView.textColor = attributes[.foregroundColor] as? UIColor
-                if let paragraphStyle = attributes[.paragraphStyle] as? NSParagraphStyle {
-                    self.fieldView.textAlignment = paragraphStyle.alignment
-                } else {
-                    self.fieldView.textAlignment = .left
-                }
-            } else {
-                if let font = self.fieldView.font {
-                    attributes[.font] = font
-                }
-                if let textColor = self.fieldView.textColor {
-                    attributes[.foregroundColor] = textColor
-                }
-                let paragraphStyle = NSMutableParagraphStyle()
-                paragraphStyle.alignment = self.fieldView.textAlignment
-                attributes[.paragraphStyle] = paragraphStyle
-            }
-            self.fieldView.defaultTextAttributes = Dictionary(uniqueKeysWithValues:
-                attributes.lazy.map { (NSAttributedString.Key(rawValue: $0.key.rawValue), $0.value) }
-            )
+            self.fieldView.font = self.textStyle?.font ?? UIFont.systemFont(ofSize: UIFont.systemFontSize)
+            self.fieldView.textColor = self.textStyle?.color ?? UIColor.black
+            self.fieldView.textAlignment = self.textStyle?.alignment ?? .left
         }
     }
     public var text: String {
-        set(value) { self.fieldView.text = value }
-        get {
-            if let text = self.fieldView.text {
-                return text
-            }
-            return ""
+        set(value) {
+            self.fieldView.text = value
+            self._updatePlaceholderVisibility()
         }
+        get { return self.fieldView.text }
     }
     public var unformatText: String {
         set(value) {
@@ -240,6 +187,7 @@ public class QTextField : QDisplayView, IQField {
             } else {
                 self.fieldView.text = value
             }
+            self._updatePlaceholderVisibility()
         }
         get {
             var result: String
@@ -255,192 +203,156 @@ public class QTextField : QDisplayView, IQField {
             return result
         }
     }
-    public var editingInsets: UIEdgeInsets {
-        set(value) { self.fieldView.editingInsets = value }
-        get { return self.fieldView.editingInsets }
+    public var placeholder: IQText? {
+        set(value) {
+            self.placeholderLabel.text = value
+            self._updatePlaceholderVisibility()
+        }
+        get { return self.placeholderLabel.text }
     }
-    public var placeholderInsets: UIEdgeInsets {
-        set(value) { self.fieldView.placeholderInsets = value }
-        get { return self.fieldView.placeholderInsets }
+    public var selectedRange: NSRange {
+        set(value) { self.fieldView.selectedRange = value }
+        get { return self.fieldView.selectedRange }
     }
     public var typingStyle: IQTextStyle? {
         didSet {
             if let typingStyle = self.typingStyle {
                 self.fieldView.allowsEditingTextAttributes = true
-                self.fieldView.typingAttributes = Dictionary(uniqueKeysWithValues:
-                    typingStyle.attributes.lazy.map { (NSAttributedString.Key(rawValue: $0.key.rawValue), $0.value) }
-                )
+                self.fieldView.typingAttributes = typingStyle.attributes
             } else {
                 self.fieldView.allowsEditingTextAttributes = false
-                self.fieldView.typingAttributes = nil
             }
         }
     }
+    public var maximumNumberOfCharecters: UInt = 0
+    public var maximumNumberOfLines: UInt = 0
+    public var minimumHeight: CGFloat = 0
+    public var maximumHeight: CGFloat = 0
+    public var heightConstraint: NSLayoutConstraint?
     public var isValid: Bool {
-        get {
-            guard let validator = self.validator else { return true }
-            return validator.validate(self.unformatText)
-        }
+        get { return false }
     }
-    public var placeholder: IQText? {
-        set(value) {
-            if let text = value {
-                if let attributed = text.attributed {
-                    self.fieldView.attributedPlaceholder = attributed
-                } else if let font = text.font, let color = text.color {
-                    self.fieldView.attributedPlaceholder = NSAttributedString(string: text.string, attributes: [
-                        .font: font,
-                        .foregroundColor: color
-                    ])
-                } else {
-                    self.fieldView.attributedPlaceholder = nil
-                }
-            } else {
-                self.fieldView.attributedPlaceholder = nil
-            }
-        }
-        get {
-            if let attributed = self.fieldView.attributedPlaceholder {
-                return QAttributedText(attributed)
-            }
-            return nil
-        }
+    public var isEditable: Bool {
+        set(value) { self.fieldView.isEditable = value }
+        get { return self.fieldView.isEditable }
+    }
+    public var isSelectable: Bool {
+        set(value) { self.fieldView.isSelectable = value }
+        get { return self.fieldView.isSelectable }
     }
     public var isEnabled: Bool {
-        set(value) { self.fieldView.isEnabled = value }
-        get { return self.fieldView.isEnabled }
+        set(value) { self.fieldView.isUserInteractionEnabled = value }
+        get { return self.fieldView.isUserInteractionEnabled }
     }
     public var isEditing: Bool {
-        get { return self.fieldView.isEditing }
+        get { return self.fieldView.isFirstResponder }
     }
-
     public var onShouldBeginEditing: ShouldClosure?
     public var onBeginEditing: Closure?
     public var onEditing: Closure?
     public var onShouldEndEditing: ShouldClosure?
     public var onEndEditing: Closure?
-    public var onShouldClear: ShouldClosure?
-    public var onPressedClear: Closure?
-    public var onShouldReturn: ShouldClosure?
-    public var onPressedReturn: Closure?
     
     open override var intrinsicContentSize: CGSize {
-        get { return self.fieldView.intrinsicContentSize }
+        get {
+            if self.placeholderLabel.isHidden == false {
+                return self.placeholderLabel.intrinsicContentSize
+            }
+            return self.fieldView.intrinsicContentSize
+        }
     }
 
+    internal private(set) var placeholderLabel: QLabel!
     internal private(set) var fieldView: Field!
     
     private var fieldDelegate: FieldDelegate!
-    private var observer: QObserver< IQTextFieldObserver > = QObserver< IQTextFieldObserver >()
+    private var observer: QObserver< IQMultiTextFieldObserver > = QObserver< IQMultiTextFieldObserver >()
     
-    public required init() {
-        super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-    }
-    
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    public required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
     open override func setup() {
         super.setup()
-
+        
         self.backgroundColor = UIColor.clear
-
+        
         self.fieldDelegate = FieldDelegate(field: self)
-
+        
+        self.placeholderLabel = QLabel(frame: self.bounds)
+        self.placeholderLabel.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
+        self.addSubview(self.placeholderLabel)
+        
         self.fieldView = Field(frame: self.bounds)
         self.fieldView.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
         self.fieldView.delegate = self.fieldDelegate
-        self.addSubview(self.fieldView)
+        self.insertSubview(self.fieldView, aboveSubview: self.placeholderLabel)
     }
     
-    public func addObserver(_ observer: IQTextFieldObserver, priority: UInt) {
+    public func addObserver(_ observer: IQMultiTextFieldObserver, priority: UInt) {
         self.observer.add(observer, priority: priority)
     }
     
-    public func removeObserver(_ observer: IQTextFieldObserver) {
+    public func removeObserver(_ observer: IQMultiTextFieldObserver) {
         self.observer.remove(observer)
     }
-
+    
     open func beginEditing() {
         self.fieldView.becomeFirstResponder()
     }
-
+    
     open override func sizeThatFits(_ size: CGSize) -> CGSize {
         return self.fieldView.sizeThatFits(size)
     }
-
+    
     open override func sizeToFit() {
         return self.fieldView.sizeToFit()
     }
+    
+    private func _updatePlaceholderVisibility() {
+        self.placeholderLabel.isHidden = self.fieldView.text.count > 0
+    }
 
-    internal class Field : UITextField, IQView {
-
-        public var textInsets: UIEdgeInsets = UIEdgeInsets.zero
-        public var editingInsets: UIEdgeInsets {
-            set(value) { self._editingInsets = value }
-            get {
-                guard let insets = self._editingInsets else { return self.textInsets }
-                return insets
-            }
-        }
-        private var _editingInsets: UIEdgeInsets?
-        public var placeholderInsets: UIEdgeInsets {
-            set(value) { self._placeholderInsets = value }
-            get {
-                guard let insets = self._placeholderInsets else { return self.textInsets }
-                return insets
-            }
-        }
-        private var _placeholderInsets: UIEdgeInsets?
-
-        public override init(frame: CGRect) {
-            super.init(frame: frame)
+    internal class Field : UITextView, IQView {
+        
+        required init() {
+            super.init(
+                frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40),
+                textContainer: nil
+            )
             self.setup()
         }
-
+        
+        public override init(frame: CGRect, textContainer: NSTextContainer?) {
+            super.init(
+                frame: frame,
+                textContainer: nil
+            )
+            self.setup()
+        }
+        
         public required init?(coder: NSCoder) {
             super.init(coder: coder)
             self.setup()
         }
-
+        
         open func setup() {
             self.backgroundColor = UIColor.clear
         }
 
-        open override func textRect(forBounds bounds: CGRect) -> CGRect {
-            return bounds.inset(by: self.textInsets)
-        }
-
-        open override func editingRect(forBounds bounds: CGRect) -> CGRect {
-            return bounds.inset(by: self.editingInsets)
-        }
-
-        open override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-            return bounds.inset(by: self.placeholderInsets)
-        }
-
     }
-
-    private class FieldDelegate : NSObject, UITextFieldDelegate {
-
-        public weak var field: QTextField?
-
-        public init(field: QTextField?) {
+    
+    private class FieldDelegate : NSObject, UITextViewDelegate {
+        
+        public weak var field: QMultiTextField?
+        
+        public init(field: QMultiTextField?) {
             self.field = field
             super.init()
         }
-
-        public func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        
+        public func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
             guard let field = self.field, let closure = field.onShouldBeginEditing else { return true }
             return closure(field)
         }
-
-        public func textFieldDidBeginEditing(_ textField: UITextField) {
+        
+        public func textViewDidBeginEditing(_ textView: UITextView) {
             guard let field = self.field else { return }
             if let closure = field.onBeginEditing {
                 closure(field)
@@ -449,13 +361,13 @@ public class QTextField : QDisplayView, IQField {
                 observer.beginEditing(textField: field)
             })
         }
-
-        public func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        
+        public func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
             guard let field = self.field, let closure = field.onShouldEndEditing else { return true }
             return closure(field)
         }
-
-        public func textFieldDidEndEditing(_ textField: UITextField) {
+        
+        public func textViewDidEndEditing(_ textView: UITextView) {
             guard let field = self.field else { return }
             if let closure = field.onEndEditing {
                 closure(field)
@@ -464,100 +376,86 @@ public class QTextField : QDisplayView, IQField {
                 observer.endEditing(textField: field)
             })
         }
-
-        public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
             guard let field = self.field else { return true }
-            var caret = range.location + string.count
-            var sourceText = textField.text ?? ""
+            var caret = range.location + text.count
+            var sourceText = textView.text ?? ""
             if let sourceTextRange = sourceText.range(from: range) {
-                sourceText = sourceText.replacingCharacters(in: sourceTextRange, with: string)
+                sourceText = sourceText.replacingCharacters(in: sourceTextRange, with: text)
             }
-            var sourceUnformat: String
-            if let formatter = field.formatter {
-                sourceUnformat = formatter.unformat(sourceText, caret: &caret)
-            } else {
-                sourceUnformat = sourceText
+            var isValid: Bool = true
+            if let font = textView.font, field.maximumNumberOfCharecters > 0 || field.maximumNumberOfLines > 0 {
+                if field.maximumNumberOfCharecters > 0 {
+                    if sourceText.count > field.maximumNumberOfCharecters {
+                        isValid = false
+                    }
+                }
+                if field.maximumNumberOfLines > 0 {
+                    let allowWidth = textView.frame.inset(by: textView.textContainerInset).width - (2.0 * textView.textContainer.lineFragmentPadding)
+                    let textSize = textView.textStorage.boundingRect(
+                        with: CGSize(width: allowWidth, height: CGFloat.greatestFiniteMagnitude),
+                        options: [ .usesLineFragmentOrigin ],
+                        context: nil
+                    )
+                    if UInt(textSize.height / font.lineHeight) > field.maximumNumberOfLines {
+                        isValid = false
+                    }
+                }
             }
-            var isValid: Bool
-            if let validator = field.validator {
-                isValid = validator.validate(sourceUnformat)
-            } else {
-                isValid = true
-            }
-            if field.requireValidator == false || string.isEmpty == true || isValid == true {
-                var location: UITextPosition?
+            if isValid == true {
+                var sourceUnformat: String
                 if let formatter = field.formatter {
-                    let format = formatter.format(sourceUnformat, caret: &caret)
-                    location = textField.position(from: textField.beginningOfDocument, offset: caret)
-                    textField.text = format
+                    sourceUnformat = formatter.unformat(sourceText, caret: &caret)
                 } else {
-                    location = textField.position(from: textField.beginningOfDocument, offset: caret)
-                    textField.text = sourceUnformat
+                    sourceUnformat = sourceText
                 }
-                if let location = location {
-                    textField.selectedTextRange = textField.textRange(from: location, to: location)
+                if let validator = field.validator {
+                    isValid = validator.validate(sourceUnformat)
                 }
-                textField.sendActions(for: .editingChanged)
-                NotificationCenter.default.post(name: UITextField.textDidChangeNotification, object: textField)
-                if let closure = field.onEditing {
-                    closure(field)
+                if field.requireValidator == false || text.isEmpty == true || isValid == true {
+                    var location: UITextPosition?
+                    if let formatter = field.formatter {
+                        let format = formatter.format(sourceUnformat, caret: &caret)
+                        location = textView.position(from: textView.beginningOfDocument, offset: caret)
+                        textView.text = format
+                    } else {
+                        location = textView.position(from: textView.beginningOfDocument, offset: caret)
+                        textView.text = sourceUnformat
+                    }
+                    if let location = location {
+                        textView.selectedTextRange = textView.textRange(from: location, to: location)
+                    }
+                    if let heightConstraint = field.heightConstraint {
+                        var height = textView.textContainerInset.top + textView.layoutManager.usedRect(for: textView.textContainer).height + textView.textContainerInset.bottom
+                        if field.minimumHeight > CGFloat.leastNonzeroMagnitude {
+                            height = max(height, field.minimumHeight)
+                        }
+                        if field.maximumHeight > CGFloat.leastNonzeroMagnitude {
+                            height = min(height, field.maximumHeight)
+                        }
+                        if abs(heightConstraint.constant - height) > CGFloat.leastNonzeroMagnitude {
+                            heightConstraint.constant = height
+                        }
+                        textView.scrollRangeToVisible(textView.selectedRange)
+                    }
+                    NotificationCenter.default.post(name: UITextView.textDidChangeNotification, object: textView)
+                    if let closure = field.onEditing {
+                        closure(field)
+                    }
+                    field.observer.reverseNotify({ (observer) in
+                        observer.editing(textField: field)
+                    })
                 }
-                field.observer.reverseNotify({ (observer) in
-                    observer.editing(textField: field)
-                })
             }
             return false
         }
-
-        public func textFieldShouldClear(_ textField: UITextField) -> Bool {
-            guard let field = self.field else { return true }
-            if let shouldClosure = field.onShouldClear {
-                if shouldClosure(field) == true {
-                    if let pressedClosure = field.onPressedClear {
-                        pressedClosure(field)
-                    }
-                    field.observer.reverseNotify({ (observer) in
-                        observer.pressedClear(textField: field)
-                    })
-                }
-            } else {
-                if let pressedClosure = field.onPressedClear {
-                    pressedClosure(field)
-                }
-                field.observer.reverseNotify({ (observer) in
-                    observer.pressedClear(textField: field)
-                })
-            }
-            return true
-        }
-
-        public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            guard let field = self.field else { return true }
-            if let shouldClosure = field.onShouldReturn {
-                if shouldClosure(field) == true {
-                    if let pressedClosure = field.onPressedReturn {
-                        pressedClosure(field)
-                    }
-                    field.observer.reverseNotify({ (observer) in
-                        observer.pressedReturn(textField: field)
-                    })
-                }
-            } else {
-                if let pressedClosure = field.onPressedReturn {
-                    pressedClosure(field)
-                }
-                field.observer.reverseNotify({ (observer) in
-                    observer.pressedReturn(textField: field)
-                })
-            }
-            return true
-        }
-
+        
     }
-
+    
 }
 
-extension QTextField : UITextInputTraits {
+extension QMultiTextField : UITextInputTraits {
 
     public var autocapitalizationType: UITextAutocapitalizationType {
         set(value) { self.fieldView.autocapitalizationType = value }

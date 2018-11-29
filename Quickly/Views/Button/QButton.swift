@@ -2,73 +2,114 @@
 //  Quickly
 //
 
-public enum QButtonSpinnerPosition: Int {
+public enum QButtonSpinnerPosition : Int {
     case fill
     case image
 }
 
-public enum QButtonImagePosition: Int {
+public enum QButtonImagePosition : Int {
     case top
     case left
     case right
     case bottom
 }
 
-public class QButton : QControl {
+public enum QButtonContentVerticalAlignment : Int {
+    case center
+    case top
+    case bottom
+    case fill
+    
+}
 
-    open override var isHighlighted: Bool {
-        didSet { self._invalidate() }
+public enum QButtonContentHorizontalAlignment : Int {
+    case center
+    case left
+    case right
+    case fill
+}
+
+public class QButton : QView {
+    
+    public typealias Closure = (_ button: QButton) -> Void
+
+    public var isHighlighted: Bool = false {
+        didSet(oldValue) { if self.isHighlighted != oldValue { self._invalidate() } }
     }
-    open override var isSelected: Bool {
-        didSet { self._invalidate() }
+    public var isSelected: Bool = false {
+        didSet(oldValue) { if self.isSelected != oldValue { self._invalidate() } }
     }
-    open override var isEnabled: Bool {
-        didSet { self._invalidate() }
+    public var isEnabled: Bool = false {
+        didSet(oldValue) { if self.isEnabled != oldValue { self._invalidate() } }
     }
-    open override var contentHorizontalAlignment: UIControl.ContentHorizontalAlignment {
-        didSet { self._invalidate() }
+    public var contentHorizontalAlignment: QButtonContentHorizontalAlignment = .fill {
+        didSet(oldValue) { if self.contentHorizontalAlignment != oldValue { self._invalidate() } }
     }
-    open override var contentVerticalAlignment: UIControl.ContentVerticalAlignment {
-        didSet { self._invalidate() }
+    public var contentVerticalAlignment: QButtonContentVerticalAlignment = .fill {
+        didSet(oldValue) { if self.contentVerticalAlignment != oldValue { self._invalidate() } }
     }
-    @IBInspectable public var contentInsets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8) {
-        didSet { self._invalidate() }
+    public var contentInsets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8) {
+        didSet(oldValue) { if self.contentInsets != oldValue { self._invalidate() } }
     }
     public var imagePosition: QButtonImagePosition = .left {
-        didSet { self._invalidate() }
+        didSet(oldValue) { if self.imagePosition != oldValue { self._invalidate() } }
     }
     public var imageInsets: UIEdgeInsets = UIEdgeInsets.zero {
-        didSet { self._invalidate() }
+        didSet(oldValue) { if self.imageInsets != oldValue { self._invalidate() } }
     }
     public var textInsets: UIEdgeInsets = UIEdgeInsets.zero {
-        didSet { self._invalidate() }
+        didSet(oldValue) { if self.textInsets != oldValue { self._invalidate() } }
     }
     public var normalStyle: IQButtonStyle? {
-        didSet { self._invalidate() }
+        didSet(oldValue) { if self.normalStyle !== oldValue { self._invalidate() } }
     }
     public var highlightedStyle: IQButtonStyle? {
-        didSet { self._invalidate() }
+        didSet(oldValue) { if self.highlightedStyle !== oldValue { self._invalidate() } }
     }
     public var disabledStyle: IQButtonStyle? {
-        didSet { self._invalidate() }
+        didSet(oldValue) { if self.disabledStyle !== oldValue { self._invalidate() } }
     }
     public var selectedStyle: IQButtonStyle? {
-        didSet { self._invalidate() }
+        didSet(oldValue) { if self.selectedStyle !== oldValue { self._invalidate() } }
     }
     public var selectedHighlightedStyle: IQButtonStyle? {
-        didSet { self._invalidate() }
+        didSet(oldValue) { if self.selectedHighlightedStyle !== oldValue { self._invalidate() } }
     }
     public var selectedDisabledStyle: IQButtonStyle? {
-        didSet { self._invalidate() }
+        didSet(oldValue) { if self.selectedDisabledStyle !== oldValue { self._invalidate() } }
     }
     public var durationChangeState: TimeInterval = 0.075
-    public private(set) var backgroundView: QDisplayView!
-    public private(set) var contentView: QView!
-    public private(set) var imageView: QImageView!
-    public private(set) var textLabel: QLabel!
-    public private(set) var tapGesture: UITapGestureRecognizer!
+    public private(set) lazy var backgroundView: QDisplayView = {
+        let view = QDisplayView(frame: self.bounds)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isUserInteractionEnabled = false
+        view.clipsToBounds = false
+        return view
+    }()
+    public private(set) lazy var contentView: QView = {
+        let view = QView(frame: self.bounds)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isUserInteractionEnabled = false
+        view.clipsToBounds = false
+        return view
+    }()
+    public private(set) lazy var imageView: QImageView = {
+        let view = QImageView(frame: self.bounds)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isUserInteractionEnabled = false
+        view.alpha = 0
+        return view
+    }()
+    public private(set) lazy var textLabel: QLabel = {
+        let view = QLabel(frame: self.bounds)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isUserInteractionEnabled = false
+        view.numberOfLines = 0
+        view.alpha = 0
+        return view
+    }()
     public var spinnerPosition: QButtonSpinnerPosition = .fill {
-        didSet { self._invalidate() }
+        didSet(oldValue) { if self.spinnerPosition != oldValue { self._invalidate() } }
     }
     public var spinnerView: QSpinnerViewType? {
         willSet {
@@ -84,6 +125,23 @@ public class QButton : QControl {
             self._invalidate()
         }
     }
+    public private(set) lazy var pressGesture: UILongPressGestureRecognizer = {
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(self._pressGestureHandler(_:)))
+        gesture.delaysTouchesBegan = true
+        gesture.minimumPressDuration = 0.02
+        gesture.allowableMovement = self._pressGestureAllowableMovement()
+        gesture.delegate = self
+        return gesture
+    }()
+    public private(set) lazy var tapGesture: UITapGestureRecognizer = {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(self._tapGestureHandler(_:)))
+        gesture.delaysTouchesBegan = true
+        gesture.delegate = self
+        return gesture
+    }()
+    
+    public var onPressed: Closure?
+    
     private var selfConstraints: [NSLayoutConstraint] = [] {
         willSet { self.removeConstraints(self.selfConstraints) }
         didSet { self.addConstraints(self.selfConstraints) }
@@ -94,18 +152,32 @@ public class QButton : QControl {
     }
 
     open override var frame: CGRect {
-        didSet { self.invalidateIntrinsicContentSize() }
+        didSet(oldValue) {
+            if self.frame != oldValue {
+                self.pressGesture.allowableMovement = self._pressGestureAllowableMovement()
+                self.invalidateIntrinsicContentSize()
+            }
+        }
     }
     open override var bounds: CGRect {
-        didSet { self.invalidateIntrinsicContentSize() }
+        didSet(oldValue) {
+            if self.bounds != oldValue {
+                self.pressGesture.allowableMovement = self._pressGestureAllowableMovement()
+                self.invalidateIntrinsicContentSize()
+            }
+        }
     }
     open override var intrinsicContentSize: CGSize {
         get {
             return self.sizeThatFits(CGSize(
-                width: Const.defaultSize,
-                height: Const.defaultSize
+                width: CGFloat.greatestFiniteMagnitude,
+                height: CGFloat.greatestFiniteMagnitude
             ))
         }
+    }
+    
+    public required init() {
+        super.init(frame: CGRect(x: 0, y: 0, width: 120, height: 40))
     }
 
     public override init(frame: CGRect) {
@@ -127,38 +199,18 @@ public class QButton : QControl {
         super.init(coder: coder)
     }
 
+
     open override func setup() {
         super.setup()
 
         self.backgroundColor = UIColor.clear
 
-        self.backgroundView = QDisplayView(frame: self.bounds)
-        self.backgroundView.translatesAutoresizingMaskIntoConstraints = false
-        self.backgroundView.isUserInteractionEnabled = false
-        self.backgroundView.clipsToBounds = false
         self.addSubview(self.backgroundView)
-
-        self.contentView = QView(frame: self.bounds)
-        self.contentView.translatesAutoresizingMaskIntoConstraints = false
-        self.contentView.isUserInteractionEnabled = false
-        self.contentView.backgroundColor = UIColor.clear
         self.addSubview(self.contentView)
-
-        self.imageView = QImageView(frame: self.bounds)
-        self.imageView.translatesAutoresizingMaskIntoConstraints = false
-        self.imageView.isUserInteractionEnabled = false
-        self.imageView.alpha = 0
         self.contentView.addSubview(self.imageView)
-
-        self.textLabel = QLabel(frame: self.bounds)
-        self.textLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.textLabel.isUserInteractionEnabled = false
-        self.textLabel.alpha = 0
-        self.textLabel.numberOfLines = 0
         self.contentView.addSubview(self.textLabel)
 
-        self.tapGesture = UITapGestureRecognizer(target: self, action: #selector(self._gestureHandler(_:)))
-        self.tapGesture.delegate = self
+        self.addGestureRecognizer(self.pressGesture)
         self.addGestureRecognizer(self.tapGesture)
         
         self._invalidate()
@@ -187,12 +239,8 @@ public class QButton : QControl {
 
     open override func invalidateIntrinsicContentSize() {
         super.invalidateIntrinsicContentSize()
-        if let imageView = self.imageView {
-            imageView.invalidateIntrinsicContentSize()
-        }
-        if let textLabel = self.textLabel {
-            textLabel.invalidateIntrinsicContentSize()
-        }
+        self.imageView.invalidateIntrinsicContentSize()
+        self.textLabel.invalidateIntrinsicContentSize()
     }
 
     open override func sizeThatFits(_ size: CGSize) -> CGSize {
@@ -254,55 +302,64 @@ public class QButton : QControl {
     open override func sizeToFit() {
         var frame = self.frame
         frame.size = self.sizeThatFits(CGSize(
-            width: Const.defaultSize,
-            height: Const.defaultSize
+            width: CGFloat.greatestFiniteMagnitude,
+            height: CGFloat.greatestFiniteMagnitude
         ))
         self.frame = frame
     }
 
     open override func updateConstraints() {
-        var selfConstraints: [NSLayoutConstraint] = []
-        selfConstraints.append(self.backgroundView.topLayout == self.topLayout)
-        selfConstraints.append(self.backgroundView.leadingLayout == self.leadingLayout)
-        selfConstraints.append(self.backgroundView.trailingLayout == self.trailingLayout)
-        selfConstraints.append(self.backgroundView.bottomLayout == self.bottomLayout)
-        let horizontalAlignment = self.contentHorizontalAlignment
-        if horizontalAlignment == .fill {
-            selfConstraints.append(self.contentView.leadingLayout == self.leadingLayout + self.contentInsets.left)
-            selfConstraints.append(self.contentView.trailingLayout == self.trailingLayout - self.contentInsets.right)
-        } else if horizontalAlignment == .left {
-            selfConstraints.append(self.contentView.leadingLayout == self.leadingLayout + self.contentInsets.left)
-            selfConstraints.append(self.contentView.trailingLayout <= self.trailingLayout - self.contentInsets.right)
-        } else if horizontalAlignment == .center {
-            selfConstraints.append(self.contentView.centerXLayout == self.centerXLayout)
-            selfConstraints.append(self.contentView.leadingLayout >= self.leadingLayout + self.contentInsets.left)
-            selfConstraints.append(self.contentView.trailingLayout <= self.trailingLayout - self.contentInsets.right)
-        } else if horizontalAlignment == .right {
-            selfConstraints.append(self.contentView.leadingLayout >= self.leadingLayout + self.contentInsets.left)
-            selfConstraints.append(self.contentView.trailingLayout == self.trailingLayout - self.contentInsets.right)
-        } else if #available(iOS 11.0, *) {
-            if horizontalAlignment == .leading {
-                selfConstraints.append(self.contentView.leadingLayout == self.leadingLayout + self.contentInsets.left)
-                selfConstraints.append(self.contentView.trailingLayout <= self.trailingLayout - self.contentInsets.right)
-            } else if horizontalAlignment == .trailing {
-                selfConstraints.append(self.contentView.leadingLayout >= self.leadingLayout + self.contentInsets.left)
-                selfConstraints.append(self.contentView.trailingLayout == self.trailingLayout - self.contentInsets.right)
-            }
+        var selfConstraints: [NSLayoutConstraint] = [
+            self.backgroundView.topLayout == self.topLayout,
+            self.backgroundView.leadingLayout == self.leadingLayout,
+            self.backgroundView.trailingLayout == self.trailingLayout,
+            self.backgroundView.bottomLayout == self.bottomLayout
+        ]
+        switch self.contentHorizontalAlignment {
+        case .fill:
+            selfConstraints.append(contentsOf: [
+                self.contentView.leadingLayout == self.leadingLayout + self.contentInsets.left,
+                self.contentView.trailingLayout == self.trailingLayout - self.contentInsets.right
+            ])
+        case .left:
+            selfConstraints.append(contentsOf: [
+                self.contentView.leadingLayout == self.leadingLayout + self.contentInsets.left,
+                self.contentView.trailingLayout <= self.trailingLayout - self.contentInsets.right
+            ])
+        case .center:
+            selfConstraints.append(contentsOf: [
+                self.contentView.centerXLayout == self.centerXLayout,
+                self.contentView.leadingLayout >= self.leadingLayout + self.contentInsets.left,
+                self.contentView.trailingLayout <= self.trailingLayout - self.contentInsets.right
+            ])
+        case .right:
+            selfConstraints.append(contentsOf: [
+                self.contentView.leadingLayout >= self.leadingLayout + self.contentInsets.left,
+                self.contentView.trailingLayout == self.trailingLayout - self.contentInsets.right
+            ])
         }
-        let verticalAlignment = self.contentVerticalAlignment
-        if verticalAlignment == .fill {
-            selfConstraints.append(self.contentView.topLayout == self.topLayout + self.contentInsets.top)
-            selfConstraints.append(self.contentView.bottomLayout == self.bottomLayout - self.contentInsets.bottom)
-        } else if verticalAlignment == .top {
-            selfConstraints.append(self.contentView.topLayout == self.topLayout + self.contentInsets.top)
-            selfConstraints.append(self.contentView.bottomLayout <= self.bottomLayout - self.contentInsets.bottom)
-        } else if verticalAlignment == .center {
-            selfConstraints.append(self.contentView.centerYLayout == self.centerYLayout)
-            selfConstraints.append(self.contentView.topLayout >= self.topLayout + self.contentInsets.top)
-            selfConstraints.append(self.contentView.bottomLayout <= self.bottomLayout - self.contentInsets.bottom)
-        } else if verticalAlignment == .bottom {
-            selfConstraints.append(self.contentView.topLayout >= self.topLayout + self.contentInsets.top)
-            selfConstraints.append(self.contentView.bottomLayout == self.bottomLayout - self.contentInsets.bottom)
+        switch self.contentVerticalAlignment {
+        case .fill:
+            selfConstraints.append(contentsOf: [
+                self.contentView.topLayout == self.topLayout + self.contentInsets.top,
+                self.contentView.bottomLayout == self.bottomLayout - self.contentInsets.bottom
+            ])
+        case .top:
+            selfConstraints.append(contentsOf: [
+                self.contentView.topLayout == self.topLayout + self.contentInsets.top,
+                self.contentView.bottomLayout <= self.bottomLayout - self.contentInsets.bottom
+            ])
+        case .center:
+            selfConstraints.append(contentsOf: [
+                self.contentView.centerYLayout == self.centerYLayout,
+                self.contentView.topLayout >= self.topLayout + self.contentInsets.top,
+                self.contentView.bottomLayout <= self.bottomLayout - self.contentInsets.bottom
+            ])
+        case .bottom:
+            selfConstraints.append(contentsOf: [
+                self.contentView.topLayout >= self.topLayout + self.contentInsets.top,
+                self.contentView.bottomLayout == self.bottomLayout - self.contentInsets.bottom
+            ])
         }
         self.selfConstraints = selfConstraints
 
@@ -405,36 +462,6 @@ public class QButton : QControl {
         super.updateConstraints()
     }
 
-    open override func touchesBegan(_ touches: Set< UITouch >, with event: UIEvent?) {
-        if self.durationChangeState > .leastNonzeroMagnitude {
-            UIView.animate(withDuration: self.durationChangeState, delay: 0, options: [ .beginFromCurrentState ], animations: {
-                super.touchesBegan(touches, with: event)
-            })
-        } else {
-            super.touchesBegan(touches, with: event)
-        }
-    }
-
-    open override func touchesMoved(_ touches: Set< UITouch >, with event: UIEvent?) {
-        if self.durationChangeState > .leastNonzeroMagnitude {
-            UIView.animate(withDuration: self.durationChangeState, delay: 0, options: [ .beginFromCurrentState ], animations: {
-                super.touchesMoved(touches, with: event)
-            })
-        } else {
-            super.touchesMoved(touches, with: event)
-        }
-    }
-
-    open override func touchesEnded(_ touches: Set< UITouch >, with event: UIEvent?) {
-        if self.durationChangeState > .leastNonzeroMagnitude {
-            UIView.animate(withDuration: self.durationChangeState, delay: 0, options: [ .beginFromCurrentState ], animations: {
-                super.touchesEnded(touches, with: event)
-            })
-        } else {
-            super.touchesEnded(touches, with: event)
-        }
-    }
-
     private func _invalidate() {
         self.invalidateIntrinsicContentSize()
         self.setNeedsUpdateConstraints()
@@ -526,80 +553,130 @@ public class QButton : QControl {
     }
 
     private func _updateContent(constraints: inout [NSLayoutConstraint], view: UIView) {
-        constraints.append(view.topLayout == self.contentView.topLayout)
-        constraints.append(view.leadingLayout == self.contentView.leadingLayout)
-        constraints.append(view.trailingLayout <= self.contentView.trailingLayout)
-        constraints.append(view.bottomLayout <= self.contentView.bottomLayout)
-        constraints.append(view.centerXLayout == self.contentView.centerXLayout)
-        constraints.append(view.centerYLayout == self.contentView.centerYLayout)
+        constraints.append(contentsOf: [
+            view.topLayout == self.contentView.topLayout,
+            view.leadingLayout == self.contentView.leadingLayout,
+            view.trailingLayout == self.contentView.trailingLayout,
+            view.bottomLayout == self.contentView.bottomLayout,
+            view.centerXLayout == self.contentView.centerXLayout,
+            view.centerYLayout == self.contentView.centerYLayout
+        ])
     }
 
     private func _updateContent(constraints: inout [NSLayoutConstraint], view: UIView, edgeInsets: UIEdgeInsets) {
-        constraints.append(view.topLayout == self.contentView.topLayout + edgeInsets.top)
-        constraints.append(view.leadingLayout == self.contentView.leadingLayout + edgeInsets.left)
-        constraints.append(view.trailingLayout == self.contentView.trailingLayout - edgeInsets.right)
-        constraints.append(view.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom)
-        constraints.append(view.centerXLayout == self.contentView.centerXLayout)
-        constraints.append(view.centerYLayout == self.contentView.centerYLayout)
+        constraints.append(contentsOf: [
+            view.topLayout == self.contentView.topLayout + edgeInsets.top,
+            view.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
+            view.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
+            view.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom,
+            view.centerXLayout == self.contentView.centerXLayout,
+            view.centerYLayout == self.contentView.centerYLayout
+        ])
     }
 
     private func _updateContent(
         constraints: inout [NSLayoutConstraint],
-        topView: UIView, topEdgeInsets: UIEdgeInsets,
-        bottomView: UIView, bottomEdgeInsets: UIEdgeInsets
+        topView: UIView,
+        topEdgeInsets: UIEdgeInsets,
+        bottomView: UIView,
+        bottomEdgeInsets: UIEdgeInsets
     ) {
-        constraints.append(topView.leadingLayout >= self.contentView.leadingLayout + topEdgeInsets.left)
-        constraints.append(topView.trailingLayout <= self.contentView.trailingLayout - topEdgeInsets.right)
-        constraints.append(topView.bottomLayout == bottomView.topLayout - (topEdgeInsets.bottom + bottomEdgeInsets.top))
-        constraints.append(bottomView.leadingLayout >= self.contentView.leadingLayout + bottomEdgeInsets.left)
-        constraints.append(bottomView.trailingLayout <= self.contentView.trailingLayout - bottomEdgeInsets.right)
+        constraints.append(contentsOf: [
+            topView.leadingLayout == self.contentView.leadingLayout + topEdgeInsets.left,
+            topView.trailingLayout == self.contentView.trailingLayout - topEdgeInsets.right,
+            topView.centerXLayout == self.contentView.centerXLayout
+        ])
         if topView.alpha <= CGFloat.leastNonzeroMagnitude {
-            constraints.append(bottomView.topLayout == self.contentView.topLayout + bottomEdgeInsets.top)
-            constraints.append(bottomView.bottomLayout == self.contentView.bottomLayout - bottomEdgeInsets.bottom)
+            constraints.append(contentsOf: [
+                bottomView.topLayout == self.contentView.topLayout + bottomEdgeInsets.top,
+                bottomView.bottomLayout == self.contentView.bottomLayout - bottomEdgeInsets.bottom
+            ])
         } else if bottomView.alpha <= CGFloat.leastNonzeroMagnitude {
-            constraints.append(topView.topLayout == self.contentView.topLayout + topEdgeInsets.top)
-            constraints.append(topView.bottomLayout == self.contentView.bottomLayout - topEdgeInsets.bottom)
+            constraints.append(contentsOf: [
+                topView.topLayout == self.contentView.topLayout + topEdgeInsets.top,
+                topView.bottomLayout == self.contentView.bottomLayout - topEdgeInsets.bottom
+            ])
         } else {
-            constraints.append(topView.topLayout == self.contentView.topLayout + topEdgeInsets.top)
-            constraints.append(bottomView.bottomLayout == self.contentView.bottomLayout - bottomEdgeInsets.bottom)
+            constraints.append(contentsOf: [
+                topView.topLayout == self.contentView.topLayout + topEdgeInsets.top,
+                bottomView.bottomLayout == self.contentView.bottomLayout - bottomEdgeInsets.bottom
+            ])
         }
-        constraints.append(topView.centerXLayout == self.contentView.centerXLayout)
-        constraints.append(bottomView.centerXLayout == self.contentView.centerXLayout)
+        constraints.append(contentsOf: [
+            bottomView.topLayout == topView.bottomLayout + (topEdgeInsets.bottom + bottomEdgeInsets.top),
+            bottomView.leadingLayout == self.contentView.leadingLayout + bottomEdgeInsets.left,
+            bottomView.trailingLayout == self.contentView.trailingLayout - bottomEdgeInsets.right,
+            bottomView.centerXLayout == self.contentView.centerXLayout
+        ])
     }
 
     private func _updateContent(
         constraints: inout [NSLayoutConstraint],
-        leftView: UIView, leftEdgeInsets: UIEdgeInsets,
-        rightView: UIView, rightEdgeInsets: UIEdgeInsets
+        leftView: UIView,
+        leftEdgeInsets: UIEdgeInsets,
+        rightView: UIView,
+        rightEdgeInsets: UIEdgeInsets
     ) {
-        constraints.append(leftView.topLayout >= self.contentView.topLayout + leftEdgeInsets.top)
-        constraints.append(leftView.trailingLayout == rightView.leadingLayout - (leftEdgeInsets.right + rightEdgeInsets.left))
-        constraints.append(leftView.bottomLayout <= self.contentView.bottomLayout - leftEdgeInsets.bottom)
-        constraints.append(rightView.topLayout >= self.contentView.topLayout + rightEdgeInsets.top)
-        constraints.append(rightView.bottomLayout <= self.contentView.bottomLayout - rightEdgeInsets.bottom)
+        constraints.append(contentsOf: [
+            leftView.topLayout == self.contentView.topLayout + leftEdgeInsets.top,
+            leftView.trailingLayout == rightView.leadingLayout - (leftEdgeInsets.right + rightEdgeInsets.left),
+            leftView.bottomLayout == self.contentView.bottomLayout - leftEdgeInsets.bottom,
+            leftView.centerYLayout == self.contentView.centerYLayout
+        ])
+        constraints.append(contentsOf: [
+            rightView.topLayout == self.contentView.topLayout + rightEdgeInsets.top,
+            rightView.bottomLayout == self.contentView.bottomLayout - rightEdgeInsets.bottom,
+            rightView.centerYLayout == self.contentView.centerYLayout
+        ])
         if leftView.alpha <= CGFloat.leastNonzeroMagnitude {
-            constraints.append(rightView.leadingLayout == self.contentView.leadingLayout + rightEdgeInsets.left)
-            constraints.append(rightView.trailingLayout == self.contentView.trailingLayout - rightEdgeInsets.right)
+            constraints.append(contentsOf: [
+                rightView.leadingLayout == self.contentView.leadingLayout + rightEdgeInsets.left,
+                rightView.trailingLayout == self.contentView.trailingLayout - rightEdgeInsets.right
+            ])
         } else if rightView.alpha <= CGFloat.leastNonzeroMagnitude {
-            constraints.append(leftView.leadingLayout == self.contentView.leadingLayout + leftEdgeInsets.left)
-            constraints.append(leftView.trailingLayout == self.contentView.trailingLayout - leftEdgeInsets.right)
+            constraints.append(contentsOf: [
+                leftView.leadingLayout == self.contentView.leadingLayout + leftEdgeInsets.left,
+                leftView.trailingLayout == self.contentView.trailingLayout - leftEdgeInsets.right
+            ])
         } else {
-            constraints.append(leftView.leadingLayout == self.contentView.leadingLayout + leftEdgeInsets.left)
-            constraints.append(rightView.trailingLayout == self.contentView.trailingLayout - rightEdgeInsets.right)
+            constraints.append(contentsOf: [
+                leftView.leadingLayout == self.contentView.leadingLayout + leftEdgeInsets.left,
+                rightView.trailingLayout == self.contentView.trailingLayout - rightEdgeInsets.right
+            ])
         }
-        constraints.append(leftView.centerYLayout == self.contentView.centerYLayout)
-        constraints.append(rightView.centerYLayout == self.contentView.centerYLayout)
+    }
+    
+}
+
+extension QButton {
+    
+    private func _pressGestureAllowableMovement() -> CGFloat {
+        return min(self.frame.width, self.frame.height) * 1.5
+    }
+    
+}
+
+extension QButton {
+    
+    @objc
+    private func _pressGestureHandler(_ sender: Any) {
+        var isHighlighted = self.isHighlighted
+        switch self.pressGesture.state {
+        case .began: isHighlighted = true
+        default: isHighlighted = false
+        }
+        if isHighlighted != self.isHighlighted {
+            UIView.animate(withDuration: self.durationChangeState, delay: 0, options: [ .beginFromCurrentState ], animations: {
+                self.isHighlighted = isHighlighted
+                self.layoutIfNeeded()
+            })
+        }
     }
 
     @objc
-    private func _gestureHandler(_ sender: Any) {
-        self.sendActions(for: .touchUpInside)
-    }
-
-    private struct Const {
-
-        static let defaultSize: CGFloat = 1024 * 1024
-
+    private func _tapGestureHandler(_ sender: Any) {
+        guard let onPressed = self.onPressed else { return }
+        onPressed(self)
     }
 
 }
@@ -607,11 +684,13 @@ public class QButton : QControl {
 extension QButton : UIGestureRecognizerDelegate {
 
     open override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if self.tapGesture == gestureRecognizer {
-            let location = self.tapGesture.location(in: self)
-            return self.bounds.contains(location)
-        }
-        return false
+        let location = gestureRecognizer.location(in: self)
+        return self.bounds.contains(location)
+    }
+    
+    open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let otherView = otherGestureRecognizer.view else { return false }
+        return self.isDescendant(of: otherView)
     }
 
 }

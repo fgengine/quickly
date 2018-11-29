@@ -48,7 +48,10 @@ open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComp
             horizontal: UILayoutPriority(rawValue: 252),
             vertical: UILayoutPriority(rawValue: 252)
         )
-        view.addTouchUpInside(self, action: #selector(self.pressedButton(_:)))
+        view.onPressed = { [weak self] _ in
+            guard let strong = self, let composable = strong.composable else { return }
+            composable.buttonPressed(composable)
+        }
         self.contentView.addSubview(view)
         return view
     }()
@@ -120,13 +123,6 @@ open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComp
         if let composable = self.composable {
             composable.buttonIsSpinnerAnimating = false
             self.button.stopSpinner()
-        }
-    }
-
-    @objc
-    private func pressedButton(_ sender: Any) {
-        if let composable = self.composable {
-            composable.buttonPressed(composable)
         }
     }
 

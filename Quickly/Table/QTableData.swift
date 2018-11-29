@@ -19,7 +19,7 @@ open class QTableData : IQTableData {
     }
     
     open func resetCacheHeight() {
-        self.cacheHeight = 0
+        self.cacheHeight = nil
     }
 
 }

@@ -103,6 +103,7 @@ open class QTableSection : IQTableSection {
             }
         }
         if indices.count > 0 {
+            indices.sort()
             let indexPaths = rows.compactMap({ return $0.indexPath })
             for index in indices.reversed() {
                 let row = self.rows[index]

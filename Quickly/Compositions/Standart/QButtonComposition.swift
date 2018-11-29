@@ -31,7 +31,10 @@ open class QButtonComposition< Composable: QButtonComposable > : QComposition< C
     lazy private var button: QButton = {
         let view = QButton(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.addTouchUpInside(self, action: #selector(self.pressedButton(_:)))
+        view.onPressed = { [weak self] _ in
+            guard let strong = self, let composable = strong.composable else { return }
+            composable.buttonPressed(composable)
+        }
         self.contentView.addSubview(view)
         return view
     }()
@@ -93,13 +96,6 @@ open class QButtonComposition< Composable: QButtonComposable > : QComposition< C
         guard let composable = self.composable else { return }
         composable.buttonIsSpinnerAnimating = false
         self.button.stopSpinner()
-    }
-
-    @objc
-    private func pressedButton(_ sender: Any) {
-        if let composable = self.composable {
-            composable.buttonPressed(composable)
-        }
     }
 
 }

@@ -265,10 +265,8 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
 
     open func deleteSection(_ sections: [IQCollectionSection]) {
         var indexSet = IndexSet()
-        for section in self.sections {
-            if let index = self.sections.index(where: { (existSection: IQCollectionSection) -> Bool in
-                return (existSection === section)
-            }) {
+        for section in sections {
+            if let index = self.sections.index(where: { return ($0 === section) }) {
                 indexSet.insert(index)
             }
         }
@@ -287,10 +285,8 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
 
     open func reloadSection(_ sections: [IQCollectionSection]) {
         var indexSet = IndexSet()
-        for section in self.sections {
-            if let index = self.sections.index(where: { (existSection: IQCollectionSection) -> Bool in
-                return (existSection === section)
-            }) {
+        for section in sections {
+            if let index = self.sections.index(where: { return ($0 === section) }) {
                 indexSet.insert(index)
             }
         }

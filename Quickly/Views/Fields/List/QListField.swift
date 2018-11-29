@@ -73,10 +73,10 @@ public class QListField : QDisplayView, IQField {
     public var selectedRow: QListFieldPickerRow? {
         didSet {
             if let selectedRow = self.selectedRow {
-                selectedRow.field.apply(self.label)
+                selectedRow.field.apply(self.valieLabel)
                 self.pickerController.select(row: selectedRow, animated: self.isEditing)
             } else {
-                self.label.text = self.placeholder
+                self.valieLabel.text = self.placeholder
             }
             self.invalidateIntrinsicContentSize()
         }
@@ -94,7 +94,7 @@ public class QListField : QDisplayView, IQField {
     public var placeholder: IQText? {
         didSet {
             if self.selectedRow == nil {
-                self.label.text = self.placeholder
+                self.valieLabel.text = self.placeholder
                 self.invalidateIntrinsicContentSize()
             }
         }
@@ -103,6 +103,12 @@ public class QListField : QDisplayView, IQField {
     public var isEditing: Bool {
         get { return self.isFirstResponder }
     }
+    public var onShouldBeginEditing: ShouldClosure?
+    public var onBeginEditing: Closure?
+    public var onSelect: SelectClosure?
+    public var onShouldEndEditing: ShouldClosure?
+    public var onEndEditing: Closure?
+    
     open override var canBecomeFirstResponder: Bool {
         get {
             guard self.isEnabled == true else { return false }
@@ -117,23 +123,17 @@ public class QListField : QDisplayView, IQField {
         }
     }
     open override var inputView: UIView? {
-        get { return self.picker }
+        get { return self.pickerView }
     }
     open override var intrinsicContentSize: CGSize {
-        get { return self.label.intrinsicContentSize }
+        get { return self.valieLabel.intrinsicContentSize }
     }
 
-    public var onShouldBeginEditing: ShouldClosure?
-    public var onBeginEditing: Closure?
-    public var onSelect: SelectClosure?
-    public var onShouldEndEditing: ShouldClosure?
-    public var onEndEditing: Closure?
-
-    internal var label: QLabel!
-    internal var picker: QPickerView!
-    internal var pickerSection: QPickerSection!
-    internal var pickerController: QPickerController!
-    internal var tapGesture: UITapGestureRecognizer!
+    internal private(set) var valieLabel: QLabel!
+    internal private(set) var pickerView: QPickerView!
+    internal private(set) var pickerSection: QPickerSection!
+    internal private(set) var pickerController: QPickerController!
+    internal private(set) var tapGesture: UITapGestureRecognizer!
     
     private var observer: QObserver< IQListFieldObserver >
     
@@ -157,18 +157,18 @@ public class QListField : QDisplayView, IQField {
 
         self.backgroundColor = UIColor.clear
 
-        self.label = QLabel(frame: self.bounds)
-        self.label.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
-        self.addSubview(self.label)
+        self.valieLabel = QLabel(frame: self.bounds)
+        self.valieLabel.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
+        self.addSubview(self.valieLabel)
 
-        self.picker = QPickerView()
+        self.pickerView = QPickerView()
 
         self.pickerSection = QPickerSection(cellType: QListFieldPickerCell.self, height: 40, rows: [])
 
         self.pickerController = QPickerController()
         self.pickerController.sections = [ self.pickerSection ]
         self.pickerController.delegate = self
-        self.picker.pickerController = self.pickerController
+        self.pickerView.pickerController = self.pickerController
         
         self.tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture(_:)))
         self.addGestureRecognizer(self.tapGesture)
@@ -187,11 +187,11 @@ public class QListField : QDisplayView, IQField {
     }
 
     open override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return self.label.sizeThatFits(size)
+        return self.valieLabel.sizeThatFits(size)
     }
 
     open override func sizeToFit() {
-        return self.label.sizeToFit()
+        return self.valieLabel.sizeToFit()
     }
 
     @discardableResult

@@ -144,7 +144,6 @@ open class QImageTitleComposition< Composable: QImageTitleComposable > : QCompos
                 ]
             case .vertical:
                 self.imageConstraints = [
-                    self.imageView.widthLayout == composable.imageSize.width,
                     self.imageView.heightLayout == composable.imageSize.height
                 ]
             }

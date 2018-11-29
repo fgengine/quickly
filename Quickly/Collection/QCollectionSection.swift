@@ -113,6 +113,7 @@ open class QCollectionSection : IQCollectionSection {
             }
         }
         if indices.count > 0 {
+            indices.sort()
             let indexPaths = items.compactMap({ $0.indexPath })
             for index in indices.reversed() {
                 let item = self.items[index]

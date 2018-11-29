@@ -4,6 +4,7 @@
 
 public enum QCompositionTableRowSizeBehaviour {
     case dynamic
+    case full
     case fixed(height: CGFloat)
     case bound(minimum: CGFloat, maximum: CGFloat)
 }
@@ -50,6 +51,8 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
         switch row.sizeBehaviour {
         case .dynamic:
             return Composition.height(composable: row.composable, spec: spec)
+        case .full:
+            return spec.containerSize.height
         case .fixed(let height):
             return height
         case .bound(let minimum, let maximum):
@@ -60,6 +63,9 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
 
     open override func setup() {
         super.setup()
+        
+        self.clipsToBounds = true
+        
         self.composition = Composition(contentView: self.contentView, owner: self)
     }
 

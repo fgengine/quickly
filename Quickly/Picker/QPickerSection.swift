@@ -67,6 +67,7 @@ open class QPickerSection : IQPickerSection {
             }
         }
         if indices.count > 0 {
+            indices.sort()
             for index in indices.reversed() {
                 let row = self.rows[index]
                 self.rows.remove(at: index)

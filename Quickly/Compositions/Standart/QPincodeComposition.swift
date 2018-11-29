@@ -192,63 +192,94 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
         
         self.button1 = QButton(frame: self.contentView.bounds)
         self.button1.translatesAutoresizingMaskIntoConstraints = false
-        self.button1.addTouchUpInside(self, action: #selector(self.pressedButton1(_:)))
+        self.button1.onPressed = { [weak self] _ in
+            self?.pressedButton(number: 1)
+        }
         self.contentView.addSubview(self.button1)
         
         self.button2 = QButton(frame: self.contentView.bounds)
         self.button2.translatesAutoresizingMaskIntoConstraints = false
-        self.button2.addTouchUpInside(self, action: #selector(self.pressedButton2(_:)))
+        self.button2.onPressed = { [weak self] _ in
+            self?.pressedButton(number: 2)
+        }
         self.contentView.addSubview(self.button2)
         
         self.button3 = QButton(frame: self.contentView.bounds)
         self.button3.translatesAutoresizingMaskIntoConstraints = false
-        self.button3.addTouchUpInside(self, action: #selector(self.pressedButton3(_:)))
+        self.button3.onPressed = { [weak self] _ in
+            self?.pressedButton(number: 3)
+        }
         self.contentView.addSubview(self.button3)
         
         self.button4 = QButton(frame: self.contentView.bounds)
         self.button4.translatesAutoresizingMaskIntoConstraints = false
-        self.button4.addTouchUpInside(self, action: #selector(self.pressedButton4(_:)))
+        self.button4.onPressed = { [weak self] _ in
+            self?.pressedButton(number: 4)
+        }
         self.contentView.addSubview(self.button4)
         
         self.button5 = QButton(frame: self.contentView.bounds)
         self.button5.translatesAutoresizingMaskIntoConstraints = false
-        self.button5.addTouchUpInside(self, action: #selector(self.pressedButton5(_:)))
+        self.button5.onPressed = { [weak self] _ in
+            self?.pressedButton(number: 5)
+        }
         self.contentView.addSubview(self.button5)
         
         self.button6 = QButton(frame: self.contentView.bounds)
         self.button6.translatesAutoresizingMaskIntoConstraints = false
-        self.button6.addTouchUpInside(self, action: #selector(self.pressedButton6(_:)))
+        self.button6.onPressed = { [weak self] _ in
+            self?.pressedButton(number: 6)
+        }
         self.contentView.addSubview(self.button6)
         
         self.button7 = QButton(frame: self.contentView.bounds)
         self.button7.translatesAutoresizingMaskIntoConstraints = false
-        self.button7.addTouchUpInside(self, action: #selector(self.pressedButton7(_:)))
+        self.button7.onPressed = { [weak self] _ in
+            self?.pressedButton(number: 7)
+        }
         self.contentView.addSubview(self.button7)
         
         self.button8 = QButton(frame: self.contentView.bounds)
         self.button8.translatesAutoresizingMaskIntoConstraints = false
-        self.button8.addTouchUpInside(self, action: #selector(self.pressedButton8(_:)))
+        self.button8.onPressed = { [weak self] _ in
+            self?.pressedButton(number: 8)
+        }
         self.contentView.addSubview(self.button8)
         
         self.button9 = QButton(frame: self.contentView.bounds)
         self.button9.translatesAutoresizingMaskIntoConstraints = false
-        self.button9.addTouchUpInside(self, action: #selector(self.pressedButton9(_:)))
+        self.button9.onPressed = { [weak self] _ in
+            self?.pressedButton(number: 9)
+        }
         self.contentView.addSubview(self.button9)
         
         self.button0 = QButton(frame: self.contentView.bounds)
         self.button0.translatesAutoresizingMaskIntoConstraints = false
-        self.button0.addTouchUpInside(self, action: #selector(self.pressedButton0(_:)))
+        self.button0.onPressed = { [weak self] _ in
+            self?.pressedButton(number: 0)
+        }
         self.contentView.addSubview(self.button0)
         
         self.buttonLeft = QButton(frame: self.contentView.bounds)
         self.buttonLeft.translatesAutoresizingMaskIntoConstraints = false
-        self.buttonLeft.addTouchUpInside(self, action: #selector(self.pressedButtonLeft(_:)))
+        self.buttonLeft.onPressed = { [weak self] _ in
+            guard let strong = self else { return }
+            strong.delegate?.pincodeCompositionLeftPressed(strong)
+        }
         self.buttonLeft.alpha = 0
         self.contentView.addSubview(self.buttonLeft)
         
         self.buttonRight = QButton(frame: self.contentView.bounds)
         self.buttonRight.translatesAutoresizingMaskIntoConstraints = false
-        self.buttonRight.addTouchUpInside(self, action: #selector(self.pressedButtonRight(_:)))
+        self.buttonRight.onPressed = { [weak self] _ in
+            guard let strong = self else { return }
+            if strong.pincode.isEmpty == true {
+                strong.delegate?.pincodeCompositionRightPressed(strong)
+            } else {
+                strong.pincode.removeLast()
+                strong.updateRightButton()
+            }
+        }
         self.buttonRight.alpha = 0
         self.contentView.addSubview(self.buttonRight)
     }
@@ -472,75 +503,6 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
                     self.contentView.layoutIfNeeded()
                 })
             }
-        }
-    }
-    
-    @objc
-    private func pressedButton0(_ sender: Any?) {
-        self.pressedButton(number: 0)
-    }
-    
-    @objc
-    private func pressedButton1(_ sender: Any?) {
-        self.pressedButton(number: 1)
-    }
-    
-    @objc
-    private func pressedButton2(_ sender: Any?) {
-        self.pressedButton(number: 2)
-    }
-    
-    @objc
-    private func pressedButton3(_ sender: Any?) {
-        self.pressedButton(number: 3)
-    }
-    
-    @objc
-    private func pressedButton4(_ sender: Any?) {
-        self.pressedButton(number: 4)
-    }
-    
-    @objc
-    private func pressedButton5(_ sender: Any?) {
-        self.pressedButton(number: 5)
-    }
-    
-    @objc
-    private func pressedButton6(_ sender: Any?) {
-        self.pressedButton(number: 6)
-    }
-    
-    @objc
-    private func pressedButton7(_ sender: Any?) {
-        self.pressedButton(number: 7)
-    }
-    
-    @objc
-    private func pressedButton8(_ sender: Any?) {
-        self.pressedButton(number: 8)
-    }
-    
-    @objc
-    private func pressedButton9(_ sender: Any?) {
-        self.pressedButton(number: 9)
-    }
-    
-    @objc
-    private func pressedButtonLeft(_ sender: Any?) {
-        if let delegate = self.delegate {
-            delegate.pincodeCompositionLeftPressed(self)
-        }
-    }
-    
-    @objc
-    private func pressedButtonRight(_ sender: Any?) {
-        if self.pincode.isEmpty == true {
-            if let delegate = self.delegate {
-                delegate.pincodeCompositionRightPressed(self)
-            }
-        } else {
-            self.pincode.removeLast()
-            self.updateRightButton()
         }
     }
     
