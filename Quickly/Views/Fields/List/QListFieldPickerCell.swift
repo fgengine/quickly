@@ -4,40 +4,36 @@
 
 public class QListFieldPickerCell : QPickerCell< QListFieldPickerRow > {
 
-    private var _title: QLabel!
+    private lazy var _title: QLabel = {
+        let view = QLabel(frame: self.bounds)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(view)
+        return view
+    }()
 
-    private var currentEdgeInsets: UIEdgeInsets?
+    private var _edgeInsets: UIEdgeInsets?
 
-    private var selfConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.removeConstraints(self.selfConstraints) }
-        didSet { self.addConstraints(self.selfConstraints) }
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.removeConstraints(self._constraints) }
+        didSet { self.addConstraints(self._constraints) }
     }
 
-    open override func setup() {
-        super.setup()
-
-        self._title = QLabel(frame: self.bounds)
-        self._title.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(self._title)
-    }
-
-    open override func set(row: QListFieldPickerRow) {
+    open override func set(row: RowType) {
         super.set(row: row)
-        self.apply(row: row)
+        self._apply(row: row)
     }
 
-    private func apply(row: QListFieldPickerRow) {
-        if self.currentEdgeInsets != row.rowEdgeInsets {
-            self.currentEdgeInsets = row.rowEdgeInsets
-
-            var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self._title.topLayout == self.topLayout + row.rowEdgeInsets.top)
-            selfConstraints.append(self._title.leadingLayout == self.leadingLayout + row.rowEdgeInsets.left)
-            selfConstraints.append(self._title.trailingLayout == self.trailingLayout - row.rowEdgeInsets.right)
-            selfConstraints.append(self._title.bottomLayout == self.bottomLayout - row.rowEdgeInsets.bottom)
-            self.selfConstraints = selfConstraints
+    private func _apply(row: RowType) {
+        if self._edgeInsets != row.rowEdgeInsets {
+            self._edgeInsets = row.rowEdgeInsets
+            self._constraints = [
+                self._title.topLayout == self.topLayout + row.rowEdgeInsets.top,
+                self._title.leadingLayout == self.leadingLayout + row.rowEdgeInsets.left,
+                self._title.trailingLayout == self.trailingLayout - row.rowEdgeInsets.right,
+                self._title.bottomLayout == self.bottomLayout - row.rowEdgeInsets.bottom
+            ]
         }
-        row.row.apply(self._title)
+        self._title.apply(row.row)
     }
 
 }

@@ -36,30 +36,30 @@ open class QTitleSwitchComposable : QComposable {
 
 open class QTitleSwitchComposition< Composable: QTitleSwitchComposable > : QComposition< Composable > {
 
-    lazy private var titleLabel: QLabel = {
+    private lazy var titleLabel: QLabel = {
         let view = QLabel(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    lazy private var `switch`: QSwitch = {
+    private lazy var `switch`: QSwitch = {
         let view = QSwitch(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.setContentHuggingPriority(
             horizontal: UILayoutPriority(rawValue: 252),
             vertical: UILayoutPriority(rawValue: 252)
         )
-        view.addValueChanged(self, action: #selector(self.pressedSwitch(_:)))
+        view.addValueChanged(self, action: #selector(self._pressedSwitch(_:)))
         self.contentView.addSubview(view)
         return view
     }()
 
-    private var currentEdgeInsets: UIEdgeInsets?
-    private var currentSwitchSpacing: CGFloat?
+    private var _edgeInsets: UIEdgeInsets?
+    private var _switchSpacing: CGFloat?
 
-    private var selfConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.selfConstraints) }
-        didSet { self.contentView.addConstraints(self.selfConstraints) }
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self._constraints) }
+        didSet { self.contentView.addConstraints(self._constraints) }
     }
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
@@ -78,10 +78,10 @@ open class QTitleSwitchComposition< Composable: QTitleSwitchComposable > : QComp
             bottom: composable.edgeInsets.bottom,
             right: spec.containerRightInset + composable.edgeInsets.right
         )
-        if self.currentEdgeInsets != edgeInsets || self.currentSwitchSpacing != composable.switchSpacing {
-            self.currentEdgeInsets = edgeInsets
-            self.currentSwitchSpacing = composable.switchSpacing
-            self.selfConstraints = [
+        if self._edgeInsets != edgeInsets || self._switchSpacing != composable.switchSpacing {
+            self._edgeInsets = edgeInsets
+            self._switchSpacing = composable.switchSpacing
+            self._constraints = [
                 self.titleLabel.topLayout == self.contentView.topLayout + edgeInsets.top,
                 self.titleLabel.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
                 self.titleLabel.trailingLayout == self.switch.leadingLayout - composable.switchSpacing,
@@ -94,8 +94,8 @@ open class QTitleSwitchComposition< Composable: QTitleSwitchComposable > : QComp
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        composable.title.apply(self.titleLabel)
-        composable.switch.apply(self.switch)
+        self.titleLabel.apply(composable.title)
+        self.switch.apply(composable.switch)
     }
     
     open override func postLayout(composable: Composable, spec: IQContainerSpec) {
@@ -110,7 +110,7 @@ open class QTitleSwitchComposition< Composable: QTitleSwitchComposable > : QComp
     }
 
     @objc
-    private func pressedSwitch(_ sender: Any) {
+    private func _pressedSwitch(_ sender: Any) {
         if let composable = self.composable {
             composable.switchIsOn = self.switch.isOn
             composable.switchChanged(composable)

@@ -19,30 +19,30 @@ open class QStackbar : QView {
         }
     }
     public var leftViewsSpacing: CGFloat {
-        set(value) { self.leftView.spacing = value }
-        get { return self.leftView.spacing }
+        set(value) { self._leftView.spacing = value }
+        get { return self._leftView.spacing }
     }
     public var leftViews: [UIView] {
         set(value) {
-            if self.leftView.views != value {
-                self.leftView.views = value
+            if self._leftView.views != value {
+                self._leftView.views = value
                 self.setNeedsUpdateConstraints()
             }
         }
-        get { return self.leftView.views }
+        get { return self._leftView.views }
     }
     public var centerViewsSpacing: CGFloat {
-        set(value) { self.centerView.spacing = value }
-        get { return self.centerView.spacing }
+        set(value) { self._centerView.spacing = value }
+        get { return self._centerView.spacing }
     }
     public var centerViews: [UIView] {
         set(value) {
-            if self.centerView.views != value {
-                self.centerView.views = value
+            if self._centerView.views != value {
+                self._centerView.views = value
                 self.setNeedsUpdateConstraints()
             }
         }
-        get { return self.centerView.views }
+        get { return self._centerView.views }
     }
     public var rightViewsOffset: CGFloat = 0 {
         didSet(oldValue) {
@@ -52,17 +52,17 @@ open class QStackbar : QView {
         }
     }
     public var rightViewsSpacing: CGFloat {
-        set(value) { self.rightView.spacing = value }
-        get { return self.rightView.spacing }
+        set(value) { self._rightView.spacing = value }
+        get { return self._rightView.spacing }
     }
     public var rightViews: [UIView] {
         set(value) {
-            if self.rightView.views != value {
-                self.rightView.views = value
+            if self._rightView.views != value {
+                self._rightView.views = value
                 self.setNeedsUpdateConstraints()
             }
         }
-        get { return self.rightView.views }
+        get { return self._rightView.views }
     }
     public var backgroundView: UIView? {
         willSet {
@@ -77,13 +77,13 @@ open class QStackbar : QView {
         }
     }
 
-    private var leftView: WrapView!
-    private var centerView: WrapView!
-    private var rightView: WrapView!
+    private var _leftView: WrapView!
+    private var _centerView: WrapView!
+    private var _rightView: WrapView!
 
-    private var selfConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.removeConstraints(self.selfConstraints) }
-        didSet { self.addConstraints(self.selfConstraints) }
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.removeConstraints(self._constraints) }
+        didSet { self.addConstraints(self._constraints) }
     }
 
     public required init() {
@@ -101,17 +101,17 @@ open class QStackbar : QView {
 
         self.backgroundColor = UIColor.white
 
-        self.leftView = WrapView(frame: self.bounds)
-        self.leftView.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        self.addSubview(self.leftView)
+        self._leftView = WrapView(frame: self.bounds)
+        self._leftView.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        self.addSubview(self._leftView)
 
-        self.centerView = WrapView(frame: self.bounds)
-        self.centerView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        self.addSubview(self.centerView)
+        self._centerView = WrapView(frame: self.bounds)
+        self._centerView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        self.addSubview(self._centerView)
 
-        self.rightView = WrapView(frame: self.bounds)
-        self.rightView.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        self.addSubview(self.rightView)
+        self._rightView = WrapView(frame: self.bounds)
+        self._rightView.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        self.addSubview(self._rightView)
     }
 
     open override func updateConstraints() {
@@ -121,46 +121,46 @@ open class QStackbar : QView {
         let centerViewsCount = self.centerViews.count
         let rightViewsCount = self.rightViews.count
 
-        var selfConstraints: [NSLayoutConstraint] = []
+        var constraints: [NSLayoutConstraint] = []
         if let backgroundView = self.backgroundView {
-            selfConstraints.append(backgroundView.topLayout == self.topLayout)
-            selfConstraints.append(backgroundView.leadingLayout == self.leadingLayout)
-            selfConstraints.append(backgroundView.trailingLayout == self.trailingLayout)
-            selfConstraints.append(backgroundView.bottomLayout == self.bottomLayout)
+            constraints.append(backgroundView.topLayout == self.topLayout)
+            constraints.append(backgroundView.leadingLayout == self.leadingLayout)
+            constraints.append(backgroundView.trailingLayout == self.trailingLayout)
+            constraints.append(backgroundView.bottomLayout == self.bottomLayout)
         }
-        selfConstraints.append(self.leftView.topLayout == self.topLayout + self.edgeInsets.top)
-        selfConstraints.append(self.leftView.leadingLayout == self.leadingLayout + self.edgeInsets.left)
-        selfConstraints.append(self.leftView.bottomLayout == self.bottomLayout - self.edgeInsets.bottom)
-        selfConstraints.append(self.centerView.topLayout == self.topLayout + self.edgeInsets.top)
+        constraints.append(self._leftView.topLayout == self.topLayout + self.edgeInsets.top)
+        constraints.append(self._leftView.leadingLayout == self.leadingLayout + self.edgeInsets.left)
+        constraints.append(self._leftView.bottomLayout == self.bottomLayout - self.edgeInsets.bottom)
+        constraints.append(self._centerView.topLayout == self.topLayout + self.edgeInsets.top)
         if centerViewsCount > 0 {
             if leftViewsCount > 0 && rightViewsCount > 0 {
-                selfConstraints.append(self.centerView.leadingLayout >= self.leftView.trailingLayout + self.leftViewsOffset)
-                selfConstraints.append(self.centerView.trailingLayout <= self.rightView.leadingLayout - self.rightViewsOffset)
+                constraints.append(self._centerView.leadingLayout >= self._leftView.trailingLayout + self.leftViewsOffset)
+                constraints.append(self._centerView.trailingLayout <= self._rightView.leadingLayout - self.rightViewsOffset)
             } else if leftViewsCount > 0 {
-                selfConstraints.append(self.centerView.leadingLayout >= self.leftView.trailingLayout + self.leftViewsOffset)
-                selfConstraints.append(self.centerView.trailingLayout <= self.trailingLayout - self.edgeInsets.right)
+                constraints.append(self._centerView.leadingLayout >= self._leftView.trailingLayout + self.leftViewsOffset)
+                constraints.append(self._centerView.trailingLayout <= self.trailingLayout - self.edgeInsets.right)
             } else if rightViewsCount > 0 {
-                selfConstraints.append(self.centerView.leadingLayout >= self.leadingLayout + self.edgeInsets.left)
-                selfConstraints.append(self.centerView.trailingLayout <= self.rightView.leadingLayout - self.rightViewsOffset)
+                constraints.append(self._centerView.leadingLayout >= self.leadingLayout + self.edgeInsets.left)
+                constraints.append(self._centerView.trailingLayout <= self._rightView.leadingLayout - self.rightViewsOffset)
             } else {
-                selfConstraints.append(self.centerView.leadingLayout == self.leadingLayout + self.edgeInsets.left)
-                selfConstraints.append(self.centerView.trailingLayout == self.trailingLayout - self.edgeInsets.right)
+                constraints.append(self._centerView.leadingLayout == self.leadingLayout + self.edgeInsets.left)
+                constraints.append(self._centerView.trailingLayout == self.trailingLayout - self.edgeInsets.right)
             }
-            selfConstraints.append(self.centerView.centerXLayout == self.centerXLayout)
+            constraints.append(self._centerView.centerXLayout == self.centerXLayout)
         } else {
             if leftViewsCount > 0 && rightViewsCount > 0 {
-                selfConstraints.append(self.leftView.trailingLayout >= self.rightView.trailingLayout + self.leftViewsOffset + self.rightViewsOffset)
+                constraints.append(self._leftView.trailingLayout >= self._rightView.trailingLayout + self.leftViewsOffset + self.rightViewsOffset)
             } else if leftViewsCount > 0 {
-                selfConstraints.append(self.leftView.trailingLayout <= self.trailingLayout - self.edgeInsets.right)
+                constraints.append(self._leftView.trailingLayout <= self.trailingLayout - self.edgeInsets.right)
             } else if rightViewsCount > 0 {
-                selfConstraints.append(self.rightView.leadingLayout >= self.leadingLayout + self.edgeInsets.left)
+                constraints.append(self._rightView.leadingLayout >= self.leadingLayout + self.edgeInsets.left)
             }
         }
-        selfConstraints.append(self.centerView.bottomLayout == self.bottomLayout - self.edgeInsets.bottom)
-        selfConstraints.append(self.rightView.topLayout == self.topLayout + self.edgeInsets.top)
-        selfConstraints.append(self.rightView.trailingLayout == self.trailingLayout - self.edgeInsets.right)
-        selfConstraints.append(self.rightView.bottomLayout == self.bottomLayout - self.edgeInsets.bottom)
-        self.selfConstraints = selfConstraints
+        constraints.append(self._centerView.bottomLayout == self.bottomLayout - self.edgeInsets.bottom)
+        constraints.append(self._rightView.topLayout == self.topLayout + self.edgeInsets.top)
+        constraints.append(self._rightView.trailingLayout == self.trailingLayout - self.edgeInsets.right)
+        constraints.append(self._rightView.bottomLayout == self.bottomLayout - self.edgeInsets.bottom)
+        self._constraints = constraints
     }
 
     private class WrapView : QInvisibleView {
@@ -189,9 +189,9 @@ open class QStackbar : QView {
             }
         }
 
-        private var selfConstraints: [NSLayoutConstraint] = [] {
-            willSet { self.removeConstraints(self.selfConstraints) }
-            didSet { self.addConstraints(self.selfConstraints) }
+        private var _constraints: [NSLayoutConstraint] = [] {
+            willSet { self.removeConstraints(self._constraints) }
+            didSet { self.addConstraints(self._constraints) }
         }
 
         public override func setup() {
@@ -205,26 +205,26 @@ open class QStackbar : QView {
         public override func updateConstraints() {
             super.updateConstraints()
 
-            var selfConstraints: [NSLayoutConstraint] = []
+            var constraints: [NSLayoutConstraint] = []
             if self.views.count > 0 {
                 var lastView: UIView? = nil
                 for view in self.views {
-                    selfConstraints.append(view.topLayout == self.topLayout)
+                    constraints.append(view.topLayout == self.topLayout)
                     if let lastView = lastView {
-                        selfConstraints.append(view.leadingLayout == lastView.trailingLayout + self.spacing)
+                        constraints.append(view.leadingLayout == lastView.trailingLayout + self.spacing)
                     } else {
-                        selfConstraints.append(view.leadingLayout == self.leadingLayout)
+                        constraints.append(view.leadingLayout == self.leadingLayout)
                     }
-                    selfConstraints.append(view.bottomLayout == self.bottomLayout)
+                    constraints.append(view.bottomLayout == self.bottomLayout)
                     lastView = view
                 }
                 if let lastView = lastView {
-                    selfConstraints.append(lastView.trailingLayout == self.trailingLayout)
+                    constraints.append(lastView.trailingLayout == self.trailingLayout)
                 }
             } else {
-                selfConstraints.append(self.widthLayout == 0)
+                constraints.append(self.widthLayout == 0)
             }
-            self.selfConstraints = selfConstraints
+            self._constraints = constraints
         }
 
     }

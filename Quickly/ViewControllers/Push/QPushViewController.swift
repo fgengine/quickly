@@ -16,20 +16,21 @@ open class QPushViewController : QViewController, IQPushViewController {
     open var pushDismissAnimation: IQPushViewControllerFixedAnimation?
     open var pushInteractiveDismissAnimation: IQPushViewControllerInteractiveAnimation?
     public private(set) lazy var tapGesture: UITapGestureRecognizer = self._prepareTapGesture()
-    private var timer: QTimer?
-    private var contentLayoutConstraints: [NSLayoutConstraint]
+    
+    private var _timer: QTimer?
+    private var _contentLayoutConstraints: [NSLayoutConstraint]
 
     public init(_ contentViewController: IQPushContentViewController, displayTime: TimeInterval? = nil) {
         self.pushContentViewController = contentViewController
         self.pushState = .hide
         self.pushOffset = 0
         self.pushDisplayTime = displayTime
-        self.contentLayoutConstraints = []
+        self._contentLayoutConstraints = []
         super.init()
     }
 
     deinit {
-        if let timer = self.timer {
+        if let timer = self._timer {
             timer.stop()
         }
     }
@@ -49,7 +50,7 @@ open class QPushViewController : QViewController, IQPushViewController {
                 strong.pushContentViewController.didTimeout()
             })
             timer.start()
-            self.timer = timer
+            self._timer = timer
         }
 
         self.pushContentViewController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -90,7 +91,7 @@ open class QPushViewController : QViewController, IQPushViewController {
     }
 
     open override func prepareInteractiveDismiss() {
-        if let timer = self.timer {
+        if let timer = self._timer {
             timer.pause()
         }
         super.prepareInteractiveDismiss()
@@ -99,7 +100,7 @@ open class QPushViewController : QViewController, IQPushViewController {
 
     open override func cancelInteractiveDismiss() {
         super.cancelInteractiveDismiss()
-        if let timer = self.timer {
+        if let timer = self._timer {
             timer.resume()
         }
         self.pushContentViewController.cancelInteractiveDismiss()
@@ -107,7 +108,7 @@ open class QPushViewController : QViewController, IQPushViewController {
 
     open override func finishInteractiveDismiss() {
         super.finishInteractiveDismiss()
-        if let timer = self.timer {
+        if let timer = self._timer {
             timer.stop()
         }
         self.pushContentViewController.finishInteractiveDismiss()
@@ -172,22 +173,22 @@ open class QPushViewController : QViewController, IQPushViewController {
         )
         switch self.pushState {
         case .hide:
-            self.contentLayoutConstraints.append(self.view.topLayout == self.pushContentViewController.view.bottomLayout + self.pushOffset)
+            self._contentLayoutConstraints.append(self.view.topLayout == self.pushContentViewController.view.bottomLayout + self.pushOffset)
         case .show:
-            self.contentLayoutConstraints.append(self.view.topLayout == self.pushContentViewController.view.topLayout - (edgeInsets.top + self.pushOffset))
+            self._contentLayoutConstraints.append(self.view.topLayout == self.pushContentViewController.view.topLayout - (edgeInsets.top + self.pushOffset))
         }
-        self.contentLayoutConstraints.append(self.view.leadingLayout == self.pushContentViewController.view.leadingLayout - edgeInsets.left)
-        self.contentLayoutConstraints.append(self.view.trailingLayout == self.pushContentViewController.view.trailingLayout + edgeInsets.right)
-        self.contentLayoutConstraints.append(self.view.bottomLayout <= self.pushContentViewController.view.bottomLayout - edgeInsets.bottom ~ .defaultLow)
-        if self.contentLayoutConstraints.count > 0 {
-            self.view.addConstraints(self.contentLayoutConstraints)
+        self._contentLayoutConstraints.append(self.view.leadingLayout == self.pushContentViewController.view.leadingLayout - edgeInsets.left)
+        self._contentLayoutConstraints.append(self.view.trailingLayout == self.pushContentViewController.view.trailingLayout + edgeInsets.right)
+        self._contentLayoutConstraints.append(self.view.bottomLayout <= self.pushContentViewController.view.bottomLayout - edgeInsets.bottom ~ .defaultLow)
+        if self._contentLayoutConstraints.count > 0 {
+            self.view.addConstraints(self._contentLayoutConstraints)
         }
     }
     
     private func _unlayoutContentViewController() {
-        if self.contentLayoutConstraints.count > 0 {
-            self.view.removeConstraints(self.contentLayoutConstraints)
-            self.contentLayoutConstraints.removeAll()
+        if self._contentLayoutConstraints.count > 0 {
+            self.view.removeConstraints(self._contentLayoutConstraints)
+            self._contentLayoutConstraints.removeAll()
         }
     }
 

@@ -8,18 +8,18 @@ open class QPickerSection : IQPickerSection {
 
     public weak var controller: IQPickerController?
     public var cellType: CellType {
-        didSet { self.reloadColumn() }
+        didSet { self._reloadColumn() }
     }
     public var size: CGSize {
-        didSet { self.reloadColumn() }
+        didSet { self._reloadColumn() }
     }
     public private(set) var index: Int?
 
     public var rows: [IQPickerRow] {
         willSet { self.unbind() }
         didSet {
-            self.rebindRows(from: self.rows.startIndex, to: self.rows.endIndex)
-            self.reloadColumn()
+            self._rebindRows(from: self.rows.startIndex, to: self.rows.endIndex)
+            self._reloadColumn()
         }
     }
 
@@ -36,27 +36,27 @@ open class QPickerSection : IQPickerSection {
     public func bind(_ controller: IQPickerController, _ index: Int) {
         self.controller = controller
         self.index = index
-        self.bindRows()
+        self._bindRows()
     }
 
     public func rebind(_ index: Int) {
         self.index = index
-        self.rebindRows(
+        self._rebindRows(
             from: self.rows.startIndex,
             to: self.rows.endIndex
         )
     }
 
     public func unbind() {
-        self.unbindRows()
+        self._unbindRows()
         self.index = nil
         self.controller = nil
     }
 
     public func insertRow(_ rows: [IQPickerRow], index: Int) {
         self.rows.insert(contentsOf: rows, at: index)
-        self.rebindRows(from: index, to: self.rows.endIndex)
-        self.reloadColumn()
+        self._rebindRows(from: index, to: self.rows.endIndex)
+        self._reloadColumn()
     }
 
     public func deleteRow(_ rows: [IQPickerRow]) {
@@ -73,8 +73,8 @@ open class QPickerSection : IQPickerSection {
                 self.rows.remove(at: index)
                 row.unbind()
             }
-            self.rebindRows(from: indices.first!, to: self.rows.endIndex)
-            self.reloadColumn()
+            self._rebindRows(from: indices.first!, to: self.rows.endIndex)
+            self._reloadColumn()
         }
     }
 
@@ -82,7 +82,7 @@ open class QPickerSection : IQPickerSection {
 
 extension QPickerSection {
 
-    private func bindRows() {
+    private func _bindRows() {
         guard let sectionIndex = self.index else { return }
         var rowIndex: Int = 0
         for row in self.rows {
@@ -91,20 +91,20 @@ extension QPickerSection {
         }
     }
 
-    private func rebindRows(from: Int, to: Int) {
+    private func _rebindRows(from: Int, to: Int) {
         guard let sectionIndex = self.index else { return }
         for rowIndex in from..<to {
             self.rows[rowIndex].rebind(IndexPath(row: rowIndex, section: sectionIndex))
         }
     }
 
-    private func unbindRows() {
+    private func _unbindRows() {
         for row in self.rows {
             row.unbind()
         }
     }
 
-    private func reloadColumn() {
+    private func _reloadColumn() {
         guard
             let index = self.index,
             let controller = self.controller,

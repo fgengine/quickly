@@ -41,47 +41,47 @@ open class QPlaceholderImageTitleIconComposable : QComposable {
 
 open class QPlaceholderImageTitleIconComposition< Composable: QPlaceholderImageTitleIconComposable > : QComposition< Composable > {
 
-    lazy private var imageView: QImageView = {
+    private lazy var imageView: QImageView = {
         let view = QImageView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    lazy private var titleLabel: QPlaceholderView = {
+    private lazy var titleLabel: QPlaceholderView = {
         let view = QPlaceholderView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    lazy private var iconView: QImageView = {
+    private lazy var iconView: QImageView = {
         let view = QImageView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
 
-    private var currentEdgeInsets: UIEdgeInsets?
-    private var currentImageWidth: CGFloat?
-    private var currentImageSpacing: CGFloat?
-    private var currentTitleHeight: CGFloat?
-    private var currentIconWidth: CGFloat?
-    private var currentIconSpacing: CGFloat?
+    private var _edgeInsets: UIEdgeInsets?
+    private var _imageWidth: CGFloat?
+    private var _imageSpacing: CGFloat?
+    private var _titleHeight: CGFloat?
+    private var _iconWidth: CGFloat?
+    private var _iconSpacing: CGFloat?
 
-    private var selfConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.selfConstraints) }
-        didSet { self.contentView.addConstraints(self.selfConstraints) }
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self._constraints) }
+        didSet { self.contentView.addConstraints(self._constraints) }
     }
-    private var imageConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.imageView.removeConstraints(self.imageConstraints) }
-        didSet { self.imageView.addConstraints(self.imageConstraints) }
+    private var _imageConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.imageView.removeConstraints(self._imageConstraints) }
+        didSet { self.imageView.addConstraints(self._imageConstraints) }
     }
-    private var titleConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.titleLabel.removeConstraints(self.titleConstraints) }
-        didSet { self.titleLabel.addConstraints(self.titleConstraints) }
+    private var _titleConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.titleLabel.removeConstraints(self._titleConstraints) }
+        didSet { self.titleLabel.addConstraints(self._titleConstraints) }
     }
-    private var iconConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.iconView.removeConstraints(self.iconConstraints) }
-        didSet { self.iconView.addConstraints(self.iconConstraints) }
+    private var _iconConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.iconView.removeConstraints(self._iconConstraints) }
+        didSet { self.iconView.addConstraints(self._iconConstraints) }
     }
 
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
@@ -101,11 +101,11 @@ open class QPlaceholderImageTitleIconComposition< Composable: QPlaceholderImageT
             bottom: composable.edgeInsets.bottom,
             right: spec.containerRightInset + composable.edgeInsets.right
         )
-        if self.currentEdgeInsets != edgeInsets || self.currentImageSpacing != composable.imageSpacing || self.currentIconSpacing != composable.iconSpacing {
-            self.currentEdgeInsets = edgeInsets
-            self.currentImageSpacing = composable.imageSpacing
-            self.currentIconSpacing = composable.iconSpacing
-            self.selfConstraints = [
+        if self._edgeInsets != edgeInsets || self._imageSpacing != composable.imageSpacing || self._iconSpacing != composable.iconSpacing {
+            self._edgeInsets = edgeInsets
+            self._imageSpacing = composable.imageSpacing
+            self._iconSpacing = composable.iconSpacing
+            self._constraints = [
                 self.imageView.topLayout == self.contentView.topLayout + edgeInsets.top,
                 self.imageView.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
                 self.imageView.trailingLayout == self.titleLabel.leadingLayout - composable.imageSpacing,
@@ -119,30 +119,30 @@ open class QPlaceholderImageTitleIconComposition< Composable: QPlaceholderImageT
                 self.iconView.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom
             ]
         }
-        if self.currentImageWidth != composable.imageWidth {
-            self.currentImageWidth = composable.imageWidth
-            self.imageConstraints = [
+        if self._imageWidth != composable.imageWidth {
+            self._imageWidth = composable.imageWidth
+            self._imageConstraints = [
                 self.imageView.widthLayout == composable.imageWidth
             ]
         }
-        if self.currentTitleHeight != composable.titleHeight {
-            self.currentTitleHeight = composable.titleHeight
-            self.titleConstraints = [
+        if self._titleHeight != composable.titleHeight {
+            self._titleHeight = composable.titleHeight
+            self._titleConstraints = [
                 self.titleLabel.heightLayout == composable.titleHeight
             ]
         }
-        if self.currentIconWidth != composable.iconWidth {
-            self.currentIconWidth = composable.iconWidth
-            self.iconConstraints = [
+        if self._iconWidth != composable.iconWidth {
+            self._iconWidth = composable.iconWidth
+            self._iconConstraints = [
                 self.iconView.widthLayout == composable.iconWidth
             ]
         }
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        composable.image.apply(self.imageView)
-        composable.title.apply(self.titleLabel)
-        composable.icon.apply(self.iconView)
+        self.imageView.apply(composable.image)
+        self.titleLabel.apply(composable.title)
+        self.iconView.apply(composable.icon)
     }
 
 }

@@ -12,7 +12,11 @@ open class QApiProvider : NSObject, IQApiProvider {
     public var localCertificateUrls: [URL] = []
     public var logging: QApiLogging = .never
 
-    public private(set) lazy var session: URLSession = self.prepareSession()
+    public private(set) lazy var session: URLSession = URLSession(
+        configuration: self.sessionConfiguration,
+        delegate: self,
+        delegateQueue: self.sessionQueue
+    )
     public private(set) var sessionConfiguration: URLSessionConfiguration
     public private(set) var sessionQueue: OperationQueue
     
@@ -238,18 +242,6 @@ open class QApiProvider : NSObject, IQApiProvider {
         if query.provider === self {
             query.cancel()
         }
-    }
-    
-}
-
-extension QApiProvider {
-
-    private func prepareSession() -> URLSession {
-        return URLSession(
-            configuration: self.sessionConfiguration,
-            delegate: self,
-            delegateQueue: self.sessionQueue
-        )
     }
     
 }

@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QCollectionViewController : QViewController, IQCollectionControllerObserver, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController {
+open class QCollectionViewController : QViewController, IQCollectionControllerObserver, IQKeyboardObserver, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController {
 
     #if DEBUG
     open override var logging: Bool {
@@ -11,7 +11,7 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     #endif
     public var contentOffset: CGPoint {
         get {
-            guard let collectionView = self.collectionView else { return CGPoint.zero }
+            guard let collectionView = self._collectionView else { return CGPoint.zero }
             let contentOffset = collectionView.contentOffset
             let contentInset = collectionView.contentInset
             return CGPoint(
@@ -22,7 +22,7 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     }
     public var contentSize: CGSize {
         get {
-            guard let collectionView = self.collectionView else { return CGSize.zero }
+            guard let collectionView = self._collectionView else { return CGSize.zero }
             return collectionView.contentSize
         }
     }
@@ -33,7 +33,7 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
             }
         }
         didSet {
-            if let collectionView = self.collectionView {
+            if let collectionView = self._collectionView {
                 collectionView.collectionController = self.collectionController
             }
             if let collectionController = self.collectionController {
@@ -46,74 +46,75 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     }
     public var refreshControl: UIRefreshControl? {
         set(value) {
-            if let refreshControl = self.storeRefreshControl {
+            if let refreshControl = self._refreshControl {
                 if refreshControl.isRefreshing == true {
                     refreshControl.endRefreshing()
                 }
             }
-            self.storeRefreshControl = value
+            self._refreshControl = value
             self._updateRefreshControlState()
         }
-        get { return self.storeRefreshControl }
+        get { return self._refreshControl }
     }
     public var isRefreshing: Bool {
         get {
-            guard let refreshControl = self.storeRefreshControl else { return false }
+            guard let refreshControl = self._refreshControl else { return false }
             return refreshControl.isRefreshing
         }
     }
-    private var collectionView: QCollectionView! {
+    
+    private var _collectionView: QCollectionView! {
         willSet {
-            guard let view = self.collectionView else { return }
+            guard let view = self._collectionView else { return }
             view.removeFromSuperview()
         }
         didSet {
-            guard let view = self.collectionView else { return }
+            guard let view = self._collectionView else { return }
             let edgeInsets = self.inheritedEdgeInsets
             view.contentInset = edgeInsets
             view.scrollIndicatorInsets = edgeInsets
             self.view.addSubview(view)
         }
     }
-    private var storeRefreshControl: UIRefreshControl? {
+    private var _refreshControl: UIRefreshControl? {
         willSet {
-            guard let refreshControl = self.storeRefreshControl else { return }
+            guard let refreshControl = self._refreshControl else { return }
             refreshControl.removeValueChanged(self, action: #selector(self._triggeredRefreshControl(_:)))
         }
         didSet {
-            guard let refreshControl = self.storeRefreshControl else { return }
+            guard let refreshControl = self._refreshControl else { return }
             refreshControl.addValueChanged(self, action: #selector(self._triggeredRefreshControl(_:)))
         }
     }
-    private var keyboard: QKeyboard!
+    private var _keyboard: QKeyboard!
     
     deinit {
         self.collectionController = nil
-        self.keyboard.removeObserver(self)
+        self._keyboard.removeObserver(self)
     }
     
     open override func setup() {
         super.setup()
         
-        self.keyboard = QKeyboard()
+        self._keyboard = QKeyboard()
     }
 
     open override func didLoad() {
-        self.collectionView = QCollectionView(frame: self.view.bounds, layout: QCollectionFlowLayout())
-        self.collectionView.collectionController = self.collectionController
-        self.keyboard.addObserver(self, priority: 0)
+        self._collectionView = QCollectionView(frame: self.view.bounds, layout: QCollectionFlowLayout())
+        self._collectionView.collectionController = self.collectionController
+        self._keyboard.addObserver(self, priority: 0)
     }
 
     open override func layout(bounds: CGRect) {
         super.layout(bounds: bounds)
-        if let view = self.collectionView {
+        if let view = self._collectionView {
             view.frame = bounds
         }
     }
 
     open override func didChangeAdditionalEdgeInsets() {
         super.didChangeAdditionalEdgeInsets()
-        if let view = self.collectionView {
+        if let view = self._collectionView {
             self._updateContentInsets(view)
         }
     }
@@ -125,12 +126,12 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     
     open override func prepareInteractiveDismiss() {
         super.prepareInteractiveDismiss()
-        self.collectionView.endEditing(false)
+        self._collectionView.endEditing(false)
     }
     
     open override func willDismiss(animated: Bool) {
         super.willDismiss(animated: animated)
-        self.collectionView.endEditing(false)
+        self._collectionView.endEditing(false)
     }
 
     open override func didDismiss(animated: Bool) {
@@ -140,26 +141,28 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     
     open override func willTransition(size: CGSize) {
         super.willTransition(size: size)
-        if let view = self.collectionView {
+        if let view = self._collectionView {
             self._updateContentInsets(view)
         }
-        if let collectionLayout = self.collectionView.collectionLayout {
+        if let collectionLayout = self._collectionView.collectionLayout {
             collectionLayout.invalidateLayout()
         }
     }
 
     open func beginRefreshing() {
-        guard let refreshControl = self.storeRefreshControl else { return }
+        guard let refreshControl = self._refreshControl else { return }
         refreshControl.beginRefreshing()
     }
 
     open func endRefreshing() {
-        guard let refreshControl = self.storeRefreshControl else { return }
+        guard let refreshControl = self._refreshControl else { return }
         refreshControl.endRefreshing()
     }
 
     open func triggeredRefreshControl() {
     }
+    
+    // MAKR: IQCollectionControllerObserver
     
     open func scroll(_ controller: IQCollectionController, collectionView: UICollectionView) {
         if let vc = self.contentOwnerViewController {
@@ -175,46 +178,8 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     
     open func update(_ controller: IQCollectionController) {
     }
-
-    @objc
-    private func _triggeredRefreshControl(_ sender: Any) {
-        self.triggeredRefreshControl()
-    }
-
-    private func _updateRefreshControlState() {
-        if self.isLoaded == true {
-            if self.refreshControlHidden == false && self.isPresented == true {
-                self.collectionView.refreshControl = self.storeRefreshControl
-            } else {
-                if let refreshControl = self.storeRefreshControl {
-                    refreshControl.endRefreshing()
-                }
-                self.collectionView.refreshControl = nil
-            }
-        }
-    }
     
-    private func _updateContentInsets(_ view: QCollectionView) {
-        let edgeInsets = self.adjustedContentInset
-        view.contentLeftInset = edgeInsets.left
-        view.contentRightInset = edgeInsets.right
-        view.contentInset = UIEdgeInsets(
-            top: edgeInsets.top,
-            left: 0,
-            bottom: edgeInsets.bottom,
-            right: 0
-        )
-        view.scrollIndicatorInsets = edgeInsets
-        if view.contentOffset.x < 0 || view.contentOffset.y < 0 {
-            let x = (view.contentOffset.x < 0) ? -edgeInsets.left : view.contentOffset.x
-            let y = (view.contentOffset.y < 0) ? -edgeInsets.top : view.contentOffset.y
-            view.contentOffset = CGPoint(x: x, y: y)
-        }
-    }
-
-}
-
-extension QCollectionViewController : IQKeyboardObserver {
+    // MAKR: IQKeyboardObserver
     
     open func willShowKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
         var options: UIView.AnimationOptions = []
@@ -246,6 +211,42 @@ extension QCollectionViewController : IQKeyboardObserver {
     }
     
     open func didHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
+    }
+
+    @objc
+    private func _triggeredRefreshControl(_ sender: Any) {
+        self.triggeredRefreshControl()
+    }
+
+    private func _updateRefreshControlState() {
+        if self.isLoaded == true {
+            if self.refreshControlHidden == false && self.isPresented == true {
+                self._collectionView.refreshControl = self._refreshControl
+            } else {
+                if let refreshControl = self._refreshControl {
+                    refreshControl.endRefreshing()
+                }
+                self._collectionView.refreshControl = nil
+            }
+        }
+    }
+    
+    private func _updateContentInsets(_ view: QCollectionView) {
+        let edgeInsets = self.adjustedContentInset
+        view.contentLeftInset = edgeInsets.left
+        view.contentRightInset = edgeInsets.right
+        view.contentInset = UIEdgeInsets(
+            top: edgeInsets.top,
+            left: 0,
+            bottom: edgeInsets.bottom,
+            right: 0
+        )
+        view.scrollIndicatorInsets = edgeInsets
+        if view.contentOffset.x < 0 || view.contentOffset.y < 0 {
+            let x = (view.contentOffset.x < 0) ? -edgeInsets.left : view.contentOffset.x
+            let y = (view.contentOffset.y < 0) ? -edgeInsets.top : view.contentOffset.y
+            view.contentOffset = CGPoint(x: x, y: y)
+        }
     }
     
 }

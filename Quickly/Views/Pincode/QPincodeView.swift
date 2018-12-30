@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QPincodeViewStyleSheet : QDisplayViewStyleSheet< QPincodeView > {
+open class QPincodeViewStyleSheet : QDisplayViewStyleSheet {
     
     public var length: Int = 4
     public var color: UIColor = UIColor.black
@@ -43,16 +43,6 @@ open class QPincodeViewStyleSheet : QDisplayViewStyleSheet< QPincodeView > {
         self.thickness = styleSheet.thickness
         
         super.init(styleSheet)
-    }
-    
-    public override func apply(_ target: QPincodeView) {
-        super.apply(target)
-        
-        target.length = self.length
-        target.color = self.color
-        target.diameter = self.diameter
-        target.spacing = self.spacing
-        target.thickness = self.thickness
     }
     
 }
@@ -128,6 +118,16 @@ open class QPincodeView : QDisplayView {
         if self.isEmpty == false {
             self.text.remove(at: self.text.index(self.text.endIndex, offsetBy: -1))
         }
+    }
+    
+    public func apply(_ styleSheet: QPincodeViewStyleSheet) {
+        self.apply(styleSheet as QDisplayViewStyleSheet)
+        
+        self.length = styleSheet.length
+        self.color = styleSheet.color
+        self.diameter = styleSheet.diameter
+        self.spacing = styleSheet.spacing
+        self.thickness = styleSheet.thickness
     }
 
     open override func draw(_ rect: CGRect) {

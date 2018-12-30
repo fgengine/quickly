@@ -7,33 +7,33 @@ open class QCollectionSection : IQCollectionSection {
     public weak var controller: IQCollectionController?
     public private(set) var index: Int?
     public var insets: UIEdgeInsets = UIEdgeInsets.zero {
-        didSet { self.reloadSection() }
+        didSet { self._reloadSection() }
     }
     public var minimumLineSpacing: CGFloat = 0 {
-        didSet { self.reloadSection() }
+        didSet { self._reloadSection() }
     }
     public var minimumInteritemSpacing: CGFloat = 0 {
-        didSet { self.reloadSection() }
+        didSet { self._reloadSection() }
     }
     public var canMove: Bool = true {
-        didSet { self.reloadSection() }
+        didSet { self._reloadSection() }
     }
     public var hidden: Bool = false {
-        didSet { self.reloadSection() }
+        didSet { self._reloadSection() }
     }
 
     public var header: IQCollectionData? {
-        willSet { self.unbindHeader() }
+        willSet { self._unbindHeader() }
         didSet {
-            self.bindHeader()
-            self.reloadSection()
+            self._bindHeader()
+            self._reloadSection()
         }
     }
     public var footer: IQCollectionData? {
-        willSet { self.unbindFooter() }
+        willSet { self._unbindFooter() }
         didSet {
-            self.bindFooter()
-            self.reloadSection()
+            self._bindFooter()
+            self._reloadSection()
         }
     }
     public private(set) var items: [IQCollectionItem]
@@ -65,22 +65,22 @@ open class QCollectionSection : IQCollectionSection {
     public func bind(_ controller: IQCollectionController, _ index: Int) {
         self.controller = controller
         self.index = index
-        self.bindHeader()
-        self.bindFooter()
-        self.bindItems()
+        self._bindHeader()
+        self._bindFooter()
+        self._bindItems()
     }
     
     public func rebind(_ index: Int) {
         self.index = index
-        self.rebindItems(
+        self._rebindItems(
             from: self.items.startIndex,
             to: self.items.endIndex
         )
     }
     
     public func unbind() {
-        self.unbindHeader()
-        self.unbindFooter()
+        self._unbindHeader()
+        self._unbindFooter()
         for item in self.items {
             item.unbind()
         }
@@ -89,14 +89,14 @@ open class QCollectionSection : IQCollectionSection {
     }
     
     public func setItems(_ items: [IQCollectionItem]) {
-        self.unbindItems()
+        self._unbindItems()
         self.items = items
-        self.bindItems()
+        self._bindItems()
     }
     
     public func insertItem(_ items: [IQCollectionItem], index: Int) {
         self.items.insert(contentsOf: items, at: index)
-        self.rebindItems(from: index, to: self.items.endIndex)
+        self._rebindItems(from: index, to: self.items.endIndex)
         let indexPaths = items.compactMap({ $0.indexPath })
         if indexPaths.count > 0 {
             if let controller = self.controller, let collectionView = controller.collectionView {
@@ -120,7 +120,7 @@ open class QCollectionSection : IQCollectionSection {
                 self.items.remove(at: index)
                 item.unbind()
             }
-            self.rebindItems(from: indices.first!, to: self.items.endIndex)
+            self._rebindItems(from: indices.first!, to: self.items.endIndex)
             if indexPaths.count > 0 {
                 if let controller = self.controller, let collectionView = controller.collectionView {
                     collectionView.deleteItems(at: indexPaths)
@@ -149,7 +149,7 @@ open class QCollectionSection : IQCollectionSection {
         let item = self.items[fromIndex]
         self.items.remove(at: fromIndex)
         self.items.insert(item, at: toIndex)
-        self.rebindItems(
+        self._rebindItems(
             from: min(fromIndex, toIndex),
             to: max(fromIndex, toIndex)
         )
@@ -159,31 +159,31 @@ open class QCollectionSection : IQCollectionSection {
 
 extension QCollectionSection {
     
-    private func bindHeader() {
+    private func _bindHeader() {
         if let header = self.header {
             header.bind(self)
         }
     }
     
-    private func unbindHeader() {
+    private func _unbindHeader() {
         if let header = self.header {
             header.unbind()
         }
     }
     
-    private func bindFooter() {
+    private func _bindFooter() {
         if let footer = self.header {
             footer.bind(self)
         }
     }
     
-    private func unbindFooter() {
+    private func _unbindFooter() {
         if let footer = self.header {
             footer.unbind()
         }
     }
     
-    private func bindItems() {
+    private func _bindItems() {
         guard let sectionIndex = self.index else { return }
         var itemIndex = 0
         for item in self.items {
@@ -192,20 +192,20 @@ extension QCollectionSection {
         }
     }
     
-    private func rebindItems(from: Int, to: Int) {
+    private func _rebindItems(from: Int, to: Int) {
         guard let sectionIndex = self.index else { return }
         for itemIndex in from..<to {
             self.items[itemIndex].rebind(IndexPath(item: itemIndex, section: sectionIndex))
         }
     }
     
-    private func unbindItems() {
+    private func _unbindItems() {
         for item in self.items {
             item.unbind()
         }
     }
 
-    private func reloadSection() {
+    private func _reloadSection() {
         guard
             let index = self.index,
             let controller = self.controller,

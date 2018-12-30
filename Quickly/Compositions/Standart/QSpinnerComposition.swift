@@ -28,11 +28,11 @@ open class QSpinnerComposition< Composable: QSpinnerComposable, Spinner: QSpinne
         return view
     }()
 
-    private var currentEdgeInsets: UIEdgeInsets?
+    private var _edgeInsets: UIEdgeInsets?
 
-    private var selfConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.selfConstraints) }
-        didSet { self.contentView.addConstraints(self.selfConstraints) }
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self._constraints) }
+        didSet { self.contentView.addConstraints(self._constraints) }
     }
 
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
@@ -49,9 +49,9 @@ open class QSpinnerComposition< Composable: QSpinnerComposable, Spinner: QSpinne
             bottom: composable.edgeInsets.bottom,
             right: spec.containerRightInset + composable.edgeInsets.right
         )
-        if self.currentEdgeInsets != edgeInsets {
-            self.currentEdgeInsets = edgeInsets
-            self.selfConstraints = [
+        if self._edgeInsets != edgeInsets {
+            self._edgeInsets = edgeInsets
+            self._constraints = [
                 self.spinnerView.topLayout >= self.contentView.topLayout + edgeInsets.top,
                 self.spinnerView.leadingLayout >= self.contentView.leadingLayout + edgeInsets.left,
                 self.spinnerView.trailingLayout <= self.contentView.trailingLayout - edgeInsets.right,

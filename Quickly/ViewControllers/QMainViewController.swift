@@ -20,7 +20,7 @@ open class QMainViewController : QViewController {
             guard let vc = self.backgroundViewController else { return }
             vc.parent = self
             if self.isLoaded == true {
-                self.appendBackgroundController(vc)
+                self._appendBackgroundController(vc)
                 vc.willPresent(animated: false)
                 vc.didPresent(animated: false)
             }
@@ -42,7 +42,7 @@ open class QMainViewController : QViewController {
             guard let vc = self.contentViewController else { return }
             vc.parent = self
             if self.isLoaded == true {
-                self.appendContentController(vc)
+                self._appendContentController(vc)
                 vc.willPresent(animated: false)
                 vc.didPresent(animated: false)
             }
@@ -64,7 +64,7 @@ open class QMainViewController : QViewController {
             guard let vc = self.modalContainerViewController else { return }
             vc.parent = self
             if self.isLoaded == true {
-                self.appendModalContainer(vc)
+                self._appendModalContainer(vc)
                 vc.willPresent(animated: false)
                 vc.didPresent(animated: false)
             }
@@ -86,7 +86,7 @@ open class QMainViewController : QViewController {
             guard let vc = self.pushContainerViewController else { return }
             vc.parent = self
             if self.isLoaded == true {
-                self.appendPushContainer(vc)
+                self._appendPushContainer(vc)
                 vc.willPresent(animated: false)
                 vc.didPresent(animated: false)
             }
@@ -108,7 +108,7 @@ open class QMainViewController : QViewController {
             guard let vc = self.dialogContainerViewController else { return }
             vc.parent = self
             if self.isLoaded == true {
-                self.appendDialogContainer(vc)
+                self._appendDialogContainer(vc)
                 vc.willPresent(animated: false)
                 vc.didPresent(animated: false)
             }
@@ -117,19 +117,19 @@ open class QMainViewController : QViewController {
 
     open override func didLoad() {
         if let vc = self.backgroundViewController {
-            self.appendBackgroundController(vc)
+            self._appendBackgroundController(vc)
         }
         if let vc = self.contentViewController {
-            self.appendContentController(vc)
+            self._appendContentController(vc)
         }
         if let vc = self.modalContainerViewController {
-            self.appendModalContainer(vc)
+            self._appendModalContainer(vc)
         }
         if let vc = self.pushContainerViewController {
-            self.appendPushContainer(vc)
+            self._appendPushContainer(vc)
         }
         if let vc = self.dialogContainerViewController {
-            self.appendDialogContainer(vc)
+            self._appendDialogContainer(vc)
         }
     }
 
@@ -402,12 +402,12 @@ open class QMainViewController : QViewController {
         return cdvc.preferedStatusBarAnimation()
     }
 
-    private func appendBackgroundController(_ viewController: IQViewController) {
+    private func _appendBackgroundController(_ viewController: IQViewController) {
         viewController.view.frame = self.view.bounds
         self.view.insertSubview(viewController.view, at: 0)
     }
 
-    private func appendContentController(_ viewController: IQViewController) {
+    private func _appendContentController(_ viewController: IQViewController) {
         viewController.view.frame = self.view.bounds
         if let vc = self.dialogContainerViewController {
             if vc.view.superview == self.view {
@@ -438,7 +438,7 @@ open class QMainViewController : QViewController {
         }
     }
 
-    private func appendModalContainer(_ viewController: IQModalContainerViewController) {
+    private func _appendModalContainer(_ viewController: IQModalContainerViewController) {
         viewController.view.frame = self.view.bounds
         if let vc = self.dialogContainerViewController {
             if vc.view.superview == self.view {
@@ -469,7 +469,7 @@ open class QMainViewController : QViewController {
         }
     }
 
-    private func appendPushContainer(_ viewController: IQPushContainerViewController) {
+    private func _appendPushContainer(_ viewController: IQPushContainerViewController) {
         viewController.view.frame = self.view.bounds
         if let vc = self.dialogContainerViewController {
             if vc.view.superview == self.view {
@@ -500,7 +500,7 @@ open class QMainViewController : QViewController {
         }
     }
 
-    private func appendDialogContainer(_ viewController: IQDialogContainerViewController) {
+    private func _appendDialogContainer(_ viewController: IQDialogContainerViewController) {
         viewController.view.frame = self.view.bounds
         if let vc = self.pushContainerViewController {
             if vc.view.superview == self.view {

@@ -21,22 +21,25 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
     public var screenLeftInset: CGFloat = 0
     public var screenRightInset: CGFloat = 0
     public private(set) lazy var composition: Composition = {
-        let composition = Composition(frame: self.view.bounds.inset(by: self.inheritedEdgeInsets), owner: self)
+        let composition = Composition(frame: self.view.bounds, owner: self)
+        composition.contentView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(composition.contentView)
+        self._updateConstraints(self.view, composition.contentView)
         return composition
     }()
+    
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.view.removeConstraints(self._constraints) }
+        didSet { self.view.addConstraints(self._constraints) }
+    }
     
     open override func load() -> ViewType {
         return QViewControllerDefaultView(viewController: self)
     }
-
-    open override func layout(bounds: CGRect) {
-        self._updateContentFrame(self.composition.contentView, bounds: bounds)
-    }
     
     open override func didChangeAdditionalEdgeInsets() {
         if self.isLoaded == true {
-            self._updateContentFrame(self.composition.contentView, bounds: self.view.bounds)
+            self._updateConstraints(self.view, self.composition.contentView)
         }
     }
     
@@ -44,9 +47,14 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
 
 extension QCompositionViewController {
     
-    private func _updateContentFrame(_ contentView: UIView, bounds: CGRect) {
+    private func _updateConstraints(_ view: UIView, _ contentView: UIView) {
         let edgeInsets = self.inheritedEdgeInsets
-        contentView.frame = bounds.inset(by: edgeInsets)
+        self._constraints = [
+            contentView.topLayout == view.topLayout + edgeInsets.top,
+            contentView.leadingLayout == view.leadingLayout + edgeInsets.left,
+            contentView.trailingLayout == view.trailingLayout - edgeInsets.right,
+            contentView.bottomLayout == view.bottomLayout - edgeInsets.bottom
+        ]
     }
 
 }

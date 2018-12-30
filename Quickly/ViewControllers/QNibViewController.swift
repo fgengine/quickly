@@ -23,14 +23,21 @@ open class QNibViewController : QViewController, IQStackContentViewController, I
     @IBOutlet
     public var rootView: UIView! {
         willSet {
-            guard let view = self.rootView else { return }
-            view.removeFromSuperview()
+            guard let rootView = self.rootView else { return }
+            rootView.removeFromSuperview()
         }
         didSet {
-            guard let view = self.rootView else { return }
-            view.frame = self.view.bounds
-            self.view.addSubview(view)
+            guard let rootView = self.rootView else { return }
+            rootView.translatesAutoresizingMaskIntoConstraints = false
+            rootView.frame = self.view.bounds
+            self.view.addSubview(rootView)
+            self._updateConstraints(self.view, rootView)
         }
+    }
+    
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.view.removeConstraints(self._constraints) }
+        didSet { self.view.addConstraints(self._constraints) }
     }
 
     open func nibName() -> String {
@@ -49,26 +56,25 @@ open class QNibViewController : QViewController, IQStackContentViewController, I
         let nib = UINib(nibName: self.nibName(), bundle: self.nibBundle())
         _ = nib.instantiate(withOwner: self, options: nil)
     }
-
-    open override func layout(bounds: CGRect) {
-        if let rootView = self.rootView {
-            self._updateRootFrame(rootView, bounds: bounds)
-        }
-    }
     
     open override func didChangeAdditionalEdgeInsets() {
         if let rootView = self.rootView {
-            self._updateRootFrame(rootView, bounds: self.view.bounds)
+            self._updateConstraints(self.view, rootView)
         }
     }
 
 }
 
 extension QNibViewController {
-
-    private func _updateRootFrame(_ rootView: UIView, bounds: CGRect) {
+    
+    private func _updateConstraints(_ view: UIView, _ rootView: UIView) {
         let edgeInsets = self.inheritedEdgeInsets
-        rootView.frame = bounds.inset(by: edgeInsets)
+        self._constraints = [
+            rootView.topLayout == view.topLayout + edgeInsets.top,
+            rootView.leadingLayout == view.leadingLayout + edgeInsets.left,
+            rootView.trailingLayout == view.trailingLayout - edgeInsets.right,
+            rootView.bottomLayout == view.bottomLayout - edgeInsets.bottom
+        ]
     }
 
 }

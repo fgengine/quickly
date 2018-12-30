@@ -18,12 +18,12 @@ class TextFieldViewController : QNibViewController, IQRouterable, IQContextable 
 
     @IBOutlet private weak var textField: QTextField!
 
-    private var keyboard: QKeyboard
+    private var _keyboard: QKeyboard
 
     init(router: RouterType, context: ContextType) {
         self.router = router
         self.context = context
-        self.keyboard = QKeyboard()
+        self._keyboard = QKeyboard()
         super.init()
     }
 
@@ -58,7 +58,7 @@ class TextFieldViewController : QNibViewController, IQRouterable, IQContextable 
 
     override func willPresent(animated: Bool) {
         super.willPresent(animated: animated)
-        self.keyboard.addObserver(self, priority: 0)
+        self._keyboard.addObserver(self, priority: 0)
     }
 
     override func didPresent(animated: Bool) {
@@ -87,7 +87,7 @@ class TextFieldViewController : QNibViewController, IQRouterable, IQContextable 
 
     override func didDismiss(animated: Bool) {
         super.didDismiss(animated: animated)
-        self.keyboard.removeObserver(self)
+        self._keyboard.removeObserver(self)
     }
 
 }

@@ -35,13 +35,13 @@ open class QTitleButtonComposable : QComposable {
 
 open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComposition< Composable > {
 
-    lazy private var titleLabel: QLabel = {
+    private lazy var titleLabel: QLabel = {
         let view = QLabel(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    lazy private var button: QButton = {
+    private lazy var button: QButton = {
         let view = QButton(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.setContentHuggingPriority(
@@ -56,12 +56,12 @@ open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComp
         return view
     }()
 
-    private var currentEdgeInsets: UIEdgeInsets?
-    private var currentButtonSpacing: CGFloat?
+    private var _edgeInsets: UIEdgeInsets?
+    private var _buttonSpacing: CGFloat?
 
-    private var selfConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.selfConstraints) }
-        didSet { self.contentView.addConstraints(self.selfConstraints) }
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self._constraints) }
+        didSet { self.contentView.addConstraints(self._constraints) }
     }
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
@@ -80,10 +80,10 @@ open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComp
             bottom: composable.edgeInsets.bottom,
             right: spec.containerRightInset + composable.edgeInsets.right
         )
-        if self.currentEdgeInsets != edgeInsets || self.currentButtonSpacing != composable.buttonSpacing {
-            self.currentEdgeInsets = edgeInsets
-            self.currentButtonSpacing = composable.buttonSpacing
-            self.selfConstraints = [
+        if self._edgeInsets != edgeInsets || self._buttonSpacing != composable.buttonSpacing {
+            self._edgeInsets = edgeInsets
+            self._buttonSpacing = composable.buttonSpacing
+            self._constraints = [
                 self.titleLabel.topLayout == self.contentView.topLayout + edgeInsets.top,
                 self.titleLabel.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
                 self.titleLabel.trailingLayout == self.button.leadingLayout - composable.buttonSpacing,
@@ -96,8 +96,8 @@ open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComp
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        composable.title.apply(self.titleLabel)
-        composable.button.apply(self.button)
+        self.titleLabel.apply(composable.title)
+        self.button.apply(composable.button)
     }
     
     open override func postLayout(composable: Composable, spec: IQContainerSpec) {

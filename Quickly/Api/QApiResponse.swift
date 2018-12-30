@@ -14,7 +14,7 @@ open class QApiResponse : IQApiResponse {
     public init() {
     }
 
-    open func parse(response: URLResponse, data: Data) {
+    open func parse(response: URLResponse, data: Data?) {
         self.url = response.url
         self.mimeType = response.mimeType
         self.textEncodingName = response.textEncodingName
@@ -23,10 +23,17 @@ open class QApiResponse : IQApiResponse {
             self.httpHeaders = httpResponse.allHeaderFields
         }
         do {
-            try self.parse(data: data)
+            if let data = data {
+                try self.parse(data: data)
+            } else {
+                try self.parse()
+            }
         } catch let error {
             self.parse(error: error)
         }
+    }
+    
+    open func parse() throws {
     }
 
     open func parse(data: Data) throws {

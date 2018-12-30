@@ -36,27 +36,27 @@ open class QCollectionView : UICollectionView, IQView {
             if #available(iOS 10, *) {
                 super.refreshControl = value
             } else {
-                self.legacyRefreshControl = value
+                self._refreshControl = value
             }
         }
         get {
             if #available(iOS 10, *) {
                 return super.refreshControl
             } else {
-                return self.legacyRefreshControl
+                return self._refreshControl
             }
         }
     }
     open var contentLeftInset: CGFloat = 0
     open var contentRightInset: CGFloat = 0
 
-    private var legacyRefreshControl: UIRefreshControl? {
+    private var _refreshControl: UIRefreshControl? {
         willSet {
-            guard let refreshControl = self.legacyRefreshControl else { return }
+            guard let refreshControl = self._refreshControl else { return }
             self.addSubview(refreshControl)
         }
         didSet {
-            guard let refreshControl = self.legacyRefreshControl else { return }
+            guard let refreshControl = self._refreshControl else { return }
             refreshControl.removeFromSuperview()
         }
     }

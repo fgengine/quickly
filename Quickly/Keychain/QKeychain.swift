@@ -42,29 +42,29 @@ public final class QKeychain {
     @discardableResult
     public func set(_ value: Data?, key: String, access: QKeychainAccessOptions = .defaultOption) -> Bool {
         guard let value = value else {
-            return self.processDelete(key)
+            return self._processDelete(key)
         }
-        return self.processSet(value, key: key, access: access)
+        return self._processSet(value, key: key, access: access)
     }
 
     @discardableResult
     public func set(_ value: String?, key: String, access: QKeychainAccessOptions = .defaultOption) -> Bool {
         guard let value = value else {
-            return self.processDelete(key)
+            return self._processDelete(key)
         }
-        return self.processSet(value, key: key, access: access)
+        return self._processSet(value, key: key, access: access)
     }
 
     @discardableResult
     public func set(_ value: Bool?, key: String, access: QKeychainAccessOptions = .defaultOption) -> Bool {
         guard let value = value else {
-            return self.processDelete(key)
+            return self._processDelete(key)
         }
-        return self.processSet(value, key: key, access: access)
+        return self._processSet(value, key: key, access: access)
     }
 
     public func get(_ key: String) -> Data? {
-        let query = self.process(query: [
+        let query = self._process(query: [
             Constants.klass : kSecClassGenericPassword,
             Constants.attrAccount : key,
             Constants.returnData : kCFBooleanTrue,
@@ -94,7 +94,7 @@ public final class QKeychain {
 
     @discardableResult
     public func clear() -> Bool {
-        let query = self.process(
+        let query = self._process(
             query: [
                 Constants.klass : kSecClassGenericPassword
             ],
@@ -104,9 +104,9 @@ public final class QKeychain {
         return code == noErr
     }
 
-    private func processSet(_ value: Data, key: String, access: QKeychainAccessOptions) -> Bool {
-        self.processDelete(key)
-        let query = self.process(
+    private func _processSet(_ value: Data, key: String, access: QKeychainAccessOptions) -> Bool {
+        self._processDelete(key)
+        let query = self._process(
             query: [
                 Constants.klass : kSecClassGenericPassword,
                 Constants.attrAccount : key,
@@ -119,20 +119,20 @@ public final class QKeychain {
         return code == noErr
     }
 
-    private func processSet(_ value: String, key: String, access: QKeychainAccessOptions) -> Bool {
+    private func _processSet(_ value: String, key: String, access: QKeychainAccessOptions) -> Bool {
         guard let data = value.data(using: String.Encoding.utf8) else { return false }
-        return self.processSet(data, key: key, access: access)
+        return self._processSet(data, key: key, access: access)
     }
 
-    private func processSet(_ value: Bool, key: String, access: QKeychainAccessOptions) -> Bool {
+    private func _processSet(_ value: Bool, key: String, access: QKeychainAccessOptions) -> Bool {
         let bytes: [UInt8] = (value == true) ? [1] : [0]
         let data = Data(bytes: bytes)
-        return self.processSet(data, key: key, access: access)
+        return self._processSet(data, key: key, access: access)
     }
 
     @discardableResult
-    private func processDelete(_ key: String) -> Bool {
-        let query = self.process(
+    private func _processDelete(_ key: String) -> Bool {
+        let query = self._process(
             query: [
                 Constants.klass : kSecClassGenericPassword,
                 Constants.attrAccount : key
@@ -143,7 +143,7 @@ public final class QKeychain {
         return code == noErr
     }
 
-    private func process(query: [String: Any], forceSync: Bool) -> [String: Any] {
+    private func _process(query: [String: Any], forceSync: Bool) -> [String: Any] {
         var result = query
         if let accessGroup = self.accessGroup {
             result[Constants.accessGroup] = accessGroup

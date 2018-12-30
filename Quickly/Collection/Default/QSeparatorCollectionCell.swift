@@ -29,11 +29,11 @@ open class QSeparatorCollectionCell< Item: QSeparatorCollectionItem > : QBackgro
 
     private var _separator: QView!
 
-    private var currentEdgeInsets: UIEdgeInsets?
+    private var _edgeInsets: UIEdgeInsets?
 
-    private var selfConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.selfConstraints) }
-        didSet { self.contentView.addConstraints(self.selfConstraints) }
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self._constraints) }
+        didSet { self.contentView.addConstraints(self._constraints) }
     }
 
     open override class func size(
@@ -72,15 +72,14 @@ open class QSeparatorCollectionCell< Item: QSeparatorCollectionItem > : QBackgro
     open override func set(item: Item, spec: IQContainerSpec, animated: Bool) {
         super.set(item: item, spec: spec, animated: animated)
 
-        if self.currentEdgeInsets != item.edgeInsets {
-            self.currentEdgeInsets = item.edgeInsets
-
-            var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self._separator.topLayout == self.contentView.topLayout + item.edgeInsets.top)
-            selfConstraints.append(self._separator.leadingLayout == self.contentView.leadingLayout + item.edgeInsets.left)
-            selfConstraints.append(self._separator.trailingLayout == self.contentView.trailingLayout - item.edgeInsets.right)
-            selfConstraints.append(self._separator.bottomLayout == self.contentView.bottomLayout - item.edgeInsets.bottom)
-            self.selfConstraints = selfConstraints
+        if self._edgeInsets != item.edgeInsets {
+            self._edgeInsets = item.edgeInsets
+            self._constraints = [
+                self._separator.topLayout == self.contentView.topLayout + item.edgeInsets.top,
+                self._separator.leadingLayout == self.contentView.leadingLayout + item.edgeInsets.left,
+                self._separator.trailingLayout == self.contentView.trailingLayout - item.edgeInsets.right,
+                self._separator.bottomLayout == self.contentView.bottomLayout - item.edgeInsets.bottom
+            ]
         }
         self._separator.backgroundColor = item.color
     }

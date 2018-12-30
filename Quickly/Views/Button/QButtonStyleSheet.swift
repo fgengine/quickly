@@ -17,7 +17,7 @@ open class QButtonStyleSheet : IQStyleSheet {
     public var selectedHighlightedStyle: IQButtonStyle?
     public var selectedDisabledStyle: IQButtonStyle?
     public var spinnerPosition: QButtonSpinnerPosition
-    public var spinnerViewType: QSpinnerViewType.Type?
+    public var spinnerFactory: IQSpinnerFactory?
     public var isSelected: Bool
     public var isEnabled: Bool
 
@@ -35,7 +35,7 @@ open class QButtonStyleSheet : IQStyleSheet {
         selectedHighlightedStyle: IQButtonStyle? = nil,
         selectedDisabledStyle: IQButtonStyle? = nil,
         spinnerPosition: QButtonSpinnerPosition = .fill,
-        spinnerViewType: QSpinnerViewType.Type? = nil,
+        spinnerFactory: IQSpinnerFactory? = nil,
         isSelected: Bool = false,
         isEnabled: Bool = true
     ) {
@@ -52,7 +52,7 @@ open class QButtonStyleSheet : IQStyleSheet {
         self.selectedHighlightedStyle = selectedHighlightedStyle
         self.selectedDisabledStyle = selectedDisabledStyle
         self.spinnerPosition = spinnerPosition
-        self.spinnerViewType = spinnerViewType
+        self.spinnerFactory = spinnerFactory
         self.isSelected = isSelected
         self.isEnabled = isEnabled
     }
@@ -71,31 +71,9 @@ open class QButtonStyleSheet : IQStyleSheet {
         self.selectedHighlightedStyle = styleSheet.selectedHighlightedStyle
         self.selectedDisabledStyle = styleSheet.selectedDisabledStyle
         self.spinnerPosition = styleSheet.spinnerPosition
-        self.spinnerViewType = styleSheet.spinnerViewType
+        self.spinnerFactory = styleSheet.spinnerFactory
         self.isSelected = styleSheet.isSelected
         self.isEnabled = styleSheet.isEnabled
-    }
-
-    public func apply(_ target: QButton) {
-        target.contentHorizontalAlignment = self.contentHorizontalAlignment
-        target.contentVerticalAlignment = self.contentVerticalAlignment
-        target.contentInsets = self.contentInsets
-        target.imagePosition = self.imagePosition
-        target.imageInsets = self.imageInsets
-        target.textInsets = self.textInsets
-        target.normalStyle = self.normalStyle
-        target.highlightedStyle = self.highlightedStyle
-        target.selectedStyle = self.selectedStyle
-        target.selectedHighlightedStyle = self.selectedHighlightedStyle
-        target.selectedDisabledStyle = self.selectedDisabledStyle
-        target.spinnerPosition = self.spinnerPosition
-        if let spinnerViewType = self.spinnerViewType {
-            target.spinnerView = spinnerViewType.init()
-        } else {
-            target.spinnerView = nil
-        }
-        target.isSelected = self.isSelected
-        target.isEnabled = self.isEnabled
     }
 
 }

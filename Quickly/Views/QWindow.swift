@@ -5,17 +5,18 @@
 open class QWindow : UIWindow, IQView {
 
     open var contentViewController: IQViewController {
-        set(value) { self.viewController.contentViewController = value }
-        get { return self.viewController.contentViewController }
+        set(value) { self._viewController.contentViewController = value }
+        get { return self._viewController.contentViewController }
     }
-    private var viewController: RootViewController
+    
+    private var _viewController: RootViewController
     
     public required init() {
         fatalError("init(coder:) has not been implemented")
     }
 
     public init(_ contentViewController: IQViewController) {
-        self.viewController = RootViewController(contentViewController)
+        self._viewController = RootViewController(contentViewController)
         super.init(frame: UIScreen.main.bounds)
         self.backgroundColor = UIColor.black
         self.setup()
@@ -26,7 +27,7 @@ open class QWindow : UIWindow, IQView {
     }
 
     open func setup() {
-        self.rootViewController = self.viewController
+        self.rootViewController = self._viewController
     }
 
     private class RootViewController : UIViewController, IQViewControllerDelegate {

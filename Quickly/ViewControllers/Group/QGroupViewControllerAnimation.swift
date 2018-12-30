@@ -103,6 +103,7 @@ public class QGroupViewControllerAnimation : IQGroupViewControllerAnimation {
             self.targetViewController.didPresent(animated: animated)
             self.targetViewController = nil
             self.contentView = nil
+            complete(true)
         }
     }
 

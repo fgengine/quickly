@@ -45,11 +45,10 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
     private var _pagebarHeight: CGFloat
     private var _pagebarHidden: Bool
     private var _viewControllers: [IQPageViewController]
-    
-    private var activeInteractiveCurrentViewController: IQPageViewController?
-    private var activeInteractiveForwardViewController: IQPageViewController?
-    private var activeInteractiveBackwardViewController: IQPageViewController?
-    private var activeInteractiveAnimation: IQPageViewControllerInteractiveAnimation?
+    private var _activeInteractiveCurrentViewController: IQPageViewController?
+    private var _activeInteractiveForwardViewController: IQPageViewController?
+    private var _activeInteractiveBackwardViewController: IQPageViewController?
+    private var _activeInteractiveAnimation: IQPageViewControllerInteractiveAnimation?
 
     public override init() {
         self._pagebarHeight = 44
@@ -523,10 +522,10 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
                 let currentViewController = self.currentViewController,
                 let animation = self._prepareInteractiveAnimation(currentViewController)
                 else { return }
-            self.activeInteractiveBackwardViewController = self.backwardViewController
-            self.activeInteractiveForwardViewController = self.forwardViewController
-            self.activeInteractiveCurrentViewController = currentViewController
-            self.activeInteractiveAnimation = animation
+            self._activeInteractiveBackwardViewController = self.backwardViewController
+            self._activeInteractiveForwardViewController = self.forwardViewController
+            self._activeInteractiveCurrentViewController = currentViewController
+            self._activeInteractiveAnimation = animation
             self.isAnimating = true
             animation.prepare(
                 contentView: self.view,
@@ -538,18 +537,18 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
             )
             break
         case .changed:
-            guard let animation = self.activeInteractiveAnimation else { return }
+            guard let animation = self._activeInteractiveAnimation else { return }
             animation.update(position: position, velocity: velocity)
             break
         case .ended, .failed, .cancelled:
-            guard let animation = self.activeInteractiveAnimation else { return }
+            guard let animation = self._activeInteractiveAnimation else { return }
             if animation.canFinish == true {
                 animation.finish({ [weak self] (completed: Bool) in
                     guard let strong = self else { return }
                     switch animation.finishMode {
                     case .none: strong._endInteractive()
-                    case .backward: strong._endInteractive(strong.activeInteractiveBackwardViewController)
-                    case .forward: strong._endInteractive(strong.activeInteractiveForwardViewController)
+                    case .backward: strong._endInteractive(strong._activeInteractiveBackwardViewController)
+                    case .forward: strong._endInteractive(strong._activeInteractiveForwardViewController)
                     }
                 })
             } else {
@@ -566,9 +565,9 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
 
     private func _endInteractive(_ viewController: IQPageViewController?) {
         let currently = (
-            self.activeInteractiveBackwardViewController,
-            self.activeInteractiveCurrentViewController,
-            self.activeInteractiveForwardViewController
+            self._activeInteractiveBackwardViewController,
+            self._activeInteractiveCurrentViewController,
+            self._activeInteractiveForwardViewController
         )
         let displayed = self._displayedViewController(viewController)
         if currently.0 !== displayed.0 {
@@ -600,10 +599,10 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
     }
 
     private func _endInteractive() {
-        self.activeInteractiveBackwardViewController = nil
-        self.activeInteractiveCurrentViewController = nil
-        self.activeInteractiveForwardViewController = nil
-        self.activeInteractiveAnimation = nil
+        self._activeInteractiveBackwardViewController = nil
+        self._activeInteractiveCurrentViewController = nil
+        self._activeInteractiveForwardViewController = nil
+        self._activeInteractiveAnimation = nil
         self.isAnimating = false
     }
 

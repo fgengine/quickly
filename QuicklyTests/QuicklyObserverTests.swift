@@ -23,14 +23,14 @@ class QuicklyObserverTests : XCTestCase {
 
     class FakeObserver {
 
-        private var onTest: () -> Void
+        private var _onTest: () -> Void
 
         init(_ onTest: @escaping () -> Void) {
-            self.onTest = onTest
+            self._onTest = onTest
         }
 
         func test() {
-            self.onTest()
+            self._onTest()
         }
 
     }

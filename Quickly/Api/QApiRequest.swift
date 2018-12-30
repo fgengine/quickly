@@ -91,11 +91,11 @@ open class QApiRequest : IQApiRequest {
     }
 
     public func urlRequest(provider: IQApiProvider) -> URLRequest? {
-        if var components = self.prepareUrlComponents(provider: provider) {
-            components.percentEncodedQuery = self.prepareUrlQuery(query: components.query, provider: provider)
+        if var components = self._prepareUrlComponents(provider: provider) {
+            components.percentEncodedQuery = self._prepareUrlQuery(query: components.query, provider: provider)
             if let url = components.url {
-                var headers = self.prepareHeaders(provider: provider)
-                let bodyData = self.prepareBody(provider: provider, headers: &headers)
+                var headers = self._prepareHeaders(provider: provider)
+                let bodyData = self._prepareBody(provider: provider, headers: &headers)
                 var urlRequest = URLRequest(url: url)
                 urlRequest.httpMethod = self.method
                 urlRequest.cachePolicy = self.cachePolicy
@@ -110,7 +110,7 @@ open class QApiRequest : IQApiRequest {
         return nil
     }
 
-    private func prepareUrlComponents(provider: IQApiProvider) -> URLComponents? {
+    private func _prepareUrlComponents(provider: IQApiProvider) -> URLComponents? {
         if let selfUrl = self.url {
             return URLComponents(string: selfUrl.absoluteString)
         } else if let providerUrl = provider.baseUrl {
@@ -136,7 +136,7 @@ open class QApiRequest : IQApiRequest {
         return nil
     }
 
-    private func prepareUrlQuery(query: String?, provider: IQApiProvider) -> String? {
+    private func _prepareUrlQuery(query: String?, provider: IQApiProvider) -> String? {
         var result = String()
         var allParams: [String: Any] = [:]
         provider.urlParams.forEach({ (key: String, value: Any) in
@@ -154,10 +154,10 @@ open class QApiRequest : IQApiRequest {
         self.urlParams.forEach({ (key: String, value: Any) in
             allParams[key] = value
         })
-        let flatParams = self.flatParams(params: allParams)
+        let flatParams = self._flatParams(params: allParams)
         flatParams.forEach({ (key: String, value: Any) in
-            let encodeKey = self.encode(urlKey: key)
-            let encodeValue = self.encode(value: value)
+            let encodeKey = self._encode(urlKey: key)
+            let encodeValue = self._encode(value: value)
             if result.count > 0 {
                 result.append("&\(encodeKey)=\(encodeValue)")
             } else {
@@ -170,7 +170,7 @@ open class QApiRequest : IQApiRequest {
         return nil
     }
 
-    private func prepareHeaders(provider: IQApiProvider) -> [String: String] {
+    private func _prepareHeaders(provider: IQApiProvider) -> [String: String] {
         var result: [String: String] = [:]
         provider.headers.forEach({ (key: String, value: String) in
             result[key] = value
@@ -181,7 +181,7 @@ open class QApiRequest : IQApiRequest {
         return result
     }
 
-    private func prepareBody(provider: IQApiProvider, headers: inout [String: String]) -> Data? {
+    private func _prepareBody(provider: IQApiProvider, headers: inout [String: String]) -> Data? {
         if let bodyData = self.bodyData {
             headers["Content-Length"] = "\(bodyData.count)"
             return bodyData
@@ -197,20 +197,20 @@ open class QApiRequest : IQApiRequest {
                     allParams[key] = value
                 })
             }
-            let flatParams = self.flatParams(params: allParams)
+            let flatParams = self._flatParams(params: allParams)
             if let uploadedItems = self.uploadItems {
                 var data = Data()
                 let boundary = UUID().uuidString
                 flatParams.forEach({ (key: String, value: Any) in
-                    let encodeKey = self.encode(value: key)
+                    let encodeKey = self._encode(value: key)
                     let rowString = "--\(boundary)\r\nContent-Disposition: form-data; name=\"\(encodeKey)\"\r\n\r\n\(value)\r\n"
                     if let rowData = rowString.data(using: .ascii) {
                         data.append(rowData)
                     }
                 })
                 uploadedItems.forEach({ (uploadedItem: QApiRequestUploadItem) in
-                    let encodeName = self.encode(value: uploadedItem.name)
-                    let encodeFilename = self.encode(value: uploadedItem.filename)
+                    let encodeName = self._encode(value: uploadedItem.name)
+                    let encodeFilename = self._encode(value: uploadedItem.filename)
                     let headerString = "--\(boundary)\r\nContent-Disposition: form-data; name=\"\(encodeName)\"; filename=\"\(encodeFilename)\"\r\nContent-Type: \(uploadedItem.mimetype)\r\n\r\n"
                     if let headerData = headerString.data(using: .ascii) {
                         data.append(headerData)
@@ -231,8 +231,8 @@ open class QApiRequest : IQApiRequest {
             } else if flatParams.count > 0 {
                 var paramsString = String()
                 flatParams.forEach({ (key: String, value: Any) in
-                    let encodeKey = self.encode(urlKey: key)
-                    let encodeValue = self.encode(value: value)
+                    let encodeKey = self._encode(urlKey: key)
+                    let encodeValue = self._encode(value: value)
                     if paramsString.count > 0 {
                         paramsString.append("&\(encodeKey)=\(encodeValue)")
                     } else {
@@ -249,23 +249,23 @@ open class QApiRequest : IQApiRequest {
         return nil
     }
 
-    private func flatParams(params: [String: Any]) -> [String: Any] {
+    private func _flatParams(params: [String: Any]) -> [String: Any] {
         var flatParams: [String: Any] = [:]
         params.forEach { (key: String, value: Any) in
-            self.flatParams(flatParams: &flatParams, path: key, value: value)
+            self._flatParams(flatParams: &flatParams, path: key, value: value)
         }
         return flatParams
     }
 
-    private func flatParams(flatParams: inout [String: Any], path: String, value: Any) {
+    private func _flatParams(flatParams: inout [String: Any], path: String, value: Any) {
         if let valueDictionary = value as? [String: Any] {
             valueDictionary.forEach { (subPath: String, subValue: Any) in
-                self.flatParams(flatParams: &flatParams, path: "\(path)[\(subPath)]", value: subValue)
+                self._flatParams(flatParams: &flatParams, path: "\(path)[\(subPath)]", value: subValue)
             }
         } else if let valueArray = value as? [Any] {
             var index = 0
             valueArray.forEach({ (subValue: Any) in
-                self.flatParams(flatParams: &flatParams, path: "\(path)[\(index)]", value: subValue)
+                self._flatParams(flatParams: &flatParams, path: "\(path)[\(index)]", value: subValue)
                 index += 1
             })
         } else {
@@ -273,21 +273,21 @@ open class QApiRequest : IQApiRequest {
         }
     }
 
-    private func encode(urlKey: String) -> String {
+    private func _encode(urlKey: String) -> String {
         var string = urlKey
         if self.trimArraySymbolsUrlParams == true {
             if let regexp = try? NSRegularExpression(pattern: "\\[[0-9]+\\]", options: []) {
                 string = regexp.stringByReplacingMatches(in: string, options: [], range: NSRange(location: 0, length: string.count), withTemplate: "")
             }
         }
-        return self.encode(value: string)
+        return self._encode(value: string)
     }
 
-    private func encode(value: Any) -> String {
-        return self.encode(value: "\(value)")
+    private func _encode(value: Any) -> String {
+        return self._encode(value: "\(value)")
     }
 
-    private func encode(value: String) -> String {
+    private func _encode(value: String) -> String {
         return value.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
     }
 

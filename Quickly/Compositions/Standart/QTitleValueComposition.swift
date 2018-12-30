@@ -25,13 +25,13 @@ open class QTitleValueComposable : QComposable {
 
 open class QTitleValueComposition< Composable: QTitleValueComposable > : QComposition< Composable > {
 
-    lazy private var titleLabel: QLabel = {
+    private lazy var titleLabel: QLabel = {
         let view = QLabel(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    lazy private var valueLabel: QLabel = {
+    private lazy var valueLabel: QLabel = {
         let view = QLabel(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.setContentHuggingPriority(
@@ -42,12 +42,12 @@ open class QTitleValueComposition< Composable: QTitleValueComposable > : QCompos
         return view
     }()
 
-    private var currentEdgeInsets: UIEdgeInsets?
-    private var currentTitleSpacing: CGFloat?
+    private var _edgeInsets: UIEdgeInsets?
+    private var _titleSpacing: CGFloat?
 
-    private var selfConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.selfConstraints) }
-        didSet { self.contentView.addConstraints(self.selfConstraints) }
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self._constraints) }
+        didSet { self.contentView.addConstraints(self._constraints) }
     }
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
@@ -67,10 +67,10 @@ open class QTitleValueComposition< Composable: QTitleValueComposable > : QCompos
             bottom: composable.edgeInsets.bottom,
             right: spec.containerRightInset + composable.edgeInsets.right
         )
-        if self.currentEdgeInsets != edgeInsets || self.currentTitleSpacing != composable.titleSpacing {
-            self.currentEdgeInsets = edgeInsets
-            self.currentTitleSpacing = composable.titleSpacing
-            self.selfConstraints = [
+        if self._edgeInsets != edgeInsets || self._titleSpacing != composable.titleSpacing {
+            self._edgeInsets = edgeInsets
+            self._titleSpacing = composable.titleSpacing
+            self._constraints = [
                 self.titleLabel.topLayout == self.contentView.topLayout + edgeInsets.top,
                 self.titleLabel.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
                 self.titleLabel.trailingLayout == self.valueLabel.leadingLayout - composable.titleSpacing,
@@ -83,8 +83,8 @@ open class QTitleValueComposition< Composable: QTitleValueComposable > : QCompos
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        composable.title.apply(self.titleLabel)
-        composable.value.apply(self.valueLabel)
+        self.titleLabel.apply(composable.title)
+        self.valueLabel.apply(composable.value)
     }
 
 }

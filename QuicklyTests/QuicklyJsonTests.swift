@@ -7,7 +7,7 @@ import Quickly
 
 class QuicklyJsonTests : XCTestCase {
 
-    private func fakeJson() -> QJson {
+    private func _fakeJson() -> QJson {
         return QJson(root: [
             "bool": true,
             "int": 1,
@@ -25,12 +25,12 @@ class QuicklyJsonTests : XCTestCase {
     }
 
     func testDebugJson() {
-        let json = self.fakeJson()
+        let json = self._fakeJson()
         print(json.debugString())
     }
 
     func testSimpleGetJson() {
-        let json = self.fakeJson()
+        let json = self._fakeJson()
 
         let bool: Bool = try! json.get(path: "bool")
         XCTAssert(bool == true)

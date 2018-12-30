@@ -36,11 +36,11 @@ open class QPagebarTitleCell< ItemType: QPagebarTitleItem > : QPagebarCell< Item
         return view
     }()
     
-    private var currentEdgeInsets: UIEdgeInsets?
+    private var _edgeInsets: UIEdgeInsets?
     
-    private var selfConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.selfConstraints) }
-        didSet { self.contentView.addConstraints(self.selfConstraints) }
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self._constraints) }
+        didSet { self.contentView.addConstraints(self._constraints) }
     }
 
     open override class func size(
@@ -71,16 +71,16 @@ open class QPagebarTitleCell< ItemType: QPagebarTitleItem > : QPagebarCell< Item
             self.selectedBackgroundView = nil
         }
 
-        if self.currentEdgeInsets != item.edgeInsets {
-            self.currentEdgeInsets = item.edgeInsets
-            self.selfConstraints = [
+        if self._edgeInsets != item.edgeInsets {
+            self._edgeInsets = item.edgeInsets
+            self._constraints = [
                 self._titleLabel.topLayout == self.contentView.topLayout + item.edgeInsets.top,
                 self._titleLabel.leadingLayout == self.contentView.leadingLayout + item.edgeInsets.left,
                 self._titleLabel.trailingLayout == self.contentView.trailingLayout - item.edgeInsets.right,
                 self._titleLabel.bottomLayout == self.contentView.bottomLayout - item.edgeInsets.bottom
             ]
         }
-        item.title.apply(self._titleLabel)
+        self._titleLabel.apply(item.title)
     }
 
 }

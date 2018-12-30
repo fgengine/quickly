@@ -40,7 +40,7 @@ public struct QLayoutItem< T > {
         self.multiplier = multiplier
     }
 
-    fileprivate func constrain(
+    fileprivate func _constrain(
         _ secondItem: QLayoutItem,
         relation: NSLayoutConstraint.Relation
     ) -> NSLayoutConstraint {
@@ -55,7 +55,7 @@ public struct QLayoutItem< T > {
         )
     }
 
-    fileprivate func constrain(
+    fileprivate func _constrain(
         _ constant: CGFloat,
         relation: NSLayoutConstraint.Relation
     ) -> NSLayoutConstraint {
@@ -70,54 +70,54 @@ public struct QLayoutItem< T > {
         )
     }
 
-    fileprivate func item(multiplier: CGFloat) -> QLayoutItem {
+    fileprivate func _item(multiplier: CGFloat) -> QLayoutItem {
         return QLayoutItem(self.item, self.attribute, self.constant, multiplier)
     }
 
-    fileprivate func item(constant: CGFloat) -> QLayoutItem {
+    fileprivate func _item(constant: CGFloat) -> QLayoutItem {
         return QLayoutItem(self.item, self.attribute, constant, self.multiplier)
     }
 
 }
 
 public func * < T > (lhs: QLayoutItem< T >, rhs: CGFloat) -> QLayoutItem< T > {
-    return lhs.item(multiplier: lhs.multiplier * rhs)
+    return lhs._item(multiplier: lhs.multiplier * rhs)
 }
 
 public func / < T > (lhs: QLayoutItem< T >, rhs: CGFloat) -> QLayoutItem< T > {
-    return lhs.item(multiplier: lhs.multiplier / rhs)
+    return lhs._item(multiplier: lhs.multiplier / rhs)
 }
 
 public func + < T > (lhs: QLayoutItem< T >, rhs: CGFloat) -> QLayoutItem< T > {
-    return lhs.item(constant: lhs.constant + rhs)
+    return lhs._item(constant: lhs.constant + rhs)
 }
 
 public func - < T > (lhs: QLayoutItem< T >, rhs: CGFloat) -> QLayoutItem< T > {
-    return lhs.item(constant: lhs.constant - rhs)
+    return lhs._item(constant: lhs.constant - rhs)
 }
 
 public func == < T > (lhs: QLayoutItem< T >, rhs: QLayoutItem< T >) -> NSLayoutConstraint {
-    return lhs.constrain(rhs, relation: .equal)
+    return lhs._constrain(rhs, relation: .equal)
 }
 
 public func == (lhs: QLayoutItem< QLayoutDimension >, rhs: CGFloat) -> NSLayoutConstraint {
-    return lhs.constrain(rhs, relation: .equal)
+    return lhs._constrain(rhs, relation: .equal)
 }
 
 public func >= < T > (lhs: QLayoutItem< T >, rhs: QLayoutItem< T >) -> NSLayoutConstraint {
-    return lhs.constrain(rhs, relation: .greaterThanOrEqual)
+    return lhs._constrain(rhs, relation: .greaterThanOrEqual)
 }
 
 public func >= (lhs: QLayoutItem< QLayoutDimension >, rhs: CGFloat) -> NSLayoutConstraint {
-    return lhs.constrain(rhs, relation: .greaterThanOrEqual)
+    return lhs._constrain(rhs, relation: .greaterThanOrEqual)
 }
 
 public func <= < T > (lhs: QLayoutItem< T >, rhs: QLayoutItem< T >) -> NSLayoutConstraint {
-    return lhs.constrain(rhs, relation: .lessThanOrEqual)
+    return lhs._constrain(rhs, relation: .lessThanOrEqual)
 }
 
 public func <= (lhs: QLayoutItem< QLayoutDimension >, rhs: CGFloat) -> NSLayoutConstraint {
-    return lhs.constrain(rhs, relation: .lessThanOrEqual)
+    return lhs._constrain(rhs, relation: .lessThanOrEqual)
 }
 
 public extension QLayoutTarget {

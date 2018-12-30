@@ -23,10 +23,10 @@ public final class QTimer : NSObject {
     public var onPaused: Closure?
     public var onResumed: Closure?
 
-    private var startDelayDate: Date?
-    private var startDate: Date?
-    private var pauseDate: Date?
-    private var timer: Timer?
+    private var _startDelayDate: Date?
+    private var _startDate: Date?
+    private var _pauseDate: Date?
+    private var _timer: Timer?
 
     public init(interval: TimeInterval, delay: TimeInterval, repeating: UInt) {
         self.interval = interval
@@ -64,19 +64,19 @@ public final class QTimer : NSObject {
             self.isStarted = true
             self.isPaused = false
             if self.delay > TimeInterval.ulpOfOne {
-                self.startDate = Date() + self.delay
+                self._startDate = Date() + self.delay
                 self.isDelaying = true
             } else {
-                self.startDate = Date() + self.interval
+                self._startDate = Date() + self.interval
                 self.isDelaying = false
             }
-            self.pauseDate = nil
+            self._pauseDate = nil
             self.repeated = 0
-            self.timer = Timer(
-                fireAt: self.startDate!,
+            self._timer = Timer(
+                fireAt: self._startDate!,
                 interval: self.interval,
                 target: self,
-                selector: #selector(self.handler(_:)),
+                selector: #selector(self._handler(_:)),
                 userInfo: nil,
                 repeats: (self.isDelaying == true) || (self.repeating != 0)
             )
@@ -85,7 +85,7 @@ public final class QTimer : NSObject {
                     closure(self)
                 }
             }
-            RunLoop.main.add(self.timer!, forMode: RunLoop.Mode.common)
+            RunLoop.main.add(self._timer!, forMode: RunLoop.Mode.common)
         }
     }
 
@@ -94,12 +94,12 @@ public final class QTimer : NSObject {
             self.isDelaying = false
             self.isStarted = false
             self.isPaused = false
-            self.startDate = nil
-            self.pauseDate = nil
+            self._startDate = nil
+            self._pauseDate = nil
             self.repeated = 0
-            if let timer = self.timer {
+            if let timer = self._timer {
                 timer.invalidate()
-                self.timer = nil
+                self._timer = nil
             }
             if let closure = self.onStoped {
                 closure(self)
@@ -110,10 +110,10 @@ public final class QTimer : NSObject {
     public func pause() {
         if (self.isStarted == true) && (self.isPaused == false) {
             self.isPaused = true
-            self.pauseDate = Date()
-            if let timer = self.timer {
+            self._pauseDate = Date()
+            if let timer = self._timer {
                 timer.invalidate()
-                self.timer = nil
+                self._timer = nil
             }
             if let closure = self.onPaused {
                 closure(self)
@@ -125,20 +125,20 @@ public final class QTimer : NSObject {
         if (self.isStarted == true) && (self.isPaused == true) {
             self.isPaused = false
 
-            self.startDate = self.startDate! + (Date().timeIntervalSince1970 - self.pauseDate!.timeIntervalSince1970)
-            self.pauseDate = nil;
-            self.timer = Timer(
-                fireAt: self.startDate!,
+            self._startDate = self._startDate! + (Date().timeIntervalSince1970 - self._pauseDate!.timeIntervalSince1970)
+            self._pauseDate = nil;
+            self._timer = Timer(
+                fireAt: self._startDate!,
                 interval: self.interval,
                 target: self,
-                selector: #selector(self.handler(_:)),
+                selector: #selector(self._handler(_:)),
                 userInfo: nil,
                 repeats: (self.repeating != 0)
             )
             if let closure = self.onResumed {
                 closure(self)
             }
-            RunLoop.main.add(self.timer!, forMode: RunLoop.Mode.common)
+            RunLoop.main.add(self._timer!, forMode: RunLoop.Mode.common)
         }
     }
 
@@ -149,7 +149,7 @@ public final class QTimer : NSObject {
         }
     }
 
-    @IBAction private func handler(_ sender: Any) {
+    @IBAction private func _handler(_ sender: Any) {
         if self.isDelaying == true {
             self.isDelaying = false
             if let closure = self.onStarted {
@@ -175,9 +175,9 @@ public final class QTimer : NSObject {
             if finished == true {
                 self.isStarted = false
                 self.isPaused = false
-                if let timer = self.timer {
+                if let timer = self._timer {
                     timer.invalidate()
-                    self.timer = nil
+                    self._timer = nil
                 }
                 if let closure = self.onFinished {
                     closure(self)

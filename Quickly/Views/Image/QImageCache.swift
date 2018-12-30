@@ -10,7 +10,13 @@ public class QImageCache {
 
     public let name: String
     public private(set) var memory: [String: UIImage]
-    public private(set) lazy var queue: DispatchQueue = self.prepareDispatchQueue()
+    public private(set) lazy var queue: DispatchQueue = DispatchQueue(
+        label: self.name,
+        qos: .background,
+        attributes: .concurrent,
+        autoreleaseFrequency: .inherit,
+        target: nil
+    )
     public private(set) var url: URL
 
     public init(name: String) throws {
@@ -27,7 +33,7 @@ public class QImageCache {
         }
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(self.didReceiveMemoryWarning(_:)),
+            selector: #selector(self._didReceiveMemoryWarning(_:)),
             name: UIApplication.didReceiveMemoryWarningNotification,
             object: nil
         )
@@ -166,18 +172,8 @@ public class QImageCache {
         }
     }
 
-    private func prepareDispatchQueue() -> DispatchQueue {
-        return DispatchQueue(
-            label: self.name,
-            qos: .background,
-            attributes: .concurrent,
-            autoreleaseFrequency: .inherit,
-            target: nil
-        )
-    }
-
     @objc
-    private func didReceiveMemoryWarning(_ notification: NSNotification) {
+    private func _didReceiveMemoryWarning(_ notification: NSNotification) {
         self.queue.sync {
             self.memory.removeAll()
         }

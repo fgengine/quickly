@@ -21,23 +21,23 @@ open class QPlaceholderTitleComposable : QComposable {
 
 open class QPlaceholderTitleComposition< Composable: QPlaceholderTitleComposable > : QComposition< Composable > {
     
-    lazy private var titleLabel: QPlaceholderView = {
+    private lazy var titleLabel: QPlaceholderView = {
         let view = QPlaceholderView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
     
-    private var currentEdgeInsets: UIEdgeInsets?
-    private var currentTitleHeight: CGFloat?
+    private var _edgeInsets: UIEdgeInsets?
+    private var _titleHeight: CGFloat?
     
-    private var selfConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.selfConstraints) }
-        didSet { self.contentView.addConstraints(self.selfConstraints) }
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self._constraints) }
+        didSet { self.contentView.addConstraints(self._constraints) }
     }
-    private var titleConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.titleLabel.removeConstraints(self.titleConstraints) }
-        didSet { self.titleLabel.addConstraints(self.titleConstraints) }
+    private var _titleConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.titleLabel.removeConstraints(self._titleConstraints) }
+        didSet { self.titleLabel.addConstraints(self._titleConstraints) }
     }
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
@@ -54,25 +54,25 @@ open class QPlaceholderTitleComposition< Composable: QPlaceholderTitleComposable
             bottom: composable.edgeInsets.bottom,
             right: spec.containerRightInset + composable.edgeInsets.right
         )
-        if self.currentEdgeInsets != edgeInsets {
-            self.currentEdgeInsets = edgeInsets
-            self.selfConstraints = [
+        if self._edgeInsets != edgeInsets {
+            self._edgeInsets = edgeInsets
+            self._constraints = [
                 self.titleLabel.topLayout == self.contentView.topLayout + edgeInsets.top,
                 self.titleLabel.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
                 self.titleLabel.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
                 self.titleLabel.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom
             ]
         }
-        if self.currentTitleHeight != composable.titleHeight {
-            self.currentTitleHeight = composable.titleHeight
-            self.titleConstraints = [
+        if self._titleHeight != composable.titleHeight {
+            self._titleHeight = composable.titleHeight
+            self._titleConstraints = [
                 self.titleLabel.heightLayout == composable.titleHeight
             ]
         }
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        composable.title.apply(self.titleLabel)
+        self.titleLabel.apply(composable.title)
     }
     
 }

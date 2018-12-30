@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
+open class QLabelStyleSheet : QDisplayViewStyleSheet {
 
     public var text: IQText
     public var alignment: NSTextAlignment
@@ -39,15 +39,6 @@ open class QLabelStyleSheet : QDisplayViewStyleSheet< QLabel > {
         self.numberOfLines = styleSheet.numberOfLines
 
         super.init(styleSheet)
-    }
-
-    public override func apply(_ target: QLabel) {
-        super.apply(target)
-
-        target.text = self.text
-        target.alignment = self.alignment
-        target.lineBreakMode = self.lineBreakMode
-        target.numberOfLines = self.numberOfLines
     }
 
 }
@@ -87,9 +78,6 @@ open class QLabel : QDisplayView {
         }
     }
     
-    open override var intrinsicContentSize: CGSize {
-        get { return self.label.intrinsicContentSize }
-    }
     open override var forFirstBaselineLayout: UIView {
         get { return self.label.forFirstBaselineLayout }
     }
@@ -125,12 +113,12 @@ open class QLabel : QDisplayView {
 
     public convenience init(frame: CGRect, styleSheet: QLabelStyleSheet) {
         self.init(frame: frame)
-        styleSheet.apply(self)
+        self.apply(styleSheet)
     }
 
     public convenience init(styleSheet: QLabelStyleSheet) {
         self.init(frame: CGRect.zero)
-        styleSheet.apply(self)
+        self.apply(styleSheet)
         self.sizeToFit()
     }
 
@@ -152,6 +140,15 @@ open class QLabel : QDisplayView {
 
     open override func sizeThatFits(_ size: CGSize) -> CGSize {
         return self.label.sizeThatFits(size)
+    }
+    
+    public func apply(_ styleSheet: QLabelStyleSheet) {
+        self.apply(styleSheet as QDisplayViewStyleSheet)
+        
+        self.text = styleSheet.text
+        self.alignment = styleSheet.alignment
+        self.lineBreakMode = styleSheet.lineBreakMode
+        self.numberOfLines = styleSheet.numberOfLines
     }
 
 }

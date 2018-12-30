@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QGradientViewStyleSheet : QDisplayViewStyleSheet< QGradientView > {
+open class QGradientViewStyleSheet : QDisplayViewStyleSheet {
 
     public var points: [QGradientPoint]
     public var startPoint: CGPoint
@@ -26,14 +26,6 @@ open class QGradientViewStyleSheet : QDisplayViewStyleSheet< QGradientView > {
         self.endPoint = styleSheet.endPoint
 
         super.init(styleSheet)
-    }
-
-    public override func apply(_ target: QGradientView) {
-        super.apply(target)
-
-        target.points = self.points
-        target.startPoint = self.startPoint
-        target.endPoint = self.endPoint
     }
 
 }
@@ -70,6 +62,14 @@ open class QGradientView : QDisplayView {
 
     open override class var layerClass: AnyClass {
         get { return CAGradientLayer.self }
+    }
+    
+    public func apply(_ styleSheet: QGradientViewStyleSheet) {
+        self.apply(styleSheet as QDisplayViewStyleSheet)
+        
+        self.points = styleSheet.points
+        self.startPoint = styleSheet.startPoint
+        self.endPoint = styleSheet.endPoint
     }
 
 }

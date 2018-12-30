@@ -12,8 +12,8 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
         didSet { if self.collectionView != nil { self.configure() } }
     }
     public var sections: [IQCollectionSection] = [] {
-        willSet { self.unbindSections() }
-        didSet { self.bindSections() }
+        willSet { self._unbindSections() }
+        didSet { self._bindSections() }
     }
     public var items: [IQCollectionItem] {
         get {
@@ -49,19 +49,20 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
     public var canMove: Bool = true
     public private(set) var isBatchUpdating: Bool = false
     public private(set) var decors: [IQCollectionDecor.Type]
-    private var aliasDecors: [QMetatype : IQCollectionDecor.Type]
     public private(set) var cells: [IQCollectionCell.Type]
-    private var aliasCells: [QMetatype : IQCollectionCell.Type]
-    private var observer: QObserver< IQCollectionControllerObserver >
+    
+    private var _aliasDecors: [QMetatype : IQCollectionDecor.Type]
+    private var _aliasCells: [QMetatype : IQCollectionCell.Type]
+    private var _observer: QObserver< IQCollectionControllerObserver >
 
     public init(
         cells: [IQCollectionCell.Type]
     ) {
         self.decors = []
-        self.aliasDecors = [:]
+        self._aliasDecors = [:]
         self.cells = cells
-        self.aliasCells = [:]
-        self.observer = QObserver< IQCollectionControllerObserver >()
+        self._aliasCells = [:]
+        self._observer = QObserver< IQCollectionControllerObserver >()
         super.init()
     }
 
@@ -70,59 +71,11 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
         cells: [IQCollectionCell.Type]
     ) {
         self.decors = decors
-        self.aliasDecors = [:]
+        self._aliasDecors = [:]
         self.cells = cells
-        self.aliasCells = [:]
-        self.observer = QObserver< IQCollectionControllerObserver >()
+        self._aliasCells = [:]
+        self._observer = QObserver< IQCollectionControllerObserver >()
         super.init()
-    }
-
-    fileprivate func decorClass(data: IQCollectionData) -> IQCollectionDecor.Type? {
-        let dataMetatype = QMetatype(data)
-        if let metatype = self.aliasDecors.first(where: { return $0.key == dataMetatype }) {
-            return metatype.value
-        }
-        let usings = self.decors.filter({ return $0.using(any: data) })
-        guard usings.count > 0 else { return nil }
-        if usings.count > 1 {
-            let typeOfData = type(of: data)
-            let levels = usings.compactMap({ (type) -> (IQCollectionDecor.Type, UInt)? in
-                guard let level = type.usingLevel(any: typeOfData) else { return nil }
-                return (type, level)
-            })
-            let sorted = levels.sorted(by: { return $0.1 > $1.1 })
-            let decorType = sorted.first!.0
-            self.aliasDecors[dataMetatype] = decorType
-            return decorType
-        } else {
-            let decorType = usings.first!
-            self.aliasDecors[dataMetatype] = decorType
-            return decorType
-        }
-    }
-
-    fileprivate func cellClass(item: IQCollectionItem) -> IQCollectionCell.Type? {
-        let rowMetatype = QMetatype(item)
-        if let metatype = self.aliasCells.first(where: { return $0.key == rowMetatype }) {
-            return metatype.value
-        }
-        let usings = self.cells.filter({ return $0.using(any: item) })
-        guard usings.count > 0 else { return nil }
-        if usings.count > 1 {
-            let typeOfData = type(of: item)
-            let levels = usings.compactMap({ (type) -> (IQCollectionCell.Type, UInt)? in
-                guard let level = type.usingLevel(any: typeOfData) else { return nil }
-                return (type, level)
-            })
-            let sorted = levels.sorted(by: { return $0.1 > $1.1 })
-            let cellType = sorted.first!.0
-            self.aliasCells[rowMetatype] = cellType
-            return cellType
-        } else {
-            let cellType = usings.first!
-            self.aliasCells[rowMetatype] = cellType
-            return cellType
-        }
     }
 
     open func configure() {
@@ -139,11 +92,11 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
     }
 
     open func addObserver(_ observer: IQCollectionControllerObserver, priority: UInt) {
-        self.observer.add(observer, priority: priority)
+        self._observer.add(observer, priority: priority)
     }
 
     open func removeObserver(_ observer: IQCollectionControllerObserver) {
-        self.observer.remove(observer)
+        self._observer.remove(observer)
     }
 
     open func section(index: Int) -> IQCollectionSection {
@@ -209,7 +162,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
     open func dequeue(data: IQCollectionData, kind: String, indexPath: IndexPath) -> Decor? {
         guard
             let collectionView = self.collectionView,
-            let decorClass = self.decorClass(data: data),
+            let decorClass = self._decorClass(data: data),
             let decorView = decorClass.dequeue(collectionView: collectionView, kind: kind, indexPath: indexPath)
             else { return nil }
         decorView.collectionDelegate = self
@@ -219,7 +172,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
     open func dequeue(item: IQCollectionItem, indexPath: IndexPath) -> Cell? {
         guard
             let collectionView = self.collectionView,
-            let cellClass = self.cellClass(item: item),
+            let cellClass = self._cellClass(item: item),
             let cellView = cellClass.dequeue(collectionView: collectionView, indexPath: indexPath)
             else { return nil }
         cellView.collectionDelegate = self
@@ -229,7 +182,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
     open func reload() {
         guard let collectionView = self.collectionView else { return }
         collectionView.reloadData()
-        self.notifyUpdate()
+        self._notifyUpdate()
     }
 
     open func performBatchUpdates(_ updates: (() -> Void)?, completion: ((Bool) -> Void)? = nil) {
@@ -241,7 +194,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
         collectionView.performBatchUpdates(updates, completion: { [weak self] (finish: Bool) in
             if let strong = self {
                 strong.isBatchUpdating = true
-                strong.notifyUpdate()
+                strong._notifyUpdate()
             }
             completion?(finish)
         })
@@ -249,7 +202,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
 
     open func insertSection(_ sections: [IQCollectionSection], index: Int) {
         self.sections.insert(contentsOf: sections, at: index)
-        self.rebindSections(from: index, to: self.sections.endIndex)
+        self._rebindSections(from: index, to: self.sections.endIndex)
         var indexSet = IndexSet()
         for section in self.sections {
             if let sectionIndex = section.index {
@@ -276,7 +229,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
                 self.sections.remove(at: index)
                 section.unbind()
             }
-            self.rebindSections(from: indexSet.first!, to: self.sections.endIndex)
+            self._rebindSections(from: indexSet.first!, to: self.sections.endIndex)
             if let collectionView = self.collectionView {
                 collectionView.deleteSections(indexSet)
             }
@@ -339,7 +292,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
                 else { return }
             decor.set(any: header, spec: collectionView, animated: animated)
             if self.isBatchUpdating == false {
-                self.notifyUpdate()
+                self._notifyUpdate()
             }
         }
     }
@@ -353,7 +306,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
                 else { return }
             decor.set(any: footer, spec: collectionView, animated: animated)
             if self.isBatchUpdating == false {
-                self.notifyUpdate()
+                self._notifyUpdate()
             }
         }
     }
@@ -366,7 +319,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
             else { return }
         cell.set(any: item, spec: collectionView, animated: animated)
         if self.isBatchUpdating == false {
-            self.notifyUpdate()
+            self._notifyUpdate()
         }
     }
 
@@ -374,7 +327,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
 
 extension QCollectionController {
 
-    private func bindSections() {
+    private func _bindSections() {
         var sectionIndex: Int = 0
         for section in self.sections {
             section.bind(self, sectionIndex)
@@ -382,20 +335,68 @@ extension QCollectionController {
         }
     }
 
-    private func rebindSections(from: Int, to: Int) {
+    private func _rebindSections(from: Int, to: Int) {
         for index in from..<to {
             self.sections[index].rebind(index)
         }
     }
 
-    private func unbindSections() {
+    private func _unbindSections() {
         for section in self.sections {
             section.unbind()
         }
     }
 
-    private func notifyUpdate() {
-        self.observer.notify({ $0.update(self) })
+    private func _notifyUpdate() {
+        self._observer.notify({ $0.update(self) })
+    }
+    
+    private func _decorClass(data: IQCollectionData) -> IQCollectionDecor.Type? {
+        let dataMetatype = QMetatype(data)
+        if let metatype = self._aliasDecors.first(where: { return $0.key == dataMetatype }) {
+            return metatype.value
+        }
+        let usings = self.decors.filter({ return $0.using(any: data) })
+        guard usings.count > 0 else { return nil }
+        if usings.count > 1 {
+            let typeOfData = type(of: data)
+            let levels = usings.compactMap({ (type) -> (IQCollectionDecor.Type, UInt)? in
+                guard let level = type.usingLevel(any: typeOfData) else { return nil }
+                return (type, level)
+            })
+            let sorted = levels.sorted(by: { return $0.1 > $1.1 })
+            let decorType = sorted.first!.0
+            self._aliasDecors[dataMetatype] = decorType
+            return decorType
+        } else {
+            let decorType = usings.first!
+            self._aliasDecors[dataMetatype] = decorType
+            return decorType
+        }
+    }
+    
+    private func _cellClass(item: IQCollectionItem) -> IQCollectionCell.Type? {
+        let rowMetatype = QMetatype(item)
+        if let metatype = self._aliasCells.first(where: { return $0.key == rowMetatype }) {
+            return metatype.value
+        }
+        let usings = self.cells.filter({ return $0.using(any: item) })
+        guard usings.count > 0 else { return nil }
+        if usings.count > 1 {
+            let typeOfData = type(of: item)
+            let levels = usings.compactMap({ (type) -> (IQCollectionCell.Type, UInt)? in
+                guard let level = type.usingLevel(any: typeOfData) else { return nil }
+                return (type, level)
+            })
+            let sorted = levels.sorted(by: { return $0.1 > $1.1 })
+            let cellType = sorted.first!.0
+            self._aliasCells[rowMetatype] = cellType
+            return cellType
+        } else {
+            let cellType = usings.first!
+            self._aliasCells[rowMetatype] = cellType
+            return cellType
+        }
     }
 
 }
@@ -403,11 +404,11 @@ extension QCollectionController {
 extension QCollectionController : UIScrollViewDelegate {
 
     open func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.observer.notify({ $0.scroll(self, collectionView: self.collectionView!) })
+        self._observer.notify({ $0.scroll(self, collectionView: self.collectionView!) })
     }
 
     open func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        self.observer.notify({ $0.zoom(self, collectionView: self.collectionView!) })
+        self._observer.notify({ $0.zoom(self, collectionView: self.collectionView!) })
     }
 
 }
@@ -531,7 +532,7 @@ extension QCollectionController : UICollectionViewDelegateFlowLayout {
     ) -> CGSize {
         let section = self.section(index: indexPath.section)
         let item = self.item(indexPath: indexPath)
-        if let cellClass = self.cellClass(item: item) {
+        if let cellClass = self._cellClass(item: item) {
             return cellClass.size(any: item, layout: collectionViewLayout, section: section, spec: collectionView as! IQContainerSpec)
         }
         return CGSize.zero
@@ -571,7 +572,7 @@ extension QCollectionController : UICollectionViewDelegateFlowLayout {
     ) -> CGSize {
         let section = self.section(index: sectionIndex)
         if let data = section.header {
-            if let decorClass = self.decorClass(data: data) {
+            if let decorClass = self._decorClass(data: data) {
                 return decorClass.size(any: data, layout: collectionViewLayout, section: section, spec: collectionView as! IQContainerSpec)
             }
         }
@@ -585,7 +586,7 @@ extension QCollectionController : UICollectionViewDelegateFlowLayout {
     ) -> CGSize {
         let section = self.section(index: sectionIndex)
         if let data = section.footer {
-            if let decorClass = self.decorClass(data: data) {
+            if let decorClass = self._decorClass(data: data) {
                 return decorClass.size(any: data, layout: collectionViewLayout, section: section, spec: collectionView as! IQContainerSpec)
             }
         }

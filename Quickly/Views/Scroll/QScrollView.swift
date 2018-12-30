@@ -16,13 +16,13 @@ open class QScrollView : UIScrollView, IQView {
 
     public private(set) var contentView: UIView!
 
-    private var selfConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.removeConstraints(self.selfConstraints) }
-        didSet { self.addConstraints(self.selfConstraints) }
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.removeConstraints(self._constraints) }
+        didSet { self.addConstraints(self._constraints) }
     }
-    private var contentConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.contentConstraints) }
-        didSet { self.contentView.addConstraints(self.contentConstraints) }
+    private var _contentConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self._contentConstraints) }
+        didSet { self.contentView.addConstraints(self._contentConstraints) }
     }
     
     public required init() {
@@ -54,12 +54,12 @@ open class QScrollView : UIScrollView, IQView {
     open override func updateConstraints() {
         super.updateConstraints()
         
-        var selfConstraints: [NSLayoutConstraint] = []
-        selfConstraints.append(self.topLayout == self.contentView.topLayout)
-        selfConstraints.append(self.leadingLayout == self.contentView.leadingLayout)
-        selfConstraints.append(self.trailingLayout == self.contentView.trailingLayout)
-        selfConstraints.append(self.bottomLayout == self.contentView.bottomLayout)
-        self.selfConstraints = selfConstraints
+        self._constraints = [
+            self.topLayout == self.contentView.topLayout,
+            self.leadingLayout == self.contentView.leadingLayout,
+            self.trailingLayout == self.contentView.trailingLayout,
+            self.bottomLayout == self.contentView.bottomLayout
+        ]
 
         var contentConstraints: [NSLayoutConstraint] = []
         switch self.direction {
@@ -71,7 +71,7 @@ open class QScrollView : UIScrollView, IQView {
         case .horizontal:
             contentConstraints.append(self.heightLayout == self.contentView.heightLayout)
         }
-        self.contentConstraints = contentConstraints
+        self._contentConstraints = contentConstraints
     }
 
 }

@@ -376,14 +376,14 @@ public final class QTextStyle : IQTextStyle {
 
     public var attributes: [NSAttributedString.Key: Any] {
         get {
-            if self._rebuildAttributes == true {
-                self._rebuildAttributes = false
-                self._attributes = self.rebuildAttributes()
+            if self._needRebuildAttributes == true {
+                self._needRebuildAttributes = false
+                self._attributes = self._rebuildAttributes()
             }
             return self._attributes
         }
     }
-    private var _rebuildAttributes: Bool = true
+    private var _needRebuildAttributes: Bool = true
     private var _attributes: [NSAttributedString.Key: Any] = [:]
 
     public init(
@@ -498,13 +498,13 @@ public final class QTextStyle : IQTextStyle {
     }
 
     public func setNeedRebuildAttributes() {
-        self._rebuildAttributes = true
+        self._needRebuildAttributes = true
         for child in self.children {
             child.setNeedRebuildAttributes()
         }
     }
 
-    private func rebuildAttributes() -> [NSAttributedString.Key: Any] {
+    private func _rebuildAttributes() -> [NSAttributedString.Key: Any] {
         var attributes: [NSAttributedString.Key: Any] = [:]
         if let font = self.font {
             attributes[.font] = font

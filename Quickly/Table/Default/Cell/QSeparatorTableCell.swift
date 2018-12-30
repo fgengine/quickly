@@ -20,11 +20,11 @@ open class QSeparatorTableCell< RowType: QSeparatorTableRow > : QBackgroundColor
 
     private var _separator: QView!
 
-    private var currentEdgeInsets: UIEdgeInsets?
+    private var _edgeInsets: UIEdgeInsets?
 
-    private var selfConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.selfConstraints) }
-        didSet { self.contentView.addConstraints(self.selfConstraints) }
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self._constraints) }
+        didSet { self.contentView.addConstraints(self._constraints) }
     }
 
     open override class func height(row: RowType, spec: IQContainerSpec) -> CGFloat {
@@ -42,15 +42,14 @@ open class QSeparatorTableCell< RowType: QSeparatorTableRow > : QBackgroundColor
     open override func set(row: RowType, spec: IQContainerSpec, animated: Bool) {
         super.set(row: row, spec: spec, animated: animated)
         
-        if self.currentEdgeInsets != row.edgeInsets {
-            self.currentEdgeInsets = row.edgeInsets
-
-            var selfConstraints: [NSLayoutConstraint] = []
-            selfConstraints.append(self._separator.topLayout == self.contentView.topLayout + row.edgeInsets.top)
-            selfConstraints.append(self._separator.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left)
-            selfConstraints.append(self._separator.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right)
-            selfConstraints.append(self._separator.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom)
-            self.selfConstraints = selfConstraints
+        if self._edgeInsets != row.edgeInsets {
+            self._edgeInsets = row.edgeInsets
+            self._constraints = [
+                self._separator.topLayout == self.contentView.topLayout + row.edgeInsets.top,
+                self._separator.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left,
+                self._separator.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right,
+                self._separator.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom
+            ]
         }
         self._separator.backgroundColor = row.color
     }

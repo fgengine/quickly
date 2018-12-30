@@ -173,29 +173,27 @@ public class QApiQuery<
         self.task = nil
         if let error = error as NSError? {
             if self.canceled == false {
-                self.parse(error: error)
+                self._parse(error: error)
             }
         } else {
-            self.parse()
+            self._parse()
         }
     }
 
-    private func parse() {
-        guard let response = self.receivedResponse, let data = self.receivedData else {
-            return
-        }
-        self.response.parse(response: response, data: data)
-        self.completeIfNeeded()
+    private func _parse() {
+        guard let response = self.receivedResponse else { return }
+        self.response.parse(response: response, data: self.receivedData)
+        self._completeIfNeeded()
     }
 
-    private func parse(error: Error) {
+    private func _parse(error: Error) {
         self.response.parse(error: error)
-        self.completeIfNeeded()
+        self._completeIfNeeded()
     }
 
-    private func completeIfNeeded() {
+    private func _completeIfNeeded() {
         if self.response.error == nil {
-            self.complete()
+            self._complete()
         } else {
             if(abs(self.createAt.timeIntervalSinceNow) <= self.request.retries) {
                 self.response.reset()
@@ -203,14 +201,14 @@ public class QApiQuery<
                     self.provider.send(query: self)
                 })
             } else {
-                self.complete()
+                self._complete()
             }
         }
     }
 
-    private func complete() {
-        if self.logging(self.request.logging) == false {
-            self.logging(self.provider.logging)
+    private func _complete() {
+        if self._logging(self.request.logging) == false {
+            self._logging(self.provider.logging)
         }
         self.queue.async {
             self.completed(self.request, self.response)
@@ -218,7 +216,7 @@ public class QApiQuery<
     }
     
     @discardableResult
-    private func logging(_ logging: QApiLogging) -> Bool {
+    private func _logging(_ logging: QApiLogging) -> Bool {
         switch logging {
         case .never:
             return false

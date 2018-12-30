@@ -30,8 +30,8 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         didSet { if let tableView = self.tableView { tableView.estimatedSectionFooterHeight = self.estimatedSectionFooterHeight } }
     }
     public var sections: [IQTableSection] = [] {
-        willSet { self.unbindSections() }
-        didSet { self.bindSections() }
+        willSet { self._unbindSections() }
+        didSet { self._bindSections() }
     }
     public var rows: [IQTableRow] {
         get {
@@ -54,12 +54,13 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
     public var canEdit: Bool = true
     public var canMove: Bool = true
     public private(set) var isBatchUpdating: Bool = false
-    private var decors: [IQTableDecor.Type]
-    private var aliasDecors: [QMetatype : IQTableDecor.Type]
-    private var cells: [IQTableCell.Type]
-    private var aliasCells: [QMetatype : IQTableCell.Type]
-    private var cacheHeight: [Int : [Int : CGFloat]]
-    private var observer: QObserver< IQTableControllerObserver >
+    
+    private var _decors: [IQTableDecor.Type]
+    private var _aliasDecors: [QMetatype : IQTableDecor.Type]
+    private var _cells: [IQTableCell.Type]
+    private var _aliasCells: [QMetatype : IQTableCell.Type]
+    private var _cacheHeight: [Int : [Int : CGFloat]]
+    private var _observer: QObserver< IQTableControllerObserver >
 
     public init(
         cells: [IQTableCell.Type]
@@ -71,12 +72,12 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         self.estimatedSectionHeaderHeight = UITableView.automaticDimension
         self.estimatedSectionFooterHeight = UITableView.automaticDimension
 
-        self.decors = []
-        self.aliasDecors = [:]
-        self.cells = cells
-        self.aliasCells = [:]
-        self.cacheHeight = [:]
-        self.observer = QObserver< IQTableControllerObserver >()
+        self._decors = []
+        self._aliasDecors = [:]
+        self._cells = cells
+        self._aliasCells = [:]
+        self._cacheHeight = [:]
+        self._observer = QObserver< IQTableControllerObserver >()
         super.init()
     }
 
@@ -91,69 +92,21 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         self.estimatedSectionHeaderHeight = UITableView.automaticDimension
         self.estimatedSectionFooterHeight = UITableView.automaticDimension
 
-        self.decors = decors
-        self.aliasDecors = [:]
-        self.cells = cells
-        self.aliasCells = [:]
-        self.cacheHeight = [:]
-        self.observer = QObserver< IQTableControllerObserver >()
+        self._decors = decors
+        self._aliasDecors = [:]
+        self._cells = cells
+        self._aliasCells = [:]
+        self._cacheHeight = [:]
+        self._observer = QObserver< IQTableControllerObserver >()
         super.init()
-    }
-
-    fileprivate func decorClass(data: IQTableData) -> IQTableDecor.Type? {
-        let dataMetatype = QMetatype(data)
-        if let metatype = self.aliasDecors.first(where: { return $0.key == dataMetatype }) {
-            return metatype.value
-        }
-        let usings = self.decors.filter({ return $0.using(any: data) })
-        guard usings.count > 0 else { return nil }
-        if usings.count > 1 {
-            let typeOfData = type(of: data)
-            let levels = usings.compactMap({ (type) -> (IQTableDecor.Type, UInt)? in
-                guard let level = type.usingLevel(any: typeOfData) else { return nil }
-                return (type, level)
-            })
-            let sorted = levels.sorted(by: { return $0.1 > $1.1 })
-            let decorType = sorted.first!.0
-            self.aliasDecors[dataMetatype] = decorType
-            return decorType
-        } else {
-            let decorType = usings.first!
-            self.aliasDecors[dataMetatype] = decorType
-            return decorType
-        }
-    }
-
-    fileprivate func cellClass(row: IQTableRow) -> IQTableCell.Type? {
-        let rowMetatype = QMetatype(row)
-        if let metatype = self.aliasCells.first(where: { return $0.key == rowMetatype }) {
-            return metatype.value
-        }
-        let usings = self.cells.filter({ return $0.using(any: row) })
-        guard usings.count > 0 else { return nil }
-        if usings.count > 1 {
-            let typeOfData = type(of: row)
-            let levels = usings.compactMap({ (type) -> (IQTableCell.Type, UInt)? in
-                guard let level = type.usingLevel(any: typeOfData) else { return nil }
-                return (type, level)
-            })
-            let sorted = levels.sorted(by: { return $0.1 > $1.1 })
-            let cellType = sorted.first!.0
-            self.aliasCells[rowMetatype] = cellType
-            return cellType
-        } else {
-            let cellType = usings.first!
-            self.aliasCells[rowMetatype] = cellType
-            return cellType
-        }
     }
 
     open func configure() {
         if let tableView = self.tableView {
-            for type in self.decors {
+            for type in self._decors {
                 type.register(tableView: tableView)
             }
-            for type in self.cells {
+            for type in self._cells {
                 type.register(tableView: tableView)
             }
             tableView.rowHeight = self.rowHeight
@@ -167,11 +120,11 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
     }
 
     open func addObserver(_ observer: IQTableControllerObserver, priority: UInt) {
-        self.observer.add(observer, priority: priority)
+        self._observer.add(observer, priority: priority)
     }
 
     open func removeObserver(_ observer: IQTableControllerObserver) {
-        self.observer.remove(observer)
+        self._observer.remove(observer)
     }
 
     open func section(index: Int) -> IQTableSection {
@@ -257,7 +210,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
     open func dequeue(data: IQTableData) -> Decor? {
         guard
             let tableView = self.tableView,
-            let decorClass = self.decorClass(data: data),
+            let decorClass = self._decorClass(data: data),
             let decorView = decorClass.dequeue(tableView: tableView)
             else { return nil }
         decorView.tableDelegate = self
@@ -267,7 +220,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
     open func dequeue(row: IQTableRow, indexPath: IndexPath) -> Cell? {
         guard
             let tableView = self.tableView,
-            let cellClass = self.cellClass(row: row),
+            let cellClass = self._cellClass(row: row),
             let tableCell = cellClass.dequeue(tableView: tableView, indexPath: indexPath)
             else { return nil }
         tableCell.tableDelegate = self;
@@ -277,12 +230,12 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
     open func reload() {
         guard let tableView = self.tableView else { return }
         tableView.reloadData()
-        self.notifyUpdate()
+        self._notifyUpdate()
     }
 
     open func insertSection(_ sections: [IQTableSection], index: Int, with animation: UITableView.RowAnimation? = nil) {
         self.sections.insert(contentsOf: sections, at: index)
-        self.rebindSections(from: index, to: self.sections.endIndex)
+        self._rebindSections(from: index, to: self.sections.endIndex)
         var indexSet = IndexSet()
         for section in self.sections {
             if let sectionIndex = section.index {
@@ -295,7 +248,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
             }
         }
         if self.isBatchUpdating == false {
-            self.notifyUpdate()
+            self._notifyUpdate()
         }
     }
 
@@ -312,13 +265,13 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
                 self.sections.remove(at: index)
                 section.unbind()
             }
-            self.rebindSections(from: indexSet.first!, to: self.sections.endIndex)
+            self._rebindSections(from: indexSet.first!, to: self.sections.endIndex)
             if let tableView = self.tableView, let animation = animation {
                 tableView.deleteSections(indexSet, with: animation)
             }
         }
         if self.isBatchUpdating == false {
-            self.notifyUpdate()
+            self._notifyUpdate()
         }
     }
 
@@ -335,7 +288,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
             }
         }
         if self.isBatchUpdating == false {
-            self.notifyUpdate()
+            self._notifyUpdate()
         }
     }
 
@@ -352,7 +305,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
             tableView.endUpdates()
         }
         self.isBatchUpdating = false
-        self.notifyUpdate()
+        self._notifyUpdate()
     }
 
     open func scroll(row: IQTableRow, scroll: UITableView.ScrollPosition, animated: Bool) {
@@ -396,7 +349,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
             else { return }
         decorView.set(any: header, spec: tableView, animated: animated)
         if self.isBatchUpdating == false {
-            self.notifyUpdate()
+            self._notifyUpdate()
         }
     }
 
@@ -408,7 +361,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
             else { return }
         decorView.set(any: footer, spec: tableView, animated: animated)
         if self.isBatchUpdating == false {
-            self.notifyUpdate()
+            self._notifyUpdate()
         }
     }
 
@@ -420,36 +373,84 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
             else { return }
         cell.set(any: row, spec: tableView, animated: animated)
         if self.isBatchUpdating == false {
-            self.notifyUpdate()
+            self._notifyUpdate()
         }
     }
 
 }
 
 extension QTableController {
-
-    private func bindSections() {
+    
+    private func _bindSections() {
         var sectionIndex: Int = 0
         for section in self.sections {
             section.bind(self, sectionIndex)
             sectionIndex += 1
         }
     }
-
-    private func rebindSections(from: Int, to: Int) {
+    
+    private func _rebindSections(from: Int, to: Int) {
         for index in from..<to {
             self.sections[index].rebind(index)
         }
     }
-
-    private func unbindSections() {
+    
+    private func _unbindSections() {
         for section in self.sections {
             section.unbind()
         }
     }
-
-    private func notifyUpdate() {
-        self.observer.notify({ $0.update(self) })
+    
+    private func _notifyUpdate() {
+        self._observer.notify({ $0.update(self) })
+    }
+    
+    private func _decorClass(data: IQTableData) -> IQTableDecor.Type? {
+        let dataMetatype = QMetatype(data)
+        if let metatype = self._aliasDecors.first(where: { return $0.key == dataMetatype }) {
+            return metatype.value
+        }
+        let usings = self._decors.filter({ return $0.using(any: data) })
+        guard usings.count > 0 else { return nil }
+        if usings.count > 1 {
+            let typeOfData = type(of: data)
+            let levels = usings.compactMap({ (type) -> (IQTableDecor.Type, UInt)? in
+                guard let level = type.usingLevel(any: typeOfData) else { return nil }
+                return (type, level)
+            })
+            let sorted = levels.sorted(by: { return $0.1 > $1.1 })
+            let decorType = sorted.first!.0
+            self._aliasDecors[dataMetatype] = decorType
+            return decorType
+        } else {
+            let decorType = usings.first!
+            self._aliasDecors[dataMetatype] = decorType
+            return decorType
+        }
+    }
+    
+    private func _cellClass(row: IQTableRow) -> IQTableCell.Type? {
+        let rowMetatype = QMetatype(row)
+        if let metatype = self._aliasCells.first(where: { return $0.key == rowMetatype }) {
+            return metatype.value
+        }
+        let usings = self._cells.filter({ return $0.using(any: row) })
+        guard usings.count > 0 else { return nil }
+        if usings.count > 1 {
+            let typeOfData = type(of: row)
+            let levels = usings.compactMap({ (type) -> (IQTableCell.Type, UInt)? in
+                guard let level = type.usingLevel(any: typeOfData) else { return nil }
+                return (type, level)
+            })
+            let sorted = levels.sorted(by: { return $0.1 > $1.1 })
+            let cellType = sorted.first!.0
+            self._aliasCells[rowMetatype] = cellType
+            return cellType
+        } else {
+            let cellType = usings.first!
+            self._aliasCells[rowMetatype] = cellType
+            return cellType
+        }
     }
 
 }
@@ -457,7 +458,7 @@ extension QTableController {
 extension QTableController : UIScrollViewDelegate {
 
     open func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.observer.notify({ $0.scroll(self, tableView: self.tableView!) })
+        self._observer.notify({ $0.scroll(self, tableView: self.tableView!) })
     }
     
     open func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
@@ -564,7 +565,7 @@ extension QTableController : UITableViewDelegate {
             return cacheHeight
         }
         var caclulatedHeight: CGFloat = 0
-        if let cellClass = self.cellClass(row: row) {
+        if let cellClass = self._cellClass(row: row) {
             caclulatedHeight = cellClass.height(any: row, spec: tableView as! TableView)
         } else {
             caclulatedHeight = 0
@@ -582,7 +583,7 @@ extension QTableController : UITableViewDelegate {
             return cacheHeight
         }
         var caclulatedHeight: CGFloat = 0
-        if let decorClass = self.decorClass(data: data) {
+        if let decorClass = self._decorClass(data: data) {
             caclulatedHeight = decorClass.height(any: data, spec: tableView as! TableView)
         } else {
             caclulatedHeight = 0
@@ -600,7 +601,7 @@ extension QTableController : UITableViewDelegate {
             return cacheHeight
         }
         var caclulatedHeight: CGFloat = 0
-        if let decorClass = self.decorClass(data: data) {
+        if let decorClass = self._decorClass(data: data) {
             caclulatedHeight = decorClass.height(any: data, spec: tableView as! TableView)
         } else {
             caclulatedHeight = 0
@@ -614,7 +615,7 @@ extension QTableController : UITableViewDelegate {
         viewForHeaderInSection section: Int
     ) -> UIView? {
         if let data = self.header(index: section) {
-            if let decorClass = self.decorClass(data: data) {
+            if let decorClass = self._decorClass(data: data) {
                 return decorClass.dequeue(tableView: tableView)
             }
         }
@@ -626,7 +627,7 @@ extension QTableController : UITableViewDelegate {
         viewForFooterInSection section: Int
     ) -> UIView? {
         if let data = self.footer(index: section) {
-            if let decorClass = self.decorClass(data: data) {
+            if let decorClass = self._decorClass(data: data) {
                 return decorClass.dequeue(tableView: tableView)
             }
         }

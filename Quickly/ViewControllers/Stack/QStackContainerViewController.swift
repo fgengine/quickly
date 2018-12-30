@@ -34,9 +34,9 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     public private(set) lazy var interactiveDismissGesture: UIScreenEdgePanGestureRecognizer = self._prepareInteractiveDismissGesture()
     
     private var _viewControllers: [IQStackViewController]
-    private var activeInteractiveCurrentViewController: IQStackViewController?
-    private var activeInteractivePreviousViewController: IQStackViewController?
-    private var activeInteractiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation?
+    private var _activeInteractiveCurrentViewController: IQStackViewController?
+    private var _activeInteractivePreviousViewController: IQStackViewController?
+    private var _activeInteractiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation?
 
     public init(
         _viewControllers: [IQStackViewController] = [],
@@ -396,9 +396,9 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
                 let previousViewController = self.previousViewController,
                 let dismissAnimation = self._prepareInteractiveDismissAnimation(currentViewController)
                 else { return }
-            self.activeInteractiveCurrentViewController = currentViewController
-            self.activeInteractivePreviousViewController = previousViewController
-            self.activeInteractiveDismissAnimation = dismissAnimation
+            self._activeInteractiveCurrentViewController = currentViewController
+            self._activeInteractivePreviousViewController = previousViewController
+            self._activeInteractiveDismissAnimation = dismissAnimation
             self._appearViewController(previousViewController)
             self.isAnimating = true
             dismissAnimation.prepare(
@@ -413,11 +413,11 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
             )
             break
         case .changed:
-            guard let dismissAnimation = self.activeInteractiveDismissAnimation else { return }
+            guard let dismissAnimation = self._activeInteractiveDismissAnimation else { return }
             dismissAnimation.update(position: position, velocity: velocity)
             break
         case .ended, .failed, .cancelled:
-            guard let dismissAnimation = self.activeInteractiveDismissAnimation else { return }
+            guard let dismissAnimation = self._activeInteractiveDismissAnimation else { return }
             if dismissAnimation.canFinish == true {
                 dismissAnimation.finish({ [weak self] (completed: Bool) in
                     guard let strong = self else { return }
@@ -436,7 +436,7 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     }
 
     private func _finishInteractiveDismiss() {
-        if let vc = self.activeInteractiveCurrentViewController {
+        if let vc = self._activeInteractiveCurrentViewController {
             if let index = self._viewControllers.index(where: { return $0 === vc }) {
                 self._viewControllers.remove(at: index)
             }
@@ -447,16 +447,16 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     }
 
     private func _cancelInteractiveDismiss() {
-        if let vc = self.activeInteractivePreviousViewController {
+        if let vc = self._activeInteractivePreviousViewController {
             self._disappearViewController(vc)
         }
         self._endInteractiveDismiss()
     }
 
     private func _endInteractiveDismiss() {
-        self.activeInteractiveCurrentViewController = nil
-        self.activeInteractivePreviousViewController = nil
-        self.activeInteractiveDismissAnimation = nil
+        self._activeInteractiveCurrentViewController = nil
+        self._activeInteractivePreviousViewController = nil
+        self._activeInteractiveDismissAnimation = nil
         self.isAnimating = false
     }
 

@@ -51,59 +51,59 @@ open class QPlaceholderImageTitleDetailShapeComposable : QComposable {
 
 open class QPlaceholderImageTitleDetailShapeComposition< Composable: QPlaceholderImageTitleDetailShapeComposable > : QComposition< Composable > {
     
-    lazy private var imageView: QImageView = {
+    private lazy var imageView: QImageView = {
         let view = QImageView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    lazy private var titleLabel: QPlaceholderView = {
+    private lazy var titleLabel: QPlaceholderView = {
         let view = QPlaceholderView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    lazy private var detailLabel: QPlaceholderView = {
+    private lazy var detailLabel: QPlaceholderView = {
         let view = QPlaceholderView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    lazy private var shapeView: QShapeView = {
+    private lazy var shapeView: QShapeView = {
         let view = QShapeView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
     
-    private var currentEdgeInsets: UIEdgeInsets?
-    private var currentImageWidth: CGFloat?
-    private var currentImageSpacing: CGFloat?
-    private var currentTitleHeight: CGFloat?
-    private var currentTitleSpacing: CGFloat?
-    private var currentDetailHeight: CGFloat?
-    private var currentShapeWidth: CGFloat?
-    private var currentShapeSpacing: CGFloat?
+    private var _edgeInsets: UIEdgeInsets?
+    private var _imageWidth: CGFloat?
+    private var _imageSpacing: CGFloat?
+    private var _titleHeight: CGFloat?
+    private var _titleSpacing: CGFloat?
+    private var _detailHeight: CGFloat?
+    private var _shapeWidth: CGFloat?
+    private var _shapeSpacing: CGFloat?
     
-    private var selfConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.selfConstraints) }
-        didSet { self.contentView.addConstraints(self.selfConstraints) }
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self._constraints) }
+        didSet { self.contentView.addConstraints(self._constraints) }
     }
-    private var imageConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.imageView.removeConstraints(self.imageConstraints) }
-        didSet { self.imageView.addConstraints(self.imageConstraints) }
+    private var _imageConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.imageView.removeConstraints(self._imageConstraints) }
+        didSet { self.imageView.addConstraints(self._imageConstraints) }
     }
-    private var titleConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.titleLabel.removeConstraints(self.titleConstraints) }
-        didSet { self.titleLabel.addConstraints(self.titleConstraints) }
+    private var _titleConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.titleLabel.removeConstraints(self._titleConstraints) }
+        didSet { self.titleLabel.addConstraints(self._titleConstraints) }
     }
-    private var detailConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.detailLabel.removeConstraints(self.detailConstraints) }
-        didSet { self.detailLabel.addConstraints(self.detailConstraints) }
+    private var _detailConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.detailLabel.removeConstraints(self._detailConstraints) }
+        didSet { self.detailLabel.addConstraints(self._detailConstraints) }
     }
-    private var shapeConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.shapeView.removeConstraints(self.shapeConstraints) }
-        didSet { self.shapeView.addConstraints(self.shapeConstraints) }
+    private var _shapeConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.shapeView.removeConstraints(self._shapeConstraints) }
+        didSet { self.shapeView.addConstraints(self._shapeConstraints) }
     }
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
@@ -123,12 +123,12 @@ open class QPlaceholderImageTitleDetailShapeComposition< Composable: QPlaceholde
             bottom: composable.edgeInsets.bottom,
             right: spec.containerRightInset + composable.edgeInsets.right
         )
-        if self.currentEdgeInsets != edgeInsets || self.currentImageSpacing != composable.imageSpacing || self.currentTitleSpacing != composable.titleSpacing || self.currentShapeSpacing != composable.shapeSpacing {
-            self.currentEdgeInsets = edgeInsets
-            self.currentImageSpacing = composable.imageSpacing
-            self.currentTitleSpacing = composable.titleSpacing
-            self.currentShapeSpacing = composable.shapeSpacing
-            self.selfConstraints = [
+        if self._edgeInsets != edgeInsets || self._imageSpacing != composable.imageSpacing || self._titleSpacing != composable.titleSpacing || self._shapeSpacing != composable.shapeSpacing {
+            self._edgeInsets = edgeInsets
+            self._imageSpacing = composable.imageSpacing
+            self._titleSpacing = composable.titleSpacing
+            self._shapeSpacing = composable.shapeSpacing
+            self._constraints = [
                 self.imageView.topLayout == self.contentView.topLayout + edgeInsets.top,
                 self.imageView.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
                 self.imageView.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom,
@@ -144,36 +144,36 @@ open class QPlaceholderImageTitleDetailShapeComposition< Composable: QPlaceholde
                 self.shapeView.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom
             ]
         }
-        if self.currentImageWidth != composable.imageWidth {
-            self.currentImageWidth = composable.imageWidth
-            self.imageConstraints = [
+        if self._imageWidth != composable.imageWidth {
+            self._imageWidth = composable.imageWidth
+            self._imageConstraints = [
                 self.imageView.widthLayout == composable.imageWidth
             ]
         }
-        if self.currentTitleHeight != composable.titleHeight {
-            self.currentTitleHeight = composable.titleHeight
-            self.titleConstraints = [
+        if self._titleHeight != composable.titleHeight {
+            self._titleHeight = composable.titleHeight
+            self._titleConstraints = [
                 self.titleLabel.heightLayout == composable.titleHeight
             ]
         }
-        if self.currentDetailHeight != composable.detailHeight {
-            self.currentDetailHeight = composable.detailHeight
-            self.detailConstraints = [
+        if self._detailHeight != composable.detailHeight {
+            self._detailHeight = composable.detailHeight
+            self._detailConstraints = [
                 self.detailLabel.heightLayout == composable.detailHeight
             ]
         }
-        if self.currentShapeWidth != composable.shapeWidth {
-            self.currentShapeWidth = composable.shapeWidth
-            self.shapeConstraints = [
+        if self._shapeWidth != composable.shapeWidth {
+            self._shapeWidth = composable.shapeWidth
+            self._shapeConstraints = [
                 self.shapeView.widthLayout == composable.shapeWidth
             ]
         }
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        composable.image.apply(self.imageView)
-        composable.title.apply(self.titleLabel)
-        composable.detail.apply(self.detailLabel)
+        self.imageView.apply(composable.image)
+        self.titleLabel.apply(composable.title)
+        self.detailLabel.apply(composable.detail)
         self.shapeView.model = composable.shape
     }
     

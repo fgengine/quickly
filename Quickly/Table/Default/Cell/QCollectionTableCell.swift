@@ -38,43 +38,43 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
 
     public private(set) var collectionView: QCollectionView!
 
-    private weak var currentController: IQCollectionController? {
+    private weak var _collectionController: IQCollectionController? {
         set(value) {
-            if self.currentController !== value {
-                if let controller = self.collectionView.collectionController {
-                    controller.removeObserver(self)
+            if self._collectionController !== value {
+                if let collectionController = self.collectionView.collectionController {
+                    collectionController.removeObserver(self)
                 }
                 self.collectionView.collectionController = value
-                if let controller = self.collectionView.collectionController {
-                    controller.addObserver(self, priority: 0)
+                if let collectionController = self.collectionView.collectionController {
+                    collectionController.addObserver(self, priority: 0)
                 }
             }
         }
         get { return self.collectionView.collectionController }
     }
-    private weak var currentLayout: RowType.LayoutType? {
+    private weak var _collectionLayout: RowType.LayoutType? {
         set(value) {
-            if self.currentLayout !== value {
-                if let layout = self.collectionView.collectionLayout {
-                    layout.removeObserver(self)
+            if self._collectionLayout !== value {
+                if let collectionLayout = self.collectionView.collectionLayout {
+                    collectionLayout.removeObserver(self)
                 }
                 self.collectionView.collectionLayout = value
-                if let layout = self.collectionView.collectionLayout {
-                    layout.addObserver(self, priority: 0)
+                if let collectionLayout = self.collectionView.collectionLayout {
+                    collectionLayout.addObserver(self, priority: 0)
                 }
             }
         }
         get { return self.collectionView.collectionLayout }
     }
 
-    private var collectionHeightConstraint: NSLayoutConstraint! {
+    private var _collectionHeightConstraint: NSLayoutConstraint! {
         willSet {
-            if let constraint = self.collectionHeightConstraint {
+            if let constraint = self._collectionHeightConstraint {
                 self.collectionView.removeConstraint(constraint)
             }
         }
         didSet {
-            if let constraint = self.collectionHeightConstraint {
+            if let constraint = self._collectionHeightConstraint {
                 self.collectionView.addConstraint(constraint)
             }
         }
@@ -105,9 +105,9 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
     open override func set(row: RowType, spec: IQContainerSpec, animated: Bool) {
         super.set(row: row, spec: spec, animated: animated)
 
-        self.collectionHeightConstraint = nil
-        self.currentLayout = row.layout
-        self.currentController = row.controller
+        self._collectionHeightConstraint = nil
+        self._collectionLayout = row.layout
+        self._collectionController = row.controller
         self.collectionView.contentInset = row.edgeInsets
         self.collectionView.scrollIndicatorInsets = row.edgeInsets
     }
@@ -119,17 +119,17 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
     }
 
     public func update(_ controller: IQCollectionController) {
-        self.apply(contentSize: self.collectionView.collectionViewLayout.collectionViewContentSize)
+        self._apply(contentSize: self.collectionView.collectionViewLayout.collectionViewContentSize)
     }
 
     public func update(_ layout: IQCollectionLayout, contentSize: CGSize) {
-        self.apply(contentSize: contentSize)
+        self._apply(contentSize: contentSize)
     }
 
-    private func apply(contentSize: CGSize) {
+    private func _apply(contentSize: CGSize) {
         guard let row = self.row else { return }
         switch row.sizeBehaviour {
-        case .dynamic: self.collectionHeightConstraint = (self.collectionView.heightLayout == contentSize.height)
+        case .dynamic: self._collectionHeightConstraint = (self.collectionView.heightLayout == contentSize.height)
         default: break
         }
     }

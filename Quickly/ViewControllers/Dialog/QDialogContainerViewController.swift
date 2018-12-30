@@ -33,8 +33,9 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
     open var interactiveDismissAnimation: IQDialogViewControllerInteractiveAnimation?
     open private(set) var isAnimating: Bool
     public private(set) lazy var interactiveDismissGesture: UIPanGestureRecognizer = self._prepareInteractiveDismissGesture()
-    private var activeInteractiveViewController: IQDialogViewController?
-    private var activeInteractiveDismissAnimation: IQDialogViewControllerInteractiveAnimation?
+    
+    private var _activeInteractiveViewController: IQDialogViewController?
+    private var _activeInteractiveDismissAnimation: IQDialogViewControllerInteractiveAnimation?
 
     public override init() {
         self.viewControllers = []
@@ -315,17 +316,17 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
                 let viewController = self.currentViewController,
                 let dismissAnimation = self._prepareinteractiveDismissAnimation(viewController)
                 else { return }
-            self.activeInteractiveViewController = viewController
-            self.activeInteractiveDismissAnimation = dismissAnimation
+            self._activeInteractiveViewController = viewController
+            self._activeInteractiveDismissAnimation = dismissAnimation
             self.isAnimating = true
             dismissAnimation.prepare(viewController: viewController, position: position, velocity: velocity)
             break
         case .changed:
-            guard let dismissAnimation = self.activeInteractiveDismissAnimation else { return }
+            guard let dismissAnimation = self._activeInteractiveDismissAnimation else { return }
             dismissAnimation.update(position: position, velocity: velocity)
             break
         case .ended, .failed, .cancelled:
-            guard let dismissAnimation = self.activeInteractiveDismissAnimation else { return }
+            guard let dismissAnimation = self._activeInteractiveDismissAnimation else { return }
             if dismissAnimation.canFinish == true {
                 dismissAnimation.finish({ [weak self] (completed: Bool) in
                     guard let strong = self else { return }
@@ -345,7 +346,7 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
     }
 
     private func _finishInteractiveDismiss() {
-        guard let viewController = self.activeInteractiveViewController else {
+        guard let viewController = self._activeInteractiveViewController else {
             self._endInteractiveDismiss()
             return
         }
@@ -378,8 +379,8 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
     }
 
     private func _endInteractiveDismiss() {
-        self.activeInteractiveViewController = nil
-        self.activeInteractiveDismissAnimation = nil
+        self._activeInteractiveViewController = nil
+        self._activeInteractiveDismissAnimation = nil
         self.isAnimating = false
     }
 

@@ -27,18 +27,18 @@ public class QReachability {
     public private(set) var isRunning: Bool
     public var connection: QReachabilityConnection {
         get {
-            guard self.isReachableFlagSet() else { return .none }
-            guard self.isRunningOnDevice() else { return .wifi }
+            guard self._isReachableFlagSet() else { return .none }
+            guard self._isRunningOnDevice() else { return .wifi }
             var connection: QReachabilityConnection = .none
-            if self.isConnectionRequiredFlagSet() == true {
+            if self._isConnectionRequiredFlagSet() == true {
                 connection = .wifi
             }
-            if self.isConnectionOnTrafficOrDemandFlagSet() == true {
-                if self.isInterventionRequiredFlagSet() == false {
+            if self._isConnectionOnTrafficOrDemandFlagSet() == true {
+                if self._isInterventionRequiredFlagSet() == false {
                     connection = .wifi
                 }
             }
-            if self.isOnWWANFlagSet() == true {
+            if self._isOnWWANFlagSet() == true {
                 if self.allowsCellularConnection == false {
                     connection = .none
                 } else {
@@ -50,32 +50,32 @@ public class QReachability {
     }
     public var description: String {
         get {
-            let W = self.isRunningOnDevice() ? (self.isOnWWANFlagSet() ? "W" : "-") : "X"
-            let R = self.isReachableFlagSet() ? "R" : "-"
-            let c = self.isConnectionRequiredFlagSet() ? "c" : "-"
-            let t = self.isTransientConnectionFlagSet() ? "t" : "-"
-            let i = self.isInterventionRequiredFlagSet() ? "i" : "-"
-            let C = self.isConnectionOnTrafficFlagSet() ? "C" : "-"
-            let D = self.isConnectionOnDemandFlagSet() ? "D" : "-"
-            let l = self.isLocalAddressFlagSet() ? "l" : "-"
-            let d = self.isDirectFlagSet() ? "d" : "-"
+            let W = self._isRunningOnDevice() ? (self._isOnWWANFlagSet() ? "W" : "-") : "X"
+            let R = self._isReachableFlagSet() ? "R" : "-"
+            let c = self._isConnectionRequiredFlagSet() ? "c" : "-"
+            let t = self._isTransientConnectionFlagSet() ? "t" : "-"
+            let i = self._isInterventionRequiredFlagSet() ? "i" : "-"
+            let C = self._isConnectionOnTrafficFlagSet() ? "C" : "-"
+            let D = self._isConnectionOnDemandFlagSet() ? "D" : "-"
+            let l = self._isLocalAddressFlagSet() ? "l" : "-"
+            let d = self._isDirectFlagSet() ? "d" : "-"
             return "\(W)\(R) \(c)\(t)\(i)\(C)\(D)\(l)\(d)"
         }
     }
 
-    private var observer: QObserver< QReachabilityObserver >
-    private var reachability: SCNetworkReachability
-    private var currentFlags: SCNetworkReachabilityFlags
-    private var previousFlags: SCNetworkReachabilityFlags?
-    private var queue: DispatchQueue
+    private var _observer: QObserver< QReachabilityObserver >
+    private var _reachability: SCNetworkReachability
+    private var _currentFlags: SCNetworkReachabilityFlags
+    private var _previousFlags: SCNetworkReachabilityFlags?
+    private var _queue: DispatchQueue
     
     public required init(reachability: SCNetworkReachability) {
         self.allowsCellularConnection = true
         self.isRunning = false
-        self.observer = QObserver< QReachabilityObserver >()
-        self.reachability = reachability
-        self.currentFlags = SCNetworkReachabilityFlags()
-        self.queue = DispatchQueue(label: "org.fgengine.quickly.reachability")
+        self._observer = QObserver< QReachabilityObserver >()
+        self._reachability = reachability
+        self._currentFlags = SCNetworkReachabilityFlags()
+        self._queue = DispatchQueue(label: "org.fgengine.quickly.reachability")
     }
     
     public convenience init?(hostname: String) {
@@ -96,38 +96,38 @@ public class QReachability {
     }
 
     public func addObserver(_ observer: QReachabilityObserver, priority: UInt) {
-        self.observer.add(observer, priority: priority)
+        self._observer.add(observer, priority: priority)
     }
 
     public func removeObserver(_ observer: QReachabilityObserver) {
-        self.observer.remove(observer)
+        self._observer.remove(observer)
     }
 
     public func start() throws {
         guard self.isRunning == false else { return }
         var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
         context.info = UnsafeMutableRawPointer(Unmanaged< QReachability >.passUnretained(self).toOpaque())
-        if SCNetworkReachabilitySetCallback(self.reachability, QReachabilityCallback, &context) == false {
+        if SCNetworkReachabilitySetCallback(self._reachability, QReachabilityCallback, &context) == false {
             self.stop()
             throw QReachabilityError.unableToSetCallback
         }
-        if SCNetworkReachabilitySetDispatchQueue(self.reachability, self.queue) == false {
+        if SCNetworkReachabilitySetDispatchQueue(self._reachability, self._queue) == false {
             self.stop()
             throw QReachabilityError.unableToSetDispatchQueue
         }
-        self.queue.async {
-            self.changed()
+        self._queue.async {
+            self._changed()
         }
         self.isRunning = true
     }
 
     public func stop() {
-        SCNetworkReachabilitySetCallback(self.reachability, nil, nil)
-        SCNetworkReachabilitySetDispatchQueue(self.reachability, nil)
+        SCNetworkReachabilitySetCallback(self._reachability, nil, nil)
+        SCNetworkReachabilitySetDispatchQueue(self._reachability, nil)
         self.isRunning = false
     }
 
-    private func isRunningOnDevice() -> Bool {
+    private func _isRunningOnDevice() -> Bool {
         #if targetEnvironment(simulator)
             return false
         #else
@@ -135,63 +135,63 @@ public class QReachability {
         #endif
     }
 
-    private func isOnWWANFlagSet() -> Bool {
+    private func _isOnWWANFlagSet() -> Bool {
         #if os(iOS)
-            return self.currentFlags.contains(.isWWAN)
+            return self._currentFlags.contains(.isWWAN)
         #else
             return false
         #endif
     }
 
-    private func isReachableFlagSet() -> Bool {
-        return self.currentFlags.contains(.reachable)
+    private func _isReachableFlagSet() -> Bool {
+        return self._currentFlags.contains(.reachable)
     }
 
-    private func isConnectionRequiredFlagSet() -> Bool {
-        return self.currentFlags.contains(.connectionRequired)
+    private func _isConnectionRequiredFlagSet() -> Bool {
+        return self._currentFlags.contains(.connectionRequired)
     }
 
-    private func isInterventionRequiredFlagSet() -> Bool {
-        return self.currentFlags.contains(.interventionRequired)
+    private func _isInterventionRequiredFlagSet() -> Bool {
+        return self._currentFlags.contains(.interventionRequired)
     }
 
-    private func isConnectionOnTrafficFlagSet() -> Bool {
-        return self.currentFlags.contains(.connectionOnTraffic)
+    private func _isConnectionOnTrafficFlagSet() -> Bool {
+        return self._currentFlags.contains(.connectionOnTraffic)
     }
 
-    private func isConnectionOnDemandFlagSet() -> Bool {
-        return self.currentFlags.contains(.connectionOnDemand)
+    private func _isConnectionOnDemandFlagSet() -> Bool {
+        return self._currentFlags.contains(.connectionOnDemand)
     }
 
-    private func isConnectionOnTrafficOrDemandFlagSet() -> Bool {
-        return self.currentFlags.intersection([.connectionOnTraffic, .connectionOnDemand]).isEmpty == false
+    private func _isConnectionOnTrafficOrDemandFlagSet() -> Bool {
+        return self._currentFlags.intersection([.connectionOnTraffic, .connectionOnDemand]).isEmpty == false
     }
 
-    private func isTransientConnectionFlagSet() -> Bool {
-        return self.currentFlags.contains(.transientConnection)
+    private func _isTransientConnectionFlagSet() -> Bool {
+        return self._currentFlags.contains(.transientConnection)
     }
 
-    private func isLocalAddressFlagSet() -> Bool {
-        return self.currentFlags.contains(.isLocalAddress)
+    private func _isLocalAddressFlagSet() -> Bool {
+        return self._currentFlags.contains(.isLocalAddress)
     }
 
-    private func isDirectFlagSet() -> Bool {
-        return self.currentFlags.contains(.isDirect)
+    private func _isDirectFlagSet() -> Bool {
+        return self._currentFlags.contains(.isDirect)
     }
 
-    private func isConnectionRequiredAndTransientFlagSet() -> Bool {
-        return self.currentFlags.intersection([.connectionRequired, .transientConnection]) == [.connectionRequired, .transientConnection]
+    private func _isConnectionRequiredAndTransientFlagSet() -> Bool {
+        return self._currentFlags.intersection([.connectionRequired, .transientConnection]) == [.connectionRequired, .transientConnection]
     }
 
-    fileprivate func changed() {
+    fileprivate func _changed() {
         var flags = SCNetworkReachabilityFlags()
-        if SCNetworkReachabilityGetFlags(self.reachability, &flags) == true {
-            if self.previousFlags != flags {
-                self.previousFlags = self.currentFlags
-                self.currentFlags = flags
+        if SCNetworkReachabilityGetFlags(self._reachability, &flags) == true {
+            if self._previousFlags != flags {
+                self._previousFlags = self._currentFlags
+                self._currentFlags = flags
 
                 DispatchQueue.main.async {
-                    self.observer.notify({ (observer: QReachabilityObserver) in
+                    self._observer.notify({ (observer: QReachabilityObserver) in
                         observer.reachability(self, connection: self.connection)
                     })
                 }
@@ -208,6 +208,6 @@ private func QReachabilityCallback(
 ) {
     guard let info = info else { return }
     let reachability = Unmanaged< QReachability >.fromOpaque(info).takeUnretainedValue()
-    reachability.changed()
+    reachability._changed()
 }
 

@@ -39,33 +39,33 @@ public final class QKeyboardAnimationInfo {
 
 public final class QKeyboard {
 
-    private var observer: QObserver< IQKeyboardObserver >
+    private var _observer: QObserver< IQKeyboardObserver >
 
     public init() {
-        self.observer = QObserver< IQKeyboardObserver >()
-        self.start()
+        self._observer = QObserver< IQKeyboardObserver >()
+        self._start()
     }
 
     deinit {
-        self.stop()
+        self._stop()
     }
 
     public func addObserver(_ observer: IQKeyboardObserver, priority: UInt) {
-        self.observer.add(observer, priority: priority)
+        self._observer.add(observer, priority: priority)
     }
 
     public func removeObserver(_ observer: IQKeyboardObserver) {
-        self.observer.remove(observer)
+        self._observer.remove(observer)
     }
 
-    private func start() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.willShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didShow(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.willHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didHide(_:)), name: UIResponder.keyboardDidHideNotification, object: nil)
+    private func _start() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self._willShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self._didShow(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self._willHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self._didHide(_:)), name: UIResponder.keyboardDidHideNotification, object: nil)
     }
 
-    private func stop() {
+    private func _stop() {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -73,45 +73,45 @@ public final class QKeyboard {
     }
 
     @objc
-    private func willShow(_ notification: Notification) {
+    private func _willShow(_ notification: Notification) {
         guard
             let notificationInfo = notification.userInfo,
             let animationInfo = QKeyboardAnimationInfo(notificationInfo)
             else { return }
-        self.observer.notify({ (observer: IQKeyboardObserver) in
+        self._observer.notify({ (observer: IQKeyboardObserver) in
             observer.willShowKeyboard(self, animationInfo: animationInfo)
         })
     }
 
     @objc
-    private func didShow(_ notification: Notification) {
+    private func _didShow(_ notification: Notification) {
         guard
             let notificationInfo = notification.userInfo,
             let animationInfo = QKeyboardAnimationInfo(notificationInfo)
             else { return }
-        self.observer.notify({ (observer: IQKeyboardObserver) in
+        self._observer.notify({ (observer: IQKeyboardObserver) in
             observer.didShowKeyboard(self, animationInfo: animationInfo)
         })
     }
 
     @objc
-    private func willHide(_ notification: Notification) {
+    private func _willHide(_ notification: Notification) {
         guard
             let notificationInfo = notification.userInfo,
             let animationInfo = QKeyboardAnimationInfo(notificationInfo)
             else { return }
-        self.observer.notify({ (observer: IQKeyboardObserver) in
+        self._observer.notify({ (observer: IQKeyboardObserver) in
             observer.willHideKeyboard(self, animationInfo: animationInfo)
         })
     }
 
     @objc
-    private func didHide(_ notification: Notification) {
+    private func _didHide(_ notification: Notification) {
         guard
             let notificationInfo = notification.userInfo,
             let animationInfo = QKeyboardAnimationInfo(notificationInfo)
             else { return }
-        self.observer.notify({ (observer: IQKeyboardObserver) in
+        self._observer.notify({ (observer: IQKeyboardObserver) in
             observer.didHideKeyboard(self, animationInfo: animationInfo)
         })
     }

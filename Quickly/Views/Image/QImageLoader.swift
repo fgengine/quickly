@@ -68,7 +68,7 @@ public class QImageLoader {
         _ url: URL,
         filter: IQImageLoaderFilter? = nil
     ) -> Bool {
-        guard let key = self.key(url, filter: filter) else { return false }
+        guard let key = self._key(url, filter: filter) else { return false }
         return self.cache.isExist(key)
     }
 
@@ -76,7 +76,7 @@ public class QImageLoader {
         _ url: URL,
         filter: IQImageLoaderFilter? = nil
     ) -> UIImage? {
-        guard let key = self.key(url, filter: filter) else { return nil }
+        guard let key = self._key(url, filter: filter) else { return nil }
         return self.cache.image(key)
     }
 
@@ -112,7 +112,7 @@ public class QImageLoader {
         success: SuccessClosure? = nil,
         failure: FailureClosure? = nil
     ) {
-        guard let key = self.key(url, filter: filter) else { return }
+        guard let key = self._key(url, filter: filter) else { return }
         self.cache.set(data, image: image, key: key, success: success, failure: failure)
     }
 
@@ -122,7 +122,7 @@ public class QImageLoader {
         success: SuccessClosure? = nil,
         failure: FailureClosure? = nil
     ) {
-        guard let key = self.key(url, filter: filter) else { return }
+        guard let key = self._key(url, filter: filter) else { return }
         self.cache.remove(key, success: success, failure: failure)
     }
 
@@ -194,15 +194,15 @@ public class QImageLoader {
         }
     }
 
-    private func key(_ url: URL, filter: IQImageLoaderFilter?) -> String? {
+    private func _key(_ url: URL, filter: IQImageLoaderFilter?) -> String? {
         if let filter = filter {
-            return self.key("{\(filter.name)}{\(url.absoluteString)}")
+            return self._key("{\(filter.name)}{\(url.absoluteString)}")
         } else {
-            return self.key(url.absoluteString)
+            return self._key(url.absoluteString)
         }
     }
 
-    private func key(_ name: String) -> String? {
+    private func _key(_ name: String) -> String? {
         guard let key = name.sha256 else { return nil }
         return key
     }
@@ -255,15 +255,15 @@ public class QImageLoader {
                         final = filtered
                     }
                     if let final = final {
-                        self.notifyCache(loader: loader, image: final)
+                        self._notifyCache(loader: loader, image: final)
                     }
                 } else if let image = loader.cacheImage(self.url) {
-                    self.notifyCache(loader: loader, image: image)
+                    self._notifyCache(loader: loader, image: image)
                 }
             }
         }
 
-        private func notifyCache(loader: QImageLoader, image: UIImage) {
+        private func _notifyCache(loader: QImageLoader, image: UIImage) {
             DispatchQueue.main.async {
                 for target in self.targets {
                     target.imageLoader(loader, cacheImage: image)
@@ -275,11 +275,11 @@ public class QImageLoader {
 
     private class DownloadOperation: BaseOperation {
 
-        private var semaphore: DispatchSemaphore
-        private var query: IQApiQuery?
+        private var _semaphore: DispatchSemaphore
+        private var _query: IQApiQuery?
 
         public override init(loader: QImageLoader, targets: [IQImageLoaderTarget], url: URL, filter: IQImageLoaderFilter?) {
-            self.semaphore = DispatchSemaphore(value: 0)
+            self._semaphore = DispatchSemaphore(value: 0)
             super.init(loader: loader, targets: targets, url: url, filter: filter)
         }
 
@@ -293,26 +293,26 @@ public class QImageLoader {
                 var downloadError: Error?
                 let request = QImageRequest(url: self.url)
                 let response = QImageResponse()
-                self.query = loader.provider.send(
+                self._query = loader.provider.send(
                     request: request,
                     response: response,
                     queue: loader.syncQueue,
                     download: { [weak self] (progress) in
-                        self?.notify(loader: loader, progress: progress)
+                        self?._notify(loader: loader, progress: progress)
                     },
                     completed: { [weak self] (request, response) in
                         downloadData = response.data
                         downloadImage = response.image
                         downloadError = response.error
-                        self?.query = nil
-                        self?.semaphore.signal()
+                        self?._query = nil
+                        self?._semaphore.signal()
                     }
                 )
-                self.semaphore.wait()
+                self._semaphore.wait()
                 if self.isCancelled == false {
                     guard let data = downloadData, let image = downloadImage else {
                         if let error = downloadError {
-                            self.notifyFinish(loader: loader, error: error)
+                            self._notifyFinish(loader: loader, error: error)
                         }
                         return
                     }
@@ -320,9 +320,9 @@ public class QImageLoader {
                     if let filter = self.filter {
                         let filtered = filter.apply(image)
                         loader.set(filtered, url: self.url, filter: filter)
-                        self.notifyFinish(loader: loader, image: filtered)
+                        self._notifyFinish(loader: loader, image: filtered)
                     } else {
-                        self.notifyFinish(loader: loader, image: image)
+                        self._notifyFinish(loader: loader, image: image)
                     }
                 }
             }
@@ -331,13 +331,13 @@ public class QImageLoader {
         open override func cancel() {
             super.cancel()
 
-            if let query = self.query {
+            if let query = self._query {
                 query.cancel()
             }
-            self.semaphore.signal()
+            self._semaphore.signal()
         }
 
-        private func notify(loader: QImageLoader, progress: Progress) {
+        private func _notify(loader: QImageLoader, progress: Progress) {
             DispatchQueue.main.async {
                 for target in self.targets {
                     target.imageLoader(loader, downloadProgress: progress)
@@ -345,7 +345,7 @@ public class QImageLoader {
             }
         }
 
-        private func notifyFinish(loader: QImageLoader, image: UIImage) {
+        private func _notifyFinish(loader: QImageLoader, image: UIImage) {
             DispatchQueue.main.async {
                 for target in self.targets {
                     target.imageLoader(loader, downloadImage: image)
@@ -353,7 +353,7 @@ public class QImageLoader {
             }
         }
 
-        private func notifyFinish(loader: QImageLoader, error: Error) {
+        private func _notifyFinish(loader: QImageLoader, error: Error) {
             DispatchQueue.main.async {
                 for target in self.targets {
                     target.imageLoader(loader, downloadError: error)

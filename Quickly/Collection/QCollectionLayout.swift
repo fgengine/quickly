@@ -4,24 +4,24 @@
 
 open class QCollectionLayout : UICollectionViewLayout, IQCollectionLayout {
 
-    private var observer: QObserver< IQCollectionLayoutObserver >
+    private var _observer: QObserver< IQCollectionLayoutObserver >
 
     public override init() {
-        self.observer = QObserver< IQCollectionLayoutObserver >()
+        self._observer = QObserver< IQCollectionLayoutObserver >()
         super.init()
     }
 
     public required init?(coder: NSCoder) {
-        self.observer = QObserver< IQCollectionLayoutObserver >()
+        self._observer = QObserver< IQCollectionLayoutObserver >()
         super.init(coder: coder)
     }
 
     public func addObserver(_ observer: IQCollectionLayoutObserver, priority: UInt) {
-        self.observer.add(observer, priority: priority)
+        self._observer.add(observer, priority: priority)
     }
 
     public func removeObserver(_ observer: IQCollectionLayoutObserver) {
-        self.observer.remove(observer)
+        self._observer.remove(observer)
     }
 
     open override func finalizeCollectionViewUpdates() {
@@ -40,31 +40,31 @@ open class QCollectionLayout : UICollectionViewLayout, IQCollectionLayout {
     }
 
     internal func notifyUpdate(contentSize: CGSize) {
-        self.observer.notify({ $0.update(self, contentSize: contentSize) })
+        self._observer.notify({ $0.update(self, contentSize: contentSize) })
     }
 
 }
 
 open class QCollectionFlowLayout : UICollectionViewFlowLayout, IQCollectionLayout {
 
-    private var observer: QObserver< IQCollectionLayoutObserver >
+    private var _observer: QObserver< IQCollectionLayoutObserver >
 
     public override init() {
-        self.observer = QObserver< IQCollectionLayoutObserver >()
+        self._observer = QObserver< IQCollectionLayoutObserver >()
         super.init()
     }
 
     public required init?(coder: NSCoder) {
-        self.observer = QObserver< IQCollectionLayoutObserver >()
+        self._observer = QObserver< IQCollectionLayoutObserver >()
         super.init(coder: coder)
     }
 
     public func addObserver(_ observer: IQCollectionLayoutObserver, priority: UInt) {
-        self.observer.add(observer, priority: priority)
+        self._observer.add(observer, priority: priority)
     }
 
     public func removeObserver(_ observer: IQCollectionLayoutObserver) {
-        self.observer.remove(observer)
+        self._observer.remove(observer)
     }
 
     open override func finalizeCollectionViewUpdates() {
@@ -83,7 +83,7 @@ open class QCollectionFlowLayout : UICollectionViewFlowLayout, IQCollectionLayou
     }
 
     internal func notifyUpdate(contentSize: CGSize) {
-        self.observer.notify({ $0.update(self, contentSize: contentSize) })
+        self._observer.notify({ $0.update(self, contentSize: contentSize) })
     }
 
 }

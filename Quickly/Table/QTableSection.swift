@@ -7,27 +7,27 @@ open class QTableSection : IQTableSection {
     public weak var controller: IQTableController?
     public private(set) var index: Int?
     public var canEdit: Bool = true {
-        didSet { self.reloadSection() }
+        didSet { self._reloadSection() }
     }
     public var canMove: Bool = true {
-        didSet { self.reloadSection() }
+        didSet { self._reloadSection() }
     }
     public var hidden: Bool = false {
-        didSet { self.reloadSection() }
+        didSet { self._reloadSection() }
     }
 
     public var header: IQTableData? {
-        willSet { self.unbindHeader() }
+        willSet { self._unbindHeader() }
         didSet {
-            self.bindHeader()
-            self.reloadSection()
+            self._bindHeader()
+            self._reloadSection()
         }
     }
     public var footer: IQTableData? {
-        willSet { self.unbindFooter() }
+        willSet { self._unbindFooter() }
         didSet {
-            self.bindFooter()
-            self.reloadSection()
+            self._bindFooter()
+            self._reloadSection()
         }
     }
     public private(set) var rows: [IQTableRow]
@@ -55,22 +55,22 @@ open class QTableSection : IQTableSection {
     public func bind(_ controller: IQTableController, _ index: Int) {
         self.controller = controller
         self.index = index
-        self.bindHeader()
-        self.bindFooter()
-        self.bindRows()
+        self._bindHeader()
+        self._bindFooter()
+        self._bindRows()
     }
 
     public func rebind(_ index: Int) {
         self.index = index
-        self.rebindRows(
+        self._rebindRows(
             from: self.rows.startIndex,
             to: self.rows.endIndex
         )
     }
 
     public func unbind() {
-        self.unbindHeader()
-        self.unbindFooter()
+        self._unbindHeader()
+        self._unbindFooter()
         for row in self.rows {
             row.unbind()
         }
@@ -79,14 +79,14 @@ open class QTableSection : IQTableSection {
     }
     
     public func setRows(_ rows: [IQTableRow]) {
-        self.unbindRows()
+        self._unbindRows()
         self.rows = rows
-        self.bindRows()
+        self._bindRows()
     }
 
     public func insertRow(_ rows: [IQTableRow], index: Int, with animation: UITableView.RowAnimation? = nil) {
         self.rows.insert(contentsOf: rows, at: index)
-        self.rebindRows(from: index, to: self.rows.endIndex)
+        self._rebindRows(from: index, to: self.rows.endIndex)
         let indexPaths = rows.compactMap({ return $0.indexPath })
         if indexPaths.count > 0 {
             if let controller = self.controller, let tableView = controller.tableView, let animation = animation {
@@ -110,7 +110,7 @@ open class QTableSection : IQTableSection {
                 self.rows.remove(at: index)
                 row.unbind()
             }
-            self.rebindRows(from: indices.first!, to: self.rows.endIndex)
+            self._rebindRows(from: indices.first!, to: self.rows.endIndex)
             if indexPaths.count > 0 {
                 if let controller = self.controller, let tableView = controller.tableView, let animation = animation {
                     tableView.deleteRows(at: indexPaths, with: animation)
@@ -132,7 +132,7 @@ open class QTableSection : IQTableSection {
         let row = self.rows[fromIndex]
         self.rows.remove(at: fromIndex)
         self.rows.insert(row, at: toIndex)
-        self.rebindRows(
+        self._rebindRows(
             from: min(fromIndex, toIndex),
             to: max(fromIndex, toIndex)
         )
@@ -142,31 +142,31 @@ open class QTableSection : IQTableSection {
 
 extension QTableSection {
 
-    private func bindHeader() {
+    private func _bindHeader() {
         if let header = self.header {
             header.bind(self)
         }
     }
 
-    private func unbindHeader() {
+    private func _unbindHeader() {
         if let header = self.header {
             header.unbind()
         }
     }
 
-    private func bindFooter() {
+    private func _bindFooter() {
         if let footer = self.header {
             footer.bind(self)
         }
     }
 
-    private func unbindFooter() {
+    private func _unbindFooter() {
         if let footer = self.header {
             footer.unbind()
         }
     }
 
-    private func bindRows() {
+    private func _bindRows() {
         guard let sectionIndex = self.index else { return }
         var rowIndex: Int = 0
         for row in self.rows {
@@ -175,20 +175,20 @@ extension QTableSection {
         }
     }
 
-    private func rebindRows(from: Int, to: Int) {
+    private func _rebindRows(from: Int, to: Int) {
         guard let sectionIndex = self.index else { return }
         for rowIndex in from..<to {
             self.rows[rowIndex].rebind(IndexPath(row: rowIndex, section: sectionIndex))
         }
     }
 
-    private func unbindRows() {
+    private func _unbindRows() {
         for row in self.rows {
             row.unbind()
         }
     }
 
-    private func reloadSection() {
+    private func _reloadSection() {
         guard
             let index = self.index,
             let controller = self.controller,

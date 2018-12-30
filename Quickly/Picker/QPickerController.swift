@@ -9,8 +9,8 @@ open class QPickerController : NSObject, IQPickerController {
         didSet { self.configure() }
     }
     public var sections: [IQPickerSection] = [] {
-        willSet { self.unbindSections() }
-        didSet { self.bindSections() }
+        willSet { self._unbindSections() }
+        didSet { self._bindSections() }
     }
     public var selectedRows: [IQPickerRow?] {
         get {
@@ -83,7 +83,7 @@ open class QPickerController : NSObject, IQPickerController {
 
     public func insertSection(_ sections: [IQPickerSection], index: Int) {
         self.sections.insert(contentsOf: sections, at: index)
-        self.rebindSections(from: index, to: self.sections.endIndex)
+        self._rebindSections(from: index, to: self.sections.endIndex)
         if self.isBatchUpdating == false, let pickerView = self.pickerView {
             pickerView.reloadAllComponents()
         }
@@ -102,7 +102,7 @@ open class QPickerController : NSObject, IQPickerController {
                 self.sections.remove(at: index)
                 section.unbind()
             }
-            self.rebindSections(from: indexSet.first!, to: self.sections.endIndex)
+            self._rebindSections(from: indexSet.first!, to: self.sections.endIndex)
         }
         if self.isBatchUpdating == false, let pickerView = self.pickerView {
             pickerView.reloadAllComponents()
@@ -141,7 +141,7 @@ open class QPickerController : NSObject, IQPickerController {
 
 extension QPickerController {
 
-    private func bindSections() {
+    private func _bindSections() {
         var sectionIndex: Int = 0
         for section in self.sections {
             section.bind(self, sectionIndex)
@@ -149,13 +149,13 @@ extension QPickerController {
         }
     }
 
-    private func rebindSections(from: Int, to: Int) {
+    private func _rebindSections(from: Int, to: Int) {
         for index in from..<to {
             self.sections[index].rebind(index)
         }
     }
 
-    private func unbindSections() {
+    private func _unbindSections() {
         for section in self.sections {
             section.unbind()
         }

@@ -19,10 +19,11 @@ open class QModalContainerViewController : QViewController, IQModalContainerView
     open var interactiveDismissAnimation: IQModalViewControllerInteractiveAnimation?
     open private(set) var isAnimating: Bool
     public private(set) lazy var interactiveDismissGesture: UIPanGestureRecognizer = self._prepareInteractiveDismissGesture()
-    private var deferredViewControllers: [(Bool, IQModalViewController, Bool, (() -> Void)?)]
-    private var activeInteractiveCurrentViewController: IQModalViewController?
-    private var activeInteractivePreviousViewController: IQModalViewController?
-    private var activeInteractiveDismissAnimation: IQModalViewControllerInteractiveAnimation?
+    
+    private var _deferredViewControllers: [(Bool, IQModalViewController, Bool, (() -> Void)?)]
+    private var _activeInteractiveCurrentViewController: IQModalViewController?
+    private var _activeInteractivePreviousViewController: IQModalViewController?
+    private var _activeInteractiveDismissAnimation: IQModalViewControllerInteractiveAnimation?
 
     public override init() {
         self.viewControllers = []
@@ -30,7 +31,7 @@ open class QModalContainerViewController : QViewController, IQModalContainerView
         self.dismissAnimation = QModalViewControllerDismissAnimation()
         self.interactiveDismissAnimation = QModalViewControllerInteractiveDismissAnimation()
         self.isAnimating = false
-        self.deferredViewControllers = []
+        self._deferredViewControllers = []
         super.init()
     }
 
@@ -160,7 +161,7 @@ open class QModalContainerViewController : QViewController, IQModalContainerView
     open func presentModal(viewController: IQModalViewController, animated: Bool, completion: (() -> Void)?) {
         if self.isLoaded == true {
             if self.isAnimating == true {
-                self.deferredViewControllers.append((true, viewController, animated, completion))
+                self._deferredViewControllers.append((true, viewController, animated, completion))
             } else {
                 self._present(viewController, animated: animated, completion: completion)
             }
@@ -173,7 +174,7 @@ open class QModalContainerViewController : QViewController, IQModalContainerView
 
     open func dismissModal(viewController: IQModalViewController, animated: Bool, completion: (() -> Void)?) {
         if self.isAnimating == true {
-            self.deferredViewControllers.append((false, viewController, animated, completion))
+            self._deferredViewControllers.append((false, viewController, animated, completion))
         } else {
             self._dismiss(viewController, animated: animated, completion: completion)
         }
@@ -253,8 +254,8 @@ open class QModalContainerViewController : QViewController, IQModalContainerView
     }
 
     private func _processDeferred() {
-        if self.deferredViewControllers.count > 0 {
-            let deferred = self.deferredViewControllers.remove(at: 0)
+        if self._deferredViewControllers.count > 0 {
+            let deferred = self._deferredViewControllers.remove(at: 0)
             if deferred.0 == true {
                 self._present(deferred.1, animated: deferred.2, completion: deferred.3)
             } else {
@@ -311,9 +312,9 @@ open class QModalContainerViewController : QViewController, IQModalContainerView
                 let viewController = self.currentViewController,
                 let dismissAnimation = self._prepareinteractiveDismissAnimation(viewController)
                 else { return }
-            self.activeInteractiveCurrentViewController = viewController
-            self.activeInteractivePreviousViewController = self.previousViewController
-            self.activeInteractiveDismissAnimation = dismissAnimation
+            self._activeInteractiveCurrentViewController = viewController
+            self._activeInteractivePreviousViewController = self.previousViewController
+            self._activeInteractiveDismissAnimation = dismissAnimation
             dismissAnimation.prepare(
                 contentView: self.view,
                 previousViewController: self.previousViewController,
@@ -323,11 +324,11 @@ open class QModalContainerViewController : QViewController, IQModalContainerView
             )
             break
         case .changed:
-            guard let dismissAnimation = self.activeInteractiveDismissAnimation else { return }
+            guard let dismissAnimation = self._activeInteractiveDismissAnimation else { return }
             dismissAnimation.update(position: position, velocity: velocity)
             break
         case .ended, .failed, .cancelled:
-            guard let dismissAnimation = self.activeInteractiveDismissAnimation else { return }
+            guard let dismissAnimation = self._activeInteractiveDismissAnimation else { return }
             if dismissAnimation.canFinish == true {
                 dismissAnimation.finish({ [weak self] (completed: Bool) in
                     guard let strong = self else { return }
@@ -346,7 +347,7 @@ open class QModalContainerViewController : QViewController, IQModalContainerView
     }
 
     private func _finishInteractiveDismiss() {
-        guard let currentViewController = self.activeInteractiveCurrentViewController else {
+        guard let currentViewController = self._activeInteractiveCurrentViewController else {
             self._endInteractiveDismiss()
             return
         }
@@ -363,9 +364,9 @@ open class QModalContainerViewController : QViewController, IQModalContainerView
     }
 
     private func _endInteractiveDismiss() {
-        self.activeInteractiveCurrentViewController = nil
-        self.activeInteractivePreviousViewController = nil
-        self.activeInteractiveDismissAnimation = nil
+        self._activeInteractiveCurrentViewController = nil
+        self._activeInteractivePreviousViewController = nil
+        self._activeInteractiveDismissAnimation = nil
     }
 
 }

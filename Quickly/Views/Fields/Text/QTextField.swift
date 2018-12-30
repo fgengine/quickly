@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
+open class QTextFieldStyleSheet : QDisplayViewStyleSheet {
 
     public var requireValidator: Bool
     public var validator: IQInputValidator?
@@ -101,32 +101,6 @@ open class QTextFieldStyleSheet : QDisplayViewStyleSheet< QTextField > {
         super.init(styleSheet)
     }
 
-    public override func apply(_ target: QTextField) {
-        super.apply(target)
-
-        target.requireValidator = self.requireValidator
-        target.validator = self.validator
-        target.formatter = self.formatter
-        target.textInsets = self.textInsets
-        target.textStyle = self.textStyle
-        target.editingInsets = self.editingInsets
-        target.placeholderInsets = self.placeholderInsets
-        target.placeholder = self.placeholder
-        target.typingStyle = self.typingStyle
-        target.autocapitalizationType = self.autocapitalizationType
-        target.autocorrectionType = self.autocorrectionType
-        target.spellCheckingType = self.spellCheckingType
-        target.keyboardType = self.keyboardType
-        target.keyboardAppearance = self.keyboardAppearance
-        target.returnKeyType = self.returnKeyType
-        target.enablesReturnKeyAutomatically = self.enablesReturnKeyAutomatically
-        target.isSecureTextEntry = self.isSecureTextEntry
-        if #available(iOS 10.0, *) {
-            target.textContentType = self.textContentType
-        }
-        target.isEnabled = self.isEnabled
-    }
-
 }
 
 public protocol IQTextFieldObserver : class {
@@ -147,7 +121,7 @@ public class QTextField : QDisplayView, IQField {
     public var requireValidator: Bool = false
     public var validator: IQInputValidator? {
         willSet { self.fieldView.delegate = nil }
-        didSet {self.fieldView.delegate = self.fieldDelegate }
+        didSet {self.fieldView.delegate = self._fieldDelegate }
     }
     public var formatter: IQStringFormatter? {
         willSet {
@@ -330,8 +304,8 @@ public class QTextField : QDisplayView, IQField {
 
     internal private(set) var fieldView: Field!
     
-    private var fieldDelegate: FieldDelegate!
-    private var observer: QObserver< IQTextFieldObserver > = QObserver< IQTextFieldObserver >()
+    private var _fieldDelegate: FieldDelegate!
+    private var _observer: QObserver< IQTextFieldObserver > = QObserver< IQTextFieldObserver >()
     
     public required init() {
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
@@ -350,20 +324,20 @@ public class QTextField : QDisplayView, IQField {
 
         self.backgroundColor = UIColor.clear
 
-        self.fieldDelegate = FieldDelegate(field: self)
+        self._fieldDelegate = FieldDelegate(field: self)
 
         self.fieldView = Field(frame: self.bounds)
         self.fieldView.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
-        self.fieldView.delegate = self.fieldDelegate
+        self.fieldView.delegate = self._fieldDelegate
         self.addSubview(self.fieldView)
     }
     
     public func addObserver(_ observer: IQTextFieldObserver, priority: UInt) {
-        self.observer.add(observer, priority: priority)
+        self._observer.add(observer, priority: priority)
     }
     
     public func removeObserver(_ observer: IQTextFieldObserver) {
-        self.observer.remove(observer)
+        self._observer.remove(observer)
     }
 
     open func beginEditing() {
@@ -376,6 +350,32 @@ public class QTextField : QDisplayView, IQField {
 
     open override func sizeToFit() {
         return self.fieldView.sizeToFit()
+    }
+    
+    public func apply(_ styleSheet: QTextFieldStyleSheet) {
+        self.apply(styleSheet as QDisplayViewStyleSheet)
+        
+        self.requireValidator = styleSheet.requireValidator
+        self.validator = styleSheet.validator
+        self.formatter = styleSheet.formatter
+        self.textInsets = styleSheet.textInsets
+        self.textStyle = styleSheet.textStyle
+        self.editingInsets = styleSheet.editingInsets
+        self.placeholderInsets = styleSheet.placeholderInsets
+        self.placeholder = styleSheet.placeholder
+        self.typingStyle = styleSheet.typingStyle
+        self.autocapitalizationType = styleSheet.autocapitalizationType
+        self.autocorrectionType = styleSheet.autocorrectionType
+        self.spellCheckingType = styleSheet.spellCheckingType
+        self.keyboardType = styleSheet.keyboardType
+        self.keyboardAppearance = styleSheet.keyboardAppearance
+        self.returnKeyType = styleSheet.returnKeyType
+        self.enablesReturnKeyAutomatically = styleSheet.enablesReturnKeyAutomatically
+        self.isSecureTextEntry = styleSheet.isSecureTextEntry
+        if #available(iOS 10.0, *) {
+            self.textContentType = styleSheet.textContentType
+        }
+        self.isEnabled = styleSheet.isEnabled
     }
 
     internal class Field : UITextField, IQView {
@@ -445,7 +445,7 @@ public class QTextField : QDisplayView, IQField {
             if let closure = field.onBeginEditing {
                 closure(field)
             }
-            field.observer.reverseNotify({ (observer) in
+            field._observer.reverseNotify({ (observer) in
                 observer.beginEditing(textField: field)
             })
         }
@@ -460,7 +460,7 @@ public class QTextField : QDisplayView, IQField {
             if let closure = field.onEndEditing {
                 closure(field)
             }
-            field.observer.reverseNotify({ (observer) in
+            field._observer.reverseNotify({ (observer) in
                 observer.endEditing(textField: field)
             })
         }
@@ -502,7 +502,7 @@ public class QTextField : QDisplayView, IQField {
                 if let closure = field.onEditing {
                     closure(field)
                 }
-                field.observer.reverseNotify({ (observer) in
+                field._observer.reverseNotify({ (observer) in
                     observer.editing(textField: field)
                 })
             }
@@ -516,7 +516,7 @@ public class QTextField : QDisplayView, IQField {
                     if let pressedClosure = field.onPressedClear {
                         pressedClosure(field)
                     }
-                    field.observer.reverseNotify({ (observer) in
+                    field._observer.reverseNotify({ (observer) in
                         observer.pressedClear(textField: field)
                     })
                 }
@@ -524,7 +524,7 @@ public class QTextField : QDisplayView, IQField {
                 if let pressedClosure = field.onPressedClear {
                     pressedClosure(field)
                 }
-                field.observer.reverseNotify({ (observer) in
+                field._observer.reverseNotify({ (observer) in
                     observer.pressedClear(textField: field)
                 })
             }
@@ -538,7 +538,7 @@ public class QTextField : QDisplayView, IQField {
                     if let pressedClosure = field.onPressedReturn {
                         pressedClosure(field)
                     }
-                    field.observer.reverseNotify({ (observer) in
+                    field._observer.reverseNotify({ (observer) in
                         observer.pressedReturn(textField: field)
                     })
                 }
@@ -546,7 +546,7 @@ public class QTextField : QDisplayView, IQField {
                 if let pressedClosure = field.onPressedReturn {
                     pressedClosure(field)
                 }
-                field.observer.reverseNotify({ (observer) in
+                field._observer.reverseNotify({ (observer) in
                     observer.pressedReturn(textField: field)
                 })
             }

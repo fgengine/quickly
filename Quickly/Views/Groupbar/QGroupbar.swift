@@ -136,7 +136,7 @@ open class QGroupbar : QView {
         public override var collectionViewContentSize: CGSize {
             get {
                 var contentSize = CGSize.zero
-                self.cache.forEach({
+                self._cache.forEach({
                     let frameSize = $0.value.frame.size
                     contentSize = CGSize(
                         width: contentSize.width + frameSize.width,
@@ -146,21 +146,21 @@ open class QGroupbar : QView {
                 return contentSize
             }
         }
-        private var bounds = CGRect.zero
-        private var cache: [IndexPath: UICollectionViewLayoutAttributes] = [:]
+        private var _bounds = CGRect.zero
+        private var _cache: [IndexPath: UICollectionViewLayoutAttributes] = [:]
         
         public override func prepare() {
-            guard let collectionView = self.collectionView, self.cache.isEmpty == true else { return }
-            self.cache = [:]
-            self.bounds = collectionView.bounds
+            guard let collectionView = self.collectionView, self._cache.isEmpty == true else { return }
+            self._cache = [:]
+            self._bounds = collectionView.bounds
             
             var numberOfCells: Int = 0
             for sectionIndex in 0..<collectionView.numberOfSections {
                 numberOfCells += collectionView.numberOfItems(inSection: sectionIndex)
             }
             let cellSize = CGSize(
-                width: self.bounds.width / CGFloat(numberOfCells),
-                height: self.bounds.height
+                width: self._bounds.width / CGFloat(numberOfCells),
+                height: self._bounds.height
             )
             var offset: CGFloat = 0
             for sectionIndex in 0..<collectionView.numberOfSections {
@@ -168,22 +168,22 @@ open class QGroupbar : QView {
                     let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
                     let attribute = UICollectionViewLayoutAttributes(forCellWith: indexPath)
                     attribute.frame = CGRect(x: offset, y: 0, width: cellSize.width, height: cellSize.height)
-                    self.cache[indexPath] = attribute
+                    self._cache[indexPath] = attribute
                     offset += cellSize.width
                 }
             }
         }
         
         override public func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
-            if self.bounds.size != newBounds.size {
-                self.cache.removeAll(keepingCapacity: true)
+            if self._bounds.size != newBounds.size {
+                self._cache.removeAll(keepingCapacity: true)
             }
             return true
         }
         
         public override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
             var attributes: [UICollectionViewLayoutAttributes] = []
-            for attribute in self.cache {
+            for attribute in self._cache {
                 if attribute.value.frame.intersects(rect) == true {
                     attributes.append(attribute.value)
                 }

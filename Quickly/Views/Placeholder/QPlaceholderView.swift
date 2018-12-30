@@ -11,7 +11,7 @@ public enum QPlaceholderViewAlignment {
 
 open class QPlaceholderViewStyleSheet : IQStyleSheet {
     
-    public var bubble: QDisplayViewStyleSheet< QDisplayView >
+    public var bubble: QDisplayViewStyleSheet
     public var alignment: QPlaceholderViewAlignment
     
     public init(
@@ -20,7 +20,7 @@ open class QPlaceholderViewStyleSheet : IQStyleSheet {
         shadow: QViewShadow? = nil,
         alignment: QPlaceholderViewAlignment = .left(width: 0.5)
     ) {
-        self.bubble = QDisplayViewStyleSheet< QDisplayView >(
+        self.bubble = QDisplayViewStyleSheet(
             backgroundColor: color,
             cornerRadius: cornerRadius,
             shadow: shadow
@@ -33,16 +33,11 @@ open class QPlaceholderViewStyleSheet : IQStyleSheet {
         self.alignment = styleSheet.alignment
     }
     
-    public func apply(_ target: QPlaceholderView) {
-        self.bubble.apply(target.bubble)
-        target.alignment = self.alignment
-    }
-    
 }
 
 open class QPlaceholderView : QView {
     
-    public private(set) lazy var bubble: QDisplayView = {
+    public private(set) lazy var bubbleView: QDisplayView = {
         let view = QDisplayView(frame: self.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(view)
@@ -52,9 +47,9 @@ open class QPlaceholderView : QView {
         didSet { self.setNeedsUpdateConstraints() }
     }
     
-    private var selfConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.removeConstraints(self.selfConstraints) }
-        didSet { self.addConstraints(self.selfConstraints) }
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.removeConstraints(self._constraints) }
+        didSet { self.addConstraints(self._constraints) }
     }
     
     open override func setup() {
@@ -68,34 +63,39 @@ open class QPlaceholderView : QView {
         
         switch self.alignment {
         case .fill:
-            self.selfConstraints = [
-                self.bubble.topLayout == self.topLayout,
-                self.bubble.bottomLayout == self.bottomLayout,
-                self.bubble.leadingLayout == self.leadingLayout,
-                self.bubble.trailingLayout == self.trailingLayout
+            self._constraints = [
+                self.bubbleView.topLayout == self.topLayout,
+                self.bubbleView.bottomLayout == self.bottomLayout,
+                self.bubbleView.leadingLayout == self.leadingLayout,
+                self.bubbleView.trailingLayout == self.trailingLayout
             ]
         case .left(let width):
-            self.selfConstraints = [
-                self.bubble.topLayout == self.topLayout,
-                self.bubble.bottomLayout == self.bottomLayout,
-                self.bubble.leadingLayout == self.leadingLayout,
-                self.bubble.widthLayout == (self.widthLayout * width)
+            self._constraints = [
+                self.bubbleView.topLayout == self.topLayout,
+                self.bubbleView.bottomLayout == self.bottomLayout,
+                self.bubbleView.leadingLayout == self.leadingLayout,
+                self.bubbleView.widthLayout == (self.widthLayout * width)
             ]
         case .center(let width):
-            self.selfConstraints = [
-                self.bubble.topLayout == self.topLayout,
-                self.bubble.bottomLayout == self.bottomLayout,
-                self.bubble.centerXLayout == self.centerXLayout,
-                self.bubble.widthLayout == (self.widthLayout * width)
+            self._constraints = [
+                self.bubbleView.topLayout == self.topLayout,
+                self.bubbleView.bottomLayout == self.bottomLayout,
+                self.bubbleView.centerXLayout == self.centerXLayout,
+                self.bubbleView.widthLayout == (self.widthLayout * width)
             ]
         case .right(let width):
-            self.selfConstraints = [
-                self.bubble.topLayout == self.topLayout,
-                self.bubble.bottomLayout == self.bottomLayout,
-                self.bubble.trailingLayout == self.trailingLayout,
-                self.bubble.widthLayout == (self.widthLayout * width)
+            self._constraints = [
+                self.bubbleView.topLayout == self.topLayout,
+                self.bubbleView.bottomLayout == self.bottomLayout,
+                self.bubbleView.trailingLayout == self.trailingLayout,
+                self.bubbleView.widthLayout == (self.widthLayout * width)
             ]
         }
+    }
+    
+    public func apply(_ styleSheet: QPlaceholderViewStyleSheet) {
+        self.bubbleView.apply(styleSheet.bubble)
+        self.alignment = styleSheet.alignment
     }
     
 }

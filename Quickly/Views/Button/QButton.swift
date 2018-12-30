@@ -142,13 +142,13 @@ public class QButton : QView {
     
     public var onPressed: Closure?
     
-    private var selfConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.removeConstraints(self.selfConstraints) }
-        didSet { self.addConstraints(self.selfConstraints) }
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.removeConstraints(self._constraints) }
+        didSet { self.addConstraints(self._constraints) }
     }
-    private var contentConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.contentConstraints) }
-        didSet { self.contentView.addConstraints(self.contentConstraints) }
+    private var _contentConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self._contentConstraints) }
+        didSet { self.contentView.addConstraints(self._contentConstraints) }
     }
 
     open override var frame: CGRect {
@@ -186,12 +186,12 @@ public class QButton : QView {
 
     public convenience init(frame: CGRect, styleSheet: QButtonStyleSheet) {
         self.init(frame: frame)
-        styleSheet.apply(self)
+        self.apply(styleSheet)
     }
 
     public convenience init(styleSheet: QButtonStyleSheet) {
         self.init(frame: CGRect.zero)
-        styleSheet.apply(self)
+        self.apply(styleSheet)
         self.sizeToFit()
     }
 
@@ -309,7 +309,7 @@ public class QButton : QView {
     }
 
     open override func updateConstraints() {
-        var selfConstraints: [NSLayoutConstraint] = [
+        var constraints: [NSLayoutConstraint] = [
             self.backgroundView.topLayout == self.topLayout,
             self.backgroundView.leadingLayout == self.leadingLayout,
             self.backgroundView.trailingLayout == self.trailingLayout,
@@ -317,51 +317,51 @@ public class QButton : QView {
         ]
         switch self.contentHorizontalAlignment {
         case .fill:
-            selfConstraints.append(contentsOf: [
+            constraints.append(contentsOf: [
                 self.contentView.leadingLayout == self.leadingLayout + self.contentInsets.left,
                 self.contentView.trailingLayout == self.trailingLayout - self.contentInsets.right
             ])
         case .left:
-            selfConstraints.append(contentsOf: [
+            constraints.append(contentsOf: [
                 self.contentView.leadingLayout == self.leadingLayout + self.contentInsets.left,
                 self.contentView.trailingLayout <= self.trailingLayout - self.contentInsets.right
             ])
         case .center:
-            selfConstraints.append(contentsOf: [
+            constraints.append(contentsOf: [
                 self.contentView.centerXLayout == self.centerXLayout,
                 self.contentView.leadingLayout >= self.leadingLayout + self.contentInsets.left,
                 self.contentView.trailingLayout <= self.trailingLayout - self.contentInsets.right
             ])
         case .right:
-            selfConstraints.append(contentsOf: [
+            constraints.append(contentsOf: [
                 self.contentView.leadingLayout >= self.leadingLayout + self.contentInsets.left,
                 self.contentView.trailingLayout == self.trailingLayout - self.contentInsets.right
             ])
         }
         switch self.contentVerticalAlignment {
         case .fill:
-            selfConstraints.append(contentsOf: [
+            constraints.append(contentsOf: [
                 self.contentView.topLayout == self.topLayout + self.contentInsets.top,
                 self.contentView.bottomLayout == self.bottomLayout - self.contentInsets.bottom
             ])
         case .top:
-            selfConstraints.append(contentsOf: [
+            constraints.append(contentsOf: [
                 self.contentView.topLayout == self.topLayout + self.contentInsets.top,
                 self.contentView.bottomLayout <= self.bottomLayout - self.contentInsets.bottom
             ])
         case .center:
-            selfConstraints.append(contentsOf: [
+            constraints.append(contentsOf: [
                 self.contentView.centerYLayout == self.centerYLayout,
                 self.contentView.topLayout >= self.topLayout + self.contentInsets.top,
                 self.contentView.bottomLayout <= self.bottomLayout - self.contentInsets.bottom
             ])
         case .bottom:
-            selfConstraints.append(contentsOf: [
+            constraints.append(contentsOf: [
                 self.contentView.topLayout >= self.topLayout + self.contentInsets.top,
                 self.contentView.bottomLayout == self.bottomLayout - self.contentInsets.bottom
             ])
         }
-        self.selfConstraints = selfConstraints
+        self._constraints = constraints
 
         var contentConstraints: [NSLayoutConstraint] = []
         if self.isSpinnerAnimating() == true {
@@ -454,13 +454,35 @@ public class QButton : QView {
                 self._updateContent(constraints: &contentConstraints, view: self.textLabel, edgeInsets: self.textInsets)
             }
         }
-        if self.isSpinnerAnimating() == false && self.imageView.alpha <= CGFloat.leastNonzeroMagnitude && self.textLabel.alpha <= CGFloat.leastNonzeroMagnitude {
-            contentConstraints.append(self.contentView.widthLayout == 0)
-            contentConstraints.append(self.contentView.heightLayout == 0)
-        }
-        self.contentConstraints = contentConstraints
+        self._contentConstraints = contentConstraints
         super.updateConstraints()
     }
+    
+    public func apply(_ styleSheet: QButtonStyleSheet) {
+        self.contentHorizontalAlignment = styleSheet.contentHorizontalAlignment
+        self.contentVerticalAlignment = styleSheet.contentVerticalAlignment
+        self.contentInsets = styleSheet.contentInsets
+        self.imagePosition = styleSheet.imagePosition
+        self.imageInsets = styleSheet.imageInsets
+        self.textInsets = styleSheet.textInsets
+        self.normalStyle = styleSheet.normalStyle
+        self.highlightedStyle = styleSheet.highlightedStyle
+        self.selectedStyle = styleSheet.selectedStyle
+        self.selectedHighlightedStyle = styleSheet.selectedHighlightedStyle
+        self.selectedDisabledStyle = styleSheet.selectedDisabledStyle
+        self.spinnerPosition = styleSheet.spinnerPosition
+        if let spinnerFactory = styleSheet.spinnerFactory {
+            self.spinnerView = spinnerFactory.create()
+        } else {
+            self.spinnerView = nil
+        }
+        self.isSelected = styleSheet.isSelected
+        self.isEnabled = styleSheet.isEnabled
+    }
+    
+}
+
+extension QButton {
 
     private func _invalidate() {
         self.invalidateIntrinsicContentSize()
@@ -528,7 +550,7 @@ public class QButton : QView {
 
     private func _applyImageStyle(_ style: IQButtonStyle) {
         if let image = style.image {
-            image.apply(self.imageView)
+            self.imageView.apply(image)
             self.imageView.alpha = 1
         } else {
             self._resetImageStyle()
@@ -541,7 +563,7 @@ public class QButton : QView {
 
     private func _applyTextStyle(_ style: IQButtonStyle) {
         if let text = style.text {
-            text.apply(self.textLabel)
+            self.textLabel.apply(text)
             self.textLabel.alpha = 1
         } else {
             self._resetTextStyle()

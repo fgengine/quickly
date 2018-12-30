@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QImageViewStyleSheet : QDisplayViewStyleSheet< QImageView > {
+open class QImageViewStyleSheet : QDisplayViewStyleSheet {
 
     public var source: IQImageSource
     public var verticalAlignment: QViewVerticalAlignment
@@ -35,19 +35,9 @@ open class QImageViewStyleSheet : QDisplayViewStyleSheet< QImageView > {
         super.init(styleSheet)
     }
 
-    public override func apply(_ target: QImageView) {
-        super.apply(target)
-
-        target.verticalAlignment = self.verticalAlignment
-        target.horizontalAlignment = self.horizontalAlignment
-        target.loader = self.loader
-        target.filter = self.filter
-        target.source = self.source
-    }
-
 }
 
-open class QImageView : QDisplayView, IQImageLoaderTarget {
+open class QImageView : QDisplayView {
 
     public private(set) var isDownloading: Bool = false
     public var verticalAlignment: QViewVerticalAlignment = .center {
@@ -202,6 +192,20 @@ open class QImageView : QDisplayView, IQImageLoaderTarget {
             self.isDownloading = false
         }
     }
+    
+    public func apply(_ styleSheet: QImageViewStyleSheet) {
+        self.apply(styleSheet as QDisplayViewStyleSheet)
+        
+        self.verticalAlignment = styleSheet.verticalAlignment
+        self.horizontalAlignment = styleSheet.horizontalAlignment
+        self.loader = styleSheet.loader
+        self.filter = styleSheet.filter
+        self.source = styleSheet.source
+    }
+    
+}
+
+extension QImageView : IQImageLoaderTarget {
 
     open func imageLoader(_ imageLoader: QImageLoader, cacheImage: UIImage) {
         self.image = cacheImage

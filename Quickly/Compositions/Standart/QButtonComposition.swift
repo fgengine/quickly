@@ -28,7 +28,7 @@ open class QButtonComposable : QComposable {
 
 open class QButtonComposition< Composable: QButtonComposable > : QComposition< Composable > {
 
-    lazy private var button: QButton = {
+    private lazy var button: QButton = {
         let view = QButton(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onPressed = { [weak self] _ in
@@ -39,10 +39,10 @@ open class QButtonComposition< Composable: QButtonComposable > : QComposition< C
         return view
     }()
 
-    private var currentEdgeInsets: UIEdgeInsets?
-    private var selfConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.selfConstraints) }
-        didSet { self.contentView.addConstraints(self.selfConstraints) }
+    private var _edgeInsets: UIEdgeInsets?
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self._constraints) }
+        didSet { self.contentView.addConstraints(self._constraints) }
     }
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
@@ -59,9 +59,9 @@ open class QButtonComposition< Composable: QButtonComposable > : QComposition< C
             bottom: composable.edgeInsets.bottom,
             right: spec.containerRightInset + composable.edgeInsets.right
         )
-        if self.currentEdgeInsets != edgeInsets {
-            self.currentEdgeInsets = edgeInsets
-            self.selfConstraints = [
+        if self._edgeInsets != edgeInsets {
+            self._edgeInsets = edgeInsets
+            self._constraints = [
                 self.button.topLayout == self.contentView.topLayout + edgeInsets.top,
                 self.button.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
                 self.button.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
@@ -71,7 +71,7 @@ open class QButtonComposition< Composable: QButtonComposable > : QComposition< C
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        composable.button.apply(self.button)
+        self.button.apply(composable.button)
     }
     
     open override func postLayout(composable: Composable, spec: IQContainerSpec) {

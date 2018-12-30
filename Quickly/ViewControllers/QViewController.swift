@@ -86,11 +86,12 @@ open class QViewController : NSObject, IQViewController {
     open var adjustedContentInset: UIEdgeInsets {
         get {
             let inheritedEdgeInsets = self.inheritedEdgeInsets
+            let additionalEdgeInsets = self.additionalEdgeInsets
             return UIEdgeInsets(
-                top: self.additionalEdgeInsets.top + inheritedEdgeInsets.top,
-                left: self.additionalEdgeInsets.left + inheritedEdgeInsets.left,
-                bottom: self.additionalEdgeInsets.bottom + inheritedEdgeInsets.bottom,
-                right: self.additionalEdgeInsets.right + inheritedEdgeInsets.right
+                top: additionalEdgeInsets.top + inheritedEdgeInsets.top,
+                left: additionalEdgeInsets.left + inheritedEdgeInsets.left,
+                bottom: additionalEdgeInsets.bottom + inheritedEdgeInsets.bottom,
+                right: additionalEdgeInsets.right + inheritedEdgeInsets.right
             )
         }
     }

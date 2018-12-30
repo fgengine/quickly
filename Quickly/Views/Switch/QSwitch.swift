@@ -32,14 +32,6 @@ open class QSwitchStyleSheet : IQStyleSheet {
         self.offImage = styleSheet.offImage
     }
     
-    open func apply(_ target: QSwitch) {
-        target.tintColor = self.tintColor
-        target.onTintColor = self.onTintColor
-        target.thumbTintColor = self.thumbTintColor
-        target.onImage = self.onImage
-        target.offImage = self.offImage
-    }
-    
 }
 
 open class QSwitch : UISwitch, IQView {
@@ -60,6 +52,14 @@ open class QSwitch : UISwitch, IQView {
     }
     
     open func setup() {
+    }
+    
+    public func apply(_ styleSheet: QSwitchStyleSheet) {
+        self.tintColor = styleSheet.tintColor
+        self.onTintColor = styleSheet.onTintColor
+        self.thumbTintColor = styleSheet.thumbTintColor
+        self.onImage = styleSheet.onImage
+        self.offImage = styleSheet.offImage
     }
     
 }

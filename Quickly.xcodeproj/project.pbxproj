@@ -191,6 +191,8 @@
 		40691540208487BE008934D5 /* IQStackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4069153C208487BD008934D5 /* IQStackViewController.swift */; };
 		406BC12C217722EA00164485 /* QProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406BC12B217722EA00164485 /* QProxy.swift */; };
 		406BC12E2177231C00164485 /* IQProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406BC12D2177231C00164485 /* IQProxy.swift */; };
+		406C598921D1B04000CAA611 /* IQLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406C598821D1B04000CAA611 /* IQLoadingView.swift */; };
+		406C598B21D1B08A00CAA611 /* QLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406C598A21D1B08A00CAA611 /* QLoadingView.swift */; };
 		406FDF6B20908071004178CC /* QApiPagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406FDF6A20908071004178CC /* QApiPagination.swift */; };
 		406FDF6F209082E4004178CC /* IQApiPagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406FDF6E209082E4004178CC /* IQApiPagination.swift */; };
 		4070B6A920628E4E00B568A9 /* QReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4070B6A720628E4E00B568A9 /* QReachability.swift */; };
@@ -221,6 +223,7 @@
 		4085C07520E4D1C20079AF90 /* QAnimationEaseLinear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4085C07420E4D1C10079AF90 /* QAnimationEaseLinear.swift */; };
 		4085C07720E4D5580079AF90 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4085C07620E4D5580079AF90 /* Double.swift */; };
 		4085C07920E4D56A0079AF90 /* CGFloat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4085C07820E4D56A0079AF90 /* CGFloat.swift */; };
+		40877B9421CF98E40051226E /* IQSpinnerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40877B9321CF98E40051226E /* IQSpinnerFactory.swift */; };
 		408B575520BC2D920045C0B2 /* IQContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 408B575420BC2D920045C0B2 /* IQContentViewController.swift */; };
 		409403551F4DEB6C008A8B90 /* QuicklyPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 409403541F4DEB6C008A8B90 /* QuicklyPrivate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		409403581F4E129F008A8B90 /* QApiProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409403571F4E129F008A8B90 /* QApiProvider.swift */; };
@@ -572,6 +575,8 @@
 		406915452084CA26008934D5 /* QStackViewControllerAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QStackViewControllerAnimation.swift; sourceTree = "<group>"; };
 		406BC12B217722EA00164485 /* QProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QProxy.swift; sourceTree = "<group>"; };
 		406BC12D2177231C00164485 /* IQProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQProxy.swift; sourceTree = "<group>"; };
+		406C598821D1B04000CAA611 /* IQLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQLoadingView.swift; sourceTree = "<group>"; };
+		406C598A21D1B08A00CAA611 /* QLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QLoadingView.swift; sourceTree = "<group>"; };
 		406FDF6A20908071004178CC /* QApiPagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QApiPagination.swift; sourceTree = "<group>"; };
 		406FDF6E209082E4004178CC /* IQApiPagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQApiPagination.swift; sourceTree = "<group>"; };
 		4070B6A720628E4E00B568A9 /* QReachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QReachability.swift; sourceTree = "<group>"; };
@@ -602,6 +607,7 @@
 		4085C07420E4D1C10079AF90 /* QAnimationEaseLinear.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QAnimationEaseLinear.swift; sourceTree = "<group>"; };
 		4085C07620E4D5580079AF90 /* Double.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
 		4085C07820E4D56A0079AF90 /* CGFloat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGFloat.swift; sourceTree = "<group>"; };
+		40877B9321CF98E40051226E /* IQSpinnerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQSpinnerFactory.swift; sourceTree = "<group>"; };
 		408B575420BC2D920045C0B2 /* IQContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQContentViewController.swift; sourceTree = "<group>"; };
 		409403541F4DEB6C008A8B90 /* QuicklyPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuicklyPrivate.h; sourceTree = "<group>"; };
 		409403571F4E129F008A8B90 /* QApiProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QApiProvider.swift; sourceTree = "<group>"; };
@@ -1417,6 +1423,15 @@
 			path = Proxy;
 			sourceTree = "<group>";
 		};
+		406C598721D1B02000CAA611 /* Loading */ = {
+			isa = PBXGroup;
+			children = (
+				406C598821D1B04000CAA611 /* IQLoadingView.swift */,
+				406C598A21D1B08A00CAA611 /* QLoadingView.swift */,
+			);
+			path = Loading;
+			sourceTree = "<group>";
+		};
 		4070B6A620628E2D00B568A9 /* Reachability */ = {
 			isa = PBXGroup;
 			children = (
@@ -1458,6 +1473,14 @@
 				4085C07220E4CF300079AF90 /* QAnimationEaseBounce.swift */,
 			);
 			path = Ease;
+			sourceTree = "<group>";
+		};
+		40877B9121CF98930051226E /* Factory */ = {
+			isa = PBXGroup;
+			children = (
+				40877B9321CF98E40051226E /* IQSpinnerFactory.swift */,
+			);
+			path = Factory;
 			sourceTree = "<group>";
 		};
 		409403561F4E125E008A8B90 /* Api */ = {
@@ -1536,6 +1559,7 @@
 		40C8F8221F55109100C75D34 /* Spinner */ = {
 			isa = PBXGroup;
 			children = (
+				40877B9121CF98930051226E /* Factory */,
 				40C8F8231F55109100C75D34 /* IQSpinnerView.swift */,
 				40C8F8271F55145D00C75D34 /* QSpinnerView.swift */,
 			);
@@ -1719,6 +1743,7 @@
 				4055E9CC215E21DD00D66AA6 /* Switch */,
 				40CF45811F4DE6AB004D00D8 /* Fields */,
 				40C8F8221F55109100C75D34 /* Spinner */,
+				406C598721D1B02000CAA611 /* Loading */,
 				4022460A2076516F0020B357 /* Pincode */,
 				4022460E207651B70020B357 /* Gradient */,
 				4022460B2076517D0020B357 /* Blur */,
@@ -2158,6 +2183,7 @@
 				40CF45DF1F4DE6AB004D00D8 /* QTableController.swift in Sources */,
 				40CF45B61F4DE6AB004D00D8 /* IQCollectionController.swift in Sources */,
 				4023D97A2146EA70005F915D /* QPlaceholderImageComposition.swift in Sources */,
+				406C598921D1B04000CAA611 /* IQLoadingView.swift in Sources */,
 				402F1FB61F4EF525007625CA /* QApiError.swift in Sources */,
 				4062A51A20737D2B00B190BE /* IQShapeModel.swift in Sources */,
 				40CF45BE1F4DE6AB004D00D8 /* QCollectionData.swift in Sources */,
@@ -2234,6 +2260,7 @@
 				40E52949204E9466002EDB0A /* QBlurView.swift in Sources */,
 				40CF45EC1F4DE6AB004D00D8 /* IQView.swift in Sources */,
 				40FC3F0A20C7F4960013B71A /* QModalViewControllerAnimation.swift in Sources */,
+				40877B9421CF98E40051226E /* IQSpinnerFactory.swift in Sources */,
 				40979EC31F62C88A0003ED1C /* QLengthStringValidator.swift in Sources */,
 				4039F8D420723F7600A88E45 /* QDateField.swift in Sources */,
 				40571364217DB408009ED2E3 /* Bundle.swift in Sources */,
@@ -2251,6 +2278,7 @@
 				4057FFEF205027DC004F3EDB /* IQDialogViewController.swift in Sources */,
 				4062C8C52088CC650098F809 /* QDialogContainerViewController.swift in Sources */,
 				4007B09A2144236900AE17DC /* QTitleIconComposition.swift in Sources */,
+				406C598B21D1B08A00CAA611 /* QLoadingView.swift in Sources */,
 				40CF45C31F4DE6AB004D00D8 /* NSAttributedString.swift in Sources */,
 				40836AB0216CB21100777404 /* QPlaceholderTitleDetailValueComposition.swift in Sources */,
 				401E8F7D206D34C4008A5BE4 /* QPickerView.swift in Sources */,

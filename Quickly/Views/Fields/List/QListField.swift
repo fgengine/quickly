@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QListFieldStyleSheet : QDisplayViewStyleSheet< QListField > {
+public class QListFieldStyleSheet : QDisplayViewStyleSheet {
 
     public var rows: [QListFieldPickerRow]
     public var rowHeight: CGFloat
@@ -41,15 +41,6 @@ public class QListFieldStyleSheet : QDisplayViewStyleSheet< QListField > {
         super.init(styleSheet)
     }
 
-    public override func apply(_ target: QListField) {
-        super.apply(target)
-
-        target.rows = self.rows
-        target.rowHeight = self.rowHeight
-        target.placeholder = self.placeholder
-        target.isEnabled = self.isEnabled
-    }
-
 }
 
 public protocol IQListFieldObserver : class {
@@ -73,7 +64,7 @@ public class QListField : QDisplayView, IQField {
     public var selectedRow: QListFieldPickerRow? {
         didSet {
             if let selectedRow = self.selectedRow {
-                selectedRow.field.apply(self.valieLabel)
+                self.valieLabel.apply(selectedRow.field)
                 self.pickerController.select(row: selectedRow, animated: self.isEditing)
             } else {
                 self.valieLabel.text = self.placeholder
@@ -135,20 +126,20 @@ public class QListField : QDisplayView, IQField {
     internal private(set) var pickerController: QPickerController!
     internal private(set) var tapGesture: UITapGestureRecognizer!
     
-    private var observer: QObserver< IQListFieldObserver >
+    private var _observer: QObserver< IQListFieldObserver >
     
     public required init() {
-        self.observer = QObserver< IQListFieldObserver >()
+        self._observer = QObserver< IQListFieldObserver >()
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
     }
     
     public override init(frame: CGRect) {
-        self.observer = QObserver< IQListFieldObserver >()
+        self._observer = QObserver< IQListFieldObserver >()
         super.init(frame: frame)
     }
     
     public required init?(coder: NSCoder) {
-        self.observer = QObserver< IQListFieldObserver >()
+        self._observer = QObserver< IQListFieldObserver >()
         super.init(coder: coder)
     }
 
@@ -170,16 +161,16 @@ public class QListField : QDisplayView, IQField {
         self.pickerController.delegate = self
         self.pickerView.pickerController = self.pickerController
         
-        self.tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture(_:)))
+        self.tapGesture = UITapGestureRecognizer(target: self, action: #selector(self._tapGesture(_:)))
         self.addGestureRecognizer(self.tapGesture)
     }
     
     public func addObserver(_ observer: IQListFieldObserver, priority: UInt) {
-        self.observer.add(observer, priority: priority)
+        self._observer.add(observer, priority: priority)
     }
     
     public func removeObserver(_ observer: IQListFieldObserver) {
-        self.observer.remove(observer)
+        self._observer.remove(observer)
     }
 
     open func beginEditing() {
@@ -201,7 +192,7 @@ public class QListField : QDisplayView, IQField {
             self.selectedRow = self.rows.first
         }
         self.onBeginEditing?(self)
-        self.observer.reverseNotify({ (observer) in
+        self._observer.reverseNotify({ (observer) in
             observer.beginEditing(listField: self)
         })
         return true
@@ -211,14 +202,27 @@ public class QListField : QDisplayView, IQField {
     open override func resignFirstResponder() -> Bool {
         guard super.resignFirstResponder() == true else { return false }
         self.onEndEditing?(self)
-        self.observer.reverseNotify({ (observer) in
+        self._observer.reverseNotify({ (observer) in
             observer.endEditing(listField: self)
         })
         return true
     }
     
+    public func apply(_ styleSheet: QListFieldStyleSheet) {
+        self.apply(styleSheet as QDisplayViewStyleSheet)
+        
+        self.rows = styleSheet.rows
+        self.rowHeight = styleSheet.rowHeight
+        self.placeholder = styleSheet.placeholder
+        self.isEnabled = styleSheet.isEnabled
+    }
+    
+}
+
+extension QListField {
+    
     @objc
-    private func tapGesture(_ sender: Any) {
+    private func _tapGesture(_ sender: Any) {
         if self.canBecomeFirstResponder == true {
             self.becomeFirstResponder()
         }
@@ -234,7 +238,7 @@ extension QListField : IQPickerControllerDelegate {
         if let closure = self.onSelect {
             closure(self, row)
         }
-        self.observer.reverseNotify({ (observer) in
+        self._observer.reverseNotify({ (observer) in
             observer.select(listField: self, row: row)
         })
     }

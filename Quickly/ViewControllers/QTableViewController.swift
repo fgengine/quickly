@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QTableViewController : QViewController, IQTableControllerObserver, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController {
+open class QTableViewController : QViewController, IQTableControllerObserver, IQKeyboardObserver, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController {
 
     #if DEBUG
     open override var logging: Bool {
@@ -59,49 +59,81 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     }
     public var refreshControl: UIRefreshControl? {
         set(value) {
-            if let refreshControl = self.storeRefreshControl {
+            if let refreshControl = self._refreshControl {
                 if refreshControl.isRefreshing == true {
                     refreshControl.endRefreshing()
                 }
             }
-            self.storeRefreshControl = value
+            self._refreshControl = value
             self._updateRefreshControlState()
         }
-        get { return self.storeRefreshControl }
+        get { return self._refreshControl }
     }
     public var isRefreshing: Bool {
         get {
-            guard let refreshControl = self.storeRefreshControl else { return false }
+            guard let refreshControl = self._refreshControl else { return false }
             return refreshControl.isRefreshing
         }
     }
-    private var storeRefreshControl: UIRefreshControl? {
+    public var footerView: QView? {
+        set(value) {
+            if self._footerView != value {
+                if let view = self._footerView {
+                    view.removeFromSuperview()
+                }
+                self._footerView = value
+                if self.isLoaded == true {
+                    if let view = self._footerView, let tableView = self.tableView {
+                        view.frame = self._footerViewFrame()
+                        self.view.insertSubview(view, aboveSubview: tableView)
+                    }
+                }
+            }
+        }
+        get { return self._footerView }
+    }
+    public var footerViewHeight: CGFloat = 100 {
+        didSet(oldValue) {
+            if self.footerViewHeight != oldValue {
+                if let view = self._footerView {
+                    view.frame = self._footerViewFrame()
+                }
+            }
+        }
+    }
+    
+    private var _refreshControl: UIRefreshControl? {
         willSet {
-            guard let refreshControl = self.storeRefreshControl else { return }
+            guard let refreshControl = self._refreshControl else { return }
             refreshControl.removeValueChanged(self, action: #selector(self._triggeredRefreshControl(_:)))
         }
         didSet {
-            guard let refreshControl = self.storeRefreshControl else { return }
+            guard let refreshControl = self._refreshControl else { return }
             refreshControl.addValueChanged(self, action: #selector(self._triggeredRefreshControl(_:)))
         }
     }
-    private var keyboard: QKeyboard!
+    private var _footerView: QView?
+    private var _keyboard: QKeyboard!
 
     deinit {
         self.tableController = nil
-        self.keyboard.removeObserver(self)
+        self._keyboard.removeObserver(self)
     }
     
     open override func setup() {
         super.setup()
         
-        self.keyboard = QKeyboard()
+        self._keyboard = QKeyboard()
     }
 
     open override func didLoad() {
         self.tableView = QTableView(frame: self.view.bounds)
         self.tableView.tableController = self.tableController
-        self.keyboard.addObserver(self, priority: 0)
+        if let view = self._footerView {
+            view.frame = self._footerViewFrame()
+            self.view.addSubview(view)
+        }
+        self._keyboard.addObserver(self, priority: 0)
     }
 
     open override func layout(bounds: CGRect) {
@@ -109,12 +141,18 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
         if let view = self.tableView {
             view.frame = bounds
         }
+        if let view = self._footerView {
+            view.frame = self._footerViewFrame()
+        }
     }
 
     open override func didChangeAdditionalEdgeInsets() {
         super.didChangeAdditionalEdgeInsets()
         if let view = self.tableView {
             self._updateContentInsets(view)
+        }
+        if let view = self._footerView {
+            view.frame = self._footerViewFrame()
         }
     }
 
@@ -147,17 +185,19 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     }
 
     open func beginRefreshing() {
-        guard let refreshControl = self.storeRefreshControl else { return }
+        guard let refreshControl = self._refreshControl else { return }
         refreshControl.beginRefreshing()
     }
 
     open func endRefreshing() {
-        guard let refreshControl = self.storeRefreshControl else { return }
+        guard let refreshControl = self._refreshControl else { return }
         refreshControl.endRefreshing()
     }
 
     open func triggeredRefreshControl() {
     }
+    
+    // MARK: IQTableControllerObserver
     
     open func scroll(_ controller: IQTableController, tableView: UITableView) {
         if let vc = self.contentOwnerViewController {
@@ -167,44 +207,8 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     
     open func update(_ controller: IQTableController) {
     }
-
-    @objc
-    private func _triggeredRefreshControl(_ sender: Any) {
-        self.triggeredRefreshControl()
-    }
-
-    private func _updateRefreshControlState() {
-        if self.isLoaded == true {
-            if self.refreshControlHidden == false && self.isPresented == true {
-                self.tableView.refreshControl = self.storeRefreshControl
-            } else {
-                if let refreshControl = self.storeRefreshControl {
-                    refreshControl.endRefreshing()
-                }
-                self.tableView.refreshControl = nil
-            }
-        }
-    }
     
-    private func _updateContentInsets(_ view: QTableView) {
-        let edgeInsets = self.adjustedContentInset
-        view.contentLeftInset = edgeInsets.left
-        view.contentRightInset = edgeInsets.right
-        view.contentInset = UIEdgeInsets(
-            top: edgeInsets.top,
-            left: 0,
-            bottom: edgeInsets.bottom,
-            right: 0
-        )
-        view.scrollIndicatorInsets = edgeInsets
-        if view.contentOffset.y <= CGFloat.leastNonzeroMagnitude {
-            view.contentOffset = CGPoint(x: 0, y: -edgeInsets.top)
-        }
-    }
-
-}
-
-extension QTableViewController : IQKeyboardObserver {
+    // MAKR: IQKeyboardObserver
     
     open func willShowKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
         var options: UIView.AnimationOptions = []
@@ -236,6 +240,58 @@ extension QTableViewController : IQKeyboardObserver {
     }
     
     open func didHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
+    }
+
+    @objc
+    private func _triggeredRefreshControl(_ sender: Any) {
+        self.triggeredRefreshControl()
+    }
+
+    private func _updateRefreshControlState() {
+        if self.isLoaded == true {
+            if self.refreshControlHidden == false && self.isPresented == true {
+                self.tableView.refreshControl = self._refreshControl
+            } else {
+                if let refreshControl = self._refreshControl {
+                    refreshControl.endRefreshing()
+                }
+                self.tableView.refreshControl = nil
+            }
+        }
+    }
+    
+    private func _updateContentInsets(_ view: QTableView) {
+        let edgeInsets = self.adjustedContentInset
+        let footerHeight = (self.footerView != nil) ? self.footerViewHeight : 0
+        view.contentLeftInset = edgeInsets.left
+        view.contentRightInset = edgeInsets.right
+        view.contentInset = UIEdgeInsets(
+            top: edgeInsets.top,
+            left: 0,
+            bottom: edgeInsets.bottom + footerHeight,
+            right: 0
+        )
+        view.scrollIndicatorInsets = UIEdgeInsets(
+            top: edgeInsets.top,
+            left: edgeInsets.left,
+            bottom: edgeInsets.bottom + footerHeight,
+            right: edgeInsets.right
+        )
+        if view.contentOffset.y <= CGFloat.leastNonzeroMagnitude {
+            view.contentOffset = CGPoint(x: 0, y: -edgeInsets.top)
+        }
+    }
+    
+    private func _footerViewFrame() -> CGRect {
+        let bounds = self.view.bounds
+        let edgeInsets = self.adjustedContentInset
+        let height = self.footerViewHeight
+        return CGRect(
+            x: 0,
+            y: bounds.height - edgeInsets.bottom - height,
+            width: bounds.width,
+            height: height
+        )
     }
     
 }

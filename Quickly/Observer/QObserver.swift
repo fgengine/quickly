@@ -4,27 +4,27 @@
 
 public final class QObserver< T > {
 
-    private var items: [Item]
-    private var isForeached: Bool
-    private var addingItems: [Item]
-    private var removingItems: [Item]
+    private var _items: [Item]
+    private var _isForeached: Bool
+    private var _addingItems: [Item]
+    private var _removingItems: [Item]
 
     public init() {
-        self.items = []
-        self.isForeached = false
-        self.addingItems = []
-        self.removingItems = []
+        self._items = []
+        self._isForeached = false
+        self._addingItems = []
+        self._removingItems = []
     }
 
     public func add(_ observer: T, priority: UInt) {
-        if self.isForeached == true {
+        if self._isForeached == true {
             let item = Item(priority: priority, observer: observer)
-            self.addingItems.append(item)
+            self._addingItems.append(item)
         } else {
             if let index = self._index(observer) {
-                self.items[index].priority = priority
+                self._items[index].priority = priority
             } else {
-                self.items.append(Item(priority: priority, observer: observer))
+                self._items.append(Item(priority: priority, observer: observer))
             }
             self._postAdd()
         }
@@ -32,20 +32,20 @@ public final class QObserver< T > {
 
     public func remove(_ observer: T) {
         guard let index = self._index(observer) else { return }
-        if self.isForeached == true {
-            self.removingItems.append(self.items[index])
+        if self._isForeached == true {
+            self._removingItems.append(self._items[index])
         } else {
-            self.items.remove(at: index)
+            self._items.remove(at: index)
         }
     }
 
     public func notify(_ closure: (_ observer: T) -> Void) {
-        if self.isForeached == false {
-            self.isForeached = true
-            self.items.forEach({
+        if self._isForeached == false {
+            self._isForeached = true
+            self._items.forEach({
                 closure($0.observer)
             })
-            self.isForeached = false
+            self._isForeached = false
             self._postNotify()
         } else {
             fatalError("Recursive notify")
@@ -53,15 +53,15 @@ public final class QObserver< T > {
     }
     
     public func notify(priorities: [UInt], closure: (_ observer: T) -> Void) {
-        if self.isForeached == false {
-            self.isForeached = true
+        if self._isForeached == false {
+            self._isForeached = true
             for priority in priorities {
-                let items = self.items.filter({ return $0.priority == priority })
+                let items = self._items.filter({ return $0.priority == priority })
                 items.forEach({
                     closure($0.observer)
                 })
             }
-            self.isForeached = false
+            self._isForeached = false
             self._postNotify()
         } else {
             fatalError("Recursive notify")
@@ -69,12 +69,12 @@ public final class QObserver< T > {
     }
 
     public func reverseNotify(_ closure: (_ observer: T) -> Void) {
-        if self.isForeached == false {
-            self.isForeached = true
-            self.items.reversed().forEach({
+        if self._isForeached == false {
+            self._isForeached = true
+            self._items.reversed().forEach({
                 closure($0.observer)
             })
-            self.isForeached = false
+            self._isForeached = false
             self._postNotify()
         } else {
             fatalError("Recursive notify")
@@ -82,15 +82,15 @@ public final class QObserver< T > {
     }
     
     public func reverseNotify(priorities: [UInt], closure: (_ observer: T) -> Void) {
-        if self.isForeached == false {
-            self.isForeached = true
+        if self._isForeached == false {
+            self._isForeached = true
             for priority in priorities {
-                let items = self.items.filter({ return $0.priority == priority })
+                let items = self._items.filter({ return $0.priority == priority })
                 items.reversed().forEach({
                     closure($0.observer)
                 })
             }
-            self.isForeached = false
+            self._isForeached = false
             self._postNotify()
         } else {
             fatalError("Recursive notify")
@@ -99,37 +99,37 @@ public final class QObserver< T > {
     
     private func _index(_ observer: T) -> Int? {
         let pointer = Unmanaged.passUnretained(observer as AnyObject).toOpaque()
-        return self.items.index(where: { return $0.pointer == pointer })
+        return self._items.index(where: { return $0.pointer == pointer })
     }
     
     private func _index(_ item: Item) -> Int? {
-        return self.items.index(where: { return $0.pointer == item.pointer })
+        return self._items.index(where: { return $0.pointer == item.pointer })
     }
     
     private func _postNotify() {
-        if self.removingItems.count > 0 {
-            for item in self.removingItems {
+        if self._removingItems.count > 0 {
+            for item in self._removingItems {
                 if let index = self._index(item) {
-                    self.items.remove(at: index)
+                    self._items.remove(at: index)
                 }
             }
-            self.removingItems.removeAll()
+            self._removingItems.removeAll()
         }
-        if self.addingItems.count > 0 {
-            for item in self.addingItems {
+        if self._addingItems.count > 0 {
+            for item in self._addingItems {
                 if let index = self._index(item) {
-                    self.items[index].priority = item.priority
+                    self._items[index].priority = item.priority
                 } else {
-                    self.items.append(item)
+                    self._items.append(item)
                 }
             }
-            self.addingItems.removeAll()
+            self._addingItems.removeAll()
             self._postAdd()
         }
     }
     
     private func _postAdd() {
-        self.items.sort(by: { return $0.priority < $1.priority })
+        self._items.sort(by: { return $0.priority < $1.priority })
     }
 
     private final class Item {

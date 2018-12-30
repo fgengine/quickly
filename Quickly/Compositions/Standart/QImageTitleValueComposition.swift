@@ -35,19 +35,19 @@ open class QImageTitleValueComposable : QComposable {
 
 open class QImageTitleValueComposition< Composable: QImageTitleValueComposable > : QComposition< Composable > {
 
-    lazy private var imageView: QImageView = {
+    private lazy var imageView: QImageView = {
         let view = QImageView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    lazy private var titleLabel: QLabel = {
+    private lazy var titleLabel: QLabel = {
         let view = QLabel(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    lazy private var valueLabel: QLabel = {
+    private lazy var valueLabel: QLabel = {
         let view = QLabel(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.setContentHuggingPriority(
@@ -58,18 +58,18 @@ open class QImageTitleValueComposition< Composable: QImageTitleValueComposable >
         return view
     }()
 
-    private var currentEdgeInsets: UIEdgeInsets?
-    private var currentImageSpacing: CGFloat?
-    private var currentTitleSpacing: CGFloat?
-    private var currentImageWidth: CGFloat?
+    private var _edgeInsets: UIEdgeInsets?
+    private var _imageSpacing: CGFloat?
+    private var _titleSpacing: CGFloat?
+    private var _imageWidth: CGFloat?
 
-    private var selfConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.contentView.removeConstraints(self.selfConstraints) }
-        didSet { self.contentView.addConstraints(self.selfConstraints) }
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.contentView.removeConstraints(self._constraints) }
+        didSet { self.contentView.addConstraints(self._constraints) }
     }
-    private var imageConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.imageView.removeConstraints(self.imageConstraints) }
-        didSet { self.imageView.addConstraints(self.imageConstraints) }
+    private var _imageConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.imageView.removeConstraints(self._imageConstraints) }
+        didSet { self.imageView.addConstraints(self._imageConstraints) }
     }
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
@@ -90,11 +90,11 @@ open class QImageTitleValueComposition< Composable: QImageTitleValueComposable >
             bottom: composable.edgeInsets.bottom,
             right: spec.containerRightInset + composable.edgeInsets.right
         )
-        if self.currentEdgeInsets != edgeInsets || self.currentImageSpacing != composable.imageSpacing || self.currentTitleSpacing != composable.titleSpacing {
-            self.currentEdgeInsets = edgeInsets
-            self.currentImageSpacing = composable.imageSpacing
-            self.currentTitleSpacing = composable.titleSpacing
-            self.selfConstraints = [
+        if self._edgeInsets != edgeInsets || self._imageSpacing != composable.imageSpacing || self._titleSpacing != composable.titleSpacing {
+            self._edgeInsets = edgeInsets
+            self._imageSpacing = composable.imageSpacing
+            self._titleSpacing = composable.titleSpacing
+            self._constraints = [
                 self.imageView.topLayout == self.contentView.topLayout + edgeInsets.top,
                 self.imageView.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
                 self.imageView.trailingLayout == self.titleLabel.leadingLayout - composable.imageSpacing,
@@ -107,18 +107,18 @@ open class QImageTitleValueComposition< Composable: QImageTitleValueComposable >
                 self.valueLabel.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom
             ]
         }
-        if self.currentImageWidth != composable.imageWidth {
-            self.currentImageWidth = composable.imageWidth
-            self.imageConstraints = [
+        if self._imageWidth != composable.imageWidth {
+            self._imageWidth = composable.imageWidth
+            self._imageConstraints = [
                 self.imageView.widthLayout == composable.imageWidth
             ]
         }
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        composable.image.apply(self.imageView)
-        composable.title.apply(self.titleLabel)
-        composable.value.apply(self.valueLabel)
+        self.imageView.apply(composable.image)
+        self.titleLabel.apply(composable.title)
+        self.valueLabel.apply(composable.value)
     }
 
 }
