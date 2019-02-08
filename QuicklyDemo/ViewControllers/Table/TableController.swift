@@ -209,8 +209,8 @@ class TableController : QTableController {
                     composable: QTitleButtonComposable(
                         title: QLabelStyleSheet(text: QText("Title")),
                         button: QButtonStyleSheet(
-                            normalStyle: QButtonStyle(color: UIColor.red, cornerRadius: .auto, text: QText("Button")),
-                            highlightedStyle: QButtonStyle(color: UIColor.green, cornerRadius: .auto, text: QText("Button"))
+                            normalStyle: QButtonStyle(color: UIColor.red, cornerRadius: .auto, text: QLabelStyleSheet(text: QText("Button"))),
+                            highlightedStyle: QButtonStyle(color: UIColor.green, cornerRadius: .auto, text: QLabelStyleSheet(text: QText("Button")))
                         ),
                         buttonPressed: { (composable) in
                             print("Pressed \(composable)")
@@ -224,9 +224,9 @@ class TableController : QTableController {
                         field: QTextFieldStyleSheet(
                             placeholder: QText("Placeholder")
                         ),
-                        fieldText: "",
-                        fieldEditing: { (composable) in
-                            print("Editing \(composable) \(composable.fieldText)")
+                        text: "",
+                        editing: { (composable) in
+                            print("Editing \(composable) \(composable.text)")
                         }
                     ),
                     backgroundColor: UIColor(white: 1, alpha: 1),
@@ -251,8 +251,8 @@ class TableController : QTableController {
                             ],
                             placeholder: QText("Placeholder")
                         ),
-                        fieldSelect: { (composable) in
-                            print("Selected \(composable) \(composable.fieldSelectedRow?.row.text.string ?? "none")")
+                        select: { (composable) in
+                            print("Selected \(composable) \(composable.selectedRow?.row.text.string ?? "none")")
                         }
                     ),
                     backgroundColor: UIColor(white: 1, alpha: 1),
@@ -261,10 +261,17 @@ class TableController : QTableController {
                 QCompositionTableRow< QDateFieldComposable >(
                     composable: QDateFieldComposable(
                         field: QDateFieldStyleSheet(
+                            formatter: QDateFieldFormatter(
+                                dateFormat: "YYYY",
+                                textStyle: QTextStyle(
+                                    font: UIFont.systemFont(ofSize: UIFont.systemFontSize),
+                                    color: UIColor.black
+                                )
+                            ),
                             placeholder: QText("Placeholder")
                         ),
-                        fieldSelect: { (composable) in
-                            print("Selected \(composable) \(composable.fieldDate.debugDescription)")
+                        select: { (composable) in
+                            print("Selected \(composable) \(composable.date.debugDescription)")
                         }
                     ),
                     backgroundColor: UIColor(white: 1, alpha: 1),

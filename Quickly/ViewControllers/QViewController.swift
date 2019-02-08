@@ -4,8 +4,6 @@
 
 open class QViewController : NSObject, IQViewController {
 
-    public typealias ViewType = IQViewController.ViewType
-
     open weak var delegate: IQViewControllerDelegate?
     open weak var parent: IQViewController? {
         set(value) {
@@ -95,7 +93,7 @@ open class QViewController : NSObject, IQViewController {
             )
         }
     }
-    open var view: ViewType {
+    open var view: UIView {
         get {
             self.loadViewIfNeeded()
             return self._view
@@ -113,7 +111,7 @@ open class QViewController : NSObject, IQViewController {
 
     private weak var _parent: IQViewController!
     private var _parentChanging: Bool = false
-    private var _view: ViewType!
+    private var _view: View!
 
     public override init() {
         self.edgesForExtendedLayout = .all
@@ -134,13 +132,9 @@ open class QViewController : NSObject, IQViewController {
     open func setup() {
     }
 
-    open func load() -> ViewType {
-        return QViewControllerTransparentView(viewController: self)
-    }
-
     open func loadViewIfNeeded() {
         if self._view == nil {
-            self._view = self.load()
+            self._view = View(viewController: self)
             self.didLoad()
         }
     }
@@ -338,66 +332,42 @@ open class QViewController : NSObject, IQViewController {
             parent.setNeedUpdateStatusBar()
         }
     }
-
-}
-
-open class QViewControllerDefaultView : QView, IQViewControllerView {
-
-    public weak var viewController: IQViewController?
     
-    public required init() {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    public init(viewController: QViewController, backgroundColor: UIColor = .clear) {
-        self.viewController = viewController
-        super.init(frame: UIScreen.main.bounds)
-        self.backgroundColor = backgroundColor
-        self.clipsToBounds = true
-    }
-
-    public required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    open override func layoutSubviews() {
-        super.layoutSubviews()
-
-        if let vc = self.viewController {
-            vc.layout(bounds: self.bounds)
+    private class View : UIView {
+        
+        public weak var viewController: IQViewController?
+        
+        public init(viewController: QViewController) {
+            self.viewController = viewController
+            super.init(frame: UIScreen.main.bounds)
+            self.backgroundColor = UIColor.clear
+            self.clipsToBounds = true
         }
-    }
-
-}
-
-open class QViewControllerTransparentView : QTransparentView, IQViewControllerView {
-
-    public weak var viewController: IQViewController?
-    
-    public required init() {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    public init(viewController: QViewController) {
-        self.viewController = viewController
-        super.init(frame: UIScreen.main.bounds)
-        self.clipsToBounds = true
-    }
-
-    public required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    open override func setNeedsLayout() {
-        super.setNeedsLayout()
-    }
-
-    open override func layoutSubviews() {
-        super.layoutSubviews()
-
-        if let vc = self.viewController {
-            vc.layout(bounds: self.bounds)
+        
+        public required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
         }
+        
+        open override func setNeedsLayout() {
+            super.setNeedsLayout()
+        }
+        
+        open override func layoutSubviews() {
+            super.layoutSubviews()
+            
+            if let vc = self.viewController {
+                vc.layout(bounds: self.bounds)
+            }
+        }
+        
+        open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+            let view = super.hitTest(point, with: event)
+            if view == self {
+                return nil
+            }
+            return view
+        }
+        
     }
 
 }

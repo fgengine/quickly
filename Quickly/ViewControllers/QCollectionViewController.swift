@@ -2,13 +2,8 @@
 //  Quickly
 //
 
-open class QCollectionViewController : QViewController, IQCollectionControllerObserver, IQKeyboardObserver, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController {
+open class QCollectionViewController : QViewController, IQCollectionControllerObserver, IQKeyboardObserver, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController {
 
-    #if DEBUG
-    open override var logging: Bool {
-        get { return true }
-    }
-    #endif
     public var contentOffset: CGPoint {
         get {
             guard let collectionView = self._collectionView else { return CGPoint.zero }
@@ -62,6 +57,17 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
             return refreshControl.isRefreshing
         }
     }
+    public var loadingView: QLoadingViewType? {
+        willSet {
+            guard let loadingView = self.loadingView else { return }
+            loadingView.removeFromSuperview()
+            loadingView.delegate = nil
+        }
+        didSet {
+            guard let loadingView = self.loadingView else { return }
+            loadingView.delegate = self
+        }
+    }
     
     private var _collectionView: QCollectionView! {
         willSet {
@@ -110,12 +116,18 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
         if let view = self._collectionView {
             view.frame = bounds
         }
+        if let view = self.loadingView, view.superview != nil {
+            self._updateFrame(loadingView: view, bounds: bounds)
+        }
     }
 
     open override func didChangeAdditionalEdgeInsets() {
         super.didChangeAdditionalEdgeInsets()
         if let view = self._collectionView {
             self._updateContentInsets(view)
+        }
+        if let view = self.loadingView, view.superview != nil {
+            self._updateFrame(loadingView: view, bounds: self.view.bounds)
         }
     }
 
@@ -160,6 +172,21 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     }
 
     open func triggeredRefreshControl() {
+    }
+    
+    open func isLoading() -> Bool {
+        guard let loadingView = self.loadingView else { return false }
+        return loadingView.isAnimating()
+    }
+    
+    open func startLoading() {
+        guard let loadingView = self.loadingView else { return }
+        loadingView.start()
+    }
+    
+    open func stopLoading() {
+        guard let loadingView = self.loadingView else { return }
+        loadingView.stop()
     }
     
     // MAKR: IQCollectionControllerObserver
@@ -212,6 +239,8 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     
     open func didHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
     }
+    
+    // MAKR: Private
 
     @objc
     private func _triggeredRefreshControl(_ sender: Any) {
@@ -247,6 +276,23 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
             let y = (view.contentOffset.y < 0) ? -edgeInsets.top : view.contentOffset.y
             view.contentOffset = CGPoint(x: x, y: y)
         }
+    }
+    
+    private func _updateFrame(loadingView: QLoadingViewType, bounds: CGRect) {
+        loadingView.frame = bounds.inset(by: self.inheritedEdgeInsets)
+    }
+    
+}
+
+extension QCollectionViewController : IQLoadingViewDelegate {
+    
+    open func willShow(loadingView: QLoadingViewType) {
+        self._updateFrame(loadingView: loadingView, bounds: self.view.bounds)
+        self.view.addSubview(loadingView)
+    }
+    
+    open func didHide(loadingView: QLoadingViewType) {
+        loadingView.removeFromSuperview()
     }
     
 }

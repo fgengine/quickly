@@ -19,5 +19,20 @@ open class QListFieldPickerRow : QPickerRow {
 
         super.init()
     }
+    
+    public convenience init(
+        field: IQText,
+        row: IQText,
+        rowEdgeInsets: UIEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
+    ) {
+        self.init(
+            field: QLabelStyleSheet(text: field),
+            row: QLabelStyleSheet(
+                text: row,
+                alignment: .center
+            ),
+            rowEdgeInsets: rowEdgeInsets
+        )
+    }
 
 }

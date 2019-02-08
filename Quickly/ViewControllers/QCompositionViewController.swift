@@ -2,13 +2,8 @@
 //  Quickly
 //
 
-open class QCompositionViewController< Composition: IQComposition > : QViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController {
+open class QCompositionViewController< Composition: IQComposition > : QViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController {
 
-    #if DEBUG
-    open override var logging: Bool {
-        get { return true }
-    }
-    #endif
     public var contentOffset: CGPoint {
         get { return CGPoint.zero }
     }
@@ -20,43 +15,125 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
     }
     public var screenLeftInset: CGFloat = 0
     public var screenRightInset: CGFloat = 0
+    public var backgroundView: UIView? {
+        willSet {
+            guard let backgroundView = self.backgroundView else { return }
+            backgroundView.removeFromSuperview()
+        }
+        didSet {
+            guard let backgroundView = self.backgroundView else { return }
+            backgroundView.translatesAutoresizingMaskIntoConstraints = false
+            self.view.insertSubview(backgroundView, at: 0)
+            self._updateConstraints(self.view, backgroundView: backgroundView)
+        }
+    }
     public private(set) lazy var composition: Composition = {
         let composition = Composition(frame: self.view.bounds, owner: self)
         composition.contentView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(composition.contentView)
-        self._updateConstraints(self.view, composition.contentView)
+        if let backgroundView = self.backgroundView {
+            self.view.insertSubview(composition.contentView, aboveSubview: backgroundView)
+        } else {
+            self.view.addSubview(composition.contentView)
+        }
+        self._updateConstraints(self.view, contentView: composition.contentView)
         return composition
     }()
-    
-    private var _constraints: [NSLayoutConstraint] = [] {
-        willSet { self.view.removeConstraints(self._constraints) }
-        didSet { self.view.addConstraints(self._constraints) }
+    public var loadingView: QLoadingViewType? {
+        willSet {
+            guard let loadingView = self.loadingView else { return }
+            loadingView.removeFromSuperview()
+            loadingView.delegate = nil
+        }
+        didSet {
+            guard let loadingView = self.loadingView else { return }
+            loadingView.translatesAutoresizingMaskIntoConstraints = false
+            loadingView.delegate = self
+        }
     }
     
-    open override func load() -> ViewType {
-        return QViewControllerDefaultView(viewController: self)
+    private var _backgroundConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.view.removeConstraints(self._backgroundConstraints) }
+        didSet { self.view.addConstraints(self._backgroundConstraints) }
+    }
+    private var _contentConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.view.removeConstraints(self._contentConstraints) }
+        didSet { self.view.addConstraints(self._contentConstraints) }
+    }
+    private var _loadingConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.view.removeConstraints(self._loadingConstraints) }
+        didSet { self.view.addConstraints(self._loadingConstraints) }
     }
     
     open override func didChangeAdditionalEdgeInsets() {
         if self.isLoaded == true {
-            self._updateConstraints(self.view, self.composition.contentView)
+            self._updateConstraints(self.view, contentView: self.composition.contentView)
         }
+        if let loadingView = self.loadingView, view.superview != nil {
+            self._updateConstraints(self.view, loadingView: loadingView)
+        }
+    }
+    
+    open func isLoading() -> Bool {
+        guard let loadingView = self.loadingView else { return false }
+        return loadingView.isAnimating()
+    }
+    
+    open func startLoading() {
+        guard let loadingView = self.loadingView else { return }
+        loadingView.start()
+    }
+    
+    open func stopLoading() {
+        guard let loadingView = self.loadingView else { return }
+        loadingView.stop()
     }
     
 }
 
 extension QCompositionViewController {
     
-    private func _updateConstraints(_ view: UIView, _ contentView: UIView) {
+    private func _updateConstraints(_ view: UIView, backgroundView: UIView) {
+        self._backgroundConstraints = [
+            backgroundView.topLayout == view.topLayout,
+            backgroundView.leadingLayout == view.leadingLayout,
+            backgroundView.trailingLayout == view.trailingLayout,
+            backgroundView.bottomLayout == view.bottomLayout
+        ]
+    }
+    
+    private func _updateConstraints(_ view: UIView, contentView: UIView) {
         let edgeInsets = self.inheritedEdgeInsets
-        self._constraints = [
+        self._contentConstraints = [
             contentView.topLayout == view.topLayout + edgeInsets.top,
             contentView.leadingLayout == view.leadingLayout + edgeInsets.left,
             contentView.trailingLayout == view.trailingLayout - edgeInsets.right,
             contentView.bottomLayout == view.bottomLayout - edgeInsets.bottom
         ]
     }
+    
+    private func _updateConstraints(_ view: UIView, loadingView: QLoadingViewType) {
+        let edgeInsets = self.inheritedEdgeInsets
+        self._loadingConstraints = [
+            loadingView.topLayout == view.topLayout + edgeInsets.top,
+            loadingView.leadingLayout == view.leadingLayout + edgeInsets.left,
+            loadingView.trailingLayout == view.trailingLayout - edgeInsets.right,
+            loadingView.bottomLayout == view.bottomLayout - edgeInsets.bottom
+        ]
+    }
 
+}
+
+extension QCompositionViewController : IQLoadingViewDelegate {
+    
+    open func willShow(loadingView: QLoadingViewType) {
+        self.view.addSubview(loadingView)
+        self._updateConstraints(self.view, loadingView: loadingView)
+    }
+
+    open func didHide(loadingView: QLoadingViewType) {
+        loadingView.removeFromSuperview()
+    }
+    
 }
 
 extension QCompositionViewController : IQContainerSpec {
@@ -90,6 +167,25 @@ extension QCompositionViewController : IQTextFieldObserver {
     open func pressedReturn(textField: QTextField) {
     }
     
+}
+
+extension QCompositionViewController : IQMultiTextFieldObserver {
+    
+    open func beginEditing(multiTextField: QMultiTextField) {
+    }
+
+    open func editing(multiTextField: QMultiTextField) {
+    }
+
+    open func endEditing(multiTextField: QMultiTextField) {
+    }
+
+    open func pressedReturn(multiTextField: QMultiTextField) {
+    }
+
+    open func changed(multiTextField: QMultiTextField, height: CGFloat) {
+    }
+
 }
 
 extension QCompositionViewController : IQListFieldObserver {

@@ -43,12 +43,21 @@ open class QApiResponse : IQApiResponse {
             } catch let error {
                 self.parse(error: error)
             }
+        } else if let xml = try? QXmlReader(data: data) {
+            do {
+                try self.parse(xml: xml.document)
+            } catch let error {
+                self.parse(error: error)
+            }
         } else {
             self.parse(error: QApiError.invalidResponse)
         }
     }
 
     open func parse(json: QJson) throws {
+    }
+    
+    open func parse(xml: QXmlDocument) throws {
     }
 
     open func parse(error: Error) {

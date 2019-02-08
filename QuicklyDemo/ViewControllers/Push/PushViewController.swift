@@ -31,17 +31,20 @@ class PushViewController : QNibViewController, IQRouterable, IQContextable {
         let normalStyle = QButtonStyle()
         normalStyle.color = UIColor.lightGray
         normalStyle.cornerRadius = QViewCornerRadius.manual(radius: 4)
-        normalStyle.text = QText("Show push", color: UIColor.black)
+        normalStyle.text = QLabelStyleSheet(text: QText("Show push"))
 
         let highlightedStyle = QButtonStyle(parent: normalStyle)
         highlightedStyle.color = UIColor.darkGray
-        highlightedStyle.text = QText("Show push", color: UIColor.black)
+        highlightedStyle.text = QLabelStyleSheet(text: QText("Show push"))
 
         self.showPushButton.imageInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         self.showPushButton.textInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         self.showPushButton.normalStyle = normalStyle
         self.showPushButton.highlightedStyle = highlightedStyle
-        self.showPushButton.addTouchUpInside(self, action: #selector(self.pressedShowPush(_:)))
+        self.showPushButton.onPressed = { [weak self] (button) in
+            guard let strong = self else { return }
+            strong.router.presentConfirmPush()
+        }
     }
 
     @objc

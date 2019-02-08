@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QStackContainerViewController : QViewController, IQStackContainerViewController {
+open class QStackContainerViewController : QViewController, IQStackContainerViewController, IQModalContentViewController {
 
     public var contentOffset: CGPoint {
         get { return CGPoint.zero }
@@ -39,18 +39,21 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     private var _activeInteractiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation?
 
     public init(
-        _viewControllers: [IQStackViewController] = [],
+        viewControllers: [IQStackViewController] = [],
         presentAnimation: IQStackViewControllerPresentAnimation = QStackViewControllerPresentAnimation(),
         dismissAnimation: IQStackViewControllerDismissAnimation = QStackViewControllerDismissAnimation(),
         interactiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation? = QStackViewControllerinteractiveDismissAnimation()
     ) {
-        self._viewControllers = _viewControllers
+        self._viewControllers = viewControllers
         self.presentAnimation = presentAnimation
         self.dismissAnimation = dismissAnimation
         self.interactiveDismissAnimation = interactiveDismissAnimation
         self.hidesGroupbarWhenPushed = false
         self.isAnimating = false
         super.init()
+        viewControllers.forEach({
+            self._addChildViewController($0)
+        })
     }
 
     open override func didLoad() {

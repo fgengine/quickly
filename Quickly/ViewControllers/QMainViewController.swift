@@ -125,258 +125,128 @@ open class QMainViewController : QViewController {
         if let vc = self.modalContainerViewController {
             self._appendModalContainer(vc)
         }
-        if let vc = self.pushContainerViewController {
-            self._appendPushContainer(vc)
-        }
         if let vc = self.dialogContainerViewController {
             self._appendDialogContainer(vc)
+        }
+        if let vc = self.pushContainerViewController {
+            self._appendPushContainer(vc)
         }
     }
 
     open override func layout(bounds: CGRect) {
-        if let vc = self.backgroundViewController {
-            vc.view.frame = bounds
-        }
-        if let vc = self.contentViewController {
-            vc.view.frame = bounds
-        }
-        if let vc = self.modalContainerViewController {
-            vc.view.frame = bounds
-        }
-        if let vc = self.pushContainerViewController {
-            vc.view.frame = bounds
-        }
-        if let vc = self.dialogContainerViewController {
-            vc.view.frame = bounds
-        }
+        self.backgroundViewController?.view.frame = bounds
+        self.contentViewController?.view.frame = bounds
+        self.modalContainerViewController?.view.frame = bounds
+        self.dialogContainerViewController?.view.frame = bounds
+        self.pushContainerViewController?.view.frame = bounds
     }
 
     open override func prepareInteractivePresent() {
         super.prepareInteractivePresent()
-        if let vc = self.backgroundViewController {
-            vc.prepareInteractivePresent()
-        }
-        if let vc = self.contentViewController {
-            vc.prepareInteractivePresent()
-        }
-        if let vc = self.modalContainerViewController {
-            vc.prepareInteractivePresent()
-        }
-        if let vc = self.pushContainerViewController {
-            vc.prepareInteractivePresent()
-        }
-        if let vc = self.dialogContainerViewController {
-            vc.prepareInteractivePresent()
-        }
+        self.backgroundViewController?.prepareInteractivePresent()
+        self.contentViewController?.prepareInteractivePresent()
+        self.modalContainerViewController?.prepareInteractivePresent()
+        self.dialogContainerViewController?.prepareInteractivePresent()
+        self.pushContainerViewController?.prepareInteractivePresent()
     }
 
     open override func cancelInteractivePresent() {
         super.cancelInteractivePresent()
-        if let vc = self.backgroundViewController {
-            vc.cancelInteractivePresent()
-        }
-        if let vc = self.contentViewController {
-            vc.cancelInteractivePresent()
-        }
-        if let vc = self.modalContainerViewController {
-            vc.cancelInteractivePresent()
-        }
-        if let vc = self.pushContainerViewController {
-            vc.cancelInteractivePresent()
-        }
-        if let vc = self.dialogContainerViewController {
-            vc.cancelInteractivePresent()
-        }
+        self.backgroundViewController?.cancelInteractivePresent()
+        self.contentViewController?.cancelInteractivePresent()
+        self.modalContainerViewController?.cancelInteractivePresent()
+        self.dialogContainerViewController?.cancelInteractivePresent()
+        self.pushContainerViewController?.cancelInteractivePresent()
     }
 
     open override func finishInteractivePresent() {
         super.finishInteractivePresent()
-        if let vc = self.backgroundViewController {
-            vc.finishInteractivePresent()
-        }
-        if let vc = self.contentViewController {
-            vc.finishInteractivePresent()
-        }
-        if let vc = self.modalContainerViewController {
-            vc.finishInteractivePresent()
-        }
-        if let vc = self.pushContainerViewController {
-            vc.finishInteractivePresent()
-        }
-        if let vc = self.dialogContainerViewController {
-            vc.finishInteractivePresent()
-        }
+        self.backgroundViewController?.finishInteractivePresent()
+        self.contentViewController?.finishInteractivePresent()
+        self.modalContainerViewController?.finishInteractivePresent()
+        self.dialogContainerViewController?.finishInteractivePresent()
+        self.pushContainerViewController?.finishInteractivePresent()
     }
 
     open override func willPresent(animated: Bool) {
         super.willPresent(animated: animated)
-        if let vc = self.backgroundViewController {
-            vc.willPresent(animated: animated)
-        }
-        if let vc = self.contentViewController {
-            vc.willPresent(animated: animated)
-        }
-        if let vc = self.modalContainerViewController {
-            vc.willPresent(animated: animated)
-        }
-        if let vc = self.pushContainerViewController {
-            vc.willPresent(animated: animated)
-        }
-        if let vc = self.dialogContainerViewController {
-            vc.willPresent(animated: animated)
-        }
+        self.backgroundViewController?.willPresent(animated: animated)
+        self.contentViewController?.willPresent(animated: animated)
+        self.modalContainerViewController?.willPresent(animated: animated)
+        self.dialogContainerViewController?.willPresent(animated: animated)
+        self.pushContainerViewController?.willPresent(animated: animated)
     }
 
     open override func didPresent(animated: Bool) {
         super.didPresent(animated: animated)
-        if let vc = self.backgroundViewController {
-            vc.didPresent(animated: animated)
-        }
-        if let vc = self.contentViewController {
-            vc.didPresent(animated: animated)
-        }
-        if let vc = self.modalContainerViewController {
-            vc.didPresent(animated: animated)
-        }
-        if let vc = self.pushContainerViewController {
-            vc.didPresent(animated: animated)
-        }
-        if let vc = self.dialogContainerViewController {
-            vc.didPresent(animated: animated)
-        }
+        self.backgroundViewController?.didPresent(animated: animated)
+        self.contentViewController?.didPresent(animated: animated)
+        self.modalContainerViewController?.didPresent(animated: animated)
+        self.dialogContainerViewController?.didPresent(animated: animated)
+        self.pushContainerViewController?.didPresent(animated: animated)
     }
 
     open override func prepareInteractiveDismiss() {
         super.prepareInteractiveDismiss()
-        if let vc = self.backgroundViewController {
-            vc.prepareInteractiveDismiss()
-        }
-        if let vc = self.contentViewController {
-            vc.prepareInteractiveDismiss()
-        }
-        if let vc = self.modalContainerViewController {
-            vc.prepareInteractiveDismiss()
-        }
-        if let vc = self.pushContainerViewController {
-            vc.prepareInteractiveDismiss()
-        }
-        if let vc = self.dialogContainerViewController {
-            vc.prepareInteractiveDismiss()
-        }
+        self.backgroundViewController?.prepareInteractiveDismiss()
+        self.contentViewController?.prepareInteractiveDismiss()
+        self.modalContainerViewController?.prepareInteractiveDismiss()
+        self.dialogContainerViewController?.prepareInteractiveDismiss()
+        self.pushContainerViewController?.prepareInteractiveDismiss()
     }
 
     open override func cancelInteractiveDismiss() {
         super.cancelInteractiveDismiss()
-        if let vc = self.backgroundViewController {
-            vc.cancelInteractiveDismiss()
-        }
-        if let vc = self.contentViewController {
-            vc.cancelInteractiveDismiss()
-        }
-        if let vc = self.modalContainerViewController {
-            vc.cancelInteractiveDismiss()
-        }
-        if let vc = self.pushContainerViewController {
-            vc.cancelInteractiveDismiss()
-        }
-        if let vc = self.dialogContainerViewController {
-            vc.cancelInteractiveDismiss()
-        }
+        self.backgroundViewController?.cancelInteractiveDismiss()
+        self.contentViewController?.cancelInteractiveDismiss()
+        self.modalContainerViewController?.cancelInteractiveDismiss()
+        self.dialogContainerViewController?.cancelInteractiveDismiss()
+        self.pushContainerViewController?.cancelInteractiveDismiss()
     }
 
     open override func finishInteractiveDismiss() {
         super.finishInteractiveDismiss()
-        if let vc = self.backgroundViewController {
-            vc.finishInteractiveDismiss()
-        }
-        if let vc = self.contentViewController {
-            vc.finishInteractiveDismiss()
-        }
-        if let vc = self.modalContainerViewController {
-            vc.finishInteractiveDismiss()
-        }
-        if let vc = self.pushContainerViewController {
-            vc.finishInteractiveDismiss()
-        }
-        if let vc = self.dialogContainerViewController {
-            vc.finishInteractiveDismiss()
-        }
+        self.backgroundViewController?.finishInteractiveDismiss()
+        self.contentViewController?.finishInteractiveDismiss()
+        self.modalContainerViewController?.finishInteractiveDismiss()
+        self.dialogContainerViewController?.finishInteractiveDismiss()
+        self.pushContainerViewController?.finishInteractiveDismiss()
     }
 
     open override func willDismiss(animated: Bool) {
         super.willDismiss(animated: animated)
-        if let vc = self.backgroundViewController {
-            vc.willDismiss(animated: animated)
-        }
-        if let vc = self.contentViewController {
-            vc.willDismiss(animated: animated)
-        }
-        if let vc = self.modalContainerViewController {
-            vc.willDismiss(animated: animated)
-        }
-        if let vc = self.pushContainerViewController {
-            vc.willDismiss(animated: animated)
-        }
-        if let vc = self.dialogContainerViewController {
-            vc.willDismiss(animated: animated)
-        }
+        self.backgroundViewController?.willDismiss(animated: animated)
+        self.contentViewController?.willDismiss(animated: animated)
+        self.modalContainerViewController?.willDismiss(animated: animated)
+        self.dialogContainerViewController?.willDismiss(animated: animated)
+        self.pushContainerViewController?.willDismiss(animated: animated)
     }
 
     open override func didDismiss(animated: Bool) {
         super.didDismiss(animated: animated)
-        if let vc = self.backgroundViewController {
-            vc.didDismiss(animated: animated)
-        }
-        if let vc = self.contentViewController {
-            vc.didDismiss(animated: animated)
-        }
-        if let vc = self.modalContainerViewController {
-            vc.didDismiss(animated: animated)
-        }
-        if let vc = self.pushContainerViewController {
-            vc.didDismiss(animated: animated)
-        }
-        if let vc = self.dialogContainerViewController {
-            vc.didDismiss(animated: animated)
-        }
+        self.backgroundViewController?.didDismiss(animated: animated)
+        self.contentViewController?.didDismiss(animated: animated)
+        self.modalContainerViewController?.didDismiss(animated: animated)
+        self.dialogContainerViewController?.didDismiss(animated: animated)
+        self.pushContainerViewController?.didDismiss(animated: animated)
     }
 
     open override func willTransition(size: CGSize) {
         super.willTransition(size: size)
-        if let vc = self.backgroundViewController {
-            vc.willTransition(size: size)
-        }
-        if let vc = self.contentViewController {
-            vc.willTransition(size: size)
-        }
-        if let vc = self.modalContainerViewController {
-            vc.willTransition(size: size)
-        }
-        if let vc = self.pushContainerViewController {
-            vc.willTransition(size: size)
-        }
-        if let vc = self.dialogContainerViewController {
-            vc.willTransition(size: size)
-        }
+        self.backgroundViewController?.willTransition(size: size)
+        self.contentViewController?.willTransition(size: size)
+        self.modalContainerViewController?.willTransition(size: size)
+        self.dialogContainerViewController?.willTransition(size: size)
+        self.pushContainerViewController?.willTransition(size: size)
     }
 
     open override func didTransition(size: CGSize) {
         super.didTransition(size: size)
-        if let vc = self.backgroundViewController {
-            vc.didTransition(size: size)
-        }
-        if let vc = self.contentViewController {
-            vc.didTransition(size: size)
-        }
-        if let vc = self.modalContainerViewController {
-            vc.didTransition(size: size)
-        }
-        if let vc = self.pushContainerViewController {
-            vc.didTransition(size: size)
-        }
-        if let vc = self.dialogContainerViewController {
-            vc.didTransition(size: size)
-        }
+        self.backgroundViewController?.didTransition(size: size)
+        self.contentViewController?.didTransition(size: size)
+        self.modalContainerViewController?.didTransition(size: size)
+        self.dialogContainerViewController?.didTransition(size: size)
+        self.pushContainerViewController?.didTransition(size: size)
     }
 
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
@@ -409,30 +279,14 @@ open class QMainViewController : QViewController {
 
     private func _appendContentController(_ viewController: IQViewController) {
         viewController.view.frame = self.view.bounds
-        if let vc = self.dialogContainerViewController {
-            if vc.view.superview == self.view {
-                self.view.insertSubview(viewController.view, belowSubview: vc.view)
-            } else {
-                self.view.addSubview(viewController.view)
-            }
-        } else if let vc = self.pushContainerViewController {
-            if vc.view.superview == self.view {
-                self.view.insertSubview(viewController.view, belowSubview: vc.view)
-            } else {
-                self.view.addSubview(viewController.view)
-            }
-        } else if let vc = self.modalContainerViewController {
-            if vc.view.superview == self.view {
-                self.view.insertSubview(viewController.view, belowSubview: vc.view)
-            } else {
-                self.view.addSubview(viewController.view)
-            }
-        } else if let vc = self.backgroundViewController {
-            if vc.view.superview == self.view {
-                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
-            } else {
-                self.view.addSubview(viewController.view)
-            }
+        if let vc = self.backgroundViewController, vc.view.superview == self.view {
+            self.view.insertSubview(viewController.view, aboveSubview: vc.view)
+        } else if let vc = self.modalContainerViewController, vc.view.superview == self.view {
+            self.view.insertSubview(viewController.view, belowSubview: vc.view)
+        } else if let vc = self.dialogContainerViewController, vc.view.superview == self.view {
+            self.view.insertSubview(viewController.view, belowSubview: vc.view)
+        } else if let vc = self.pushContainerViewController, vc.view.superview == self.view {
+            self.view.insertSubview(viewController.view, belowSubview: vc.view)
         } else {
             self.view.addSubview(viewController.view)
         }
@@ -440,61 +294,14 @@ open class QMainViewController : QViewController {
 
     private func _appendModalContainer(_ viewController: IQModalContainerViewController) {
         viewController.view.frame = self.view.bounds
-        if let vc = self.dialogContainerViewController {
-            if vc.view.superview == self.view {
-                self.view.insertSubview(viewController.view, belowSubview: vc.view)
-            } else {
-                self.view.addSubview(viewController.view)
-            }
-        } else if let vc = self.pushContainerViewController {
-            if vc.view.superview == self.view {
-                self.view.insertSubview(viewController.view, belowSubview: vc.view)
-            } else {
-                self.view.addSubview(viewController.view)
-            }
-        } else if let vc = self.contentViewController {
-            if vc.view.superview == self.view {
-                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
-            } else {
-                self.view.addSubview(viewController.view)
-            }
-        } else if let vc = self.backgroundViewController {
-            if vc.view.superview == self.view {
-                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
-            } else {
-                self.view.addSubview(viewController.view)
-            }
-        } else {
-            self.view.addSubview(viewController.view)
-        }
-    }
-
-    private func _appendPushContainer(_ viewController: IQPushContainerViewController) {
-        viewController.view.frame = self.view.bounds
-        if let vc = self.dialogContainerViewController {
-            if vc.view.superview == self.view {
-                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
-            } else {
-                self.view.addSubview(viewController.view)
-            }
-        } else if let vc = self.modalContainerViewController {
-            if vc.view.superview == self.view {
-                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
-            } else {
-                self.view.addSubview(viewController.view)
-            }
-        } else if let vc = self.contentViewController {
-            if vc.view.superview == self.view {
-                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
-            } else {
-                self.view.addSubview(viewController.view)
-            }
-        } else if let vc = self.backgroundViewController {
-            if vc.view.superview == self.view {
-                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
-            } else {
-                self.view.addSubview(viewController.view)
-            }
+        if let vc = self.contentViewController, vc.view.superview == self.view {
+            self.view.insertSubview(viewController.view, aboveSubview: vc.view)
+        } else if let vc = self.backgroundViewController, vc.view.superview == self.view {
+            self.view.insertSubview(viewController.view, aboveSubview: vc.view)
+        } else if let vc = self.dialogContainerViewController, vc.view.superview == self.view {
+            self.view.insertSubview(viewController.view, belowSubview: vc.view)
+        } else if let vc = self.pushContainerViewController, vc.view.superview == self.view {
+            self.view.insertSubview(viewController.view, belowSubview: vc.view)
         } else {
             self.view.addSubview(viewController.view)
         }
@@ -502,30 +309,29 @@ open class QMainViewController : QViewController {
 
     private func _appendDialogContainer(_ viewController: IQDialogContainerViewController) {
         viewController.view.frame = self.view.bounds
-        if let vc = self.pushContainerViewController {
-            if vc.view.superview == self.view {
-                self.view.insertSubview(viewController.view, belowSubview: vc.view)
-            } else {
-                self.view.addSubview(viewController.view)
-            }
-        } else if let vc = self.modalContainerViewController {
-            if vc.view.superview == self.view {
-                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
-            } else {
-                self.view.addSubview(viewController.view)
-            }
-        } else if let vc = self.contentViewController {
-            if vc.view.superview == self.view {
-                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
-            } else {
-                self.view.addSubview(viewController.view)
-            }
-        } else if let vc = self.backgroundViewController {
-            if vc.view.superview == self.view {
-                self.view.insertSubview(viewController.view, aboveSubview: vc.view)
-            } else {
-                self.view.addSubview(viewController.view)
-            }
+        if let vc = self.modalContainerViewController, vc.view.superview == self.view {
+            self.view.insertSubview(viewController.view, aboveSubview: vc.view)
+        } else if let vc = self.contentViewController, vc.view.superview == self.view {
+            self.view.insertSubview(viewController.view, aboveSubview: vc.view)
+        } else if let vc = self.backgroundViewController, vc.view.superview == self.view {
+            self.view.insertSubview(viewController.view, aboveSubview: vc.view)
+        } else if let vc = self.pushContainerViewController, vc.view.superview == self.view {
+            self.view.insertSubview(viewController.view, belowSubview: vc.view)
+        } else {
+            self.view.addSubview(viewController.view)
+        }
+    }
+    
+    private func _appendPushContainer(_ viewController: IQPushContainerViewController) {
+        viewController.view.frame = self.view.bounds
+        if let vc = self.dialogContainerViewController, vc.view.superview == self.view {
+            self.view.insertSubview(viewController.view, aboveSubview: vc.view)
+        } else if let vc = self.modalContainerViewController, vc.view.superview == self.view {
+            self.view.insertSubview(viewController.view, aboveSubview: vc.view)
+        } else if let vc = self.contentViewController, vc.view.superview == self.view {
+            self.view.insertSubview(viewController.view, aboveSubview: vc.view)
+        } else if let vc = self.backgroundViewController, vc.view.superview == self.view {
+            self.view.insertSubview(viewController.view, aboveSubview: vc.view)
         } else {
             self.view.addSubview(viewController.view)
         }

@@ -115,11 +115,11 @@ open class QMultiTextFieldStyleSheet : QDisplayViewStyleSheet {
 
 public protocol IQMultiTextFieldObserver : class {
     
-    func beginEditing(textField: QMultiTextField)
-    func editing(textField: QMultiTextField)
-    func endEditing(textField: QMultiTextField)
-    func pressedReturn(textField: QMultiTextField)
-    func changed(textField: QMultiTextField, height: CGFloat)
+    func beginEditing(multiTextField: QMultiTextField)
+    func editing(multiTextField: QMultiTextField)
+    func endEditing(multiTextField: QMultiTextField)
+    func pressedReturn(multiTextField: QMultiTextField)
+    func changed(multiTextField: QMultiTextField, height: CGFloat)
     
 }
 
@@ -436,7 +436,7 @@ public class QMultiTextField : QDisplayView, IQField {
                 closure(field)
             }
             field._observer.reverseNotify({ (observer) in
-                observer.beginEditing(textField: field)
+                observer.beginEditing(multiTextField: field)
             })
         }
         
@@ -451,7 +451,7 @@ public class QMultiTextField : QDisplayView, IQField {
                 closure(field)
             }
             field._observer.reverseNotify({ (observer) in
-                observer.endEditing(textField: field)
+                observer.endEditing(multiTextField: field)
             })
         }
         
@@ -522,7 +522,7 @@ public class QMultiTextField : QDisplayView, IQField {
                         closure(field)
                     }
                     field._observer.reverseNotify({ (observer) in
-                        observer.editing(textField: field)
+                        observer.editing(multiTextField: field)
                     })
                 }
             }

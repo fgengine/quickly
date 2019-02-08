@@ -32,60 +32,48 @@ class ButtonViewController : QNibViewController, IQRouterable, IQContextable {
         normalStyle.color = UIColor.red
         normalStyle.cornerRadius = QViewCornerRadius.auto
         normalStyle.shadow = QViewShadow(color: .black, opacity: 0.5, radius: 10, offset: CGSize(width: 0, height: 6))
-        normalStyle.text = QText("Normal", color: UIColor.black)
-        normalStyle.image = QImageSource(
-            "button_image",
-            renderingMode: .alwaysTemplate,
-            tintColor: UIColor.black
-        )
+        normalStyle.text = QLabelStyleSheet(text: QText("Normal"))
+        normalStyle.image = QImageViewStyleSheet(source: QImageSource("button_image"))
 
         let highlightedStyle = QButtonStyle(parent: normalStyle)
         highlightedStyle.color = UIColor.blue
-        highlightedStyle.text = QText("Highlighted", color: UIColor.white)
-        highlightedStyle.image = QImageSource(
-            "button_image",
-            renderingMode: .alwaysTemplate,
-            tintColor: UIColor.white
-        )
+        highlightedStyle.text = QLabelStyleSheet(text: QText("Highlighted"))
+        highlightedStyle.image = QImageViewStyleSheet(source: QImageSource("button_image"))
 
         self.button.imageInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         self.button.textInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         self.button.normalStyle = normalStyle
         self.button.highlightedStyle = highlightedStyle
-        self.button.addTouchUpInside(self, action: #selector(self.pressedButton(_:)))
+        self.button.onPressed = { [weak self] (button) in
+            guard let strong = self else { return }
+            UIView.animate(withDuration: 0.2, delay: 0, options: [ .beginFromCurrentState ], animations: {
+                switch strong.button.imagePosition {
+                case .top: strong.button.imagePosition = .right
+                case .right: strong.button.imagePosition = .bottom
+                case .bottom: strong.button.imagePosition = .left
+                case .left: strong.button.imagePosition = .top
+                }
+                strong.button.layoutIfNeeded()
+            })
+        }
 
         self.spinnerButton.imageInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         self.spinnerButton.textInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         self.spinnerButton.normalStyle = normalStyle
         self.spinnerButton.highlightedStyle = highlightedStyle
         self.spinnerButton.spinnerView = QSpinnerView()
-        self.spinnerButton.addTouchUpInside(self, action: #selector(self.pressedSpinnerButton(_:)))
-    }
-
-    @objc
-    func pressedButton(_ sender: Any) {
-        UIView.animate(withDuration: 0.2, delay: 0, options: [ .beginFromCurrentState ], animations: {
-            switch self.button.imagePosition {
-            case .top: self.button.imagePosition = .right
-            case .right: self.button.imagePosition = .bottom
-            case .bottom: self.button.imagePosition = .left
-            case .left: self.button.imagePosition = .top
-            }
-            self.button.layoutIfNeeded()
-        })
-    }
-
-    @objc
-    func pressedSpinnerButton(_ sender: Any) {
-        UIView.animate(withDuration: 0.2, delay: 0, options: [ .beginFromCurrentState ], animations: {
-            self.spinnerButton.startSpinner()
-            self.spinnerButton.layoutIfNeeded()
-        })
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+        self.spinnerButton.onPressed = { [weak self] (button) in
+            guard let strong = self else { return }
             UIView.animate(withDuration: 0.2, delay: 0, options: [ .beginFromCurrentState ], animations: {
-                self.spinnerButton.stopSpinner()
-                self.spinnerButton.layoutIfNeeded()
+                strong.spinnerButton.startSpinner()
+                strong.spinnerButton.layoutIfNeeded()
             })
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+                UIView.animate(withDuration: 0.2, delay: 0, options: [ .beginFromCurrentState ], animations: {
+                    strong.spinnerButton.stopSpinner()
+                    strong.spinnerButton.layoutIfNeeded()
+                })
+            }
         }
     }
 

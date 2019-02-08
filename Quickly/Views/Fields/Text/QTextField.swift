@@ -9,8 +9,8 @@ open class QTextFieldStyleSheet : QDisplayViewStyleSheet {
     public var formatter: IQStringFormatter?
     public var textInsets: UIEdgeInsets
     public var textStyle: IQTextStyle?
-    public var editingInsets: UIEdgeInsets
-    public var placeholderInsets: UIEdgeInsets
+    public var editingInsets: UIEdgeInsets?
+    public var placeholderInsets: UIEdgeInsets?
     public var placeholder: IQText?
     public var typingStyle: IQTextStyle?
     public var autocapitalizationType: UITextAutocapitalizationType
@@ -30,8 +30,8 @@ open class QTextFieldStyleSheet : QDisplayViewStyleSheet {
         formatter: IQStringFormatter? = nil,
         textInsets: UIEdgeInsets = UIEdgeInsets.zero,
         textStyle: IQTextStyle? = nil,
-        editingInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        placeholderInsets: UIEdgeInsets = UIEdgeInsets.zero,
+        editingInsets: UIEdgeInsets? = nil,
+        placeholderInsets: UIEdgeInsets? = nil,
         placeholder: IQText? = nil,
         typingStyle: IQTextStyle? = nil,
         autocapitalizationType: UITextAutocapitalizationType = .none,
@@ -229,11 +229,11 @@ public class QTextField : QDisplayView, IQField {
             return result
         }
     }
-    public var editingInsets: UIEdgeInsets {
+    public var editingInsets: UIEdgeInsets? {
         set(value) { self.fieldView.editingInsets = value }
         get { return self.fieldView.editingInsets }
     }
-    public var placeholderInsets: UIEdgeInsets {
+    public var placeholderInsets: UIEdgeInsets? {
         set(value) { self.fieldView.placeholderInsets = value }
         get { return self.fieldView.placeholderInsets }
     }
@@ -381,22 +381,8 @@ public class QTextField : QDisplayView, IQField {
     internal class Field : UITextField, IQView {
 
         public var textInsets: UIEdgeInsets = UIEdgeInsets.zero
-        public var editingInsets: UIEdgeInsets {
-            set(value) { self._editingInsets = value }
-            get {
-                guard let insets = self._editingInsets else { return self.textInsets }
-                return insets
-            }
-        }
-        private var _editingInsets: UIEdgeInsets?
-        public var placeholderInsets: UIEdgeInsets {
-            set(value) { self._placeholderInsets = value }
-            get {
-                guard let insets = self._placeholderInsets else { return self.textInsets }
-                return insets
-            }
-        }
-        private var _placeholderInsets: UIEdgeInsets?
+        public var editingInsets: UIEdgeInsets?
+        public var placeholderInsets: UIEdgeInsets?
 
         public override init(frame: CGRect) {
             super.init(frame: frame)
@@ -417,11 +403,17 @@ public class QTextField : QDisplayView, IQField {
         }
 
         open override func editingRect(forBounds bounds: CGRect) -> CGRect {
-            return bounds.inset(by: self.editingInsets)
+            guard let insets = self.editingInsets else {
+                return bounds.inset(by: self.textInsets)
+            }
+            return bounds.inset(by: insets)
         }
 
         open override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-            return bounds.inset(by: self.placeholderInsets)
+            guard let insets = self.placeholderInsets else {
+                return bounds.inset(by: self.textInsets)
+            }
+            return bounds.inset(by: insets)
         }
 
     }

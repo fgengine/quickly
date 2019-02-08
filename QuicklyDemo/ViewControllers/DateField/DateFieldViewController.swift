@@ -27,7 +27,13 @@ class DateFieldViewController : QNibViewController, IQRouterable, IQContextable 
     override func didLoad() {
         super.didLoad()
 
-        self.dateField.formatter = QDateFieldFormatter(dateFormat: "dd.MM.yyyy")
+        self.dateField.formatter = QDateFieldFormatter(
+            dateFormat: "dd.MM.yyyy",
+            textStyle: QTextStyle(
+                font: UIFont.systemFont(ofSize: UIFont.systemFontSize),
+                color: UIColor.black
+            )
+        )
         self.dateField.placeholder = QText("DateField")
         self.dateField.onSelect = { (dateField, date) in
             print("\(NSStringFromClass(dateField.classForCoder)).onSelect(date: \(date)")

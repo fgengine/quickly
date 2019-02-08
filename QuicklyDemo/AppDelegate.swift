@@ -5,15 +5,11 @@
 import Quickly
 
 @UIApplicationMain
-class AppDelegate : QApplication< AppContext, AppWireframe > {
-
-    override func prepareContext() -> AppContext {
-        return AppContext()
-    }
+class AppDelegate : QApplication< AppWireframe > {
 
     override func prepareWireframe() -> AppWireframe {
         return AppWireframe(
-            context: self.context
+            context: AppContext()
         )
     }
 

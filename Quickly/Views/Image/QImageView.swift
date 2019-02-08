@@ -80,6 +80,26 @@ open class QImageView : QDisplayView {
         }
     }
     
+    public required init() {
+        super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        self.setup()
+    }
+    
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.setup()
+    }
+    
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.setup()
+    }
+    
+    public convenience init(frame: CGRect, styleSheet: QImageViewStyleSheet) {
+        self.init(frame: frame)
+        self.apply(styleSheet)
+    }
+    
     open override var frame: CGRect {
         set(value) {
             if(super.frame != value) {

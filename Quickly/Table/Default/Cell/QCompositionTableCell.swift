@@ -137,6 +137,28 @@ extension QCompositionTableCell : IQTextFieldObserver {
     
 }
 
+extension QCompositionTableCell : IQMultiTextFieldObserver {
+    
+    open func beginEditing(multiTextField: QMultiTextField) {
+        self._scroll(animated: true)
+    }
+    
+    open func editing(multiTextField: QMultiTextField) {
+    }
+    
+    open func endEditing(multiTextField: QMultiTextField) {
+    }
+    
+    open func pressedReturn(multiTextField: QMultiTextField) {
+    }
+    
+    open func changed(multiTextField: QMultiTextField, height: CGFloat) {
+        guard let controller = self.row?.section?.controller else { return }
+        controller.performBatchUpdates({})
+    }
+    
+}
+
 extension QCompositionTableCell : IQListFieldObserver {
     
     open func beginEditing(listField: QListField) {

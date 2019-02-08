@@ -102,15 +102,15 @@ open class QStackbar : QView {
         self.backgroundColor = UIColor.white
 
         self._leftView = WrapView(frame: self.bounds)
-        self._leftView.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        self._leftView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         self.addSubview(self._leftView)
 
         self._centerView = WrapView(frame: self.bounds)
-        self._centerView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        self._centerView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         self.addSubview(self._centerView)
 
         self._rightView = WrapView(frame: self.bounds)
-        self._rightView.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        self._rightView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         self.addSubview(self._rightView)
     }
 

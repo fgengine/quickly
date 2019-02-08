@@ -39,7 +39,7 @@ public class QButton : QView {
     public var isSelected: Bool = false {
         didSet(oldValue) { if self.isSelected != oldValue { self._invalidate() } }
     }
-    public var isEnabled: Bool = false {
+    public var isEnabled: Bool = true {
         didSet(oldValue) { if self.isEnabled != oldValue { self._invalidate() } }
     }
     public var contentHorizontalAlignment: QButtonContentHorizontalAlignment = .fill {

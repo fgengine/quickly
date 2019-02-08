@@ -30,22 +30,20 @@ class DialogViewController : QNibViewController, IQRouterable, IQContextable {
         let normalStyle = QButtonStyle()
         normalStyle.color = UIColor.lightGray
         normalStyle.cornerRadius = QViewCornerRadius.manual(radius: 4)
-        normalStyle.text = QText("Show dialog", color: UIColor.black)
+        normalStyle.text = QLabelStyleSheet(text: QText("Show dialog"))
 
         let highlightedStyle = QButtonStyle(parent: normalStyle)
         highlightedStyle.color = UIColor.darkGray
-        highlightedStyle.text = QText("Show dialog", color: UIColor.black)
+        highlightedStyle.text = QLabelStyleSheet(text: QText("Show dialog"))
 
         self.showDialogButton.imageInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         self.showDialogButton.textInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         self.showDialogButton.normalStyle = normalStyle
         self.showDialogButton.highlightedStyle = highlightedStyle
-        self.showDialogButton.addTouchUpInside(self, action: #selector(self.pressedShowDialog(_:)))
-    }
-
-    @objc
-    private func pressedShowDialog(_ sender: Any) {
-        self.router.presentConfirmDialog()
+        self.showDialogButton.onPressed = { [weak self] (button) in
+            guard let strong = self else { return }
+            strong.router.presentConfirmDialog()
+        }
     }
 
 }

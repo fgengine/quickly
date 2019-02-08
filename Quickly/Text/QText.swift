@@ -11,13 +11,22 @@ open class QText : IQText {
         get { return nil }
     }
 
-    public init(_ string: String, font: UIFont, color: UIColor) {
+    public init(
+        _ string: String,
+        font: UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize),
+        color: UIColor = UIColor.black
+    ) {
         self.string = string
         self.font = font
         self.color = color
     }
     
-    public init(_ string: String, font: UIFont, color: UIColor, parts: [String : String]) {
+    public init(
+        _ string: String,
+        font: UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize),
+        color: UIColor = UIColor.black,
+        parts: [String : String]
+    ) {
         self.string = string
         parts.forEach({ (key: String, value: String) in
             if let range = string.range(of: key) {

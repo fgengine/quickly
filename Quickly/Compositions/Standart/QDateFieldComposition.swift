@@ -8,38 +8,38 @@ open class QDateFieldComposable : QComposable {
     public typealias Closure = (_ composable: QDateFieldComposable) -> Void
 
     public var field: QDateFieldStyleSheet
-    public var fieldHeight: CGFloat
-    public var fieldDate: Date?
-    public var fieldIsValid: Bool
-    public var fieldIsEditing: Bool
-    public var fieldShouldBeginEditing: ShouldClosure?
-    public var fieldBeginEditing: Closure?
-    public var fieldSelect: Closure?
-    public var fieldShouldEndEditing: ShouldClosure?
-    public var fieldEndEditing: Closure?
+    public var height: CGFloat
+    public var date: Date?
+    public var isValid: Bool
+    public var isEditing: Bool
+    public var shouldBeginEditing: ShouldClosure?
+    public var beginEditing: Closure?
+    public var select: Closure?
+    public var shouldEndEditing: ShouldClosure?
+    public var endEditing: Closure?
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         field: QDateFieldStyleSheet,
-        fieldDate: Date? = nil,
-        fieldHeight: CGFloat = 44,
-        fieldSelectedRow: QListFieldPickerRow? = nil,
-        fieldShouldBeginEditing: ShouldClosure? = nil,
-        fieldBeginEditing: Closure? = nil,
-        fieldSelect: Closure? = nil,
-        fieldShouldEndEditing: ShouldClosure? = nil,
-        fieldEndEditing: Closure? = nil
+        date: Date? = nil,
+        height: CGFloat = 44,
+        selectedRow: QListFieldPickerRow? = nil,
+        shouldBeginEditing: ShouldClosure? = nil,
+        beginEditing: Closure? = nil,
+        select: Closure? = nil,
+        shouldEndEditing: ShouldClosure? = nil,
+        endEditing: Closure? = nil
     ) {
         self.field = field
-        self.fieldDate = fieldDate
-        self.fieldHeight = fieldHeight
-        self.fieldIsValid = true
-        self.fieldIsEditing = false
-        self.fieldShouldBeginEditing = fieldShouldBeginEditing
-        self.fieldBeginEditing = fieldBeginEditing
-        self.fieldSelect = fieldSelect
-        self.fieldShouldEndEditing = fieldShouldEndEditing
-        self.fieldEndEditing = fieldEndEditing
+        self.date = date
+        self.height = height
+        self.isValid = true
+        self.isEditing = false
+        self.shouldBeginEditing = shouldBeginEditing
+        self.beginEditing = beginEditing
+        self.select = select
+        self.shouldEndEditing = shouldEndEditing
+        self.endEditing = endEditing
         super.init(edgeInsets: edgeInsets)
     }
 
@@ -84,7 +84,7 @@ open class QDateFieldComposition< Composable: QDateFieldComposable > : QComposit
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         return CGSize(
             width: spec.containerSize.width,
-            height: composable.edgeInsets.top + composable.fieldHeight + composable.edgeInsets.bottom
+            height: composable.edgeInsets.top + composable.height + composable.edgeInsets.bottom
         )
     }
     
@@ -125,12 +125,12 @@ open class QDateFieldComposition< Composable: QDateFieldComposable > : QComposit
     }
     
     open override func postLayout(composable: Composable, spec: IQContainerSpec) {
-        self.dateField.date = composable.fieldDate
+        self.dateField.date = composable.date
     }
 
     private func _shouldBeginEditing() -> Bool {
         guard let composable = self.composable else { return true }
-        if let closure = composable.fieldShouldBeginEditing {
+        if let closure = composable.shouldBeginEditing {
             return closure(composable)
         }
         return true
@@ -138,24 +138,24 @@ open class QDateFieldComposition< Composable: QDateFieldComposable > : QComposit
 
     private func _beginEditing() {
         guard let composable = self.composable else { return }
-        composable.fieldIsEditing = self.dateField.isEditing
-        if let closure = composable.fieldBeginEditing {
+        composable.isEditing = self.dateField.isEditing
+        if let closure = composable.beginEditing {
             closure(composable)
         }
     }
 
     private func _select(_ date: Date) {
         guard let composable = self.composable else { return }
-        composable.fieldIsValid = self.dateField.isValid
-        composable.fieldDate = date
-        if let closure = composable.fieldSelect {
+        composable.isValid = self.dateField.isValid
+        composable.date = date
+        if let closure = composable.select {
             closure(composable)
         }
     }
 
     private func _shouldEndEditing() -> Bool {
         guard let composable = self.composable else { return true }
-        if let closure = composable.fieldShouldEndEditing {
+        if let closure = composable.shouldEndEditing {
             return closure(composable)
         }
         return true
@@ -163,8 +163,8 @@ open class QDateFieldComposition< Composable: QDateFieldComposable > : QComposit
 
     private func _endEditing() {
         guard let composable = self.composable else { return }
-        composable.fieldIsEditing = self.dateField.isEditing
-        if let closure = composable.fieldEndEditing {
+        composable.isEditing = self.dateField.isEditing
+        if let closure = composable.endEditing {
             closure(composable)
         }
     }

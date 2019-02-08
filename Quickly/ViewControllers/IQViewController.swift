@@ -10,8 +10,6 @@ public protocol IQViewControllerDelegate : class {
 
 public protocol IQViewController : class {
 
-    typealias ViewType = UIView & IQViewControllerView
-
     var delegate: IQViewControllerDelegate? { set get }
     var parent: IQViewController? { set get }
     var child: [IQViewController] { get }
@@ -19,13 +17,11 @@ public protocol IQViewController : class {
     var additionalEdgeInsets: UIEdgeInsets { set get }
     var inheritedEdgeInsets: UIEdgeInsets { get }
     var adjustedContentInset: UIEdgeInsets { get }
-    var view: ViewType { get }
+    var view: UIView { get }
     var isLoaded: Bool { get }
     var isPresented: Bool { get }
 
     func setup()
-
-    func load() -> ViewType
 
     func loadViewIfNeeded()
     func didLoad()
@@ -64,11 +60,5 @@ public protocol IQViewController : class {
     func preferedStatusBarStyle() -> UIStatusBarStyle
     func preferedStatusBarAnimation() -> UIStatusBarAnimation
     func setNeedUpdateStatusBar()
-
-}
-
-public protocol IQViewControllerView : IQView {
-
-    var viewController: IQViewController? { get }
 
 }

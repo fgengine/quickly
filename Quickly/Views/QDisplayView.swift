@@ -95,8 +95,10 @@ extension QDisplayView {
             self.layer.shadowOpacity = Float(shadow.opacity)
             self.layer.shadowRadius = shadow.radius
             self.layer.shadowOffset = shadow.offset
+            self.clipsToBounds = false
         } else {
             self.layer.shadowColor = nil
+            self.clipsToBounds = true
         }
         self._updateShadowPath()
     }

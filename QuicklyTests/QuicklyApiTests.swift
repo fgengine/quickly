@@ -10,7 +10,11 @@ class QuicklyApiTests : XCTestCase {
     func testGetApi() {
         let expectation = self.expectation(description: "")
 
-        let provider = QApiProvider(baseUrl: URL(string: "https://habrahabr.ru")!)
+        let provider = QApiProvider(
+            baseUrl: URL(string: "https://habrahabr.ru")!,
+            sessionConfiguration: URLSessionConfiguration.default,
+            sessionQueue: OperationQueue()
+        )
 
         let request = QApiRequest(method: "GET")
         request.logging = .always

@@ -11,7 +11,7 @@ protocol IConfirmModalViewControllerRouter : IQRouter {
     
 }
 
-class ConfirmModalViewController : QNibViewController, IQModalContentViewController, IQRouterable, IQContextable {
+class ConfirmModalViewController : QNibViewController, IQRouterable, IQContextable {
 
     weak var router: IConfirmModalViewControllerRouter!
     weak var context: AppContext!
@@ -36,17 +36,20 @@ class ConfirmModalViewController : QNibViewController, IQModalContentViewControl
         let normalStyle = QButtonStyle()
         normalStyle.color = UIColor.lightGray
         normalStyle.cornerRadius = QViewCornerRadius.manual(radius: 4)
-        normalStyle.text = QText("Close", color: UIColor.black)
+        normalStyle.text = QLabelStyleSheet(text: QText("Close"))
 
         let highlightedStyle = QButtonStyle(parent: normalStyle)
         highlightedStyle.color = UIColor.darkGray
-        highlightedStyle.text = QText("Close", color: UIColor.black)
+        highlightedStyle.text = QLabelStyleSheet(text: QText("Close"))
 
         self.closeButton.imageInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         self.closeButton.textInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         self.closeButton.normalStyle = normalStyle
         self.closeButton.highlightedStyle = highlightedStyle
-        self.closeButton.addTouchUpInside(self, action: #selector(self.pressedClose(_:)))
+        self.closeButton.onPressed = { [weak self] (button) in
+            guard let strong = self else { return }
+            strong.router.dismiss(viewController: strong)
+        }
     }
 
     override func preferedStatusBarStyle() -> UIStatusBarStyle {
@@ -54,11 +57,6 @@ class ConfirmModalViewController : QNibViewController, IQModalContentViewControl
     }
 
     func didPressedOutsideContent() {
-        self.router.dismiss(viewController: self)
-    }
-
-    @objc
-    private func pressedClose(_ sender: Any) {
         self.router.dismiss(viewController: self)
     }
 

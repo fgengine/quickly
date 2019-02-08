@@ -181,6 +181,10 @@ open class QGroupbar : QView {
             return true
         }
         
+        public override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+            return self._cache[indexPath]
+        }
+        
         public override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
             var attributes: [UICollectionViewLayoutAttributes] = []
             for attribute in self._cache {

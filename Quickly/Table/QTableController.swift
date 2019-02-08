@@ -293,19 +293,20 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
     }
 
     open func performBatchUpdates(_ updates: (() -> Void)) {
-        #if DEBUG
-            assert(self.isBatchUpdating == false, "Recurcive calling IQTableController.performBatchUpdates()")
-        #endif
-        self.isBatchUpdating = true
-        if let tableView = self.tableView {
-            tableView.beginUpdates()
+        if self.isBatchUpdating == false {
+            self.isBatchUpdating = true
+            if let tableView = self.tableView {
+                tableView.beginUpdates()
+            }
+            updates()
+            if let tableView = self.tableView {
+                tableView.endUpdates()
+            }
+            self.isBatchUpdating = false
+            self._notifyUpdate()
+        } else {
+            updates()
         }
-        updates()
-        if let tableView = self.tableView {
-            tableView.endUpdates()
-        }
-        self.isBatchUpdating = false
-        self._notifyUpdate()
     }
 
     open func scroll(row: IQTableRow, scroll: UITableView.ScrollPosition, animated: Bool) {

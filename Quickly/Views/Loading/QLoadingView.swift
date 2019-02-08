@@ -76,6 +76,7 @@ open class QLoadingView : QView, IQLoadingView {
             self.panelView.centerXLayout == self.centerXLayout,
             self.panelView.centerYLayout == self.centerYLayout
         ]
+        self._relayout()
     }
     
     open func isAnimating() -> Bool  {
@@ -98,14 +99,16 @@ open class QLoadingView : QView, IQLoadingView {
     }
     
     open func stop() {
-        self._counter -= 1
-        if self._counter == 0 {
+        if self._counter == 1 {
+            self._counter = 0
             UIView.animate(withDuration: self.hideDuration, delay: 0, options: [ .beginFromCurrentState ], animations: {
                 self.alpha = 0
             }, completion: { [weak self] (complited) in
                 guard let strong = self else { return }
                 strong._didStop()
             })
+        } else if self._counter > 0 {
+            self._counter -= 1
         }
     }
     
@@ -144,7 +147,7 @@ extension QLoadingView {
             case .right:
                 panelConstraints.append(contentsOf: [
                     detailLabel.topLayout >= self.panelView.topLayout + self.panelInsets.top,
-                    detailLabel.leadingLayout == self.panelView.leadingLayout - self.panelInsets.left,
+                    detailLabel.leadingLayout == self.panelView.leadingLayout + self.panelInsets.left,
                     detailLabel.bottomLayout <= self.panelView.bottomLayout - self.panelInsets.bottom,
                     spinnerView.topLayout >= self.panelView.topLayout + self.panelInsets.top,
                     spinnerView.leadingLayout == self.panelView.leadingLayout - self.detailSpacing,
@@ -168,14 +171,14 @@ extension QLoadingView {
         } else if let spinnerView = self.spinnerView {
             panelConstraints.append(contentsOf: [
                 spinnerView.topLayout == self.panelView.topLayout + self.panelInsets.top,
-                spinnerView.leadingLayout == self.panelView.leadingLayout - self.panelInsets.left,
+                spinnerView.leadingLayout == self.panelView.leadingLayout + self.panelInsets.left,
                 spinnerView.trailingLayout == self.panelView.trailingLayout - self.panelInsets.right,
                 spinnerView.bottomLayout == self.panelView.bottomLayout - self.panelInsets.bottom
             ])
         } else if let detailLabel = self.detailLabel {
             panelConstraints.append(contentsOf: [
                 detailLabel.topLayout == self.panelView.topLayout + self.panelInsets.top,
-                detailLabel.leadingLayout == self.panelView.leadingLayout - self.panelInsets.left,
+                detailLabel.leadingLayout == self.panelView.leadingLayout + self.panelInsets.left,
                 detailLabel.trailingLayout == self.panelView.trailingLayout - self.panelInsets.right,
                 detailLabel.bottomLayout == self.panelView.bottomLayout - self.panelInsets.bottom
             ])

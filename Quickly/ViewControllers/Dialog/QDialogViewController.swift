@@ -20,8 +20,22 @@ open class QDialogViewController : QViewController, IQDialogViewController {
     open var dialogPresentAnimation: IQDialogViewControllerFixedAnimation?
     open var dialogDismissAnimation: IQDialogViewControllerFixedAnimation?
     open var dialogInteractiveDismissAnimation: IQDialogViewControllerInteractiveAnimation?
-    public private(set) lazy var tapGesture: UITapGestureRecognizer = self._prepareTapGesture()
+    public private(set) lazy var tapGesture: UITapGestureRecognizer = {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(self._tapGestureHandler(_:)))
+        gesture.delegate = self
+        return gesture
+    }()
     
+    private lazy var _backgroundView: QInvisibleView = {
+        let view = QInvisibleView(frame: self.view.bounds)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.addGestureRecognizer(self.tapGesture)
+        return view
+    }()
+    private var _backgroundConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.view.removeConstraints(self._backgroundConstraints) }
+        didSet { self.view.addConstraints(self._backgroundConstraints) }
+    }
     private var _contentLayoutConstraints: [NSLayoutConstraint] = []
     private var _contentSizeConstraints: [NSLayoutConstraint] = []
 
@@ -46,13 +60,15 @@ open class QDialogViewController : QViewController, IQDialogViewController {
         self.dialogContentViewController.parent = self
     }
 
-    open override func load() -> ViewType {
-        return QViewControllerDefaultView(viewController: self)
-    }
-
     open override func didLoad() {
-        self.view.addGestureRecognizer(self.tapGesture)
-
+        self.view.addSubview(self._backgroundView)
+        self._backgroundConstraints = [
+            self._backgroundView.topLayout == self.view.topLayout,
+            self._backgroundView.leadingLayout == self.view.leadingLayout,
+            self._backgroundView.trailingLayout == self.view.trailingLayout,
+            self._backgroundView.bottomLayout == self.view.bottomLayout
+        ]
+        
         self.dialogContentViewController.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(self.dialogContentViewController.view)
 
@@ -133,12 +149,6 @@ open class QDialogViewController : QViewController, IQDialogViewController {
 
     open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
         return self.dialogContentViewController.preferedStatusBarAnimation()
-    }
-
-    private func _prepareTapGesture() -> UITapGestureRecognizer {
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(self._tapGestureHandler(_:)))
-        gesture.delegate = self
-        return gesture
     }
 
     private func _relayoutContentViewController() {

@@ -55,5 +55,13 @@ open class QStackWireframe< ContextType: IQContext, WireframeType: IQWireframe >
     open func popStack(to viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         self.viewController.popStack(to: viewController, animated: animated, completion: completion)
     }
+    
+    open func resetStack(animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        if let rootViewController = self.viewController.rootViewController {
+            self.viewController.popStack(to: rootViewController, animated: animated, completion: completion)
+        } else {
+            completion?()
+        }
+    }
 
 }

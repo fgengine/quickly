@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QGroupContainerViewController : QViewController, IQGroupContainerViewController, IQStackContentViewController {
+open class QGroupContainerViewController : QViewController, IQGroupContainerViewController, IQStackContentViewController, IQModalContentViewController {
 
     public var contentOffset: CGPoint {
         get { return CGPoint.zero }
