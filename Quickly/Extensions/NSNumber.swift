@@ -21,5 +21,9 @@ public extension NSNumber {
         }
         return number
     }
+    
+    public class func number(from string: Substring) -> NSNumber? {
+        return self.number(from: String(string))
+    }
 
 }

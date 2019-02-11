@@ -245,6 +245,7 @@
 		40A75B6A208FAF81000E5FBE /* NSDecimalNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A75B69208FAF81000E5FBE /* NSDecimalNumber.swift */; };
 		40A907A8206F603D00655D2A /* QLabelPickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A907A6206F603D00655D2A /* QLabelPickerSection.swift */; };
 		40A907AB206F6C3800655D2A /* IQField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A907A9206F6C3800655D2A /* IQField.swift */; };
+		40A95CF422121B9700BD3AD9 /* QEmailStringValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A95CF322121B9700BD3AD9 /* QEmailStringValidator.swift */; };
 		40A97ED02063C1A900594DE2 /* DisclosureShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A97ECD2063C1A100594DE2 /* DisclosureShape.swift */; };
 		40B8A1921F4F49AC00204E5A /* QImplAuthenticationChallenge.m in Sources */ = {isa = PBXBuildFile; fileRef = 402F1FBC1F4F446F007625CA /* QImplAuthenticationChallenge.m */; };
 		40B8A1941F4F4AFB00204E5A /* QuicklyApiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B8A1931F4F4AFB00204E5A /* QuicklyApiTests.swift */; };
@@ -633,6 +634,7 @@
 		40A75B69208FAF81000E5FBE /* NSDecimalNumber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDecimalNumber.swift; sourceTree = "<group>"; };
 		40A907A6206F603D00655D2A /* QLabelPickerSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QLabelPickerSection.swift; sourceTree = "<group>"; };
 		40A907A9206F6C3800655D2A /* IQField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQField.swift; sourceTree = "<group>"; };
+		40A95CF322121B9700BD3AD9 /* QEmailStringValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QEmailStringValidator.swift; sourceTree = "<group>"; };
 		40A97ECD2063C1A100594DE2 /* DisclosureShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisclosureShape.swift; sourceTree = "<group>"; };
 		40B8A1931F4F4AFB00204E5A /* QuicklyApiTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuicklyApiTests.swift; sourceTree = "<group>"; };
 		40B8A1951F4F6BED00204E5A /* QShapeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QShapeView.swift; sourceTree = "<group>"; };
@@ -1532,6 +1534,7 @@
 				40134EF51F62D16C009F81A6 /* QCharacterSetStringValidator.swift */,
 				40134EF71F62D20C009F81A6 /* QRegularExpressionStringValidator.swift */,
 				40239D431F7BC90A002C4B9A /* QAmountStringValidator.swift */,
+				40A95CF322121B9700BD3AD9 /* QEmailStringValidator.swift */,
 			);
 			path = StringValidator;
 			sourceTree = "<group>";
@@ -2276,6 +2279,7 @@
 				401E8F84206D3CC1008A5BE4 /* QPickerRow.swift in Sources */,
 				404C910120D164A4001DE192 /* QPushViewControllerInteractiveAnimation.swift in Sources */,
 				403FA9D1212436C2004E3DD8 /* QWebViewController.swift in Sources */,
+				40A95CF422121B9700BD3AD9 /* QEmailStringValidator.swift in Sources */,
 				404C90FD20D1644F001DE192 /* QPageViewControllerInteractiveAnimation.swift in Sources */,
 				40A75B68208FAE13000E5FBE /* NSNumber.swift in Sources */,
 				4007B0832144236900AE17DC /* QTitleComposition.swift in Sources */,

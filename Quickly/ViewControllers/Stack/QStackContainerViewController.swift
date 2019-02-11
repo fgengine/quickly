@@ -241,20 +241,22 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
 
     open func popStack(to viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         if self.currentViewController === viewController {
-        } else if self.previousViewController === viewController {
+            completion?()
+            return
+        }
+        if self.previousViewController === viewController {
             self._dismiss(self.currentViewController!, animated: animated, completion: completion)
         } else if self._viewControllers.count > 2 {
             if let index = self._viewControllers.index(where: { return $0 === viewController }) {
-                let startIndex = self._viewControllers.index(index, offsetBy: 2)
+                let startIndex = self._viewControllers.index(index, offsetBy: 1)
                 let endIndex = self._viewControllers.index(self._viewControllers.endIndex, offsetBy: -1)
-                if endIndex - startIndex > 2 {
+                if endIndex - startIndex > 0 {
                     let hiddenViewControllers = self._viewControllers[startIndex..<endIndex]
                     hiddenViewControllers.forEach({ (hiddenViewController) in
                         self._dismiss(hiddenViewController, animated: false, completion: nil)
                     })
-                } else {
-
                 }
+                self._dismiss(self.currentViewController!, animated: animated, completion: completion)
             }
         }
     }

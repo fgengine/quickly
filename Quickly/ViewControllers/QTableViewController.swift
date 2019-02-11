@@ -21,33 +21,29 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
             return tableView.contentSize
         }
     }
-    public private(set) var tableView: QTableView! {
+    public private(set) var tableView: QTableView? {
         willSet {
             guard let tableView = self.tableView else { return }
             tableView.removeFromSuperview()
         }
         didSet {
             guard let tableView = self.tableView else { return }
-            let edgeInsets = self.inheritedEdgeInsets
-            tableView.contentInset = edgeInsets
-            tableView.scrollIndicatorInsets = edgeInsets
             self.view.addSubview(tableView)
         }
     }
     public var tableController: IQTableController? {
-        willSet {
-            if let tableController = self.tableController {
-                tableController.removeObserver(self)
-            }
-        }
-        didSet {
+        set(value) {
             if let tableView = self.tableView {
-                tableView.tableController = self.tableController
-            }
-            if let tableController = self.tableController {
-                tableController.addObserver(self, priority: 0)
+                if let tableController = tableView.tableController {
+                    tableController.removeObserver(self)
+                }
+                if let tableController = value {
+                    tableController.addObserver(self, priority: 0)
+                }
+                tableView.tableController = value
             }
         }
+        get { return self.tableView?.tableController }
     }
     public var refreshControlHidden: Bool = false {
         didSet { self._updateRefreshControlState() }
@@ -135,7 +131,6 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
 
     open override func didLoad() {
         self.tableView = QTableView(frame: self.view.bounds)
-        self.tableView.tableController = self.tableController
         if let view = self._footerView {
             view.frame = self._footerViewFrame()
             self.view.addSubview(view)
@@ -145,27 +140,27 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
 
     open override func layout(bounds: CGRect) {
         super.layout(bounds: bounds)
-        if let view = self.tableView {
-            view.frame = bounds
+        if let tableView = self.tableView {
+            tableView.frame = bounds
         }
-        if let view = self._footerView {
-            view.frame = self._footerViewFrame()
+        if let footerView = self._footerView {
+            footerView.frame = self._footerViewFrame()
         }
-        if let view = self.loadingView, view.superview != nil {
-            self._updateFrame(loadingView: view, bounds: bounds)
+        if let loadingView = self.loadingView, loadingView.superview != nil {
+            self._updateFrame(loadingView: loadingView, bounds: bounds)
         }
     }
 
     open override func didChangeAdditionalEdgeInsets() {
         super.didChangeAdditionalEdgeInsets()
-        if let view = self.tableView {
-            self._updateContentInsets(view)
+        if let tableView = self.tableView {
+            self._updateContentInsets(tableView)
         }
-        if let view = self._footerView {
-            view.frame = self._footerViewFrame()
+        if let footerView = self._footerView {
+            footerView.frame = self._footerViewFrame()
         }
-        if let view = self.loadingView, view.superview != nil {
-            self._updateFrame(loadingView: view, bounds: self.view.bounds)
+        if let loadingView = self.loadingView, loadingView.superview != nil {
+            self._updateFrame(loadingView: loadingView, bounds: self.view.bounds)
         }
     }
 
@@ -176,12 +171,16 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     
     open override func prepareInteractiveDismiss() {
         super.prepareInteractiveDismiss()
-        self.tableView.endEditing(false)
+        if let tableView = self.tableView {
+            tableView.endEditing(false)
+        }
     }
     
     open override func willDismiss(animated: Bool) {
         super.willDismiss(animated: animated)
-        self.tableView.endEditing(false)
+        if let tableView = self.tableView {
+            tableView.endEditing(false)
+        }
     }
 
     open override func didDismiss(animated: Bool) {
@@ -191,9 +190,9 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     
     open override func willTransition(size: CGSize) {
         super.willTransition(size: size)
-        if let view = self.tableView {
-            self._updateContentInsets(view)
-            view.reloadData()
+        if let tableView = self.tableView {
+            self._updateContentInsets(tableView)
+            tableView.reloadData()
         }
     }
 
@@ -228,8 +227,8 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     // MARK: IQTableControllerObserver
     
     open func scroll(_ controller: IQTableController, tableView: UITableView) {
-        if let vc = self.contentOwnerViewController {
-            vc.updateContent()
+        if let viewController = self.contentOwnerViewController {
+            viewController.updateContent()
         }
     }
     
@@ -278,37 +277,37 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     }
 
     private func _updateRefreshControlState() {
-        if self.isLoaded == true {
+        if let tableView = self.tableView {
             if self.refreshControlHidden == false && self.isPresented == true {
-                self.tableView.refreshControl = self._refreshControl
+                tableView.refreshControl = self._refreshControl
             } else {
                 if let refreshControl = self._refreshControl {
                     refreshControl.endRefreshing()
                 }
-                self.tableView.refreshControl = nil
+                tableView.refreshControl = nil
             }
         }
     }
     
-    private func _updateContentInsets(_ view: QTableView) {
+    private func _updateContentInsets(_ tableView: QTableView) {
         let edgeInsets = self.adjustedContentInset
         let footerHeight = (self.footerView != nil) ? self.footerViewHeight : 0
-        view.contentLeftInset = edgeInsets.left
-        view.contentRightInset = edgeInsets.right
-        view.contentInset = UIEdgeInsets(
+        tableView.contentLeftInset = edgeInsets.left
+        tableView.contentRightInset = edgeInsets.right
+        tableView.contentInset = UIEdgeInsets(
             top: edgeInsets.top,
             left: 0,
             bottom: edgeInsets.bottom + footerHeight,
             right: 0
         )
-        view.scrollIndicatorInsets = UIEdgeInsets(
+        tableView.scrollIndicatorInsets = UIEdgeInsets(
             top: edgeInsets.top,
             left: edgeInsets.left,
             bottom: edgeInsets.bottom + footerHeight,
             right: edgeInsets.right
         )
-        if view.contentOffset.y <= CGFloat.leastNonzeroMagnitude {
-            view.contentOffset = CGPoint(x: 0, y: -edgeInsets.top)
+        if tableView.contentOffset.y <= CGFloat.leastNonzeroMagnitude {
+            tableView.contentOffset = CGPoint(x: 0, y: -edgeInsets.top)
         }
     }
     

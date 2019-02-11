@@ -54,7 +54,7 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
     }
     private weak var _collectionLayout: RowType.LayoutType? {
         set(value) {
-            if self._collectionLayout !== value {
+            if self.collectionView.collectionLayout !== value {
                 if let collectionLayout = self.collectionView.collectionLayout {
                     collectionLayout.removeObserver(self)
                 }

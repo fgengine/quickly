@@ -66,8 +66,12 @@ open class QCollectionView : UICollectionView, IQView {
         self.setup()
     }
 
-    public init(frame: CGRect, layout: CollectionLayoutType) {
-        super.init(frame: frame, collectionViewLayout: layout)
+    public init(frame: CGRect, layout: CollectionLayoutType? = nil) {
+        if let layout = layout {
+            super.init(frame: frame, collectionViewLayout: layout)
+        } else {
+            super.init(frame: frame, collectionViewLayout: QCollectionFlowLayout())
+        }
         self.setup()
     }
 

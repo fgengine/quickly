@@ -49,9 +49,12 @@ open class QCollectionFlowLayout : UICollectionViewFlowLayout, IQCollectionLayou
 
     private var _observer: QObserver< IQCollectionLayoutObserver >
 
-    public override init() {
+    public init(
+        scrollDirection: UICollectionView.ScrollDirection = .vertical
+    ) {
         self._observer = QObserver< IQCollectionLayoutObserver >()
         super.init()
+        self.scrollDirection = scrollDirection
     }
 
     public required init?(coder: NSCoder) {

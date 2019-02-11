@@ -6,7 +6,7 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
 
     public var contentOffset: CGPoint {
         get {
-            guard let collectionView = self._collectionView else { return CGPoint.zero }
+            guard let collectionView = self.collectionView else { return CGPoint.zero }
             let contentOffset = collectionView.contentOffset
             let contentInset = collectionView.contentInset
             return CGPoint(
@@ -17,24 +17,37 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     }
     public var contentSize: CGSize {
         get {
-            guard let collectionView = self._collectionView else { return CGSize.zero }
+            guard let collectionView = self.collectionView else { return CGSize.zero }
             return collectionView.contentSize
         }
     }
-    public var collectionController: IQCollectionController? {
+    public private(set) var collectionView: QCollectionView? {
         willSet {
-            if let collectionController = self.collectionController {
-                collectionController.removeObserver(self)
-            }
+            guard let collectionView = self.collectionView else { return }
+            collectionView.removeFromSuperview()
         }
         didSet {
-            if let collectionView = self._collectionView {
-                collectionView.collectionController = self.collectionController
-            }
-            if let collectionController = self.collectionController {
-                collectionController.addObserver(self, priority: 0)
+            guard let collectionView = self.collectionView else { return }
+            self.view.addSubview(collectionView)
+        }
+    }
+    public var collectionLayout: QCollectionLayoutType? {
+        set(value) { self.collectionView?.collectionLayout = value }
+        get { return self.collectionView?.collectionLayout }
+    }
+    public var collectionController: IQCollectionController? {
+        set(value) {
+            if let collectionView = self.collectionView {
+                if let collectionController = collectionView.collectionController {
+                    collectionController.removeObserver(self)
+                }
+                if let collectionController = value {
+                    collectionController.addObserver(self, priority: 0)
+                }
+                collectionView.collectionController = value
             }
         }
+        get { return self.collectionView?.collectionController }
     }
     public var refreshControlHidden: Bool = false {
         didSet { self._updateRefreshControlState() }
@@ -69,19 +82,6 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
         }
     }
     
-    private var _collectionView: QCollectionView! {
-        willSet {
-            guard let view = self._collectionView else { return }
-            view.removeFromSuperview()
-        }
-        didSet {
-            guard let view = self._collectionView else { return }
-            let edgeInsets = self.inheritedEdgeInsets
-            view.contentInset = edgeInsets
-            view.scrollIndicatorInsets = edgeInsets
-            self.view.addSubview(view)
-        }
-    }
     private var _refreshControl: UIRefreshControl? {
         willSet {
             guard let refreshControl = self._refreshControl else { return }
@@ -106,28 +106,27 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     }
 
     open override func didLoad() {
-        self._collectionView = QCollectionView(frame: self.view.bounds, layout: QCollectionFlowLayout())
-        self._collectionView.collectionController = self.collectionController
+        self.collectionView = QCollectionView(frame: self.view.bounds)
         self._keyboard.addObserver(self, priority: 0)
     }
 
     open override func layout(bounds: CGRect) {
         super.layout(bounds: bounds)
-        if let view = self._collectionView {
-            view.frame = bounds
+        if let collectionView = self.collectionView {
+            collectionView.frame = bounds
         }
-        if let view = self.loadingView, view.superview != nil {
-            self._updateFrame(loadingView: view, bounds: bounds)
+        if let loadingView = self.loadingView, loadingView.superview != nil {
+            self._updateFrame(loadingView: loadingView, bounds: bounds)
         }
     }
 
     open override func didChangeAdditionalEdgeInsets() {
         super.didChangeAdditionalEdgeInsets()
-        if let view = self._collectionView {
-            self._updateContentInsets(view)
+        if let collectionView = self.collectionView {
+            self._updateContentInsets(collectionView)
         }
-        if let view = self.loadingView, view.superview != nil {
-            self._updateFrame(loadingView: view, bounds: self.view.bounds)
+        if let loadingView = self.loadingView, loadingView.superview != nil {
+            self._updateFrame(loadingView: loadingView, bounds: self.view.bounds)
         }
     }
 
@@ -138,12 +137,16 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     
     open override func prepareInteractiveDismiss() {
         super.prepareInteractiveDismiss()
-        self._collectionView.endEditing(false)
+        if let collectionView = self.collectionView {
+            collectionView.endEditing(false)
+        }
     }
     
     open override func willDismiss(animated: Bool) {
         super.willDismiss(animated: animated)
-        self._collectionView.endEditing(false)
+        if let collectionView = self.collectionView {
+            collectionView.endEditing(false)
+        }
     }
 
     open override func didDismiss(animated: Bool) {
@@ -153,11 +156,11 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     
     open override func willTransition(size: CGSize) {
         super.willTransition(size: size)
-        if let view = self._collectionView {
-            self._updateContentInsets(view)
-        }
-        if let collectionLayout = self._collectionView.collectionLayout {
-            collectionLayout.invalidateLayout()
+        if let collectionView = self.collectionView {
+            self._updateContentInsets(collectionView)
+            if let collectionLayout = collectionView.collectionLayout {
+                collectionLayout.invalidateLayout()
+            }
         }
     }
 
@@ -192,14 +195,14 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     // MAKR: IQCollectionControllerObserver
     
     open func scroll(_ controller: IQCollectionController, collectionView: UICollectionView) {
-        if let vc = self.contentOwnerViewController {
-            vc.updateContent()
+        if let viewController = self.contentOwnerViewController {
+            viewController.updateContent()
         }
     }
     
     open func zoom(_ controller: IQCollectionController, collectionView: UICollectionView) {
-        if let vc = self.contentOwnerViewController {
-            vc.updateContent()
+        if let viewController = self.contentOwnerViewController {
+            viewController.updateContent()
         }
     }
     
@@ -248,33 +251,33 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     }
 
     private func _updateRefreshControlState() {
-        if self.isLoaded == true {
+        if let collectionView = self.collectionView {
             if self.refreshControlHidden == false && self.isPresented == true {
-                self._collectionView.refreshControl = self._refreshControl
+                collectionView.refreshControl = self._refreshControl
             } else {
                 if let refreshControl = self._refreshControl {
                     refreshControl.endRefreshing()
                 }
-                self._collectionView.refreshControl = nil
+                collectionView.refreshControl = nil
             }
         }
     }
     
-    private func _updateContentInsets(_ view: QCollectionView) {
+    private func _updateContentInsets(_ collectionView: QCollectionView) {
         let edgeInsets = self.adjustedContentInset
-        view.contentLeftInset = edgeInsets.left
-        view.contentRightInset = edgeInsets.right
-        view.contentInset = UIEdgeInsets(
+        collectionView.contentLeftInset = edgeInsets.left
+        collectionView.contentRightInset = edgeInsets.right
+        collectionView.contentInset = UIEdgeInsets(
             top: edgeInsets.top,
             left: 0,
             bottom: edgeInsets.bottom,
             right: 0
         )
-        view.scrollIndicatorInsets = edgeInsets
-        if view.contentOffset.x < 0 || view.contentOffset.y < 0 {
-            let x = (view.contentOffset.x < 0) ? -edgeInsets.left : view.contentOffset.x
-            let y = (view.contentOffset.y < 0) ? -edgeInsets.top : view.contentOffset.y
-            view.contentOffset = CGPoint(x: x, y: y)
+        collectionView.scrollIndicatorInsets = edgeInsets
+        if collectionView.contentOffset.x < 0 || collectionView.contentOffset.y < 0 {
+            let x = (collectionView.contentOffset.x < 0) ? -edgeInsets.left : collectionView.contentOffset.x
+            let y = (collectionView.contentOffset.y < 0) ? -edgeInsets.top : collectionView.contentOffset.y
+            collectionView.contentOffset = CGPoint(x: x, y: y)
         }
     }
     

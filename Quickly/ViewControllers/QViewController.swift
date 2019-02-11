@@ -136,6 +136,7 @@ open class QViewController : NSObject, IQViewController {
         if self._view == nil {
             self._view = View(viewController: self)
             self.didLoad()
+            self.didChangeAdditionalEdgeInsets()
         }
     }
 

@@ -266,12 +266,12 @@ extension QApiQuery : IQDebug {
         } else {
             QDebugString("Response: \(self.response)\n", &buffer, indent, nextIndent, indent)
         }
-        if let receivedData = self.receivedData {
+        if let data = self.receivedData {
             var debug = String()
-            if let json = try? QJson(data: receivedData) {
-                json.debugString(&debug, 0, nextIndent, indent)
+            if let string = String(data: data, encoding: .utf8) {
+                string.debugString(&debug, 0, nextIndent, indent)
             } else {
-                receivedData.debugString(&debug, 0, nextIndent, indent)
+                data.debugString(&debug, 0, nextIndent, indent)
             }
             QDebugString("Received: \(debug)\n", &buffer, indent, nextIndent, indent)
         }

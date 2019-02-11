@@ -22,5 +22,9 @@ public extension NSDecimalNumber {
         }
         return number as? NSDecimalNumber
     }
+    
+    public class func decimalNumber(from string: Substring) -> NSDecimalNumber? {
+        return self.decimalNumber(from: String(string))
+    }
 
 }

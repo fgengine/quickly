@@ -18,6 +18,22 @@ public class QXmlDocument {
         self.nodes = nodes
     }
     
+    public func first(_ path: String) -> QXmlNode? {
+        return self.nodes.first(where: { return $0.name == path })
+    }
+    
+    public func first(_ path: Array< String >) -> QXmlNode? {
+        if path.isEmpty == false {
+            if path.count == 1 {
+                return self.first(path[path.startIndex])
+            } else if let node = self.first(path[path.startIndex]) {
+                let subpath = Array< String >(path.dropFirst())
+                return node.first(subpath)
+            }
+        }
+        return nil
+    }
+    
 }
 
 #if DEBUG
@@ -60,6 +76,32 @@ public class QXmlNode {
         self.attributes = attributes
         self.nodes = nodes
         self.value = value
+    }
+    
+    public func first(_ path: String) -> QXmlNode? {
+        return self.nodes.first(where: { return $0.name == path })
+    }
+    
+    public func first(_ path: Array< String >) -> QXmlNode? {
+        if path.isEmpty == false {
+            if path.count == 1 {
+                return self.first(path[path.startIndex])
+            } else if let node = self.first(path[path.startIndex]) {
+                return node.first(path.dropFirst())
+            }
+        }
+        return nil
+    }
+    
+    public func first(_ path: ArraySlice< String >) -> QXmlNode? {
+        if path.isEmpty == false {
+            if path.count == 1 {
+                return self.first(path[path.startIndex])
+            } else if let node = self.first(path[path.startIndex]) {
+                return node.first(path.dropFirst())
+            }
+        }
+        return nil
     }
     
 }
@@ -148,6 +190,39 @@ public class QXmlValue {
     
     public init(text: String) {
         self.text = text
+    }
+    
+    public func asNumber() -> NSNumber? {
+        return NSNumber.number(from: self.text)
+    }
+    public func asInt() -> Int? {
+        guard let number = self.asNumber() else { return nil }
+        return number.intValue
+    }
+    public func asUInt() -> UInt? {
+        guard let number = self.asNumber() else { return nil }
+        return number.uintValue
+    }
+    public func asFloat() -> Float? {
+        guard let number = self.asNumber() else { return nil }
+        return number.floatValue
+    }
+    public func asDouble() -> Double? {
+        guard let number = self.asNumber() else { return nil }
+        return number.doubleValue
+    }
+    public func asDecimalNumber() -> NSDecimalNumber? {
+        return NSDecimalNumber.decimalNumber(from: self.text)
+    }
+    public func asDecimal() -> Decimal? {
+        guard let decimalNumber = self.asDecimalNumber() else { return nil }
+        return decimalNumber as Decimal
+    }
+    public func asUrl() -> URL? {
+        return URL.init(string: self.text)
+    }
+    public func asColor() -> UIColor? {
+        return UIColor(hexString: self.text)
     }
     
 }
