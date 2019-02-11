@@ -293,6 +293,8 @@ open class QApiRequest : IQApiRequest {
 
 }
 
+#if DEBUG
+
 extension QApiRequest : IQDebug {
 
     open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
@@ -305,23 +307,19 @@ extension QApiRequest : IQDebug {
 
         QDebugString("Method: \(self.method)\n", &buffer, indent, nextIndent, indent)
         if let url = self.url {
-            var debug = String()
-            url.debugString(&debug, 0, nextIndent, indent)
+            let debug = url.debugString(0, nextIndent, indent)
             QDebugString("Url: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if let urlPart = self.urlPart {
-            var debug = String()
-            urlPart.debugString(&debug, 0, nextIndent, indent)
+            let debug = urlPart.debugString(0, nextIndent, indent)
             QDebugString("UrlPart: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if self.urlParams.count > 0 {
-            var debug = String()
-            self.urlParams.debugString(&debug, 0, nextIndent, indent)
+            let debug = self.urlParams.debugString(0, nextIndent, indent)
             QDebugString("UrlParams: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if self.headers.count > 0 {
-            var debug = String()
-            self.headers.debugString(&debug, 0, nextIndent, indent)
+            let debug = self.headers.debugString(0, nextIndent, indent)
             QDebugString("Headers: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if let bodyData = self.bodyData {
@@ -334,29 +332,24 @@ extension QApiRequest : IQDebug {
             QDebugString("Body: \(debug)\n", &buffer, indent, nextIndent, indent)
         } else {
             if let bodyParams = self.bodyParams {
-                var debug = String()
-                bodyParams.debugString(&debug, 0, nextIndent, indent)
+                let debug = bodyParams.debugString(0, nextIndent, indent)
                 QDebugString("BodyParams: \(debug)\n", &buffer, indent, nextIndent, indent)
             }
             if let uploadItems = self.uploadItems {
-                var debug = String()
-                uploadItems.debugString(&debug, 0, nextIndent, indent)
+                let debug = uploadItems.debugString(0, nextIndent, indent)
                 QDebugString("UploadItems: \(debug)\n", &buffer, indent, nextIndent, indent)
             }
         }
         if self.timeout > TimeInterval.leastNonzeroMagnitude {
-            var debug = String()
-            self.timeout.debugString(&debug, 0, nextIndent, indent)
+            let debug = self.timeout.debugString(0, nextIndent, indent)
             QDebugString("Timeout: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if self.retries > TimeInterval.leastNonzeroMagnitude {
-            var debug = String()
-            self.retries.debugString(&debug, 0, nextIndent, indent)
+            let debug = self.retries.debugString(0, nextIndent, indent)
             QDebugString("Retries: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if self.delay > TimeInterval.leastNonzeroMagnitude {
-            var debug = String()
-            self.delay.debugString(&debug, 0, nextIndent, indent)
+            let debug = self.delay.debugString(0, nextIndent, indent)
             QDebugString("Delay: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
 
@@ -367,6 +360,10 @@ extension QApiRequest : IQDebug {
     }
     
 }
+
+#endif
+
+// MARK: - QApiRequestUploadItem -
 
 open class QApiRequestUploadItem {
 
@@ -383,6 +380,8 @@ open class QApiRequestUploadItem {
     }
 
 }
+
+#if DEBUG
 
 extension QApiRequestUploadItem : IQDebug {
 
@@ -406,3 +405,5 @@ extension QApiRequestUploadItem : IQDebug {
     }
     
 }
+
+#endif

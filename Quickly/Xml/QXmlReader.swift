@@ -30,42 +30,58 @@ public class QXmlReader {
     private class Delegate : NSObject, XMLParserDelegate {
         
         public var document: QXmlDocument
-        private var nodes: [QXmlNode]
-        private var currentNode: QXmlNode {
-            get { return self.nodes[self.nodes.count - 1] }
-        }
+        private var rootNodes: [QXmlNode]
+        private var recurseNodes: [QXmlNode]
+        private var trimmingCharacterSet: CharacterSet
         
         public override init() {
             self.document = QXmlDocument()
-            self.nodes = []
+            self.rootNodes = []
+            self.recurseNodes = []
+            self.trimmingCharacterSet = CharacterSet.whitespacesAndNewlines
             super.init()
         }
         
         public func parserDidEndDocument(_ parser: XMLParser) {
-            self.document.nodes = self.nodes
+            self.document.nodes = self.rootNodes
         }
         
         public func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
             let attributes = attributeDict.compactMap({ (key, value) -> QXmlAttribute in
                 return QXmlAttribute(name: key, value: QXmlValue(text: value))
             })
-            self.nodes.append(QXmlNode(name: elementName, attributes: attributes))
+            let node = QXmlNode(name: elementName, attributes: attributes)
+            if let parentNode = self.recurseNodes.last {
+                parentNode.nodes.append(node)
+            } else {
+                self.rootNodes.append(node)
+            }
+            self.recurseNodes.append(node)
         }
         
         public func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-            let node = self.currentNode
+            guard let node = self.recurseNodes.last else {
+                parser.abortParsing()
+                return
+            }
             if node.name != elementName {
                 parser.abortParsing()
             }
-            self.nodes.remove(at: self.nodes.count - 1)
+            self.recurseNodes.removeLast()
         }
         
         public func parser(_ parser: XMLParser, foundCharacters string: String) {
-            let node = self.currentNode
-            if let value = node.value {
-                value.text.append(string)
-            } else {
-                node.value = QXmlValue(text: string)
+            let trimString = string.trimmingCharacters(in: self.trimmingCharacterSet)
+            if trimString.count > 0 {
+                if let node = self.recurseNodes.last {
+                    if let value = node.value {
+                        value.text.append(trimString)
+                    } else {
+                        node.value = QXmlValue(text: trimString)
+                    }
+                } else {
+                    parser.abortParsing()
+                }
             }
         }
         

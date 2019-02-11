@@ -60,6 +60,8 @@ extension QJsonModel : IQJsonValue {
 
 }
 
+#if DEBUG
+
 extension QJsonModel : IQDebug {
 
     open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
@@ -91,3 +93,5 @@ extension QJsonModel : IQDebug {
     }
 
 }
+
+#endif

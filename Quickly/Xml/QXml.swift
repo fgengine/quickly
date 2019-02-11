@@ -20,6 +20,32 @@ public class QXmlDocument {
     
 }
 
+#if DEBUG
+
+extension QXmlDocument : IQDebug {
+    
+    open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+        let nextIndent = indent + 1
+        
+        if headerIndent > 0 {
+            buffer.append(String(repeating: "\t", count: headerIndent))
+        }
+        buffer.append("<\(String(describing: self))\n")
+        
+        if self.nodes.count > 0 {
+            self.nodes.debugString(&buffer, indent, nextIndent, indent)
+        }
+        
+        if footerIndent > 0 {
+            buffer.append(String(repeating: "\t", count: footerIndent))
+        }
+        buffer.append(">")
+    }
+    
+}
+
+#endif
+
 // MARK: - QXmlNode -
 
 public class QXmlNode {
@@ -38,6 +64,42 @@ public class QXmlNode {
     
 }
 
+#if DEBUG
+
+extension QXmlNode : IQDebug {
+    
+    open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+        let nextIndent = indent + 1
+        
+        if headerIndent > 0 {
+            buffer.append(String(repeating: "\t", count: headerIndent))
+        }
+        buffer.append("<\(String(describing: self))\n")
+        
+        QDebugString("Name: \(self.name)\n", &buffer, indent, nextIndent, indent)
+        if self.attributes.count > 0 {
+            let debug = self.attributes.debugString(0, nextIndent, indent)
+            QDebugString("Attributes: \(debug)\n", &buffer, indent, nextIndent, indent)
+        }
+        if self.nodes.count > 0 {
+            let debug = self.nodes.debugString(0, nextIndent, indent)
+            QDebugString("Nodes: \(debug)\n", &buffer, indent, nextIndent, indent)
+        }
+        if let value = self.value {
+            let debug = value.debugString(0, nextIndent, indent)
+            QDebugString("Value: \(debug)\n", &buffer, indent, nextIndent, indent)
+        }
+        
+        if footerIndent > 0 {
+            buffer.append(String(repeating: "\t", count: footerIndent))
+        }
+        buffer.append(">")
+    }
+    
+}
+
+#endif
+
 // MARK: - QXmlAttribute -
 
 public class QXmlAttribute {
@@ -52,6 +114,32 @@ public class QXmlAttribute {
     
 }
 
+#if DEBUG
+
+extension QXmlAttribute : IQDebug {
+    
+    open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+        let nextIndent = indent + 1
+        
+        if headerIndent > 0 {
+            buffer.append(String(repeating: "\t", count: headerIndent))
+        }
+        buffer.append("<\(String(describing: self))\n")
+        
+        QDebugString("Name: \(self.name)\n", &buffer, indent, nextIndent, indent)
+        let valueDebug = self.value.debugString(0, nextIndent, indent)
+        QDebugString("Value: \(valueDebug)\n", &buffer, indent, nextIndent, indent)
+        
+        if footerIndent > 0 {
+            buffer.append(String(repeating: "\t", count: footerIndent))
+        }
+        buffer.append(">")
+    }
+    
+}
+
+#endif
+
 // MARK: - QXmlValue -
 
 public class QXmlValue {
@@ -63,3 +151,27 @@ public class QXmlValue {
     }
     
 }
+
+#if DEBUG
+
+extension QXmlValue : IQDebug {
+    
+    open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+        let nextIndent = indent + 1
+        
+        if headerIndent > 0 {
+            buffer.append(String(repeating: "\t", count: headerIndent))
+        }
+        buffer.append("<\(String(describing: self))\n")
+        
+        QDebugString("\(self.text)\n", &buffer, indent, nextIndent, indent)
+        
+        if footerIndent > 0 {
+            buffer.append(String(repeating: "\t", count: footerIndent))
+        }
+        buffer.append(">")
+    }
+    
+}
+
+#endif

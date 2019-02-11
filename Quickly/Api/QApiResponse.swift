@@ -75,6 +75,8 @@ open class QApiResponse : IQApiResponse {
 
 }
 
+#if DEBUG
+
 extension QApiResponse : IQDebug {
 
     open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
@@ -86,33 +88,27 @@ extension QApiResponse : IQDebug {
         buffer.append("<\(String(describing: self))\n")
 
         if let url = self.url {
-            var debug = String()
-            url.debugString(&debug, 0, nextIndent, indent)
+            let debug = url.debugString(0, nextIndent, indent)
             QDebugString("Url: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if let mimeType = self.mimeType {
-            var debug = String()
-            mimeType.debugString(&debug, 0, nextIndent, indent)
+            let debug = mimeType.debugString(0, nextIndent, indent)
             QDebugString("MimeType: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if let textEncodingName = self.textEncodingName {
-            var debug = String()
-            textEncodingName.debugString(&debug, 0, nextIndent, indent)
+            let debug = textEncodingName.debugString(0, nextIndent, indent)
             QDebugString("TextEncodingName: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if let httpStatusCode = self.httpStatusCode {
-            var debug = String()
-            httpStatusCode.debugString(&debug, 0, nextIndent, indent)
+            let debug = httpStatusCode.debugString(0, nextIndent, indent)
             QDebugString("HttpStatusCode: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if let httpHeaders = self.httpHeaders {
-            var debug = String()
-            httpHeaders.debugString(&debug, 0, nextIndent, indent)
+            let debug = httpHeaders.debugString(0, nextIndent, indent)
             QDebugString("HttpHeaders: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if let error = self.error as IQDebug? {
-            var debug = String()
-            error.debugString(&debug, 0, nextIndent, indent)
+            let debug = error.debugString(0, nextIndent, indent)
             QDebugString("Error: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
 
@@ -123,3 +119,5 @@ extension QApiResponse : IQDebug {
     }
     
 }
+
+#endif

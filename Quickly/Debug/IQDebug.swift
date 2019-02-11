@@ -2,9 +2,12 @@
 //  Quickly
 //
 
+#if DEBUG
+
 public protocol IQDebug {
 
     func debugString() -> String
+    func debugString(_ headerIndent: Int, _ indent: Int, _ footerIndent: Int) -> String
     func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int)
 
 }
@@ -12,8 +15,12 @@ public protocol IQDebug {
 public extension IQDebug {
 
     public func debugString() -> String {
+        return self.debugString(0, 1, 0)
+    }
+    
+    func debugString(_ headerIndent: Int, _ indent: Int, _ footerIndent: Int) -> String {
         var buffer = String()
-        self.debugString(&buffer, 0, 1, 0)
+        self.debugString(&buffer, headerIndent, indent, footerIndent)
         return buffer
     }
 
@@ -330,3 +337,4 @@ extension NSDictionary : IQDebug {
 
 }
 
+#endif

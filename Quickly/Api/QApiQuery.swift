@@ -234,6 +234,8 @@ public class QApiQuery<
 
 }
 
+#if DEBUG
+
 extension QApiQuery : IQDebug {
 
     open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
@@ -245,15 +247,13 @@ extension QApiQuery : IQDebug {
         buffer.append("<\(String(describing: self))\n")
 
         if let provider = self.provider as? IQDebug {
-            var debug = String()
-            provider.debugString(&debug, 0, nextIndent, indent)
+            let debug = provider.debugString(0, nextIndent, indent)
             QDebugString("Provider: \(debug)\n", &buffer, indent, nextIndent, indent)
         } else {
             QDebugString("Provider: \(self.provider)\n", &buffer, indent, nextIndent, indent)
         }
         if let request = self.request as? IQDebug {
-            var debug = String()
-            request.debugString(&debug, 0, nextIndent, indent)
+            let debug = request.debugString(0, nextIndent, indent)
             QDebugString("Request: \(debug)\n", &buffer, indent, nextIndent, indent)
         } else {
             QDebugString("Request: \(self.request)\n", &buffer, indent, nextIndent, indent)
@@ -261,8 +261,7 @@ extension QApiQuery : IQDebug {
         QDebugString("CreateAt: \(self.createAt)\n", &buffer, indent, nextIndent, indent)
         QDebugString("Duration: \(-self.createAt.timeIntervalSinceNow) s\n", &buffer, indent, nextIndent, indent)
         if let response = self.response as? IQDebug {
-            var debug = String()
-            response.debugString(&debug, 0, nextIndent, indent)
+            let debug = response.debugString(0, nextIndent, indent)
             QDebugString("Response: \(debug)\n", &buffer, indent, nextIndent, indent)
         } else {
             QDebugString("Response: \(self.response)\n", &buffer, indent, nextIndent, indent)
@@ -284,3 +283,5 @@ extension QApiQuery : IQDebug {
     }
     
 }
+
+#endif

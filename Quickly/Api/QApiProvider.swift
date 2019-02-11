@@ -422,6 +422,8 @@ extension QApiProvider : URLSessionDownloadDelegate {
     
 }
 
+#if DEBUG
+
 extension QApiProvider : IQDebug {
 
     open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
@@ -433,28 +435,23 @@ extension QApiProvider : IQDebug {
         buffer.append("<\(String(describing: self))\n")
 
         if let baseUrl = self.baseUrl {
-            var debug = String()
-            baseUrl.debugString(&debug, 0, nextIndent, indent)
+            let debug = baseUrl.debugString(0, nextIndent, indent)
             QDebugString("BaseUrl: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if self.urlParams.count > 0 {
-            var debug = String()
-            self.urlParams.debugString(&debug, 0, nextIndent, indent)
+            let debug = self.urlParams.debugString(0, nextIndent, indent)
             QDebugString("UrlParams: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if self.headers.count > 0 {
-            var debug = String()
-            self.headers.debugString(&debug, 0, nextIndent, indent)
+            let debug = self.headers.debugString(0, nextIndent, indent)
             QDebugString("Headers: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if let bodyParams = self.bodyParams {
-            var debug = String()
-            bodyParams.debugString(&debug, 0, nextIndent, indent)
+            let debug = bodyParams.debugString(0, nextIndent, indent)
             QDebugString("BodyParams: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
         if self.allowInvalidCertificates == true {
-            var debug = String()
-            self.allowInvalidCertificates.debugString(&debug, 0, nextIndent, indent)
+            let debug = self.allowInvalidCertificates.debugString(0, nextIndent, indent)
             QDebugString("AllowInvalidCertificates: \(debug)\n", &buffer, indent, nextIndent, indent)
         }
 
@@ -465,3 +462,5 @@ extension QApiProvider : IQDebug {
     }
     
 }
+
+#endif

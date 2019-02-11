@@ -320,6 +320,7 @@
 		40E2D6181F67D22E00B954E4 /* ImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40E2D6161F67D22E00B954E4 /* ImageViewController.xib */; };
 		40E52946204E7F1F002EDB0A /* IQAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E52944204E7F1F002EDB0A /* IQAnimation.swift */; };
 		40E52949204E9466002EDB0A /* QBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E52947204E9466002EDB0A /* QBlurView.swift */; };
+		40E60925220D94B400448CB2 /* QuicklyXmlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E60924220D94B400448CB2 /* QuicklyXmlTests.swift */; };
 		40E7382C1F556AF600B192C6 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E7382B1F556AF600B192C6 /* UIDevice.swift */; };
 		40E738541F5606C500B192C6 /* QBackgroundColorTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E7384E1F5606C500B192C6 /* QBackgroundColorTableCell.swift */; };
 		40E738561F5606C500B192C6 /* QSeparatorTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E738501F5606C500B192C6 /* QSeparatorTableCell.swift */; };
@@ -706,6 +707,7 @@
 		40E2D6161F67D22E00B954E4 /* ImageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageViewController.xib; sourceTree = "<group>"; };
 		40E52944204E7F1F002EDB0A /* IQAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQAnimation.swift; sourceTree = "<group>"; };
 		40E52947204E9466002EDB0A /* QBlurView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QBlurView.swift; sourceTree = "<group>"; };
+		40E60924220D94B400448CB2 /* QuicklyXmlTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuicklyXmlTests.swift; sourceTree = "<group>"; };
 		40E7382B1F556AF600B192C6 /* UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		40E7384E1F5606C500B192C6 /* QBackgroundColorTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QBackgroundColorTableCell.swift; sourceTree = "<group>"; };
 		40E738501F5606C500B192C6 /* QSeparatorTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSeparatorTableCell.swift; sourceTree = "<group>"; };
@@ -889,6 +891,7 @@
 			isa = PBXGroup;
 			children = (
 				40EBC12C1F4DC40200D42A64 /* QuicklyJsonTests.swift */,
+				40E60924220D94B400448CB2 /* QuicklyXmlTests.swift */,
 				406101691F8DFEEE00A5463E /* QuicklyModelTests.swift */,
 				40B8A1931F4F4AFB00204E5A /* QuicklyApiTests.swift */,
 				4011E0491F4CBA6C0056CA79 /* QuicklyTextTests.swift */,
@@ -2060,6 +2063,7 @@
 				4011E04A1F4CBA6C0056CA79 /* QuicklyTextTests.swift in Sources */,
 				4061016A1F8DFEEF00A5463E /* QuicklyModelTests.swift in Sources */,
 				40386F5620ADA982005F5349 /* QuicklyTimerTests.swift in Sources */,
+				40E60925220D94B400448CB2 /* QuicklyXmlTests.swift in Sources */,
 				40B8A1941F4F4AFB00204E5A /* QuicklyApiTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

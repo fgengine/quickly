@@ -392,7 +392,9 @@ public final class QJson {
 
 }
 
-// MARK: - QJson : IQDebug -
+// MARK: - IQDebug
+
+#if DEBUG
 
 extension QJson : IQDebug {
 
@@ -412,6 +414,8 @@ extension QJson : IQDebug {
     }
 
 }
+
+#endif
 
 // MARK: - Bool : IQJsonValue -
 
