@@ -14,7 +14,12 @@ open class QMultiTextFieldComposable : QComposable {
     public var maximumHeight: CGFloat
     public var height: CGFloat
     public var text: String
-    public var isValid: Bool
+    public var isValid: Bool {
+        get {
+            guard let validator = self.field.validator else { return true }
+            return validator.validate(self.text)
+        }
+    }
     public var isEditing: Bool
     public var shouldBeginEditing: ShouldClosure?
     public var beginEditing: Closure?
@@ -46,7 +51,6 @@ open class QMultiTextFieldComposable : QComposable {
         self.minimumHeight = minimumHeight
         self.maximumHeight = maximumHeight
         self.height = height
-        self.isValid = true
         self.isEditing = false
         self.shouldBeginEditing = shouldBeginEditing
         self.beginEditing = beginEditing
@@ -160,7 +164,6 @@ open class QMultiTextFieldComposition< Composable: QMultiTextFieldComposable > :
 
     private func _editing() {
         guard let composable = self.composable else { return }
-        composable.isValid = self.multiTextField.isValid
         composable.text = self.multiTextField.unformatText
         if let closure = composable.editing {
             closure(composable)

@@ -10,7 +10,9 @@ open class QDateFieldComposable : QComposable {
     public var field: QDateFieldStyleSheet
     public var height: CGFloat
     public var date: Date?
-    public var isValid: Bool
+    public var isValid: Bool {
+        get { return self.date != nil }
+    }
     public var isEditing: Bool
     public var shouldBeginEditing: ShouldClosure?
     public var beginEditing: Closure?
@@ -33,7 +35,6 @@ open class QDateFieldComposable : QComposable {
         self.field = field
         self.date = date
         self.height = height
-        self.isValid = true
         self.isEditing = false
         self.shouldBeginEditing = shouldBeginEditing
         self.beginEditing = beginEditing
@@ -146,7 +147,6 @@ open class QDateFieldComposition< Composable: QDateFieldComposable > : QComposit
 
     private func _select(_ date: Date) {
         guard let composable = self.composable else { return }
-        composable.isValid = self.dateField.isValid
         composable.date = date
         if let closure = composable.select {
             closure(composable)

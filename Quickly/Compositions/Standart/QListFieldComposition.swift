@@ -10,7 +10,9 @@ open class QListFieldComposable : QComposable {
     public var field: QListFieldStyleSheet
     public var selectedRow: QListFieldPickerRow?
     public var height: CGFloat
-    public var isValid: Bool
+    public var isValid: Bool{
+        get { return self.selectedRow != nil }
+    }
     public var isEditing: Bool
     public var shouldBeginEditing: ShouldClosure?
     public var beginEditing: Closure?
@@ -32,7 +34,6 @@ open class QListFieldComposable : QComposable {
         self.field = field
         self.selectedRow = selectedRow
         self.height = height
-        self.isValid = true
         self.isEditing = false
         self.shouldBeginEditing = shouldBeginEditing
         self.beginEditing = beginEditing
@@ -145,7 +146,6 @@ open class QListFieldComposition< Composable: QListFieldComposable > : QComposit
 
     private func _select(_ pickerRow: QListFieldPickerRow) {
         guard let composable = self.composable else { return }
-        composable.isValid = self.listField.isValid
         composable.selectedRow = pickerRow
         if let closure = composable.select {
             closure(composable)

@@ -4,6 +4,9 @@
 
 open class QEmailStringValidator : IQStringValidator {
     
+    public init() {
+    }
+    
     public func validate(_ string: String, complete: Bool) -> Bool {
         let parts = string.split(separator: "@")
         if parts.count != 2 {

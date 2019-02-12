@@ -10,7 +10,12 @@ open class QTextFieldComposable : QComposable {
     public var field: QTextFieldStyleSheet
     public var height: CGFloat
     public var text: String
-    public var isValid: Bool
+    public var isValid: Bool {
+        get {
+            guard let validator = self.field.validator else { return true }
+            return validator.validate(self.text)
+        }
+    }
     public var isEditing: Bool
     public var shouldBeginEditing: ShouldClosure?
     public var beginEditing: Closure?
@@ -40,7 +45,6 @@ open class QTextFieldComposable : QComposable {
         self.field = field
         self.text = text
         self.height = height
-        self.isValid = true
         self.isEditing = false
         self.shouldBeginEditing = shouldBeginEditing
         self.beginEditing = beginEditing
@@ -169,7 +173,6 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
 
     private func _editing() {
         guard let composable = self.composable else { return }
-        composable.isValid = self.textField.isValid
         composable.text = self.textField.unformatText
         if let closure = composable.editing {
             closure(composable)
@@ -202,7 +205,6 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
 
     private func _pressedClear() {
         guard let composable = self.composable else { return }
-        composable.isValid = self.textField.isValid
         composable.text = self.textField.unformatText
         if let closure = composable.pressedClear {
             closure(composable)

@@ -9,19 +9,17 @@ public enum QCollectionTableRowSizeBehaviour {
 
 open class QCollectionTableRow : QBackgroundColorTableRow {
 
-    public typealias LayoutType = UICollectionViewLayout & IQCollectionLayout
-
     public var edgeInsets: UIEdgeInsets
 
     public var sizeBehaviour: QCollectionTableRowSizeBehaviour
     public var controller: IQCollectionController
-    public var layout: LayoutType
+    public var layout: QCollectionLayoutType
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         sizeBehaviour: QCollectionTableRowSizeBehaviour = .dynamic,
         controller: IQCollectionController,
-        layout: LayoutType
+        layout: QCollectionLayoutType
     ) {
         self.edgeInsets = edgeInsets
         self.sizeBehaviour = sizeBehaviour
@@ -52,7 +50,7 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
         }
         get { return self.collectionView.collectionController }
     }
-    private weak var _collectionLayout: RowType.LayoutType? {
+    private weak var _collectionLayout: QCollectionLayoutType? {
         set(value) {
             if self.collectionView.collectionLayout !== value {
                 if let collectionLayout = self.collectionView.collectionLayout {

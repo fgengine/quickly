@@ -68,7 +68,7 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
         if self.isLoaded == true {
             self._updateConstraints(self.view, contentView: self.composition.contentView)
         }
-        if let loadingView = self.loadingView, view.superview != nil {
+        if let loadingView = self.loadingView, loadingView.superview != nil {
             self._updateConstraints(self.view, loadingView: loadingView)
         }
     }

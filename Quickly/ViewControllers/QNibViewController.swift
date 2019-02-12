@@ -68,7 +68,7 @@ open class QNibViewController : QViewController, IQStackContentViewController, I
         if let rootView = self.rootView {
             self._updateConstraints(self.view, rootView: rootView)
         }
-        if let loadingView = self.loadingView, view.superview != nil {
+        if let loadingView = self.loadingView, loadingView.superview != nil {
             self._updateConstraints(self.view, loadingView: loadingView)
         }
     }
