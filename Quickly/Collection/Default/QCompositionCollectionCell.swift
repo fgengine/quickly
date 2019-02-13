@@ -131,6 +131,8 @@ extension QCompositionCollectionCell : IQMultiTextFieldObserver {
     }
     
     open func changed(multiTextField: QMultiTextField, height: CGFloat) {
+        guard let layout = self.item?.section?.controller?.collectionView?.collectionViewLayout else { return }
+        layout.invalidateLayout()
     }
     
 }

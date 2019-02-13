@@ -192,7 +192,7 @@ public class QListField : QDisplayView, IQField {
             self.selectedRow = self.rows.first
         }
         self.onBeginEditing?(self)
-        self._observer.reverseNotify({ (observer) in
+        self._observer.notify({ (observer) in
             observer.beginEditing(listField: self)
         })
         return true
@@ -202,7 +202,7 @@ public class QListField : QDisplayView, IQField {
     open override func resignFirstResponder() -> Bool {
         guard super.resignFirstResponder() == true else { return false }
         self.onEndEditing?(self)
-        self._observer.reverseNotify({ (observer) in
+        self._observer.notify({ (observer) in
             observer.endEditing(listField: self)
         })
         return true
@@ -238,7 +238,7 @@ extension QListField : IQPickerControllerDelegate {
         if let closure = self.onSelect {
             closure(self, row)
         }
-        self._observer.reverseNotify({ (observer) in
+        self._observer.notify({ (observer) in
             observer.select(listField: self, row: row)
         })
     }

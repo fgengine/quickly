@@ -153,8 +153,10 @@ extension QCompositionTableCell : IQMultiTextFieldObserver {
     }
     
     open func changed(multiTextField: QMultiTextField, height: CGFloat) {
-        guard let controller = self.row?.section?.controller else { return }
-        controller.performBatchUpdates({})
+        guard let row = self.row, let section = row.section, let controller = section.controller else { return }
+        controller.performBatchUpdates({
+            row.resetCacheHeight()
+        })
     }
     
 }

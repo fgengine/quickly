@@ -437,7 +437,7 @@ public class QTextField : QDisplayView, IQField {
             if let closure = field.onBeginEditing {
                 closure(field)
             }
-            field._observer.reverseNotify({ (observer) in
+            field._observer.notify({ (observer) in
                 observer.beginEditing(textField: field)
             })
         }
@@ -452,7 +452,7 @@ public class QTextField : QDisplayView, IQField {
             if let closure = field.onEndEditing {
                 closure(field)
             }
-            field._observer.reverseNotify({ (observer) in
+            field._observer.notify({ (observer) in
                 observer.endEditing(textField: field)
             })
         }
@@ -494,7 +494,7 @@ public class QTextField : QDisplayView, IQField {
                 if let closure = field.onEditing {
                     closure(field)
                 }
-                field._observer.reverseNotify({ (observer) in
+                field._observer.notify({ (observer) in
                     observer.editing(textField: field)
                 })
             }
@@ -508,7 +508,7 @@ public class QTextField : QDisplayView, IQField {
                     if let pressedClosure = field.onPressedClear {
                         pressedClosure(field)
                     }
-                    field._observer.reverseNotify({ (observer) in
+                    field._observer.notify({ (observer) in
                         observer.pressedClear(textField: field)
                     })
                 }
@@ -516,7 +516,7 @@ public class QTextField : QDisplayView, IQField {
                 if let pressedClosure = field.onPressedClear {
                     pressedClosure(field)
                 }
-                field._observer.reverseNotify({ (observer) in
+                field._observer.notify({ (observer) in
                     observer.pressedClear(textField: field)
                 })
             }
@@ -530,7 +530,7 @@ public class QTextField : QDisplayView, IQField {
                     if let pressedClosure = field.onPressedReturn {
                         pressedClosure(field)
                     }
-                    field._observer.reverseNotify({ (observer) in
+                    field._observer.notify({ (observer) in
                         observer.pressedReturn(textField: field)
                     })
                 }
@@ -538,7 +538,7 @@ public class QTextField : QDisplayView, IQField {
                 if let pressedClosure = field.onPressedReturn {
                     pressedClosure(field)
                 }
-                field._observer.reverseNotify({ (observer) in
+                field._observer.notify({ (observer) in
                     observer.pressedReturn(textField: field)
                 })
             }

@@ -235,7 +235,7 @@ public class QDateField : QDisplayView, IQField {
             self.date = self.pickerView.date
         }
         self.onBeginEditing?(self)
-        self._observer.reverseNotify({ (observer) in
+        self._observer.notify({ (observer) in
             observer.beginEditing(dateField: self)
         })
         return true
@@ -245,7 +245,7 @@ public class QDateField : QDisplayView, IQField {
     open override func resignFirstResponder() -> Bool {
         guard super.resignFirstResponder() == true else { return false }
         self.onEndEditing?(self)
-        self._observer.reverseNotify({ (observer) in
+        self._observer.notify({ (observer) in
             observer.endEditing(dateField: self)
         })
         return true
@@ -302,7 +302,7 @@ extension QDateField {
         if let closure = self.onSelect {
             closure(self, self.pickerView.date)
         }
-        self._observer.reverseNotify({ (observer) in
+        self._observer.notify({ (observer) in
             observer.select(dateField: self, date: self.pickerView.date)
         })
     }

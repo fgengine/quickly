@@ -435,7 +435,7 @@ public class QMultiTextField : QDisplayView, IQField {
             if let closure = field.onBeginEditing {
                 closure(field)
             }
-            field._observer.reverseNotify({ (observer) in
+            field._observer.notify({ (observer) in
                 observer.beginEditing(multiTextField: field)
             })
         }
@@ -450,7 +450,7 @@ public class QMultiTextField : QDisplayView, IQField {
             if let closure = field.onEndEditing {
                 closure(field)
             }
-            field._observer.reverseNotify({ (observer) in
+            field._observer.notify({ (observer) in
                 observer.endEditing(multiTextField: field)
             })
         }
@@ -508,20 +508,23 @@ public class QMultiTextField : QDisplayView, IQField {
                     let height = field._textHeight()
                     if abs(field.textHeight - height) > CGFloat.leastNonzeroMagnitude {
                         field.textHeight = height
-                        if let onChangedHeight = field.onChangedHeight {
-                            UIView.animate(withDuration: 0.1, animations: {
+                        UIView.animate(withDuration: 0.1, animations: {
+                            if let onChangedHeight = field.onChangedHeight {
                                 onChangedHeight(field)
-                                textView.scrollRangeToVisible(textView.selectedRange)
-                            }, completion: { _ in
-                                textView.scrollRangeToVisible(textView.selectedRange)
+                            }
+                            field._observer.notify({ (observer) in
+                                observer.changed(multiTextField: field, height: height)
                             })
-                        }
+                            textView.scrollRangeToVisible(textView.selectedRange)
+                        }, completion: { _ in
+                            textView.scrollRangeToVisible(textView.selectedRange)
+                        })
                     }
                     NotificationCenter.default.post(name: UITextView.textDidChangeNotification, object: textView)
                     if let closure = field.onEditing {
                         closure(field)
                     }
-                    field._observer.reverseNotify({ (observer) in
+                    field._observer.notify({ (observer) in
                         observer.editing(multiTextField: field)
                     })
                 }
