@@ -63,9 +63,9 @@ open class QMultiTextFieldComposable : QComposable {
 
 }
 
-open class QMultiTextFieldComposition< Composable: QMultiTextFieldComposable > : QComposition< Composable > {
+open class QMultiTextFieldComposition< Composable: QMultiTextFieldComposable > : QComposition< Composable >, IQEditableComposition {
 
-    public lazy private(set) var multiTextField: QMultiTextField = {
+    public lazy private(set) var field: QMultiTextField = {
         let view = QMultiTextField(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onShouldBeginEditing = { [weak self] (multiTextField: QMultiTextField) in
@@ -112,7 +112,7 @@ open class QMultiTextFieldComposition< Composable: QMultiTextFieldComposable > :
     
     deinit {
         if let observer = self.owner as? IQMultiTextFieldObserver {
-            self.multiTextField.removeObserver(observer)
+            self.field.removeObserver(observer)
         }
     }
     
@@ -120,7 +120,7 @@ open class QMultiTextFieldComposition< Composable: QMultiTextFieldComposable > :
         super.setup(owner: owner)
         
         if let observer = owner as? IQMultiTextFieldObserver {
-            self.multiTextField.addObserver(observer, priority: 0)
+            self.field.addObserver(observer, priority: 0)
         }
     }
     
@@ -134,17 +134,29 @@ open class QMultiTextFieldComposition< Composable: QMultiTextFieldComposable > :
         if self._edgeInsets != edgeInsets {
             self._edgeInsets = edgeInsets
             self._constraints = [
-                self.multiTextField.topLayout == self.contentView.topLayout + edgeInsets.top,
-                self.multiTextField.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
-                self.multiTextField.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
-                self.multiTextField.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom
+                self.field.topLayout == self.contentView.topLayout + edgeInsets.top,
+                self.field.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
+                self.field.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
+                self.field.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom
             ]
         }
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        self.multiTextField.apply(composable.field)
+        self.field.apply(composable.field)
     }
+    
+    // MARK: - IQCompositionEditable
+    
+    open func beginEditing() {
+        self.field.beginEditing()
+    }
+    
+    open func endEditing() {
+        self.field.endEditing(false)
+    }
+    
+    // MARK: - Private
 
     private func _shouldBeginEditing() -> Bool {
         guard let composable = self.composable else { return true }
@@ -156,7 +168,7 @@ open class QMultiTextFieldComposition< Composable: QMultiTextFieldComposable > :
 
     private func _beginEditing() {
         guard let composable = self.composable else { return }
-        composable.isEditing = self.multiTextField.isEditing
+        composable.isEditing = self.field.isEditing
         if let closure = composable.beginEditing {
             closure(composable)
         }
@@ -164,7 +176,7 @@ open class QMultiTextFieldComposition< Composable: QMultiTextFieldComposable > :
 
     private func _editing() {
         guard let composable = self.composable else { return }
-        composable.text = self.multiTextField.unformatText
+        composable.text = self.field.unformatText
         if let closure = composable.editing {
             closure(composable)
         }
@@ -180,7 +192,7 @@ open class QMultiTextFieldComposition< Composable: QMultiTextFieldComposable > :
 
     private func _endEditing() {
         guard let composable = self.composable else { return }
-        composable.isEditing = self.multiTextField.isEditing
+        composable.isEditing = self.field.isEditing
         if let closure = composable.endEditing {
             closure(composable)
         }
@@ -188,7 +200,7 @@ open class QMultiTextFieldComposition< Composable: QMultiTextFieldComposable > :
 
     private func _changedHeight() {
         guard let composable = self.composable else { return }
-        composable.height = self.multiTextField.textHeight
+        composable.height = self.field.textHeight
         if let closure = composable.changedHeight {
             closure(composable)
         }

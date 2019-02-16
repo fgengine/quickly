@@ -60,9 +60,9 @@ open class QTextFieldComposable : QComposable {
 
 }
 
-open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposition< Composable > {
+open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposition< Composable >, IQEditableComposition {
 
-    public lazy private(set) var textField: QTextField = {
+    public lazy private(set) var field: QTextField = {
         let view = QTextField(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onShouldBeginEditing = { [weak self] (textField: QTextField) in
@@ -121,7 +121,7 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
     
     deinit {
         if let observer = self.owner as? IQTextFieldObserver {
-            self.textField.removeObserver(observer)
+            self.field.removeObserver(observer)
         }
     }
     
@@ -129,7 +129,7 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
         super.setup(owner: owner)
         
         if let observer = owner as? IQTextFieldObserver {
-            self.textField.addObserver(observer, priority: 0)
+            self.field.addObserver(observer, priority: 0)
         }
     }
     
@@ -143,17 +143,29 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
         if self._edgeInsets != edgeInsets {
             self._edgeInsets = edgeInsets
             self._constraints = [
-                self.textField.topLayout == self.contentView.topLayout + edgeInsets.top,
-                self.textField.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
-                self.textField.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
-                self.textField.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom
+                self.field.topLayout == self.contentView.topLayout + edgeInsets.top,
+                self.field.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
+                self.field.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
+                self.field.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom
             ]
         }
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        self.textField.apply(composable.field)
+        self.field.apply(composable.field)
     }
+    
+    // MARK: - IQCompositionEditable
+    
+    open func beginEditing() {
+        self.field.beginEditing()
+    }
+    
+    open func endEditing() {
+        self.field.endEditing(false)
+    }
+    
+    // MARK: - Private
 
     private func _shouldBeginEditing() -> Bool {
         guard let composable = self.composable else { return true }
@@ -165,7 +177,7 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
 
     private func _beginEditing() {
         guard let composable = self.composable else { return }
-        composable.isEditing = self.textField.isEditing
+        composable.isEditing = self.field.isEditing
         if let closure = composable.beginEditing {
             closure(composable)
         }
@@ -173,7 +185,7 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
 
     private func _editing() {
         guard let composable = self.composable else { return }
-        composable.text = self.textField.unformatText
+        composable.text = self.field.unformatText
         if let closure = composable.editing {
             closure(composable)
         }
@@ -189,7 +201,7 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
 
     private func _endEditing() {
         guard let composable = self.composable else { return }
-        composable.isEditing = self.textField.isEditing
+        composable.isEditing = self.field.isEditing
         if let closure = composable.endEditing {
             closure(composable)
         }
@@ -205,7 +217,7 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
 
     private func _pressedClear() {
         guard let composable = self.composable else { return }
-        composable.text = self.textField.unformatText
+        composable.text = self.field.unformatText
         if let closure = composable.pressedClear {
             closure(composable)
         }

@@ -27,6 +27,13 @@ public protocol IQComposition : class {
 
 }
 
+public protocol IQEditableComposition : class {
+    
+    func beginEditing()
+    func endEditing()
+    
+}
+
 public extension IQComposition {
 
     static func height(composable: Composable, spec: IQContainerSpec) -> CGFloat {

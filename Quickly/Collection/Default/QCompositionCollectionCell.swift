@@ -29,7 +29,7 @@ open class QCompositionCollectionItem< Composable: IQComposable > : QBackgroundC
 
 }
 
-open class QCompositionCollectionCell< Composition: IQComposition > : QBackgroundColorCollectionCell< QCompositionCollectionItem< Composition.Composable > > {
+open class QCompositionCollectionCell< Composition: IQComposition > : QBackgroundColorCollectionCell< QCompositionCollectionItem< Composition.Composable > >, IQTextFieldObserver, IQMultiTextFieldObserver, IQListFieldObserver, IQDateFieldObserver {
 
     open override var isHighlighted: Bool {
         didSet {
@@ -70,6 +70,70 @@ open class QCompositionCollectionCell< Composition: IQComposition > : QBackgroun
         super.set(item: item, spec: spec, animated: animated)
         self._prepareComposition(item: item, spec: spec, highlighted: self.isHighlighted, selected: self.isSelected, animated: animated)
     }
+
+    // MARK: - IQTextFieldObserver
+    
+    open func beginEditing(textField: QTextField) {
+        self._scroll(animated: true)
+    }
+    
+    open func editing(textField: QTextField) {
+    }
+    
+    open func endEditing(textField: QTextField) {
+    }
+    
+    open func pressedClear(textField: QTextField) {
+    }
+    
+    open func pressedReturn(textField: QTextField) {
+    }
+    
+    // MARK: - IQMultiTextFieldObserver
+    
+    open func beginEditing(multiTextField: QMultiTextField) {
+        self._scroll(animated: true)
+    }
+    
+    open func editing(multiTextField: QMultiTextField) {
+    }
+    
+    open func endEditing(multiTextField: QMultiTextField) {
+    }
+    
+    open func pressedReturn(multiTextField: QMultiTextField) {
+    }
+    
+    open func changed(multiTextField: QMultiTextField, height: CGFloat) {
+        guard let layout = self.item?.section?.controller?.collectionView?.collectionViewLayout else { return }
+        layout.invalidateLayout()
+    }
+    
+    // MARK: - IQListFieldObserver
+    
+    open func beginEditing(listField: QListField) {
+        self._scroll(animated: true)
+    }
+    
+    open func select(listField: QListField, row: QListFieldPickerRow) {
+    }
+    
+    open func endEditing(listField: QListField) {
+    }
+    
+    // MARK: - IQDateFieldObserver
+    
+    open func beginEditing(dateField: QDateField) {
+        self._scroll(animated: true)
+    }
+    
+    open func select(dateField: QDateField, date: Date) {
+    }
+    
+    open func endEditing(dateField: QDateField) {
+    }
+    
+    // MARK: - Private
     
     private func _prepareComposition(item: Item, spec: IQContainerSpec, highlighted: Bool, selected: Bool, animated: Bool) {
         self.composition.prepare(
@@ -91,76 +155,6 @@ open class QCompositionCollectionCell< Composition: IQComposition > : QBackgroun
     private func _scroll(animated: Bool) {
         guard let item = self.item, let controller = item.section?.controller else { return }
         controller.scroll(item: item, scroll: .centeredVertically, animated: animated)
-    }
-
-}
-
-extension QCompositionCollectionCell : IQTextFieldObserver {
-    
-    open func beginEditing(textField: QTextField) {
-        self._scroll(animated: true)
-    }
-    
-    open func editing(textField: QTextField) {
-    }
-    
-    open func endEditing(textField: QTextField) {
-    }
-    
-    open func pressedClear(textField: QTextField) {
-    }
-    
-    open func pressedReturn(textField: QTextField) {
-    }
-    
-}
-
-extension QCompositionCollectionCell : IQMultiTextFieldObserver {
-    
-    open func beginEditing(multiTextField: QMultiTextField) {
-        self._scroll(animated: true)
-    }
-    
-    open func editing(multiTextField: QMultiTextField) {
-    }
-    
-    open func endEditing(multiTextField: QMultiTextField) {
-    }
-    
-    open func pressedReturn(multiTextField: QMultiTextField) {
-    }
-    
-    open func changed(multiTextField: QMultiTextField, height: CGFloat) {
-        guard let layout = self.item?.section?.controller?.collectionView?.collectionViewLayout else { return }
-        layout.invalidateLayout()
-    }
-    
-}
-
-extension QCompositionCollectionCell : IQListFieldObserver {
-    
-    open func beginEditing(listField: QListField) {
-        self._scroll(animated: true)
-    }
-    
-    open func select(listField: QListField, row: QListFieldPickerRow) {
-    }
-    
-    open func endEditing(listField: QListField) {
-    }
-    
-}
-
-extension QCompositionCollectionCell : IQDateFieldObserver {
-    
-    open func beginEditing(dateField: QDateField) {
-        self._scroll(animated: true)
-    }
-    
-    open func select(dateField: QDateField, date: Date) {
-    }
-    
-    open func endEditing(dateField: QDateField) {
     }
     
 }

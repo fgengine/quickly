@@ -46,9 +46,9 @@ open class QDateFieldComposable : QComposable {
 
 }
 
-open class QDateFieldComposition< Composable: QDateFieldComposable > : QComposition< Composable > {
+open class QDateFieldComposition< Composable: QDateFieldComposable > : QComposition< Composable >, IQEditableComposition {
 
-    public lazy private(set) var dateField: QDateField = {
+    public lazy private(set) var field: QDateField = {
         let view = QDateField(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onShouldBeginEditing = { [weak self] (dateField: QDateField) in
@@ -91,7 +91,7 @@ open class QDateFieldComposition< Composable: QDateFieldComposable > : QComposit
     
     deinit {
         if let observer = self.owner as? IQDateFieldObserver {
-            self.dateField.removeObserver(observer)
+            self.field.removeObserver(observer)
         }
     }
     
@@ -99,7 +99,7 @@ open class QDateFieldComposition< Composable: QDateFieldComposable > : QComposit
         super.setup(owner: owner)
         
         if let observer = owner as? IQDateFieldObserver {
-            self.dateField.addObserver(observer, priority: 0)
+            self.field.addObserver(observer, priority: 0)
         }
     }
     
@@ -113,21 +113,33 @@ open class QDateFieldComposition< Composable: QDateFieldComposable > : QComposit
         if self._edgeInsets != edgeInsets {
             self._edgeInsets = edgeInsets
             self._constraints = [
-                self.dateField.topLayout == self.contentView.topLayout + edgeInsets.top,
-                self.dateField.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
-                self.dateField.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
-                self.dateField.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom
+                self.field.topLayout == self.contentView.topLayout + edgeInsets.top,
+                self.field.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
+                self.field.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
+                self.field.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom
             ]
         }
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        self.dateField.apply(composable.field)
+        self.field.apply(composable.field)
     }
     
     open override func postLayout(composable: Composable, spec: IQContainerSpec) {
-        self.dateField.date = composable.date
+        self.field.date = composable.date
     }
+    
+    // MARK: - IQCompositionEditable
+    
+    open func beginEditing() {
+        self.field.beginEditing()
+    }
+    
+    open func endEditing() {
+        self.field.endEditing(false)
+    }
+    
+    // MARK: - Private
 
     private func _shouldBeginEditing() -> Bool {
         guard let composable = self.composable else { return true }
@@ -139,7 +151,7 @@ open class QDateFieldComposition< Composable: QDateFieldComposable > : QComposit
 
     private func _beginEditing() {
         guard let composable = self.composable else { return }
-        composable.isEditing = self.dateField.isEditing
+        composable.isEditing = self.field.isEditing
         if let closure = composable.beginEditing {
             closure(composable)
         }
@@ -163,7 +175,7 @@ open class QDateFieldComposition< Composable: QDateFieldComposable > : QComposit
 
     private func _endEditing() {
         guard let composable = self.composable else { return }
-        composable.isEditing = self.dateField.isEditing
+        composable.isEditing = self.field.isEditing
         if let closure = composable.endEditing {
             closure(composable)
         }

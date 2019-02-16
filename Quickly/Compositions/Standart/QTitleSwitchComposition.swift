@@ -27,7 +27,7 @@ open class QTitleSwitchComposable : QComposable {
         self.switch = `switch`
         self.switchHeight = switchHeight
         self.switchSpacing = switchSpacing
-        self.switchIsOn = false
+        self.switchIsOn = switchIsOn
         self.switchChanged = switchChanged
         super.init(edgeInsets: edgeInsets)
     }
@@ -86,9 +86,10 @@ open class QTitleSwitchComposition< Composable: QTitleSwitchComposable > : QComp
                 self.titleLabel.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
                 self.titleLabel.trailingLayout == self.switch.leadingLayout - composable.switchSpacing,
                 self.titleLabel.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom,
-                self.switch.topLayout == self.contentView.topLayout + edgeInsets.top,
+                self.switch.topLayout >= self.contentView.topLayout + edgeInsets.top,
                 self.switch.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
-                self.switch.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom,
+                self.switch.bottomLayout <= self.contentView.bottomLayout - edgeInsets.bottom,
+                self.switch.centerYLayout == self.contentView.centerYLayout
             ]
         }
     }

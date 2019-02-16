@@ -43,7 +43,7 @@ open class QCompositionTableRow< Composable: IQComposable > : QBackgroundColorTa
 
 }
 
-open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColorTableCell< QCompositionTableRow< Composition.Composable > > {
+open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColorTableCell< QCompositionTableRow< Composition.Composable > >, IQTextFieldObserver, IQMultiTextFieldObserver, IQListFieldObserver, IQDateFieldObserver {
 
     public private(set) var composition: Composition!
 
@@ -92,32 +92,8 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
             self._prepareComposition(row: row, spec: spec, highlighted: self.isHighlighted, selected: selected, animated: animated)
         }
     }
-    
-    private func _prepareComposition(row: RowType, spec: IQContainerSpec, highlighted: Bool, selected: Bool, animated: Bool) {
-        self.composition.prepare(
-            composable: self._currentComposable(row: row, highlighted: highlighted, selected: selected),
-            spec: spec,
-            animated: animated
-        )
-    }
-    
-    private func _currentComposable(row: RowType, highlighted: Bool, selected: Bool) -> Composition.Composable {
-        if selected == true || highlighted == true {
-            if let selectedComposable = row.selectedComposable {
-                return selectedComposable
-            }
-        }
-        return row.composable
-    }
-    
-    private func _scroll(animated: Bool) {
-        guard let row = self.row, let controller = row.section?.controller else { return }
-        controller.scroll(row: row, scroll: .middle, animated: animated)
-    }
 
-}
-
-extension QCompositionTableCell : IQTextFieldObserver {
+    // MARK: - IQTextFieldObserver
     
     open func beginEditing(textField: QTextField) {
         self._scroll(animated: true)
@@ -135,9 +111,7 @@ extension QCompositionTableCell : IQTextFieldObserver {
     open func pressedReturn(textField: QTextField) {
     }
     
-}
-
-extension QCompositionTableCell : IQMultiTextFieldObserver {
+    // MARK: - IQMultiTextFieldObserver
     
     open func beginEditing(multiTextField: QMultiTextField) {
         self._scroll(animated: true)
@@ -159,9 +133,7 @@ extension QCompositionTableCell : IQMultiTextFieldObserver {
         })
     }
     
-}
-
-extension QCompositionTableCell : IQListFieldObserver {
+    // MARK: - IQListFieldObserver
     
     open func beginEditing(listField: QListField) {
         self._scroll(animated: true)
@@ -173,9 +145,7 @@ extension QCompositionTableCell : IQListFieldObserver {
     open func endEditing(listField: QListField) {
     }
     
-}
-
-extension QCompositionTableCell : IQDateFieldObserver {
+    // MARK: - IQDateFieldObserver
     
     open func beginEditing(dateField: QDateField) {
         self._scroll(animated: true)
@@ -185,6 +155,30 @@ extension QCompositionTableCell : IQDateFieldObserver {
     }
     
     open func endEditing(dateField: QDateField) {
+    }
+    
+    // MARK: - Private
+    
+    private func _prepareComposition(row: RowType, spec: IQContainerSpec, highlighted: Bool, selected: Bool, animated: Bool) {
+        self.composition.prepare(
+            composable: self._currentComposable(row: row, highlighted: highlighted, selected: selected),
+            spec: spec,
+            animated: animated
+        )
+    }
+    
+    private func _currentComposable(row: RowType, highlighted: Bool, selected: Bool) -> Composition.Composable {
+        if selected == true || highlighted == true {
+            if let selectedComposable = row.selectedComposable {
+                return selectedComposable
+            }
+        }
+        return row.composable
+    }
+    
+    private func _scroll(animated: Bool) {
+        guard let row = self.row, let controller = row.section?.controller else { return }
+        controller.scroll(row: row, scroll: .middle, animated: animated)
     }
     
 }
