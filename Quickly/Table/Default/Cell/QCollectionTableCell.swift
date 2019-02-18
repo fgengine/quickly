@@ -13,13 +13,13 @@ open class QCollectionTableRow : QBackgroundColorTableRow {
 
     public var sizeBehaviour: QCollectionTableRowSizeBehaviour
     public var controller: IQCollectionController
-    public var layout: QCollectionLayoutType
+    public var layout: UICollectionViewLayout
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         sizeBehaviour: QCollectionTableRowSizeBehaviour = .dynamic,
         controller: IQCollectionController,
-        layout: QCollectionLayoutType
+        layout: UICollectionViewLayout
     ) {
         self.edgeInsets = edgeInsets
         self.sizeBehaviour = sizeBehaviour
@@ -32,7 +32,7 @@ open class QCollectionTableRow : QBackgroundColorTableRow {
 
 }
 
-open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundColorTableCell< RowType >, IQCollectionControllerObserver, IQCollectionLayoutObserver {
+open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundColorTableCell< RowType >, IQCollectionControllerObserver {
 
     public private(set) var collectionView: QCollectionView!
 
@@ -42,27 +42,17 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
                 if let collectionController = self.collectionView.collectionController {
                     collectionController.removeObserver(self)
                 }
-                self.collectionView.collectionController = value
-                if let collectionController = self.collectionView.collectionController {
+                if let collectionController = value {
                     collectionController.addObserver(self, priority: 0)
                 }
+                self.collectionView.collectionController = value
             }
         }
         get { return self.collectionView.collectionController }
     }
-    private weak var _collectionLayout: QCollectionLayoutType? {
-        set(value) {
-            if self.collectionView.collectionLayout !== value {
-                if let collectionLayout = self.collectionView.collectionLayout {
-                    collectionLayout.removeObserver(self)
-                }
-                self.collectionView.collectionLayout = value
-                if let collectionLayout = self.collectionView.collectionLayout {
-                    collectionLayout.addObserver(self, priority: 0)
-                }
-            }
-        }
-        get { return self.collectionView.collectionLayout }
+    private var _collectionViewLayout: UICollectionViewLayout {
+        set(value) { self.collectionView.collectionViewLayout = value }
+        get { return self.collectionView.collectionViewLayout }
     }
 
     private var _collectionHeightConstraint: NSLayoutConstraint! {
@@ -88,26 +78,19 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
     open override func setup() {
         super.setup()
 
-        self.collectionView = QCollectionView(frame: self.bounds, layout: QCollectionFlowLayout())
-        self.collectionView.translatesAutoresizingMaskIntoConstraints = false
+        self.collectionView = QCollectionView(frame: self.bounds, collectionViewLayout: UICollectionViewFlowLayout())
+        self.collectionView.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
         self.contentView.addSubview(self.collectionView)
-        
-        self.contentView.addConstraints([
-            self.collectionView.topLayout == self.contentView.topLayout,
-            self.collectionView.leadingLayout == self.contentView.leadingLayout,
-            self.collectionView.trailingLayout == self.contentView.trailingLayout,
-            self.collectionView.bottomLayout == self.contentView.bottomLayout
-        ])
     }
     
     open override func set(row: RowType, spec: IQContainerSpec, animated: Bool) {
         super.set(row: row, spec: spec, animated: animated)
 
         self._collectionHeightConstraint = nil
-        self._collectionLayout = row.layout
-        self._collectionController = row.controller
         self.collectionView.contentInset = row.edgeInsets
         self.collectionView.scrollIndicatorInsets = row.edgeInsets
+        self._collectionViewLayout = row.layout
+        self._collectionController = row.controller
     }
 
     open func scroll(_ controller: IQCollectionController, collectionView: UICollectionView) {
@@ -118,10 +101,6 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
 
     public func update(_ controller: IQCollectionController) {
         self._apply(contentSize: self.collectionView.collectionViewLayout.collectionViewContentSize)
-    }
-
-    public func update(_ layout: IQCollectionLayout, contentSize: CGSize) {
-        self._apply(contentSize: contentSize)
     }
 
     private func _apply(contentSize: CGSize) {

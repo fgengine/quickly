@@ -116,7 +116,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
             tableView.estimatedSectionHeaderHeight = self.estimatedSectionHeaderHeight
             tableView.estimatedSectionFooterHeight = self.estimatedSectionFooterHeight
         }
-        self.reload()
+        self.reload([])
     }
 
     open func addObserver(_ observer: IQTableControllerObserver, priority: UInt) {
@@ -227,10 +227,14 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         return tableCell
     }
 
-    open func reload() {
-        guard let tableView = self.tableView else { return }
-        tableView.reloadData()
-        self._notifyUpdate()
+    open func reload(_ options: QTableControllerReloadOption) {
+        if options.contains(.resetCache) == true {
+            self.sections.forEach({ $0.resetCache() })
+        }
+        if let tableView = self.tableView {
+            tableView.reloadData()
+            self._notifyUpdate()
+        }
     }
 
     open func insertSection(_ sections: [IQTableSection], index: Int, with animation: UITableView.RowAnimation? = nil) {

@@ -19,14 +19,17 @@ open class QGroupbar : QView {
     }
     public private(set) var cellTypes: [ItemType.Type]
     public var items: [QGroupbarItem] {
-        set(value) { self.collectionSection.setItems(value) }
+        set(value) {
+            self.collectionSection.setItems(value)
+            self.collectionController.reload()
+        }
         get { return self.collectionSection.items as! [QGroupbarItem] }
     }
     public var selectedItem: QGroupbarItem? {
         get { return self.collectionController.selectedItems.first as? QGroupbarItem }
     }
     private lazy var collectionView: QCollectionView = {
-        let view = QCollectionView(frame: self.bounds, layout: self.collectionLayout)
+        let view = QCollectionView(frame: self.bounds, collectionViewLayout: self.collectionLayout)
         view.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
@@ -131,7 +134,7 @@ open class QGroupbar : QView {
         }
     }
     
-    private class CollectionLayout : QCollectionLayout {
+    private class CollectionLayout : UICollectionViewFlowLayout {
         
         public override var collectionViewContentSize: CGSize {
             get {

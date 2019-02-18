@@ -31,10 +31,6 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
             self.view.addSubview(collectionView)
         }
     }
-    public var collectionLayout: QCollectionLayoutType? {
-        set(value) { self.collectionView?.collectionLayout = value }
-        get { return self.collectionView?.collectionLayout }
-    }
     public var collectionController: IQCollectionController? {
         set(value) {
             if let collectionView = self.collectionView {
@@ -158,9 +154,7 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
         super.willTransition(size: size)
         if let collectionView = self.collectionView {
             self._updateContentInsets(collectionView)
-            if let collectionLayout = collectionView.collectionLayout {
-                collectionLayout.invalidateLayout()
-            }
+            collectionView.collectionViewLayout.invalidateLayout()
         }
     }
 
@@ -265,19 +259,30 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     
     private func _updateContentInsets(_ collectionView: QCollectionView) {
         let edgeInsets = self.adjustedContentInset
-        collectionView.contentLeftInset = edgeInsets.left
-        collectionView.contentRightInset = edgeInsets.right
-        collectionView.contentInset = UIEdgeInsets(
+        let oldContentInset = collectionView.contentInset
+        let newContentInset = UIEdgeInsets(
             top: edgeInsets.top,
             left: 0,
             bottom: edgeInsets.bottom,
             right: 0
         )
+        collectionView.contentLeftInset = edgeInsets.left
+        collectionView.contentRightInset = edgeInsets.right
+        collectionView.contentInset = newContentInset
         collectionView.scrollIndicatorInsets = edgeInsets
-        if collectionView.contentOffset.x < 0 || collectionView.contentOffset.y < 0 {
-            let x = (collectionView.contentOffset.x < 0) ? -edgeInsets.left : collectionView.contentOffset.x
-            let y = (collectionView.contentOffset.y < 0) ? -edgeInsets.top : collectionView.contentOffset.y
-            collectionView.contentOffset = CGPoint(x: x, y: y)
+        let deltaContentInset = UIEdgeInsets(
+            top: newContentInset.top - oldContentInset.top,
+            left: newContentInset.left - oldContentInset.left,
+            bottom: newContentInset.bottom - oldContentInset.bottom,
+            right: newContentInset.right - oldContentInset.right
+        )
+        if abs(deltaContentInset.left) > CGFloat.leastNonzeroMagnitude || abs(deltaContentInset.top) > CGFloat.leastNonzeroMagnitude {
+            let oldContentOffset = collectionView.contentOffset
+            let newContentOffset = CGPoint(
+                x: max(oldContentOffset.x - deltaContentInset.left, -newContentInset.left),
+                y: max(oldContentOffset.y - deltaContentInset.top, -newContentInset.top)
+            )
+            collectionView.setContentOffset(newContentOffset, animated: false)
         }
     }
     

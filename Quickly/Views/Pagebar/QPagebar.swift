@@ -23,14 +23,17 @@ open class QPagebar : QView {
         get { return self.collectionLayout.minimumInteritemSpacing }
     }
     public var items: [QPagebarItem] {
-        set(value) { self.collectionSection.setItems(value) }
+        set(value) {
+            self.collectionSection.setItems(value)
+            self.collectionController.reload()
+        }
         get { return self.collectionSection.items as! [QPagebarItem] }
     }
     public var selectedItem: QPagebarItem? {
         get { return self.collectionController.selectedItems.first as? QPagebarItem }
     }
     private lazy var collectionView: QCollectionView = {
-        let view = QCollectionView(frame: self.bounds, layout: self.collectionLayout)
+        let view = QCollectionView(frame: self.bounds, collectionViewLayout: self.collectionLayout)
         view.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
@@ -139,7 +142,7 @@ open class QPagebar : QView {
         }
     }
 
-    private class CollectionLayout : QCollectionFlowLayout {
+    private class CollectionLayout : UICollectionViewFlowLayout {
 
         public override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
             guard

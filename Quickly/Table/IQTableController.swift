@@ -2,6 +2,18 @@
 //  Quickly
 //
 
+public struct QTableControllerReloadOption : OptionSet {
+    
+    public let rawValue: Int
+    
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+
+    public static let resetCache = QTableControllerReloadOption(rawValue: 1 << 0)
+    
+}
+
 public protocol IQTableControllerObserver : class {
 
     func scroll(_ controller: IQTableController, tableView: UITableView)
@@ -57,7 +69,7 @@ public protocol IQTableController : UITableViewDataSource, UITableViewDelegate {
     func dequeue(data: IQTableData) -> Decor?
     func dequeue(row: IQTableRow, indexPath: IndexPath) -> Cell?
 
-    func reload()
+    func reload(_ options: QTableControllerReloadOption)
 
     func prependSection(_ section: IQTableSection, with animation: UITableView.RowAnimation?)
     func prependSection(_ sections: [IQTableSection], with animation: UITableView.RowAnimation?)

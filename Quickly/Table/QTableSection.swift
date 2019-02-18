@@ -137,6 +137,10 @@ open class QTableSection : IQTableSection {
             to: max(fromIndex, toIndex)
         )
     }
+    
+    public func resetCache() {
+        self.rows.forEach({ $0.resetCacheHeight() })
+    }
 
 }
 

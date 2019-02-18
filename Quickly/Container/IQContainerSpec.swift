@@ -16,9 +16,12 @@ public extension IQContainerSpec {
     
     var containerAvailableSize: CGSize {
         get {
+            let containerSize = self.containerSize
+            let containerLeftInset = self.containerLeftInset
+            let containerRightInset = self.containerRightInset
             return CGSize(
-                width: self.containerSize.width - (self.containerLeftInset + self.containerRightInset),
-                height: self.containerSize.height - (self.containerLeftInset + self.containerRightInset)
+                width: containerSize.width - (containerLeftInset + containerRightInset),
+                height: containerSize.height - (containerLeftInset + containerRightInset)
             )
         }
     }

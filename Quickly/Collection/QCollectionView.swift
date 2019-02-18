@@ -4,8 +4,6 @@
 
 open class QCollectionView : UICollectionView, IQView {
 
-    public typealias CollectionLayoutType = UICollectionViewLayout & IQCollectionLayout
-
     public var collectionController: IQCollectionController? {
         willSet {
             self.delegate = nil
@@ -19,15 +17,6 @@ open class QCollectionView : UICollectionView, IQView {
             self.dataSource = self.collectionController
             if let collectionController = self.collectionController {
                 collectionController.collectionView = self
-            }
-        }
-    }
-    public var collectionLayout: CollectionLayoutType? {
-        didSet {
-            if let collectionLayout = self.collectionLayout {
-                self.collectionViewLayout = collectionLayout
-            } else {
-                self.collectionViewLayout = QCollectionFlowLayout()
             }
         }
     }
@@ -62,21 +51,17 @@ open class QCollectionView : UICollectionView, IQView {
     }
     
     public required init() {
-        super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100), collectionViewLayout: QCollectionFlowLayout())
+        super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100), collectionViewLayout: UICollectionViewFlowLayout())
         self.setup()
     }
 
-    public init(frame: CGRect, layout: CollectionLayoutType? = nil) {
-        if let layout = layout {
-            super.init(frame: frame, collectionViewLayout: layout)
-        } else {
-            super.init(frame: frame, collectionViewLayout: QCollectionFlowLayout())
-        }
+    public override init(frame: CGRect, collectionViewLayout: UICollectionViewLayout) {
+        super.init(frame: frame, collectionViewLayout: collectionViewLayout)
         self.setup()
     }
 
     public convenience init(frame: CGRect) {
-        self.init(frame: frame, layout: QCollectionFlowLayout())
+        self.init(frame: frame, collectionViewLayout: UICollectionViewFlowLayout())
     }
 
     public required init?(coder: NSCoder) {

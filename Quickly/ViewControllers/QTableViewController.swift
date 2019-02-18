@@ -156,6 +156,9 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
         if let tableView = self.tableView {
             self._updateContentInsets(tableView)
         }
+        if let tableController = self.tableController {
+            tableController.reload([ .resetCache ])
+        }
         if let footerView = self._footerView {
             footerView.frame = self._footerViewFrame()
         }
@@ -292,22 +295,35 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     private func _updateContentInsets(_ tableView: QTableView) {
         let edgeInsets = self.adjustedContentInset
         let footerHeight = (self.footerView != nil) ? self.footerViewHeight : 0
-        tableView.contentLeftInset = edgeInsets.left
-        tableView.contentRightInset = edgeInsets.right
-        tableView.contentInset = UIEdgeInsets(
+        let oldContentInset = tableView.contentInset
+        let newContentInset = UIEdgeInsets(
             top: edgeInsets.top,
             left: 0,
             bottom: edgeInsets.bottom + footerHeight,
             right: 0
         )
+        tableView.contentLeftInset = edgeInsets.left
+        tableView.contentRightInset = edgeInsets.right
+        tableView.contentInset = newContentInset
         tableView.scrollIndicatorInsets = UIEdgeInsets(
             top: edgeInsets.top,
             left: edgeInsets.left,
             bottom: edgeInsets.bottom + footerHeight,
             right: edgeInsets.right
         )
-        if tableView.contentOffset.y <= CGFloat.leastNonzeroMagnitude {
-            tableView.contentOffset = CGPoint(x: 0, y: -edgeInsets.top)
+        let deltaContentInset = UIEdgeInsets(
+            top: newContentInset.top - oldContentInset.top,
+            left: newContentInset.left - oldContentInset.left,
+            bottom: newContentInset.bottom - oldContentInset.bottom,
+            right: newContentInset.right - oldContentInset.right
+        )
+        if abs(deltaContentInset.top) > CGFloat.leastNonzeroMagnitude {
+            let oldContentOffset = tableView.contentOffset
+            let newContentOffset = CGPoint(
+                x: oldContentOffset.x,
+                y: max(oldContentOffset.y - deltaContentInset.top, -newContentInset.top)
+            )
+            tableView.setContentOffset(newContentOffset, animated: false)
         }
     }
     

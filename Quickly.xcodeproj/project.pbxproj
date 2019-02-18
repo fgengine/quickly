@@ -204,8 +204,6 @@
 		40784DDD207DED22001828E3 /* IQJsonEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40784DDB207DED22001828E3 /* IQJsonEnum.swift */; };
 		4079B10B219ABCCB00917A5D /* QMultiTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F3F8BC219966EA00ADE043 /* QMultiTextField.swift */; };
 		4080082C206A9BEF00B5C9A7 /* QCollectionTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40800828206A9BEF00B5C9A7 /* QCollectionTableCell.swift */; };
-		40800837206BD43B00B5C9A7 /* QCollectionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40800835206BD43A00B5C9A7 /* QCollectionLayout.swift */; };
-		4080083A206BD46F00B5C9A7 /* IQCollectionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40800838206BD46F00B5C9A7 /* IQCollectionLayout.swift */; };
 		40800845206BE8AD00B5C9A7 /* ListFieldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4080083F206BE80300B5C9A7 /* ListFieldViewController.swift */; };
 		40800846206BE8B100B5C9A7 /* ListFieldViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40800840206BE80300B5C9A7 /* ListFieldViewController.xib */; };
 		40836A9E216C88C400777404 /* QImageTitleDetailValueComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40836A9D216C88C400777404 /* QImageTitleDetailValueComposition.swift */; };
@@ -593,8 +591,6 @@
 		40784DDB207DED22001828E3 /* IQJsonEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQJsonEnum.swift; sourceTree = "<group>"; };
 		407F9C5220DBDA7000278A81 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		40800828206A9BEF00B5C9A7 /* QCollectionTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCollectionTableCell.swift; sourceTree = "<group>"; };
-		40800835206BD43A00B5C9A7 /* QCollectionLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCollectionLayout.swift; sourceTree = "<group>"; };
-		40800838206BD46F00B5C9A7 /* IQCollectionLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionLayout.swift; sourceTree = "<group>"; };
 		4080083F206BE80300B5C9A7 /* ListFieldViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListFieldViewController.swift; sourceTree = "<group>"; };
 		40800840206BE80300B5C9A7 /* ListFieldViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListFieldViewController.xib; sourceTree = "<group>"; };
 		40836A9D216C88C400777404 /* QImageTitleDetailValueComposition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QImageTitleDetailValueComposition.swift; sourceTree = "<group>"; };
@@ -1621,8 +1617,6 @@
 				40CF45781F4DE6AB004D00D8 /* QCollectionData.swift */,
 				40CF45751F4DE6AB004D00D8 /* IQCollectionSection.swift */,
 				40CF457B1F4DE6AB004D00D8 /* QCollectionSection.swift */,
-				40800838206BD46F00B5C9A7 /* IQCollectionLayout.swift */,
-				40800835206BD43A00B5C9A7 /* QCollectionLayout.swift */,
 				40CF45701F4DE6AB004D00D8 /* IQCollectionController.swift */,
 				40CF45771F4DE6AB004D00D8 /* QCollectionController.swift */,
 				40CF457C1F4DE6AB004D00D8 /* QCollectionView.swift */,
@@ -2124,7 +2118,6 @@
 				40CF45EF1F4DE6AB004D00D8 /* QView.swift in Sources */,
 				40CF45CA1F4DE6AB004D00D8 /* QLabel.swift in Sources */,
 				40CF45DD1F4DE6AB004D00D8 /* IQTableSection.swift in Sources */,
-				4080083A206BD46F00B5C9A7 /* IQCollectionLayout.swift in Sources */,
 				4034EFAF220C319800DA2426 /* QXml.swift in Sources */,
 				40224611207651CD0020B357 /* QGradientView.swift in Sources */,
 				40B8A19B1F4F80FF00204E5A /* QJsonModel.swift in Sources */,
@@ -2139,7 +2132,6 @@
 				40CF45BD1F4DE6AB004D00D8 /* QCollectionController.swift in Sources */,
 				406FDF6F209082E4004178CC /* IQApiPagination.swift in Sources */,
 				405A490E201F19020001D684 /* QTransparentView.swift in Sources */,
-				40800837206BD43B00B5C9A7 /* QCollectionLayout.swift in Sources */,
 				40134F031F63129E009F81A6 /* QCardExpirationDateStringFormatter.swift in Sources */,
 				40224614207652E60020B357 /* QGradientPoint.swift in Sources */,
 				40FBE6AA1F54591000F5194B /* QImageSource.swift in Sources */,

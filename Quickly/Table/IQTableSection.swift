@@ -33,6 +33,8 @@ public protocol IQTableSection : class {
 
     func moveRow(_ fromRow: IQTableRow, toIndex: Int) -> Bool
     func moveRow(_ fromIndex: Int, toIndex: Int)
+    
+    func resetCache()
 
 }
 

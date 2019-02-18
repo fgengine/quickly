@@ -17,7 +17,9 @@ open class QViewController : NSObject, IQViewController {
                 if let parent = self.parent {
                     parent.addChild(self)
                 }
-                self.didChangeAdditionalEdgeInsets()
+                if self.isLoaded == true {
+                    self.didChangeAdditionalEdgeInsets()
+                }
                 self._parentChanging = false
             } else {
                 self._parent = value
@@ -28,14 +30,14 @@ open class QViewController : NSObject, IQViewController {
     open private(set) var child: [IQViewController] = []
     open var edgesForExtendedLayout: UIRectEdge {
         didSet(oldValue) {
-            if self.edgesForExtendedLayout != oldValue {
+            if self.edgesForExtendedLayout != oldValue && self.isLoaded == true {
                 self.didChangeAdditionalEdgeInsets()
             }
         }
     }
     open var additionalEdgeInsets: UIEdgeInsets {
         didSet(oldValue) {
-            if self.additionalEdgeInsets != oldValue {
+            if self.additionalEdgeInsets != oldValue && self.isLoaded == true {
                 self.didChangeAdditionalEdgeInsets()
             }
         }
