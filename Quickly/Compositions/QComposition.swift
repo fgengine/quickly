@@ -35,7 +35,7 @@ open class QComposition< Composable: QComposable > : IQComposition {
     }
 
     public required init(frame: CGRect, owner: AnyObject) {
-        self.contentView = QTransparentView(frame: frame)
+        self.contentView = QInvisibleView(frame: frame)
         self.setup(owner: owner)
     }
     

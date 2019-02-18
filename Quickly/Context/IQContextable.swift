@@ -6,6 +6,6 @@ public protocol IQContextable {
     
     associatedtype ContextType
 
-    var context: ContextType! { get }
+    var context: ContextType { get }
 
 }

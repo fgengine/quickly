@@ -6,6 +6,6 @@ public protocol IQRouterable {
 
     associatedtype RouterType
 
-    var router: RouterType! { get }
+    var router: RouterType { get }
 
 }
