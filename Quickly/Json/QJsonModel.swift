@@ -34,13 +34,13 @@ open class QJsonModel : IQJsonModel {
     public required init(json: QJson) throws {
     }
 
-    public final func toJson() -> QJson? {
+    public final func toJson() throws -> QJson? {
         let json = QJson(basePath: "")
-        self.toJson(json: json)
+        try self.toJson(json: json)
         return json
     }
 
-    open func toJson(json: QJson) {
+    open func toJson(json: QJson) throws {
     }
 
 }
@@ -52,7 +52,7 @@ extension QJsonModel : IQJsonValue {
     }
 
     public func toJsonValue(path: String) throws -> Any {
-        guard let json = self.toJson(), let root = json.root else {
+        guard let json = try self.toJson(), let root = json.root else {
             throw QJsonError.cast(path: path)
         }
         return root

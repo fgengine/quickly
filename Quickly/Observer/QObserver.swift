@@ -48,7 +48,9 @@ public final class QObserver< T > {
             self._isForeached = false
             self._postNotify()
         } else {
-            fatalError("Recursive notify")
+            self._items.forEach({
+                closure($0.observer)
+            })
         }
     }
     
@@ -64,7 +66,12 @@ public final class QObserver< T > {
             self._isForeached = false
             self._postNotify()
         } else {
-            fatalError("Recursive notify")
+            for priority in priorities {
+                let items = self._items.filter({ return $0.priority == priority })
+                items.forEach({
+                    closure($0.observer)
+                })
+            }
         }
     }
 
@@ -77,7 +84,9 @@ public final class QObserver< T > {
             self._isForeached = false
             self._postNotify()
         } else {
-            fatalError("Recursive notify")
+            self._items.reversed().forEach({
+                closure($0.observer)
+            })
         }
     }
     
@@ -93,7 +102,12 @@ public final class QObserver< T > {
             self._isForeached = false
             self._postNotify()
         } else {
-            fatalError("Recursive notify")
+            for priority in priorities {
+                let items = self._items.filter({ return $0.priority == priority })
+                items.reversed().forEach({
+                    closure($0.observer)
+                })
+            }
         }
     }
     

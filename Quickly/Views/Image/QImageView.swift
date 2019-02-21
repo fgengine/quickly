@@ -31,6 +31,8 @@ open class QImageViewStyleSheet : QDisplayViewStyleSheet {
         self.source = styleSheet.source
         self.verticalAlignment = styleSheet.verticalAlignment
         self.horizontalAlignment = styleSheet.horizontalAlignment
+        self.filter = styleSheet.filter
+        self.loader = styleSheet.loader
 
         super.init(styleSheet)
     }
@@ -103,9 +105,12 @@ open class QImageView : QDisplayView {
     open override var frame: CGRect {
         set(value) {
             if(super.frame != value) {
+                let sizeChanged = super.frame.size != value.size
                 super.frame = value
-                self.invalidateIntrinsicContentSize()
-                self.setNeedsDisplay()
+                if sizeChanged == true {
+                    self.invalidateIntrinsicContentSize()
+                    self.setNeedsDisplay()
+                }
             }
         }
         get { return super.frame }
@@ -113,9 +118,12 @@ open class QImageView : QDisplayView {
     open override var bounds: CGRect {
         set(value) {
             if(super.bounds != value) {
+                let sizeChanged = super.bounds.size != value.size
                 super.bounds = value
-                self.invalidateIntrinsicContentSize()
-                self.setNeedsDisplay()
+                if sizeChanged == true {
+                    self.invalidateIntrinsicContentSize()
+                    self.setNeedsDisplay()
+                }
             }
         }
         get { return super.bounds }

@@ -153,6 +153,7 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
         self.field.apply(composable.field)
+        self.field.unformatText = composable.text
     }
     
     // MARK: - IQCompositionEditable

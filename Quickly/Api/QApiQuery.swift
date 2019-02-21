@@ -207,13 +207,17 @@ public class QApiQuery<
     }
 
     private func _complete() {
+        #if DEBUG
         if self._logging(self.request.logging) == false {
             self._logging(self.provider.logging)
         }
+        #endif
         self.queue.async {
             self.completed(self.request, self.response)
         }
     }
+    
+    #if DEBUG
     
     @discardableResult
     private func _logging(_ logging: QApiLogging) -> Bool {
@@ -231,6 +235,8 @@ public class QApiQuery<
             return true
         }
     }
+    
+    #endif
 
 }
 

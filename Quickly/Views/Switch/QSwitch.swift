@@ -36,6 +36,10 @@ open class QSwitchStyleSheet : IQStyleSheet {
 
 open class QSwitch : UISwitch, IQView {
     
+    public typealias ChangedClosure = (_ `switch`: QSwitch, _ isOn: Bool) -> Void
+    
+    public var onChanged: ChangedClosure? = nil
+    
     public required init() {
         super.init(frame: CGRect.zero)
         self.setup()
@@ -52,6 +56,11 @@ open class QSwitch : UISwitch, IQView {
     }
     
     open func setup() {
+        self.addTarget(self, action: #selector(self._handleChanged(_:)), for: .valueChanged)
+    }
+    
+    deinit {
+        self.removeTarget(self, action: #selector(self._handleChanged(_:)), for: .valueChanged)
     }
     
     public func apply(_ styleSheet: QSwitchStyleSheet) {
@@ -60,6 +69,12 @@ open class QSwitch : UISwitch, IQView {
         self.thumbTintColor = styleSheet.thumbTintColor
         self.onImage = styleSheet.onImage
         self.offImage = styleSheet.offImage
+    }
+    
+    @objc
+    private func _handleChanged(_ sender: Any) {
+        guard let onChanged = self.onChanged else { return }
+        onChanged(self, self.isOn)
     }
     
 }

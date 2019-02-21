@@ -8,7 +8,7 @@ public protocol IQJsonModel {
 
     init(json: QJson) throws
 
-    func toJson() -> QJson?
-    func toJson(json: QJson)
+    func toJson() throws -> QJson?
+    func toJson(json: QJson) throws
 
 }

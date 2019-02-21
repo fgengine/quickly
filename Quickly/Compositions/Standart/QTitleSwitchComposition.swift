@@ -49,7 +49,13 @@ open class QTitleSwitchComposition< Composable: QTitleSwitchComposable > : QComp
             horizontal: UILayoutPriority(rawValue: 252),
             vertical: UILayoutPriority(rawValue: 252)
         )
-        view.addValueChanged(self, action: #selector(self._pressedSwitch(_:)))
+        view.onChanged = { [weak self] (`switch`, isOn) in
+            guard let strong = self else { return }
+            if let composable = strong.composable {
+                composable.switchIsOn = strong.switch.isOn
+                composable.switchChanged(composable)
+            }
+        }
         self.contentView.addSubview(view)
         return view
     }()
@@ -108,14 +114,6 @@ open class QTitleSwitchComposition< Composable: QTitleSwitchComposable > : QComp
             composable.switchIsOn = on
         }
         self.switch.setOn(on, animated: animated)
-    }
-
-    @objc
-    private func _pressedSwitch(_ sender: Any) {
-        if let composable = self.composable {
-            composable.switchIsOn = self.switch.isOn
-            composable.switchChanged(composable)
-        }
     }
 
 }

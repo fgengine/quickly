@@ -156,9 +156,6 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
         if let tableView = self.tableView {
             self._updateContentInsets(tableView)
         }
-        if let tableController = self.tableController {
-            tableController.reload([ .resetCache ])
-        }
         if let footerView = self._footerView {
             footerView.frame = self._footerViewFrame()
         }
@@ -195,7 +192,9 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
         super.willTransition(size: size)
         if let tableView = self.tableView {
             self._updateContentInsets(tableView)
-            tableView.reloadData()
+        }
+        if let tableController = self.tableController {
+            tableController.reload([ .resetCache ])
         }
     }
 
@@ -241,32 +240,36 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     // MAKR: IQKeyboardObserver
     
     open func willShowKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
-        var options: UIView.AnimationOptions = []
-        switch animationInfo.curve {
-        case .linear: options.insert(.curveLinear)
-        case .easeIn: options.insert(.curveEaseIn)
-        case .easeOut: options.insert(.curveEaseOut)
-        default: options.insert(.curveEaseInOut)
+        if self.isPresented == true {
+            var options: UIView.AnimationOptions = []
+            switch animationInfo.curve {
+            case .linear: options.insert(.curveLinear)
+            case .easeIn: options.insert(.curveEaseIn)
+            case .easeOut: options.insert(.curveEaseOut)
+            default: options.insert(.curveEaseInOut)
+            }
+            UIView.animate(withDuration: animationInfo.duration, delay: 0, options: options, animations: {
+                self.additionalEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: animationInfo.endFrame.height, right: 0)
+            })
         }
-        UIView.animate(withDuration: animationInfo.duration, delay: 0, options: options, animations: {
-            self.additionalEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: animationInfo.endFrame.height, right: 0)
-        })
     }
     
     open func didShowKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
     }
     
     open func willHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
-        var options: UIView.AnimationOptions = []
-        switch animationInfo.curve {
-        case .linear: options.insert(.curveLinear)
-        case .easeIn: options.insert(.curveEaseIn)
-        case .easeOut: options.insert(.curveEaseOut)
-        default: options.insert(.curveEaseInOut)
+        if self.isPresented == true {
+            var options: UIView.AnimationOptions = []
+            switch animationInfo.curve {
+            case .linear: options.insert(.curveLinear)
+            case .easeIn: options.insert(.curveEaseIn)
+            case .easeOut: options.insert(.curveEaseOut)
+            default: options.insert(.curveEaseInOut)
+            }
+            UIView.animate(withDuration: animationInfo.duration, delay: 0, options: options, animations: {
+                self.additionalEdgeInsets = UIEdgeInsets.zero
+            })
         }
-        UIView.animate(withDuration: animationInfo.duration, delay: 0, options: options, animations: {
-            self.additionalEdgeInsets = UIEdgeInsets.zero
-        })
     }
     
     open func didHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
