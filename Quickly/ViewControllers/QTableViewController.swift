@@ -2,6 +2,19 @@
 //  Quickly
 //
 
+open class QTableViewControllerFooterView : QView {
+    
+    public var insets: UIEdgeInsets = UIEdgeInsets.zero {
+        didSet(oldValue) {
+            if self.insets != oldValue { self.didChangeInsets() }
+        }
+    }
+    
+    open func didChangeInsets() {
+    }
+    
+}
+
 open class QTableViewController : QViewController, IQTableControllerObserver, IQKeyboardObserver, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController {
 
     public var contentOffset: CGPoint {
@@ -66,17 +79,18 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
             return refreshControl.isRefreshing
         }
     }
-    public var footerView: QView? {
+    public var footerView: QTableViewControllerFooterView? {
         set(value) {
             if self._footerView != value {
-                if let view = self._footerView {
-                    view.removeFromSuperview()
+                if let footerView = self._footerView {
+                    footerView.removeFromSuperview()
                 }
                 self._footerView = value
                 if self.isLoaded == true {
-                    if let view = self._footerView, let tableView = self.tableView {
-                        view.frame = self._footerViewFrame()
-                        self.view.insertSubview(view, aboveSubview: tableView)
+                    if let footerView = self._footerView, let tableView = self.tableView {
+                        footerView.frame = self._footerViewFrame()
+                        footerView.insets = self._footerViewInsets()
+                        self.view.insertSubview(footerView, aboveSubview: tableView)
                     }
                 }
             }
@@ -86,8 +100,8 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     public var footerViewHeight: CGFloat = 100 {
         didSet(oldValue) {
             if self.footerViewHeight != oldValue {
-                if let view = self._footerView {
-                    view.frame = self._footerViewFrame()
+                if let footerView = self._footerView {
+                    footerView.frame = self._footerViewFrame()
                 }
                 self.didChangeAdditionalEdgeInsets()
             }
@@ -115,7 +129,7 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
             refreshControl.addValueChanged(self, action: #selector(self._triggeredRefreshControl(_:)))
         }
     }
-    private var _footerView: QView?
+    private var _footerView: QTableViewControllerFooterView?
     private var _keyboard: QKeyboard!
 
     deinit {
@@ -131,9 +145,10 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
 
     open override func didLoad() {
         self.tableView = QTableView(frame: self.view.bounds)
-        if let view = self._footerView {
-            view.frame = self._footerViewFrame()
-            self.view.addSubview(view)
+        if let footerView = self._footerView {
+            footerView.frame = self._footerViewFrame()
+            footerView.insets = self._footerViewInsets()
+            self.view.addSubview(footerView)
         }
         self._keyboard.addObserver(self, priority: 0)
     }
@@ -145,6 +160,7 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
         }
         if let footerView = self._footerView {
             footerView.frame = self._footerViewFrame()
+            footerView.insets = self._footerViewInsets()
         }
         if let loadingView = self.loadingView, loadingView.superview != nil {
             self._updateFrame(loadingView: loadingView, bounds: bounds)
@@ -158,6 +174,7 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
         }
         if let footerView = self._footerView {
             footerView.frame = self._footerViewFrame()
+            footerView.insets = self._footerViewInsets()
         }
         if let loadingView = self.loadingView, loadingView.superview != nil {
             self._updateFrame(loadingView: loadingView, bounds: self.view.bounds)
@@ -337,12 +354,22 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     private func _footerViewFrame() -> CGRect {
         let bounds = self.view.bounds
         let edgeInsets = self.adjustedContentInset
-        let height = self.footerViewHeight
+        let height = self.footerViewHeight + edgeInsets.bottom
         return CGRect(
             x: 0,
-            y: bounds.height - edgeInsets.bottom - height,
+            y: bounds.height - height,
             width: bounds.width,
             height: height
+        )
+    }
+    
+    private func _footerViewInsets() -> UIEdgeInsets {
+        let edgeInsets = self.adjustedContentInset
+        return UIEdgeInsets(
+            top: 0,
+            left: edgeInsets.left,
+            bottom: edgeInsets.bottom,
+            right: edgeInsets.right
         )
     }
     

@@ -161,16 +161,17 @@ open class QGroupbar : QView {
             for sectionIndex in 0..<collectionView.numberOfSections {
                 numberOfCells += collectionView.numberOfItems(inSection: sectionIndex)
             }
+            let contentInset = collectionView.contentInset
             let cellSize = CGSize(
-                width: self._bounds.width / CGFloat(numberOfCells),
-                height: self._bounds.height
+                width: (self._bounds.width - (contentInset.left + contentInset.right)) / CGFloat(numberOfCells),
+                height: (self._bounds.height - (contentInset.top + contentInset.bottom))
             )
-            var offset: CGFloat = 0
+            var offset: CGFloat = contentInset.left
             for sectionIndex in 0..<collectionView.numberOfSections {
                 for itemIndex in 0..<collectionView.numberOfItems(inSection: sectionIndex) {
                     let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
                     let attribute = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-                    attribute.frame = CGRect(x: offset, y: 0, width: cellSize.width, height: cellSize.height)
+                    attribute.frame = CGRect(x: offset, y: contentInset.top, width: cellSize.width, height: cellSize.height)
                     self._cache[indexPath] = attribute
                     offset += cellSize.width
                 }
