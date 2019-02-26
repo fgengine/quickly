@@ -3,6 +3,11 @@
 //
 
 open class QCollectionViewController : QViewController, IQCollectionControllerObserver, IQKeyboardObserver, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController {
+    
+    public enum PagesPosition {
+        case top(offset: CGFloat)
+        case bottom(offset: CGFloat)
+    }
 
     public var contentOffset: CGPoint {
         get {
@@ -66,6 +71,31 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
             return refreshControl.isRefreshing
         }
     }
+    public var pagesPosition: PagesPosition = .bottom(offset: 0) {
+        didSet {
+            guard let pagesView = self.pagesView else { return }
+            if self.isLoaded == true {
+                self._updateFrame(pagesView: pagesView, bounds: self.view.bounds)
+            }
+        }
+    }
+    public var pagesView: QPagesViewType? {
+        willSet {
+            guard let pagesView = self.pagesView else { return }
+            if self.isLoaded == true {
+                pagesView.removeFromSuperview()
+            }
+        }
+        didSet {
+            guard let pagesView = self.pagesView, let collectionView = self.collectionView else { return }
+            if self.isLoaded == true {
+                pagesView.sizeToFit()
+                self._updateNumberOfPages(pagesView: pagesView, bounds: self.view.bounds)
+                self._updateCurrentPage(pagesView: pagesView)
+                self.view.insertSubview(pagesView, aboveSubview: collectionView)
+            }
+        }
+    }
     public var loadingView: QLoadingViewType? {
         willSet {
             guard let loadingView = self.loadingView else { return }
@@ -111,6 +141,9 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
         if let collectionView = self.collectionView {
             collectionView.frame = bounds
         }
+        if let pagesView = self.pagesView {
+            self._updateNumberOfPages(pagesView: pagesView, bounds: bounds)
+        }
         if let loadingView = self.loadingView, loadingView.superview != nil {
             self._updateFrame(loadingView: loadingView, bounds: bounds)
         }
@@ -120,6 +153,9 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
         super.didChangeAdditionalEdgeInsets()
         if let collectionView = self.collectionView {
             self._updateContentInsets(collectionView)
+        }
+        if let pagesView = self.pagesView {
+            self._updateFrame(pagesView: pagesView, bounds: self.view.bounds)
         }
         if let loadingView = self.loadingView, loadingView.superview != nil {
             self._updateFrame(loadingView: loadingView, bounds: self.view.bounds)
@@ -189,6 +225,9 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     // MAKR: IQCollectionControllerObserver
     
     open func scroll(_ controller: IQCollectionController, collectionView: UICollectionView) {
+        if let pagesView = self.pagesView {
+            self._updateCurrentPage(pagesView: pagesView)
+        }
         if let viewController = self.contentOwnerViewController {
             viewController.updateContent()
         }
@@ -201,6 +240,9 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     }
     
     open func update(_ controller: IQCollectionController) {
+        if let pagesView = self.pagesView {
+            self._updateNumberOfPages(pagesView: pagesView, bounds: self.view.bounds)
+        }
     }
     
     // MAKR: IQKeyboardObserver
@@ -290,8 +332,53 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
         }
     }
     
+    private func _updateFrame(pagesView: QPagesViewType, bounds: CGRect) {
+        let edgeInset = self.adjustedContentInset
+        let pagesHeight = pagesView.frame.height
+        switch self.pagesPosition {
+        case .top(let offset):
+            pagesView.frame = CGRect(
+                x: edgeInset.left,
+                y: edgeInset.top + offset,
+                width: bounds.width - (edgeInset.left + edgeInset.right),
+                height: pagesHeight
+            )
+        case .bottom(let offset):
+            pagesView.frame = CGRect(
+                x: edgeInset.left,
+                y: bounds.height - (edgeInset.bottom + offset),
+                width: bounds.width - (edgeInset.left + edgeInset.right),
+                height: pagesHeight
+            )
+        }
+    }
+    
     private func _updateFrame(loadingView: QLoadingViewType, bounds: CGRect) {
         loadingView.frame = bounds.inset(by: self.inheritedEdgeInsets)
+    }
+    
+    private func _updateCurrentPage(pagesView: QPagesViewType) {
+        if let collectionView = self.collectionView {
+            let contentSize = collectionView.collectionViewLayout.collectionViewContentSize
+            let contentOffset = collectionView.contentOffset
+            if contentSize.width > CGFloat.leastNonzeroMagnitude && contentOffset.x > CGFloat.leastNonzeroMagnitude {
+                pagesView.currentProgress = contentSize.width / (contentSize.width - contentOffset.x)
+            } else {
+                pagesView.currentProgress = 0
+            }
+        }
+    }
+    
+    private func _updateNumberOfPages(pagesView: QPagesViewType, bounds: CGRect) {
+        if let collectionView = self.collectionView {
+            let contentBounds = collectionView.bounds
+            let contentSize = collectionView.collectionViewLayout.collectionViewContentSize
+            if contentBounds.width > CGFloat.leastNonzeroMagnitude {
+                pagesView.numberOfPages = UInt(contentSize.width / contentBounds.width)
+            }
+            pagesView.sizeToFit()
+            self._updateFrame(pagesView: pagesView, bounds: bounds)
+        }
     }
     
 }
@@ -300,7 +387,13 @@ extension QCollectionViewController : IQLoadingViewDelegate {
     
     open func willShow(loadingView: QLoadingViewType) {
         self._updateFrame(loadingView: loadingView, bounds: self.view.bounds)
-        self.view.addSubview(loadingView)
+        if let pagesView = self.pagesView {
+            self.view.insertSubview(loadingView, aboveSubview: pagesView)
+        } else if let collectionView = self.collectionView {
+            self.view.insertSubview(loadingView, aboveSubview: collectionView)
+        } else {
+            self.view.addSubview(loadingView)
+        }
     }
     
     open func didHide(loadingView: QLoadingViewType) {

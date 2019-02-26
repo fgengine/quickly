@@ -52,7 +52,11 @@ open class QSpinnerView : QView, IQSpinnerView {
     }
 
     open override func sizeToFit() {
-        return self._indicator.sizeToFit()
+        self._indicator.sizeToFit()
+        self.frame = CGRect(
+            origin: self.frame.origin,
+            size: self._indicator.frame.size
+        )
     }
 
 }
