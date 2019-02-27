@@ -15,7 +15,72 @@ public extension UIImage {
             }
         }
     }
-
+    
+    public func unrotate() -> UIImage? {
+        guard self.imageOrientation != .up else {
+            return self
+        }
+        let size = self.size
+        let imageOrientation = self.imageOrientation
+        var transform = CGAffineTransform.identity;
+        switch imageOrientation {
+        case .down, .downMirrored:
+            transform = transform.translatedBy(x: size.width, y: size.height)
+            transform = transform.rotated(by: CGFloat.pi)
+        case .left, .leftMirrored:
+            transform = transform.translatedBy(x: size.width, y: 0)
+            transform = transform.rotated(by: CGFloat.pi / 2)
+        case .right, .rightMirrored:
+            transform = transform.translatedBy(x: 0, y: size.height)
+            transform = transform.rotated(by: -(CGFloat.pi / 2))
+        default:
+            break
+        }
+        switch imageOrientation {
+        case .upMirrored, .downMirrored:
+            transform = transform.translatedBy(x: size.width, y: 0)
+            transform = transform.scaledBy(x: -1, y: 1)
+        case .leftMirrored, .rightMirrored:
+            transform = transform.translatedBy(x: size.height, y: 0)
+            transform = transform.scaledBy(x: -1, y: 1)
+        default:
+            break
+        }
+        guard let cgImage = self.cgImage, let colorSpace = cgImage.colorSpace else {
+            return nil
+        }
+        if let context = CGContext(data: nil, width: Int(size.width), height: Int(size.height), bitsPerComponent: cgImage.bitsPerComponent, bytesPerRow: 0, space: colorSpace, bitmapInfo: cgImage.bitmapInfo.rawValue) {
+            context.concatenate(transform)
+            let rect: CGRect
+            switch imageOrientation {
+            case .left, .leftMirrored, .right, .rightMirrored: rect = CGRect(x: 0, y: 0, width: size.height, height: size.width)
+            default: rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+            }
+            context.draw(cgImage, in: rect)
+            if let image = context.makeImage() {
+                return UIImage(cgImage: image, scale: self.scale, orientation: .up)
+            }
+        }
+        return nil
+    }
+    
+    public func scaleTo(size: CGSize) -> UIImage? {
+        guard let cgImage = self.cgImage, let colorSpace = cgImage.colorSpace else {
+            return nil
+        }
+        var rect = size.aspectFit(bounds: CGRect(origin: CGPoint.zero, size: size))
+        rect.size = CGSize(
+            width: floor(rect.width),
+            height: floor(rect.height)
+        )
+        if let context = CGContext(data: nil, width: Int(rect.width), height: Int(rect.height), bitsPerComponent: cgImage.bitsPerComponent, bytesPerRow: 0, space: colorSpace, bitmapInfo: cgImage.bitmapInfo.rawValue) {
+            context.draw(cgImage, in: rect)
+            if let image = context.makeImage() {
+                return UIImage(cgImage: image, scale: self.scale, orientation: .up)
+            }
+        }
+        return nil
+    }
 
     public func modify(_ draw: (CGContext, CGRect) -> ()) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(size, false, scale)
