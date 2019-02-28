@@ -50,7 +50,7 @@ open class QTitleDetailComposition< Composable: QTitleDetailComposable > : QComp
     }
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
-        let availableWidth = spec.containerAvailableSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
+        let availableWidth = spec.containerSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
         let titleTextSize = composable.title.text.size(width: availableWidth)
         let detailTextSize = composable.detail.text.size(width: availableWidth)
         return CGSize(
@@ -60,23 +60,17 @@ open class QTitleDetailComposition< Composable: QTitleDetailComposable > : QComp
     }
     
     open override func preLayout(composable: Composable, spec: IQContainerSpec) {
-        let edgeInsets = UIEdgeInsets(
-            top: composable.edgeInsets.top,
-            left: spec.containerLeftInset + composable.edgeInsets.left,
-            bottom: composable.edgeInsets.bottom,
-            right: spec.containerRightInset + composable.edgeInsets.right
-        )
-        if self._edgeInsets != edgeInsets || self._titleSpacing != composable.titleSpacing {
-            self._edgeInsets = edgeInsets
+        if self._edgeInsets != composable.edgeInsets || self._titleSpacing != composable.titleSpacing {
+            self._edgeInsets = composable.edgeInsets
             self._titleSpacing = composable.titleSpacing
             self._constraints = [
-                self.titleLabel.topLayout == self.contentView.topLayout + edgeInsets.top,
-                self.titleLabel.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
-                self.titleLabel.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
+                self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
+                self.titleLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
+                self.titleLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
                 self.titleLabel.bottomLayout <= self.detailLabel.topLayout - composable.titleSpacing,
-                self.detailLabel.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
-                self.detailLabel.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
-                self.detailLabel.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom
+                self.detailLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
+                self.detailLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
+                self.detailLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets .bottom
             ]
         }
     }

@@ -55,7 +55,7 @@ open class QTitleIconComposition< Composable: QTitleIconComposable > : QComposit
     }
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
-        let availableWidth = spec.containerAvailableSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
+        let availableWidth = spec.containerSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
         let titleTextSize = composable.title.text.size(width: availableWidth - (composable.iconWidth + composable.iconSpacing))
         let iconSize = composable.icon.source.size(CGSize(width: composable.iconWidth, height: availableWidth))
         return CGSize(
@@ -65,23 +65,17 @@ open class QTitleIconComposition< Composable: QTitleIconComposable > : QComposit
     }
     
     open override func preLayout(composable: Composable, spec: IQContainerSpec) {
-        let edgeInsets = UIEdgeInsets(
-            top: composable.edgeInsets.top,
-            left: spec.containerLeftInset + composable.edgeInsets.left,
-            bottom: composable.edgeInsets.bottom,
-            right: spec.containerRightInset + composable.edgeInsets.right
-        )
-        if self._edgeInsets != edgeInsets || self._iconSpacing != composable.iconSpacing {
-            self._edgeInsets = edgeInsets
+        if self._edgeInsets != composable.edgeInsets || self._iconSpacing != composable.iconSpacing {
+            self._edgeInsets = composable.edgeInsets
             self._iconSpacing = composable.iconSpacing
             self._constraints = [
-                self.titleLabel.topLayout == self.contentView.topLayout + edgeInsets.top,
-                self.titleLabel.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
+                self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
+                self.titleLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
                 self.titleLabel.trailingLayout == self.iconView.leadingLayout - composable.iconSpacing,
-                self.titleLabel.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom,
-                self.iconView.topLayout == self.contentView.topLayout + edgeInsets.top,
-                self.iconView.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
-                self.iconView.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom,
+                self.titleLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom,
+                self.iconView.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
+                self.iconView.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
+                self.iconView.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom,
             ]
         }
         if self._iconWidth != composable.iconWidth {

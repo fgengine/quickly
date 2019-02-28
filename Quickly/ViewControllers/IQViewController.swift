@@ -18,6 +18,7 @@ public protocol IQViewController : class {
     var inheritedEdgeInsets: UIEdgeInsets { get }
     var adjustedContentInset: UIEdgeInsets { get }
     var view: UIView { get }
+    var isLoading: Bool { get }
     var isLoaded: Bool { get }
     var isPresented: Bool { get }
 
@@ -30,7 +31,7 @@ public protocol IQViewController : class {
     func layoutIfNeeded()
     func layout(bounds: CGRect)
 
-    func didChangeAdditionalEdgeInsets()
+    func didChangeContentEdgeInsets()
 
     func prepareInteractivePresent()
     func cancelInteractivePresent()

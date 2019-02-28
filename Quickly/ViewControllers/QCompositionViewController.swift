@@ -64,7 +64,8 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
         didSet { self.view.addConstraints(self._loadingConstraints) }
     }
     
-    open override func didChangeAdditionalEdgeInsets() {
+    open override func didChangeContentEdgeInsets() {
+        super.didChangeContentEdgeInsets()
         if self.isLoaded == true {
             self._updateConstraints(self.view, contentView: self.composition.contentView)
         }

@@ -49,7 +49,7 @@ open class QPagebarTitleCell< ItemType: QPagebarTitleItem > : QPagebarCell< Item
         section: IQCollectionSection,
         spec: IQContainerSpec
     ) -> CGSize {
-        let availableWidth = spec.containerAvailableSize.width - (item.edgeInsets.left + item.edgeInsets.right)
+        let availableWidth = spec.containerSize.width - (item.edgeInsets.left + item.edgeInsets.right)
         let textSize = item.title.text.size(width: availableWidth)
         return CGSize(
             width: item.edgeInsets.left + textSize.width + item.edgeInsets.right,

@@ -60,8 +60,8 @@ open class QPushViewController : QViewController, IQPushViewController {
         self._layoutContentViewController()
     }
     
-    open override func didChangeAdditionalEdgeInsets() {
-        super.didChangeAdditionalEdgeInsets()
+    open override func didChangeContentEdgeInsets() {
+        super.didChangeContentEdgeInsets()
         self._relayoutContentViewController()
     }
 

@@ -64,7 +64,8 @@ open class QNibViewController : QViewController, IQStackContentViewController, I
         _ = nib.instantiate(withOwner: self, options: nil)
     }
     
-    open override func didChangeAdditionalEdgeInsets() {
+    open override func didChangeContentEdgeInsets() {
+        super.didChangeContentEdgeInsets()
         if let rootView = self.rootView {
             self._updateConstraints(self.view, rootView: rootView)
         }

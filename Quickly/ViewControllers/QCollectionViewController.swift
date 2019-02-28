@@ -118,6 +118,7 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
             refreshControl.addValueChanged(self, action: #selector(self._triggeredRefreshControl(_:)))
         }
     }
+    private var _edgesForExtendedLayout: UIRectEdge?
     private var _keyboard: QKeyboard!
     
     deinit {
@@ -149,8 +150,8 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
         }
     }
 
-    open override func didChangeAdditionalEdgeInsets() {
-        super.didChangeAdditionalEdgeInsets()
+    open override func didChangeContentEdgeInsets() {
+        super.didChangeContentEdgeInsets()
         if let collectionView = self.collectionView {
             self._updateContentInsets(collectionView)
         }
@@ -189,7 +190,6 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     open override func willTransition(size: CGSize) {
         super.willTransition(size: size)
         if let collectionView = self.collectionView {
-            self._updateContentInsets(collectionView)
             collectionView.collectionViewLayout.invalidateLayout()
         }
     }
@@ -256,8 +256,14 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
             case .easeOut: options.insert(.curveEaseOut)
             default: options.insert(.curveEaseInOut)
             }
+            self._edgesForExtendedLayout = self.edgesForExtendedLayout
+            var edgesForExtendedLayout = self.edgesForExtendedLayout
+            if edgesForExtendedLayout.contains(.bottom) == true {
+                edgesForExtendedLayout.remove(.bottom)
+            }
             UIView.animate(withDuration: animationInfo.duration, delay: 0, options: options, animations: {
                 self.additionalEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: animationInfo.endFrame.height, right: 0)
+                self.edgesForExtendedLayout = edgesForExtendedLayout
             })
         }
     }
@@ -276,6 +282,10 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
             }
             UIView.animate(withDuration: animationInfo.duration, delay: 0, options: options, animations: {
                 self.additionalEdgeInsets = UIEdgeInsets.zero
+                if let edgesForExtendedLayout = self._edgesForExtendedLayout {
+                    self.edgesForExtendedLayout = edgesForExtendedLayout
+                    self._edgesForExtendedLayout = nil
+                }
             })
         }
     }

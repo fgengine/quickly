@@ -18,7 +18,7 @@ open class QViewController : NSObject, IQViewController {
                     parent.addChild(self)
                 }
                 if self.isLoaded == true {
-                    self.didChangeAdditionalEdgeInsets()
+                    self.didChangeContentEdgeInsets()
                 }
                 self._parentChanging = false
             } else {
@@ -31,56 +31,60 @@ open class QViewController : NSObject, IQViewController {
     open var edgesForExtendedLayout: UIRectEdge {
         didSet(oldValue) {
             if self.edgesForExtendedLayout != oldValue && self.isLoaded == true {
-                self.didChangeAdditionalEdgeInsets()
+                self.didChangeContentEdgeInsets()
             }
         }
     }
     open var additionalEdgeInsets: UIEdgeInsets {
         didSet(oldValue) {
             if self.additionalEdgeInsets != oldValue && self.isLoaded == true {
-                self.didChangeAdditionalEdgeInsets()
+                self.didChangeContentEdgeInsets()
             }
         }
     }
     open var inheritedEdgeInsets: UIEdgeInsets {
         get {
-            var edgeInsets = UIEdgeInsets.zero
-            var edges = self.edgesForExtendedLayout
-            var target = self.parent
-            while let vc = target {
-                let additionalEdgeInsets = vc.additionalEdgeInsets
-                let edgesForExtendedLayout = vc.edgesForExtendedLayout
-                if edges.contains(.top) == true {
-                    if edgesForExtendedLayout.contains(.top) == true {
-                        edgeInsets.top += additionalEdgeInsets.top
-                    } else {
-                        edges.remove(.top)
+            if self._needUpdateInheritedEdgeInsets == true {
+                self._needUpdateInheritedEdgeInsets = false
+                var edgeInsets = UIEdgeInsets.zero
+                var edges = self.edgesForExtendedLayout
+                var target = self.parent
+                while let vc = target {
+                    let additionalEdgeInsets = vc.additionalEdgeInsets
+                    let edgesForExtendedLayout = vc.edgesForExtendedLayout
+                    if edges.contains(.top) == true {
+                        if edgesForExtendedLayout.contains(.top) == true {
+                            edgeInsets.top += additionalEdgeInsets.top
+                        } else {
+                            edges.remove(.top)
+                        }
                     }
-                }
-                if edges.contains(.left) == true {
-                    if edgesForExtendedLayout.contains(.left) == true {
-                        edgeInsets.left += additionalEdgeInsets.left
-                    } else {
-                        edges.remove(.left)
+                    if edges.contains(.left) == true {
+                        if edgesForExtendedLayout.contains(.left) == true {
+                            edgeInsets.left += additionalEdgeInsets.left
+                        } else {
+                            edges.remove(.left)
+                        }
                     }
-                }
-                if edges.contains(.right) == true {
-                    if edgesForExtendedLayout.contains(.right) == true {
-                        edgeInsets.right += additionalEdgeInsets.right
-                    } else {
-                        edges.remove(.right)
+                    if edges.contains(.right) == true {
+                        if edgesForExtendedLayout.contains(.right) == true {
+                            edgeInsets.right += additionalEdgeInsets.right
+                        } else {
+                            edges.remove(.right)
+                        }
                     }
-                }
-                if edges.contains(.bottom) == true {
-                    if edgesForExtendedLayout.contains(.bottom) == true {
-                        edgeInsets.bottom += additionalEdgeInsets.bottom
-                    } else {
-                        edges.remove(.bottom)
+                    if edges.contains(.bottom) == true {
+                        if edgesForExtendedLayout.contains(.bottom) == true {
+                            edgeInsets.bottom += additionalEdgeInsets.bottom
+                        } else {
+                            edges.remove(.bottom)
+                        }
                     }
+                    target = vc.parent
                 }
-                target = vc.parent
+                self._inheritedEdgeInsets = edgeInsets
             }
-            return edgeInsets
+            return self._inheritedEdgeInsets
         }
     }
     open var adjustedContentInset: UIEdgeInsets {
@@ -101,6 +105,7 @@ open class QViewController : NSObject, IQViewController {
             return self._view
         }
     }
+    open private(set) var isLoading: Bool = false
     open var isLoaded: Bool {
         get { return (self._view != nil) }
     }
@@ -112,13 +117,18 @@ open class QViewController : NSObject, IQViewController {
     #endif
 
     private weak var _parent: IQViewController!
-    private var _parentChanging: Bool = false
+    private var _parentChanging: Bool
+    private var _inheritedEdgeInsets: UIEdgeInsets
+    private var _needUpdateInheritedEdgeInsets: Bool
     private var _view: View!
 
     public override init() {
         self.edgesForExtendedLayout = .all
         self.additionalEdgeInsets = UIEdgeInsets.zero
         self.isPresented = false
+        self._parentChanging = false
+        self._inheritedEdgeInsets = UIEdgeInsets.zero
+        self._needUpdateInheritedEdgeInsets = true
         super.init()
         self.setup()
     }
@@ -135,10 +145,12 @@ open class QViewController : NSObject, IQViewController {
     }
 
     open func loadViewIfNeeded() {
-        if self._view == nil {
+        if self._view == nil && self.isLoading == false {
+            self.isLoading = true
             self._view = View(viewController: self)
             self.didLoad()
-            self.didChangeAdditionalEdgeInsets()
+            self.didChangeContentEdgeInsets()
+            self.isLoading = false
         }
     }
 
@@ -164,16 +176,17 @@ open class QViewController : NSObject, IQViewController {
         }
         #endif
     }
-
-    open func didChangeAdditionalEdgeInsets() {
+    
+    open func didChangeContentEdgeInsets() {
         #if DEBUG
         if self.logging == true {
             print("\(String(describing: self.classForCoder)).didChangeAdditionalEdgeInsets()")
         }
         #endif
+        self._needUpdateInheritedEdgeInsets = true
         self.setNeedLayout()
         self.child.forEach({
-            $0.didChangeAdditionalEdgeInsets()
+            $0.didChangeContentEdgeInsets()
         })
     }
 

@@ -92,27 +92,21 @@ open class QPlaceholderTitleDetailValueComposition< Composable: QPlaceholderTitl
     }
     
     open override func preLayout(composable: Composable, spec: IQContainerSpec) {
-        let edgeInsets = UIEdgeInsets(
-            top: composable.edgeInsets.top,
-            left: spec.containerLeftInset + composable.edgeInsets.left,
-            bottom: composable.edgeInsets.bottom,
-            right: spec.containerRightInset + composable.edgeInsets.right
-        )
-        if self._edgeInsets != edgeInsets || self._titleSpacing != composable.titleSpacing || self._valueSpacing != composable.valueSpacing {
-            self._edgeInsets = edgeInsets
+        if self._edgeInsets != composable.edgeInsets || self._titleSpacing != composable.titleSpacing || self._valueSpacing != composable.valueSpacing {
+            self._edgeInsets = composable.edgeInsets
             self._titleSpacing = composable.titleSpacing
             self._valueSpacing = composable.valueSpacing
             self._constraints = [
-                self.titleLabel.topLayout == self.contentView.topLayout + edgeInsets.top,
-                self.titleLabel.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
+                self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
+                self.titleLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
                 self.titleLabel.trailingLayout == self.valueLabel.leadingLayout - composable.valueSpacing,
                 self.titleLabel.bottomLayout <= self.detailLabel.topLayout - composable.titleSpacing,
-                self.detailLabel.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
+                self.detailLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
                 self.detailLabel.trailingLayout == self.valueLabel.leadingLayout - composable.valueSpacing,
-                self.detailLabel.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom,
-                self.valueLabel.topLayout >= self.contentView.topLayout + edgeInsets.top,
-                self.valueLabel.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
-                self.valueLabel.bottomLayout <= self.contentView.bottomLayout - edgeInsets.bottom,
+                self.detailLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom,
+                self.valueLabel.topLayout >= self.contentView.topLayout + composable.edgeInsets.top,
+                self.valueLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
+                self.valueLabel.bottomLayout <= self.contentView.bottomLayout - composable.edgeInsets.bottom,
                 self.valueLabel.centerYLayout == self.contentView.centerYLayout
             ]
         }

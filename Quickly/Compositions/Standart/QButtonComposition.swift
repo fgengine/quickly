@@ -53,19 +53,13 @@ open class QButtonComposition< Composable: QButtonComposable > : QComposition< C
     }
     
     open override func preLayout(composable: Composable, spec: IQContainerSpec) {
-        let edgeInsets = UIEdgeInsets(
-            top: composable.edgeInsets.top,
-            left: spec.containerLeftInset + composable.edgeInsets.left,
-            bottom: composable.edgeInsets.bottom,
-            right: spec.containerRightInset + composable.edgeInsets.right
-        )
-        if self._edgeInsets != edgeInsets {
-            self._edgeInsets = edgeInsets
+        if self._edgeInsets != composable.edgeInsets {
+            self._edgeInsets = composable.edgeInsets
             self._constraints = [
-                self.button.topLayout == self.contentView.topLayout + edgeInsets.top,
-                self.button.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
-                self.button.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
-                self.button.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom
+                self.button.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
+                self.button.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
+                self.button.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
+                self.button.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom
             ]
         }
     }

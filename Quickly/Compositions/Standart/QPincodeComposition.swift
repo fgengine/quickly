@@ -280,21 +280,15 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
     }
     
     open override func preLayout(composable: Composable, spec: IQContainerSpec) {
-        let edgeInsets = UIEdgeInsets(
-            top: composable.edgeInsets.top,
-            left: spec.containerLeftInset + composable.edgeInsets.left,
-            bottom: composable.edgeInsets.bottom,
-            right: spec.containerRightInset + composable.edgeInsets.right
-        )
         let errorVisible = (self._error != nil)
-        if  self._edgeInsets != edgeInsets ||
+        if  self._edgeInsets != composable.edgeInsets ||
             self._titleSpacing != composable.titleSpacing ||
             self._pincodeSpacing != composable.pincodeSpacing ||
             self._errorVisible != errorVisible ||
             self._errorSpacing != composable.errorSpacing ||
             self._buttonsSpacing != composable.buttonsSpacing
         {
-            self._edgeInsets = edgeInsets
+            self._edgeInsets = composable.edgeInsets
             self._titleSpacing = composable.titleSpacing
             self._pincodeSpacing = composable.pincodeSpacing
             self._errorVisible = errorVisible
@@ -303,24 +297,24 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
             
             var constraints: [NSLayoutConstraint] = []
             
-            constraints.append(self.titleLabel.topLayout >= self.contentView.topLayout + edgeInsets.top)
-            constraints.append(self.titleLabel.leadingLayout == self.contentView.leadingLayout + edgeInsets.left)
-            constraints.append(self.titleLabel.trailingLayout == self.contentView.trailingLayout - edgeInsets.right)
+            constraints.append(self.titleLabel.topLayout >= self.contentView.topLayout + composable.edgeInsets.top)
+            constraints.append(self.titleLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
+            constraints.append(self.titleLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
             
             constraints.append(self.pincode.topLayout == self.titleLabel.bottomLayout + composable.titleSpacing)
-            constraints.append(self.pincode.leadingLayout == self.contentView.leadingLayout + edgeInsets.left)
-            constraints.append(self.pincode.trailingLayout == self.contentView.trailingLayout - edgeInsets.right)
+            constraints.append(self.pincode.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
+            constraints.append(self.pincode.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
             
             constraints.append(self.errorLabel.topLayout == self.pincode.bottomLayout + composable.errorSpacing)
-            constraints.append(self.errorLabel.leadingLayout == self.contentView.leadingLayout + edgeInsets.left)
-            constraints.append(self.errorLabel.trailingLayout == self.contentView.trailingLayout - edgeInsets.right)
+            constraints.append(self.errorLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left)
+            constraints.append(self.errorLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right)
             
             if errorVisible == true {
                 constraints.append(self.button1.topLayout == self.errorLabel.bottomLayout + composable.pincodeSpacing)
             } else {
                 constraints.append(self.button1.topLayout == self.pincode.bottomLayout + composable.pincodeSpacing)
             }
-            constraints.append(self.button1.leadingLayout >= self.contentView.leadingLayout + edgeInsets.left)
+            constraints.append(self.button1.leadingLayout >= self.contentView.leadingLayout + composable.edgeInsets.left)
             constraints.append(self.button1.trailingLayout == self.button2.leadingLayout - composable.buttonsSpacing.horizontal)
             
             constraints.append(self.button2.topLayout == self.button1.topLayout)
@@ -329,11 +323,11 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
             
             constraints.append(self.button3.topLayout == self.button2.topLayout)
             constraints.append(self.button3.leadingLayout == self.button2.trailingLayout + composable.buttonsSpacing.horizontal)
-            constraints.append(self.button3.trailingLayout <= self.contentView.trailingLayout - edgeInsets.right)
+            constraints.append(self.button3.trailingLayout <= self.contentView.trailingLayout - composable.edgeInsets.right)
             constraints.append(self.button3.bottomLayout == self.button2.bottomLayout)
             
             constraints.append(self.button4.topLayout == self.button1.bottomLayout + composable.buttonsSpacing.vertical)
-            constraints.append(self.button4.leadingLayout >= self.contentView.leadingLayout + edgeInsets.left)
+            constraints.append(self.button4.leadingLayout >= self.contentView.leadingLayout + composable.edgeInsets.left)
             constraints.append(self.button4.trailingLayout == self.button1.trailingLayout)
             
             constraints.append(self.button5.topLayout == self.button4.topLayout)
@@ -343,11 +337,11 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
             
             constraints.append(self.button6.topLayout == self.button5.topLayout)
             constraints.append(self.button6.leadingLayout == self.button3.leadingLayout)
-            constraints.append(self.button6.trailingLayout <= self.contentView.trailingLayout - edgeInsets.right)
+            constraints.append(self.button6.trailingLayout <= self.contentView.trailingLayout - composable.edgeInsets.right)
             constraints.append(self.button6.bottomLayout == self.button5.bottomLayout)
             
             constraints.append(self.button7.topLayout == self.button4.bottomLayout + composable.buttonsSpacing.vertical)
-            constraints.append(self.button7.leadingLayout >= self.contentView.leadingLayout + edgeInsets.left)
+            constraints.append(self.button7.leadingLayout >= self.contentView.leadingLayout + composable.edgeInsets.left)
             constraints.append(self.button7.trailingLayout == self.button4.trailingLayout)
             
             constraints.append(self.button8.topLayout == self.button7.topLayout)
@@ -357,23 +351,23 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
             
             constraints.append(self.button9.topLayout == self.button8.topLayout)
             constraints.append(self.button9.leadingLayout == self.button6.leadingLayout)
-            constraints.append(self.button9.trailingLayout <= self.contentView.trailingLayout - edgeInsets.right)
+            constraints.append(self.button9.trailingLayout <= self.contentView.trailingLayout - composable.edgeInsets.right)
             constraints.append(self.button9.bottomLayout == self.button8.bottomLayout)
             
             constraints.append(self.buttonLeft.topLayout == self.button0.topLayout)
             constraints.append(self.buttonLeft.bottomLayout == self.button0.bottomLayout)
-            constraints.append(self.buttonLeft.leadingLayout >= self.contentView.leadingLayout + edgeInsets.left)
+            constraints.append(self.buttonLeft.leadingLayout >= self.contentView.leadingLayout + composable.edgeInsets.left)
             constraints.append(self.buttonLeft.trailingLayout == self.button7.trailingLayout)
             
             constraints.append(self.button0.topLayout == self.button8.bottomLayout + composable.buttonsSpacing.vertical)
-            constraints.append(self.button0.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom)
+            constraints.append(self.button0.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom)
             constraints.append(self.button0.leadingLayout == self.button8.leadingLayout)
             constraints.append(self.button0.trailingLayout == self.button8.trailingLayout)
             
             constraints.append(self.buttonRight.topLayout == self.button0.topLayout)
             constraints.append(self.buttonRight.bottomLayout == self.button0.bottomLayout)
             constraints.append(self.buttonRight.leadingLayout == self.button9.leadingLayout)
-            constraints.append(self.buttonRight.trailingLayout <= self.contentView.trailingLayout - edgeInsets.right)
+            constraints.append(self.buttonRight.trailingLayout <= self.contentView.trailingLayout - composable.edgeInsets.right)
             
             self._constraints = constraints
         }

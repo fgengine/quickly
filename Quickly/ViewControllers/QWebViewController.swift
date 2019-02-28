@@ -24,8 +24,10 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
         let webView = WKWebView(frame: self.view.bounds, configuration: self.prepareConfiguration())
         webView.uiDelegate = self
         webView.navigationDelegate = self
+        if #available(iOS 11.0, *) {
+            webView.scrollView.contentInsetAdjustmentBehavior = .never
+        }
         webView.scrollView.delegate = self
-        self._updateFrame(webView: webView, bounds: webView.bounds)
         self.view.addSubview(webView)
         return webView
     }()
@@ -51,23 +53,21 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
     
     open override func layout(bounds: CGRect) {
         super.layout(bounds: bounds)
-        self._updateFrame(webView: self.webView, bounds: bounds)
+        self.webView.frame = bounds
         if let view = self.loadingView, view.superview == self.view {
             self._updateFrame(loadingView: view, bounds: bounds)
         }
     }
     
-    open override func didChangeAdditionalEdgeInsets() {
-        super.didChangeAdditionalEdgeInsets()
+    open override func didChangeContentEdgeInsets() {
+        super.didChangeContentEdgeInsets()
         if self.isLoaded == true {
-            let bounds = self.view.bounds
-            self._updateFrame(webView: self.webView, bounds: bounds)
+            self._updateContentInsets(webView: self.webView)
             if let view = self.loadingView, view.superview != nil {
-                self._updateFrame(loadingView: view, bounds: bounds)
+                self._updateFrame(loadingView: view, bounds: self.view.bounds)
             }
         }
-    }
-    
+    }    
     open func prepareConfiguration() -> WKWebViewConfiguration {
         return WKWebViewConfiguration()
     }
@@ -153,8 +153,20 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
     
     // MARK: Private
     
-    private func _updateFrame(webView: WKWebView, bounds: CGRect) {
-        webView.frame = bounds.inset(by: self.inheritedEdgeInsets)
+    private func _updateContentInsets(webView: WKWebView) {
+        let edgeInsets = self.adjustedContentInset
+        webView.scrollView.contentInset = UIEdgeInsets(
+            top: edgeInsets.top,
+            left: 0,
+            bottom: edgeInsets.bottom,
+            right: 0
+        )
+        webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(
+            top: edgeInsets.top,
+            left: edgeInsets.left,
+            bottom: edgeInsets.bottom,
+            right: edgeInsets.right
+        )
     }
     
     private func _updateFrame(loadingView: QLoadingViewType, bounds: CGRect) {

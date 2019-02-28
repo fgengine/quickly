@@ -71,23 +71,17 @@ open class QPlaceholderTitleShapeComposition< Composable: QPlaceholderTitleShape
     }
     
     open override func preLayout(composable: Composable, spec: IQContainerSpec) {
-        let edgeInsets = UIEdgeInsets(
-            top: composable.edgeInsets.top,
-            left: spec.containerLeftInset + composable.edgeInsets.left,
-            bottom: composable.edgeInsets.bottom,
-            right: spec.containerRightInset + composable.edgeInsets.right
-        )
-        if self._edgeInsets != edgeInsets || self._shapeSpacing != composable.shapeSpacing {
-            self._edgeInsets = edgeInsets
+        if self._edgeInsets != composable.edgeInsets || self._shapeSpacing != composable.shapeSpacing {
+            self._edgeInsets = composable.edgeInsets
             self._shapeSpacing = composable.shapeSpacing
             self._constraints = [
-                self.titleLabel.topLayout == self.contentView.topLayout + edgeInsets.top,
-                self.titleLabel.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
+                self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
+                self.titleLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
                 self.titleLabel.trailingLayout == self.shapeView.leadingLayout - composable.shapeSpacing,
-                self.titleLabel.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom,
-                self.shapeView.topLayout == self.contentView.topLayout + edgeInsets.top,
-                self.shapeView.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
-                self.shapeView.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom
+                self.titleLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom,
+                self.shapeView.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
+                self.shapeView.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
+                self.shapeView.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom
             ]
         }
         if self._titleHeight != composable.titleHeight {

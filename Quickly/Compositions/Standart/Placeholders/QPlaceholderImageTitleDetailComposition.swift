@@ -85,7 +85,7 @@ open class QPlaceholderImageTitleDetailComposition< Composable: QPlaceholderImag
     }
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
-        let availableWidth = spec.containerAvailableSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
+        let availableWidth = spec.containerSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
         let imageSize = composable.image.source.size(CGSize(width: composable.imageWidth, height: availableWidth))
         return CGSize(
             width: spec.containerSize.width,
@@ -94,27 +94,21 @@ open class QPlaceholderImageTitleDetailComposition< Composable: QPlaceholderImag
     }
     
     open override func preLayout(composable: Composable, spec: IQContainerSpec) {
-        let edgeInsets = UIEdgeInsets(
-            top: composable.edgeInsets.top,
-            left: spec.containerLeftInset + composable.edgeInsets.left,
-            bottom: composable.edgeInsets.bottom,
-            right: spec.containerRightInset + composable.edgeInsets.right
-        )
-        if self._edgeInsets != edgeInsets || self._imageSpacing != composable.imageSpacing || self._titleSpacing != composable.titleSpacing {
-            self._edgeInsets = edgeInsets
+        if self._edgeInsets != composable.edgeInsets || self._imageSpacing != composable.imageSpacing || self._titleSpacing != composable.titleSpacing {
+            self._edgeInsets = composable.edgeInsets
             self._imageSpacing = composable.imageSpacing
             self._titleSpacing = composable.titleSpacing
             self._constraints = [
-                self.imageView.topLayout == self.contentView.topLayout + edgeInsets.top,
-                self.imageView.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
-                self.imageView.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom,
-                self.titleLabel.topLayout == self.contentView.topLayout + edgeInsets.top,
+                self.imageView.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
+                self.imageView.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
+                self.imageView.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom,
+                self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
                 self.titleLabel.leadingLayout == self.imageView.trailingLayout + composable.imageSpacing,
-                self.titleLabel.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
+                self.titleLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
                 self.titleLabel.bottomLayout <= self.detailLabel.topLayout - composable.titleSpacing,
                 self.detailLabel.leadingLayout == self.imageView.trailingLayout + composable.imageSpacing,
-                self.detailLabel.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
-                self.detailLabel.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom
+                self.detailLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
+                self.detailLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom
             ]
         }
         if self._imageWidth != composable.imageWidth {

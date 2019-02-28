@@ -74,7 +74,7 @@ open class QImageTitleComposition< Composable: QImageTitleComposable > : QCompos
     }
 
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
-        let availableWidth = spec.containerAvailableSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
+        let availableWidth = spec.containerSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
         switch composable.direction {
         case .horizontal:
             let imageSize = composable.image.source.size(CGSize(width: composable.imageSize.width, height: availableWidth))
@@ -97,14 +97,8 @@ open class QImageTitleComposition< Composable: QImageTitleComposable > : QCompos
         let changedDirection = self._direction != composable.direction
         self._direction = composable.direction
         
-        let edgeInsets = UIEdgeInsets(
-            top: composable.edgeInsets.top,
-            left: spec.containerLeftInset + composable.edgeInsets.left,
-            bottom: composable.edgeInsets.bottom,
-            right: spec.containerRightInset + composable.edgeInsets.right
-        )
-        let changedEdgeInsets = self._edgeInsets != edgeInsets
-        self._edgeInsets = edgeInsets
+        let changedEdgeInsets = self._edgeInsets != composable.edgeInsets
+        self._edgeInsets = composable.edgeInsets
         
         let changedImageSpacing = self._imageSpacing != composable.imageSpacing
         self._imageSpacing = composable.imageSpacing
@@ -116,23 +110,23 @@ open class QImageTitleComposition< Composable: QImageTitleComposable > : QCompos
             switch composable.direction {
             case .horizontal:
                 self._constraints = [
-                    self.imageView.topLayout == self.contentView.topLayout + edgeInsets.top,
-                    self.imageView.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
+                    self.imageView.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
+                    self.imageView.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
                     self.imageView.trailingLayout == self.titleLabel.leadingLayout - composable.imageSpacing,
-                    self.imageView.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom,
-                    self.titleLabel.topLayout == self.contentView.topLayout + edgeInsets.top,
-                    self.titleLabel.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
-                    self.titleLabel.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom
+                    self.imageView.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom,
+                    self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
+                    self.titleLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
+                    self.titleLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom
                 ]
             case .vertical:
                 self._constraints = [
-                    self.imageView.topLayout == self.contentView.topLayout + edgeInsets.top,
-                    self.imageView.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
-                    self.imageView.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
-                    self.imageView.bottomLayout == self.titleLabel.topLayout - edgeInsets.bottom,
-                    self.titleLabel.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
-                    self.titleLabel.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
-                    self.titleLabel.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom
+                    self.imageView.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
+                    self.imageView.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
+                    self.imageView.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
+                    self.imageView.bottomLayout == self.titleLabel.topLayout - composable.edgeInsets.bottom,
+                    self.titleLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
+                    self.titleLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
+                    self.titleLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom
                 ]
             }
         }
