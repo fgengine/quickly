@@ -13,7 +13,9 @@ open class QAmountStringValidator : QRegularExpressionStringValidator {
         patterns.append("^0$")
         patterns.append("^[1-9][0-9]{0,\(maximumSimbol - 1)}$")
         if decimalSeparator.count > 0 && maximumDecimalSimbol > 0 {
+            patterns.append("^0\\\(decimalSeparator)$")
             patterns.append("^0\\\(decimalSeparator)[0-9]{0,\(maximumDecimalSimbol)}$")
+            patterns.append("^[1-9][0-9]{0,\(maximumSimbol - 1)}\\\(decimalSeparator)$")
             patterns.append("^[1-9][0-9]{0,\(maximumSimbol - 1)}\\\(decimalSeparator)[0-9]{0,\(maximumDecimalSimbol)}$")
         }
         super.init(

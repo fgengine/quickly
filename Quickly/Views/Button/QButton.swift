@@ -467,6 +467,7 @@ public class QButton : QView {
         self.textInsets = styleSheet.textInsets
         self.normalStyle = styleSheet.normalStyle
         self.highlightedStyle = styleSheet.highlightedStyle
+        self.disabledStyle = styleSheet.disabledStyle
         self.selectedStyle = styleSheet.selectedStyle
         self.selectedHighlightedStyle = styleSheet.selectedHighlightedStyle
         self.selectedDisabledStyle = styleSheet.selectedDisabledStyle

@@ -34,6 +34,17 @@ public final class QKeyboardAnimationInfo {
         self.curve = UIView.AnimationCurve(rawValue: curveValue.intValue) ?? .easeInOut
         self.local = localValue.boolValue
     }
+    
+    public func animationOptions(_ base: UIView.AnimationOptions) -> UIView.AnimationOptions {
+        var options: UIView.AnimationOptions = base
+        switch self.curve {
+        case .linear: options.insert(.curveLinear)
+        case .easeIn: options.insert(.curveEaseIn)
+        case .easeOut: options.insert(.curveEaseOut)
+        default: options.insert(.curveEaseInOut)
+        }
+        return options
+    }
 
 }
 

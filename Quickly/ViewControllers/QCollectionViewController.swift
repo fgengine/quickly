@@ -222,7 +222,7 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
         loadingView.stop()
     }
     
-    // MAKR: IQCollectionControllerObserver
+    // MARK: IQCollectionControllerObserver
     
     open func scroll(_ controller: IQCollectionController, collectionView: UICollectionView) {
         if let pagesView = self.pagesView {
@@ -245,23 +245,19 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
         }
     }
     
-    // MAKR: IQKeyboardObserver
+    // MARK: IQKeyboardObserver
     
     open func willShowKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
-        if self.isPresented == true {
-            var options: UIView.AnimationOptions = []
-            switch animationInfo.curve {
-            case .linear: options.insert(.curveLinear)
-            case .easeIn: options.insert(.curveEaseIn)
-            case .easeOut: options.insert(.curveEaseOut)
-            default: options.insert(.curveEaseInOut)
-            }
+        guard self.isPresented == true else {
+            return
+        }
+        if self._edgesForExtendedLayout == nil {
             self._edgesForExtendedLayout = self.edgesForExtendedLayout
             var edgesForExtendedLayout = self.edgesForExtendedLayout
             if edgesForExtendedLayout.contains(.bottom) == true {
                 edgesForExtendedLayout.remove(.bottom)
             }
-            UIView.animate(withDuration: animationInfo.duration, delay: 0, options: options, animations: {
+            UIView.animate(withDuration: animationInfo.duration, delay: 0, options: animationInfo.animationOptions([]), animations: {
                 self.additionalEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: animationInfo.endFrame.height, right: 0)
                 self.edgesForExtendedLayout = edgesForExtendedLayout
             })
@@ -272,20 +268,14 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     }
     
     open func willHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
-        if self.isPresented == true {
-            var options: UIView.AnimationOptions = []
-            switch animationInfo.curve {
-            case .linear: options.insert(.curveLinear)
-            case .easeIn: options.insert(.curveEaseIn)
-            case .easeOut: options.insert(.curveEaseOut)
-            default: options.insert(.curveEaseInOut)
-            }
-            UIView.animate(withDuration: animationInfo.duration, delay: 0, options: options, animations: {
+        guard self.isPresented == true else {
+            return
+        }
+        if let edgesForExtendedLayout = self._edgesForExtendedLayout {
+            self._edgesForExtendedLayout = nil
+            UIView.animate(withDuration: animationInfo.duration, delay: 0, options: animationInfo.animationOptions([]), animations: {
                 self.additionalEdgeInsets = UIEdgeInsets.zero
-                if let edgesForExtendedLayout = self._edgesForExtendedLayout {
-                    self.edgesForExtendedLayout = edgesForExtendedLayout
-                    self._edgesForExtendedLayout = nil
-                }
+                self.edgesForExtendedLayout = edgesForExtendedLayout
             })
         }
     }
@@ -293,7 +283,7 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     open func didHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
     }
     
-    // MAKR: Private
+    // MARK: Private
 
     @objc
     private func _triggeredRefreshControl(_ sender: Any) {
