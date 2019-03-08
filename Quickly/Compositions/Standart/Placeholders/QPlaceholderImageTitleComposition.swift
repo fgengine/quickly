@@ -10,7 +10,7 @@ open class QPlaceholderImageTitleComposable : QComposable {
     public var imageSize: CGSize
     public var imageSpacing: CGFloat
 
-    public var title: QPlaceholderViewStyleSheet
+    public var title: QPlaceholderStyleSheet
     public var titleHeight: CGFloat
 
     public init(
@@ -18,7 +18,7 @@ open class QPlaceholderImageTitleComposable : QComposable {
         image: QImageViewStyleSheet,
         imageWidth: CGFloat = 96,
         imageSpacing: CGFloat = 4,
-        title: QPlaceholderViewStyleSheet,
+        title: QPlaceholderStyleSheet,
         titleHeight: CGFloat
     ) {
         self.direction = .horizontal
@@ -35,7 +35,7 @@ open class QPlaceholderImageTitleComposable : QComposable {
         image: QImageViewStyleSheet,
         imageHeight: CGFloat = 96,
         imageSpacing: CGFloat = 8,
-        title: QPlaceholderViewStyleSheet,
+        title: QPlaceholderStyleSheet,
         titleHeight: CGFloat
     ) {
         self.direction = .vertical

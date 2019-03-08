@@ -25,8 +25,8 @@ public protocol IQCollectionController : UICollectionViewDataSource, UICollectio
 
     func configure()
 
-    func addObserver(_ observer: IQCollectionControllerObserver, priority: UInt)
-    func removeObserver(_ observer: IQCollectionControllerObserver)
+    func add(observer: IQCollectionControllerObserver, priority: UInt)
+    func remove(observer: IQCollectionControllerObserver)
 
     func section(index: Int) -> IQCollectionSection
     func index(section: IQCollectionSection) -> Int?

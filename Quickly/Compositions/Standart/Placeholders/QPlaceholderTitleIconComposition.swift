@@ -4,7 +4,7 @@
 
 open class QPlaceholderTitleIconComposable : QComposable {
     
-    public var title: QPlaceholderViewStyleSheet
+    public var title: QPlaceholderStyleSheet
     public var titleHeight: CGFloat
     
     public var icon: QImageViewStyleSheet
@@ -13,7 +13,7 @@ open class QPlaceholderTitleIconComposable : QComposable {
     
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        title: QPlaceholderViewStyleSheet,
+        title: QPlaceholderStyleSheet,
         titleHeight: CGFloat,
         icon: QImageViewStyleSheet,
         iconWidth: CGFloat = 16,

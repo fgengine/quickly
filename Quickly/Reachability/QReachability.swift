@@ -95,11 +95,11 @@ public class QReachability {
         self.stop()
     }
 
-    public func addObserver(_ observer: QReachabilityObserver, priority: UInt) {
+    public func add(observer: QReachabilityObserver, priority: UInt) {
         self._observer.add(observer, priority: priority)
     }
 
-    public func removeObserver(_ observer: QReachabilityObserver) {
+    public func remove(observer: QReachabilityObserver) {
         self._observer.remove(observer)
     }
 

@@ -8,11 +8,11 @@ open class QPlaceholderImageTitleDetailIconComposable : QComposable {
     public var imageWidth: CGFloat
     public var imageSpacing: CGFloat
     
-    public var title: QPlaceholderViewStyleSheet
+    public var title: QPlaceholderStyleSheet
     public var titleHeight: CGFloat
     public var titleSpacing: CGFloat
     
-    public var detail: QPlaceholderViewStyleSheet
+    public var detail: QPlaceholderStyleSheet
     public var detailHeight: CGFloat
     
     public var icon: QImageViewStyleSheet
@@ -24,10 +24,10 @@ open class QPlaceholderImageTitleDetailIconComposable : QComposable {
         image: QImageViewStyleSheet,
         imageWidth: CGFloat = 96,
         imageSpacing: CGFloat = 4,
-        title: QPlaceholderViewStyleSheet,
+        title: QPlaceholderStyleSheet,
         titleHeight: CGFloat,
         titleSpacing: CGFloat = 4,
-        detail: QPlaceholderViewStyleSheet,
+        detail: QPlaceholderStyleSheet,
         detailHeight: CGFloat,
         icon: QImageViewStyleSheet,
         iconWidth: CGFloat = 16,

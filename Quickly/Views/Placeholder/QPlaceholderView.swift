@@ -2,25 +2,18 @@
 //  Quickly
 //
 
-public enum QPlaceholderViewAlignment {
-    case fill
-    case left(width: CGFloat)
-    case center(width: CGFloat)
-    case right(width: CGFloat)
-}
-
-open class QPlaceholderViewStyleSheet : IQStyleSheet {
+open class QPlaceholderStyleSheet : IQStyleSheet {
     
-    public var bubble: QDisplayViewStyleSheet
-    public var alignment: QPlaceholderViewAlignment
+    public var bubble: QDisplayStyleSheet
+    public var alignment: QPlaceholderView.Alignment
     
     public init(
         color: UIColor? = nil,
         cornerRadius: QViewCornerRadius = .none,
         shadow: QViewShadow? = nil,
-        alignment: QPlaceholderViewAlignment = .left(width: 0.5)
+        alignment: QPlaceholderView.Alignment = .left(width: 0.5)
     ) {
-        self.bubble = QDisplayViewStyleSheet(
+        self.bubble = QDisplayStyleSheet(
             backgroundColor: color,
             cornerRadius: cornerRadius,
             shadow: shadow
@@ -28,7 +21,7 @@ open class QPlaceholderViewStyleSheet : IQStyleSheet {
         self.alignment = alignment
     }
     
-    public init(_ styleSheet: QPlaceholderViewStyleSheet) {
+    public init(_ styleSheet: QPlaceholderStyleSheet) {
         self.bubble = styleSheet.bubble
         self.alignment = styleSheet.alignment
     }
@@ -43,7 +36,7 @@ open class QPlaceholderView : QView {
         self.addSubview(view)
         return view
     }()
-    public var alignment: QPlaceholderViewAlignment = .left(width: 0.5) {
+    public var alignment: Alignment = .left(width: 0.5) {
         didSet { self.setNeedsUpdateConstraints() }
     }
     
@@ -93,9 +86,20 @@ open class QPlaceholderView : QView {
         }
     }
     
-    public func apply(_ styleSheet: QPlaceholderViewStyleSheet) {
+    public func apply(_ styleSheet: QPlaceholderStyleSheet) {
         self.bubbleView.apply(styleSheet.bubble)
         self.alignment = styleSheet.alignment
+    }
+    
+}
+
+extension QPlaceholderView {
+    
+    public enum Alignment {
+        case fill
+        case left(width: CGFloat)
+        case center(width: CGFloat)
+        case right(width: CGFloat)
     }
     
 }

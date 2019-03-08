@@ -2,9 +2,9 @@
 //  Quickly
 //
 
-open class QSegmentStyleSheet : IQStyleSheet {
+open class QSegmentedControlStyleSheet : IQStyleSheet {
     
-    public var items: [QSegmentItem]
+    public var items: [QSegmentedControl.Item]
     public var isMomentary: Bool
     public var apportionsSegmentWidthsByContent: Bool
     public var normalTextStyle: IQTextStyle?
@@ -13,7 +13,7 @@ open class QSegmentStyleSheet : IQStyleSheet {
     public var selectedTextStyle: IQTextStyle?
     
     public init(
-        items: [QSegmentItem],
+        items: [QSegmentedControl.Item],
         isMomentary: Bool = false,
         apportionsSegmentWidthsByContent: Bool = false,
         normalTextStyle: IQTextStyle? = nil,
@@ -30,7 +30,7 @@ open class QSegmentStyleSheet : IQStyleSheet {
         self.selectedTextStyle = selectedTextStyle
     }
     
-    public init(_ styleSheet: QSegmentStyleSheet) {
+    public init(_ styleSheet: QSegmentedControlStyleSheet) {
         self.items = styleSheet.items
         self.isMomentary = styleSheet.isMomentary
         self.apportionsSegmentWidthsByContent = styleSheet.apportionsSegmentWidthsByContent
@@ -42,40 +42,11 @@ open class QSegmentStyleSheet : IQStyleSheet {
     
 }
 
-open class QSegmentItem {
+open class QSegmentedControl : UISegmentedControl, IQView {
     
-    public var text: String?
-    public var image: UIImage?
-    public var width: CGFloat?
-    public var enabled: Bool
+    public typealias SelectedClosure = (_ segment: QSegmentedControl, _ selectedItem: QSegmentedControl.Item?) -> Void
     
-    public init(
-        text: String,
-        width: CGFloat? = nil,
-        enabled: Bool = true
-    ) {
-        self.text = text
-        self.width = width
-        self.enabled = enabled
-    }
-    
-    public init(
-        image: UIImage,
-        width: CGFloat? = nil,
-        enabled: Bool = true
-    ) {
-        self.image = image
-        self.width = width
-        self.enabled = enabled
-    }
-    
-}
-
-open class QSegment : UISegmentedControl, IQView {
-    
-    public typealias SelectedClosure = (_ segment: QSegment, _ selectedItem: QSegmentItem?) -> Void
-    
-    public var items: [QSegmentItem] = [] {
+    public var items: [QSegmentedControl.Item] = [] {
         didSet {
             self.removeAllSegments()
             for item in self.items {
@@ -87,7 +58,7 @@ open class QSegment : UISegmentedControl, IQView {
             }
         }
     }
-    public var selectedItem: QSegmentItem? {
+    public var selectedItem: QSegmentedControl.Item? {
         set(value) {
             if let selectedItem = value {
                 if let index = self.items.firstIndex(where: { return $0 === selectedItem }) {
@@ -162,7 +133,7 @@ open class QSegment : UISegmentedControl, IQView {
         self.removeTarget(self, action: #selector(self._handleChanged(_:)), for: .valueChanged)
     }
     
-    public func apply(_ styleSheet: QSegmentStyleSheet) {
+    public func apply(_ styleSheet: QSegmentedControlStyleSheet) {
         self.items = styleSheet.items
         self.isMomentary = styleSheet.isMomentary
         self.apportionsSegmentWidthsByContent = styleSheet.apportionsSegmentWidthsByContent
@@ -176,6 +147,39 @@ open class QSegment : UISegmentedControl, IQView {
     private func _handleChanged(_ sender: Any) {
         guard let onSelected = self.onSelected else { return }
         onSelected(self, self.selectedItem)
+    }
+    
+}
+
+extension QSegmentedControl {
+    
+    open class Item {
+        
+        public var text: String?
+        public var image: UIImage?
+        public var width: CGFloat?
+        public var enabled: Bool
+        
+        public init(
+            text: String,
+            width: CGFloat? = nil,
+            enabled: Bool = true
+            ) {
+            self.text = text
+            self.width = width
+            self.enabled = enabled
+        }
+        
+        public init(
+            image: UIImage,
+            width: CGFloat? = nil,
+            enabled: Bool = true
+            ) {
+            self.image = image
+            self.width = width
+            self.enabled = enabled
+        }
+        
     }
     
 }

@@ -13,7 +13,7 @@ open class QImageTitleValueShapeComposable : QComposable {
 
     public var value: QLabelStyleSheet
 
-    public var shape: IQShapeModel
+    public var shape: QShapeView.Model
     public var shapeWidth: CGFloat
     public var shapeSpacing: CGFloat
 
@@ -25,7 +25,7 @@ open class QImageTitleValueShapeComposable : QComposable {
         title: QLabelStyleSheet,
         titleSpacing: CGFloat = 4,
         value: QLabelStyleSheet,
-        shape: IQShapeModel,
+        shape: QShapeView.Model,
         shapeWidth: CGFloat = 16,
         shapeSpacing: CGFloat = 4
     ) {

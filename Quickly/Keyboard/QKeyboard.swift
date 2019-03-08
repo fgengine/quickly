@@ -61,11 +61,11 @@ public final class QKeyboard {
         self._stop()
     }
 
-    public func addObserver(_ observer: IQKeyboardObserver, priority: UInt) {
+    public func add(observer: IQKeyboardObserver, priority: UInt) {
         self._observer.add(observer, priority: priority)
     }
 
-    public func removeObserver(_ observer: IQKeyboardObserver) {
+    public func remove(observer: IQKeyboardObserver) {
         self._observer.remove(observer)
     }
 

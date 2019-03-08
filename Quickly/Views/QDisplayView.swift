@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QDisplayViewStyleSheet : IQStyleSheet {
+open class QDisplayStyleSheet : IQStyleSheet {
 
     public var backgroundColor: UIColor?
     public var tintColor: UIColor?
@@ -24,7 +24,7 @@ open class QDisplayViewStyleSheet : IQStyleSheet {
         self.shadow = shadow
     }
 
-    public init(_ styleSheet: QDisplayViewStyleSheet) {
+    public init(_ styleSheet: QDisplayStyleSheet) {
         self.backgroundColor = styleSheet.backgroundColor
         self.tintColor = styleSheet.tintColor
         self.cornerRadius = styleSheet.cornerRadius
@@ -58,7 +58,7 @@ open class QDisplayView : QView {
         self.clipsToBounds = true
     }
     
-    public func apply(_ styleSheet: QDisplayViewStyleSheet) {
+    public func apply(_ styleSheet: QDisplayStyleSheet) {
         self.backgroundColor = styleSheet.backgroundColor
         self.tintColor = styleSheet.tintColor
         self.cornerRadius = styleSheet.cornerRadius

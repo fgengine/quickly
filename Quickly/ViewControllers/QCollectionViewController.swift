@@ -40,10 +40,10 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
         set(value) {
             if let collectionView = self.collectionView {
                 if let collectionController = collectionView.collectionController {
-                    collectionController.removeObserver(self)
+                    collectionController.remove(observer: self)
                 }
                 if let collectionController = value {
-                    collectionController.addObserver(self, priority: 0)
+                    collectionController.add(observer: self, priority: 0)
                 }
                 collectionView.collectionController = value
             }
@@ -123,7 +123,7 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
     
     deinit {
         self.collectionController = nil
-        self._keyboard.removeObserver(self)
+        self._keyboard.remove(observer: self)
     }
     
     open override func setup() {
@@ -134,7 +134,7 @@ open class QCollectionViewController : QViewController, IQCollectionControllerOb
 
     open override func didLoad() {
         self.collectionView = QCollectionView(frame: self.view.bounds)
-        self._keyboard.addObserver(self, priority: 0)
+        self._keyboard.add(observer: self, priority: 0)
     }
 
     open override func layout(bounds: CGRect) {

@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QTextFieldStyleSheet : QDisplayViewStyleSheet {
+open class QTextFieldStyleSheet : QDisplayStyleSheet {
 
     public var requireValidator: Bool
     public var validator: IQInputValidator?
@@ -332,11 +332,11 @@ public class QTextField : QDisplayView, IQField {
         self.addSubview(self.fieldView)
     }
     
-    public func addObserver(_ observer: IQTextFieldObserver, priority: UInt) {
+    public func add(observer: IQTextFieldObserver, priority: UInt) {
         self._observer.add(observer, priority: priority)
     }
     
-    public func removeObserver(_ observer: IQTextFieldObserver) {
+    public func remove(observer: IQTextFieldObserver) {
         self._observer.remove(observer)
     }
 
@@ -353,7 +353,7 @@ public class QTextField : QDisplayView, IQField {
     }
     
     public func apply(_ styleSheet: QTextFieldStyleSheet) {
-        self.apply(styleSheet as QDisplayViewStyleSheet)
+        self.apply(styleSheet as QDisplayStyleSheet)
         
         self.requireValidator = styleSheet.requireValidator
         self.validator = styleSheet.validator

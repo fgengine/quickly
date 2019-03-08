@@ -23,14 +23,14 @@ open class QAttributedText : IQText {
         self.attributed = style.attributed(text)
     }
     
-    public init(_ string: String, style: IQTextStyle, parts: [String : QAttributedText]) {
-        let mutableAttributed = style.mutableAttributed(string)
+    public init(_ text: String, style: IQTextStyle, parts: [String : QAttributedText]) {
+        let attributed = style.mutableAttributed(text)
         parts.forEach({ (key: String, value: QAttributedText) in
-            if let range = mutableAttributed.string.range(of: key), let attributed = value.attributed {
-                mutableAttributed.replaceCharacters(in: string.nsRange(from: range), with: attributed)
+            if let range = attributed.string.range(of: key), let valueAttributed = value.attributed {
+                attributed.replaceCharacters(in: string.nsRange(from: range), with: valueAttributed)
             }
         })
-        self.attributed = mutableAttributed
+        self.attributed = attributed
     }
     
     public func size(size: CGSize) -> CGSize {

@@ -18,7 +18,7 @@ public enum QDateFieldMode {
     }
 }
 
-open class QDateFieldStyleSheet : QDisplayViewStyleSheet {
+open class QDateFieldStyleSheet : QDisplayStyleSheet {
 
     public var formatter: IQDateFieldFormatter
     public var mode: QDateFieldMode
@@ -208,11 +208,11 @@ public class QDateField : QDisplayView, IQField {
         self.addGestureRecognizer(self.tapGesture)
     }
     
-    public func addObserver(_ observer: IQDateFieldObserver, priority: UInt) {
+    public func add(observer: IQDateFieldObserver, priority: UInt) {
         self._observer.add(observer, priority: priority)
     }
     
-    public func removeObserver(_ observer: IQDateFieldObserver) {
+    public func remove(observer: IQDateFieldObserver) {
         self._observer.remove(observer)
     }
 
@@ -252,7 +252,7 @@ public class QDateField : QDisplayView, IQField {
     }
     
     public func apply(_ styleSheet: QDateFieldStyleSheet) {
-        self.apply(styleSheet as QDisplayViewStyleSheet)
+        self.apply(styleSheet as QDisplayStyleSheet)
         
         self.formatter = styleSheet.formatter
         self.mode = styleSheet.mode

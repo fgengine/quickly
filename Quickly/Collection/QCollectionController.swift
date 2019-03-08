@@ -91,11 +91,11 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
         self.reload()
     }
 
-    open func addObserver(_ observer: IQCollectionControllerObserver, priority: UInt) {
+    open func add(observer: IQCollectionControllerObserver, priority: UInt) {
         self._observer.add(observer, priority: priority)
     }
 
-    open func removeObserver(_ observer: IQCollectionControllerObserver) {
+    open func remove(observer: IQCollectionControllerObserver) {
         self._observer.remove(observer)
     }
 

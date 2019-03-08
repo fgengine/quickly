@@ -40,10 +40,10 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
         set(value) {
             if self._collectionController !== value {
                 if let collectionController = self.collectionView.collectionController {
-                    collectionController.removeObserver(self)
+                    collectionController.remove(observer: self)
                 }
                 if let collectionController = value {
-                    collectionController.addObserver(self, priority: 0)
+                    collectionController.add(observer: self, priority: 0)
                 }
                 self.collectionView.collectionController = value
             }

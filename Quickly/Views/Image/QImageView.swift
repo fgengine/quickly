@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QImageViewStyleSheet : QDisplayViewStyleSheet {
+open class QImageViewStyleSheet : QDisplayStyleSheet {
 
     public var source: IQImageSource
     public var verticalAlignment: QViewVerticalAlignment
@@ -222,7 +222,7 @@ open class QImageView : QDisplayView {
     }
     
     public func apply(_ styleSheet: QImageViewStyleSheet) {
-        self.apply(styleSheet as QDisplayViewStyleSheet)
+        self.apply(styleSheet as QDisplayStyleSheet)
         
         self.verticalAlignment = styleSheet.verticalAlignment
         self.horizontalAlignment = styleSheet.horizontalAlignment

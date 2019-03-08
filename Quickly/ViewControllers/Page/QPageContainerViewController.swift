@@ -292,7 +292,7 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
     }
 
     open func setCurrentViewController(_ viewController: IQPageViewController, mode: QPageViewControllerAnimationMode = .none, completion: (() -> Swift.Void)? = nil) {
-        guard self._viewControllers.contains(where: { $0 === viewController }) == true else { return }
+        guard self._viewControllers.contains(where: { viewController === $0 }) == true else { return }
         if self.isLoaded == true {
             self._updateViewControllers(viewController, mode: mode, updation: {
                 if let pagebar = self._pagebar {
@@ -315,8 +315,8 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
         var displayedBackward: IQPageViewController?
         var displayedCurrent: IQPageViewController?
         var displayedForward: IQPageViewController?
-        if let vc = viewController {
-            displayedCurrent = vc
+        if self._viewControllers.contains(where: { viewController === $0 }) == true {
+            displayedCurrent = viewController
         } else {
             displayedCurrent = self._viewControllers.first
         }
@@ -387,8 +387,8 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
                 completion?()
             }
         } else {
-            self._disappearViewControllers(currently, displayed)
             updation?()
+            self._disappearViewControllers(currently, displayed)
             completion?()
         }
     }

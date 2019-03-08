@@ -119,11 +119,11 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         self.reload([])
     }
 
-    open func addObserver(_ observer: IQTableControllerObserver, priority: UInt) {
+    open func add(observer: IQTableControllerObserver, priority: UInt) {
         self._observer.add(observer, priority: priority)
     }
 
-    open func removeObserver(_ observer: IQTableControllerObserver) {
+    open func remove(observer: IQTableControllerObserver) {
         self._observer.remove(observer)
     }
 

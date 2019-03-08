@@ -8,14 +8,14 @@ open class QPlaceholderImageTitleValueShapeComposable : QComposable {
     public var imageWidth: CGFloat
     public var imageSpacing: CGFloat
     
-    public var title: QPlaceholderViewStyleSheet
+    public var title: QPlaceholderStyleSheet
     public var titleHeight: CGFloat
     public var titleSpacing: CGFloat = 0
     
-    public var value: QPlaceholderViewStyleSheet
+    public var value: QPlaceholderStyleSheet
     public var valueHeight: CGFloat
     
-    public var shape: IQShapeModel
+    public var shape: QShapeView.Model
     public var shapeWidth: CGFloat
     public var shapeSpacing: CGFloat
     
@@ -24,12 +24,12 @@ open class QPlaceholderImageTitleValueShapeComposable : QComposable {
         image: QImageViewStyleSheet,
         imageWidth: CGFloat = 96,
         imageSpacing: CGFloat = 4,
-        title: QPlaceholderViewStyleSheet,
+        title: QPlaceholderStyleSheet,
         titleHeight: CGFloat,
         titleSpacing: CGFloat = 4,
-        value: QPlaceholderViewStyleSheet,
+        value: QPlaceholderStyleSheet,
         valueHeight: CGFloat,
-        shape: IQShapeModel,
+        shape: QShapeView.Model,
         shapeWidth: CGFloat = 16,
         shapeSpacing: CGFloat = 4
     ) {

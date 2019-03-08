@@ -2,15 +2,9 @@
 //  Quickly
 //
 
-public enum QScrollViewDirection {
-    case vertical
-    case horizontal
-    case stretch
-}
-
 open class QScrollView : UIScrollView, IQView {
     
-    public var direction: QScrollViewDirection {
+    public var direction: Direction {
         didSet { self.setNeedsUpdateConstraints() }
     }
 
@@ -31,7 +25,7 @@ open class QScrollView : UIScrollView, IQView {
         self.setup()
     }
 
-    public init(frame: CGRect, direction: QScrollViewDirection) {
+    public init(frame: CGRect, direction: Direction) {
         self.direction = direction
         super.init(frame: frame)
         self.setup()
@@ -74,4 +68,14 @@ open class QScrollView : UIScrollView, IQView {
         self._contentConstraints = contentConstraints
     }
 
+}
+
+extension QScrollView {
+    
+    public enum Direction {
+        case vertical
+        case horizontal
+        case stretch
+    }
+    
 }

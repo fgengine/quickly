@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QLabelStyleSheet : QDisplayViewStyleSheet {
+open class QLabelStyleSheet : QDisplayStyleSheet {
 
     public var text: IQText
     public var alignment: NSTextAlignment
@@ -143,7 +143,7 @@ open class QLabel : QDisplayView {
     }
     
     public func apply(_ styleSheet: QLabelStyleSheet) {
-        self.apply(styleSheet as QDisplayViewStyleSheet)
+        self.apply(styleSheet as QDisplayStyleSheet)
         
         self.text = styleSheet.text
         self.alignment = styleSheet.alignment

@@ -6,14 +6,14 @@ open class QTitleShapeComposable : QComposable {
 
     public var title: QLabelStyleSheet
 
-    public var shape: IQShapeModel
+    public var shape: QShapeView.Model
     public var shapeWidth: CGFloat
     public var shapeSpacing: CGFloat
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         title: QLabelStyleSheet,
-        shape: IQShapeModel,
+        shape: QShapeView.Model,
         shapeWidth: CGFloat = 16,
         shapeSpacing: CGFloat = 4
     ) {

@@ -2,19 +2,19 @@
 //  Quickly
 //
 
-open class QSegmentComposable : QComposable {
+open class QSegmentedControlComposable : QComposable {
 
-    public typealias Closure = (_ composable: QSegmentComposable) -> Void
+    public typealias Closure = (_ composable: QSegmentedControlComposable) -> Void
 
-    public var segment: QSegmentStyleSheet
-    public var segmentSelectedItem: QSegmentItem?
+    public var segment: QSegmentedControlStyleSheet
+    public var segmentSelectedItem: QSegmentedControl.Item?
     public var segmentHeight: CGFloat
     public var segmentChanged: Closure
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        segment: QSegmentStyleSheet,
-        segmentSelectedItem: QSegmentItem? = nil,
+        segment: QSegmentedControlStyleSheet,
+        segmentSelectedItem: QSegmentedControl.Item? = nil,
         segmentHeight: CGFloat = 44,
         segmentChanged: @escaping Closure
     ) {
@@ -27,10 +27,10 @@ open class QSegmentComposable : QComposable {
 
 }
 
-open class QSegmentComposition< Composable: QSegmentComposable > : QComposition< Composable > {
+open class QSegmentedControlComposition< Composable: QSegmentedControlComposable > : QComposition< Composable > {
 
-    private lazy var segment: QSegment = {
-        let view = QSegment()
+    private lazy var segment: QSegmentedControl = {
+        let view = QSegmentedControl()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onSelected = { [weak self] (segment, selected) in
             guard let strong = self else { return }

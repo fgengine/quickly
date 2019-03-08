@@ -2,13 +2,6 @@
 //  Quickly
 //
 
-public enum QLoadingViewPosition : Int {
-    case top
-    case left
-    case right
-    case bottom
-}
-
 open class QLoadingView : QView, IQLoadingView {
     
     public var delegate: IQLoadingViewDelegate?
@@ -37,7 +30,7 @@ open class QLoadingView : QView, IQLoadingView {
             self._relayout()
         }
     }
-    public var spinnerPosition: QLoadingViewPosition = .top
+    public var spinnerPosition: QLoadingView.Position = .top
 
     public var detailLabel: QLabel? {
         willSet {
@@ -110,6 +103,17 @@ open class QLoadingView : QView, IQLoadingView {
         } else if self._counter > 0 {
             self._counter -= 1
         }
+    }
+    
+}
+
+extension QLoadingView {
+    
+    public enum Position : Int {
+        case top
+        case left
+        case right
+        case bottom
     }
     
 }

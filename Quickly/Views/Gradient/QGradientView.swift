@@ -2,14 +2,14 @@
 //  Quickly
 //
 
-open class QGradientViewStyleSheet : QDisplayViewStyleSheet {
+open class QGradientStyleSheet : QDisplayStyleSheet {
 
-    public var points: [QGradientPoint]
+    public var points: [QGradientView.Point]
     public var startPoint: CGPoint
     public var endPoint: CGPoint
 
     public init(
-        points: [QGradientPoint],
+        points: [QGradientView.Point],
         startPoint: CGPoint = CGPoint(x: 0, y: 0),
         endPoint: CGPoint = CGPoint(x: 0, y: 1)
     ) {
@@ -20,7 +20,7 @@ open class QGradientViewStyleSheet : QDisplayViewStyleSheet {
         super.init(backgroundColor: UIColor.clear)
     }
 
-    public init(_ styleSheet: QGradientViewStyleSheet) {
+    public init(_ styleSheet: QGradientStyleSheet) {
         self.points = styleSheet.points
         self.startPoint = styleSheet.startPoint
         self.endPoint = styleSheet.endPoint
@@ -32,7 +32,7 @@ open class QGradientViewStyleSheet : QDisplayViewStyleSheet {
 
 open class QGradientView : QDisplayView {
 
-    public var points: [QGradientPoint] {
+    public var points: [Point] {
         set(value) {
             self.gradientLayer.colors = value.compactMap({ return $0.color.cgColor })
             self.gradientLayer.locations = value.compactMap({ return NSNumber(value: Float($0.location)) })
@@ -41,7 +41,7 @@ open class QGradientView : QDisplayView {
             guard let colors = self.gradientLayer.colors as? [CGColor], let locations = self.gradientLayer.locations else { return [] }
             let count = max(locations.count, locations.count)
             return (0..<count).compactMap({
-                return QGradientPoint(
+                return Point(
                     color: UIColor(cgColor: colors[$0]),
                     location: CGFloat(locations[$0].floatValue)
                 )
@@ -64,12 +64,28 @@ open class QGradientView : QDisplayView {
         get { return CAGradientLayer.self }
     }
     
-    public func apply(_ styleSheet: QGradientViewStyleSheet) {
-        self.apply(styleSheet as QDisplayViewStyleSheet)
+    public func apply(_ styleSheet: QGradientStyleSheet) {
+        self.apply(styleSheet as QDisplayStyleSheet)
         
         self.points = styleSheet.points
         self.startPoint = styleSheet.startPoint
         self.endPoint = styleSheet.endPoint
     }
 
+}
+
+extension QGradientView {
+    
+    public struct Point {
+        
+        public let color: UIColor
+        public let location: CGFloat
+        
+        public init(color: UIColor, location: CGFloat) {
+            self.color = color
+            self.location = location
+        }
+        
+    }
+    
 }

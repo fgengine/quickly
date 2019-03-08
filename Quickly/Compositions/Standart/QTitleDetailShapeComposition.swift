@@ -9,7 +9,7 @@ open class QTitleDetailShapeComposable : QComposable {
 
     public var detail: QLabelStyleSheet
 
-    public var shape: IQShapeModel
+    public var shape: QShapeView.Model
     public var shapeWidth: CGFloat
     public var shapeSpacing: CGFloat
 
@@ -18,7 +18,7 @@ open class QTitleDetailShapeComposable : QComposable {
         title: QLabelStyleSheet,
         titleSpacing: CGFloat = 4,
         detail: QLabelStyleSheet,
-        shape: IQShapeModel,
+        shape: QShapeView.Model,
         shapeWidth: CGFloat = 16,
         shapeSpacing: CGFloat = 4
     ) {

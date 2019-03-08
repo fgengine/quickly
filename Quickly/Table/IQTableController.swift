@@ -44,8 +44,8 @@ public protocol IQTableController : UITableViewDataSource, UITableViewDelegate {
 
     func configure()
 
-    func addObserver(_ observer: IQTableControllerObserver, priority: UInt)
-    func removeObserver(_ observer: IQTableControllerObserver)
+    func add(observer: IQTableControllerObserver, priority: UInt)
+    func remove(observer: IQTableControllerObserver)
 
     func section(index: Int) -> IQTableSection
     func index(section: IQTableSection) -> Int?

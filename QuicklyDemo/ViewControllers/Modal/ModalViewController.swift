@@ -27,12 +27,12 @@ class ModalViewController : QNibViewController, IQRouterable, IQContextable {
     override func didLoad() {
         super.didLoad()
 
-        let normalStyle = QButtonStyle()
+        let normalStyle = QButton.StateStyle()
         normalStyle.color = UIColor.lightGray
         normalStyle.cornerRadius = QViewCornerRadius.manual(radius: 4)
         normalStyle.text = QLabelStyleSheet(text: QText("Show modal"))
 
-        let highlightedStyle = QButtonStyle(parent: normalStyle)
+        let highlightedStyle = QButton.StateStyle(parent: normalStyle)
         highlightedStyle.color = UIColor.darkGray
         highlightedStyle.text = QLabelStyleSheet(text: QText("Show modal"))
 

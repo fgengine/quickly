@@ -4,25 +4,25 @@
 
 open class QPlaceholderTitleDetailValueComposable : QComposable {
     
-    public var title: QPlaceholderViewStyleSheet
+    public var title: QPlaceholderStyleSheet
     public var titleHeight: CGFloat
     public var titleSpacing: CGFloat
     
-    public var detail: QPlaceholderViewStyleSheet
+    public var detail: QPlaceholderStyleSheet
     public var detailHeight: CGFloat
     
-    public var value: QPlaceholderViewStyleSheet
+    public var value: QPlaceholderStyleSheet
     public var valueSize: CGSize
     public var valueSpacing: CGFloat
     
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        title: QPlaceholderViewStyleSheet,
+        title: QPlaceholderStyleSheet,
         titleHeight: CGFloat,
         titleSpacing: CGFloat = 4,
-        detail: QPlaceholderViewStyleSheet,
+        detail: QPlaceholderStyleSheet,
         detailHeight: CGFloat,
-        value: QPlaceholderViewStyleSheet,
+        value: QPlaceholderStyleSheet,
         valueSize: CGSize,
         valueSpacing: CGFloat = 4
     ) {

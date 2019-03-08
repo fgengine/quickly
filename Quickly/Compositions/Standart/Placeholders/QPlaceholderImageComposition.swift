@@ -4,12 +4,12 @@
 
 open class QPlaceholderImageComposable : QComposable {
 
-    public var image: QPlaceholderViewStyleSheet
+    public var image: QPlaceholderStyleSheet
     public var imageHeight: CGFloat
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        image: QPlaceholderViewStyleSheet,
+        image: QPlaceholderStyleSheet,
         imageHeight: CGFloat
     ) {
         self.image = image

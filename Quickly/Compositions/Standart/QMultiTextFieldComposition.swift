@@ -112,7 +112,7 @@ open class QMultiTextFieldComposition< Composable: QMultiTextFieldComposable > :
     
     deinit {
         if let observer = self.owner as? IQMultiTextFieldObserver {
-            self.field.removeObserver(observer)
+            self.field.remove(observer: observer)
         }
     }
     
@@ -120,7 +120,7 @@ open class QMultiTextFieldComposition< Composable: QMultiTextFieldComposable > :
         super.setup(owner: owner)
         
         if let observer = owner as? IQMultiTextFieldObserver {
-            self.field.addObserver(observer, priority: 0)
+            self.field.add(observer: observer, priority: 0)
         }
     }
     

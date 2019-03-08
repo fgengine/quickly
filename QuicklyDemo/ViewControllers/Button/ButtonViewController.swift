@@ -28,14 +28,14 @@ class ButtonViewController : QNibViewController, IQRouterable, IQContextable {
     override func didLoad() {
         super.didLoad()
 
-        let normalStyle = QButtonStyle()
+        let normalStyle = QButton.StateStyle()
         normalStyle.color = UIColor.red
         normalStyle.cornerRadius = QViewCornerRadius.auto
         normalStyle.shadow = QViewShadow(color: .black, opacity: 0.5, radius: 10, offset: CGSize(width: 0, height: 6))
         normalStyle.text = QLabelStyleSheet(text: QText("Normal"))
         normalStyle.image = QImageViewStyleSheet(source: QImageSource("button_image"))
 
-        let highlightedStyle = QButtonStyle(parent: normalStyle)
+        let highlightedStyle = QButton.StateStyle(parent: normalStyle)
         highlightedStyle.color = UIColor.blue
         highlightedStyle.text = QLabelStyleSheet(text: QText("Highlighted"))
         highlightedStyle.image = QImageViewStyleSheet(source: QImageSource("button_image"))

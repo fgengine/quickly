@@ -48,10 +48,10 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
         set(value) {
             if let tableView = self.tableView {
                 if let tableController = tableView.tableController {
-                    tableController.removeObserver(self)
+                    tableController.remove(observer: self)
                 }
                 if let tableController = value {
-                    tableController.addObserver(self, priority: 0)
+                    tableController.add(observer: self, priority: 0)
                 }
                 tableView.tableController = value
             }
@@ -135,7 +135,7 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
 
     deinit {
         self.tableController = nil
-        self._keyboard.removeObserver(self)
+        self._keyboard.remove(observer: self)
     }
     
     open override func setup() {
@@ -151,7 +151,7 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
             footerView.insets = self._footerViewInsets()
             self.view.addSubview(footerView)
         }
-        self._keyboard.addObserver(self, priority: 0)
+        self._keyboard.add(observer: self, priority: 0)
     }
 
     open override func layout(bounds: CGRect) {

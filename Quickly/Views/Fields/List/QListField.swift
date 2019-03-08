@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QListFieldStyleSheet : QDisplayViewStyleSheet {
+public class QListFieldStyleSheet : QDisplayStyleSheet {
 
     public var rows: [QListFieldPickerRow]
     public var rowHeight: CGFloat
@@ -165,11 +165,11 @@ public class QListField : QDisplayView, IQField {
         self.addGestureRecognizer(self.tapGesture)
     }
     
-    public func addObserver(_ observer: IQListFieldObserver, priority: UInt) {
+    public func add(observer: IQListFieldObserver, priority: UInt) {
         self._observer.add(observer, priority: priority)
     }
     
-    public func removeObserver(_ observer: IQListFieldObserver) {
+    public func remove(observer: IQListFieldObserver) {
         self._observer.remove(observer)
     }
 
@@ -209,7 +209,7 @@ public class QListField : QDisplayView, IQField {
     }
     
     public func apply(_ styleSheet: QListFieldStyleSheet) {
-        self.apply(styleSheet as QDisplayViewStyleSheet)
+        self.apply(styleSheet as QDisplayStyleSheet)
         
         self.rows = styleSheet.rows
         self.rowHeight = styleSheet.rowHeight

@@ -2,31 +2,80 @@
 //  Quickly
 //
 
-public enum QButtonSpinnerPosition : Int {
-    case fill
-    case image
-}
-
-public enum QButtonImagePosition : Int {
-    case top
-    case left
-    case right
-    case bottom
-}
-
-public enum QButtonContentVerticalAlignment : Int {
-    case center
-    case top
-    case bottom
-    case fill
+open class QButtonStyleSheet : IQStyleSheet {
     
-}
-
-public enum QButtonContentHorizontalAlignment : Int {
-    case center
-    case left
-    case right
-    case fill
+    public var contentHorizontalAlignment: QButton.ContentHorizontalAlignment
+    public var contentVerticalAlignment: QButton.ContentVerticalAlignment
+    public var contentInsets: UIEdgeInsets
+    public var imagePosition: QButton.ImagePosition
+    public var imageInsets: UIEdgeInsets
+    public var textInsets: UIEdgeInsets
+    public var normalStyle: QButton.StateStyle?
+    public var highlightedStyle: QButton.StateStyle?
+    public var disabledStyle: QButton.StateStyle?
+    public var selectedStyle: QButton.StateStyle?
+    public var selectedHighlightedStyle: QButton.StateStyle?
+    public var selectedDisabledStyle: QButton.StateStyle?
+    public var spinnerPosition: QButton.SpinnerPosition
+    public var spinnerFactory: IQSpinnerFactory?
+    public var isSelected: Bool
+    public var isEnabled: Bool
+    
+    public init(
+        contentHorizontalAlignment: QButton.ContentHorizontalAlignment = .center,
+        contentVerticalAlignment: QButton.ContentVerticalAlignment = .center,
+        contentInsets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8),
+        imagePosition: QButton.ImagePosition = .left,
+        imageInsets: UIEdgeInsets = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2),
+        textInsets: UIEdgeInsets = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2),
+        normalStyle: QButton.StateStyle? = nil,
+        highlightedStyle: QButton.StateStyle? = nil,
+        disabledStyle: QButton.StateStyle? = nil,
+        selectedStyle: QButton.StateStyle? = nil,
+        selectedHighlightedStyle: QButton.StateStyle? = nil,
+        selectedDisabledStyle: QButton.StateStyle? = nil,
+        spinnerPosition: QButton.SpinnerPosition = .fill,
+        spinnerFactory: IQSpinnerFactory? = nil,
+        isSelected: Bool = false,
+        isEnabled: Bool = true
+    ) {
+        self.contentHorizontalAlignment = contentHorizontalAlignment
+        self.contentVerticalAlignment = contentVerticalAlignment
+        self.contentInsets = contentInsets
+        self.imagePosition = imagePosition
+        self.imageInsets = imageInsets
+        self.textInsets = textInsets
+        self.normalStyle = normalStyle
+        self.highlightedStyle = highlightedStyle
+        self.disabledStyle = disabledStyle
+        self.selectedStyle = selectedStyle
+        self.selectedHighlightedStyle = selectedHighlightedStyle
+        self.selectedDisabledStyle = selectedDisabledStyle
+        self.spinnerPosition = spinnerPosition
+        self.spinnerFactory = spinnerFactory
+        self.isSelected = isSelected
+        self.isEnabled = isEnabled
+    }
+    
+    public init(_ styleSheet: QButtonStyleSheet) {
+        self.contentHorizontalAlignment = styleSheet.contentHorizontalAlignment
+        self.contentVerticalAlignment = styleSheet.contentVerticalAlignment
+        self.contentInsets = styleSheet.contentInsets
+        self.imagePosition = styleSheet.imagePosition
+        self.imageInsets = styleSheet.imageInsets
+        self.textInsets = styleSheet.textInsets
+        self.normalStyle = styleSheet.normalStyle
+        self.highlightedStyle = styleSheet.highlightedStyle
+        self.disabledStyle = styleSheet.disabledStyle
+        self.selectedStyle = styleSheet.selectedStyle
+        self.selectedHighlightedStyle = styleSheet.selectedHighlightedStyle
+        self.selectedDisabledStyle = styleSheet.selectedDisabledStyle
+        self.spinnerPosition = styleSheet.spinnerPosition
+        self.spinnerFactory = styleSheet.spinnerFactory
+        self.isSelected = styleSheet.isSelected
+        self.isEnabled = styleSheet.isEnabled
+    }
+    
 }
 
 public class QButton : QView {
@@ -42,16 +91,16 @@ public class QButton : QView {
     public var isEnabled: Bool = true {
         didSet(oldValue) { if self.isEnabled != oldValue { self._invalidate() } }
     }
-    public var contentHorizontalAlignment: QButtonContentHorizontalAlignment = .fill {
+    public var contentHorizontalAlignment: ContentHorizontalAlignment = .fill {
         didSet(oldValue) { if self.contentHorizontalAlignment != oldValue { self._invalidate() } }
     }
-    public var contentVerticalAlignment: QButtonContentVerticalAlignment = .fill {
+    public var contentVerticalAlignment: ContentVerticalAlignment = .fill {
         didSet(oldValue) { if self.contentVerticalAlignment != oldValue { self._invalidate() } }
     }
     public var contentInsets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8) {
         didSet(oldValue) { if self.contentInsets != oldValue { self._invalidate() } }
     }
-    public var imagePosition: QButtonImagePosition = .left {
+    public var imagePosition: ImagePosition = .left {
         didSet(oldValue) { if self.imagePosition != oldValue { self._invalidate() } }
     }
     public var imageInsets: UIEdgeInsets = UIEdgeInsets.zero {
@@ -60,22 +109,22 @@ public class QButton : QView {
     public var textInsets: UIEdgeInsets = UIEdgeInsets.zero {
         didSet(oldValue) { if self.textInsets != oldValue { self._invalidate() } }
     }
-    public var normalStyle: IQButtonStyle? {
+    public var normalStyle: StateStyle? {
         didSet(oldValue) { if self.normalStyle !== oldValue { self._invalidate() } }
     }
-    public var highlightedStyle: IQButtonStyle? {
+    public var highlightedStyle: StateStyle? {
         didSet(oldValue) { if self.highlightedStyle !== oldValue { self._invalidate() } }
     }
-    public var disabledStyle: IQButtonStyle? {
+    public var disabledStyle: StateStyle? {
         didSet(oldValue) { if self.disabledStyle !== oldValue { self._invalidate() } }
     }
-    public var selectedStyle: IQButtonStyle? {
+    public var selectedStyle: StateStyle? {
         didSet(oldValue) { if self.selectedStyle !== oldValue { self._invalidate() } }
     }
-    public var selectedHighlightedStyle: IQButtonStyle? {
+    public var selectedHighlightedStyle: StateStyle? {
         didSet(oldValue) { if self.selectedHighlightedStyle !== oldValue { self._invalidate() } }
     }
-    public var selectedDisabledStyle: IQButtonStyle? {
+    public var selectedDisabledStyle: StateStyle? {
         didSet(oldValue) { if self.selectedDisabledStyle !== oldValue { self._invalidate() } }
     }
     public var durationChangeState: TimeInterval = 0.075
@@ -108,7 +157,7 @@ public class QButton : QView {
         view.alpha = 0
         return view
     }()
-    public var spinnerPosition: QButtonSpinnerPosition = .fill {
+    public var spinnerPosition: SpinnerPosition = .fill {
         didSet(oldValue) { if self.spinnerPosition != oldValue { self._invalidate() } }
     }
     public var spinnerView: QSpinnerViewType? {
@@ -484,6 +533,121 @@ public class QButton : QView {
 }
 
 extension QButton {
+    
+    public enum SpinnerPosition : Int {
+        case fill
+        case image
+    }
+    
+    public enum ImagePosition : Int {
+        case top
+        case left
+        case right
+        case bottom
+    }
+    
+    public enum ContentVerticalAlignment : Int {
+        case center
+        case top
+        case bottom
+        case fill
+        
+    }
+    
+    public enum ContentHorizontalAlignment : Int {
+        case center
+        case left
+        case right
+        case fill
+    }
+    
+    public class StateStyle {
+        
+        public weak var parent: StateStyle?
+        
+        public var color: UIColor? {
+            set(value) { self._color = value }
+            get {
+                if let value = self._color { return value }
+                if let parent = self.parent { return parent.color }
+                return nil
+            }
+        }
+        private var _color: UIColor?
+        
+        public var border: QViewBorder? {
+            set(value) { self._border = value }
+            get {
+                if let value = self._border { return value }
+                if let parent = self.parent { return parent.border }
+                return nil
+            }
+        }
+        private var _border: QViewBorder?
+        
+        public var cornerRadius: QViewCornerRadius? {
+            set(value) { self._cornerRadius = value }
+            get {
+                if let value = self._cornerRadius { return value }
+                if let parent = self.parent { return parent.cornerRadius }
+                return nil
+            }
+        }
+        private var _cornerRadius: QViewCornerRadius?
+        
+        public var shadow: QViewShadow? {
+            set(value) { self._shadow = value }
+            get {
+                if let value = self._shadow { return value }
+                if let parent = self.parent { return parent.shadow }
+                return nil
+            }
+        }
+        private var _shadow: QViewShadow?
+        
+        public var image: QImageViewStyleSheet? {
+            set(value) { self._image = value }
+            get {
+                if let value = self._image { return value }
+                if let parent = self.parent { return parent.image }
+                return nil
+            }
+        }
+        private var _image: QImageViewStyleSheet?
+        
+        public var text: QLabelStyleSheet? {
+            set(value) { self._text = value }
+            get {
+                if let value = self._text { return value }
+                if let parent = self.parent { return parent.text }
+                return nil
+            }
+        }
+        private var _text: QLabelStyleSheet?
+        
+        public init(
+            parent: StateStyle? = nil,
+            color: UIColor? = nil,
+            border: QViewBorder? = nil,
+            cornerRadius: QViewCornerRadius? = nil,
+            shadow: QViewShadow? = nil,
+            image: QImageViewStyleSheet? = nil,
+            text: QLabelStyleSheet? = nil
+        ) {
+            self.parent = parent
+            self.color = color
+            self.border = border
+            self.cornerRadius = cornerRadius
+            self.shadow = shadow
+            self.image = image
+            self.text = text
+        }
+        
+    }
+    
+}
+
+extension QButton {
 
     private func _invalidate() {
         self.invalidateIntrinsicContentSize()
@@ -492,7 +656,7 @@ extension QButton {
         self._applyStyle()
     }
 
-    private func _currentStyle() -> IQButtonStyle? {
+    private func _currentStyle() -> StateStyle? {
         if self.isEnabled == false {
             if self.isSelected == true && self.selectedDisabledStyle != nil {
                 return self.selectedDisabledStyle
@@ -517,7 +681,7 @@ extension QButton {
         }
     }
 
-    private func _applyStyle(_ style: IQButtonStyle) {
+    private func _applyStyle(_ style: StateStyle) {
         if let color = style.color {
             self.backgroundView.backgroundColor = color
         }
@@ -549,7 +713,7 @@ extension QButton {
         }
     }
 
-    private func _applyImageStyle(_ style: IQButtonStyle) {
+    private func _applyImageStyle(_ style: StateStyle) {
         if let image = style.image {
             self.imageView.apply(image)
             self.imageView.alpha = 1
@@ -562,7 +726,7 @@ extension QButton {
         self.imageView.alpha = 0
     }
 
-    private func _applyTextStyle(_ style: IQButtonStyle) {
+    private func _applyTextStyle(_ style: StateStyle) {
         if let text = style.text {
             self.textLabel.apply(text)
             self.textLabel.alpha = 1

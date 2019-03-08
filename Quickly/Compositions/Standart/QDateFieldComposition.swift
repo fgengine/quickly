@@ -91,7 +91,7 @@ open class QDateFieldComposition< Composable: QDateFieldComposable > : QComposit
     
     deinit {
         if let observer = self.owner as? IQDateFieldObserver {
-            self.field.removeObserver(observer)
+            self.field.remove(observer: observer)
         }
     }
     
@@ -99,7 +99,7 @@ open class QDateFieldComposition< Composable: QDateFieldComposable > : QComposit
         super.setup(owner: owner)
         
         if let observer = owner as? IQDateFieldObserver {
-            self.field.addObserver(observer, priority: 0)
+            self.field.add(observer: observer, priority: 0)
         }
     }
     

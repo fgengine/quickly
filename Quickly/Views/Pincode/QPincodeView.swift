@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QPincodeViewStyleSheet : QDisplayViewStyleSheet {
+open class QPincodeStyleSheet : QDisplayStyleSheet {
     
     public var length: Int = 4
     public var color: UIColor = UIColor.black
@@ -35,7 +35,7 @@ open class QPincodeViewStyleSheet : QDisplayViewStyleSheet {
         )
     }
     
-    public init(_ styleSheet: QPincodeViewStyleSheet) {
+    public init(_ styleSheet: QPincodeStyleSheet) {
         self.length = styleSheet.length
         self.color = styleSheet.color
         self.diameter = styleSheet.diameter
@@ -120,8 +120,8 @@ open class QPincodeView : QDisplayView {
         }
     }
     
-    public func apply(_ styleSheet: QPincodeViewStyleSheet) {
-        self.apply(styleSheet as QDisplayViewStyleSheet)
+    public func apply(_ styleSheet: QPincodeStyleSheet) {
+        self.apply(styleSheet as QDisplayStyleSheet)
         
         self.length = styleSheet.length
         self.color = styleSheet.color

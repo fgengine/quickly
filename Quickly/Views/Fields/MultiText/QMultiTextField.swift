@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QMultiTextFieldStyleSheet : QDisplayViewStyleSheet {
+open class QMultiTextFieldStyleSheet : QDisplayStyleSheet {
 
     public var requireValidator: Bool
     public var validator: IQInputValidator?
@@ -325,11 +325,11 @@ public class QMultiTextField : QDisplayView, IQField {
         self.textHeight = self._textHeight()
     }
     
-    public func addObserver(_ observer: IQMultiTextFieldObserver, priority: UInt) {
+    public func add(observer: IQMultiTextFieldObserver, priority: UInt) {
         self._observer.add(observer, priority: priority)
     }
     
-    public func removeObserver(_ observer: IQMultiTextFieldObserver) {
+    public func remove(observer: IQMultiTextFieldObserver) {
         self._observer.remove(observer)
     }
     
@@ -360,7 +360,7 @@ public class QMultiTextField : QDisplayView, IQField {
     }
     
     public func apply(_ styleSheet: QMultiTextFieldStyleSheet) {
-        self.apply(styleSheet as QDisplayViewStyleSheet)
+        self.apply(styleSheet as QDisplayStyleSheet)
         
         self.requireValidator = styleSheet.requireValidator
         self.validator = styleSheet.validator

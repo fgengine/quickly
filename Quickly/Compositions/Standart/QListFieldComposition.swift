@@ -90,7 +90,7 @@ open class QListFieldComposition< Composable: QListFieldComposable > : QComposit
     
     deinit {
         if let observer = self.owner as? IQListFieldObserver {
-            self.field.removeObserver(observer)
+            self.field.remove(observer: observer)
         }
     }
     
@@ -98,7 +98,7 @@ open class QListFieldComposition< Composable: QListFieldComposable > : QComposit
         super.setup(owner: owner)
         
         if let observer = owner as? IQListFieldObserver {
-            self.field.addObserver(observer, priority: 0)
+            self.field.add(observer: observer, priority: 0)
         }
     }
     

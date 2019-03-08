@@ -31,12 +31,7 @@ public class QImageCache {
         if FileManager.default.fileExists(atPath: self.url.path) == false {
             try FileManager.default.createDirectory(at: self.url, withIntermediateDirectories: true, attributes: nil)
         }
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self._didReceiveMemoryWarning(_:)),
-            name: UIApplication.didReceiveMemoryWarningNotification,
-            object: nil
-        )
+        NotificationCenter.default.addObserver(self, selector: #selector(self._didReceiveMemoryWarning(_:)), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
     }
 
     deinit {

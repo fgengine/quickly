@@ -7,7 +7,7 @@ open class QPincodeComposable : QComposable {
     public let title: QLabelStyleSheet
     public let titleSpacing: CGFloat
     
-    public let pincode: QPincodeViewStyleSheet
+    public let pincode: QPincodeStyleSheet
     public let pincodeSpacing: CGFloat
     
     public let errorSpacing: CGFloat
@@ -31,7 +31,7 @@ open class QPincodeComposable : QComposable {
     public init(
         title: QLabelStyleSheet,
         titleSpacing: CGFloat,
-        pincode: QPincodeViewStyleSheet,
+        pincode: QPincodeStyleSheet,
         pincodeSpacing: CGFloat,
         errorSpacing: CGFloat,
         button1: QButtonStyleSheet,

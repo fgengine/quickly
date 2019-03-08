@@ -4,7 +4,7 @@
 
 open class QShapeView : QView {
 
-    public var model: IQShapeModel? {
+    public var model: Model? {
         didSet {
             if let model = self.model {
                 if let fillColor = model.fillColor {
@@ -73,4 +73,96 @@ open class QShapeView : QView {
         }
     }
 
+}
+
+extension QShapeView {
+    
+    public enum FillRule {
+        case nonZero
+        case evenOdd
+        
+        public var string: String {
+            get {
+                switch self {
+                case .nonZero: return CAShapeLayerFillRule.nonZero.rawValue
+                case .evenOdd: return CAShapeLayerFillRule.evenOdd.rawValue
+                }
+            }
+        }
+    }
+    
+    public enum LineCap {
+        case butt
+        case round
+        case square
+        
+        public var string: String {
+            get {
+                switch self {
+                case .butt: return CAShapeLayerLineCap.butt.rawValue
+                case .round: return CAShapeLayerLineCap.round.rawValue
+                case .square: return CAShapeLayerLineCap.square.rawValue
+                }
+            }
+        }
+    }
+    
+    public enum LineJoid {
+        case miter
+        case round
+        case bevel
+        
+        public var string: String {
+            get {
+                switch self {
+                case .miter: return CAShapeLayerLineJoin.miter.rawValue
+                case .round: return CAShapeLayerLineJoin.round.rawValue
+                case .bevel: return CAShapeLayerLineJoin.bevel.rawValue
+                }
+            }
+        }
+    }
+    
+    open class Model {
+        
+        open var fillColor: UIColor?
+        open var fillRule: FillRule
+        open var strokeColor: UIColor?
+        open var strokeStart: CGFloat
+        open var strokeEnd: CGFloat
+        open var lineWidth: CGFloat
+        open var miterLimit: CGFloat
+        open var lineCap: LineCap
+        open var lineJoin: LineJoid
+        open var lineDashPhase: CGFloat
+        open var lineDashPattern: [UInt]?
+        open var size: CGSize
+        
+        public init(size: CGSize) {
+            self.fillColor = nil
+            self.fillRule = .nonZero
+            self.strokeColor = nil
+            self.strokeStart = 0
+            self.strokeEnd = 1
+            self.lineWidth = 1
+            self.miterLimit = 10
+            self.lineCap = .butt
+            self.lineJoin = .miter
+            self.lineDashPhase = 0
+            self.lineDashPattern = nil
+            self.size = size
+        }
+        
+        open func make() -> UIBezierPath? {
+            return nil
+        }
+        
+        open func prepare(_ bounds: CGRect) -> UIBezierPath? {
+            guard let path = self.make() else { return nil }
+            path.apply(CGAffineTransform(translationX: (bounds.width / 2), y: (bounds.height / 2)))
+            return path
+        }
+        
+    }
+    
 }

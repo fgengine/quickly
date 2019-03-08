@@ -209,8 +209,8 @@ class TableController : QTableController {
                     composable: QTitleButtonComposable(
                         title: QLabelStyleSheet(text: QText("Title")),
                         button: QButtonStyleSheet(
-                            normalStyle: QButtonStyle(color: UIColor.red, cornerRadius: .auto, text: QLabelStyleSheet(text: QText("Button"))),
-                            highlightedStyle: QButtonStyle(color: UIColor.green, cornerRadius: .auto, text: QLabelStyleSheet(text: QText("Button")))
+                            normalStyle: QButton.StateStyle(color: UIColor.red, cornerRadius: .auto, text: QLabelStyleSheet(text: QText("Button"))),
+                            highlightedStyle: QButton.StateStyle(color: UIColor.green, cornerRadius: .auto, text: QLabelStyleSheet(text: QText("Button")))
                         ),
                         buttonPressed: { (composable) in
                             print("Pressed \(composable)")
