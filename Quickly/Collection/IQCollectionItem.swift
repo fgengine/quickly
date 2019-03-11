@@ -11,7 +11,6 @@ public protocol IQCollectionItem : class {
     var canMove: Bool { get }
 
     func bind(_ section: IQCollectionSection, _ indexPath: IndexPath)
-    func rebind(_ indexPath: IndexPath)
     func unbind()
 
 }

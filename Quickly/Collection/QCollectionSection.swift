@@ -70,14 +70,6 @@ open class QCollectionSection : IQCollectionSection {
         self._bindItems()
     }
     
-    public func rebind(_ index: Int) {
-        self.index = index
-        self._rebindItems(
-            from: self.items.startIndex,
-            to: self.items.endIndex
-        )
-    }
-    
     public func unbind() {
         self._unbindHeader()
         self._unbindFooter()
@@ -96,7 +88,7 @@ open class QCollectionSection : IQCollectionSection {
     
     public func insertItem(_ items: [IQCollectionItem], index: Int) {
         self.items.insert(contentsOf: items, at: index)
-        self._rebindItems(from: index, to: self.items.endIndex)
+        self._bindItems(from: index, to: self.items.endIndex)
         let indexPaths = items.compactMap({ $0.indexPath })
         if indexPaths.count > 0 {
             if let controller = self.controller, let collectionView = controller.collectionView {
@@ -120,7 +112,7 @@ open class QCollectionSection : IQCollectionSection {
                 self.items.remove(at: index)
                 item.unbind()
             }
-            self._rebindItems(from: indices.first!, to: self.items.endIndex)
+            self._bindItems(from: indices.first!, to: self.items.endIndex)
             if indexPaths.count > 0 {
                 if let controller = self.controller, let collectionView = controller.collectionView {
                     collectionView.deleteItems(at: indexPaths)
@@ -149,7 +141,7 @@ open class QCollectionSection : IQCollectionSection {
         let item = self.items[fromIndex]
         self.items.remove(at: fromIndex)
         self.items.insert(item, at: toIndex)
-        self._rebindItems(
+        self._bindItems(
             from: min(fromIndex, toIndex),
             to: max(fromIndex, toIndex)
         )
@@ -192,10 +184,10 @@ extension QCollectionSection {
         }
     }
     
-    private func _rebindItems(from: Int, to: Int) {
+    private func _bindItems(from: Int, to: Int) {
         guard let sectionIndex = self.index else { return }
         for itemIndex in from..<to {
-            self.items[itemIndex].rebind(IndexPath(item: itemIndex, section: sectionIndex))
+            self.items[itemIndex].bind(self, IndexPath(item: itemIndex, section: sectionIndex))
         }
     }
     

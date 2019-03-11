@@ -18,7 +18,6 @@ public protocol IQCollectionSection : class {
     var items: [IQCollectionItem] { get }
 
     func bind(_ controller: IQCollectionController, _ index: Int)
-    func rebind(_ index: Int)
     func unbind()
     
     func setItems(_ items: [IQCollectionItem])

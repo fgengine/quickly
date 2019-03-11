@@ -15,7 +15,6 @@ public protocol IQTableSection : class {
     var rows: [IQTableRow] { get }
 
     func bind(_ controller: IQTableController, _ index: Int)
-    func rebind(_ index: Int)
     func unbind()
     
     func setRows(_ rows: [IQTableRow])

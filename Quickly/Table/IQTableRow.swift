@@ -14,7 +14,6 @@ public protocol IQTableRow : class {
     var cacheHeight: CGFloat? { set get }
 
     func bind(_ section: IQTableSection, _ indexPath: IndexPath)
-    func rebind(_ indexPath: IndexPath)
     func unbind()
     
     func resetCacheHeight()

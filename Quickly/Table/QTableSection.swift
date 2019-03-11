@@ -60,14 +60,6 @@ open class QTableSection : IQTableSection {
         self._bindRows()
     }
 
-    public func rebind(_ index: Int) {
-        self.index = index
-        self._rebindRows(
-            from: self.rows.startIndex,
-            to: self.rows.endIndex
-        )
-    }
-
     public func unbind() {
         self._unbindHeader()
         self._unbindFooter()
@@ -86,7 +78,7 @@ open class QTableSection : IQTableSection {
 
     public func insertRow(_ rows: [IQTableRow], index: Int, with animation: UITableView.RowAnimation? = nil) {
         self.rows.insert(contentsOf: rows, at: index)
-        self._rebindRows(from: index, to: self.rows.endIndex)
+        self._bindRows(from: index, to: self.rows.endIndex)
         let indexPaths = rows.compactMap({ return $0.indexPath })
         if indexPaths.count > 0 {
             if let controller = self.controller, let tableView = controller.tableView, let animation = animation {
@@ -110,7 +102,7 @@ open class QTableSection : IQTableSection {
                 self.rows.remove(at: index)
                 row.unbind()
             }
-            self._rebindRows(from: indices.first!, to: self.rows.endIndex)
+            self._bindRows(from: indices.first!, to: self.rows.endIndex)
             if indexPaths.count > 0 {
                 if let controller = self.controller, let tableView = controller.tableView, let animation = animation {
                     tableView.deleteRows(at: indexPaths, with: animation)
@@ -132,7 +124,7 @@ open class QTableSection : IQTableSection {
         let row = self.rows[fromIndex]
         self.rows.remove(at: fromIndex)
         self.rows.insert(row, at: toIndex)
-        self._rebindRows(
+        self._bindRows(
             from: min(fromIndex, toIndex),
             to: max(fromIndex, toIndex)
         )
@@ -178,11 +170,11 @@ extension QTableSection {
             rowIndex += 1
         }
     }
-
-    private func _rebindRows(from: Int, to: Int) {
+    
+    private func _bindRows(from: Int, to: Int) {
         guard let sectionIndex = self.index else { return }
         for rowIndex in from..<to {
-            self.rows[rowIndex].rebind(IndexPath(row: rowIndex, section: sectionIndex))
+            self.rows[rowIndex].bind(self, IndexPath(row: rowIndex, section: sectionIndex))
         }
     }
 

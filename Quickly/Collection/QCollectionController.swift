@@ -202,7 +202,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
 
     open func insertSection(_ sections: [IQCollectionSection], index: Int) {
         self.sections.insert(contentsOf: sections, at: index)
-        self._rebindSections(from: index, to: self.sections.endIndex)
+        self._bindSections(from: index, to: self.sections.endIndex)
         var indexSet = IndexSet()
         for section in self.sections {
             if let sectionIndex = section.index {
@@ -229,7 +229,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
                 self.sections.remove(at: index)
                 section.unbind()
             }
-            self._rebindSections(from: indexSet.first!, to: self.sections.endIndex)
+            self._bindSections(from: indexSet.first!, to: self.sections.endIndex)
             if let collectionView = self.collectionView {
                 collectionView.deleteSections(indexSet)
             }
@@ -335,9 +335,9 @@ extension QCollectionController {
         }
     }
 
-    private func _rebindSections(from: Int, to: Int) {
+    private func _bindSections(from: Int, to: Int) {
         for index in from..<to {
-            self.sections[index].rebind(index)
+            self.sections[index].bind(self, index)
         }
     }
 

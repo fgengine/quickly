@@ -25,10 +25,6 @@ open class QCollectionItem : IQCollectionItem {
         self.indexPath = indexPath
     }
 
-    public func rebind(_ indexPath: IndexPath) {
-        self.indexPath = indexPath
-    }
-
     public func unbind() {
         self.indexPath = nil
         self.section = nil

@@ -239,7 +239,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
 
     open func insertSection(_ sections: [IQTableSection], index: Int, with animation: UITableView.RowAnimation? = nil) {
         self.sections.insert(contentsOf: sections, at: index)
-        self._rebindSections(from: index, to: self.sections.endIndex)
+        self._bindSections(from: index, to: self.sections.endIndex)
         var indexSet = IndexSet()
         for section in self.sections {
             if let sectionIndex = section.index {
@@ -269,7 +269,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
                 self.sections.remove(at: index)
                 section.unbind()
             }
-            self._rebindSections(from: indexSet.first!, to: self.sections.endIndex)
+            self._bindSections(from: indexSet.first!, to: self.sections.endIndex)
             if let tableView = self.tableView, let animation = animation {
                 tableView.deleteSections(indexSet, with: animation)
             }
@@ -394,9 +394,9 @@ extension QTableController {
         }
     }
     
-    private func _rebindSections(from: Int, to: Int) {
+    private func _bindSections(from: Int, to: Int) {
         for index in from..<to {
-            self.sections[index].rebind(index)
+            self.sections[index].bind(self, index)
         }
     }
     
