@@ -66,6 +66,7 @@ public class QStackViewControllerPresentAnimation : IQStackViewControllerPresent
             self.nextViewController.willPresent(animated: animated)
             UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews ], animations: {
                 self.containerViewController.groupbarVisibility = self.nextGroupbarVisibility
+                self.containerViewController.layoutIfNeeded()
                 self.currentViewController.view.frame = self.currentEndFrame
                 self.nextViewController.view.frame = self.nextEndFrame
             }, completion: { (completed: Bool) in
@@ -160,6 +161,7 @@ public class QStackViewControllerDismissAnimation : IQStackViewControllerDismiss
             self.previousViewController.willPresent(animated: animated)
             UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews ], animations: {
                 self.containerViewController.groupbarVisibility = self.previousGroupbarVisibility
+                self.containerViewController.layoutIfNeeded()
                 self.currentViewController.view.frame = self.currentEndFrame
                 self.previousViewController.view.frame = self.previousEndFrame
             }, completion: { (completed: Bool) in
