@@ -2,14 +2,34 @@
 //  Quickly
 //
 
-open class QWindow : UIWindow, IQView {
+// MARK: - IQWindowSecurityView -
+
+public protocol IQWindowSecurityView : IQView {
+    
+    func show(_ complete: @escaping (_ completed: Bool) -> Void)
+    func hide(_ complete: @escaping (_ completed: Bool) -> Void)
+    
+}
+
+// MARK: - QWindowSecurityViewType -
+
+public typealias QWindowSecurityViewType = UIView & IQWindowSecurityView
+
+// MARK: - QWindow -
+
+open class QWindow : UIWindow, IQView, IQApplicationStateObserver {
 
     open var contentViewController: IQViewController {
         set(value) { self._viewController.contentViewController = value }
         get { return self._viewController.contentViewController }
     }
+    open var securityView: QWindowSecurityViewType? {
+        set(value) { self._viewController.securityView = value }
+        get { return self._viewController.securityView }
+    }
     
     private var _viewController: RootViewController
+    private var _applicationState: QApplicationState
     
     public required init() {
         fatalError("init(coder:) has not been implemented")
@@ -17,102 +37,158 @@ open class QWindow : UIWindow, IQView {
 
     public init(_ contentViewController: IQViewController) {
         self._viewController = RootViewController(contentViewController)
+        self._applicationState = QApplicationState()
         super.init(frame: UIScreen.main.bounds)
-        self.backgroundColor = UIColor.black
         self.setup()
     }
 
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    deinit {
+        self._applicationState.remove(observer: self)
+    }
 
     open func setup() {
+        self.backgroundColor = UIColor.black
+        
         self.rootViewController = self._viewController
+        
+        self._applicationState.add(observer: self, priority: 0)
     }
+    
+    // MARK: Private
 
     private class RootViewController : UIViewController, IQViewControllerDelegate {
 
-        open var contentViewController: IQViewController {
+        var contentViewController: IQViewController {
             willSet {
                 if self.isViewLoaded == true {
                     self.contentViewController.willDismiss(animated: false)
                     self.contentViewController.didDismiss(animated: false)
+                    if self.contentViewController.isLoaded == true {
+                        self.contentViewController.view.removeFromSuperview()
+                    }
                 }
             }
             didSet {
                 self.contentViewController.delegate = self
                 if self.isViewLoaded == true {
                     self.contentViewController.view.frame = self.view.bounds
-                    self.view.addSubview(self.contentViewController.view)
+                    if self._isShowedSecurityView == true {
+                        if let securityView = self.securityView {
+                            self.view.insertSubview(self.contentViewController.view, belowSubview: securityView)
+                        } else {
+                            self.view.addSubview(self.contentViewController.view)
+                        }
+                    } else {
+                        self.view.addSubview(self.contentViewController.view)
+                    }
                     self.contentViewController.willPresent(animated: false)
                     self.contentViewController.didPresent(animated: false)
                 }
             }
         }
+        var securityView: QWindowSecurityViewType? {
+            willSet {
+                if self.isViewLoaded == true && self._isShowedSecurityView == true {
+                    if let securityView = self.securityView {
+                        securityView.removeFromSuperview()
+                    }
+                }
+            }
+            didSet {
+                if self.isViewLoaded == true && self._isShowedSecurityView == true {
+                    if let securityView = self.securityView {
+                        securityView.frame = self.view.bounds
+                        self.view.addSubview(securityView)
+                    }
+                }
+            }
+        }
 
-        open override var prefersStatusBarHidden: Bool {
+        override var prefersStatusBarHidden: Bool {
             get { return self.contentViewController.preferedStatusBarHidden() }
         }
-        open override var preferredStatusBarStyle: UIStatusBarStyle {
+        override var preferredStatusBarStyle: UIStatusBarStyle {
             get { return self.contentViewController.preferedStatusBarStyle() }
         }
-        open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
             get { return self.contentViewController.preferedStatusBarAnimation() }
         }
-        open override var shouldAutorotate: Bool {
+        override var shouldAutorotate: Bool {
             get { return true }
         }
-        open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
             get { return self.contentViewController.supportedOrientations() }
         }
+        
+        private var _isShowedSecurityView: Bool
 
-        public init(_ contentViewController: IQViewController) {
+        init(_ contentViewController: IQViewController) {
             self.contentViewController = contentViewController
+            self._isShowedSecurityView = false
             super.init(nibName: nil, bundle: nil)
             self.setup()
         }
 
-        public required init?(coder aDecoder: NSCoder) {
+        required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
 
-        open func setup() {
+        func setup() {
             self.contentViewController.delegate = self
         }
 
-        open override func loadView() {
+        override func loadView() {
             self.view = QTransparentView(frame: UIScreen.main.bounds)
         }
 
-        open override func viewDidLoad() {
+        override func viewDidLoad() {
             super.viewDidLoad()
 
             self.contentViewController.view.frame = self.view.bounds
             self.view.addSubview(self.contentViewController.view)
             self.contentViewController.willPresent(animated: false)
             self.contentViewController.didPresent(animated: false)
+            
+            if self._isShowedSecurityView == true {
+                if let securityView = self.securityView {
+                    securityView.frame = self.view.bounds
+                    self.view.addSubview(securityView)
+                }
+            }
         }
 
-        open override func viewDidLayoutSubviews() {
+        override func viewDidLayoutSubviews() {
             super.viewDidLayoutSubviews()
 
             self.contentViewController.additionalEdgeInsets = self._currentAdditionalEdgeInsets()
             self.contentViewController.view.frame = self.view.bounds
+            
+            if let securityView = self.securityView {
+                if securityView.superview == self.view {
+                    securityView.frame = self.view.bounds
+                }
+            }
         }
 
-        open override func viewSafeAreaInsetsDidChange() {
+        override func viewSafeAreaInsetsDidChange() {
             self.contentViewController.additionalEdgeInsets = self._currentAdditionalEdgeInsets()
         }
 
-        open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
             coordinator.animate(alongsideTransition: { [unowned self] _ in
                 self.contentViewController.willTransition(size: size)
             }, completion: { [unowned self] _ in
                 self.contentViewController.didTransition(size: size)
             })
         }
+        
+        // MARK: Internal
 
-        private func _currentAdditionalEdgeInsets() -> UIEdgeInsets {
+        internal func _currentAdditionalEdgeInsets() -> UIEdgeInsets {
             if #available(iOS 11.0, *) {
                 return self.view.safeAreaInsets
             } else {
@@ -124,13 +200,61 @@ open class QWindow : UIWindow, IQView {
                 )
             }
         }
+        
+        internal func _showSecurityView() {
+            if self.isViewLoaded == true && self._isShowedSecurityView == false {
+                if let securityView = self.securityView {
+                    self._isShowedSecurityView = true
+                    securityView.frame = self.view.bounds
+                    self.view.addSubview(securityView)
+                    securityView.show({ (completed) in
+                    })
+                }
+            }
+        }
+        
+        internal func _hideSecurityView() {
+            if self.isViewLoaded == true && self._isShowedSecurityView == true {
+                if let securityView = self.securityView {
+                    self._isShowedSecurityView = false
+                    securityView.hide({ (completed) in
+                        securityView.removeFromSuperview()
+                    })
+                }
+            }
+        }
 
         // MARK: IQViewControllerDelegate
 
-        public func requestUpdateStatusBar(viewController: IQViewController) {
+        func requestUpdateStatusBar(viewController: IQViewController) {
             self.setNeedsStatusBarAppearanceUpdate()
         }
 
+    }
+    
+    // MARK: IQApplicationStateObserver
+    
+    open func didReceiveMemoryWarning(_ applicationState: QApplicationState) {
+    }
+    
+    open func didFinishLaunching(_ applicationState: QApplicationState) {
+    }
+    
+    open func didEnterBackground(_ applicationState: QApplicationState) {
+    }
+    
+    open func willEnterForeground(_ applicationState: QApplicationState) {
+    }
+    
+    open func didBecomeActive(_ applicationState: QApplicationState) {
+        self._viewController._hideSecurityView()
+    }
+    
+    open func willResignActive(_ applicationState: QApplicationState) {
+        self._viewController._showSecurityView()
+    }
+    
+    open func willTerminate(_ applicationState: QApplicationState) {
     }
 
 }

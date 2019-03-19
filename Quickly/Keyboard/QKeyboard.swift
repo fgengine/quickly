@@ -83,6 +83,10 @@ public final class QKeyboard {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidHideNotification, object: nil)
     }
 
+}
+
+extension QKeyboard {
+    
     @objc
     private func _willShow(_ notification: Notification) {
         guard

@@ -208,6 +208,7 @@
 		4080082C206A9BEF00B5C9A7 /* QCollectionTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40800828206A9BEF00B5C9A7 /* QCollectionTableCell.swift */; };
 		40800845206BE8AD00B5C9A7 /* ListFieldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4080083F206BE80300B5C9A7 /* ListFieldViewController.swift */; };
 		40800846206BE8B100B5C9A7 /* ListFieldViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40800840206BE80300B5C9A7 /* ListFieldViewController.xib */; };
+		408200432240F22F00D0779B /* QApplicationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 408200422240F22F00D0779B /* QApplicationState.swift */; };
 		40836A9E216C88C400777404 /* QImageTitleDetailValueComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40836A9D216C88C400777404 /* QImageTitleDetailValueComposition.swift */; };
 		40836AAC216CAD8E00777404 /* QTitleDetailValueComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40836AAB216CAD8E00777404 /* QTitleDetailValueComposition.swift */; };
 		40836AAE216CAEB100777404 /* QPlaceholderImageTitleDetailValueComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40836AAD216CAEB100777404 /* QPlaceholderImageTitleDetailValueComposition.swift */; };
@@ -595,6 +596,7 @@
 		40800828206A9BEF00B5C9A7 /* QCollectionTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCollectionTableCell.swift; sourceTree = "<group>"; };
 		4080083F206BE80300B5C9A7 /* ListFieldViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListFieldViewController.swift; sourceTree = "<group>"; };
 		40800840206BE80300B5C9A7 /* ListFieldViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListFieldViewController.xib; sourceTree = "<group>"; };
+		408200422240F22F00D0779B /* QApplicationState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QApplicationState.swift; sourceTree = "<group>"; };
 		40836A9D216C88C400777404 /* QImageTitleDetailValueComposition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QImageTitleDetailValueComposition.swift; sourceTree = "<group>"; };
 		40836AAB216CAD8E00777404 /* QTitleDetailValueComposition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTitleDetailValueComposition.swift; sourceTree = "<group>"; };
 		40836AAD216CAEB100777404 /* QPlaceholderImageTitleDetailValueComposition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QPlaceholderImageTitleDetailValueComposition.swift; sourceTree = "<group>"; };
@@ -966,6 +968,7 @@
 				4034EFAB220C30D700DA2426 /* Xml */,
 				40C94A251F69514500439961 /* Observer */,
 				4070B6AA206297BB00B568A9 /* Keyboard */,
+				408200412240F20800D0779B /* ApplicationState */,
 				4070B6A620628E2D00B568A9 /* Reachability */,
 				400CF9E52125646700F9238D /* AuthenticationChallenge */,
 				406BC14721773BD600164485 /* Proxy */,
@@ -1502,6 +1505,14 @@
 				40800840206BE80300B5C9A7 /* ListFieldViewController.xib */,
 			);
 			path = ListField;
+			sourceTree = "<group>";
+		};
+		408200412240F20800D0779B /* ApplicationState */ = {
+			isa = PBXGroup;
+			children = (
+				408200422240F22F00D0779B /* QApplicationState.swift */,
+			);
+			path = ApplicationState;
 			sourceTree = "<group>";
 		};
 		4085C05F20E4C7980079AF90 /* Ease */ = {
@@ -2270,6 +2281,7 @@
 				402315361F7B9FD3001B0AF7 /* QAmountStringFormatter.swift in Sources */,
 				40D9C5B02147DF7F0086DD57 /* QPlaceholderTitleIconComposition.swift in Sources */,
 				40D9C5AE2147DE8D0086DD57 /* QPlaceholderImageTitleDetailShapeComposition.swift in Sources */,
+				408200432240F22F00D0779B /* QApplicationState.swift in Sources */,
 				406101681F8D79A700A5463E /* QFontInfo.swift in Sources */,
 				4085C07720E4D5580079AF90 /* Double.swift in Sources */,
 				401B1BC120B32E8600DC247F /* QApplication.swift in Sources */,
