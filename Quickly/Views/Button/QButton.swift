@@ -89,7 +89,12 @@ public class QButton : QView {
         didSet(oldValue) { if self.isSelected != oldValue { self._invalidate() } }
     }
     public var isEnabled: Bool = true {
-        didSet(oldValue) { if self.isEnabled != oldValue { self._invalidate() } }
+        didSet(oldValue) {
+            if self.isEnabled != oldValue {
+                self.tapGesture.isEnabled = self.isEnabled
+                self._invalidate()
+            }
+        }
     }
     public var contentHorizontalAlignment: ContentHorizontalAlignment = .fill {
         didSet(oldValue) { if self.contentHorizontalAlignment != oldValue { self._invalidate() } }
