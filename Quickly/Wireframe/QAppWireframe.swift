@@ -68,5 +68,10 @@ open class QAppWireframe< ContextType: IQContext > : IQAppWireframe {
             self.window.makeKeyAndVisible()
         }
     }
+    
+    
+    open func open(_ url: URL) -> Bool {
+        return true
+    }
 
 }

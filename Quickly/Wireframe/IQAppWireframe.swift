@@ -8,4 +8,6 @@ public protocol IQAppWireframe : IQRootWireframe {
     
     func launch(_ options: [UIApplication.LaunchOptionsKey : Any]?)
     
+    func open(_ url: URL) -> Bool
+    
 }
