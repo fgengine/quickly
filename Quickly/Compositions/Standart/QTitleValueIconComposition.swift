@@ -89,16 +89,16 @@ open class QTitleValueIconComposition< Composable: QTitleValueIconComposable > :
             self._titleSpacing = composable.titleSpacing
             self._iconSpacing = composable.iconSpacing
             self._constraints = [
-                self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
-                self.titleLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
-                self.titleLabel.trailingLayout == self.valueLabel.leadingLayout - composable.titleSpacing,
-                self.titleLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom,
-                self.valueLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
-                self.valueLabel.trailingLayout == self.iconView.leadingLayout - composable.iconSpacing,
-                self.valueLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom,
-                self.iconView.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
-                self.iconView.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
-                self.iconView.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom
+                self.titleLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.titleLabel.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.titleLabel.trailingLayout == self.valueLabel.leadingLayout.offset(-composable.titleSpacing),
+                self.titleLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+                self.valueLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.valueLabel.trailingLayout == self.iconView.leadingLayout.offset(-composable.iconSpacing),
+                self.valueLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+                self.iconView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.iconView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                self.iconView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
             ]
         }
         if self._iconWidth != composable.iconWidth {

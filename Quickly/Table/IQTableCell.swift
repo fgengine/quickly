@@ -57,7 +57,7 @@ extension IQTypedTableCell {
     }
 
     public static func usingLevel(any: AnyClass) -> UInt? {
-        return inheritanceLevel(any, RowType.self)
+        return QInheritanceLevel(any, RowType.self)
     }
 
     public static func height(any: Any, spec: IQContainerSpec) -> CGFloat {

@@ -56,10 +56,10 @@ open class QButtonComposition< Composable: QButtonComposable > : QComposition< C
         if self._edgeInsets != composable.edgeInsets {
             self._edgeInsets = composable.edgeInsets
             self._constraints = [
-                self.button.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
-                self.button.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
-                self.button.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
-                self.button.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom
+                self.button.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.button.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.button.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                self.button.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
             ]
         }
     }

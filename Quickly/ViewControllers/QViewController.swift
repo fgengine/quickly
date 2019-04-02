@@ -319,7 +319,7 @@ open class QViewController : NSObject, IQViewController {
     }
 
     open func removeChild(_ viewController: IQViewController) {
-        if let index = self.child.index(where: { return $0 === viewController }) {
+        if let index = self.child.firstIndex(where: { return $0 === viewController }) {
             self.child.remove(at: index)
             viewController.parent = nil
         }

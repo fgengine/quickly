@@ -96,20 +96,20 @@ extension QNibViewController {
     private func _updateConstraints(_ view: UIView, rootView: UIView) {
         let edgeInsets = self.inheritedEdgeInsets
         self._rootConstraints = [
-            rootView.topLayout == view.topLayout + edgeInsets.top,
-            rootView.leadingLayout == view.leadingLayout + edgeInsets.left,
-            rootView.trailingLayout == view.trailingLayout - edgeInsets.right,
-            rootView.bottomLayout == view.bottomLayout - edgeInsets.bottom
+            rootView.topLayout == view.topLayout.offset(edgeInsets.top),
+            rootView.leadingLayout == view.leadingLayout.offset(edgeInsets.left),
+            rootView.trailingLayout == view.trailingLayout.offset(-edgeInsets.right),
+            rootView.bottomLayout == view.bottomLayout.offset(-edgeInsets.bottom)
         ]
     }
     
     private func _updateConstraints(_ view: UIView, loadingView: QLoadingViewType) {
         let edgeInsets = self.inheritedEdgeInsets
         self._loadingConstraints = [
-            loadingView.topLayout == view.topLayout + edgeInsets.top,
-            loadingView.leadingLayout == view.leadingLayout + edgeInsets.left,
-            loadingView.trailingLayout == view.trailingLayout - edgeInsets.right,
-            loadingView.bottomLayout == view.bottomLayout - edgeInsets.bottom
+            loadingView.topLayout == view.topLayout.offset(edgeInsets.top),
+            loadingView.leadingLayout == view.leadingLayout.offset(edgeInsets.left),
+            loadingView.trailingLayout == view.trailingLayout.offset(-edgeInsets.right),
+            loadingView.bottomLayout == view.bottomLayout.offset(-edgeInsets.bottom)
         ]
     }
 

@@ -46,10 +46,10 @@ open class QSpinnerComposition< Composable: QSpinnerComposable, Spinner: QSpinne
         if self._edgeInsets != composable.edgeInsets {
             self._edgeInsets = composable.edgeInsets
             self._constraints = [
-                self.spinnerView.topLayout >= self.contentView.topLayout + composable.edgeInsets.top,
-                self.spinnerView.leadingLayout >= self.contentView.leadingLayout + composable.edgeInsets.left,
-                self.spinnerView.trailingLayout <= self.contentView.trailingLayout - composable.edgeInsets.right,
-                self.spinnerView.bottomLayout <= self.contentView.bottomLayout - composable.edgeInsets.bottom,
+                self.spinnerView.topLayout >= self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.spinnerView.leadingLayout >= self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.spinnerView.trailingLayout <= self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                self.spinnerView.bottomLayout <= self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
                 self.spinnerView.centerXLayout == self.contentView.centerXLayout,
                 self.spinnerView.centerYLayout == self.contentView.centerYLayout
             ]

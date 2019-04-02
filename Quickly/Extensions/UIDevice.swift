@@ -24,7 +24,7 @@ public enum QDeviceDisplaySize : Int {
 
 public extension UIDevice {
     
-    public var identifier: String {
+    var identifier: String {
         get {
             var systemInfo = utsname()
             uname(&systemInfo)
@@ -36,7 +36,7 @@ public extension UIDevice {
         }
     }
     
-    public var family: QDeviceFamily {
+    var family: QDeviceFamily {
         get {
             #if targetEnvironment(simulator)
             return .simulator
@@ -54,7 +54,7 @@ public extension UIDevice {
         }
     }
 
-    public var displaySize: QDeviceDisplaySize {
+    var displaySize: QDeviceDisplaySize {
         get {
             let screenSize = UIScreen.main.bounds.integral.size
             let screenWidth = min(screenSize.width, screenSize.height)

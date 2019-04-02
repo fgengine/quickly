@@ -74,10 +74,10 @@ open class QPagebarTitleCell< ItemType: QPagebarTitleItem > : QPagebarCell< Item
         if self._edgeInsets != item.edgeInsets {
             self._edgeInsets = item.edgeInsets
             self._constraints = [
-                self._titleLabel.topLayout == self.contentView.topLayout + item.edgeInsets.top,
-                self._titleLabel.leadingLayout == self.contentView.leadingLayout + item.edgeInsets.left,
-                self._titleLabel.trailingLayout == self.contentView.trailingLayout - item.edgeInsets.right,
-                self._titleLabel.bottomLayout == self.contentView.bottomLayout - item.edgeInsets.bottom
+                self._titleLabel.topLayout == self.contentView.topLayout.offset(item.edgeInsets.top),
+                self._titleLabel.leadingLayout == self.contentView.leadingLayout.offset(item.edgeInsets.left),
+                self._titleLabel.trailingLayout == self.contentView.trailingLayout.offset(-item.edgeInsets.right),
+                self._titleLabel.bottomLayout == self.contentView.bottomLayout.offset(-item.edgeInsets.bottom)
             ]
         }
         self._titleLabel.apply(item.title)

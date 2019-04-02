@@ -214,7 +214,7 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
 
     private func _dismiss(_ viewController: IQDialogViewController, animated: Bool, completion: (() -> Void)?) {
         let currentViewController = self.currentViewController
-        if let index = self.viewControllers.index(where: { return $0 === viewController }) {
+        if let index = self.viewControllers.firstIndex(where: { return $0 === viewController }) {
             self.viewControllers.remove(at: index)
             if self.isLoaded == true {
                 self.setNeedUpdateStatusBar()
@@ -351,7 +351,7 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
             return
         }
         self._disappearViewController(viewController)
-        if let index = self.viewControllers.index(where: { return $0 === viewController }) {
+        if let index = self.viewControllers.firstIndex(where: { return $0 === viewController }) {
             self.viewControllers.remove(at: index)
             self.setNeedUpdateStatusBar()
             if let backgroundView = self.backgroundView {

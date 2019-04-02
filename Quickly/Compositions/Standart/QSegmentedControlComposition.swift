@@ -61,10 +61,10 @@ open class QSegmentedControlComposition< Composable: QSegmentedControlComposable
         if self._edgeInsets != composable.edgeInsets {
             self._edgeInsets = composable.edgeInsets
             self._constraints = [
-                self.segment.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
-                self.segment.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
-                self.segment.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
-                self.segment.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom,
+                self.segment.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.segment.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.segment.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                self.segment.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
             ]
         }
     }

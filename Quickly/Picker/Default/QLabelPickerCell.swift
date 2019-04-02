@@ -27,10 +27,10 @@ public class QLabelPickerCell< RowType: QLabelPickerRow > : QPickerCell< RowType
         if self._edgeInsets != row.edgeInsets {
             self._edgeInsets = row.edgeInsets
             self._constraints = [
-                self._label.topLayout == self.topLayout + row.edgeInsets.top,
-                self._label.leadingLayout == self.leadingLayout + row.edgeInsets.left,
-                self._label.trailingLayout == self.trailingLayout - row.edgeInsets.right,
-                self._label.bottomLayout == self.bottomLayout - row.edgeInsets.bottom
+                self._label.topLayout == self.topLayout.offset(row.edgeInsets.top),
+                self._label.leadingLayout == self.leadingLayout.offset(row.edgeInsets.left),
+                self._label.trailingLayout == self.trailingLayout.offset(-row.edgeInsets.right),
+                self._label.bottomLayout == self.bottomLayout.offset(-row.edgeInsets.bottom)
             ]
         }
         self._label.apply(row.label)

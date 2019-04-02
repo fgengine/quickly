@@ -27,10 +27,10 @@ public class QListFieldPickerCell : QPickerCell< QListFieldPickerRow > {
         if self._edgeInsets != row.rowEdgeInsets {
             self._edgeInsets = row.rowEdgeInsets
             self._constraints = [
-                self._title.topLayout == self.topLayout + row.rowEdgeInsets.top,
-                self._title.leadingLayout == self.leadingLayout + row.rowEdgeInsets.left,
-                self._title.trailingLayout == self.trailingLayout - row.rowEdgeInsets.right,
-                self._title.bottomLayout == self.bottomLayout - row.rowEdgeInsets.bottom
+                self._title.topLayout == self.topLayout.offset(row.rowEdgeInsets.top),
+                self._title.leadingLayout == self.leadingLayout.offset(row.rowEdgeInsets.left),
+                self._title.trailingLayout == self.trailingLayout.offset(-row.rowEdgeInsets.right),
+                self._title.bottomLayout == self.bottomLayout.offset(-row.rowEdgeInsets.bottom)
             ]
         }
         self._title.apply(row.row)

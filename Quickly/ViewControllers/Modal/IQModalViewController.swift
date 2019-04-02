@@ -61,11 +61,11 @@ public protocol IQModalViewController : IQViewController {
 
 public extension IQModalViewController {
 
-    public var modalContainerViewController: IQModalContainerViewController? {
+    var modalContainerViewController: IQModalContainerViewController? {
         get { return self.parent as? IQModalContainerViewController }
     }
 
-    public func dismissModal(animated: Bool, completion: (() -> Swift.Void)?) {
+    func dismissModal(animated: Bool, completion: (() -> Swift.Void)?) {
         guard let vc = self.modalContainerViewController else { return }
         vc.dismissModal(viewController: self, animated: animated, completion: completion)
     }
@@ -82,7 +82,7 @@ public protocol IQModalContentViewController : IQViewController {
 
 public extension IQModalContentViewController {
 
-    public var modalViewController: IQModalViewController? {
+    var modalViewController: IQModalViewController? {
         get { return self.parentOf() }
     }
 

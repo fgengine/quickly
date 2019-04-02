@@ -126,65 +126,65 @@ extension QLoadingView {
             switch self.spinnerPosition {
             case .top:
                 panelConstraints.append(contentsOf: [
-                    spinnerView.topLayout == self.panelView.topLayout + self.panelInsets.top,
-                    spinnerView.leadingLayout >= self.panelView.leadingLayout + self.panelInsets.left,
-                    spinnerView.trailingLayout <= self.panelView.trailingLayout - self.panelInsets.right,
+                    spinnerView.topLayout == self.panelView.topLayout.offset(self.panelInsets.top),
+                    spinnerView.leadingLayout >= self.panelView.leadingLayout.offset(self.panelInsets.left),
+                    spinnerView.trailingLayout <= self.panelView.trailingLayout.offset(-self.panelInsets.right),
                     spinnerView.centerXLayout == self.panelView.centerXLayout,
-                    detailLabel.topLayout == spinnerView.topLayout - self.detailSpacing,
-                    detailLabel.leadingLayout >= self.panelView.leadingLayout + self.panelInsets.left,
-                    detailLabel.trailingLayout <= self.panelView.trailingLayout - self.panelInsets.right,
-                    detailLabel.bottomLayout == self.panelView.bottomLayout - self.panelInsets.bottom,
+                    detailLabel.topLayout == spinnerView.topLayout.offset(-self.detailSpacing),
+                    detailLabel.leadingLayout >= self.panelView.leadingLayout.offset(self.panelInsets.left),
+                    detailLabel.trailingLayout <= self.panelView.trailingLayout.offset(-self.panelInsets.right),
+                    detailLabel.bottomLayout == self.panelView.bottomLayout.offset(-self.panelInsets.bottom),
                     detailLabel.centerXLayout == self.panelView.centerXLayout
                 ])
             case .left:
                 panelConstraints.append(contentsOf: [
-                    spinnerView.topLayout >= self.panelView.topLayout + self.panelInsets.top,
-                    spinnerView.leadingLayout == self.panelView.leadingLayout + self.panelInsets.left,
-                    spinnerView.bottomLayout <= self.panelView.bottomLayout - self.panelInsets.bottom,
+                    spinnerView.topLayout >= self.panelView.topLayout.offset(self.panelInsets.top),
+                    spinnerView.leadingLayout == self.panelView.leadingLayout.offset(self.panelInsets.left),
+                    spinnerView.bottomLayout <= self.panelView.bottomLayout.offset(-self.panelInsets.bottom),
                     spinnerView.centerYLayout == self.panelView.centerYLayout,
-                    detailLabel.topLayout >= self.panelView.topLayout + self.panelInsets.top,
-                    detailLabel.leadingLayout == spinnerView.leadingLayout - self.detailSpacing,
-                    detailLabel.trailingLayout == self.panelView.trailingLayout - self.panelInsets.right,
-                    detailLabel.bottomLayout <= self.panelView.bottomLayout - self.panelInsets.bottom,
+                    detailLabel.topLayout >= self.panelView.topLayout.offset(self.panelInsets.top),
+                    detailLabel.leadingLayout == spinnerView.leadingLayout.offset(-self.detailSpacing),
+                    detailLabel.trailingLayout == self.panelView.trailingLayout.offset(-self.panelInsets.right),
+                    detailLabel.bottomLayout <= self.panelView.bottomLayout.offset(-self.panelInsets.bottom),
                     detailLabel.centerYLayout == self.panelView.centerYLayout
                 ])
             case .right:
                 panelConstraints.append(contentsOf: [
-                    detailLabel.topLayout >= self.panelView.topLayout + self.panelInsets.top,
-                    detailLabel.leadingLayout == self.panelView.leadingLayout + self.panelInsets.left,
-                    detailLabel.bottomLayout <= self.panelView.bottomLayout - self.panelInsets.bottom,
-                    spinnerView.topLayout >= self.panelView.topLayout + self.panelInsets.top,
-                    spinnerView.leadingLayout == self.panelView.leadingLayout - self.detailSpacing,
-                    spinnerView.trailingLayout == self.panelView.trailingLayout - self.panelInsets.right,
-                    spinnerView.bottomLayout <= self.panelView.bottomLayout - self.panelInsets.bottom,
+                    detailLabel.topLayout >= self.panelView.topLayout.offset(self.panelInsets.top),
+                    detailLabel.leadingLayout == self.panelView.leadingLayout.offset(self.panelInsets.left),
+                    detailLabel.bottomLayout <= self.panelView.bottomLayout.offset(-self.panelInsets.bottom),
+                    spinnerView.topLayout >= self.panelView.topLayout.offset(self.panelInsets.top),
+                    spinnerView.leadingLayout == self.panelView.leadingLayout.offset(-self.detailSpacing),
+                    spinnerView.trailingLayout == self.panelView.trailingLayout.offset(-self.panelInsets.right),
+                    spinnerView.bottomLayout <= self.panelView.bottomLayout.offset(-self.panelInsets.bottom),
                     spinnerView.centerYLayout == self.panelView.centerYLayout
                 ])
             case .bottom:
                 panelConstraints.append(contentsOf: [
-                    detailLabel.topLayout == self.panelView.topLayout + self.panelInsets.top,
-                    detailLabel.leadingLayout >= self.panelView.leadingLayout + self.panelInsets.left,
-                    detailLabel.trailingLayout <= self.panelView.trailingLayout - self.panelInsets.right,
+                    detailLabel.topLayout == self.panelView.topLayout.offset(self.panelInsets.top),
+                    detailLabel.leadingLayout >= self.panelView.leadingLayout.offset(self.panelInsets.left),
+                    detailLabel.trailingLayout <= self.panelView.trailingLayout.offset(-self.panelInsets.right),
                     detailLabel.centerXLayout == self.panelView.centerXLayout,
-                    spinnerView.topLayout == detailLabel.topLayout - self.detailSpacing,
-                    spinnerView.leadingLayout >= self.panelView.leadingLayout + self.panelInsets.left,
-                    spinnerView.trailingLayout <= self.panelView.trailingLayout - self.panelInsets.right,
-                    spinnerView.bottomLayout == self.panelView.bottomLayout - self.panelInsets.bottom,
+                    spinnerView.topLayout == detailLabel.topLayout.offset(-self.detailSpacing),
+                    spinnerView.leadingLayout >= self.panelView.leadingLayout.offset(self.panelInsets.left),
+                    spinnerView.trailingLayout <= self.panelView.trailingLayout.offset(-self.panelInsets.right),
+                    spinnerView.bottomLayout == self.panelView.bottomLayout.offset(-self.panelInsets.bottom),
                     spinnerView.centerXLayout == self.panelView.centerXLayout
                 ])
             }
         } else if let spinnerView = self.spinnerView {
             panelConstraints.append(contentsOf: [
-                spinnerView.topLayout == self.panelView.topLayout + self.panelInsets.top,
-                spinnerView.leadingLayout == self.panelView.leadingLayout + self.panelInsets.left,
-                spinnerView.trailingLayout == self.panelView.trailingLayout - self.panelInsets.right,
-                spinnerView.bottomLayout == self.panelView.bottomLayout - self.panelInsets.bottom
+                spinnerView.topLayout == self.panelView.topLayout.offset(self.panelInsets.top),
+                spinnerView.leadingLayout == self.panelView.leadingLayout.offset(self.panelInsets.left),
+                spinnerView.trailingLayout == self.panelView.trailingLayout.offset(-self.panelInsets.right),
+                spinnerView.bottomLayout == self.panelView.bottomLayout.offset(-self.panelInsets.bottom)
             ])
         } else if let detailLabel = self.detailLabel {
             panelConstraints.append(contentsOf: [
-                detailLabel.topLayout == self.panelView.topLayout + self.panelInsets.top,
-                detailLabel.leadingLayout == self.panelView.leadingLayout + self.panelInsets.left,
-                detailLabel.trailingLayout == self.panelView.trailingLayout - self.panelInsets.right,
-                detailLabel.bottomLayout == self.panelView.bottomLayout - self.panelInsets.bottom
+                detailLabel.topLayout == self.panelView.topLayout.offset(self.panelInsets.top),
+                detailLabel.leadingLayout == self.panelView.leadingLayout.offset(self.panelInsets.left),
+                detailLabel.trailingLayout == self.panelView.trailingLayout.offset(-self.panelInsets.right),
+                detailLabel.bottomLayout == self.panelView.bottomLayout.offset(-self.panelInsets.bottom)
             ])
         }
         self._panelConstraints = panelConstraints

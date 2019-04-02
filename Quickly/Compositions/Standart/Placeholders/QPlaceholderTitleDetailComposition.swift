@@ -74,13 +74,13 @@ open class QPlaceholderTitleDetailComposition< Composable: QPlaceholderTitleDeta
             self._edgeInsets = composable.edgeInsets
             self._titleSpacing = composable.titleSpacing
             self._constraints = [
-                self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
-                self.titleLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
-                self.titleLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
-                self.titleLabel.bottomLayout <= self.detailLabel.topLayout - composable.titleSpacing,
-                self.detailLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
-                self.detailLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
-                self.detailLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom
+                self.titleLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.titleLabel.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.titleLabel.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                self.titleLabel.bottomLayout <= self.detailLabel.topLayout.offset(-composable.titleSpacing),
+                self.detailLabel.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.detailLabel.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                self.detailLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
             ]
         }
         if self._titleHeight != composable.titleHeight {

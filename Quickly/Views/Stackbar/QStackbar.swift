@@ -123,43 +123,66 @@ open class QStackbar : QView {
 
         var constraints: [NSLayoutConstraint] = []
         if let backgroundView = self.backgroundView {
-            constraints.append(backgroundView.topLayout == self.topLayout)
-            constraints.append(backgroundView.leadingLayout == self.leadingLayout)
-            constraints.append(backgroundView.trailingLayout == self.trailingLayout)
-            constraints.append(backgroundView.bottomLayout == self.bottomLayout)
+            constraints.append(contentsOf: [
+                backgroundView.topLayout == self.topLayout,
+                backgroundView.leadingLayout == self.leadingLayout,
+                backgroundView.trailingLayout == self.trailingLayout,
+                backgroundView.bottomLayout == self.bottomLayout
+            ])
         }
-        constraints.append(self._leftView.topLayout == self.topLayout + self.edgeInsets.top)
-        constraints.append(self._leftView.leadingLayout == self.leadingLayout + self.edgeInsets.left)
-        constraints.append(self._leftView.bottomLayout == self.bottomLayout - self.edgeInsets.bottom)
-        constraints.append(self._centerView.topLayout == self.topLayout + self.edgeInsets.top)
+        constraints.append(contentsOf: [
+            self._leftView.topLayout == self.topLayout.offset(self.edgeInsets.top),
+            self._leftView.leadingLayout == self.leadingLayout.offset(self.edgeInsets.left),
+            self._leftView.bottomLayout == self.bottomLayout.offset(-self.edgeInsets.bottom),
+            self._centerView.topLayout == self.topLayout.offset(self.edgeInsets.top)
+        ])
         if centerViewsCount > 0 {
             if leftViewsCount > 0 && rightViewsCount > 0 {
-                constraints.append(self._centerView.leadingLayout >= self._leftView.trailingLayout + self.leftViewsOffset)
-                constraints.append(self._centerView.trailingLayout <= self._rightView.leadingLayout - self.rightViewsOffset)
+                constraints.append(contentsOf: [
+                    self._centerView.leadingLayout >= self._leftView.trailingLayout.offset(self.leftViewsOffset),
+                    self._centerView.trailingLayout <= self._rightView.leadingLayout.offset(-self.rightViewsOffset),
+                    self._centerView.centerXLayout == self.centerXLayout
+                ])
             } else if leftViewsCount > 0 {
-                constraints.append(self._centerView.leadingLayout >= self._leftView.trailingLayout + self.leftViewsOffset)
-                constraints.append(self._centerView.trailingLayout <= self.trailingLayout - self.edgeInsets.right)
+                constraints.append(contentsOf: [
+                    self._centerView.leadingLayout >= self._leftView.trailingLayout.offset(self.leftViewsOffset),
+                    self._centerView.trailingLayout <= self.trailingLayout.offset(-self.edgeInsets.right),
+                    self._centerView.centerXLayout == self.centerXLayout
+                ])
             } else if rightViewsCount > 0 {
-                constraints.append(self._centerView.leadingLayout >= self.leadingLayout + self.edgeInsets.left)
-                constraints.append(self._centerView.trailingLayout <= self._rightView.leadingLayout - self.rightViewsOffset)
+                constraints.append(contentsOf: [
+                    self._centerView.leadingLayout >= self.leadingLayout.offset(self.edgeInsets.left),
+                    self._centerView.trailingLayout <= self._rightView.leadingLayout.offset(-self.rightViewsOffset),
+                    self._centerView.centerXLayout == self.centerXLayout
+                ])
             } else {
-                constraints.append(self._centerView.leadingLayout == self.leadingLayout + self.edgeInsets.left)
-                constraints.append(self._centerView.trailingLayout == self.trailingLayout - self.edgeInsets.right)
+                constraints.append(contentsOf: [
+                    self._centerView.leadingLayout == self.leadingLayout.offset(self.edgeInsets.left),
+                    self._centerView.trailingLayout == self.trailingLayout.offset(-self.edgeInsets.right),
+                    self._centerView.centerXLayout == self.centerXLayout
+                ])
             }
-            constraints.append(self._centerView.centerXLayout == self.centerXLayout)
         } else {
             if leftViewsCount > 0 && rightViewsCount > 0 {
-                constraints.append(self._leftView.trailingLayout >= self._rightView.trailingLayout + self.leftViewsOffset + self.rightViewsOffset)
+                constraints.append(contentsOf: [
+                    self._leftView.trailingLayout >= self._rightView.trailingLayout.offset(self.leftViewsOffset + self.rightViewsOffset)
+                ])
             } else if leftViewsCount > 0 {
-                constraints.append(self._leftView.trailingLayout <= self.trailingLayout - self.edgeInsets.right)
+                constraints.append(contentsOf: [
+                    self._leftView.trailingLayout <= self.trailingLayout.offset(-self.edgeInsets.right)
+                ])
             } else if rightViewsCount > 0 {
-                constraints.append(self._rightView.leadingLayout >= self.leadingLayout + self.edgeInsets.left)
+                constraints.append(contentsOf: [
+                    self._rightView.leadingLayout >= self.leadingLayout.offset(self.edgeInsets.left)
+                ])
             }
         }
-        constraints.append(self._centerView.bottomLayout == self.bottomLayout - self.edgeInsets.bottom)
-        constraints.append(self._rightView.topLayout == self.topLayout + self.edgeInsets.top)
-        constraints.append(self._rightView.trailingLayout == self.trailingLayout - self.edgeInsets.right)
-        constraints.append(self._rightView.bottomLayout == self.bottomLayout - self.edgeInsets.bottom)
+        constraints.append(contentsOf: [
+            self._centerView.bottomLayout == self.bottomLayout.offset(-self.edgeInsets.bottom),
+            self._rightView.topLayout == self.topLayout.offset(self.edgeInsets.top),
+            self._rightView.trailingLayout == self.trailingLayout.offset(-self.edgeInsets.right),
+            self._rightView.bottomLayout == self.bottomLayout.offset(-self.edgeInsets.bottom)
+        ])
         self._constraints = constraints
     }
 
@@ -211,7 +234,7 @@ open class QStackbar : QView {
                 for view in self.views {
                     constraints.append(view.topLayout == self.topLayout)
                     if let lastView = lastView {
-                        constraints.append(view.leadingLayout == lastView.trailingLayout + self.spacing)
+                        constraints.append(view.leadingLayout == lastView.trailingLayout.offset(self.spacing))
                     } else {
                         constraints.append(view.leadingLayout == self.leadingLayout)
                     }

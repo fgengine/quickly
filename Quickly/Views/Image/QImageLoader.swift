@@ -226,13 +226,13 @@ public class QImageLoader {
         }
 
         public func remove(target: IQImageLoaderTarget) {
-            if let index = self.targets.index(where: { return $0 === target }) {
+            if let index = self.targets.firstIndex(where: { return $0 === target }) {
                 self.targets.remove(at: index)
             }
         }
 
         public func contains(target: IQImageLoaderTarget) -> Bool {
-            let index = self.targets.index(where: { return $0 === target })
+            let index = self.targets.firstIndex(where: { return $0 === target })
             return index != nil
         }
 

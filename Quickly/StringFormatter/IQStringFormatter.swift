@@ -13,7 +13,7 @@ public protocol IQStringFormatter {
 
 public extension IQStringFormatter {
 
-    public func unformatDifferenceCaret(
+    func unformatDifferenceCaret(
         unformat: String,
         format: String,
         formatPrefix: Int,
@@ -55,7 +55,7 @@ public extension IQStringFormatter {
         return result
     }
 
-    public func formatDifferenceCaret(
+    func formatDifferenceCaret(
         unformat: String,
         format: String,
         formatPrefix: Int,

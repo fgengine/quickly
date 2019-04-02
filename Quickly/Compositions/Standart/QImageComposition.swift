@@ -45,10 +45,10 @@ open class QImageComposition< Composable: QImageComposable > : QComposition< Com
         if self._edgeInsets != composable.edgeInsets {
             self._edgeInsets = composable.edgeInsets
             self._constraints = [
-                self.imageView.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
-                self.imageView.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
-                self.imageView.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
-                self.imageView.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom
+                self.imageView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.imageView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.imageView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                self.imageView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
             ]
         }
     }

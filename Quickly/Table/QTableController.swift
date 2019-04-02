@@ -259,7 +259,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
     open func deleteSection(_ sections: [IQTableSection], with animation: UITableView.RowAnimation? = nil) {
         var indexSet = IndexSet()
         for section in sections {
-            if let index = self.sections.index(where: { return ($0 === section) }) {
+            if let index = self.sections.firstIndex(where: { return ($0 === section) }) {
                 indexSet.insert(index)
             }
         }
@@ -282,7 +282,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
     open func reloadSection(_ sections: [IQTableSection], with animation: UITableView.RowAnimation? = nil) {
         var indexSet = IndexSet()
         for section in sections {
-            if let index = self.sections.index(where: { return ($0 === section) }) {
+            if let index = self.sections.firstIndex(where: { return ($0 === section) }) {
                 indexSet.insert(index)
             }
         }

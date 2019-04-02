@@ -65,13 +65,13 @@ open class QTitleValueComposition< Composable: QTitleValueComposable > : QCompos
             self._edgeInsets = composable.edgeInsets
             self._titleSpacing = composable.titleSpacing
             self._constraints = [
-                self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
-                self.titleLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
-                self.titleLabel.trailingLayout == self.valueLabel.leadingLayout - composable.titleSpacing,
-                self.titleLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom,
-                self.valueLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
-                self.valueLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
-                self.valueLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom
+                self.titleLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.titleLabel.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.titleLabel.trailingLayout == self.valueLabel.leadingLayout.offset(-composable.titleSpacing),
+                self.titleLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+                self.valueLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.valueLabel.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                self.valueLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
             ]
         }
     }

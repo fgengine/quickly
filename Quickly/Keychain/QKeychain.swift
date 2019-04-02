@@ -67,7 +67,7 @@ public final class QKeychain {
         let query = self._process(query: [
             Constants.klass : kSecClassGenericPassword,
             Constants.attrAccount : key,
-            Constants.returnData : kCFBooleanTrue,
+            Constants.returnData : kCFBooleanTrue as Any,
             Constants.matchLimit : kSecMatchLimitOne
        ], forceSync: false)
         var result: AnyObject? = nil
@@ -126,8 +126,7 @@ public final class QKeychain {
 
     private func _processSet(_ value: Bool, key: String, access: QKeychainAccessOptions) -> Bool {
         let bytes: [UInt8] = (value == true) ? [1] : [0]
-        let data = Data(bytes: bytes)
-        return self._processSet(data, key: key, access: access)
+        return self._processSet(Data(bytes), key: key, access: access)
     }
 
     @discardableResult

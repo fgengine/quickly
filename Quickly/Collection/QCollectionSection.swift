@@ -100,7 +100,7 @@ open class QCollectionSection : IQCollectionSection {
     public func deleteItem(_ items: [IQCollectionItem]) {
         var indices: [Int] = []
         for item in items {
-            if let index = self.items.index(where: { return ($0 === item) }) {
+            if let index = self.items.firstIndex(where: { return ($0 === item) }) {
                 indices.append(index)
             }
         }

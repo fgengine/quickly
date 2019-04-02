@@ -224,7 +224,7 @@ public final class QJson {
                 let item = try Type.fromJson(value: jsonItem, path: subpath) as! Type
                 result.append(item)
             } else {
-                if let item = try? Type.fromJson(value: jsonItem, path: subpath) as! Type {
+                if let item = try? Type.fromJson(value: jsonItem, path: subpath) as? Type {
                     result.append(item)
                 }
             }
@@ -251,7 +251,7 @@ public final class QJson {
                 let value = try Value.fromJson(value: jsonItem.value, path: subpath) as! Value
                 result[key] = value
             } else {
-                if let value = try? Value.fromJson(value: jsonItem.value, path: subpath) as! Value {
+                if let value = try? Value.fromJson(value: jsonItem.value, path: subpath) as? Value {
                     result[key] = value
                 }
             }

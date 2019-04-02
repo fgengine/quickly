@@ -4,25 +4,25 @@
 
 public extension String {
 
-    public static func localized(_ key: String) -> String {
+    static func localized(_ key: String) -> String {
         return NSLocalizedString(key, comment: "")
     }
 
-    public static func localized(_ key: String, bundle: Bundle) -> String {
+    static func localized(_ key: String, bundle: Bundle) -> String {
         return NSLocalizedString(key, bundle: bundle, comment: "")
     }
 
-    public static func localized(_ key: String, args: [String: String]) -> String {
+    static func localized(_ key: String, args: [String: String]) -> String {
         let result = self.localized(key)
         return self.replace(result, keys: args)
     }
 
-    public static func localized(_ key: String, bundle: Bundle, args: [String: String]) -> String {
+    static func localized(_ key: String, bundle: Bundle, args: [String: String]) -> String {
         let result = self.localized(key, bundle: bundle)
         return self.replace(result, keys: args)
     }
 
-    public static func replace(_ string: String, keys: [String: String]) -> String {
+    static func replace(_ string: String, keys: [String: String]) -> String {
         var result = string
         keys.forEach { (key: String, value: String) in
             if let range = result.range(of: key) {
@@ -36,7 +36,7 @@ public extension String {
 
 public extension String {
 
-    public func remove(_ characterSet: CharacterSet) -> String {
+    func remove(_ characterSet: CharacterSet) -> String {
         return self.components(separatedBy: characterSet).joined()
     }
 
@@ -44,7 +44,7 @@ public extension String {
 
 public extension String {
 
-    public func applyMask(mask: String) -> String {
+    func applyMask(mask: String) -> String {
         var result = String()
         var maskIndex = mask.startIndex
         let maskEndIndex = mask.endIndex
@@ -84,56 +84,56 @@ public extension String {
 
 public extension String {
 
-    public var md2: String? {
+    var md2: String? {
         if let data = self.data(using: .utf8) {
             return data.md2.hexString
         }
         return nil
     }
 
-    public var md4: String? {
+    var md4: String? {
         if let data = self.data(using: .utf8) {
             return data.md4.hexString
         }
         return nil
     }
 
-    public var md5: String? {
+    var md5: String? {
         if let data = self.data(using: .utf8) {
             return data.md5.hexString
         }
         return nil
     }
 
-    public var sha1: String? {
+    var sha1: String? {
         if let data = self.data(using: .utf8) {
             return data.sha1.hexString
         }
         return nil
     }
 
-    public var sha224: String? {
+    var sha224: String? {
         if let data = self.data(using: .utf8) {
             return data.sha224.hexString
         }
         return nil
     }
 
-    public var sha256: String? {
+    var sha256: String? {
         if let data = self.data(using: .utf8) {
             return data.sha256.hexString
         }
         return nil
     }
 
-    public var sha384: String? {
+    var sha384: String? {
         if let data = self.data(using: .utf8) {
             return data.sha384.hexString
         }
         return nil
     }
     
-    public var sha512: String? {
+    var sha512: String? {
         if let data = self.data(using: .utf8) {
             return data.sha512.hexString
         }
@@ -144,7 +144,7 @@ public extension String {
 
 public extension String {
 
-    public func components(pairSeparatedBy: String, valueSeparatedBy: String) -> [String: Any] {
+    func components(pairSeparatedBy: String, valueSeparatedBy: String) -> [String: Any] {
         var components: [String: Any] = [:]
         for keyValuePair in self.components(separatedBy: pairSeparatedBy) {
             let pair = keyValuePair.components(separatedBy: valueSeparatedBy)
@@ -174,7 +174,7 @@ public extension String {
 
 public extension String {
 
-    public func range(from nsRange: NSRange) -> Range< String.Index >? {
+    func range(from nsRange: NSRange) -> Range< String.Index >? {
         guard
             let from16 = utf16.index(utf16.startIndex, offsetBy: nsRange.location, limitedBy: utf16.endIndex),
             let to16 = utf16.index(utf16.startIndex, offsetBy: nsRange.location + nsRange.length, limitedBy: utf16.endIndex),
@@ -186,7 +186,7 @@ public extension String {
         return from ..< to
     }
 
-    public func nsRange(from range: Range< String.Index >) -> NSRange {
+    func nsRange(from range: Range< String.Index >) -> NSRange {
         guard
             let from = range.lowerBound.samePosition(in: utf16),
             let to = range.upperBound.samePosition(in: utf16)

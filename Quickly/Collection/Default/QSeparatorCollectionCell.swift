@@ -54,6 +54,7 @@ open class QSeparatorCollectionCell< Item: QSeparatorCollectionItem > : QBackgro
                 width: spec.containerSize.width,
                 height: item.edgeInsets.top + separatorSize + item.edgeInsets.bottom
             )
+        @unknown default: return CGSize.zero
         }
     }
 
@@ -75,10 +76,10 @@ open class QSeparatorCollectionCell< Item: QSeparatorCollectionItem > : QBackgro
         if self._edgeInsets != item.edgeInsets {
             self._edgeInsets = item.edgeInsets
             self._constraints = [
-                self._separator.topLayout == self.contentView.topLayout + item.edgeInsets.top,
-                self._separator.leadingLayout == self.contentView.leadingLayout + item.edgeInsets.left,
-                self._separator.trailingLayout == self.contentView.trailingLayout - item.edgeInsets.right,
-                self._separator.bottomLayout == self.contentView.bottomLayout - item.edgeInsets.bottom
+                self._separator.topLayout == self.contentView.topLayout.offset(item.edgeInsets.top),
+                self._separator.leadingLayout == self.contentView.leadingLayout.offset(item.edgeInsets.left),
+                self._separator.trailingLayout == self.contentView.trailingLayout.offset(-item.edgeInsets.right),
+                self._separator.bottomLayout == self.contentView.bottomLayout.offset(-item.edgeInsets.bottom)
             ]
         }
         self._separator.backgroundColor = item.color

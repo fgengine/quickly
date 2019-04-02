@@ -372,47 +372,47 @@ public class QButton : QView {
         switch self.contentHorizontalAlignment {
         case .fill:
             constraints.append(contentsOf: [
-                self.contentView.leadingLayout == self.leadingLayout + self.contentInsets.left,
-                self.contentView.trailingLayout == self.trailingLayout - self.contentInsets.right
+                self.contentView.leadingLayout == self.leadingLayout.offset(self.contentInsets.left),
+                self.contentView.trailingLayout == self.trailingLayout.offset(-self.contentInsets.right)
             ])
         case .left:
             constraints.append(contentsOf: [
-                self.contentView.leadingLayout == self.leadingLayout + self.contentInsets.left,
-                self.contentView.trailingLayout <= self.trailingLayout - self.contentInsets.right
+                self.contentView.leadingLayout == self.leadingLayout.offset(self.contentInsets.left),
+                self.contentView.trailingLayout <= self.trailingLayout.offset(-self.contentInsets.right)
             ])
         case .center:
             constraints.append(contentsOf: [
                 self.contentView.centerXLayout == self.centerXLayout,
-                self.contentView.leadingLayout >= self.leadingLayout + self.contentInsets.left,
-                self.contentView.trailingLayout <= self.trailingLayout - self.contentInsets.right
+                self.contentView.leadingLayout >= self.leadingLayout.offset(self.contentInsets.left),
+                self.contentView.trailingLayout <= self.trailingLayout.offset(-self.contentInsets.right)
             ])
         case .right:
             constraints.append(contentsOf: [
-                self.contentView.leadingLayout >= self.leadingLayout + self.contentInsets.left,
-                self.contentView.trailingLayout == self.trailingLayout - self.contentInsets.right
+                self.contentView.leadingLayout >= self.leadingLayout.offset(self.contentInsets.left),
+                self.contentView.trailingLayout == self.trailingLayout.offset(-self.contentInsets.right)
             ])
         }
         switch self.contentVerticalAlignment {
         case .fill:
             constraints.append(contentsOf: [
-                self.contentView.topLayout == self.topLayout + self.contentInsets.top,
-                self.contentView.bottomLayout == self.bottomLayout - self.contentInsets.bottom
+                self.contentView.topLayout == self.topLayout.offset(self.contentInsets.top),
+                self.contentView.bottomLayout == self.bottomLayout.offset(-self.contentInsets.bottom)
             ])
         case .top:
             constraints.append(contentsOf: [
-                self.contentView.topLayout == self.topLayout + self.contentInsets.top,
-                self.contentView.bottomLayout <= self.bottomLayout - self.contentInsets.bottom
+                self.contentView.topLayout == self.topLayout.offset(self.contentInsets.top),
+                self.contentView.bottomLayout <= self.bottomLayout.offset(-self.contentInsets.bottom)
             ])
         case .center:
             constraints.append(contentsOf: [
                 self.contentView.centerYLayout == self.centerYLayout,
-                self.contentView.topLayout >= self.topLayout + self.contentInsets.top,
-                self.contentView.bottomLayout <= self.bottomLayout - self.contentInsets.bottom
+                self.contentView.topLayout >= self.topLayout.offset(self.contentInsets.top),
+                self.contentView.bottomLayout <= self.bottomLayout.offset(-self.contentInsets.bottom)
             ])
         case .bottom:
             constraints.append(contentsOf: [
-                self.contentView.topLayout >= self.topLayout + self.contentInsets.top,
-                self.contentView.bottomLayout == self.bottomLayout - self.contentInsets.bottom
+                self.contentView.topLayout >= self.topLayout.offset(self.contentInsets.top),
+                self.contentView.bottomLayout == self.bottomLayout.offset(-self.contentInsets.bottom)
             ])
         }
         self._constraints = constraints
@@ -757,10 +757,12 @@ extension QButton {
 
     private func _updateContent(constraints: inout [NSLayoutConstraint], view: UIView, edgeInsets: UIEdgeInsets) {
         constraints.append(contentsOf: [
-            view.topLayout == self.contentView.topLayout + edgeInsets.top,
-            view.leadingLayout == self.contentView.leadingLayout + edgeInsets.left,
-            view.trailingLayout == self.contentView.trailingLayout - edgeInsets.right,
-            view.bottomLayout == self.contentView.bottomLayout - edgeInsets.bottom,
+            view.topLayout == self.contentView.topLayout.offset(edgeInsets.top),
+            view.leadingLayout == self.contentView.leadingLayout.offset(edgeInsets.left),
+            view.trailingLayout == self.contentView.trailingLayout.offset(-edgeInsets.right),
+            view.bottomLayout == self.contentView.bottomLayout.offset(-edgeInsets.bottom)
+        ])
+        constraints.append(contentsOf: [
             view.centerXLayout == self.contentView.centerXLayout,
             view.centerYLayout == self.contentView.centerYLayout
         ])
@@ -774,32 +776,34 @@ extension QButton {
         bottomEdgeInsets: UIEdgeInsets
     ) {
         constraints.append(contentsOf: [
-            topView.leadingLayout == self.contentView.leadingLayout + topEdgeInsets.left,
-            topView.trailingLayout == self.contentView.trailingLayout - topEdgeInsets.right,
-            topView.centerXLayout == self.contentView.centerXLayout
+            topView.centerXLayout == self.contentView.centerXLayout,
+            bottomView.centerXLayout == self.contentView.centerXLayout
+        ])
+        constraints.append(contentsOf: [
+            bottomView.topLayout == topView.bottomLayout.offset(topEdgeInsets.bottom + bottomEdgeInsets.top)
+        ])
+        constraints.append(contentsOf: [
+            topView.leadingLayout == self.contentView.leadingLayout.offset(topEdgeInsets.left),
+            topView.trailingLayout == self.contentView.trailingLayout.offset(-topEdgeInsets.right),
+            bottomView.leadingLayout == self.contentView.leadingLayout.offset(bottomEdgeInsets.left),
+            bottomView.trailingLayout == self.contentView.trailingLayout.offset(-bottomEdgeInsets.right)
         ])
         if topView.alpha <= CGFloat.leastNonzeroMagnitude {
             constraints.append(contentsOf: [
-                bottomView.topLayout == self.contentView.topLayout + bottomEdgeInsets.top,
-                bottomView.bottomLayout == self.contentView.bottomLayout - bottomEdgeInsets.bottom
+                bottomView.topLayout == self.contentView.topLayout.offset(bottomEdgeInsets.top),
+                bottomView.bottomLayout == self.contentView.bottomLayout.offset(-bottomEdgeInsets.bottom)
             ])
         } else if bottomView.alpha <= CGFloat.leastNonzeroMagnitude {
             constraints.append(contentsOf: [
-                topView.topLayout == self.contentView.topLayout + topEdgeInsets.top,
-                topView.bottomLayout == self.contentView.bottomLayout - topEdgeInsets.bottom
+                topView.topLayout == self.contentView.topLayout.offset(topEdgeInsets.top),
+                topView.bottomLayout == self.contentView.bottomLayout.offset(-topEdgeInsets.bottom)
             ])
         } else {
             constraints.append(contentsOf: [
-                topView.topLayout == self.contentView.topLayout + topEdgeInsets.top,
-                bottomView.bottomLayout == self.contentView.bottomLayout - bottomEdgeInsets.bottom
+                topView.topLayout == self.contentView.topLayout.offset(topEdgeInsets.top),
+                bottomView.bottomLayout == self.contentView.bottomLayout.offset(-bottomEdgeInsets.bottom)
             ])
         }
-        constraints.append(contentsOf: [
-            bottomView.topLayout == topView.bottomLayout + (topEdgeInsets.bottom + bottomEdgeInsets.top),
-            bottomView.leadingLayout == self.contentView.leadingLayout + bottomEdgeInsets.left,
-            bottomView.trailingLayout == self.contentView.trailingLayout - bottomEdgeInsets.right,
-            bottomView.centerXLayout == self.contentView.centerXLayout
-        ])
     }
 
     private func _updateContent(
@@ -810,30 +814,30 @@ extension QButton {
         rightEdgeInsets: UIEdgeInsets
     ) {
         constraints.append(contentsOf: [
-            leftView.topLayout == self.contentView.topLayout + leftEdgeInsets.top,
-            leftView.trailingLayout == rightView.leadingLayout - (leftEdgeInsets.right + rightEdgeInsets.left),
-            leftView.bottomLayout == self.contentView.bottomLayout - leftEdgeInsets.bottom,
-            leftView.centerYLayout == self.contentView.centerYLayout
+            leftView.centerYLayout == self.contentView.centerYLayout,
+            rightView.centerYLayout == self.contentView.centerYLayout
         ])
         constraints.append(contentsOf: [
-            rightView.topLayout == self.contentView.topLayout + rightEdgeInsets.top,
-            rightView.bottomLayout == self.contentView.bottomLayout - rightEdgeInsets.bottom,
-            rightView.centerYLayout == self.contentView.centerYLayout
+            leftView.topLayout == self.contentView.topLayout.offset(leftEdgeInsets.top),
+            leftView.trailingLayout == rightView.leadingLayout.offset(-(leftEdgeInsets.right + rightEdgeInsets.left)),
+            leftView.bottomLayout == self.contentView.bottomLayout.offset(-leftEdgeInsets.bottom),
+            rightView.topLayout == self.contentView.topLayout.offset(rightEdgeInsets.top),
+            rightView.bottomLayout == self.contentView.bottomLayout.offset(-rightEdgeInsets.bottom)
         ])
         if leftView.alpha <= CGFloat.leastNonzeroMagnitude {
             constraints.append(contentsOf: [
-                rightView.leadingLayout == self.contentView.leadingLayout + rightEdgeInsets.left,
-                rightView.trailingLayout == self.contentView.trailingLayout - rightEdgeInsets.right
+                rightView.leadingLayout == self.contentView.leadingLayout.offset(rightEdgeInsets.left),
+                rightView.trailingLayout == self.contentView.trailingLayout.offset(-rightEdgeInsets.right)
             ])
         } else if rightView.alpha <= CGFloat.leastNonzeroMagnitude {
             constraints.append(contentsOf: [
-                leftView.leadingLayout == self.contentView.leadingLayout + leftEdgeInsets.left,
-                leftView.trailingLayout == self.contentView.trailingLayout - leftEdgeInsets.right
+                leftView.leadingLayout == self.contentView.leadingLayout.offset(leftEdgeInsets.left),
+                leftView.trailingLayout == self.contentView.trailingLayout.offset(-leftEdgeInsets.right)
             ])
         } else {
             constraints.append(contentsOf: [
-                leftView.leadingLayout == self.contentView.leadingLayout + leftEdgeInsets.left,
-                rightView.trailingLayout == self.contentView.trailingLayout - rightEdgeInsets.right
+                leftView.leadingLayout == self.contentView.leadingLayout.offset(leftEdgeInsets.left),
+                rightView.trailingLayout == self.contentView.trailingLayout.offset(-rightEdgeInsets.right)
             ])
         }
     }

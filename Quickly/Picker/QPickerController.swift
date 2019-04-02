@@ -92,7 +92,7 @@ open class QPickerController : NSObject, IQPickerController {
     public func deleteSection(_ sections: [IQPickerSection]) {
         var indexSet = IndexSet()
         for section in self.sections {
-            if let index = self.sections.index(where: { return ($0 === section) }) {
+            if let index = self.sections.firstIndex(where: { return ($0 === section) }) {
                 indexSet.insert(index)
             }
         }

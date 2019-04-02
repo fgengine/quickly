@@ -67,21 +67,21 @@ open class QPlaceholderView : QView {
                 self.bubbleView.topLayout == self.topLayout,
                 self.bubbleView.bottomLayout == self.bottomLayout,
                 self.bubbleView.leadingLayout == self.leadingLayout,
-                self.bubbleView.widthLayout == (self.widthLayout * width)
+                self.bubbleView.widthLayout == self.widthLayout.multiplier(width)
             ]
         case .center(let width):
             self._constraints = [
                 self.bubbleView.topLayout == self.topLayout,
                 self.bubbleView.bottomLayout == self.bottomLayout,
                 self.bubbleView.centerXLayout == self.centerXLayout,
-                self.bubbleView.widthLayout == (self.widthLayout * width)
+                self.bubbleView.widthLayout == self.widthLayout.multiplier(width)
             ]
         case .right(let width):
             self._constraints = [
                 self.bubbleView.topLayout == self.topLayout,
                 self.bubbleView.bottomLayout == self.bottomLayout,
                 self.bubbleView.trailingLayout == self.trailingLayout,
-                self.bubbleView.widthLayout == (self.widthLayout * width)
+                self.bubbleView.widthLayout == self.widthLayout.multiplier(width)
             ]
         }
     }

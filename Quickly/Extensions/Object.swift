@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public func inheritanceLevel(_ selfClass: AnyClass, _ targetClass: AnyClass) -> UInt? {
+public func QInheritanceLevel(_ selfClass: AnyClass, _ targetClass: AnyClass) -> UInt? {
     var currentClass: AnyClass = selfClass
     var level: UInt = 0
     while currentClass !== targetClass {

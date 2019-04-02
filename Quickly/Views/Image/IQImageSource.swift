@@ -49,7 +49,7 @@ public protocol IQImageSource : class {
 
 public extension IQImageSource {
 
-    public func rect(_ bounds: CGRect, image: UIImage? = nil) -> CGRect {
+    func rect(_ bounds: CGRect, image: UIImage? = nil) -> CGRect {
         var size: CGSize
         if let image = image {
             size = image.size
@@ -62,7 +62,7 @@ public extension IQImageSource {
         return scaleRect
     }
 
-    public func size(_ available: CGSize, image: UIImage? = nil) -> CGSize {
+    func size(_ available: CGSize, image: UIImage? = nil) -> CGSize {
         var size: CGSize
         if let image = image {
             size = image.size

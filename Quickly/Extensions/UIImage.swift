@@ -4,7 +4,7 @@
 
 public extension UIImage {
 
-    public func tintImage(_ color: UIColor) -> UIImage? {
+    func tintImage(_ color: UIColor) -> UIImage? {
         return modify { (context: CGContext, rect: CGRect) in
             if let cgImage = self.cgImage {
                 context.setBlendMode(.normal)
@@ -16,7 +16,7 @@ public extension UIImage {
         }
     }
     
-    public func unrotate() -> UIImage? {
+    func unrotate() -> UIImage? {
         guard self.imageOrientation != .up else {
             return self
         }
@@ -64,7 +64,7 @@ public extension UIImage {
         return nil
     }
     
-    public func scaleTo(size: CGSize) -> UIImage? {
+    func scaleTo(size: CGSize) -> UIImage? {
         guard let cgImage = self.cgImage, let colorSpace = cgImage.colorSpace else {
             return nil
         }
@@ -82,7 +82,7 @@ public extension UIImage {
         return nil
     }
 
-    public func modify(_ draw: (CGContext, CGRect) -> ()) -> UIImage? {
+    func modify(_ draw: (CGContext, CGRect) -> ()) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(size, false, scale)
         if let context = UIGraphicsGetCurrentContext() {
             context.translateBy(x: 0, y: size.height)

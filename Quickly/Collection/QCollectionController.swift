@@ -104,7 +104,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
     }
 
     open func index(section: IQCollectionSection) -> Int? {
-        return self.sections.index { (existSection: IQCollectionSection) -> Bool in
+        return self.sections.firstIndex { (existSection: IQCollectionSection) -> Bool in
             return existSection === section
         }
     }
@@ -114,7 +114,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
     }
 
     open func index(header: IQCollectionData) -> Int? {
-        return self.sections.index(where: { (existSection: IQCollectionSection) -> Bool in
+        return self.sections.firstIndex(where: { (existSection: IQCollectionSection) -> Bool in
             return existSection.header === header
         })
     }
@@ -124,7 +124,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
     }
 
     open func index(footer: IQCollectionData) -> Int? {
-        return self.sections.index(where: { (existSection: IQCollectionSection) -> Bool in
+        return self.sections.firstIndex(where: { (existSection: IQCollectionSection) -> Bool in
             return existSection.footer === footer
         })
     }
@@ -219,7 +219,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
     open func deleteSection(_ sections: [IQCollectionSection]) {
         var indexSet = IndexSet()
         for section in sections {
-            if let index = self.sections.index(where: { return ($0 === section) }) {
+            if let index = self.sections.firstIndex(where: { return ($0 === section) }) {
                 indexSet.insert(index)
             }
         }
@@ -239,7 +239,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
     open func reloadSection(_ sections: [IQCollectionSection]) {
         var indexSet = IndexSet()
         for section in sections {
-            if let index = self.sections.index(where: { return ($0 === section) }) {
+            if let index = self.sections.firstIndex(where: { return ($0 === section) }) {
                 indexSet.insert(index)
             }
         }

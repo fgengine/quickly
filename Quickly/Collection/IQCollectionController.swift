@@ -75,31 +75,31 @@ public protocol IQCollectionController : UICollectionViewDataSource, UICollectio
 
 public extension IQCollectionController {
 
-    public func prependSection(_ section: IQCollectionSection) {
+    func prependSection(_ section: IQCollectionSection) {
         self.insertSection([ section ], index: self.sections.startIndex)
     }
 
-    public func prependSection(_ sections: [IQCollectionSection]) {
+    func prependSection(_ sections: [IQCollectionSection]) {
         self.insertSection(sections, index: self.sections.startIndex)
     }
 
-    public func appendSection(_ section: IQCollectionSection) {
+    func appendSection(_ section: IQCollectionSection) {
         self.insertSection([ section ], index: self.sections.endIndex)
     }
 
-    public func appendSection(_ sections: [IQCollectionSection]) {
+    func appendSection(_ sections: [IQCollectionSection]) {
         self.insertSection(sections, index: self.sections.endIndex)
     }
 
-    public func insertSection(_ section: IQCollectionSection, index: Int) {
+    func insertSection(_ section: IQCollectionSection, index: Int) {
         self.insertSection([ section ], index: index)
     }
 
-    public func deleteSection(_ section: IQCollectionSection) {
+    func deleteSection(_ section: IQCollectionSection) {
         self.deleteSection([ section ])
     }
 
-    public func reloadSection(_ section: IQCollectionSection) {
+    func reloadSection(_ section: IQCollectionSection) {
         self.reloadSection([ section ])
     }
 

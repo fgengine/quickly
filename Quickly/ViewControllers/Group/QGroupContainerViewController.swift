@@ -288,7 +288,7 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
 
     open func updateGroupItem(_ viewController: IQGroupViewController, animated: Bool) {
         guard let groupbar = self._groupbar else { return }
-        guard let index = self._viewControllers.index(where: { $0 === viewController }) else { return }
+        guard let index = self._viewControllers.firstIndex(where: { $0 === viewController }) else { return }
         guard let groupbarItem = viewController.groupbarItem else { return }
         groupbar.replaceItem(groupbarItem, index: index)
     }
@@ -415,7 +415,7 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
 extension QGroupContainerViewController : QGroupbarDelegate {
 
     public func groupbar(_ groupbar: QGroupbar, didSelectItem: QGroupbarItem) {
-        guard let index = self._viewControllers.index(where: { return $0.groupbarItem === didSelectItem }) else { return }
+        guard let index = self._viewControllers.firstIndex(where: { return $0.groupbarItem === didSelectItem }) else { return }
         let viewController = self._viewControllers[index]
         self._updateViewControllers(viewController, animated: true)
     }

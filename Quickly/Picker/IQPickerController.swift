@@ -48,27 +48,27 @@ public protocol IQPickerController : UIPickerViewDataSource, UIPickerViewDelegat
 
 public extension IQPickerController {
 
-    public func prependSection(_ section: IQPickerSection) {
+    func prependSection(_ section: IQPickerSection) {
         self.insertSection([ section ], index: self.sections.startIndex)
     }
 
-    public func prependSection(_ sections: [IQPickerSection]) {
+    func prependSection(_ sections: [IQPickerSection]) {
         self.insertSection(sections, index: self.sections.startIndex)
     }
 
-    public func appendSection(_ section: IQPickerSection) {
+    func appendSection(_ section: IQPickerSection) {
         self.insertSection([ section ], index: self.sections.endIndex)
     }
 
-    public func appendSection(_ sections: [IQPickerSection]) {
+    func appendSection(_ sections: [IQPickerSection]) {
         self.insertSection(sections, index: self.sections.endIndex)
     }
 
-    public func insertSection(_ section: IQPickerSection, index: Int) {
+    func insertSection(_ section: IQPickerSection, index: Int) {
         self.insertSection([ section ], index: index)
     }
 
-    public func deleteSection(_ section: IQPickerSection) {
+    func deleteSection(_ section: IQPickerSection) {
         self.deleteSection([ section ])
     }
 

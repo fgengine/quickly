@@ -247,7 +247,7 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
         if self.previousViewController === viewController {
             self._dismiss(self.currentViewController!, animated: animated, completion: completion)
         } else if self._viewControllers.count > 2 {
-            if let index = self._viewControllers.index(where: { return $0 === viewController }) {
+            if let index = self._viewControllers.firstIndex(where: { return $0 === viewController }) {
                 let startIndex = self._viewControllers.index(index, offsetBy: 1)
                 let endIndex = self._viewControllers.index(self._viewControllers.endIndex, offsetBy: -1)
                 if endIndex - startIndex > 0 {
@@ -299,7 +299,7 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     }
 
     private func _dismiss(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Void)?) {
-        if let index = self._viewControllers.index(where: { return $0 === viewController }) {
+        if let index = self._viewControllers.firstIndex(where: { return $0 === viewController }) {
             let currentViewController = self.currentViewController
             let previousViewController = self.previousViewController
             self._viewControllers.remove(at: index)
@@ -442,7 +442,7 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
 
     private func _finishInteractiveDismiss() {
         if let vc = self._activeInteractiveCurrentViewController {
-            if let index = self._viewControllers.index(where: { return $0 === vc }) {
+            if let index = self._viewControllers.firstIndex(where: { return $0 === vc }) {
                 self._viewControllers.remove(at: index)
             }
             self._disappearViewController(vc)

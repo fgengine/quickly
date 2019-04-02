@@ -173,13 +173,15 @@ open class QPushViewController : QViewController, IQPushViewController {
         )
         switch self.pushState {
         case .hide:
-            self._contentLayoutConstraints.append(self.view.topLayout == self.pushContentViewController.view.bottomLayout + self.pushOffset)
+            self._contentLayoutConstraints.append(self.view.topLayout == self.pushContentViewController.view.bottomLayout.offset(self.pushOffset))
         case .show:
-            self._contentLayoutConstraints.append(self.view.topLayout == self.pushContentViewController.view.topLayout - (edgeInsets.top + self.pushOffset))
+            self._contentLayoutConstraints.append(self.view.topLayout == self.pushContentViewController.view.topLayout.offset(-(edgeInsets.top + self.pushOffset)))
         }
-        self._contentLayoutConstraints.append(self.view.leadingLayout == self.pushContentViewController.view.leadingLayout - edgeInsets.left)
-        self._contentLayoutConstraints.append(self.view.trailingLayout == self.pushContentViewController.view.trailingLayout + edgeInsets.right)
-        self._contentLayoutConstraints.append(self.view.bottomLayout <= self.pushContentViewController.view.bottomLayout - edgeInsets.bottom ~ .defaultLow)
+        self._contentLayoutConstraints.append(contentsOf: [
+            self.view.leadingLayout == self.pushContentViewController.view.leadingLayout.offset(-edgeInsets.left),
+            self.view.trailingLayout == self.pushContentViewController.view.trailingLayout.offset(edgeInsets.right),
+            self.view.bottomLayout <= self.pushContentViewController.view.bottomLayout.offset(-edgeInsets.bottom) ~ .defaultLow
+        ])
         if self._contentLayoutConstraints.count > 0 {
             self.view.addConstraints(self._contentLayoutConstraints)
         }

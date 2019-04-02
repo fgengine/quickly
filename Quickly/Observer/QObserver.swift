@@ -113,11 +113,11 @@ public final class QObserver< T > {
     
     private func _index(_ observer: T) -> Int? {
         let pointer = Unmanaged.passUnretained(observer as AnyObject).toOpaque()
-        return self._items.index(where: { return $0.pointer == pointer })
+        return self._items.firstIndex(where: { return $0.pointer == pointer })
     }
     
     private func _index(_ item: Item) -> Int? {
-        return self._items.index(where: { return $0.pointer == item.pointer })
+        return self._items.firstIndex(where: { return $0.pointer == item.pointer })
     }
     
     private func _postNotify() {

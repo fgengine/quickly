@@ -62,7 +62,7 @@ open class QPickerSection : IQPickerSection {
     public func deleteRow(_ rows: [IQPickerRow]) {
         var indices: [Int] = []
         for row in rows {
-            if let index = self.rows.index(where: { return ($0 === row) }) {
+            if let index = self.rows.firstIndex(where: { return ($0 === row) }) {
                 indices.append(index)
             }
         }

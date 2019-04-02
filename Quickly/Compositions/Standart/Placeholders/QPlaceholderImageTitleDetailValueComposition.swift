@@ -122,19 +122,19 @@ open class QPlaceholderImageTitleDetailValueComposition< Composable: QPlaceholde
             self._titleSpacing = composable.titleSpacing
             self._valueSpacing = composable.valueSpacing
             self._constraints = [
-                self.imageView.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
-                self.imageView.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
-                self.imageView.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom,
-                self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
-                self.titleLabel.leadingLayout == self.imageView.trailingLayout + composable.imageSpacing,
-                self.titleLabel.trailingLayout == self.valueLabel.leadingLayout - composable.valueSpacing,
-                self.titleLabel.bottomLayout <= self.detailLabel.topLayout - composable.titleSpacing,
-                self.detailLabel.leadingLayout == self.imageView.trailingLayout + composable.imageSpacing,
-                self.detailLabel.trailingLayout == self.valueLabel.leadingLayout - composable.valueSpacing,
-                self.detailLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom,
-                self.valueLabel.topLayout >= self.contentView.topLayout + composable.edgeInsets.top,
-                self.valueLabel.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
-                self.valueLabel.bottomLayout <= self.contentView.bottomLayout - composable.edgeInsets.bottom,
+                self.imageView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.imageView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.imageView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+                self.titleLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.titleLabel.leadingLayout == self.imageView.trailingLayout.offset(composable.imageSpacing),
+                self.titleLabel.trailingLayout == self.valueLabel.leadingLayout.offset(-composable.valueSpacing),
+                self.titleLabel.bottomLayout <= self.detailLabel.topLayout.offset(-composable.titleSpacing),
+                self.detailLabel.leadingLayout == self.imageView.trailingLayout.offset(composable.imageSpacing),
+                self.detailLabel.trailingLayout == self.valueLabel.leadingLayout.offset(-composable.valueSpacing),
+                self.detailLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+                self.valueLabel.topLayout >= self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.valueLabel.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                self.valueLabel.bottomLayout <= self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
                 self.valueLabel.centerYLayout == self.contentView.centerYLayout
             ]
         }

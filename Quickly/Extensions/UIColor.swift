@@ -4,7 +4,7 @@
 
 public extension UIColor {
     
-    public var isOpaque: Bool {
+    var isOpaque: Bool {
         get {
             var r: CGFloat = 0
             var g: CGFloat = 0
@@ -18,7 +18,7 @@ public extension UIColor {
         }
     }
 
-    public convenience init(hex: UInt32) {
+    convenience init(hex: UInt32) {
         self.init(
             red: CGFloat((hex >> 24) & 0xff) / 255.0,
             green: CGFloat((hex >> 16) & 0xff) / 255.0,
@@ -27,7 +27,7 @@ public extension UIColor {
         )
     }
 
-    public convenience init(hex: UInt32, alpha: CGFloat) {
+    convenience init(hex: UInt32, alpha: CGFloat) {
         self.init(
             red: CGFloat((hex >> 16) & 0xff) / 255.0,
             green: CGFloat((hex >> 8) & 0xff) / 255.0,
@@ -36,7 +36,7 @@ public extension UIColor {
         )
     }
 
-    public convenience init?(hexString: String) {
+    convenience init?(hexString: String) {
         let characterSet = CharacterSet.alphanumerics.inverted
         let trimmingHexString = hexString.trimmingCharacters(in: characterSet)
         let scaner = Scanner.init(string: trimmingHexString)
@@ -67,7 +67,7 @@ public extension UIColor {
         }
     }
 
-    public func hexString() -> String {
+    func hexString() -> String {
         var r: CGFloat = 0
         var g: CGFloat = 0
         var b: CGFloat = 0
@@ -76,18 +76,18 @@ public extension UIColor {
         return String.init(format: "#%02X%02X%02X%02X", Int(255 * r), Int(255 * g), Int(255 * b), Int(255 * a))
     }
 
-    public static func random() -> UIColor {
+    static func random() -> UIColor {
         return self.random(alpha: 1.0)
     }
 
-    public static func random(alpha: CGFloat) -> UIColor {
+    static func random(alpha: CGFloat) -> UIColor {
         let r = CGFloat(drand48())
         let g = CGFloat(drand48())
         let b = CGFloat(drand48())
         return UIColor(red: r, green: g, blue: b, alpha: alpha)
     }
 
-    public func lerp(_ to: UIColor, progress: CGFloat) -> UIColor {
+    func lerp(_ to: UIColor, progress: CGFloat) -> UIColor {
         var selfR: CGFloat = 0, toR: CGFloat = 0
         var selfG: CGFloat = 0, toG: CGFloat = 0
         var selfB: CGFloat = 0, toB: CGFloat = 0

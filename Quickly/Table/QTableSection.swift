@@ -90,7 +90,7 @@ open class QTableSection : IQTableSection {
     public func deleteRow(_ rows: [IQTableRow], with animation: UITableView.RowAnimation? = nil) {
         var indices: [Int] = []
         for row in rows {
-            if let index = self.rows.index(where: { return ($0 === row) }) {
+            if let index = self.rows.firstIndex(where: { return ($0 === row) }) {
                 indices.append(index)
             }
         }

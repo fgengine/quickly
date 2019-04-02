@@ -45,10 +45,10 @@ open class QSeparatorTableCell< RowType: QSeparatorTableRow > : QBackgroundColor
         if self._edgeInsets != row.edgeInsets {
             self._edgeInsets = row.edgeInsets
             self._constraints = [
-                self._separator.topLayout == self.contentView.topLayout + row.edgeInsets.top,
-                self._separator.leadingLayout == self.contentView.leadingLayout + row.edgeInsets.left,
-                self._separator.trailingLayout == self.contentView.trailingLayout - row.edgeInsets.right,
-                self._separator.bottomLayout == self.contentView.bottomLayout - row.edgeInsets.bottom
+                self._separator.topLayout == self.contentView.topLayout.offset(row.edgeInsets.top),
+                self._separator.leadingLayout == self.contentView.leadingLayout.offset(row.edgeInsets.left),
+                self._separator.trailingLayout == self.contentView.trailingLayout.offset(-row.edgeInsets.right),
+                self._separator.bottomLayout == self.contentView.bottomLayout.offset(-row.edgeInsets.bottom)
             ]
         }
         self._separator.backgroundColor = row.color

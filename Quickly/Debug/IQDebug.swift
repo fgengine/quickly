@@ -14,7 +14,7 @@ public protocol IQDebug {
 
 public extension IQDebug {
 
-    public func debugString() -> String {
+    func debugString() -> String {
         return self.debugString(0, 1, 0)
     }
     
@@ -24,7 +24,7 @@ public extension IQDebug {
         return buffer
     }
 
-    public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+    func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         if headerIndent > 0 {
             buffer.append(String(repeating: "\t", count: headerIndent))
         }

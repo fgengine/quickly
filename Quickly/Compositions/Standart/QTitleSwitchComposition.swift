@@ -82,13 +82,13 @@ open class QTitleSwitchComposition< Composable: QTitleSwitchComposable > : QComp
             self._edgeInsets = composable.edgeInsets
             self._switchSpacing = composable.switchSpacing
             self._constraints = [
-                self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
-                self.titleLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
-                self.titleLabel.trailingLayout == self.switch.leadingLayout - composable.switchSpacing,
-                self.titleLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom,
-                self.switch.topLayout >= self.contentView.topLayout + composable.edgeInsets.top,
-                self.switch.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
-                self.switch.bottomLayout <= self.contentView.bottomLayout - composable.edgeInsets.bottom,
+                self.titleLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.titleLabel.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.titleLabel.trailingLayout == self.switch.leadingLayout.offset(-composable.switchSpacing),
+                self.titleLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+                self.switch.topLayout >= self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.switch.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                self.switch.bottomLayout <= self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
                 self.switch.centerYLayout == self.contentView.centerYLayout
             ]
         }

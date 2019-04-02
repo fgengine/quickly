@@ -59,7 +59,7 @@ extension IQTypedCollectionCell {
     }
 
     public static func usingLevel(any: AnyClass) -> UInt? {
-        return inheritanceLevel(any, Item.self)
+        return QInheritanceLevel(any, Item.self)
     }
 
     public static func size(any: Any, layout: UICollectionViewLayout, section: IQCollectionSection, spec: IQContainerSpec) -> CGSize {

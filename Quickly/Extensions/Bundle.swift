@@ -4,12 +4,12 @@
 
 public extension Bundle {
     
-    public var isTestFlight: Bool {
+    var isTestFlight: Bool {
         get {
             return self.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
         }
     }
-    public var version: String? {
+    var version: String? {
         get {
             return self.object(forInfoDictionaryKey: "CFBundleVersion") as? String
         }

@@ -39,36 +39,36 @@ public protocol IQTableSection : class {
 
 public extension IQTableSection {
 
-    public func prependRow(_ row: IQTableRow, with animation: UITableView.RowAnimation? = nil) {
+    func prependRow(_ row: IQTableRow, with animation: UITableView.RowAnimation? = nil) {
         self.insertRow([ row ], index: self.rows.startIndex, with: animation)
     }
 
-    public func prependRow(_ rows: [IQTableRow], with animation: UITableView.RowAnimation? = nil) {
+    func prependRow(_ rows: [IQTableRow], with animation: UITableView.RowAnimation? = nil) {
         self.insertRow(rows, index: self.rows.startIndex, with: animation)
     }
 
-    public func appendRow(_ row: IQTableRow, with animation: UITableView.RowAnimation? = nil) {
+    func appendRow(_ row: IQTableRow, with animation: UITableView.RowAnimation? = nil) {
         self.insertRow([ row ], index: self.rows.endIndex, with: animation)
     }
 
-    public func appendRow(_ rows: [IQTableRow], with animation: UITableView.RowAnimation? = nil) {
+    func appendRow(_ rows: [IQTableRow], with animation: UITableView.RowAnimation? = nil) {
         self.insertRow(rows, index: self.rows.endIndex, with: animation)
     }
 
-    public func insertRow(_ row: IQTableRow, index: Int, with animation: UITableView.RowAnimation? = nil) {
+    func insertRow(_ row: IQTableRow, index: Int, with animation: UITableView.RowAnimation? = nil) {
         self.insertRow([ row ], index: index, with: animation)
     }
 
-    public func deleteRow(_ row: IQTableRow, with animation: UITableView.RowAnimation? = nil) {
+    func deleteRow(_ row: IQTableRow, with animation: UITableView.RowAnimation? = nil) {
         self.deleteRow([ row ], with: animation)
     }
 
-    public func reloadRow(_ row: IQTableRow, with animation: UITableView.RowAnimation? = nil) {
+    func reloadRow(_ row: IQTableRow, with animation: UITableView.RowAnimation? = nil) {
         self.reloadRow([ row ], with: animation)
     }
 
-    public func moveRow(_ fromRow: IQTableRow, toIndex: Int) -> Bool {
-        guard let fromIndex = self.rows.index(where: { return ($0 === fromRow) }) else { return false }
+    func moveRow(_ fromRow: IQTableRow, toIndex: Int) -> Bool {
+        guard let fromIndex = self.rows.firstIndex(where: { return ($0 === fromRow) }) else { return false }
         self.moveRow(fromIndex, toIndex: toIndex)
         return true
     }

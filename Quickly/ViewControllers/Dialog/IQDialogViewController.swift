@@ -111,11 +111,11 @@ public protocol IQDialogViewController : IQViewController {
 
 public extension IQDialogViewController {
 
-    public var dialogContainerViewController: IQDialogContainerViewController? {
+    var dialogContainerViewController: IQDialogContainerViewController? {
         get { return self.parent as? IQDialogContainerViewController }
     }
 
-    public func dismissDialog(animated: Bool, completion: (() -> Swift.Void)?) {
+    func dismissDialog(animated: Bool, completion: (() -> Swift.Void)?) {
         guard let vc = self.dialogContainerViewController else { return }
         vc.dismissDialog(viewController: self, animated: animated, completion: completion)
     }
@@ -134,7 +134,7 @@ public protocol IQDialogContentViewController : IQViewController {
 
 public extension IQDialogContentViewController {
 
-    public var dialogViewController: IQDialogViewController? {
+    var dialogViewController: IQDialogViewController? {
         get { return self.parentOf() }
     }
 

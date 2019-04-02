@@ -60,11 +60,11 @@ public protocol IQPushViewController : IQViewController {
 
 public extension IQPushViewController {
 
-    public var pushContainerViewController: IQPushContainerViewController? {
+    var pushContainerViewController: IQPushContainerViewController? {
         get { return self.parent as? IQPushContainerViewController }
     }
 
-    public func dismissPush(animated: Bool, completion: (() -> Swift.Void)?) {
+    func dismissPush(animated: Bool, completion: (() -> Swift.Void)?) {
         guard let vc = self.pushContainerViewController else { return }
         vc.dismissPush(viewController: self, animated: animated, completion: completion)
     }
@@ -84,7 +84,7 @@ public protocol IQPushContentViewController : IQViewController {
 
 public extension IQPushContentViewController {
 
-    public var pushViewController: IQPushViewController? {
+    var pushViewController: IQPushViewController? {
         get { return self.parentOf() }
     }
 

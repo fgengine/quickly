@@ -186,6 +186,10 @@ open class QImageView : QDisplayView {
                     }
                 }
                 break
+            @unknown default:
+                if let cgImage = image.cgImage {
+                    context.draw(cgImage, in: imageRect)
+                }
             }
         }
     }

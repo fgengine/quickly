@@ -29,27 +29,27 @@ public protocol IQPickerSection : class {
 
 public extension IQPickerSection {
 
-    public func prependRow(_ row: IQPickerRow) {
+    func prependRow(_ row: IQPickerRow) {
         self.insertRow([ row ], index: self.rows.startIndex)
     }
 
-    public func prependRow(_ rows: [IQPickerRow]) {
+    func prependRow(_ rows: [IQPickerRow]) {
         self.insertRow(rows, index: self.rows.startIndex)
     }
 
-    public func appendRow(_ row: IQPickerRow) {
+    func appendRow(_ row: IQPickerRow) {
         self.insertRow([ row ], index: self.rows.endIndex)
     }
 
-    public func appendRow(_ rows: [IQPickerRow]) {
+    func appendRow(_ rows: [IQPickerRow]) {
         self.insertRow(rows, index: self.rows.endIndex)
     }
 
-    public func insertRow(_ row: IQPickerRow, index: Int) {
+    func insertRow(_ row: IQPickerRow, index: Int) {
         self.insertRow([ row ], index: index)
     }
 
-    public func deleteRow(_ row: IQPickerRow) {
+    func deleteRow(_ row: IQPickerRow) {
         self.deleteRow([ row ])
     }
 

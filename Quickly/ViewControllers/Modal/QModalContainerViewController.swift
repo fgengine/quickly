@@ -205,7 +205,7 @@ open class QModalContainerViewController : QViewController, IQModalContainerView
 
     private func _dismiss(_ viewController: IQModalViewController, animated: Bool, completion: (() -> Void)?) {
         let currentViewController = self.currentViewController
-        if let index = self.viewControllers.index(where: { return $0 === viewController }) {
+        if let index = self.viewControllers.firstIndex(where: { return $0 === viewController }) {
             var targetViewController: IQModalViewController?
             if index > self.viewControllers.startIndex {
                 targetViewController = self.viewControllers[index - 1]
@@ -352,7 +352,7 @@ open class QModalContainerViewController : QViewController, IQModalContainerView
             return
         }
         self._disappearViewController(currentViewController)
-        if let index = self.viewControllers.index(where: { return $0 === currentViewController }) {
+        if let index = self.viewControllers.firstIndex(where: { return $0 === currentViewController }) {
             self.viewControllers.remove(at: index)
             self.setNeedUpdateStatusBar()
         }

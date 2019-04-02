@@ -183,12 +183,15 @@ open class QDialogViewController : QViewController, IQDialogViewController {
         case .fill(let before, let after):
             switch self.dialogHorizontalAlignment {
             case .center(let offset):
-                self._contentLayoutConstraints.append(self.dialogContentViewController.view.leadingLayout == self.view.leadingLayout + (before + offset))
-                self._contentLayoutConstraints.append(self.view.trailingLayout == self.dialogContentViewController.view.trailingLayout + (after - offset))
-                break
+                self._contentLayoutConstraints.append(contentsOf: [
+                    self.dialogContentViewController.view.leadingLayout == self.view.leadingLayout.offset(before + offset),
+                    self.view.trailingLayout == self.dialogContentViewController.view.trailingLayout.offset(after - offset)
+                ])
             default:
-                self._contentLayoutConstraints.append(self.dialogContentViewController.view.leadingLayout == self.view.leadingLayout + before)
-                self._contentLayoutConstraints.append(self.view.trailingLayout == self.dialogContentViewController.view.trailingLayout + after)
+                self._contentLayoutConstraints.append(contentsOf: [
+                    self.dialogContentViewController.view.leadingLayout == self.view.leadingLayout.offset(before),
+                    self.view.trailingLayout == self.dialogContentViewController.view.trailingLayout.offset(after)
+                ])
                 break
             }
             break
@@ -199,44 +202,49 @@ open class QDialogViewController : QViewController, IQDialogViewController {
                 if min == max {
                     self._contentSizeConstraints.append(self.dialogContentViewController.view.heightLayout == min)
                 } else {
-                    self._contentSizeConstraints.append(self.dialogContentViewController.view.heightLayout >= min)
-                    self._contentSizeConstraints.append(self.dialogContentViewController.view.heightLayout <= max)
+                    self._contentSizeConstraints.append(contentsOf: [
+                        self.dialogContentViewController.view.heightLayout >= min,
+                        self.dialogContentViewController.view.heightLayout <= max
+                    ])
                 }
             }
             break
         case .fill(let before, let after):
             switch self.dialogVerticalAlignment {
             case .center(let offset):
-                self._contentLayoutConstraints.append(self.dialogContentViewController.view.topLayout == self.view.topLayout + (before + offset))
-                self._contentLayoutConstraints.append(self.view.bottomLayout == self.dialogContentViewController.view.bottomLayout + (after - offset))
-                break
+                self._contentLayoutConstraints.append(contentsOf: [
+                    self.dialogContentViewController.view.topLayout == self.view.topLayout.offset(before + offset),
+                    self.view.bottomLayout == self.dialogContentViewController.view.bottomLayout.offset(after - offset)
+                ])
             default:
-                self._contentLayoutConstraints.append(self.dialogContentViewController.view.topLayout == self.view.topLayout + before)
-                self._contentLayoutConstraints.append(self.view.bottomLayout == self.dialogContentViewController.view.bottomLayout + after)
+                self._contentLayoutConstraints.append(contentsOf: [
+                    self.dialogContentViewController.view.topLayout == self.view.topLayout.offset(before),
+                    self.view.bottomLayout == self.dialogContentViewController.view.bottomLayout.offset(after)
+                ])
                 break
             }
             break
         }
         switch self.dialogHorizontalAlignment {
         case .left(let offset):
-            self._contentLayoutConstraints.append(self.dialogContentViewController.view.leadingLayout == self.view.leadingLayout + offset)
+            self._contentLayoutConstraints.append(self.dialogContentViewController.view.leadingLayout == self.view.leadingLayout.offset(offset))
             break
         case .center(let offset):
-            self._contentLayoutConstraints.append(self.dialogContentViewController.view.centerXLayout == self.view.centerXLayout + offset)
+            self._contentLayoutConstraints.append(self.dialogContentViewController.view.centerXLayout == self.view.centerXLayout.offset(offset))
             break
         case .right(let offset):
-            self._contentLayoutConstraints.append(self.dialogContentViewController.view.trailingLayout == self.view.trailingLayout + offset)
+            self._contentLayoutConstraints.append(self.dialogContentViewController.view.trailingLayout == self.view.trailingLayout.offset(offset))
             break
         }
         switch self.dialogVerticalAlignment {
         case .top(let offset):
-            self._contentLayoutConstraints.append(self.dialogContentViewController.view.topLayout == self.view.topLayout + offset)
+            self._contentLayoutConstraints.append(self.dialogContentViewController.view.topLayout == self.view.topLayout.offset(offset))
             break
         case .center(let offset):
-            self._contentLayoutConstraints.append(self.dialogContentViewController.view.centerYLayout == self.view.centerYLayout + offset)
+            self._contentLayoutConstraints.append(self.dialogContentViewController.view.centerYLayout == self.view.centerYLayout.offset(offset))
             break
         case .bottom(let offset):
-            self._contentLayoutConstraints.append(self.dialogContentViewController.view.bottomLayout == self.view.bottomLayout + offset)
+            self._contentLayoutConstraints.append(self.dialogContentViewController.view.bottomLayout == self.view.bottomLayout.offset(offset))
             break
         }
         if self._contentLayoutConstraints.count > 0 {

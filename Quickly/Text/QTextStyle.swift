@@ -466,7 +466,7 @@ public final class QTextStyle : IQTextStyle {
     }
 
     public func addChild(_ child: IQTextStyle) {
-        let index = self.children.index { $0 === child }
+        let index = self.children.firstIndex { $0 === child }
         if index == nil {
             self.children.append(child)
             child.parent = self
@@ -474,7 +474,7 @@ public final class QTextStyle : IQTextStyle {
     }
 
     public func removeChild(_ child: IQTextStyle) {
-        let index = self.children.index(where: { (textStyle) -> Bool in
+        let index = self.children.firstIndex(where: { (textStyle) -> Bool in
             return textStyle === child
         })
         if let safeIndex = index {

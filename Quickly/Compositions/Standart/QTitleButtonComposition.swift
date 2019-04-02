@@ -78,13 +78,13 @@ open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComp
             self._edgeInsets = composable.edgeInsets
             self._buttonSpacing = composable.buttonSpacing
             self._constraints = [
-                self.titleLabel.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
-                self.titleLabel.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
-                self.titleLabel.trailingLayout == self.button.leadingLayout - composable.buttonSpacing,
-                self.titleLabel.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom,
-                self.button.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
-                self.button.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
-                self.button.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom,
+                self.titleLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.titleLabel.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.titleLabel.trailingLayout == self.button.leadingLayout.offset(-composable.buttonSpacing),
+                self.titleLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+                self.button.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.button.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                self.button.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
             ]
         }
     }

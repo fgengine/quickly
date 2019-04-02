@@ -128,10 +128,10 @@ open class QMultiTextFieldComposition< Composable: QMultiTextFieldComposable > :
         if self._edgeInsets != composable.edgeInsets {
             self._edgeInsets = composable.edgeInsets
             self._constraints = [
-                self.field.topLayout == self.contentView.topLayout + composable.edgeInsets.top,
-                self.field.leadingLayout == self.contentView.leadingLayout + composable.edgeInsets.left,
-                self.field.trailingLayout == self.contentView.trailingLayout - composable.edgeInsets.right,
-                self.field.bottomLayout == self.contentView.bottomLayout - composable.edgeInsets.bottom
+                self.field.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.field.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.field.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                self.field.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
             ]
         }
     }

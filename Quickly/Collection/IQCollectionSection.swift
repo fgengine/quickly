@@ -41,36 +41,36 @@ public protocol IQCollectionSection : class {
 
 public extension IQCollectionSection {
 
-    public func prependItem(_ item: IQCollectionItem) {
+    func prependItem(_ item: IQCollectionItem) {
         self.insertItem([ item ], index: self.items.startIndex)
     }
 
-    public func prependItem(_ items: [IQCollectionItem]) {
+    func prependItem(_ items: [IQCollectionItem]) {
         self.insertItem(items, index: self.items.startIndex)
     }
 
-    public func appendItem(_ item: IQCollectionItem) {
+    func appendItem(_ item: IQCollectionItem) {
         self.insertItem([ item ], index: self.items.endIndex)
     }
 
-    public func appendItem(_ items: [IQCollectionItem]) {
+    func appendItem(_ items: [IQCollectionItem]) {
         self.insertItem(items, index: self.items.endIndex)
     }
 
-    public func insertItem(_ item: IQCollectionItem, index: Int) {
+    func insertItem(_ item: IQCollectionItem, index: Int) {
         self.insertItem([ item ], index: index)
     }
 
-    public func deleteItem(_ item: IQCollectionItem) {
+    func deleteItem(_ item: IQCollectionItem) {
         self.deleteItem([ item ])
     }
 
-    public func reloadItem(_ item: IQCollectionItem) {
+    func reloadItem(_ item: IQCollectionItem) {
         self.reloadItem([ item ])
     }
 
-    public func moveItem(_ fromItem: IQCollectionItem, toIndex: Int) -> Bool {
-        guard let fromIndex = self.items.index(where: { (existItem: IQCollectionItem) -> Bool in
+    func moveItem(_ fromItem: IQCollectionItem, toIndex: Int) -> Bool {
+        guard let fromIndex = self.items.firstIndex(where: { (existItem: IQCollectionItem) -> Bool in
             return (existItem === fromItem)
         }) else {
             return false

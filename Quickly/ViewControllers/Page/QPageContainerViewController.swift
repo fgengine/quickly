@@ -306,7 +306,7 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
 
     open func updatePageItem(_ viewController: IQPageViewController, animated: Bool) {
         guard let pagebar = self._pagebar else { return }
-        guard let index = self._viewControllers.index(where: { $0 === viewController }) else { return }
+        guard let index = self._viewControllers.firstIndex(where: { $0 === viewController }) else { return }
         guard let pagebarItem = viewController.pageItem else { return }
         pagebar.replaceItem(pagebarItem, index: index)
     }
@@ -321,7 +321,7 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
             displayedCurrent = self._viewControllers.first
         }
         if let current = displayedCurrent {
-            if let index = self._viewControllers.index(where: { $0 === current }) {
+            if let index = self._viewControllers.firstIndex(where: { $0 === current }) {
                 displayedBackward = (index != self._viewControllers.startIndex) ? self._viewControllers[index - 1] : nil
                 displayedForward = (index != self._viewControllers.endIndex - 1) ? self._viewControllers[index + 1] : nil
             } else {
@@ -611,11 +611,11 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
 extension QPageContainerViewController : QPagebarDelegate {
 
     public func pagebar(_ pagebar: QPagebar, didSelectItem: QPagebarItem) {
-        guard let index = self._viewControllers.index(where: { return $0.pageItem === didSelectItem }) else { return }
+        guard let index = self._viewControllers.firstIndex(where: { return $0.pageItem === didSelectItem }) else { return }
         let viewController = self._viewControllers[index]
         var mode: QPageViewControllerAnimationMode = .forward
         if let currentViewController = self.currentViewController {
-            if let currentIndex = self._viewControllers.index(where: { return $0 === currentViewController }) {
+            if let currentIndex = self._viewControllers.firstIndex(where: { return $0 === currentViewController }) {
                 mode = (currentIndex > index) ? .backward : .forward
             }
         }

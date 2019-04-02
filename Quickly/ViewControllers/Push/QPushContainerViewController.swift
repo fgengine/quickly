@@ -179,7 +179,7 @@ open class QPushContainerViewController : QViewController, IQPushContainerViewCo
 
     private func _dismiss(_ viewController: IQPushViewController, animated: Bool, completion: (() -> Void)?) {
         let currentViewController = self.currentViewController
-        if let index = self.viewControllers.index(where: { return $0 === viewController }) {
+        if let index = self.viewControllers.firstIndex(where: { return $0 === viewController }) {
             self.viewControllers.remove(at: index)
             self.setNeedUpdateStatusBar()
             if self.isLoaded == true {
@@ -313,7 +313,7 @@ open class QPushContainerViewController : QViewController, IQPushContainerViewCo
             return
         }
         self._disappearViewController(viewController)
-        if let index = self.viewControllers.index(where: { return $0 === viewController }) {
+        if let index = self.viewControllers.firstIndex(where: { return $0 === viewController }) {
             self.viewControllers.remove(at: index)
             self.setNeedUpdateStatusBar()
             if let nextViewController = self.currentViewController {
