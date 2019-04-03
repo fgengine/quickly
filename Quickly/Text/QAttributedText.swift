@@ -27,7 +27,7 @@ open class QAttributedText : IQText {
         let attributed = style.mutableAttributed(text)
         parts.forEach({ (key: String, value: QAttributedText) in
             if let range = attributed.string.range(of: key), let valueAttributed = value.attributed {
-                attributed.replaceCharacters(in: text.nsRange(from: range), with: valueAttributed)
+                attributed.replaceCharacters(in: attributed.string.nsRange(from: range), with: valueAttributed)
             }
         })
         self.attributed = attributed
