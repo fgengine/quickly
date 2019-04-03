@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QGroupContainerViewController : QViewController, IQGroupContainerViewController, IQStackContentViewController, IQModalContentViewController {
+open class QGroupContainerViewController : QViewController, IQGroupContainerViewController, IQStackContentViewController, IQModalContentViewController, IQHamburgerContentViewController {
 
     public var contentOffset: CGPoint {
         get { return CGPoint.zero }
@@ -10,24 +10,24 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
     public var contentSize: CGSize {
         get { return CGSize.zero }
     }
-    open var groupbar: QGroupbar? {
-        set(value) { self.setGroupbar(value) }
+    open var barView: QGroupbar? {
+        set(value) { self.set(barView: value) }
         get { return self._groupbar }
     }
-    open var groupbarHeight: CGFloat {
-        set(value) { self.setGroupbarHeight(value) }
+    open var barHeight: CGFloat {
+        set(value) { self.set(barHeight: value) }
         get { return self._groupbarHeight }
     }
-    open var groupbarHidden: Bool {
-        set(value) { self.setGroupbarHidden(value) }
+    open var barHidden: Bool {
+        set(value) { self.set(barHidden: value) }
         get { return self._groupbarHidden }
     }
-    open var groupbarVisibility: CGFloat {
-        set(value) { self.setGroupbarVisibility(value) }
+    open var barVisibility: CGFloat {
+        set(value) { self.set(barVisibility: value) }
         get { return self._groupbarVisibility }
     }
     open var viewControllers: [IQGroupViewController] {
-        set(value) { self.setViewControllers(value) }
+        set(value) { self.set(viewControllers: value) }
         get { return self._viewControllers }
     }
     open private(set) var currentViewController: IQGroupViewController?
@@ -63,12 +63,12 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
             self.currentViewController = self.viewControllers.first
         }
         if let vc = self.currentViewController {
-            self._appearViewController(vc)
+            self._appear(viewController: vc)
             self.currentViewController = vc
         }
         if let groupbar = self._groupbar {
-            groupbar.items = self._viewControllers.compactMap({ return $0.groupbarItem })
-            groupbar.setSelectedItem(self.currentViewController?.groupbarItem, animated: false)
+            groupbar.items = self._viewControllers.compactMap({ return $0.barItem })
+            groupbar.setSelectedItem(self.currentViewController?.barItem, animated: false)
             self.view.addSubview(groupbar)
         }
     }
@@ -81,8 +81,8 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
             vc.view.frame = bounds
         }
         if let groupbar = self._groupbar {
-            groupbar.edgeInsets = self._groupbarEdgeInsets()
-            groupbar.frame = self._groupbarFrame(bounds: bounds)
+            groupbar.edgeInsets = self._barEdgeInsets()
+            groupbar.frame = self._barFrame(bounds: bounds)
         }
     }
 
@@ -190,73 +190,73 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
         return vc.preferedStatusBarAnimation()
     }
 
-    open func setGroupbar(_ groupbar: QGroupbar?, animated: Bool = false) {
-        if self._groupbar !== groupbar {
+    open func set(barView: QGroupbar?, animated: Bool = false) {
+        if self._groupbar !== barView {
             if self.isLoaded == true {
-                if let groupbar = self._groupbar {
-                    groupbar.removeFromSuperview()
-                    groupbar.delegate = nil
+                if let view = self._groupbar {
+                    view.removeFromSuperview()
+                    view.delegate = nil
                 }
-                self._groupbar = groupbar
-                if let groupbar = self._groupbar {
-                    groupbar.frame = self._groupbarFrame(bounds: self.view.bounds)
-                    groupbar.edgeInsets = self._groupbarEdgeInsets()
-                    groupbar.delegate = self
-                    self.view.addSubview(groupbar)
+                self._groupbar = barView
+                if let view = self._groupbar {
+                    view.frame = self._barFrame(bounds: self.view.bounds)
+                    view.edgeInsets = self._barEdgeInsets()
+                    view.delegate = self
+                    self.view.addSubview(view)
                 }
                 self.setNeedLayout()
             } else {
-                if let groupbar = self._groupbar {
-                    groupbar.delegate = nil
+                if let view = self._groupbar {
+                    view.delegate = nil
                 }
-                self._groupbar = groupbar
-                if let groupbar = self._groupbar {
-                    groupbar.delegate = self
+                self._groupbar = barView
+                if let view = self._groupbar {
+                    view.delegate = self
                 }
             }
             self._updateAdditionalEdgeInsets()
         }
     }
 
-    open func setGroupbarHeight(_ value: CGFloat, animated: Bool = false) {
-        if self._groupbarHeight != value {
-            self._groupbarHeight = value
+    open func set(barHeight: CGFloat, animated: Bool = false) {
+        if self._groupbarHeight != barHeight {
+            self._groupbarHeight = barHeight
             self._updateAdditionalEdgeInsets()
             if self.isLoaded == true {
-                self._updateGroupbar(bounds: self.view.bounds, animated: animated)
+                self._updateBar(bounds: self.view.bounds, animated: animated)
             }
         }
     }
 
-    open func setGroupbarHidden(_ value: Bool, animated: Bool = false) {
-        if self._groupbarHidden != value {
-            self._groupbarHidden = value
+    open func set(barHidden: Bool, animated: Bool = false) {
+        if self._groupbarHidden != barHidden {
+            self._groupbarHidden = barHidden
             self._updateAdditionalEdgeInsets()
             if self.isLoaded == true {
-                self._updateGroupbar(bounds: self.view.bounds, animated: animated)
+                self._updateBar(bounds: self.view.bounds, animated: animated)
             }
         }
     }
 
-    open func setGroupbarVisibility(_ visibility: CGFloat, animated: Bool = false) {
-        if self._groupbarVisibility != visibility {
-            self._groupbarVisibility = visibility
+    open func set(barVisibility: CGFloat, animated: Bool = false) {
+        if self._groupbarVisibility != barVisibility {
+            self._groupbarVisibility = barVisibility
             self._updateAdditionalEdgeInsets()
             if self.isLoaded == true {
-                self._updateGroupbar(bounds: self.view.bounds, animated: animated)
+                self._updateBar(bounds: self.view.bounds, animated: animated)
             }
         }
     }
 
-    open func setViewControllers(_ viewControllers: [IQGroupViewController], animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
-        self._viewControllers.forEach({ self._removeChildViewController($0) })
+    open func set(viewControllers: [IQGroupViewController], animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
+        self._viewControllers.forEach({ self._remove(childViewController: $0) })
         self._viewControllers = viewControllers
-        self._viewControllers.forEach({ self._addChildViewController($0) })
+        self._viewControllers.forEach({ self._add(childViewController: $0) })
         if self.isLoaded == true {
-            self._updateViewControllers(self.currentViewController, animated: animated, updation: {
+            self._update(viewController: self.currentViewController, animated: animated, updation: {
                 if let groupbar = self._groupbar {
-                    let groupbarItems = self._viewControllers.compactMap({ return $0.groupbarItem })
-                    let selectedGroupbarItem = self.currentViewController?.groupbarItem
+                    let groupbarItems = self._viewControllers.compactMap({ return $0.barItem })
+                    let selectedGroupbarItem = self.currentViewController?.barItem
                     if animated == true {
                         groupbar.performBatchUpdates({
                             groupbar.deleteItem(groupbar.items)
@@ -273,36 +273,42 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
         }
     }
 
-    open func setCurrentViewController(_ viewController: IQGroupViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
-        guard self._viewControllers.contains(where: { $0 === viewController }) == true else { return }
+    open func set(currentViewController: IQGroupViewController, animated: Bool = false, completion: (() -> Swift.Void)? = nil) {
+        guard self._viewControllers.contains(where: { $0 === currentViewController }) == true else { return }
         if self.isLoaded == true {
-            self._updateViewControllers(viewController, animated: animated, updation: {
+            self._update(viewController: currentViewController, animated: animated, updation: {
                 if let groupbar = self._groupbar {
-                    groupbar.setSelectedItem(viewController.groupbarItem, animated: animated)
+                    groupbar.setSelectedItem(currentViewController.barItem, animated: animated)
                 }
             }, completion: completion)
         } else {
-            self.currentViewController = viewController
+            self.currentViewController = currentViewController
         }
     }
 
-    open func updateGroupItem(_ viewController: IQGroupViewController, animated: Bool) {
+    open func didUpdate(viewController: IQGroupViewController, animated: Bool) {
         guard let groupbar = self._groupbar else { return }
         guard let index = self._viewControllers.firstIndex(where: { $0 === viewController }) else { return }
-        guard let groupbarItem = viewController.groupbarItem else { return }
-        groupbar.replaceItem(groupbarItem, index: index)
+        guard let barItem = viewController.barItem else { return }
+        groupbar.replaceItem(barItem, index: index)
     }
+    
+}
 
-    private func _updateViewControllers(_ viewController: IQGroupViewController?, animated: Bool, updation: (() -> Swift.Void)? = nil, completion: (() -> Swift.Void)? = nil) {
+// MARK: - Private -
+
+extension QGroupContainerViewController {
+
+    private func _update(viewController: IQGroupViewController?, animated: Bool, updation: (() -> Swift.Void)? = nil, completion: (() -> Swift.Void)? = nil) {
         if self.currentViewController !== viewController {
             let previousViewController = self.currentViewController
             self.currentViewController = viewController
             if let vc = self.currentViewController {
-                self._appearViewController(vc)
+                self._appear(viewController: vc)
             }
             updation?()
             if let currentViewController = previousViewController, let targetViewController = viewController {
-                let animation = self._prepareAnimation(currentViewController)
+                let animation = self._animation(viewController: currentViewController)
                 self.isAnimating = true
                 animation.prepare(
                     contentView: self.view,
@@ -311,7 +317,7 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
                 )
                 animation.update(animated: animated, complete: { [weak self] _ in
                     guard let strong = self else { return }
-                    strong._disappearViewController(currentViewController)
+                    strong._disappear(viewController: currentViewController)
                     strong.isAnimating = false
                     completion?()
                 })
@@ -319,7 +325,7 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
                 if let vc = previousViewController {
                     vc.willDismiss(animated: false)
                     vc.didDismiss(animated: false)
-                    self._disappearViewController(vc)
+                    self._disappear(viewController: vc)
                 }
                 if let vc = viewController {
                     vc.willPresent(animated: false)
@@ -333,15 +339,15 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
         }
     }
     
-    private func _addChildViewController(_ viewController: IQGroupViewController) {
-        viewController.parent = self
+    private func _add(childViewController: IQGroupViewController) {
+        childViewController.parent = self
     }
     
-    private func _removeChildViewController(_ viewController: IQGroupViewController) {
-        viewController.parent = nil
+    private func _remove(childViewController: IQGroupViewController) {
+        childViewController.parent = nil
     }
 
-    private func _appearViewController(_ viewController: IQGroupViewController) {
+    private func _appear(viewController: IQGroupViewController) {
         viewController.view.frame = self.view.bounds
         if let groupbar = self._groupbar {
             self.view.insertSubview(viewController.view, belowSubview: groupbar)
@@ -350,12 +356,12 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
         }
     }
 
-    private func _disappearViewController(_ viewController: IQGroupViewController) {
+    private func _disappear(viewController: IQGroupViewController) {
         viewController.view.removeFromSuperview()
     }
 
-    private func _prepareAnimation(_ viewController: IQGroupViewController) -> IQGroupViewControllerAnimation {
-        if let animation = viewController.groupAnimation { return animation }
+    private func _animation(viewController: IQGroupViewController) -> IQGroupViewControllerAnimation {
+        if let animation = viewController.animation { return animation }
         return self.animation
     }
 
@@ -368,20 +374,20 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
         )
     }
     
-    private func _updateGroupbar(bounds: CGRect, animated: Bool) {
+    private func _updateBar(bounds: CGRect, animated: Bool) {
         guard let groupbar = self._groupbar else { return }
         if animated == true {
             UIView.animate(withDuration: 0.1, delay: 0, options: [ .beginFromCurrentState ], animations: {
-                groupbar.edgeInsets = self._groupbarEdgeInsets()
-                groupbar.frame = self._groupbarFrame(bounds: bounds)
+                groupbar.edgeInsets = self._barEdgeInsets()
+                groupbar.frame = self._barFrame(bounds: bounds)
             })
         } else {
-            groupbar.edgeInsets = self._groupbarEdgeInsets()
-            groupbar.frame = self._groupbarFrame(bounds: bounds)
+            groupbar.edgeInsets = self._barEdgeInsets()
+            groupbar.frame = self._barFrame(bounds: bounds)
         }
     }
 
-    private func _groupbarFrame(bounds: CGRect) -> CGRect {
+    private func _barFrame(bounds: CGRect) -> CGRect {
         let edgeInsets = self.inheritedEdgeInsets
         let fullHeight = self._groupbarHeight + edgeInsets.bottom
         if self._groupbarHidden == true {
@@ -400,7 +406,7 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
         )
     }
 
-    private func _groupbarEdgeInsets() -> UIEdgeInsets {
+    private func _barEdgeInsets() -> UIEdgeInsets {
         let edgeInsets = self.inheritedEdgeInsets
         return UIEdgeInsets(
             top: 0,
@@ -412,12 +418,14 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
 
 }
 
+// MARK: - QGroupbarDelegate -
+
 extension QGroupContainerViewController : QGroupbarDelegate {
 
     public func groupbar(_ groupbar: QGroupbar, didSelectItem: QGroupbarItem) {
-        guard let index = self._viewControllers.firstIndex(where: { return $0.groupbarItem === didSelectItem }) else { return }
+        guard let index = self._viewControllers.firstIndex(where: { return $0.barItem === didSelectItem }) else { return }
         let viewController = self._viewControllers[index]
-        self._updateViewControllers(viewController, animated: true)
+        self._update(viewController: viewController, animated: true)
     }
 
 }

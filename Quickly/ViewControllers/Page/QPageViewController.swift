@@ -4,108 +4,108 @@
 
 open class QPageViewController : QViewController, IQPageViewController {
     
-    open private(set) var pageContentViewController: IQPageContentViewController
-    open var pageItem: QPagebarItem? {
-        set(value) { self.setPageItem(value) }
-        get { return self._pageItem }
+    open private(set) var contentViewController: IQPageContentViewController
+    open var item: QPagebarItem? {
+        set(value) { self.setItem(value) }
+        get { return self._item }
     }
-    open var pageForwardAnimation: IQPageViewControllerAnimation?
-    open var pageBackwardAnimation: IQPageViewControllerAnimation?
-    open var pageInteractiveAnimation: IQPageViewControllerInteractiveAnimation?
+    open var forwardAnimation: IQPageViewControllerAnimation?
+    open var backwardAnimation: IQPageViewControllerAnimation?
+    open var interactiveAnimation: IQPageViewControllerInteractiveAnimation?
     
-    private var _pageItem: QPagebarItem?
+    private var _item: QPagebarItem?
 
     public init(_ contentViewController: IQPageContentViewController) {
-        self.pageContentViewController = contentViewController
+        self.contentViewController = contentViewController
         super.init()
     }
 
     public init(_ pagebarItem: QPagebarItem?, _ contentViewController: IQPageContentViewController) {
-        self._pageItem = pagebarItem
-        self.pageContentViewController = contentViewController
+        self._item = pagebarItem
+        self.contentViewController = contentViewController
         super.init()
     }
 
     open override func setup() {
         super.setup()
 
-        self.pageContentViewController.parent = self
+        self.contentViewController.parent = self
     }
 
     open override func didLoad() {
-        self.pageContentViewController.view.frame = self.view.bounds
-        self.view.addSubview(self.pageContentViewController.view)
+        self.contentViewController.view.frame = self.view.bounds
+        self.view.addSubview(self.contentViewController.view)
     }
 
     open override func layout(bounds: CGRect) {
-        self.pageContentViewController.view.frame = bounds
+        self.contentViewController.view.frame = bounds
     }
 
     open override func prepareInteractivePresent() {
         super.prepareInteractivePresent()
-        self.pageContentViewController.prepareInteractivePresent()
+        self.contentViewController.prepareInteractivePresent()
     }
 
     open override func cancelInteractivePresent() {
         super.cancelInteractivePresent()
-        self.pageContentViewController.cancelInteractivePresent()
+        self.contentViewController.cancelInteractivePresent()
     }
 
     open override func finishInteractivePresent() {
         super.finishInteractivePresent()
-        self.pageContentViewController.finishInteractivePresent()
+        self.contentViewController.finishInteractivePresent()
     }
 
     open override func willPresent(animated: Bool) {
         super.willPresent(animated: animated)
-        self.pageContentViewController.willPresent(animated: animated)
+        self.contentViewController.willPresent(animated: animated)
     }
 
     open override func didPresent(animated: Bool) {
         super.didPresent(animated: animated)
-        self.pageContentViewController.didPresent(animated: animated)
+        self.contentViewController.didPresent(animated: animated)
     }
 
     open override func prepareInteractiveDismiss() {
         super.prepareInteractiveDismiss()
-        self.pageContentViewController.prepareInteractiveDismiss()
+        self.contentViewController.prepareInteractiveDismiss()
     }
 
     open override func cancelInteractiveDismiss() {
         super.cancelInteractiveDismiss()
-        self.pageContentViewController.cancelInteractiveDismiss()
+        self.contentViewController.cancelInteractiveDismiss()
     }
 
     open override func finishInteractiveDismiss() {
         super.finishInteractiveDismiss()
-        self.pageContentViewController.finishInteractiveDismiss()
+        self.contentViewController.finishInteractiveDismiss()
     }
 
     open override func willDismiss(animated: Bool) {
         super.willDismiss(animated: animated)
-        self.pageContentViewController.willDismiss(animated: animated)
+        self.contentViewController.willDismiss(animated: animated)
     }
 
     open override func didDismiss(animated: Bool) {
         super.didDismiss(animated: animated)
-        self.pageContentViewController.didDismiss(animated: animated)
+        self.contentViewController.didDismiss(animated: animated)
     }
 
     open override func willTransition(size: CGSize) {
         super.willTransition(size: size)
-        self.pageContentViewController.willTransition(size: size)
+        self.contentViewController.willTransition(size: size)
     }
 
     open override func didTransition(size: CGSize) {
         super.didTransition(size: size)
-        self.pageContentViewController.didTransition(size: size)
+        self.contentViewController.didTransition(size: size)
     }
 
-    open func setPageItem(_ item: QPagebarItem?, animated: Bool = false) {
-        if self._pageItem !== item {
-            self._pageItem = item
-            if let vc = self.pageContainerViewController {
-                vc.updatePageItem(self, animated: animated)
+    open func setItem(_ item: QPagebarItem?, animated: Bool = false) {
+        if self._item !== item {
+            self._item = item
+            if let vc = self.containerViewController {
+                vc.didUpdate(viewController: self, animated: animated)
             }
         }
     }
@@ -114,19 +114,19 @@ open class QPageViewController : QViewController, IQPageViewController {
     }
 
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
-        return self.pageContentViewController.supportedOrientations()
+        return self.contentViewController.supportedOrientations()
     }
 
     open override func preferedStatusBarHidden() -> Bool {
-        return self.pageContentViewController.preferedStatusBarHidden()
+        return self.contentViewController.preferedStatusBarHidden()
     }
 
     open override func preferedStatusBarStyle() -> UIStatusBarStyle {
-        return self.pageContentViewController.preferedStatusBarStyle()
+        return self.contentViewController.preferedStatusBarStyle()
     }
 
     open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
-        return self.pageContentViewController.preferedStatusBarAnimation()
+        return self.contentViewController.preferedStatusBarAnimation()
     }
 
 }

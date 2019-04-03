@@ -75,8 +75,8 @@ public protocol IQDialogContainerViewController : IQViewController {
     var interactiveDismissAnimation: IQDialogViewControllerInteractiveAnimation? { get }
     var isAnimating: Bool { get }
 
-    func presentDialog(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?)
-    func dismissDialog(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func present(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func dismiss(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?)
 
 }
 
@@ -84,10 +84,10 @@ public protocol IQDialogContainerViewController : IQViewController {
 
 public protocol IQDialogContainerBackgroundView : class {
 
-    var dialogContainerViewController: IQDialogContainerViewController? { set get }
+    var containerViewController: IQDialogContainerViewController? { set get }
 
-    func presentDialog(viewController: IQDialogViewController, isFirst: Bool, animated: Bool)
-    func dismissDialog(viewController: IQDialogViewController, isLast: Bool, animated: Bool)
+    func present(viewController: IQDialogViewController, isFirst: Bool, animated: Bool)
+    func dismiss(viewController: IQDialogViewController, isLast: Bool, animated: Bool)
 
 }
 
@@ -95,15 +95,15 @@ public protocol IQDialogContainerBackgroundView : class {
 
 public protocol IQDialogViewController : IQViewController {
 
-    var dialogContainerViewController: IQDialogContainerViewController? { get }
-    var dialogContentViewController: IQDialogContentViewController { get }
-    var dialogWidthBehaviour: QDialogViewControllerSizeBehaviour { set get }
-    var dialogHeightBehaviour: QDialogViewControllerSizeBehaviour { set get }
-    var dialogVerticalAlignment: QDialogViewControllerVerticalAlignment { set get }
-    var dialogHorizontalAlignment: QDialogViewControllerHorizontalAlignment { set get }
-    var dialogPresentAnimation: IQDialogViewControllerFixedAnimation? { get }
-    var dialogDismissAnimation: IQDialogViewControllerFixedAnimation? { get }
-    var dialogInteractiveDismissAnimation: IQDialogViewControllerInteractiveAnimation? { get }
+    var containerViewController: IQDialogContainerViewController? { get }
+    var contentViewController: IQDialogContentViewController { get }
+    var widthBehaviour: QDialogViewControllerSizeBehaviour { set get }
+    var heightBehaviour: QDialogViewControllerSizeBehaviour { set get }
+    var verticalAlignment: QDialogViewControllerVerticalAlignment { set get }
+    var horizontalAlignment: QDialogViewControllerHorizontalAlignment { set get }
+    var presentAnimation: IQDialogViewControllerFixedAnimation? { get }
+    var dismissAnimation: IQDialogViewControllerFixedAnimation? { get }
+    var interactiveDismissAnimation: IQDialogViewControllerInteractiveAnimation? { get }
 
     func dismissDialog(animated: Bool, completion: (() -> Swift.Void)?)
 
@@ -111,13 +111,13 @@ public protocol IQDialogViewController : IQViewController {
 
 public extension IQDialogViewController {
 
-    var dialogContainerViewController: IQDialogContainerViewController? {
+    var containerViewController: IQDialogContainerViewController? {
         get { return self.parent as? IQDialogContainerViewController }
     }
 
     func dismissDialog(animated: Bool, completion: (() -> Swift.Void)?) {
-        guard let vc = self.dialogContainerViewController else { return }
-        vc.dismissDialog(viewController: self, animated: animated, completion: completion)
+        guard let vc = self.containerViewController else { return }
+        vc.dismiss(viewController: self, animated: animated, completion: completion)
     }
 
 }
@@ -128,7 +128,7 @@ public protocol IQDialogContentViewController : IQViewController {
 
     var dialogViewController: IQDialogViewController? { get }
 
-    func didPressedOutsideContent()
+    func dialogDidPressedOutside()
 
 }
 

@@ -40,8 +40,8 @@ public protocol IQModalContainerViewController : IQViewController {
     var interactiveDismissAnimation: IQModalViewControllerInteractiveAnimation? { set get }
     var isAnimating: Bool { get }
 
-    func presentModal(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?)
-    func dismissModal(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func present(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func dismiss(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?)
 
 }
 
@@ -49,11 +49,11 @@ public protocol IQModalContainerViewController : IQViewController {
 
 public protocol IQModalViewController : IQViewController {
 
-    var modalContainerViewController: IQModalContainerViewController? { get }
-    var modalContentViewController: IQModalContentViewController { get }
-    var modalPresentAnimation: IQModalViewControllerFixedAnimation? { get }
-    var modalDismissAnimation: IQModalViewControllerFixedAnimation? { get }
-    var modalInteractiveDismissAnimation: IQModalViewControllerInteractiveAnimation? { get }
+    var containerViewController: IQModalContainerViewController? { get }
+    var contentViewController: IQModalContentViewController { get }
+    var presentAnimation: IQModalViewControllerFixedAnimation? { get }
+    var dismissAnimation: IQModalViewControllerFixedAnimation? { get }
+    var interactiveDismissAnimation: IQModalViewControllerInteractiveAnimation? { get }
 
     func dismissModal(animated: Bool, completion: (() -> Swift.Void)?)
 
@@ -61,13 +61,13 @@ public protocol IQModalViewController : IQViewController {
 
 public extension IQModalViewController {
 
-    var modalContainerViewController: IQModalContainerViewController? {
+    var containerViewController: IQModalContainerViewController? {
         get { return self.parent as? IQModalContainerViewController }
     }
 
     func dismissModal(animated: Bool, completion: (() -> Swift.Void)?) {
-        guard let vc = self.modalContainerViewController else { return }
-        vc.dismissModal(viewController: self, animated: animated, completion: completion)
+        guard let vc = self.containerViewController else { return }
+        vc.dismiss(viewController: self, animated: animated, completion: completion)
     }
 
 }

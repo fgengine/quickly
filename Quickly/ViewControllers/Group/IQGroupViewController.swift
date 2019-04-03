@@ -18,24 +18,25 @@ public protocol IQGroupViewControllerAnimation : IQFixedAnimation {
 
 public protocol IQGroupContainerViewController : IQViewController {
 
-    var groupbar: QGroupbar? { set get }
-    var groupbarHeight: CGFloat { set get }
-    var groupbarHidden: Bool { set get }
-    var groupbarVisibility: CGFloat { set get }
+    var barView: QGroupbar? { set get }
+    var barHeight: CGFloat { set get }
+    var barHidden: Bool { set get }
+    var barVisibility: CGFloat { set get }
 
     var viewControllers: [IQGroupViewController] { set get }
     var currentViewController: IQGroupViewController? { get }
     var animation: IQGroupViewControllerAnimation { get }
     var isAnimating: Bool { get }
 
-    func setGroupbar(_ groupbar: QGroupbar?, animated: Bool)
-    func setGroupbarHeight(_ height: CGFloat, animated: Bool)
-    func setGroupbarHidden(_ hidden: Bool, animated: Bool)
-    func setGroupbarVisibility(_ visibility: CGFloat, animated: Bool)
+    func set(barView: QGroupbar?, animated: Bool)
+    func set(barHeight: CGFloat, animated: Bool)
+    func set(barHidden: Bool, animated: Bool)
+    func set(barVisibility: CGFloat, animated: Bool)
 
-    func setViewControllers(_ viewControllers: [IQGroupViewController], animated: Bool, completion: (() -> Swift.Void)?)
-    func setCurrentViewController(_ viewController: IQGroupViewController, animated: Bool, completion: (() -> Swift.Void)?)
-    func updateGroupItem(_ viewController: IQGroupViewController, animated: Bool)
+    func set(viewControllers: [IQGroupViewController], animated: Bool, completion: (() -> Swift.Void)?)
+    func set(currentViewController: IQGroupViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    
+    func didUpdate(viewController: IQGroupViewController, animated: Bool)
 
 }
 
@@ -43,29 +44,29 @@ public protocol IQGroupContainerViewController : IQViewController {
 
 public protocol IQGroupViewController : IQContentOwnerViewController {
 
-    var groupContainerViewController: IQGroupContainerViewController? { get }
-    var groupContentViewController: IQGroupContentViewController { get }
-    var groupbarHidden: Bool { set get }
-    var groupbarVisibility: CGFloat { set get }
-    var groupbarItem: QGroupbarItem? { set get }
-    var groupAnimation: IQGroupViewControllerAnimation? { set get }
+    var containerViewController: IQGroupContainerViewController? { get }
+    var contentViewController: IQGroupContentViewController { get }
+    var barHidden: Bool { set get }
+    var barVisibility: CGFloat { set get }
+    var barItem: QGroupbarItem? { set get }
+    var animation: IQGroupViewControllerAnimation? { set get }
 
-    func setGroupItem(_ item: QGroupbarItem?, animated: Bool)
+    func set(item: QGroupbarItem?, animated: Bool)
 
 }
 
 extension IQGroupViewController {
 
-    public var groupContainerViewController: IQGroupContainerViewController? {
+    public var containerViewController: IQGroupContainerViewController? {
         get { return self.parent as? IQGroupContainerViewController }
     }
-    public var groupbarHidden: Bool {
-        set(value) { self.groupContainerViewController?.groupbarHidden = value }
-        get { return self.groupContainerViewController?.groupbarHidden ?? true }
+    public var barHidden: Bool {
+        set(value) { self.containerViewController?.barHidden = value }
+        get { return self.containerViewController?.barHidden ?? true }
     }
-    public var groupbarVisibility: CGFloat {
-        set(value) { self.groupContainerViewController?.groupbarVisibility = value }
-        get { return self.groupContainerViewController?.groupbarVisibility ?? 0 }
+    public var barVisibility: CGFloat {
+        set(value) { self.containerViewController?.barVisibility = value }
+        get { return self.containerViewController?.barVisibility ?? 0 }
     }
 
 }
@@ -90,25 +91,25 @@ extension IQGroupContentViewController {
         get { return self.parentOf() }
     }
     public var groupbarHidden: Bool {
-        set(value) { self.groupViewController?.groupbarHidden = value }
-        get { return self.groupViewController?.groupbarHidden ?? true }
+        set(value) { self.groupViewController?.barHidden = value }
+        get { return self.groupViewController?.barHidden ?? true }
     }
     public var groupbarVisibility: CGFloat {
-        set(value) { self.groupViewController?.groupbarVisibility = value }
-        get { return self.groupViewController?.groupbarVisibility ?? 0 }
+        set(value) { self.groupViewController?.barVisibility = value }
+        get { return self.groupViewController?.barVisibility ?? 0 }
     }
     public var groupbarItem: QGroupbarItem? {
-        set(value) { self.groupViewController?.groupbarItem = value }
-        get { return self.groupViewController?.groupbarItem }
+        set(value) { self.groupViewController?.barItem = value }
+        get { return self.groupViewController?.barItem }
     }
     public var groupAnimation: IQGroupViewControllerAnimation? {
-        set(value) { self.groupViewController?.groupAnimation = value }
-        get { return self.groupViewController?.groupAnimation }
+        set(value) { self.groupViewController?.animation = value }
+        get { return self.groupViewController?.animation }
     }
 
     public func setGroupItem(_ item: QGroupbarItem, animated: Bool) {
         guard let vc = self.groupViewController else { return }
-        vc.setGroupItem(item, animated: animated)
+        vc.set(item: item, animated: animated)
     }
 
 }

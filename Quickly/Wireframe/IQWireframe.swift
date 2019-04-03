@@ -6,21 +6,21 @@
 
 public protocol IQBaseWireframe : class {
 
-    var baseViewController: IQViewController { get }
+    var presentableViewController: IQViewController { get }
     
     func setup()
     
-    func present(_ viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?)
-    func dismiss(_ viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func present(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func dismiss(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?)
 
-    func presentModal(_ viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?)
-    func dismissModal(_ viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func present(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func dismiss(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?)
 
-    func presentDialog(_ viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?)
-    func dismissDialog(_ viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func present(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func dismiss(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?)
 
-    func presentPush(_ viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)?)
-    func dismissPush(_ viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func present(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func dismiss(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)?)
 
 }
 
@@ -51,28 +51,28 @@ public protocol IQRootWireframe : IQWireframe {
 
 extension IQRootWireframe {
 
-    public func presentModal(_ viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.modalContainerViewController?.presentModal(viewController: viewController, animated: animated, completion: completion)
+    public func present(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        self.modalContainerViewController?.present(viewController: viewController, animated: animated, completion: completion)
     }
 
-    public func dismissModal(_ viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.modalContainerViewController?.dismissModal(viewController: viewController, animated: animated, completion: completion)
+    public func dismiss(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        self.modalContainerViewController?.dismiss(viewController: viewController, animated: animated, completion: completion)
     }
 
-    public func presentDialog(_ viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.dialogContainerViewController?.presentDialog(viewController: viewController, animated: animated, completion: completion)
+    public func present(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        self.dialogContainerViewController?.present(viewController: viewController, animated: animated, completion: completion)
     }
 
-    public func dismissDialog(_ viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.dialogContainerViewController?.dismissDialog(viewController: viewController, animated: animated, completion: completion)
+    public func dismiss(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        self.dialogContainerViewController?.dismiss(viewController: viewController, animated: animated, completion: completion)
     }
 
-    public func presentPush(_ viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.pushContainerViewController?.presentPush(viewController: viewController, animated: animated, completion: completion)
+    public func present(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        self.pushContainerViewController?.present(viewController: viewController, animated: animated, completion: completion)
     }
 
-    public func dismissPush(_ viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.pushContainerViewController?.dismissPush(viewController: viewController, animated: animated, completion: completion)
+    public func dismiss(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        self.pushContainerViewController?.dismiss(viewController: viewController, animated: animated, completion: completion)
     }
 
 }
@@ -81,54 +81,54 @@ extension IQRootWireframe {
 
 public protocol IQChildWireframe : IQWireframe {
 
-    associatedtype ContextType: IQContext
     associatedtype ParentType: IQWireframe
+    associatedtype ContextType: IQContext
 
-    var context: ContextType { get }
     var parent: ParentType? { get }
+    var context: ContextType { get }
 
 }
 
 extension IQChildWireframe {
     
-    public func present(_ viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
-        guard let parentWireframe = self.parent else { return }
-        parentWireframe.present(viewController, animated: animated, completion: completion)
+    public func present(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        guard let parent = self.parent else { return }
+        parent.present(viewController: viewController, animated: animated, completion: completion)
     }
     
-    public func dismiss(_ viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
-        guard let parentWireframe = self.parent else { return }
-        parentWireframe.dismiss(viewController, animated: animated, completion: completion)
+    public func dismiss(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        guard let parent = self.parent else { return }
+        parent.dismiss(viewController: viewController, animated: animated, completion: completion)
     }
 
-    public func presentModal(_ viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        guard let parentWireframe = self.parent else { return }
-        parentWireframe.presentModal(viewController, animated: animated, completion: completion)
+    public func present(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        guard let parent = self.parent else { return }
+        parent.present(viewController: viewController, animated: animated, completion: completion)
     }
 
-    public func dismissModal(_ viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        guard let parentWireframe = self.parent else { return }
-        parentWireframe.dismissModal(viewController, animated: animated, completion: completion)
+    public func dismiss(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        guard let parent = self.parent else { return }
+        parent.dismiss(viewController: viewController, animated: animated, completion: completion)
     }
 
-    public func presentDialog(_ viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        guard let parentWireframe = self.parent else { return }
-        parentWireframe.presentDialog(viewController, animated: animated, completion: completion)
+    public func present(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        guard let parent = self.parent else { return }
+        parent.present(viewController: viewController, animated: animated, completion: completion)
     }
 
-    public func dismissDialog(_ viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        guard let parentWireframe = self.parent else { return }
-        parentWireframe.dismissDialog(viewController, animated: animated, completion: completion)
+    public func dismiss(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        guard let parent = self.parent else { return }
+        parent.dismiss(viewController: viewController, animated: animated, completion: completion)
     }
 
-    public func presentPush(_ viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        guard let parentWireframe = self.parent else { return }
-        parentWireframe.presentPush(viewController, animated: animated, completion: completion)
+    public func present(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        guard let parent = self.parent else { return }
+        parent.present(viewController: viewController, animated: animated, completion: completion)
     }
 
-    public func dismissPush(_ viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        guard let parentWireframe = self.parent else { return }
-        parentWireframe.dismissPush(viewController, animated: animated, completion: completion)
+    public func dismiss(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        guard let parent = self.parent else { return }
+        parent.dismiss(viewController: viewController, animated: animated, completion: completion)
     }
 
 }

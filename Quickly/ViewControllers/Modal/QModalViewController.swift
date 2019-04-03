@@ -4,108 +4,108 @@
 
 open class QModalViewController : QViewController, IQModalViewController {
 
-    open private(set) var modalContentViewController: IQModalContentViewController
-    open var modalPresentAnimation: IQModalViewControllerFixedAnimation?
-    open var modalDismissAnimation: IQModalViewControllerFixedAnimation?
-    open var modalInteractiveDismissAnimation: IQModalViewControllerInteractiveAnimation?
+    open private(set) var contentViewController: IQModalContentViewController
+    open var presentAnimation: IQModalViewControllerFixedAnimation?
+    open var dismissAnimation: IQModalViewControllerFixedAnimation?
+    open var interactiveDismissAnimation: IQModalViewControllerInteractiveAnimation?
 
     public init(_ contentViewController: IQModalContentViewController) {
-        self.modalContentViewController = contentViewController
+        self.contentViewController = contentViewController
         super.init()
     }
 
     open override func setup() {
         super.setup()
 
-        self.modalContentViewController.parent = self
+        self.contentViewController.parent = self
     }
 
     open override func didLoad() {
-        self.modalContentViewController.view.frame = self.view.bounds
-        self.view.addSubview(self.modalContentViewController.view)
+        self.contentViewController.view.frame = self.view.bounds
+        self.view.addSubview(self.contentViewController.view)
     }
 
     open override func layout(bounds: CGRect) {
-        self.modalContentViewController.view.frame = bounds
+        self.contentViewController.view.frame = bounds
     }
 
     open override func prepareInteractivePresent() {
         super.prepareInteractivePresent()
-        self.modalContentViewController.prepareInteractivePresent()
+        self.contentViewController.prepareInteractivePresent()
     }
 
     open override func cancelInteractivePresent() {
         super.cancelInteractivePresent()
-        self.modalContentViewController.cancelInteractivePresent()
+        self.contentViewController.cancelInteractivePresent()
     }
 
     open override func finishInteractivePresent() {
         super.finishInteractivePresent()
-        self.modalContentViewController.finishInteractivePresent()
+        self.contentViewController.finishInteractivePresent()
     }
 
     open override func willPresent(animated: Bool) {
         super.willPresent(animated: animated)
-        self.modalContentViewController.willPresent(animated: animated)
+        self.contentViewController.willPresent(animated: animated)
     }
 
     open override func didPresent(animated: Bool) {
         super.didPresent(animated: animated)
-        self.modalContentViewController.didPresent(animated: animated)
+        self.contentViewController.didPresent(animated: animated)
     }
 
     open override func prepareInteractiveDismiss() {
         super.prepareInteractiveDismiss()
-        self.modalContentViewController.prepareInteractiveDismiss()
+        self.contentViewController.prepareInteractiveDismiss()
     }
 
     open override func cancelInteractiveDismiss() {
         super.cancelInteractiveDismiss()
-        self.modalContentViewController.cancelInteractiveDismiss()
+        self.contentViewController.cancelInteractiveDismiss()
     }
 
     open override func finishInteractiveDismiss() {
         super.finishInteractiveDismiss()
-        self.modalContentViewController.finishInteractiveDismiss()
+        self.contentViewController.finishInteractiveDismiss()
     }
 
     open override func willDismiss(animated: Bool) {
         super.willDismiss(animated: animated)
-        self.modalContentViewController.willDismiss(animated: animated)
+        self.contentViewController.willDismiss(animated: animated)
     }
 
     open override func didDismiss(animated: Bool) {
         super.didDismiss(animated: animated)
-        self.modalContentViewController.didDismiss(animated: animated)
+        self.contentViewController.didDismiss(animated: animated)
     }
 
     open override func willTransition(size: CGSize) {
         super.willTransition(size: size)
-        self.modalContentViewController.willTransition(size: size)
+        self.contentViewController.willTransition(size: size)
     }
 
     open override func didTransition(size: CGSize) {
         super.didTransition(size: size)
-        self.modalContentViewController.didTransition(size: size)
+        self.contentViewController.didTransition(size: size)
     }
 
     open func updateContent() {
     }
 
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
-        return self.modalContentViewController.supportedOrientations()
+        return self.contentViewController.supportedOrientations()
     }
 
     open override func preferedStatusBarHidden() -> Bool {
-        return self.modalContentViewController.preferedStatusBarHidden()
+        return self.contentViewController.preferedStatusBarHidden()
     }
 
     open override func preferedStatusBarStyle() -> UIStatusBarStyle {
-        return self.modalContentViewController.preferedStatusBarStyle()
+        return self.contentViewController.preferedStatusBarStyle()
     }
 
     open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
-        return self.modalContentViewController.preferedStatusBarAnimation()
+        return self.contentViewController.preferedStatusBarAnimation()
     }
 
 }

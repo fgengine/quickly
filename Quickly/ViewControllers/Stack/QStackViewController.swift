@@ -4,139 +4,139 @@
 
 open class QStackViewController : QViewController, IQStackViewController {
 
-    open var stackbar: QStackbar? {
-        set(value) { self.setStackbar(value) }
-        get { return self._stackbar }
+    open var barView: QStackbar? {
+        set(value) { self.set(barView: value) }
+        get { return self._barView }
     }
-    open var stackbarHeight: CGFloat {
-        set(value) { self.setStackbarHeight(value) }
-        get { return self._stackbarHeight }
+    open var barHeight: CGFloat {
+        set(value) { self.set(barHeight: value) }
+        get { return self._barHeight }
     }
-    open var stackbarHidden: Bool {
-        set(value) { self.setStackbarHidden(value) }
-        get { return self._stackbarHidden }
+    open var barHidden: Bool {
+        set(value) { self.set(barHidden: value) }
+        get { return self._barHidden }
     }
-    open private(set) var stackContentViewController: IQStackContentViewController
-    open var stackPresentAnimation: IQStackViewControllerPresentAnimation?
-    open var stackDismissAnimation: IQStackViewControllerDismissAnimation?
-    open var stackInteractiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation?
+    open private(set) var contentViewController: IQStackContentViewController
+    open var presentAnimation: IQStackViewControllerPresentAnimation?
+    open var dismissAnimation: IQStackViewControllerDismissAnimation?
+    open var interactiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation?
     
-    private var _stackbar: QStackbar?
-    private var _stackbarHeight: CGFloat
-    private var _stackbarHidden: Bool
+    private var _barView: QStackbar?
+    private var _barHeight: CGFloat
+    private var _barHidden: Bool
 
     public init(_ contentViewController: IQStackContentViewController) {
-        self._stackbarHeight = 50
-        self._stackbarHidden = false
-        self.stackContentViewController = contentViewController
+        self._barHeight = 50
+        self._barHidden = false
+        self.contentViewController = contentViewController
         super.init()
     }
 
     open override func setup() {
         super.setup()
 
-        self.stackContentViewController.parent = self
+        self.contentViewController.parent = self
     }
 
     open override func didLoad() {
         self._updateAdditionalEdgeInsets()
 
-        self.stackContentViewController.view.frame = self.view.bounds
-        self.view.addSubview(self.stackContentViewController.view)
+        self.contentViewController.view.frame = self.view.bounds
+        self.view.addSubview(self.contentViewController.view)
 
-        if let stackbar = self._stackbar {
+        if let stackbar = self._barView {
             self.view.addSubview(stackbar)
         }
     }
 
     open override func layout(bounds: CGRect) {
-        self.stackContentViewController.view.frame = bounds
-        if let stackbar = self._stackbar {
-            stackbar.edgeInsets = self._stackbarEdgeInsets()
-            stackbar.frame = self._stackbarFrame(bounds: bounds)
+        self.contentViewController.view.frame = bounds
+        if let stackbar = self._barView {
+            stackbar.edgeInsets = self._barEdgeInsets()
+            stackbar.frame = self._barFrame(bounds: bounds)
         }
     }
 
     open override func prepareInteractivePresent() {
         super.prepareInteractivePresent()
-        self.stackContentViewController.prepareInteractivePresent()
+        self.contentViewController.prepareInteractivePresent()
     }
 
     open override func cancelInteractivePresent() {
         super.cancelInteractivePresent()
-        self.stackContentViewController.cancelInteractivePresent()
+        self.contentViewController.cancelInteractivePresent()
     }
 
     open override func finishInteractivePresent() {
         super.finishInteractivePresent()
-        self.stackContentViewController.finishInteractivePresent()
+        self.contentViewController.finishInteractivePresent()
     }
 
     open override func willPresent(animated: Bool) {
         super.willPresent(animated: animated)
-        self.stackContentViewController.willPresent(animated: animated)
+        self.contentViewController.willPresent(animated: animated)
     }
 
     open override func didPresent(animated: Bool) {
         super.didPresent(animated: animated)
-        self.stackContentViewController.didPresent(animated: animated)
+        self.contentViewController.didPresent(animated: animated)
     }
 
     open override func prepareInteractiveDismiss() {
         super.prepareInteractiveDismiss()
-        self.stackContentViewController.prepareInteractiveDismiss()
+        self.contentViewController.prepareInteractiveDismiss()
     }
 
     open override func cancelInteractiveDismiss() {
         super.cancelInteractiveDismiss()
-        self.stackContentViewController.cancelInteractiveDismiss()
+        self.contentViewController.cancelInteractiveDismiss()
     }
 
     open override func finishInteractiveDismiss() {
         super.finishInteractiveDismiss()
-        self.stackContentViewController.finishInteractiveDismiss()
+        self.contentViewController.finishInteractiveDismiss()
     }
 
     open override func willDismiss(animated: Bool) {
         super.willDismiss(animated: animated)
-        self.stackContentViewController.willDismiss(animated: animated)
+        self.contentViewController.willDismiss(animated: animated)
     }
 
     open override func didDismiss(animated: Bool) {
         super.didDismiss(animated: animated)
-        self.stackContentViewController.didDismiss(animated: animated)
+        self.contentViewController.didDismiss(animated: animated)
     }
 
     open override func willTransition(size: CGSize) {
         super.willTransition(size: size)
-        self.stackContentViewController.willTransition(size: size)
+        self.contentViewController.willTransition(size: size)
     }
 
     open override func didTransition(size: CGSize) {
         super.didTransition(size: size)
-        self.stackContentViewController.didTransition(size: size)
+        self.contentViewController.didTransition(size: size)
     }
 
-    open func setStackbar(_ stackbar: QStackbar?, animated: Bool = false) {
+    open func set(barView: QStackbar?, animated: Bool = false) {
         if self.isLoaded == true {
-            if let stackbar = self._stackbar {
-                stackbar.removeFromSuperview()
+            if let view = self._barView {
+                view.removeFromSuperview()
             }
-            self._stackbar = stackbar
-            if let stackbar = self._stackbar {
-                stackbar.frame = self._stackbarFrame(bounds: self.view.bounds)
-                stackbar.edgeInsets = self._stackbarEdgeInsets()
-                self.view.insertSubview(stackbar, aboveSubview: self.stackContentViewController.view)
+            self._barView = barView
+            if let view = self._barView {
+                view.frame = self._barFrame(bounds: self.view.bounds)
+                view.edgeInsets = self._barEdgeInsets()
+                self.view.insertSubview(view, aboveSubview: self.contentViewController.view)
             }
             self.setNeedLayout()
         } else {
-            self._stackbar = stackbar
+            self._barView = barView
         }
         self._updateAdditionalEdgeInsets()
     }
 
-    open func setStackbarHeight(_ value: CGFloat, animated: Bool = false) {
-        self._stackbarHeight = value
+    open func set(barHeight: CGFloat, animated: Bool = false) {
+        self._barHeight = barHeight
         self.setNeedLayout()
         self._updateAdditionalEdgeInsets()
         if self.isLoaded == true {
@@ -148,8 +148,8 @@ open class QStackViewController : QViewController, IQStackViewController {
         }
     }
 
-    open func setStackbarHidden(_ value: Bool, animated: Bool = false) {
-        self._stackbarHidden = value
+    open func set(barHidden: Bool, animated: Bool = false) {
+        self._barHidden = barHidden
         self.setNeedLayout()
         self._updateAdditionalEdgeInsets()
         if self.isLoaded == true {
@@ -165,34 +165,38 @@ open class QStackViewController : QViewController, IQStackViewController {
     }
 
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
-        return self.stackContentViewController.supportedOrientations()
+        return self.contentViewController.supportedOrientations()
     }
 
     open override func preferedStatusBarHidden() -> Bool {
-        return self.stackContentViewController.preferedStatusBarHidden()
+        return self.contentViewController.preferedStatusBarHidden()
     }
 
     open override func preferedStatusBarStyle() -> UIStatusBarStyle {
-        return self.stackContentViewController.preferedStatusBarStyle()
+        return self.contentViewController.preferedStatusBarStyle()
     }
 
     open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
-        return self.stackContentViewController.preferedStatusBarAnimation()
+        return self.contentViewController.preferedStatusBarAnimation()
     }
+    
+}
+
+extension QStackViewController {
 
     private func _updateAdditionalEdgeInsets() {
         self.additionalEdgeInsets = UIEdgeInsets(
-            top: (self._stackbar != nil && self._stackbarHidden == false) ? self._stackbarHeight : 0,
+            top: (self._barView != nil && self._barHidden == false) ? self._barHeight : 0,
             left: 0,
             bottom: 0,
             right: 0
         )
     }
 
-    private func _stackbarFrame(bounds: CGRect) -> CGRect {
+    private func _barFrame(bounds: CGRect) -> CGRect {
         let edgeInsets = self.inheritedEdgeInsets
-        let fullHeight = self._stackbarHeight + edgeInsets.top
-        if self._stackbarHidden == true {
+        let fullHeight = self._barHeight + edgeInsets.top
+        if self._barHidden == true {
             return CGRect(
                 x: bounds.origin.x,
                 y: bounds.origin.y - fullHeight,
@@ -208,7 +212,7 @@ open class QStackViewController : QViewController, IQStackViewController {
         )
     }
 
-    private func _stackbarEdgeInsets() -> UIEdgeInsets {
+    private func _barEdgeInsets() -> UIEdgeInsets {
         let edgeInsets = self.inheritedEdgeInsets
         return UIEdgeInsets(
             top: edgeInsets.top,

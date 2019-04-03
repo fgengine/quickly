@@ -59,19 +59,19 @@ public protocol IQStackContainerViewController : IQGroupContentViewController {
     var hidesGroupbarWhenPushed: Bool { set get }
     var isAnimating: Bool { get }
     
-    func setViewControllers(_ viewControllers: [IQStackViewController], animated: Bool, completion: (() -> Swift.Void)?)
+    func set(viewControllers: [IQStackViewController], animated: Bool, completion: (() -> Swift.Void)?)
 
-    func pushStack(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?)
-    func pushStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func push(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func push(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?)
     
-    func replaceStack(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?)
-    func replaceStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func replace(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func replace(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?)
 
-    func popStack(_ viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?)
-    func popStack(_ viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func pop(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func pop(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?)
 
-    func popStack(to viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?)
-    func popStack(to viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func popTo(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func popTo(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?)
 
 }
 
@@ -79,33 +79,33 @@ public protocol IQStackContainerViewController : IQGroupContentViewController {
 
 public protocol IQStackViewController : IQContentOwnerViewController {
 
-    var stackContainerViewController: IQStackContainerViewController? { get }
-    var stackbar: QStackbar? { set get }
-    var stackbarHeight: CGFloat { set get }
-    var stackbarHidden: Bool { set get }
-    var stackContentViewController: IQStackContentViewController { get }
+    var containerViewController: IQStackContainerViewController? { get }
+    var barView: QStackbar? { set get }
+    var barHeight: CGFloat { set get }
+    var barHidden: Bool { set get }
+    var contentViewController: IQStackContentViewController { get }
 
-    var stackPresentAnimation: IQStackViewControllerPresentAnimation? { set get }
-    var stackDismissAnimation: IQStackViewControllerDismissAnimation? { set get }
-    var stackInteractiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation? { set get }
+    var presentAnimation: IQStackViewControllerPresentAnimation? { set get }
+    var dismissAnimation: IQStackViewControllerDismissAnimation? { set get }
+    var interactiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation? { set get }
 
-    func setStackbar(_ stackbar: QStackbar?, animated: Bool)
-    func setStackbarHeight(_ height: CGFloat, animated: Bool)
-    func setStackbarHidden(_ hidden: Bool, animated: Bool)
+    func set(barView: QStackbar?, animated: Bool)
+    func set(barHeight: CGFloat, animated: Bool)
+    func set(barHidden: Bool, animated: Bool)
     
-    func popStack(animated: Bool, completion: (() -> Swift.Void)?)
+    func pop(animated: Bool, completion: (() -> Swift.Void)?)
 
 }
 
 extension IQStackViewController {
 
-    public var stackContainerViewController: IQStackContainerViewController? {
+    public var containerViewController: IQStackContainerViewController? {
         get { return self.parent as? IQStackContainerViewController }
     }
 
-    public func popStack(animated: Bool, completion: (() -> Swift.Void)?) {
-        guard let vc = self.stackContainerViewController else { return }
-        vc.popStack(self, animated: animated, completion: completion)
+    public func pop(animated: Bool, completion: (() -> Swift.Void)?) {
+        guard let vc = self.containerViewController else { return }
+        vc.pop(viewController: self, animated: animated, completion: completion)
     }
 
 }
@@ -137,49 +137,48 @@ extension IQStackContentViewController {
         get { return self.parentOf() }
     }
     public var stackbar: QStackbar? {
-        set(value) { self.stackViewController?.stackbar = value }
-        get { return self.stackViewController?.stackbar }
+        set(value) { self.stackViewController?.barView = value }
+        get { return self.stackViewController?.barView }
     }
     public var stackbarHeight: CGFloat {
-        set(value) { self.stackViewController?.stackbarHeight = value }
-        get { return self.stackViewController?.stackbarHeight ?? 0 }
+        set(value) { self.stackViewController?.barHeight = value }
+        get { return self.stackViewController?.barHeight ?? 0 }
     }
     public var stackbarHidden: Bool {
-        set(value) { self.stackViewController?.stackbarHidden = value }
-        get { return self.stackViewController?.stackbarHidden ?? true }
+        set(value) { self.stackViewController?.barHidden = value }
+        get { return self.stackViewController?.barHidden ?? true }
     }
     public var stackPresentAnimation: IQStackViewControllerPresentAnimation? {
-        set(value) { self.stackViewController?.stackPresentAnimation = value }
-        get { return self.stackViewController?.stackPresentAnimation }
+        set(value) { self.stackViewController?.presentAnimation = value }
+        get { return self.stackViewController?.presentAnimation }
     }
-
     public var stackDismissAnimation: IQStackViewControllerDismissAnimation? {
-        set(value) { self.stackViewController?.stackDismissAnimation = value }
-        get { return self.stackViewController?.stackDismissAnimation }
+        set(value) { self.stackViewController?.dismissAnimation = value }
+        get { return self.stackViewController?.dismissAnimation }
     }
     public var stackInteractiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation? {
-        set(value) { self.stackViewController?.stackInteractiveDismissAnimation = value }
-        get { return self.stackViewController?.stackInteractiveDismissAnimation }
+        set(value) { self.stackViewController?.interactiveDismissAnimation = value }
+        get { return self.stackViewController?.interactiveDismissAnimation }
     }
 
     public func setStackbar(_ stackbar: QStackbar?, animated: Bool) {
         guard let vc = self.stackViewController else { return }
-        vc.setStackbar(stackbar, animated: animated)
+        vc.set(barView: stackbar, animated: animated)
     }
 
     public func setStackbarHeight(_ height: CGFloat, animated: Bool) {
         guard let vc = self.stackViewController else { return }
-        vc.setStackbarHeight(height, animated: animated)
+        vc.set(barHeight: height, animated: animated)
     }
 
     public func setStackbarHidden(_ hidden: Bool, animated: Bool) {
         guard let vc = self.stackViewController else { return }
-        vc.setStackbarHidden(hidden, animated: animated)
+        vc.set(barHidden: hidden, animated: animated)
     }
 
     public func popStack(animated: Bool, completion: (() -> Swift.Void)?) {
         guard let vc = self.stackViewController else { return }
-        vc.popStack(animated: animated, completion: completion)
+        vc.pop(animated: animated, completion: completion)
     }
 
 }

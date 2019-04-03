@@ -4,27 +4,31 @@
 
 open class QPushViewController : QViewController, IQPushViewController {
 
-    open private(set) var pushContentViewController: IQPushContentViewController
-    open var pushState: QPushViewControllerState {
+    open private(set) var contentViewController: IQPushContentViewController
+    open var state: QPushViewControllerState {
         didSet { self._relayoutContentViewController() }
     }
-    open var pushOffset: CGFloat {
+    open var offset: CGFloat {
         didSet { self._relayoutContentViewController() }
     }
-    open private(set) var pushDisplayTime: TimeInterval?
-    open var pushPresentAnimation: IQPushViewControllerFixedAnimation?
-    open var pushDismissAnimation: IQPushViewControllerFixedAnimation?
-    open var pushInteractiveDismissAnimation: IQPushViewControllerInteractiveAnimation?
-    public private(set) lazy var tapGesture: UITapGestureRecognizer = self._prepareTapGesture()
+    open private(set) var displayTime: TimeInterval?
+    open var presentAnimation: IQPushViewControllerFixedAnimation?
+    open var dismissAnimation: IQPushViewControllerFixedAnimation?
+    open var interactiveDismissAnimation: IQPushViewControllerInteractiveAnimation?
+    public private(set) lazy var tapGesture: UITapGestureRecognizer = {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(self._handleTapGesture(_:)))
+        gesture.delegate = self
+        return gesture
+    }()
     
     private var _timer: QTimer?
     private var _contentLayoutConstraints: [NSLayoutConstraint]
 
     public init(_ contentViewController: IQPushContentViewController, displayTime: TimeInterval? = nil) {
-        self.pushContentViewController = contentViewController
-        self.pushState = .hide
-        self.pushOffset = 0
-        self.pushDisplayTime = displayTime
+        self.contentViewController = contentViewController
+        self.state = .hide
+        self.offset = 0
+        self.displayTime = displayTime
         self._contentLayoutConstraints = []
         super.init()
     }
@@ -40,22 +44,22 @@ open class QPushViewController : QViewController, IQPushViewController {
 
         self.additionalEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 0, right: 8)
 
-        self.pushContentViewController.parent = self
+        self.contentViewController.parent = self
     }
 
     open override func didLoad() {
-        if let displayTime = self.pushDisplayTime {
+        if let displayTime = self.displayTime {
             let timer = QTimer(interval: displayTime, onFinished: { [weak self] (timer: QTimer) in
                 guard let strong = self else { return }
-                strong.pushContentViewController.didTimeout()
+                strong.contentViewController.didTimeout()
             })
             timer.start()
             self._timer = timer
         }
 
-        self.pushContentViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        self.pushContentViewController.view.addGestureRecognizer(self.tapGesture)
-        self.view.addSubview(self.pushContentViewController.view)
+        self.contentViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        self.contentViewController.view.addGestureRecognizer(self.tapGesture)
+        self.view.addSubview(self.contentViewController.view)
 
         self._layoutContentViewController()
     }
@@ -67,27 +71,27 @@ open class QPushViewController : QViewController, IQPushViewController {
 
     open override func prepareInteractivePresent() {
         super.prepareInteractivePresent()
-        self.pushContentViewController.prepareInteractivePresent()
+        self.contentViewController.prepareInteractivePresent()
     }
 
     open override func cancelInteractivePresent() {
         super.cancelInteractivePresent()
-        self.pushContentViewController.cancelInteractivePresent()
+        self.contentViewController.cancelInteractivePresent()
     }
 
     open override func finishInteractivePresent() {
         super.finishInteractivePresent()
-        self.pushContentViewController.finishInteractivePresent()
+        self.contentViewController.finishInteractivePresent()
     }
 
     open override func willPresent(animated: Bool) {
         super.willPresent(animated: animated)
-        self.pushContentViewController.willPresent(animated: animated)
+        self.contentViewController.willPresent(animated: animated)
     }
 
     open override func didPresent(animated: Bool) {
         super.didPresent(animated: animated)
-        self.pushContentViewController.didPresent(animated: animated)
+        self.contentViewController.didPresent(animated: animated)
     }
 
     open override func prepareInteractiveDismiss() {
@@ -95,7 +99,7 @@ open class QPushViewController : QViewController, IQPushViewController {
             timer.pause()
         }
         super.prepareInteractiveDismiss()
-        self.pushContentViewController.prepareInteractiveDismiss()
+        self.contentViewController.prepareInteractiveDismiss()
     }
 
     open override func cancelInteractiveDismiss() {
@@ -103,7 +107,7 @@ open class QPushViewController : QViewController, IQPushViewController {
         if let timer = self._timer {
             timer.resume()
         }
-        self.pushContentViewController.cancelInteractiveDismiss()
+        self.contentViewController.cancelInteractiveDismiss()
     }
 
     open override func finishInteractiveDismiss() {
@@ -111,50 +115,50 @@ open class QPushViewController : QViewController, IQPushViewController {
         if let timer = self._timer {
             timer.stop()
         }
-        self.pushContentViewController.finishInteractiveDismiss()
+        self.contentViewController.finishInteractiveDismiss()
     }
 
     open override func willDismiss(animated: Bool) {
         super.willDismiss(animated: animated)
-        self.pushContentViewController.willDismiss(animated: animated)
+        self.contentViewController.willDismiss(animated: animated)
     }
 
     open override func didDismiss(animated: Bool) {
         super.didDismiss(animated: animated)
-        self.pushContentViewController.didDismiss(animated: animated)
+        self.contentViewController.didDismiss(animated: animated)
     }
 
     open override func willTransition(size: CGSize) {
         super.willTransition(size: size)
-        self.pushContentViewController.willTransition(size: size)
+        self.contentViewController.willTransition(size: size)
     }
 
     open override func didTransition(size: CGSize) {
         super.didTransition(size: size)
-        self.pushContentViewController.didTransition(size: size)
+        self.contentViewController.didTransition(size: size)
     }
 
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
-        return self.pushContentViewController.supportedOrientations()
+        return self.contentViewController.supportedOrientations()
     }
 
     open override func preferedStatusBarHidden() -> Bool {
-        return self.pushContentViewController.preferedStatusBarHidden()
+        return self.contentViewController.preferedStatusBarHidden()
     }
 
     open override func preferedStatusBarStyle() -> UIStatusBarStyle {
-        return self.pushContentViewController.preferedStatusBarStyle()
+        return self.contentViewController.preferedStatusBarStyle()
     }
 
     open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
-        return self.pushContentViewController.preferedStatusBarAnimation()
+        return self.contentViewController.preferedStatusBarAnimation()
     }
+    
+}
 
-    private func _prepareTapGesture() -> UITapGestureRecognizer {
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(self._tapGestureHandler(_:)))
-        gesture.delegate = self
-        return gesture
-    }
+// MARK: - Private -
+
+extension QPushViewController {
 
     private func _relayoutContentViewController() {
         guard self.isLoaded == true else { return }
@@ -171,16 +175,16 @@ open class QPushViewController : QViewController, IQPushViewController {
             bottom: additionalEdgeInsets.bottom + inheritedEdgeInsets.bottom,
             right: additionalEdgeInsets.right + inheritedEdgeInsets.right
         )
-        switch self.pushState {
+        switch self.state {
         case .hide:
-            self._contentLayoutConstraints.append(self.view.topLayout == self.pushContentViewController.view.bottomLayout.offset(self.pushOffset))
+            self._contentLayoutConstraints.append(self.view.topLayout == self.contentViewController.view.bottomLayout.offset(self.offset))
         case .show:
-            self._contentLayoutConstraints.append(self.view.topLayout == self.pushContentViewController.view.topLayout.offset(-(edgeInsets.top + self.pushOffset)))
+            self._contentLayoutConstraints.append(self.view.topLayout == self.contentViewController.view.topLayout.offset(-(edgeInsets.top + self.offset)))
         }
         self._contentLayoutConstraints.append(contentsOf: [
-            self.view.leadingLayout == self.pushContentViewController.view.leadingLayout.offset(-edgeInsets.left),
-            self.view.trailingLayout == self.pushContentViewController.view.trailingLayout.offset(edgeInsets.right),
-            self.view.bottomLayout <= self.pushContentViewController.view.bottomLayout.offset(-edgeInsets.bottom) ~ .defaultLow
+            self.view.leadingLayout == self.contentViewController.view.leadingLayout.offset(-edgeInsets.left),
+            self.view.trailingLayout == self.contentViewController.view.trailingLayout.offset(edgeInsets.right),
+            self.view.bottomLayout <= self.contentViewController.view.bottomLayout.offset(-edgeInsets.bottom) ~ .defaultLow
         ])
         if self._contentLayoutConstraints.count > 0 {
             self.view.addConstraints(self._contentLayoutConstraints)
@@ -194,17 +198,19 @@ open class QPushViewController : QViewController, IQPushViewController {
         }
     }
 
-    @objc private func _tapGestureHandler(_ sender: Any) {
-        self.pushContentViewController.didPressed()
+    @objc private func _handleTapGesture(_ sender: Any) {
+        self.contentViewController.didPressed()
     }
 
 }
+
+// MARK: - UIGestureRecognizerDelegate -
     
 extension QPushViewController : UIGestureRecognizerDelegate {
 
     open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        let location = gestureRecognizer.location(in: self.pushContentViewController.view)
-        if self.pushContentViewController.view.point(inside: location, with: nil) == false {
+        let location = gestureRecognizer.location(in: self.contentViewController.view)
+        if self.contentViewController.view.point(inside: location, with: nil) == false {
             return false
         }
         return true

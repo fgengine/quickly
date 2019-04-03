@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QCollectionViewController : QViewController, IQCollectionControllerObserver, IQKeyboardObserver, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController {
+open class QCollectionViewController : QViewController, IQCollectionControllerObserver, IQKeyboardObserver, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQHamburgerContentViewController {
     
     public enum PagesPosition {
         case top(offset: CGFloat)

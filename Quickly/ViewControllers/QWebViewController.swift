@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDelegate, UIScrollViewDelegate, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController {
+open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDelegate, UIScrollViewDelegate, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQHamburgerContentViewController {
     
     public var contentOffset: CGPoint {
         get {

@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QCompositionViewController< Composition: IQComposition > : QViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController {
+open class QCompositionViewController< Composition: IQComposition > : QViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQHamburgerContentViewController {
 
     public var contentOffset: CGPoint {
         get { return CGPoint.zero }

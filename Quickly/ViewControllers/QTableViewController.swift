@@ -15,7 +15,7 @@ open class QTableViewControllerFooterView : QView {
     
 }
 
-open class QTableViewController : QViewController, IQTableControllerObserver, IQKeyboardObserver, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController {
+open class QTableViewController : QViewController, IQTableControllerObserver, IQKeyboardObserver, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQHamburgerContentViewController {
 
     public var contentOffset: CGPoint {
         get {

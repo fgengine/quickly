@@ -1,5 +1,5 @@
 //
-//  Application
+//  Docusketch
 //
 
 open class QPincodeComposable : QComposable {

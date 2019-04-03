@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QPageContainerViewController : QViewController, IQPageContainerViewController, IQStackContentViewController, IQGroupContentViewController, IQModalContentViewController {
+open class QPageContainerViewController : QViewController, IQPageContainerViewController, IQStackContentViewController, IQGroupContentViewController, IQModalContentViewController, IQHamburgerContentViewController {
 
     public var contentOffset: CGPoint {
         get { return CGPoint.zero }
@@ -10,20 +10,20 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
     public var contentSize: CGSize {
         get { return CGSize.zero }
     }
-    open var pagebar: QPagebar? {
-        set(value) { self.setPagebar(value) }
-        get { return self._pagebar }
+    open var barView: QPagebar? {
+        set(value) { self.set(bar: value) }
+        get { return self._barView }
     }
-    open var pagebarHeight: CGFloat {
-        set(value) { self.setPagebarHeight(value) }
-        get { return self._pagebarHeight }
+    open var barHeight: CGFloat {
+        set(value) { self.set(barHeight: value) }
+        get { return self._barHeight }
     }
-    open var pagebarHidden: Bool {
-        set(value) { self.setPagebarHidden(value) }
-        get { return self._pagebarHidden }
+    open var barHidden: Bool {
+        set(value) { self.set(barHidden: value) }
+        get { return self._barHidden }
     }
     open var viewControllers: [IQPageViewController] {
-        set(value) { self.setViewControllers(value) }
+        set(value) { self.set(viewControllers: value) }
         get { return self._viewControllers }
     }
     open private(set) var currentViewController: IQPageViewController?
@@ -34,16 +34,21 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
     open var interactiveAnimation: IQPageViewControllerInteractiveAnimation?
     open private(set) var isAnimating: Bool {
         didSet {
-            if let pagebar = self._pagebar {
+            if let pagebar = self._barView {
                 pagebar.isUserInteractionEnabled = self.isAnimating == false
             }
         }
     }
-    public private(set) lazy var interactiveGesture: UIPanGestureRecognizer = self._prepareInteractiveGesture()
+    public private(set) lazy var interactiveGesture: UIPanGestureRecognizer = {
+        let gesture = UIPanGestureRecognizer(target: self, action: #selector(self._handleInteractiveGesture(_:)))
+        gesture.delaysTouchesBegan = true
+        gesture.delegate = self
+        return gesture
+    }()
     
-    private var _pagebar: QPagebar?
-    private var _pagebarHeight: CGFloat
-    private var _pagebarHidden: Bool
+    private var _barView: QPagebar?
+    private var _barHeight: CGFloat
+    private var _barHidden: Bool
     private var _viewControllers: [IQPageViewController]
     private var _activeInteractiveCurrentViewController: IQPageViewController?
     private var _activeInteractiveForwardViewController: IQPageViewController?
@@ -51,8 +56,8 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
     private var _activeInteractiveAnimation: IQPageViewControllerInteractiveAnimation?
 
     public override init() {
-        self._pagebarHeight = 44
-        self._pagebarHidden = false
+        self._barHeight = 44
+        self._barHidden = false
         self._viewControllers = []
         self.forwardAnimation = QPageViewControllerForwardAnimation()
         self.backwardAnimation = QPageViewControllerBackwardAnimation()
@@ -66,22 +71,22 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
 
         self.view.addGestureRecognizer(self.interactiveGesture)
 
-        let displayed = self._displayedViewController(self.currentViewController)
+        let displayed = self._displayed(viewController: self.currentViewController)
         if let vc = displayed.0 {
-            self._appearViewController(vc, frame: self._backwardViewControllerFrame())
+            self._appear(viewController: vc, frame: self._backwardViewControllerFrame())
             self.backwardViewController = vc
         }
         if let vc = displayed.1 {
-            self._appearViewController(vc, frame: self._currentViewControllerFrame())
+            self._appear(viewController: vc, frame: self._currentViewControllerFrame())
             self.currentViewController = vc
         }
         if let vc = displayed.2 {
-            self._appearViewController(vc, frame: self._forwardViewControllerFrame())
+            self._appear(viewController: vc, frame: self._forwardViewControllerFrame())
             self.forwardViewController = vc
         }
-        if let pagebar = self._pagebar {
-            pagebar.items = self._viewControllers.compactMap({ return $0.pageItem })
-            pagebar.setSelectedItem(self.currentViewController?.pageItem, animated: false)
+        if let pagebar = self._barView {
+            pagebar.items = self._viewControllers.compactMap({ return $0.item })
+            pagebar.setSelectedItem(self.currentViewController?.item, animated: false)
             self.view.addSubview(pagebar)
         }
     }
@@ -99,9 +104,9 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
         if let vc = self.forwardViewController {
             vc.view.frame = self._forwardViewControllerFrame()
         }
-        if let pagebar = self._pagebar {
-            pagebar.edgeInsets = self._pagebarEdgeInsets()
-            pagebar.frame = self._pagebarFrame(bounds: bounds)
+        if let pagebar = self._barView {
+            pagebar.edgeInsets = self._barEdgeInsets()
+            pagebar.frame = self._barFrame(bounds: bounds)
         }
     }
 
@@ -209,34 +214,34 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
         return vc.preferedStatusBarAnimation()
     }
 
-    open func setPagebar(_ pagebar: QPagebar?, animated: Bool = false) {
+    open func set(bar: QPagebar?, animated: Bool = false) {
         if self.isLoaded == true {
-            if let pagebar = self._pagebar {
+            if let pagebar = self._barView {
                 pagebar.removeFromSuperview()
                 pagebar.delegate = nil
             }
-            self._pagebar = pagebar
-            if let pagebar = self._pagebar {
-                pagebar.frame = self._pagebarFrame(bounds: self.view.bounds)
-                pagebar.edgeInsets = self._pagebarEdgeInsets()
+            self._barView = bar
+            if let pagebar = self._barView {
+                pagebar.frame = self._barFrame(bounds: self.view.bounds)
+                pagebar.edgeInsets = self._barEdgeInsets()
                 pagebar.delegate = self
                 self.view.addSubview(pagebar)
             }
             self.setNeedLayout()
         } else {
-            if let pagebar = self._pagebar {
+            if let pagebar = self._barView {
                 pagebar.delegate = nil
             }
-            self._pagebar = pagebar
-            if let pagebar = self._pagebar {
+            self._barView = bar
+            if let pagebar = self._barView {
                 pagebar.delegate = self
             }
         }
         self._updateAdditionalEdgeInsets()
     }
 
-    open func setPagebarHeight(_ value: CGFloat, animated: Bool = false) {
-        self._pagebarHeight = value
+    open func set(barHeight: CGFloat, animated: Bool = false) {
+        self._barHeight = barHeight
         self.setNeedLayout()
         self._updateAdditionalEdgeInsets()
         if self.isLoaded == true {
@@ -248,8 +253,8 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
         }
     }
 
-    open func setPagebarHidden(_ value: Bool, animated: Bool = false) {
-        self._pagebarHidden = value
+    open func set(barHidden: Bool, animated: Bool = false) {
+        self._barHidden = barHidden
         self.setNeedLayout()
         self._updateAdditionalEdgeInsets()
         if self.isLoaded == true {
@@ -261,18 +266,18 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
         }
     }
 
-    open func setViewControllers(_ viewControllers: [IQPageViewController], mode: QPageViewControllerAnimationMode = .none, completion: (() -> Swift.Void)? = nil) {
+    open func set(viewControllers: [IQPageViewController], mode: QPageViewControllerAnimationMode = .none, completion: (() -> Swift.Void)? = nil) {
         self._viewControllers.forEach({
-            self._disappearViewController($0)
-            self._removeChildViewController($0)
+            self._disappear(viewController: $0)
+            self._remove(childViewController: $0)
         })
         self._viewControllers = viewControllers
-        self._viewControllers.forEach({ self._addChildViewController($0) })
+        self._viewControllers.forEach({ self._add(childViewController: $0) })
         if self.isLoaded == true {
-            self._updateViewControllers(self.currentViewController, mode: mode, updation: {
-                if let pagebar = self._pagebar {
-                    let pagebarItems = self._viewControllers.compactMap({ return $0.pageItem })
-                    let selectedPagebarItem = self.currentViewController?.pageItem
+            self._update(viewController: self.currentViewController, mode: mode, updation: {
+                if let pagebar = self._barView {
+                    let pagebarItems = self._viewControllers.compactMap({ return $0.item })
+                    let selectedPagebarItem = self.currentViewController?.item
                     switch mode {
                     case .none:
                         pagebar.items = pagebarItems
@@ -291,27 +296,33 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
         }
     }
 
-    open func setCurrentViewController(_ viewController: IQPageViewController, mode: QPageViewControllerAnimationMode = .none, completion: (() -> Swift.Void)? = nil) {
-        guard self._viewControllers.contains(where: { viewController === $0 }) == true else { return }
+    open func set(currentViewController: IQPageViewController, mode: QPageViewControllerAnimationMode = .none, completion: (() -> Swift.Void)? = nil) {
+        guard self._viewControllers.contains(where: { currentViewController === $0 }) == true else { return }
         if self.isLoaded == true {
-            self._updateViewControllers(viewController, mode: mode, updation: {
-                if let pagebar = self._pagebar {
-                    pagebar.setSelectedItem(viewController.pageItem, animated: mode.isAnimating)
+            self._update(viewController: currentViewController, mode: mode, updation: {
+                if let pagebar = self._barView {
+                    pagebar.setSelectedItem(currentViewController.item, animated: mode.isAnimating)
                 }
             }, completion: completion)
         } else {
-            self.currentViewController = viewController
+            self.currentViewController = currentViewController
         }
     }
 
-    open func updatePageItem(_ viewController: IQPageViewController, animated: Bool) {
-        guard let pagebar = self._pagebar else { return }
+    open func didUpdate(viewController: IQPageViewController, animated: Bool) {
+        guard let pagebar = self._barView else { return }
         guard let index = self._viewControllers.firstIndex(where: { $0 === viewController }) else { return }
-        guard let pagebarItem = viewController.pageItem else { return }
+        guard let pagebarItem = viewController.item else { return }
         pagebar.replaceItem(pagebarItem, index: index)
     }
+    
+}
 
-    private func _displayedViewController(_ viewController: IQPageViewController?) -> (IQPageViewController?, IQPageViewController?, IQPageViewController?) {
+// MARK: - Private -
+
+extension QPageContainerViewController {
+
+    private func _displayed(viewController: IQPageViewController?) -> (IQPageViewController?, IQPageViewController?, IQPageViewController?) {
         var displayedBackward: IQPageViewController?
         var displayedCurrent: IQPageViewController?
         var displayedForward: IQPageViewController?
@@ -331,36 +342,36 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
         return (displayedBackward, displayedCurrent, displayedForward)
     }
 
-    private func _updateViewControllers(_ viewController: IQPageViewController?, mode: QPageViewControllerAnimationMode, updation: (() -> Swift.Void)? = nil, completion: (() -> Swift.Void)? = nil) {
+    private func _update(viewController: IQPageViewController?, mode: QPageViewControllerAnimationMode, updation: (() -> Swift.Void)? = nil, completion: (() -> Swift.Void)? = nil) {
         let currently = (self.backwardViewController, self.currentViewController, self.forwardViewController)
-        let displayed = self._displayedViewController(viewController)
+        let displayed = self._displayed(viewController: viewController)
         if currently.0 !== displayed.0 {
             self.backwardViewController = displayed.0
             if let vc = self.backwardViewController {
                 let frame = self._backwardViewControllerFrame()
-                self._appearViewController(vc, frame: frame)
+                self._appear(viewController: vc, frame: frame)
             }
         }
         if currently.2 !== displayed.2 {
             self.forwardViewController = displayed.2
             if let vc = self.forwardViewController {
                 let frame = self._backwardViewControllerFrame()
-                self._appearViewController(vc, frame: frame)
+                self._appear(viewController: vc, frame: frame)
             }
         }
         if currently.1 !== displayed.1 {
             self.currentViewController = displayed.1
             if let vc = self.currentViewController {
                 let frame = self._currentViewControllerFrame()
-                self._appearViewController(vc, frame: frame)
+                self._appear(viewController: vc, frame: frame)
             }
             updation?()
             if mode.isAnimating == true, let currentViewController = currently.1, let targetViewController = displayed.1 {
                 var animation: IQPageViewControllerAnimation
                 switch mode {
                 case .none: fatalError("Invalid mode")
-                case .backward: animation = self._prepareBackwardAnimation(currentViewController)
-                case .forward: animation = self._prepareForwardAnimation(currentViewController)
+                case .backward: animation = self._backwardAnimation(viewController: currentViewController)
+                case .forward: animation = self._forwardAnimation(viewController: currentViewController)
                 }
                 self.isAnimating = true
                 animation.prepare(
@@ -370,7 +381,7 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
                 )
                 animation.update(animated: true, complete: { [weak self] _ in
                     guard let strong = self else { return }
-                    strong._disappearViewControllers(currently, displayed)
+                    strong._disappear(old: currently, new: displayed)
                     strong.isAnimating = false
                     completion?()
                 })
@@ -383,28 +394,28 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
                     vc.willPresent(animated: false)
                     vc.didPresent(animated: false)
                 }
-                self._disappearViewControllers(currently, displayed)
+                self._disappear(old: currently, new: displayed)
                 completion?()
             }
         } else {
             updation?()
-            self._disappearViewControllers(currently, displayed)
+            self._disappear(old: currently, new: displayed)
             completion?()
         }
     }
     
-    private func _addChildViewController(_ viewController: IQPageViewController) {
-        viewController.parent = self
+    private func _add(childViewController: IQPageViewController) {
+        childViewController.parent = self
     }
     
-    private func _removeChildViewController(_ viewController: IQPageViewController) {
-        viewController.parent = nil
+    private func _remove(childViewController: IQPageViewController) {
+        childViewController.parent = nil
     }
 
-    private func _appearViewController(_ viewController: IQPageViewController, frame: CGRect) {
+    private func _appear(viewController: IQPageViewController, frame: CGRect) {
         viewController.view.frame = frame
         if viewController.view.superview !== self.view {
-            if let pagebar = self._pagebar {
+            if let pagebar = self._barView {
                 self.view.insertSubview(viewController.view, belowSubview: pagebar)
             } else {
                 self.view.addSubview(viewController.view)
@@ -412,47 +423,40 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
         }
     }
 
-    private func _disappearViewControllers(_ oldViewControllers: (IQPageViewController?, IQPageViewController?, IQPageViewController?), _ newViewControllers: (IQPageViewController?, IQPageViewController?, IQPageViewController?)) {
-        if let vc = oldViewControllers.0, (newViewControllers.0 !== vc) && (newViewControllers.1 !== vc) && (newViewControllers.2 !== vc) {
-            self._disappearViewController(vc)
+    private func _disappear(old: (IQPageViewController?, IQPageViewController?, IQPageViewController?), new: (IQPageViewController?, IQPageViewController?, IQPageViewController?)) {
+        if let vc = old.0, (new.0 !== vc) && (new.1 !== vc) && (new.2 !== vc) {
+            self._disappear(viewController: vc)
         }
-        if let vc = oldViewControllers.1, (newViewControllers.0 !== vc) && (newViewControllers.1 !== vc) && (newViewControllers.2 !== vc) {
-            self._disappearViewController(vc)
+        if let vc = old.1, (new.0 !== vc) && (new.1 !== vc) && (new.2 !== vc) {
+            self._disappear(viewController: vc)
         }
-        if let vc = oldViewControllers.2, (newViewControllers.0 !== vc) && (newViewControllers.1 !== vc) && (newViewControllers.2 !== vc) {
-            self._disappearViewController(vc)
+        if let vc = old.2, (new.0 !== vc) && (new.1 !== vc) && (new.2 !== vc) {
+            self._disappear(viewController: vc)
         }
     }
 
-    private func _disappearViewController(_ viewController: IQPageViewController) {
+    private func _disappear(viewController: IQPageViewController) {
         viewController.view.removeFromSuperview()
     }
 
-    private func _prepareForwardAnimation(_ viewController: IQPageViewController) -> IQPageViewControllerAnimation {
-        if let animation = viewController.pageForwardAnimation { return animation }
+    private func _forwardAnimation(viewController: IQPageViewController) -> IQPageViewControllerAnimation {
+        if let animation = viewController.forwardAnimation { return animation }
         return self.forwardAnimation
     }
 
-    private func _prepareBackwardAnimation(_ viewController: IQPageViewController) -> IQPageViewControllerAnimation {
-        if let animation = viewController.pageBackwardAnimation { return animation }
+    private func _backwardAnimation(viewController: IQPageViewController) -> IQPageViewControllerAnimation {
+        if let animation = viewController.backwardAnimation { return animation }
         return self.backwardAnimation
     }
 
-    private func _prepareInteractiveAnimation(_ viewController: IQPageViewController) -> IQPageViewControllerInteractiveAnimation? {
-        if let animation = viewController.pageInteractiveAnimation { return animation }
+    private func _interactiveAnimation(viewController: IQPageViewController) -> IQPageViewControllerInteractiveAnimation? {
+        if let animation = viewController.interactiveAnimation { return animation }
         return self.interactiveAnimation
-    }
-
-    private func _prepareInteractiveGesture() -> UIPanGestureRecognizer {
-        let gesture = UIPanGestureRecognizer(target: self, action: #selector(self._interactiveGestureHandler(_:)))
-        gesture.delaysTouchesBegan = true
-        gesture.delegate = self
-        return gesture
     }
 
     private func _updateAdditionalEdgeInsets() {
         self.additionalEdgeInsets = UIEdgeInsets(
-            top: (self._pagebar != nil && self._pagebarHidden == false) ? self._pagebarHeight : 0,
+            top: (self._barView != nil && self._barHidden == false) ? self._barHeight : 0,
             left: 0,
             bottom: 0,
             right: 0
@@ -483,10 +487,10 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
         )
     }
 
-    private func _pagebarFrame(bounds: CGRect) -> CGRect {
+    private func _barFrame(bounds: CGRect) -> CGRect {
         let edgeInsets = self.inheritedEdgeInsets
-        let fullHeight = self._pagebarHeight + edgeInsets.top
-        if self._pagebarHidden == true {
+        let fullHeight = self._barHeight + edgeInsets.top
+        if self._barHidden == true {
             return CGRect(
                 x: bounds.origin.x,
                 y: bounds.origin.y - fullHeight,
@@ -502,7 +506,7 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
         )
     }
 
-    private func _pagebarEdgeInsets() -> UIEdgeInsets {
+    private func _barEdgeInsets() -> UIEdgeInsets {
         let edgeInsets = self.inheritedEdgeInsets
         return UIEdgeInsets(
             top: edgeInsets.top,
@@ -513,14 +517,14 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
     }
 
     @objc
-    private func _interactiveGestureHandler(_ sender: Any) {
+    private func _handleInteractiveGesture(_ sender: Any) {
         let position = self.interactiveGesture.location(in: nil)
         let velocity = self.interactiveGesture.velocity(in: nil)
         switch self.interactiveGesture.state {
         case .began:
             guard
                 let currentViewController = self.currentViewController,
-                let animation = self._prepareInteractiveAnimation(currentViewController)
+                let animation = self._interactiveAnimation(viewController: currentViewController)
                 else { return }
             self._activeInteractiveBackwardViewController = self.backwardViewController
             self._activeInteractiveForwardViewController = self.forwardViewController
@@ -547,8 +551,8 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
                     guard let strong = self else { return }
                     switch animation.finishMode {
                     case .none: strong._endInteractive()
-                    case .backward: strong._endInteractive(strong._activeInteractiveBackwardViewController)
-                    case .forward: strong._endInteractive(strong._activeInteractiveForwardViewController)
+                    case .backward: strong._endInteractive(viewController: strong._activeInteractiveBackwardViewController)
+                    case .forward: strong._endInteractive(viewController: strong._activeInteractiveForwardViewController)
                     }
                 })
             } else {
@@ -563,37 +567,37 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
         }
     }
 
-    private func _endInteractive(_ viewController: IQPageViewController?) {
+    private func _endInteractive(viewController: IQPageViewController?) {
         let currently = (
             self._activeInteractiveBackwardViewController,
             self._activeInteractiveCurrentViewController,
             self._activeInteractiveForwardViewController
         )
-        let displayed = self._displayedViewController(viewController)
+        let displayed = self._displayed(viewController: viewController)
         if currently.0 !== displayed.0 {
             self.backwardViewController = displayed.0
             if let vc = self.backwardViewController {
                 let frame = self._backwardViewControllerFrame()
-                self._appearViewController(vc, frame: frame)
+                self._appear(viewController: vc, frame: frame)
             }
         }
         if currently.1 !== displayed.1 {
             self.currentViewController = displayed.1
             if let vc = self.currentViewController {
                 let frame = self._currentViewControllerFrame()
-                self._appearViewController(vc, frame: frame)
+                self._appear(viewController: vc, frame: frame)
             }
         }
         if currently.2 !== displayed.2 {
             self.forwardViewController = displayed.2
             if let vc = self.forwardViewController {
                 let frame = self._backwardViewControllerFrame()
-                self._appearViewController(vc, frame: frame)
+                self._appear(viewController: vc, frame: frame)
             }
         }
-        self._disappearViewControllers(currently, displayed)
-        if let pagebar = self._pagebar {
-            pagebar.setSelectedItem(self.currentViewController?.pageItem, animated: true)
+        self._disappear(old: currently, new: displayed)
+        if let pagebar = self._barView {
+            pagebar.setSelectedItem(self.currentViewController?.item, animated: true)
         }
         self._endInteractive()
     }
@@ -608,10 +612,12 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
 
 }
 
+// MARK: - QPagebarDelegate -
+
 extension QPageContainerViewController : QPagebarDelegate {
 
     public func pagebar(_ pagebar: QPagebar, didSelectItem: QPagebarItem) {
-        guard let index = self._viewControllers.firstIndex(where: { return $0.pageItem === didSelectItem }) else { return }
+        guard let index = self._viewControllers.firstIndex(where: { return $0.item === didSelectItem }) else { return }
         let viewController = self._viewControllers[index]
         var mode: QPageViewControllerAnimationMode = .forward
         if let currentViewController = self.currentViewController {
@@ -619,16 +625,18 @@ extension QPageContainerViewController : QPagebarDelegate {
                 mode = (currentIndex > index) ? .backward : .forward
             }
         }
-        self._updateViewControllers(viewController, mode: mode)
+        self._update(viewController: viewController, mode: mode)
     }
 
 }
+
+// MARK: - UIGestureRecognizerDelegate -
 
 extension QPageContainerViewController : UIGestureRecognizerDelegate {
     
     open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         guard gestureRecognizer == self.interactiveGesture else { return false }
-        if let pagebar = self._pagebar {
+        if let pagebar = self._barView {
             let location = touch.location(in: self.view)
             if pagebar.point(inside: location, with: nil) == true {
                 return false

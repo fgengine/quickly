@@ -2,22 +2,22 @@
 //  Quickly
 //
 
-open class QGroupWireframe< ContextType: IQContext, WireframeType: IQWireframe > : IQChildWireframe {
+open class QGroupWireframe< WireframeType: IQWireframe, ContextType: IQContext > : IQChildWireframe {
 
-    open var baseViewController: IQViewController {
+    open var presentableViewController: IQViewController {
         get { return self.viewController }
     }
     open private(set) var viewController: QGroupContainerViewController
-    open private(set) var context: ContextType
     open private(set) weak var parent: WireframeType?
+    open private(set) var context: ContextType
 
     public init(
-        context: ContextType,
-        parent: WireframeType
+        parent: WireframeType,
+        context: ContextType
     ) {
         self.viewController = QGroupContainerViewController()
-        self.context = context
         self.parent = parent
+        self.context = context
         self.setup()
     }
     

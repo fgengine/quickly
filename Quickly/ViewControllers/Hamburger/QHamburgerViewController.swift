@@ -2,20 +2,12 @@
 //  Quickly
 //
 
-open class QGroupViewController : QViewController, IQGroupViewController {
-    
-    open private(set) var contentViewController: IQGroupContentViewController
-    open var barItem: QGroupbarItem? {
-        set(value) { self.set(item: value) }
-        get { return self._barItem }
-    }
-    open var animation: IQGroupViewControllerAnimation?
-    
-    private var _barItem: QGroupbarItem?
+open class QHamburgerViewController : QViewController, IQHamburgerViewController {
 
-    public init(_ contentViewController: IQGroupContentViewController, _ groupbarItem: QGroupbarItem? = nil) {
+    open private(set) var contentViewController: IQHamburgerContentViewController
+
+    public init(_ contentViewController: IQHamburgerContentViewController) {
         self.contentViewController = contentViewController
-        self._barItem = groupbarItem
         super.init()
     }
 
@@ -94,15 +86,6 @@ open class QGroupViewController : QViewController, IQGroupViewController {
         self.contentViewController.didTransition(size: size)
     }
 
-    open func set(item: QGroupbarItem?, animated: Bool = false) {
-        if self._barItem !== item {
-            self._barItem = item
-            if let vc = self.containerViewController {
-                vc.didUpdate(viewController: self, animated: animated)
-            }
-        }
-    }
-
     open func updateContent() {
     }
 
@@ -120,6 +103,10 @@ open class QGroupViewController : QViewController, IQGroupViewController {
 
     open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
         return self.contentViewController.preferedStatusBarAnimation()
+    }
+    
+    open func shouldInteractive() -> Bool {
+        return self.contentViewController.hamburgerShouldInteractive()
     }
 
 }

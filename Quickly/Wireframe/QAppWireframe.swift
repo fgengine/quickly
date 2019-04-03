@@ -4,7 +4,7 @@
 
 open class QAppWireframe< ContextType: IQContext > : IQAppWireframe {
     
-    open var baseViewController: IQViewController {
+    open var presentableViewController: IQViewController {
         get { return self.viewController }
     }
     open private(set) var viewController: QMainViewController = QMainViewController()
@@ -35,7 +35,7 @@ open class QAppWireframe< ContextType: IQContext > : IQAppWireframe {
     open var current: IQBaseWireframe? {
         didSet {
             if let current = self.current {
-                self.viewController.contentViewController = current.baseViewController
+                self.viewController.contentViewController = current.presentableViewController
             } else {
                 self.viewController.contentViewController = nil
             }
@@ -54,12 +54,12 @@ open class QAppWireframe< ContextType: IQContext > : IQAppWireframe {
     open func setup() {
     }
     
-    open func present(_ viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+    open func present(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         guard let rootViewController = self.window.rootViewController else { return }
         rootViewController.present(viewController, animated: animated, completion: completion)
     }
     
-    open func dismiss(_ viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+    open func dismiss(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         viewController.dismiss(animated: animated, completion: completion)
     }
 

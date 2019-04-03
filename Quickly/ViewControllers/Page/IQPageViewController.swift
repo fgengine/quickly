@@ -51,9 +51,9 @@ public protocol IQPageViewControllerInteractiveAnimation : IQInteractiveAnimatio
 
 public protocol IQPageContainerViewController : IQViewController {
 
-    var pagebar: QPagebar? { set get }
-    var pagebarHeight: CGFloat { set get }
-    var pagebarHidden: Bool { set get }
+    var barView: QPagebar? { set get }
+    var barHeight: CGFloat { set get }
+    var barHidden: Bool { set get }
 
     var viewControllers: [IQPageViewController] { set get }
     var currentViewController: IQPageViewController? { get }
@@ -64,13 +64,14 @@ public protocol IQPageContainerViewController : IQViewController {
     var interactiveAnimation: IQPageViewControllerInteractiveAnimation? { get }
     var isAnimating: Bool { get }
 
-    func setPagebar(_ pagebar: QPagebar?, animated: Bool)
-    func setPagebarHeight(_ height: CGFloat, animated: Bool)
-    func setPagebarHidden(_ hidden: Bool, animated: Bool)
+    func set(bar: QPagebar?, animated: Bool)
+    func set(barHeight: CGFloat, animated: Bool)
+    func set(barHidden: Bool, animated: Bool)
 
-    func setViewControllers(_ viewControllers: [IQPageViewController], mode: QPageViewControllerAnimationMode, completion: (() -> Swift.Void)?)
-    func setCurrentViewController(_ viewController: IQPageViewController, mode: QPageViewControllerAnimationMode, completion: (() -> Swift.Void)?)
-    func updatePageItem(_ viewController: IQPageViewController, animated: Bool)
+    func set(viewControllers: [IQPageViewController], mode: QPageViewControllerAnimationMode, completion: (() -> Swift.Void)?)
+    func set(currentViewController: IQPageViewController, mode: QPageViewControllerAnimationMode, completion: (() -> Swift.Void)?)
+    
+    func didUpdate(viewController: IQPageViewController, animated: Bool)
 
 }
 
@@ -78,20 +79,20 @@ public protocol IQPageContainerViewController : IQViewController {
 
 public protocol IQPageViewController : IQContentOwnerViewController {
 
-    var pageContainerViewController: IQPageContainerViewController? { get }
-    var pageContentViewController: IQPageContentViewController { get }
-    var pageItem: QPagebarItem? { set get }
-    var pageForwardAnimation: IQPageViewControllerAnimation? { set get }
-    var pageBackwardAnimation: IQPageViewControllerAnimation? { set get }
-    var pageInteractiveAnimation: IQPageViewControllerInteractiveAnimation? { set get }
+    var containerViewController: IQPageContainerViewController? { get }
+    var contentViewController: IQPageContentViewController { get }
+    var item: QPagebarItem? { set get }
+    var forwardAnimation: IQPageViewControllerAnimation? { set get }
+    var backwardAnimation: IQPageViewControllerAnimation? { set get }
+    var interactiveAnimation: IQPageViewControllerInteractiveAnimation? { set get }
 
-    func setPageItem(_ item: QPagebarItem?, animated: Bool)
+    func setItem(_ item: QPagebarItem?, animated: Bool)
 
 }
 
 extension IQPageViewController {
 
-    public var pageContainerViewController: IQPageContainerViewController? {
+    public var containerViewController: IQPageContainerViewController? {
         get { return self.parent as? IQPageContainerViewController }
     }
 
@@ -117,25 +118,25 @@ extension IQPageContentViewController {
         get { return self.parentOf() }
     }
     public var pageItem: QPagebarItem? {
-        set(value) { self.pageViewController?.pageItem = value }
-        get { return self.pageViewController?.pageItem }
+        set(value) { self.pageViewController?.item = value }
+        get { return self.pageViewController?.item }
     }
     public var pageForwardAnimation: IQPageViewControllerAnimation? {
-        set(value) { self.pageViewController?.pageForwardAnimation = value }
-        get { return self.pageViewController?.pageForwardAnimation }
+        set(value) { self.pageViewController?.forwardAnimation = value }
+        get { return self.pageViewController?.forwardAnimation }
     }
     public var pageBackwardAnimation: IQPageViewControllerAnimation? {
-        set(value) { self.pageViewController?.pageBackwardAnimation = value }
-        get { return self.pageViewController?.pageBackwardAnimation }
+        set(value) { self.pageViewController?.backwardAnimation = value }
+        get { return self.pageViewController?.backwardAnimation }
     }
     public var pageInteractiveAnimation: IQPageViewControllerInteractiveAnimation? {
-        set(value) { self.pageViewController?.pageInteractiveAnimation = value }
-        get { return self.pageViewController?.pageInteractiveAnimation }
+        set(value) { self.pageViewController?.interactiveAnimation = value }
+        get { return self.pageViewController?.interactiveAnimation }
     }
 
     public func setPageItem(_ item: QPagebarItem, animated: Bool) {
         guard let vc = self.pageViewController else { return }
-        vc.setPageItem(item, animated: animated)
+        vc.setItem(item, animated: animated)
     }
 
 }

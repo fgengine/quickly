@@ -180,7 +180,7 @@ public class QButton : QView {
         }
     }
     public private(set) lazy var pressGesture: UILongPressGestureRecognizer = {
-        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(self._pressGestureHandler(_:)))
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(self._handlePressGesture(_:)))
         gesture.delaysTouchesBegan = true
         gesture.minimumPressDuration = 0.02
         gesture.allowableMovement = self._pressGestureAllowableMovement()
@@ -188,7 +188,7 @@ public class QButton : QView {
         return gesture
     }()
     public private(set) lazy var tapGesture: UITapGestureRecognizer = {
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(self._tapGestureHandler(_:)))
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(self._handleTapGesture(_:)))
         gesture.delaysTouchesBegan = true
         gesture.delegate = self
         return gesture
@@ -855,7 +855,7 @@ extension QButton {
 extension QButton {
     
     @objc
-    private func _pressGestureHandler(_ sender: Any) {
+    private func _handlePressGesture(_ sender: Any) {
         var isHighlighted = self.isHighlighted
         switch self.pressGesture.state {
         case .began: isHighlighted = true
@@ -870,7 +870,7 @@ extension QButton {
     }
 
     @objc
-    private func _tapGestureHandler(_ sender: Any) {
+    private func _handleTapGesture(_ sender: Any) {
         guard let onPressed = self.onPressed else { return }
         onPressed(self)
     }
