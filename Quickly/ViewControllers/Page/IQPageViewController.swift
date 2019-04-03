@@ -64,7 +64,7 @@ public protocol IQPageContainerViewController : IQViewController {
     var interactiveAnimation: IQPageViewControllerInteractiveAnimation? { get }
     var isAnimating: Bool { get }
 
-    func set(bar: QPagebar?, animated: Bool)
+    func set(barView: QPagebar?, animated: Bool)
     func set(barHeight: CGFloat, animated: Bool)
     func set(barHidden: Bool, animated: Bool)
 

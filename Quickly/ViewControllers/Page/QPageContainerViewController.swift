@@ -11,7 +11,7 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
         get { return CGSize.zero }
     }
     open var barView: QPagebar? {
-        set(value) { self.set(bar: value) }
+        set(value) { self.set(barView: value) }
         get { return self._barView }
     }
     open var barHeight: CGFloat {
@@ -214,13 +214,13 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
         return vc.preferedStatusBarAnimation()
     }
 
-    open func set(bar: QPagebar?, animated: Bool = false) {
+    open func set(barView: QPagebar?, animated: Bool = false) {
         if self.isLoaded == true {
             if let pagebar = self._barView {
                 pagebar.removeFromSuperview()
                 pagebar.delegate = nil
             }
-            self._barView = bar
+            self._barView = barView
             if let pagebar = self._barView {
                 pagebar.frame = self._barFrame(bounds: self.view.bounds)
                 pagebar.edgeInsets = self._barEdgeInsets()
@@ -232,7 +232,7 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
             if let pagebar = self._barView {
                 pagebar.delegate = nil
             }
-            self._barView = bar
+            self._barView = barView
             if let pagebar = self._barView {
                 pagebar.delegate = self
             }
