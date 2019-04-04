@@ -310,17 +310,18 @@ extension QGroupContainerViewController {
             if let currentViewController = previousViewController, let targetViewController = viewController {
                 let animation = self._animation(viewController: currentViewController)
                 self.isAnimating = true
-                animation.prepare(
+                animation.animate(
                     contentView: self.view,
                     currentViewController: currentViewController,
-                    targetViewController: targetViewController
+                    targetViewController: targetViewController,
+                    animated: animated,
+                    complete: { [weak self] in
+                        guard let strong = self else { return }
+                        strong._disappear(viewController: currentViewController)
+                        strong.isAnimating = false
+                        completion?()
+                    }
                 )
-                animation.update(animated: animated, complete: { [weak self] _ in
-                    guard let strong = self else { return }
-                    strong._disappear(viewController: currentViewController)
-                    strong.isAnimating = false
-                    completion?()
-                })
             } else {
                 if let vc = previousViewController {
                     vc.willDismiss(animated: false)

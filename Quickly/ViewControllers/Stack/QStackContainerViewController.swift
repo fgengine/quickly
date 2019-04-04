@@ -285,21 +285,22 @@ extension QStackContainerViewController {
                 self.setNeedUpdateStatusBar()
                 self.isAnimating = true
                 let presentAnimation = self._presentAnimation(viewController: viewController)
-                presentAnimation.prepare(
+                presentAnimation.animate(
                     containerViewController: self,
                     contentView: self.view,
                     currentViewController: previousViewController,
                     currentGroupbarVisibility: self._groupbarVisibility(viewController: previousViewController),
                     nextViewController: viewController,
-                    nextGroupbarVisibility: self._groupbarVisibility(viewController: viewController)
-                )
-                presentAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
-                    if let strong = self {
-                        strong._disappear(viewController: previousViewController)
-                        strong.isAnimating = false
+                    nextGroupbarVisibility: self._groupbarVisibility(viewController: viewController),
+                    animated: animated,
+                    complete: { [weak self] in
+                        if let strong = self {
+                            strong._disappear(viewController: previousViewController)
+                            strong.isAnimating = false
+                        }
+                        completion?()
                     }
-                    completion?()
-                })
+                )
             } else {
                 self._appear(viewController: viewController)
                 self.setNeedUpdateStatusBar()
@@ -326,22 +327,23 @@ extension QStackContainerViewController {
                     self._appear(viewController: previousViewController)
                     self.isAnimating = true
                     let dismissAnimation = self._dismissAnimation(viewController: previousViewController)
-                    dismissAnimation.prepare(
+                    dismissAnimation.animate(
                         containerViewController: self,
                         contentView: self.view,
                         currentViewController: viewController,
                         currentGroupbarVisibility: self._groupbarVisibility(viewController: viewController),
                         previousViewController: previousViewController,
-                        previousGroupbarVisibility: self._groupbarVisibility(viewController: previousViewController)
-                    )
-                    dismissAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
-                        if let strong = self {
-                            strong._disappear(viewController: viewController)
-                            strong._remove(childViewController: viewController)
-                            strong.isAnimating = false
+                        previousGroupbarVisibility: self._groupbarVisibility(viewController: previousViewController),
+                        animated: animated,
+                        complete: { [weak self] in
+                            if let strong = self {
+                                strong._disappear(viewController: viewController)
+                                strong._remove(childViewController: viewController)
+                                strong.isAnimating = false
+                            }
+                            completion?()
                         }
-                        completion?()
-                    })
+                    )
                 } else {
                     self._disappear(viewController: viewController)
                     self._remove(childViewController: viewController)

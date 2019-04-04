@@ -11,17 +11,33 @@ public enum QPushViewControllerState {
 
 // MARK: - IQPushViewControllerFixedAnimation -
 
-public protocol IQPushViewControllerFixedAnimation : IQFixedAnimation {
+public protocol IQPushViewControllerFixedAnimation : class {
 
-    func prepare(viewController: IQPushViewController)
+    func animate(
+        viewController: IQPushViewController,
+        animated: Bool,
+        complete: @escaping () -> Void
+    )
 
 }
 
 // MARK: - IQPushViewControllerInteractiveAnimation -
 
-public protocol IQPushViewControllerInteractiveAnimation : IQInteractiveAnimation {
+public protocol IQPushViewControllerInteractiveAnimation : class {
 
-    func prepare(viewController: IQPushViewController, position: CGPoint, velocity: CGPoint)
+    var canFinish: Bool { get }
+    
+    func prepare(
+        viewController: IQPushViewController,
+        position: CGPoint,
+        velocity: CGPoint
+    )
+    func update(
+        position: CGPoint,
+        velocity: CGPoint
+    )
+    func cancel(_ complete: @escaping (_ completed: Bool) -> Void)
+    func finish(_ complete: @escaping (_ completed: Bool) -> Void)
 
 }
 

@@ -47,17 +47,31 @@ public enum QDialogViewControllerHorizontalAlignment {
 
 // MARK: - IQDialogViewControllerFixedAnimation -
 
-public protocol IQDialogViewControllerFixedAnimation : IQFixedAnimation {
+public protocol IQDialogViewControllerFixedAnimation : class {
 
-    func prepare(viewController: IQDialogViewController)
+    func animate(
+        viewController: IQDialogViewController,
+        animated: Bool,
+        complete: @escaping () -> Void
+    )
 
 }
 
 // MARK: - IQDialogViewControllerInteractiveAnimation -
 
-public protocol IQDialogViewControllerInteractiveAnimation : IQInteractiveAnimation {
+public protocol IQDialogViewControllerInteractiveAnimation : class {
 
-    func prepare(viewController: IQDialogViewController, position: CGPoint, velocity: CGPoint)
+    var canFinish: Bool { get }
+    
+    func prepare(
+        viewController: IQDialogViewController,
+        position: CGPoint,
+        velocity: CGPoint
+    )
+    
+    func update(position: CGPoint, velocity: CGPoint)
+    func cancel(_ complete: @escaping (_ completed: Bool) -> Void)
+    func finish(_ complete: @escaping (_ completed: Bool) -> Void)
 
 }
 

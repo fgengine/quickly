@@ -141,7 +141,7 @@ open class QImageView : QDisplayView {
         super.setup()
 
         self.backgroundColor = UIColor.clear
-        self.contentMode = .center
+        self.contentMode = .scaleAspectFit
 
         self.loader = QImageLoader.shared
     }

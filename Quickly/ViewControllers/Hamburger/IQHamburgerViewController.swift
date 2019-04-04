@@ -10,23 +10,35 @@ public enum QHamburgerViewControllerState {
 
 // MARK: - IQHamburgerViewControllerFixedAnimation -
 
-public protocol IQHamburgerViewControllerFixedAnimation : IQFixedAnimation {
+public protocol IQHamburgerViewControllerFixedAnimation : class {
 
-    func prepare(
+    func layout(
+        contentView: UIView,
+        state: QHamburgerViewControllerState,
+        contentViewController: IQHamburgerViewController?,
+        leftViewController: IQHamburgerViewController?,
+        rightViewController: IQHamburgerViewController?
+    )
+    
+    func animate(
         contentView: UIView,
         currentState: QHamburgerViewControllerState,
         availableState: QHamburgerViewControllerState,
-        contentViewController: IQHamburgerViewController,
+        contentViewController: IQHamburgerViewController?,
         leftViewController: IQHamburgerViewController?,
-        rightViewController: IQHamburgerViewController?
+        rightViewController: IQHamburgerViewController?,
+        animated: Bool,
+        complete: @escaping () -> Void
     )
 
 }
 
 // MARK: - IQHamburgerViewControllerInteractiveAnimation -
 
-public protocol IQHamburgerViewControllerInteractiveAnimation : IQInteractiveAnimation {
+public protocol IQHamburgerViewControllerInteractiveAnimation : class {
 
+    var canFinish: Bool { get }
+    
     func prepare(
         contentView: UIView,
         currentState: QHamburgerViewControllerState,
@@ -37,6 +49,10 @@ public protocol IQHamburgerViewControllerInteractiveAnimation : IQInteractiveAni
         position: CGPoint,
         velocity: CGPoint
     )
+    
+    func update(position: CGPoint, velocity: CGPoint)
+    func finish(_ complete: @escaping (_ state: QHamburgerViewControllerState) -> Void)
+    func cancel(_ complete: @escaping () -> Void)
 
 }
 
@@ -45,14 +61,14 @@ public protocol IQHamburgerViewControllerInteractiveAnimation : IQInteractiveAni
 public protocol IQHamburgerContainerViewController : IQViewController {
 
     var state: QHamburgerViewControllerState { set get }
-    var contentViewController: IQHamburgerViewController { set get }
+    var contentViewController: IQHamburgerViewController? { set get }
     var leftViewController: IQHamburgerViewController? { set get }
     var rightViewController: IQHamburgerViewController? { set get }
     var animation: IQHamburgerViewControllerFixedAnimation { set get }
     var interactiveAnimation: IQHamburgerViewControllerInteractiveAnimation? { set get }
     var isAnimating: Bool { get }
 
-    func change(contentViewController: IQHamburgerViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    func change(contentViewController: IQHamburgerViewController?, animated: Bool, completion: (() -> Swift.Void)?)
     func change(leftViewController: IQHamburgerViewController?, animated: Bool, completion: (() -> Swift.Void)?)
     func change(rightViewController: IQHamburgerViewController?, animated: Bool, completion: (() -> Swift.Void)?)
     func change(state: QHamburgerViewControllerState, animated: Bool, completion: (() -> Swift.Void)?)

@@ -4,34 +4,40 @@
 
 // MARK: - IQStackViewControllerAnimation -
 
-public protocol IQStackViewControllerPresentAnimation : IQFixedAnimation {
+public protocol IQStackViewControllerPresentAnimation : class {
 
-    func prepare(
+    func animate(
         containerViewController: IQStackContainerViewController,
         contentView: UIView,
         currentViewController: IQStackViewController,
         currentGroupbarVisibility: CGFloat,
         nextViewController: IQStackViewController,
-        nextGroupbarVisibility: CGFloat
+        nextGroupbarVisibility: CGFloat,
+        animated: Bool,
+        complete: @escaping () -> Void
     )
 
 }
 
-public protocol IQStackViewControllerDismissAnimation : IQFixedAnimation {
+public protocol IQStackViewControllerDismissAnimation : class {
 
-    func prepare(
+    func animate(
         containerViewController: IQStackContainerViewController,
         contentView: UIView,
         currentViewController: IQStackViewController,
         currentGroupbarVisibility: CGFloat,
         previousViewController: IQStackViewController,
-        previousGroupbarVisibility: CGFloat
+        previousGroupbarVisibility: CGFloat,
+        animated: Bool,
+        complete: @escaping () -> Void
     )
 
 }
 
-public protocol IQStackViewControllerInteractiveDismissAnimation : IQInteractiveAnimation {
+public protocol IQStackViewControllerInteractiveDismissAnimation : class {
 
+    var canFinish: Bool { get }
+    
     func prepare(
         containerViewController: IQStackContainerViewController,
         contentView: UIView,
@@ -42,6 +48,10 @@ public protocol IQStackViewControllerInteractiveDismissAnimation : IQInteractive
         position: CGPoint,
         velocity: CGPoint
     )
+    
+    func update(position: CGPoint, velocity: CGPoint)
+    func cancel(_ complete: @escaping (_ completed: Bool) -> Void)
+    func finish(_ complete: @escaping (_ completed: Bool) -> Void)
 
 }
 

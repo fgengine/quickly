@@ -199,18 +199,19 @@ extension QModalContainerViewController {
         self._appear(viewController: viewController)
         self.setNeedUpdateStatusBar()
         let presentAnimation = self._presentAnimation(viewController: viewController)
-        presentAnimation.prepare(
+        presentAnimation.animate(
             contentView: self.view,
             previousViewController: self.previousViewController,
-            currentViewController: viewController
-        )
-        presentAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
-            if let strong = self {
-                strong.isAnimating = false
-                strong._processDeferred()
+            currentViewController: viewController,
+            animated: animated,
+            complete: { [weak self] in
+                if let strong = self {
+                    strong.isAnimating = false
+                    strong._processDeferred()
+                }
+                completion?()
             }
-            completion?()
-        })
+        )
     }
 
     private func _dismiss(viewController: IQModalViewController, animated: Bool, completion: (() -> Void)?) {
@@ -247,20 +248,21 @@ extension QModalContainerViewController {
 
     private func _dismiss(_ previousViewController: IQModalViewController?, _ currentViewController: IQModalViewController, animated: Bool, completion: (() -> Void)?) {
         let dismissAnimation = self._dismissAnimation(viewController: currentViewController)
-        dismissAnimation.prepare(
+        dismissAnimation.animate(
             contentView: self.view,
             previousViewController: previousViewController,
-            currentViewController: currentViewController
-        )
-        dismissAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
-            if let strong = self {
-                strong._disappear(viewController: currentViewController)
-                strong._remove(childViewController: currentViewController)
-                strong.isAnimating = false
-                strong._processDeferred()
+            currentViewController: currentViewController,
+            animated: animated,
+            complete: { [weak self] in
+                if let strong = self {
+                    strong._disappear(viewController: currentViewController)
+                    strong._remove(childViewController: currentViewController)
+                    strong.isAnimating = false
+                    strong._processDeferred()
+                }
+                completion?()
             }
-            completion?()
-        })
+        )
     }
 
     private func _processDeferred() {

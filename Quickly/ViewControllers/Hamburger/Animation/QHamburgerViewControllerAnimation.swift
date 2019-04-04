@@ -4,17 +4,25 @@
 
 public class QHamburgerViewControllerAnimation : IQHamburgerViewControllerFixedAnimation {
     
-    public func prepare(
+    public func layout(
         contentView: UIView,
-        currentState: QHamburgerViewControllerState,
-        availableState: QHamburgerViewControllerState,
-        contentViewController: IQHamburgerViewController,
+        state: QHamburgerViewControllerState,
+        contentViewController: IQHamburgerViewController?,
         leftViewController: IQHamburgerViewController?,
         rightViewController: IQHamburgerViewController?
     ) {
     }
     
-    public func update(animated: Bool, complete: @escaping (Bool) -> Void) {
+    public func animate(
+        contentView: UIView,
+        currentState: QHamburgerViewControllerState,
+        availableState: QHamburgerViewControllerState,
+        contentViewController: IQHamburgerViewController?,
+        leftViewController: IQHamburgerViewController?,
+        rightViewController: IQHamburgerViewController?,
+        animated: Bool,
+        complete: @escaping () -> Void
+    ) {
     }
     
 }

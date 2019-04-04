@@ -25,10 +25,10 @@ public class QHamburgerViewControllerInteractiveAnimation : IQHamburgerViewContr
     public func update(position: CGPoint, velocity: CGPoint) {
     }
     
-    public func cancel(_ complete: @escaping (_ completed: Bool) -> Void) {
+    public func finish(_ complete: @escaping (_ state: QHamburgerViewControllerState) -> Void) {
     }
     
-    public func finish(_ complete: @escaping (_ completed: Bool) -> Void) {
+    public func cancel(_ complete: @escaping () -> Void) {
     }
     
 }

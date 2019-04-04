@@ -2,69 +2,69 @@
 //  Quickly
 //
 
-public class QPushViewControllerAnimation : IQPushViewControllerFixedAnimation {
-
+public class QPushViewControllerPresentAnimation : IQPushViewControllerFixedAnimation {
+    
     public var duration: TimeInterval
-    public var viewController: IQPushViewController!
-
+    
     public init(duration: TimeInterval = 0.2) {
         self.duration = duration
     }
 
-    public func prepare(viewController: IQPushViewController) {
-        self.viewController = viewController
-        self.viewController.layoutIfNeeded()
-    }
+    public func animate(
+        viewController: IQPushViewController,
+        animated: Bool,
+        complete: @escaping () -> Void
+    ) {
+        viewController.layoutIfNeeded()
 
-    public func update(animated: Bool, complete: @escaping (Bool) -> Void) {
-    }
-
-}
-
-public class QPushViewControllerPresentAnimation : QPushViewControllerAnimation {
-
-
-    public override func update(animated: Bool, complete: @escaping (_ completed: Bool) -> Void) {
         if animated == true {
-            self.viewController.willPresent(animated: animated)
+            viewController.willPresent(animated: animated)
             UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews ], animations: {
-                self.viewController.state = .show
-                self.viewController.layoutIfNeeded()
+                viewController.state = .show
+                viewController.layoutIfNeeded()
             }, completion: { (completed: Bool) in
-                self.viewController.didPresent(animated: animated)
-                self.viewController = nil
-                complete(completed)
+                viewController.didPresent(animated: animated)
+                complete()
             })
         } else {
-            self.viewController.state = .show
-            self.viewController.willPresent(animated: animated)
-            self.viewController.didPresent(animated: animated)
-            self.viewController = nil
-            complete(true)
+            viewController.state = .show
+            viewController.willPresent(animated: animated)
+            viewController.didPresent(animated: animated)
+            complete()
         }
     }
 
 }
 
-public class QPushViewControllerDismissAnimation : QPushViewControllerAnimation {
+public class QPushViewControllerDismissAnimation : IQPushViewControllerFixedAnimation {
+    
+    public var duration: TimeInterval
+    
+    public init(duration: TimeInterval = 0.2) {
+        self.duration = duration
+    }
 
-    public override func update(animated: Bool, complete: @escaping (_ completed: Bool) -> Void) {
+    public func animate(
+        viewController: IQPushViewController,
+        animated: Bool,
+        complete: @escaping () -> Void
+    ) {
+        viewController.layoutIfNeeded()
+        
         if animated == true {
-            self.viewController.willDismiss(animated: animated)
+            viewController.willDismiss(animated: animated)
             UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews ], animations: {
-                self.viewController.state = .hide
-                self.viewController.layoutIfNeeded()
+                viewController.state = .hide
+                viewController.layoutIfNeeded()
             }, completion: { (completed: Bool) in
-                self.viewController.didDismiss(animated: animated)
-                self.viewController = nil
-                complete(completed)
+                viewController.didDismiss(animated: animated)
+                complete()
             })
         } else {
-            self.viewController.state = .hide
-            self.viewController.willDismiss(animated: animated)
-            self.viewController.didDismiss(animated: animated)
-            self.viewController = nil
-            complete(true)
+            viewController.state = .hide
+            viewController.willDismiss(animated: animated)
+            viewController.didDismiss(animated: animated)
+            complete()
         }
     }
 

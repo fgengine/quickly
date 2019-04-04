@@ -210,13 +210,16 @@ extension QDialogContainerViewController {
             self.setNeedUpdateStatusBar()
             self.isAnimating = true
             let presentAnimation = self._presentAnimation(viewController: viewController)
-            presentAnimation.prepare(viewController: viewController)
-            presentAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
-                if let strong = self {
-                    strong.isAnimating = true
+            presentAnimation.animate(
+                viewController: viewController,
+                animated: animated,
+                complete: { [weak self] in
+                    if let strong = self {
+                        strong.isAnimating = true
+                    }
+                    completion?()
                 }
-                completion?()
-            })
+            )
         } else {
             completion?()
         }
@@ -265,15 +268,18 @@ extension QDialogContainerViewController {
             )
         }
         let dismissAnimation = self._dismissAnimation(viewController: viewController)
-        dismissAnimation.prepare(viewController: viewController)
-        dismissAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
-            if let strong = self {
-                strong._disappear(viewController: viewController)
-                strong._remove(childViewController: viewController)
-                strong.isAnimating = true
+        dismissAnimation.animate(
+            viewController: viewController,
+            animated: animated,
+            complete: { [weak self] in
+                if let strong = self {
+                    strong._disappear(viewController: viewController)
+                    strong._remove(childViewController: viewController)
+                    strong.isAnimating = true
+                }
+                completion?()
             }
-            completion?()
-        })
+        )
     }
     
     private func _add(childViewController: IQDialogViewController) {

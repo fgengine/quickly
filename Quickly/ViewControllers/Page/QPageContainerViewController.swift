@@ -374,17 +374,18 @@ extension QPageContainerViewController {
                 case .forward: animation = self._forwardAnimation(viewController: currentViewController)
                 }
                 self.isAnimating = true
-                animation.prepare(
+                animation.animate(
                     contentView: self.view,
                     currentViewController: currentViewController,
-                    targetViewController: targetViewController
+                    targetViewController: targetViewController,
+                    animated: true,
+                    complete: { [weak self] in
+                        guard let strong = self else { return }
+                        strong._disappear(old: currently, new: displayed)
+                        strong.isAnimating = false
+                        completion?()
+                    }
                 )
-                animation.update(animated: true, complete: { [weak self] _ in
-                    guard let strong = self else { return }
-                    strong._disappear(old: currently, new: displayed)
-                    strong.isAnimating = false
-                    completion?()
-                })
             } else {
                 if let vc = currently.1 {
                     vc.willDismiss(animated: false)

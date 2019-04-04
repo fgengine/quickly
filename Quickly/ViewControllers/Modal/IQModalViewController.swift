@@ -4,20 +4,24 @@
 
 // MARK: - IQModalViewControllerFixedAnimation -
 
-public protocol IQModalViewControllerFixedAnimation : IQFixedAnimation {
+public protocol IQModalViewControllerFixedAnimation : class {
 
-    func prepare(
+    func animate(
         contentView: UIView,
         previousViewController: IQModalViewController?,
-        currentViewController: IQModalViewController
+        currentViewController: IQModalViewController,
+        animated: Bool,
+        complete: @escaping () -> Void
     )
 
 }
 
 // MARK: - IQModalViewControllerInteractiveAnimation -
 
-public protocol IQModalViewControllerInteractiveAnimation : IQInteractiveAnimation {
+public protocol IQModalViewControllerInteractiveAnimation : class {
 
+    var canFinish: Bool { get }
+    
     func prepare(
         contentView: UIView,
         previousViewController: IQModalViewController?,
@@ -25,6 +29,10 @@ public protocol IQModalViewControllerInteractiveAnimation : IQInteractiveAnimati
         position: CGPoint,
         velocity: CGPoint
     )
+    
+    func update(position: CGPoint, velocity: CGPoint)
+    func cancel(_ complete: @escaping (_ completed: Bool) -> Void)
+    func finish(_ complete: @escaping (_ completed: Bool) -> Void)
 
 }
 

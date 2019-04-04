@@ -2,159 +2,149 @@
 //  Quickly
 //
 
-public class QModalViewControllerAnimation : IQModalViewControllerFixedAnimation {
-
-    public var contentView: UIView!
-    public var previousBeginFrame: CGRect {
-        get { return self.contentView.bounds }
-    }
-    public var previousEndFrame: CGRect {
-        get { return self.contentView.bounds }
-    }
-    public var previousViewController: IQModalViewController?
-    public var currentBeginFrame: CGRect {
-        get { return self.contentView.bounds }
-    }
-    public var currentEndFrame: CGRect {
-        get { return self.contentView.bounds }
-    }
-    public var currentViewController: IQModalViewController!
+public class QModalViewControllerPresentAnimation : IQModalViewControllerFixedAnimation {
+    
     public var acceleration: CGFloat
-    public var duration: TimeInterval {
-        get {
-            let distance = self.currentBeginFrame.centerPoint.distance(to: self.currentEndFrame.centerPoint)
-            return TimeInterval(abs(distance) / self.acceleration)
-        }
-    }
-
+    
     public init(acceleration: CGFloat = 1400) {
         self.acceleration = acceleration
     }
 
-    public func prepare(
+    public func animate(
         contentView: UIView,
         previousViewController: IQModalViewController?,
-        currentViewController: IQModalViewController
+        currentViewController: IQModalViewController,
+        animated: Bool,
+        complete: @escaping () -> Void
     ) {
-        self.contentView = contentView
-        self.previousViewController = previousViewController
-        if let vc = self.previousViewController {
-            vc.view.frame = self.previousBeginFrame
+        let frame = contentView.bounds
+        let previousBeginFrame = frame
+        let previousEndFrame = frame
+        let currentBeginFrame = CGRect(
+            x: frame.minX,
+            y: frame.maxY,
+            width: frame.width,
+            height: frame.height
+        )
+        let currentEndFrame = frame
+        
+        if let vc = previousViewController {
+            vc.view.frame = previousBeginFrame
             vc.layoutIfNeeded()
         }
-        self.currentViewController = currentViewController
-        self.currentViewController.view.frame = self.currentBeginFrame
-        self.currentViewController.layoutIfNeeded()
-
-        if let vc = self.previousViewController {
+        currentViewController.view.frame = currentBeginFrame
+        currentViewController.layoutIfNeeded()
+        
+        if let vc = previousViewController {
             contentView.insertSubview(currentViewController.view, aboveSubview: vc.view)
         } else {
             contentView.bringSubviewToFront(currentViewController.view)
         }
-    }
-
-    public func update(animated: Bool, complete: @escaping (_ completed: Bool) -> Void) {
-    }
-
-}
-
-public class QModalViewControllerPresentAnimation : QModalViewControllerAnimation {
-
-    public override var currentBeginFrame: CGRect {
-        get {
-            let bounds = super.currentBeginFrame
-            return CGRect(
-                x: bounds.minX,
-                y: bounds.maxY,
-                width: bounds.width,
-                height: bounds.height
-            )
-        }
-    }
-
-    public override func update(animated: Bool, complete: @escaping (_ completed: Bool) -> Void) {
+        
         if animated == true {
-            if let vc = self.previousViewController {
+            let distance = currentBeginFrame.centerPoint.distance(to: currentEndFrame.centerPoint)
+            let duration = TimeInterval(abs(distance) / self.acceleration)
+            
+            if let vc = previousViewController {
                 vc.willDismiss(animated: animated)
             }
-            self.currentViewController.willPresent(animated: animated)
-            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews, .curveEaseOut ], animations: {
-                if let vc = self.previousViewController {
-                    vc.view.frame = self.previousEndFrame
+            currentViewController.willPresent(animated: animated)
+            UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews, .curveEaseOut ], animations: {
+                if let vc = previousViewController {
+                    vc.view.frame = previousEndFrame
                 }
-                self.currentViewController.view.frame = self.currentEndFrame
+                currentViewController.view.frame = currentEndFrame
             }, completion: { (completed: Bool) in
-                if let vc = self.previousViewController {
+                if let vc = previousViewController {
                     vc.didDismiss(animated: animated)
-                    self.previousViewController = nil
                 }
-                self.currentViewController.didPresent(animated: animated)
-                self.currentViewController = nil
-                complete(completed)
+                currentViewController.didPresent(animated: animated)
+                complete()
             })
         } else {
-            if let vc = self.previousViewController {
+            if let vc = previousViewController {
                 vc.willDismiss(animated: animated)
                 vc.didDismiss(animated: animated)
-                vc.view.frame = self.previousEndFrame
-                self.previousViewController = nil
+                vc.view.frame = previousEndFrame
             }
-            self.currentViewController.willPresent(animated: animated)
-            self.currentViewController.didPresent(animated: animated)
-            self.currentViewController.view.frame = self.currentEndFrame
-            self.currentViewController = nil
-            complete(true)
+            currentViewController.willPresent(animated: animated)
+            currentViewController.didPresent(animated: animated)
+            currentViewController.view.frame = currentEndFrame
+            complete()
         }
     }
 
 }
 
-public class QModalViewControllerDismissAnimation : QModalViewControllerAnimation {
-
-    public override var currentEndFrame: CGRect {
-        get {
-            let bounds = super.currentEndFrame
-            return CGRect(
-                x: bounds.minX,
-                y: bounds.maxY,
-                width: bounds.width,
-                height: bounds.height
-            )
-        }
+public class QModalViewControllerDismissAnimation : IQModalViewControllerFixedAnimation {
+    
+    public var acceleration: CGFloat
+    
+    public init(acceleration: CGFloat = 1400) {
+        self.acceleration = acceleration
     }
-
-    public override func update(animated: Bool, complete: @escaping (_ completed: Bool) -> Void) {
+    
+    public func animate(
+        contentView: UIView,
+        previousViewController: IQModalViewController?,
+        currentViewController: IQModalViewController,
+        animated: Bool,
+        complete: @escaping () -> Void
+    ) {
+        let frame = contentView.bounds
+        let previousBeginFrame = frame
+        let previousEndFrame = frame
+        let currentBeginFrame = frame
+        let currentEndFrame = CGRect(
+            x: frame.minX,
+            y: frame.maxY,
+            width: frame.width,
+            height: frame.height
+        )
+        
+        if let vc = previousViewController {
+            vc.view.frame = previousBeginFrame
+            vc.layoutIfNeeded()
+        }
+        currentViewController.view.frame = currentBeginFrame
+        currentViewController.layoutIfNeeded()
+        
+        if let vc = previousViewController {
+            contentView.insertSubview(currentViewController.view, aboveSubview: vc.view)
+        } else {
+            contentView.bringSubviewToFront(currentViewController.view)
+        }
+        
         if animated == true {
-            if let vc = self.previousViewController {
-                vc.willPresent(animated: animated)
+            let distance = currentBeginFrame.centerPoint.distance(to: currentEndFrame.centerPoint)
+            let duration = TimeInterval(abs(distance) / self.acceleration)
+            
+            if let vc = previousViewController {
+                vc.willDismiss(animated: animated)
             }
-            self.currentViewController.willDismiss(animated: animated)
-            UIView.animate(withDuration: self.duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews, .curveEaseOut ], animations: {
-                if let vc = self.previousViewController {
-                    vc.view.frame = self.previousEndFrame
+            currentViewController.willPresent(animated: animated)
+            UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews, .curveEaseOut ], animations: {
+                if let vc = previousViewController {
+                    vc.view.frame = previousEndFrame
                 }
-                self.currentViewController.view.frame = self.currentEndFrame
+                currentViewController.view.frame = currentEndFrame
             }, completion: { (completed: Bool) in
-                if let vc = self.previousViewController {
-                    vc.didPresent(animated: animated)
-                    self.previousViewController = nil
+                if let vc = previousViewController {
+                    vc.didDismiss(animated: animated)
                 }
-                self.currentViewController.didDismiss(animated: animated)
-                self.currentViewController = nil
-                complete(completed)
+                currentViewController.didPresent(animated: animated)
+                complete()
             })
         } else {
-            if let vc = self.previousViewController {
-                vc.willPresent(animated: animated)
-                vc.didPresent(animated: animated)
-                vc.view.frame = self.previousEndFrame
-                self.previousViewController = nil
+            if let vc = previousViewController {
+                vc.willDismiss(animated: animated)
+                vc.didDismiss(animated: animated)
+                vc.view.frame = previousEndFrame
             }
-            self.currentViewController.willDismiss(animated: animated)
-            self.currentViewController.didDismiss(animated: animated)
-            self.currentViewController.view.frame = self.currentEndFrame
-            self.currentViewController = nil
-            complete(true)
+            currentViewController.willPresent(animated: animated)
+            currentViewController.didPresent(animated: animated)
+            currentViewController.view.frame = currentEndFrame
+            complete()
         }
     }
 

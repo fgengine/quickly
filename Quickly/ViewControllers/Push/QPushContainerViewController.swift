@@ -175,13 +175,16 @@ extension QPushContainerViewController {
             self.setNeedUpdateStatusBar()
             self.isAnimating = true
             let presentAnimation = self._presentAnimation(viewController: viewController)
-            presentAnimation.prepare(viewController: viewController)
-            presentAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
-                if let strong = self {
-                    strong.isAnimating = false
+            presentAnimation.animate(
+                viewController: viewController,
+                animated: animated,
+                complete: { [weak self] in
+                    if let strong = self {
+                        strong.isAnimating = false
+                    }
+                    completion?()
                 }
-                completion?()
-            })
+            )
         } else {
             completion?()
         }
@@ -224,15 +227,18 @@ extension QPushContainerViewController {
     private func _dismissOne(viewController: IQPushViewController, animated: Bool, completion: (() -> Void)?) {
         let dismissAnimation = self._dismissAnimation(viewController: viewController)
         self.isAnimating = true
-        dismissAnimation.prepare(viewController: viewController)
-        dismissAnimation.update(animated: animated, complete: { [weak self] (completed: Bool) in
-            if let strong = self {
-                strong._disappear(viewController: viewController)
-                strong._remove(childViewController: viewController)
-                strong.isAnimating = false
+        dismissAnimation.animate(
+            viewController: viewController,
+            animated: animated,
+            complete: { [weak self] in
+                if let strong = self {
+                    strong._disappear(viewController: viewController)
+                    strong._remove(childViewController: viewController)
+                    strong.isAnimating = false
+                }
+                completion?()
             }
-            completion?()
-        })
+        )
     }
     
     private func _add(childViewController: IQPushViewController) {

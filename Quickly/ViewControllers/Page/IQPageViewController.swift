@@ -22,18 +22,21 @@ public enum QPageViewControllerAnimationMode {
 
 // MARK: - IQPageViewControllerAnimation -
 
-public protocol IQPageViewControllerAnimation : IQFixedAnimation {
+public protocol IQPageViewControllerAnimation : class {
 
-    func prepare(
+    func animate(
         contentView: UIView,
         currentViewController: IQPageViewController,
-        targetViewController: IQPageViewController
+        targetViewController: IQPageViewController,
+        animated: Bool,
+        complete: @escaping () -> Void
     )
 
 }
 
-public protocol IQPageViewControllerInteractiveAnimation : IQInteractiveAnimation {
+public protocol IQPageViewControllerInteractiveAnimation : class {
 
+    var canFinish: Bool { get }
     var finishMode: QPageViewControllerAnimationMode { get }
 
     func prepare(
@@ -44,6 +47,9 @@ public protocol IQPageViewControllerInteractiveAnimation : IQInteractiveAnimatio
         position: CGPoint,
         velocity: CGPoint
     )
+    func update(position: CGPoint, velocity: CGPoint)
+    func cancel(_ complete: @escaping (_ completed: Bool) -> Void)
+    func finish(_ complete: @escaping (_ completed: Bool) -> Void)
 
 }
 

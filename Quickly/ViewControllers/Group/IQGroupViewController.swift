@@ -4,12 +4,14 @@
 
 // MARK: - IQGroupViewControllerAnimation -
 
-public protocol IQGroupViewControllerAnimation : IQFixedAnimation {
+public protocol IQGroupViewControllerAnimation : class {
 
-    func prepare(
+    func animate(
         contentView: UIView,
         currentViewController: IQGroupViewController,
-        targetViewController: IQGroupViewController
+        targetViewController: IQGroupViewController,
+        animated: Bool,
+        complete: @escaping () -> Void
     )
 
 }
