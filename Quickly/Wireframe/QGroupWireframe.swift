@@ -4,10 +4,10 @@
 
 open class QGroupWireframe< WireframeType: IQWireframe, ContextType: IQContext > : IQChildWireframe {
 
-    open var presentableViewController: IQViewController {
-        get { return self.viewController }
+    open var viewController: IQViewController {
+        get { return self.containerViewController }
     }
-    open private(set) var viewController: QGroupContainerViewController
+    open private(set) var containerViewController: QGroupContainerViewController
     open private(set) weak var parent: WireframeType?
     open private(set) var context: ContextType
 
@@ -15,7 +15,7 @@ open class QGroupWireframe< WireframeType: IQWireframe, ContextType: IQContext >
         parent: WireframeType,
         context: ContextType
     ) {
-        self.viewController = QGroupContainerViewController()
+        self.containerViewController = QGroupContainerViewController()
         self.parent = parent
         self.context = context
         self.setup()

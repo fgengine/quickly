@@ -48,6 +48,11 @@ open class QHamburgerContainerViewController : QViewController, IQHamburgerConta
         gesture.delegate = self
         return gesture
     }()
+    public private(set) lazy var dismissTabGesture: UITapGestureRecognizer = {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(self._handleDismissTabGesture(_:)))
+        gesture.delegate = self
+        return gesture
+    }()
     
     private var _state: QHamburgerViewControllerState
     private var _contentViewController: IQHamburgerViewController?
@@ -73,6 +78,30 @@ open class QHamburgerContainerViewController : QViewController, IQHamburgerConta
         super.init()
     }
     
+    deinit {
+        if let vc = self._rightViewController {
+            if self.state == .right {
+                vc.willDismiss(animated: false)
+                vc.didDismiss(animated: false)
+            }
+            self._disappear(viewController: vc)
+        }
+        if let vc = self._leftViewController {
+            if self.state == .right {
+                vc.willDismiss(animated: false)
+                vc.didDismiss(animated: false)
+            }
+            self._disappear(viewController: vc)
+        }
+        if let vc = self._contentViewController {
+            if self.state == .right {
+                vc.willDismiss(animated: false)
+                vc.didDismiss(animated: false)
+            }
+            self._disappear(viewController: vc)
+        }
+    }
+    
     open override func setup() {
         super.setup()
         
@@ -93,15 +122,26 @@ open class QHamburgerContainerViewController : QViewController, IQHamburgerConta
         self.view.addGestureRecognizer(self.leftInteractivePresentGesture)
         self.view.addGestureRecognizer(self.rightInteractivePresentGesture)
         self.view.addGestureRecognizer(self.interactiveDismissGesture)
+        self.view.addGestureRecognizer(self.dismissTabGesture)
         
         if let vc = self._contentViewController {
             self._appear(viewController: vc)
+            vc.willPresent(animated: false)
+            vc.didPresent(animated: false)
         }
         if let vc = self._leftViewController {
             self._appear(viewController: vc)
+            if self.state == .left {
+                vc.willPresent(animated: false)
+                vc.didPresent(animated: false)
+            }
         }
         if let vc = self._rightViewController {
             self._appear(viewController: vc)
+            if self.state == .right {
+                vc.willPresent(animated: false)
+                vc.didPresent(animated: false)
+            }
         }
         self._apply(state: self.state)
     }
@@ -115,85 +155,121 @@ open class QHamburgerContainerViewController : QViewController, IQHamburgerConta
     open override func prepareInteractivePresent() {
         super.prepareInteractivePresent()
         self._contentViewController?.prepareInteractivePresent()
-        self._leftViewController?.prepareInteractivePresent()
-        self._rightViewController?.prepareInteractivePresent()
+        switch self.state {
+        case .idle: break
+        case .left: self._leftViewController?.prepareInteractivePresent()
+        case .right: self._rightViewController?.prepareInteractivePresent()
+        }
     }
     
     open override func cancelInteractivePresent() {
         super.cancelInteractivePresent()
         self._contentViewController?.cancelInteractivePresent()
-        self._leftViewController?.cancelInteractivePresent()
-        self._rightViewController?.cancelInteractivePresent()
+        switch self.state {
+        case .idle: break
+        case .left: self._leftViewController?.cancelInteractivePresent()
+        case .right: self._rightViewController?.cancelInteractivePresent()
+        }
     }
     
     open override func finishInteractivePresent() {
         super.finishInteractivePresent()
         self._contentViewController?.finishInteractivePresent()
-        self._leftViewController?.finishInteractivePresent()
-        self._rightViewController?.finishInteractivePresent()
+        switch self.state {
+        case .idle: break
+        case .left: self._leftViewController?.finishInteractivePresent()
+        case .right: self._rightViewController?.finishInteractivePresent()
+        }
     }
     
     open override func willPresent(animated: Bool) {
         super.willPresent(animated: animated)
         self._contentViewController?.willPresent(animated: animated)
-        self._leftViewController?.willPresent(animated: animated)
-        self._rightViewController?.willPresent(animated: animated)
+        switch self.state {
+        case .idle: break
+        case .left: self._leftViewController?.willPresent(animated: animated)
+        case .right: self._rightViewController?.willPresent(animated: animated)
+        }
     }
     
     open override func didPresent(animated: Bool) {
         super.didPresent(animated: animated)
         self._contentViewController?.didPresent(animated: animated)
-        self._leftViewController?.didPresent(animated: animated)
-        self._rightViewController?.didPresent(animated: animated)
+        switch self.state {
+        case .idle: break
+        case .left: self._leftViewController?.didPresent(animated: animated)
+        case .right: self._rightViewController?.didPresent(animated: animated)
+        }
     }
     
     open override func prepareInteractiveDismiss() {
         super.prepareInteractiveDismiss()
         self._contentViewController?.prepareInteractiveDismiss()
-        self._leftViewController?.prepareInteractiveDismiss()
-        self._rightViewController?.prepareInteractiveDismiss()
+        switch self.state {
+        case .idle: break
+        case .left: self._leftViewController?.prepareInteractiveDismiss()
+        case .right: self._rightViewController?.prepareInteractiveDismiss()
+        }
     }
     
     open override func cancelInteractiveDismiss() {
         super.cancelInteractiveDismiss()
         self._contentViewController?.cancelInteractiveDismiss()
-        self._leftViewController?.cancelInteractiveDismiss()
-        self._rightViewController?.cancelInteractiveDismiss()
+        switch self.state {
+        case .idle: break
+        case .left: self._leftViewController?.cancelInteractiveDismiss()
+        case .right: self._rightViewController?.cancelInteractiveDismiss()
+        }
     }
     
     open override func finishInteractiveDismiss() {
         super.finishInteractiveDismiss()
         self._contentViewController?.finishInteractiveDismiss()
-        self._leftViewController?.finishInteractiveDismiss()
-        self._rightViewController?.finishInteractiveDismiss()
+        switch self.state {
+        case .idle: break
+        case .left: self._leftViewController?.finishInteractiveDismiss()
+        case .right: self._rightViewController?.finishInteractiveDismiss()
+        }
     }
     
     open override func willDismiss(animated: Bool) {
         super.willDismiss(animated: animated)
         self._contentViewController?.willDismiss(animated: animated)
-        self._leftViewController?.willDismiss(animated: animated)
-        self._rightViewController?.willDismiss(animated: animated)
+        switch self.state {
+        case .idle: break
+        case .left: self._leftViewController?.willDismiss(animated: animated)
+        case .right: self._rightViewController?.willDismiss(animated: animated)
+        }
     }
     
     open override func didDismiss(animated: Bool) {
         super.didDismiss(animated: animated)
         self._contentViewController?.didDismiss(animated: animated)
-        self._leftViewController?.didDismiss(animated: animated)
-        self._rightViewController?.didDismiss(animated: animated)
+        switch self.state {
+        case .idle: break
+        case .left: self._leftViewController?.didDismiss(animated: animated)
+        case .right: self._rightViewController?.didDismiss(animated: animated)
+        }
     }
     
     open override func willTransition(size: CGSize) {
         super.willTransition(size: size)
         self._contentViewController?.willTransition(size: size)
-        self._leftViewController?.willTransition(size: size)
-        self._rightViewController?.willTransition(size: size)
+        switch self.state {
+        case .idle: break
+        case .left: self._leftViewController?.willTransition(size: size)
+        case .right: self._rightViewController?.willTransition(size: size)
+        }
     }
     
     open override func didTransition(size: CGSize) {
         super.didTransition(size: size)
         self._contentViewController?.didTransition(size: size)
-        self._leftViewController?.didTransition(size: size)
-        self._rightViewController?.didTransition(size: size)
+        switch self.state {
+        case .idle: break
+        case .left: self._leftViewController?.didTransition(size: size)
+        case .right: self._rightViewController?.didTransition(size: size)
+        }
     }
     
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
@@ -219,13 +295,17 @@ open class QHamburgerContainerViewController : QViewController, IQHamburgerConta
     public func change(contentViewController: IQHamburgerViewController?, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         if self._contentViewController !== contentViewController {
             if let vc = self._contentViewController {
-                self._disappear(viewController: vc)
+                if self.isLoaded == true {
+                    self._disappear(viewController: vc)
+                }
                 self._remove(childViewController: vc)
             }
             self._contentViewController = contentViewController
             if let vc = self._contentViewController {
                 self._add(childViewController: vc)
-                self._appear(viewController: vc)
+                if self.isLoaded == true {
+                    self._appear(viewController: vc)
+                }
             }
             self._apply(state: self._state)
             completion?()
@@ -240,25 +320,33 @@ open class QHamburgerContainerViewController : QViewController, IQHamburgerConta
                 self._change(currentState: self._state, availableState: .idle, animated: true, completion: { [weak self] in
                     guard let strong = self else { return }
                     if let vc = strong._leftViewController {
-                        strong._disappear(viewController: vc)
+                        if strong.isLoaded == true {
+                            strong._disappear(viewController: vc)
+                        }
                         strong._remove(childViewController: vc)
                     }
                     strong._leftViewController = leftViewController
                     if let vc = strong._leftViewController {
                         strong._add(childViewController: vc)
-                        strong._appear(viewController: vc)
+                        if strong.isLoaded == true {
+                            strong._appear(viewController: vc)
+                        }
                     }
                     strong._change(currentState: .idle, availableState: strong._state, animated: true, completion: completion)
                 })
             } else {
                 if let vc = self._leftViewController {
+                    if self.isLoaded == true {
                     self._disappear(viewController: vc)
+                    }
                     self._remove(childViewController: vc)
                 }
                 self._leftViewController = leftViewController
                 if let vc = self._leftViewController {
                     self._add(childViewController: vc)
-                    self._appear(viewController: vc)
+                    if self.isLoaded == true {
+                        self._appear(viewController: vc)
+                    }
                 }
                 self._apply(state: self._state)
                 completion?()
@@ -274,25 +362,33 @@ open class QHamburgerContainerViewController : QViewController, IQHamburgerConta
                 self._change(currentState: self._state, availableState: .idle, animated: true, completion: { [weak self] in
                     guard let strong = self else { return }
                     if let vc = strong._rightViewController {
-                        strong._disappear(viewController: vc)
+                        if strong.isLoaded == true {
+                            strong._disappear(viewController: vc)
+                        }
                         strong._remove(childViewController: vc)
                     }
                     strong._rightViewController = rightViewController
                     if let vc = strong._rightViewController {
                         strong._add(childViewController: vc)
-                        strong._appear(viewController: vc)
+                        if strong.isLoaded == true {
+                            strong._appear(viewController: vc)
+                        }
                     }
                     strong._change(currentState: .idle, availableState: strong._state, animated: true, completion: completion)
                 })
             } else {
                 if let vc = self._rightViewController {
-                    self._disappear(viewController: vc)
+                    if self.isLoaded == true {
+                        self._disappear(viewController: vc)
+                    }
                     self._remove(childViewController: vc)
                 }
                 self._rightViewController = rightViewController
                 if let vc = self._rightViewController {
                     self._add(childViewController: vc)
-                    self._appear(viewController: vc)
+                    if self.isLoaded == true {
+                        self._appear(viewController: vc)
+                    }
                 }
                 self._apply(state: self._state)
                 completion?()
@@ -331,7 +427,7 @@ extension QHamburgerContainerViewController {
         self.animation.animate(
             contentView: self.view,
             currentState: currentState,
-            availableState: availableState,
+            targetState: availableState,
             contentViewController: self._contentViewController,
             leftViewController: self._leftViewController,
             rightViewController: self._rightViewController,
@@ -378,7 +474,7 @@ extension QHamburgerContainerViewController {
             animation.prepare(
                 contentView: self.view,
                 currentState: self._state,
-                availableState: .left,
+                targetState: .left,
                 contentViewController: contentViewController,
                 leftViewController: self._leftViewController,
                 rightViewController: self._rightViewController,
@@ -395,11 +491,13 @@ extension QHamburgerContainerViewController {
             if animation.canFinish == true {
                 animation.finish({ [weak self] (state) in
                     guard let strong = self else { return }
+                    strong._state = state
                     strong._endInteractiveAnimation()
                 })
             } else {
-                animation.cancel({ [weak self] in
+                animation.cancel({ [weak self] (state) in
                     guard let strong = self else { return }
+                    strong._state = state
                     strong._endInteractiveAnimation()
                 })
             }
@@ -424,7 +522,7 @@ extension QHamburgerContainerViewController {
             animation.prepare(
                 contentView: self.view,
                 currentState: self._state,
-                availableState: .right,
+                targetState: .right,
                 contentViewController: contentViewController,
                 leftViewController: self._leftViewController,
                 rightViewController: self._rightViewController,
@@ -441,11 +539,13 @@ extension QHamburgerContainerViewController {
             if animation.canFinish == true {
                 animation.finish({ [weak self] (state) in
                     guard let strong = self else { return }
+                    strong._state = state
                     strong._endInteractiveAnimation()
                 })
             } else {
-                animation.cancel({ [weak self] in
+                animation.cancel({ [weak self] (state) in
                     guard let strong = self else { return }
+                    strong._state = state
                     strong._endInteractiveAnimation()
                 })
             }
@@ -470,7 +570,7 @@ extension QHamburgerContainerViewController {
             animation.prepare(
                 contentView: self.view,
                 currentState: self._state,
-                availableState: .idle,
+                targetState: .idle,
                 contentViewController: contentViewController,
                 leftViewController: self._leftViewController,
                 rightViewController: self._rightViewController,
@@ -487,11 +587,13 @@ extension QHamburgerContainerViewController {
             if animation.canFinish == true {
                 animation.finish({ [weak self] (state) in
                     guard let strong = self else { return }
+                    strong._state = state
                     strong._endInteractiveAnimation()
                 })
             } else {
-                animation.cancel({ [weak self] in
+                animation.cancel({ [weak self] (state) in
                     guard let strong = self else { return }
+                    strong._state = state
                     strong._endInteractiveAnimation()
                 })
             }
@@ -499,6 +601,11 @@ extension QHamburgerContainerViewController {
         default:
             break
         }
+    }
+    
+    @objc
+    private func _handleDismissTabGesture(_ gesture: UITapGestureRecognizer) {
+        self.change(state: .idle, animated: true, completion: nil)
     }
     
     private func _endInteractiveAnimation() {
@@ -524,9 +631,34 @@ extension QHamburgerContainerViewController : UIGestureRecognizerDelegate {
             guard self.rightViewController != nil, self._state == .idle else { return false }
             return contentViewController.shouldInteractive()
         } else if gestureRecognizer == self.interactiveDismissGesture {
-            guard self._state != .idle else { return false }
-            let location = gestureRecognizer.location(in: contentViewController.view)
-            return contentViewController.view.point(inside: location, with: nil)
+            if self._state != .idle {
+                let location = gestureRecognizer.location(in: contentViewController.view)
+                return contentViewController.view.point(inside: location, with: nil)
+            }
+        } else if gestureRecognizer == self.dismissTabGesture {
+            if self._state != .idle {
+                let location = gestureRecognizer.location(in: contentViewController.view)
+                return contentViewController.view.point(inside: location, with: nil)
+            }
+        }
+        return false
+    }
+    
+    open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer == self.interactiveDismissGesture {
+            return otherGestureRecognizer == self.dismissTabGesture
+        }
+        return false
+    }
+    
+    open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let gestureRecognizerView = gestureRecognizer.view, let otherGestureRecognizerView = otherGestureRecognizer.view else {
+            return false
+        }
+        if gestureRecognizer == self.interactiveDismissGesture {
+            return otherGestureRecognizerView.isDescendant(of: gestureRecognizerView)
+        } else if gestureRecognizer == self.dismissTabGesture {
+            return otherGestureRecognizerView.isDescendant(of: gestureRecognizerView)
         }
         return false
     }

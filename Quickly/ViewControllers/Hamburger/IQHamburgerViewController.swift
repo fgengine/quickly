@@ -23,7 +23,7 @@ public protocol IQHamburgerViewControllerFixedAnimation : class {
     func animate(
         contentView: UIView,
         currentState: QHamburgerViewControllerState,
-        availableState: QHamburgerViewControllerState,
+        targetState: QHamburgerViewControllerState,
         contentViewController: IQHamburgerViewController?,
         leftViewController: IQHamburgerViewController?,
         rightViewController: IQHamburgerViewController?,
@@ -42,7 +42,7 @@ public protocol IQHamburgerViewControllerInteractiveAnimation : class {
     func prepare(
         contentView: UIView,
         currentState: QHamburgerViewControllerState,
-        availableState: QHamburgerViewControllerState,
+        targetState: QHamburgerViewControllerState,
         contentViewController: IQHamburgerViewController,
         leftViewController: IQHamburgerViewController?,
         rightViewController: IQHamburgerViewController?,
@@ -52,7 +52,7 @@ public protocol IQHamburgerViewControllerInteractiveAnimation : class {
     
     func update(position: CGPoint, velocity: CGPoint)
     func finish(_ complete: @escaping (_ state: QHamburgerViewControllerState) -> Void)
-    func cancel(_ complete: @escaping () -> Void)
+    func cancel(_ complete: @escaping (_ state: QHamburgerViewControllerState) -> Void)
 
 }
 

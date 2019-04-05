@@ -97,6 +97,27 @@ public class QStackViewControllerinteractiveDismissAnimation : IQStackViewContro
         self.previousViewController.view.frame = self.previousBeginFrame.lerp(self.previousEndFrame, progress: progress)
         self.canFinish = self.deltaPosition > (self.distance * self.dismissDistanceRate)
     }
+    
+    public func finish(_ complete: @escaping (_ completed: Bool) -> Void) {
+        let duration = TimeInterval((self.distance - self.deltaPosition) / self.acceleration)
+        UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews ], animations: {
+            self.containerViewController.groupbarVisibility = self.previousGroupbarVisibility
+            self.currentViewController.view.frame = self.currentEndFrame
+            self.previousViewController.view.frame = self.previousEndFrame
+        }, completion: { [weak self] (completed: Bool) in
+            if let strong = self {
+                strong.containerViewController.groupbarVisibility = strong.previousGroupbarVisibility
+                strong.containerViewController = nil
+                strong.currentViewController.view.frame = strong.currentEndFrame
+                strong.currentViewController.finishInteractiveDismiss()
+                strong.currentViewController = nil
+                strong.previousViewController.view.frame = strong.previousEndFrame
+                strong.previousViewController.finishInteractivePresent()
+                strong.previousViewController = nil
+            }
+            complete(completed)
+        })
+    }
 
     public func cancel(_ complete: @escaping (_ completed: Bool) -> Void) {
         let duration = TimeInterval(self.deltaPosition / self.acceleration)
@@ -113,31 +134,6 @@ public class QStackViewControllerinteractiveDismissAnimation : IQStackViewContro
                 strong.currentViewController = nil
                 strong.previousViewController.view.frame = strong.previousBeginFrame
                 strong.previousViewController.cancelInteractivePresent()
-                strong.previousViewController = nil
-            }
-            complete(completed)
-        })
-    }
-
-    public func finish(_ complete: @escaping (_ completed: Bool) -> Void) {
-        let duration = TimeInterval((self.distance - self.deltaPosition) / self.acceleration)
-        self.currentViewController.willDismiss(animated: true)
-        self.previousViewController.willPresent(animated: true)
-        UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews ], animations: {
-            self.containerViewController.groupbarVisibility = self.previousGroupbarVisibility
-            self.currentViewController.view.frame = self.currentEndFrame
-            self.previousViewController.view.frame = self.previousEndFrame
-        }, completion: { [weak self] (completed: Bool) in
-            if let strong = self {
-                strong.containerViewController.groupbarVisibility = strong.previousGroupbarVisibility
-                strong.containerViewController = nil
-                strong.currentViewController.view.frame = strong.currentEndFrame
-                strong.currentViewController.didDismiss(animated: true)
-                strong.currentViewController.finishInteractiveDismiss()
-                strong.currentViewController = nil
-                strong.previousViewController.view.frame = strong.previousEndFrame
-                strong.previousViewController.didPresent(animated: true)
-                strong.previousViewController.finishInteractivePresent()
                 strong.previousViewController = nil
             }
             complete(completed)

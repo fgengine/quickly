@@ -4,10 +4,10 @@
 
 open class QHamburgerWireframe< WireframeType: IQWireframe, ContextType: IQContext > : IQChildWireframe {
 
-    open var presentableViewController: IQViewController {
-        get { return self.viewController }
+    open var viewController: IQViewController {
+        get { return self.containerViewController }
     }
-    open private(set) var viewController: QHamburgerContainerViewController
+    open private(set) var containerViewController: QHamburgerContainerViewController
     open private(set) weak var parent: WireframeType?
     open private(set) var context: ContextType
 
@@ -15,7 +15,7 @@ open class QHamburgerWireframe< WireframeType: IQWireframe, ContextType: IQConte
         parent: WireframeType,
         context: ContextType
     ) {
-        self.viewController = QHamburgerContainerViewController()
+        self.containerViewController = QHamburgerContainerViewController()
         self.parent = parent
         self.context = context
         self.setup()

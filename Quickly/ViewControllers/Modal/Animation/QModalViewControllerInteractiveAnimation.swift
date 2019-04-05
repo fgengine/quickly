@@ -33,8 +33,8 @@ public class QModalViewControllerInteractiveDismissAnimation : IQModalViewContro
     public var distance: CGFloat {
         get { return contentView.bounds.height }
     }
-    public var dismissDistanceRate: CGFloat
     public var acceleration: CGFloat
+    public var dismissDistanceRate: CGFloat
     public var ease: IQAnimationEase
     public private(set) var canFinish: Bool
 
@@ -42,8 +42,8 @@ public class QModalViewControllerInteractiveDismissAnimation : IQModalViewContro
         self.position = CGPoint.zero
         self.deltaPosition = 0
         self.velocity = CGPoint.zero
-        self.dismissDistanceRate = dismissDistanceRate
         self.acceleration = acceleration
+        self.dismissDistanceRate = dismissDistanceRate
         self.ease = QAnimationEaseQuadraticOut()
         self.canFinish = false
     }
