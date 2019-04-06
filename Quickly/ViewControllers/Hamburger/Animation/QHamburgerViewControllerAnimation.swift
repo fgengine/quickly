@@ -26,11 +26,11 @@ public class QHamburgerViewControllerAnimation : IQHamburgerViewControllerFixedA
         rightViewController: IQHamburgerViewController?
     ) {
         if let vc = contentViewController {
-            vc.view.frame = self._contentFrame(contentView: contentView, state: state)
+            vc.view.frame = QHamburgerViewControllerAnimation._contentFrame(contentView: contentView, state: state, leftSize: self.leftSize, rightSize: self.rightSize)
             contentView.bringSubviewToFront(vc.view)
         }
-        leftViewController?.view.frame = self._leftFrame(contentView: contentView, state: state)
-        rightViewController?.view.frame = self._rightFrame(contentView: contentView, state: state)
+        leftViewController?.view.frame = QHamburgerViewControllerAnimation._leftFrame(contentView: contentView, state: state, leftSize: self.leftSize, rightSize: self.rightSize)
+        rightViewController?.view.frame = QHamburgerViewControllerAnimation._rightFrame(contentView: contentView, state: state, leftSize: self.leftSize, rightSize: self.rightSize)
     }
     
     public func animate(
@@ -48,17 +48,19 @@ public class QHamburgerViewControllerAnimation : IQHamburgerViewControllerFixedA
         if targetState == .left { leftViewController?.willPresent(animated: animated) }
         if targetState == .right { rightViewController?.willPresent(animated: animated) }
         if animated == true {
+            let currentFrame = QHamburgerViewControllerAnimation._contentFrame(contentView: contentView, state: currentState, leftSize: self.leftSize, rightSize: self.rightSize)
+            let targetFrame = QHamburgerViewControllerAnimation._contentFrame(contentView: contentView, state: targetState, leftSize: self.leftSize, rightSize: self.rightSize)
             if let vc = contentViewController {
-                vc.view.frame = self._contentFrame(contentView: contentView, state: currentState)
+                vc.view.frame = currentFrame
                 contentView.bringSubviewToFront(vc.view)
             }
-            leftViewController?.view.frame = self._leftFrame(contentView: contentView, state: currentState)
-            rightViewController?.view.frame = self._rightFrame(contentView: contentView, state: currentState)
-            let duration = self._duration(contentView: contentView, currentState: currentState, targetState: targetState)
+            leftViewController?.view.frame = QHamburgerViewControllerAnimation._leftFrame(contentView: contentView, state: currentState, leftSize: self.leftSize, rightSize: self.rightSize)
+            rightViewController?.view.frame = QHamburgerViewControllerAnimation._rightFrame(contentView: contentView, state: currentState, leftSize: self.leftSize, rightSize: self.rightSize)
+            let duration = TimeInterval(abs(currentFrame.centerPoint.distance(to: targetFrame.centerPoint)) / self.acceleration)
             UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews ], animations: {
-                contentViewController?.view.frame = self._contentFrame(contentView: contentView, state: targetState)
-                leftViewController?.view.frame = self._leftFrame(contentView: contentView, state: targetState)
-                rightViewController?.view.frame = self._rightFrame(contentView: contentView, state: targetState)
+                contentViewController?.view.frame = QHamburgerViewControllerAnimation._contentFrame(contentView: contentView, state: targetState, leftSize: self.leftSize, rightSize: self.rightSize)
+                leftViewController?.view.frame = QHamburgerViewControllerAnimation._leftFrame(contentView: contentView, state: targetState, leftSize: self.leftSize, rightSize: self.rightSize)
+                rightViewController?.view.frame = QHamburgerViewControllerAnimation._rightFrame(contentView: contentView, state: targetState, leftSize: self.leftSize, rightSize: self.rightSize)
             }, completion: { (completed) in
                 if currentState == .left { leftViewController?.didDismiss(animated: animated) }
                 if currentState == .right { rightViewController?.didDismiss(animated: animated) }
@@ -68,11 +70,11 @@ public class QHamburgerViewControllerAnimation : IQHamburgerViewControllerFixedA
             })
         } else {
             if let vc = contentViewController {
-                vc.view.frame = self._contentFrame(contentView: contentView, state: targetState)
+                vc.view.frame = QHamburgerViewControllerAnimation._contentFrame(contentView: contentView, state: targetState, leftSize: self.leftSize, rightSize: self.rightSize)
                 contentView.bringSubviewToFront(vc.view)
             }
-            leftViewController?.view.frame = self._leftFrame(contentView: contentView, state: targetState)
-            rightViewController?.view.frame = self._rightFrame(contentView: contentView, state: targetState)
+            leftViewController?.view.frame = QHamburgerViewControllerAnimation._leftFrame(contentView: contentView, state: targetState, leftSize: self.leftSize, rightSize: self.rightSize)
+            rightViewController?.view.frame = QHamburgerViewControllerAnimation._rightFrame(contentView: contentView, state: targetState, leftSize: self.leftSize, rightSize: self.rightSize)
             if currentState == .left { leftViewController?.didDismiss(animated: animated) }
             if currentState == .right { rightViewController?.didDismiss(animated: animated) }
             if targetState == .left { leftViewController?.didPresent(animated: animated) }
@@ -85,34 +87,28 @@ public class QHamburgerViewControllerAnimation : IQHamburgerViewControllerFixedA
 
 private extension QHamburgerViewControllerAnimation {
     
-    private func _duration(contentView: UIView, currentState: QHamburgerViewControllerState, targetState: QHamburgerViewControllerState) -> TimeInterval {
-        let currentFrame = self._contentFrame(contentView: contentView, state: currentState)
-        let targetFrame = self._contentFrame(contentView: contentView, state: targetState)
-        return TimeInterval(abs(currentFrame.centerPoint.distance(to: targetFrame.centerPoint)) / self.acceleration)
-    }
-    
-    func _contentFrame(contentView: UIView, state: QHamburgerViewControllerState) -> CGRect {
+    private static func _contentFrame(contentView: UIView, state: QHamburgerViewControllerState, leftSize: CGFloat, rightSize: CGFloat) -> CGRect {
         let bounds = contentView.bounds
         switch state {
         case .idle: return bounds
-        case .left: return CGRect(x: bounds.origin.x + self.leftSize, y: bounds.origin.y, width: bounds.width, height: bounds.height)
-        case .right: return CGRect(x: bounds.origin.x - self.rightSize, y: bounds.origin.y, width: bounds.width, height: bounds.height)
+        case .left: return CGRect(x: bounds.origin.x + leftSize, y: bounds.origin.y, width: bounds.width, height: bounds.height)
+        case .right: return CGRect(x: bounds.origin.x - rightSize, y: bounds.origin.y, width: bounds.width, height: bounds.height)
         }
     }
     
-    func _leftFrame(contentView: UIView, state: QHamburgerViewControllerState) -> CGRect {
+    private static func _leftFrame(contentView: UIView, state: QHamburgerViewControllerState, leftSize: CGFloat, rightSize: CGFloat) -> CGRect {
         let bounds = contentView.bounds
         switch state {
-        case .idle, .right: return CGRect(x: bounds.origin.x - self.leftSize, y: bounds.origin.y, width: self.leftSize, height: bounds.height)
-        case .left: return CGRect(x: bounds.origin.x, y: bounds.origin.y, width: self.leftSize, height: bounds.height)
+        case .idle, .right: return CGRect(x: bounds.origin.x - leftSize, y: bounds.origin.y, width: leftSize, height: bounds.height)
+        case .left: return CGRect(x: bounds.origin.x, y: bounds.origin.y, width: leftSize, height: bounds.height)
         }
     }
     
-    func _rightFrame(contentView: UIView, state: QHamburgerViewControllerState) -> CGRect {
+    private static func _rightFrame(contentView: UIView, state: QHamburgerViewControllerState, leftSize: CGFloat, rightSize: CGFloat) -> CGRect {
         let bounds = contentView.bounds
         switch state {
-        case .idle, .left: return CGRect(x: bounds.origin.x + bounds.width, y: bounds.origin.y, width: self.rightSize, height: bounds.height)
-        case .right: return CGRect(x: (bounds.origin.x + bounds.width) - self.rightSize, y: bounds.origin.y, width: self.rightSize, height: bounds.height)
+        case .idle, .left: return CGRect(x: bounds.origin.x + bounds.width, y: bounds.origin.y, width: rightSize, height: bounds.height)
+        case .right: return CGRect(x: (bounds.origin.x + bounds.width) - rightSize, y: bounds.origin.y, width: rightSize, height: bounds.height)
         }
     }
     

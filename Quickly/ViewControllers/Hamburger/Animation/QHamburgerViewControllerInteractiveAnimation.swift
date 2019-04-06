@@ -21,9 +21,6 @@ public class QHamburgerViewControllerInteractiveAnimation : IQHamburgerViewContr
     public var position: CGPoint
     public var deltaPosition: CGFloat
     public var velocity: CGPoint
-    public var distance: CGFloat {
-        get { return contentView.bounds.width }
-    }
     public var acceleration: CGFloat
     public var finishDistanceRate: CGFloat
     public var ease: IQAnimationEase
@@ -62,14 +59,14 @@ public class QHamburgerViewControllerInteractiveAnimation : IQHamburgerViewContr
         self.currentState = currentState
         self.targetState = targetState
         self.contentViewController = contentViewController
-        self.contentBeginFrame = self._contentFrame(contentView: contentView, state: currentState)
-        self.contentEndFrame = self._contentFrame(contentView: contentView, state: targetState)
+        self.contentBeginFrame = QHamburgerViewControllerInteractiveAnimation._contentFrame(contentView: contentView, state: currentState, leftSize: self.leftSize, rightSize: self.rightSize)
+        self.contentEndFrame = QHamburgerViewControllerInteractiveAnimation._contentFrame(contentView: contentView, state: targetState, leftSize: self.leftSize, rightSize: self.rightSize)
         self.leftViewController = leftViewController
-        self.leftBeginFrame = self._leftFrame(contentView: contentView, state: currentState)
-        self.leftEndFrame = self._leftFrame(contentView: contentView, state: targetState)
+        self.leftBeginFrame = QHamburgerViewControllerInteractiveAnimation._leftFrame(contentView: contentView, state: currentState, leftSize: self.leftSize, rightSize: self.rightSize)
+        self.leftEndFrame = QHamburgerViewControllerInteractiveAnimation._leftFrame(contentView: contentView, state: targetState, leftSize: self.leftSize, rightSize: self.rightSize)
         self.rightViewController = rightViewController
-        self.rightBeginFrame = self._rightFrame(contentView: contentView, state: currentState)
-        self.rightEndFrame = self._rightFrame(contentView: contentView, state: targetState)
+        self.rightBeginFrame = QHamburgerViewControllerInteractiveAnimation._rightFrame(contentView: contentView, state: currentState, leftSize: self.leftSize, rightSize: self.rightSize)
+        self.rightEndFrame = QHamburgerViewControllerInteractiveAnimation._rightFrame(contentView: contentView, state: targetState, leftSize: self.leftSize, rightSize: self.rightSize)
         self.position = position
         self.velocity = velocity
         
@@ -102,16 +99,18 @@ public class QHamburgerViewControllerInteractiveAnimation : IQHamburgerViewContr
             }
         case .right: break
         }
-        self.deltaPosition = self.ease.lerp(max(0, delta), from: 0, to: self.distance)
-        let progress = self.deltaPosition / self.distance
+        let distance = QHamburgerViewControllerInteractiveAnimation._distance(currentState: self.currentState, targetState: self.targetState, leftSize: self.leftSize, rightSize: self.rightSize)
+        self.deltaPosition = self.ease.lerp(max(0, min(delta, distance)), from: 0, to: distance)
+        let progress = self.deltaPosition / distance
         self.contentViewController.view.frame = self.contentBeginFrame.lerp(self.contentEndFrame, progress: progress)
         self.leftViewController?.view.frame = self.leftBeginFrame.lerp(self.leftEndFrame, progress: progress)
         self.rightViewController?.view.frame = self.rightBeginFrame.lerp(self.rightEndFrame, progress: progress)
-        self.canFinish = self.deltaPosition > (self.distance * self.finishDistanceRate)
+        self.canFinish = self.deltaPosition > (distance * self.finishDistanceRate)
     }
     
     public func finish(_ complete: @escaping (_ state: QHamburgerViewControllerState) -> Void) {
-        let duration = TimeInterval((self.distance - self.deltaPosition) / self.acceleration)
+        let distance = QHamburgerViewControllerInteractiveAnimation._distance(currentState: self.currentState, targetState: self.targetState, leftSize: self.leftSize, rightSize: self.rightSize)
+        let duration = TimeInterval((distance - self.deltaPosition) / self.acceleration)
         UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews ], animations: {
             self.contentViewController.view.frame = self.contentEndFrame
             self.leftViewController?.view.frame = self.leftEndFrame
@@ -166,28 +165,51 @@ public class QHamburgerViewControllerInteractiveAnimation : IQHamburgerViewContr
 
 private extension QHamburgerViewControllerInteractiveAnimation {
     
-    func _contentFrame(contentView: UIView, state: QHamburgerViewControllerState) -> CGRect {
+    static func _distance(currentState: QHamburgerViewControllerState, targetState: QHamburgerViewControllerState, leftSize: CGFloat, rightSize: CGFloat) -> CGFloat {
+        switch currentState {
+        case .idle:
+            switch targetState {
+            case .idle: return 0
+            case .left: return leftSize
+            case .right: return rightSize
+            }
+        case .left:
+            switch targetState {
+            case .idle: return leftSize
+            case .left: return 0
+            case .right: return leftSize + rightSize
+            }
+        case .right:
+            switch targetState {
+            case .idle: return rightSize
+            case .left: return leftSize + rightSize
+            case .right: return 0
+            }
+        }
+    }
+    
+    static func _contentFrame(contentView: UIView, state: QHamburgerViewControllerState, leftSize: CGFloat, rightSize: CGFloat) -> CGRect {
         let bounds = contentView.bounds
         switch state {
         case .idle: return bounds
-        case .left: return CGRect(x: bounds.origin.x + self.leftSize, y: bounds.origin.y, width: bounds.width, height: bounds.height)
-        case .right: return CGRect(x: bounds.origin.x - self.rightSize, y: bounds.origin.y, width: bounds.width, height: bounds.height)
+        case .left: return CGRect(x: bounds.origin.x + leftSize, y: bounds.origin.y, width: bounds.width, height: bounds.height)
+        case .right: return CGRect(x: bounds.origin.x - rightSize, y: bounds.origin.y, width: bounds.width, height: bounds.height)
         }
     }
     
-    func _leftFrame(contentView: UIView, state: QHamburgerViewControllerState) -> CGRect {
+    static func _leftFrame(contentView: UIView, state: QHamburgerViewControllerState, leftSize: CGFloat, rightSize: CGFloat) -> CGRect {
         let bounds = contentView.bounds
         switch state {
-        case .idle, .right: return CGRect(x: bounds.origin.x - self.leftSize, y: bounds.origin.y, width: self.leftSize, height: bounds.height)
-        case .left: return CGRect(x: bounds.origin.x, y: bounds.origin.y, width: self.leftSize, height: bounds.height)
+        case .idle, .right: return CGRect(x: bounds.origin.x - leftSize, y: bounds.origin.y, width: leftSize, height: bounds.height)
+        case .left: return CGRect(x: bounds.origin.x, y: bounds.origin.y, width: leftSize, height: bounds.height)
         }
     }
     
-    func _rightFrame(contentView: UIView, state: QHamburgerViewControllerState) -> CGRect {
+    static func _rightFrame(contentView: UIView, state: QHamburgerViewControllerState, leftSize: CGFloat, rightSize: CGFloat) -> CGRect {
         let bounds = contentView.bounds
         switch state {
-        case .idle, .left: return CGRect(x: bounds.origin.x + bounds.width, y: bounds.origin.y, width: self.rightSize, height: bounds.height)
-        case .right: return CGRect(x: (bounds.origin.x + bounds.width) - self.rightSize, y: bounds.origin.y, width: self.rightSize, height: bounds.height)
+        case .idle, .left: return CGRect(x: bounds.origin.x + bounds.width, y: bounds.origin.y, width: rightSize, height: bounds.height)
+        case .right: return CGRect(x: (bounds.origin.x + bounds.width) - rightSize, y: bounds.origin.y, width: rightSize, height: bounds.height)
         }
     }
     
