@@ -87,7 +87,7 @@ public class QHamburgerViewControllerAnimation : IQHamburgerViewControllerFixedA
 
 private extension QHamburgerViewControllerAnimation {
     
-    private static func _contentFrame(contentView: UIView, state: QHamburgerViewControllerState, leftSize: CGFloat, rightSize: CGFloat) -> CGRect {
+    static func _contentFrame(contentView: UIView, state: QHamburgerViewControllerState, leftSize: CGFloat, rightSize: CGFloat) -> CGRect {
         let bounds = contentView.bounds
         switch state {
         case .idle: return bounds
@@ -96,7 +96,7 @@ private extension QHamburgerViewControllerAnimation {
         }
     }
     
-    private static func _leftFrame(contentView: UIView, state: QHamburgerViewControllerState, leftSize: CGFloat, rightSize: CGFloat) -> CGRect {
+    static func _leftFrame(contentView: UIView, state: QHamburgerViewControllerState, leftSize: CGFloat, rightSize: CGFloat) -> CGRect {
         let bounds = contentView.bounds
         switch state {
         case .idle, .right: return CGRect(x: bounds.origin.x - leftSize, y: bounds.origin.y, width: leftSize, height: bounds.height)
@@ -104,7 +104,7 @@ private extension QHamburgerViewControllerAnimation {
         }
     }
     
-    private static func _rightFrame(contentView: UIView, state: QHamburgerViewControllerState, leftSize: CGFloat, rightSize: CGFloat) -> CGRect {
+    static func _rightFrame(contentView: UIView, state: QHamburgerViewControllerState, leftSize: CGFloat, rightSize: CGFloat) -> CGRect {
         let bounds = contentView.bounds
         switch state {
         case .idle, .left: return CGRect(x: bounds.origin.x + bounds.width, y: bounds.origin.y, width: rightSize, height: bounds.height)
