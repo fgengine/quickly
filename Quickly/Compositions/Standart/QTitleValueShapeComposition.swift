@@ -74,8 +74,8 @@ open class QTitleValueShapeComposition< Composable: QTitleValueShapeComposable >
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         let availableWidth = spec.containerSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
-        let valueTextSize = composable.value.text.size(width: availableWidth - (composable.shapeWidth + composable.shapeSpacing))
-        let titleTextSize = composable.title.text.size(width: availableWidth - (valueTextSize.width + composable.titleSpacing + composable.shapeWidth + composable.shapeSpacing))
+        let valueTextSize = composable.value.size(width: availableWidth - (composable.shapeWidth + composable.shapeSpacing))
+        let titleTextSize = composable.title.size(width: availableWidth - (valueTextSize.width + composable.titleSpacing + composable.shapeWidth + composable.shapeSpacing))
         let shapeSzie = composable.shape.size
         return CGSize(
             width: spec.containerSize.width,

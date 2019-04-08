@@ -108,7 +108,7 @@ open class QPlaceholderImageTitleDetailShapeComposition< Composable: QPlaceholde
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         let availableWidth = spec.containerSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
-        let imageSize = composable.image.source.size(CGSize(width: composable.imageWidth, height: availableWidth))
+        let imageSize = composable.image.size(CGSize(width: composable.imageWidth, height: availableWidth))
         let shapeSize = composable.shape.size
         return CGSize(
             width: spec.containerSize.width,

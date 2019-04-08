@@ -293,13 +293,13 @@
 		40E738581F5606C500B192C6 /* QSpaceTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E738521F5606C500B192C6 /* QSpaceTableCell.swift */; };
 		40EC87962189A71D00B5F806 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EC87952189A71D00B5F806 /* UIView.swift */; };
 		40EFD0BF20E60E0700473D17 /* IQTextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EFD0BE20E60E0700473D17 /* IQTextStyle.swift */; };
-		40EFD0C320E613A400473D17 /* IQImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EFD0C220E613A400473D17 /* IQImageSource.swift */; };
+		40EFD0C320E613A400473D17 /* QImageLocalSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EFD0C220E613A400473D17 /* QImageLocalSource.swift */; };
 		40FBE67A1F5311EB00F5194B /* QLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE6791F5311EB00F5194B /* QLayout.swift */; };
 		40FBE6A21F543EFD00F5194B /* IQText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE69D1F543EFD00F5194B /* IQText.swift */; };
 		40FBE6A41F543EFD00F5194B /* QAttributedText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE69F1F543EFD00F5194B /* QAttributedText.swift */; };
 		40FBE6A51F543EFD00F5194B /* QText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE6A01F543EFD00F5194B /* QText.swift */; };
 		40FBE6A61F543EFD00F5194B /* QTextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE6A11F543EFD00F5194B /* QTextStyle.swift */; };
-		40FBE6AA1F54591000F5194B /* QImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE6A91F54591000F5194B /* QImageSource.swift */; };
+		40FBE6AA1F54591000F5194B /* QImageRemoteSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FBE6A91F54591000F5194B /* QImageRemoteSource.swift */; };
 		40FC3F0620C7C4040013B71A /* IQModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FC3F0520C7C4040013B71A /* IQModalViewController.swift */; };
 		40FC3F0820C7F46A0013B71A /* QModalContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FC3F0720C7F46A0013B71A /* QModalContainerViewController.swift */; };
 		40FC3F0A20C7F4960013B71A /* QModalViewControllerAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FC3F0920C7F4960013B71A /* QModalViewControllerAnimation.swift */; };
@@ -597,14 +597,14 @@
 		40E738521F5606C500B192C6 /* QSpaceTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSpaceTableCell.swift; sourceTree = "<group>"; };
 		40EC87952189A71D00B5F806 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		40EFD0BE20E60E0700473D17 /* IQTextStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQTextStyle.swift; sourceTree = "<group>"; };
-		40EFD0C220E613A400473D17 /* IQImageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQImageSource.swift; sourceTree = "<group>"; };
+		40EFD0C220E613A400473D17 /* QImageLocalSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QImageLocalSource.swift; sourceTree = "<group>"; };
 		40F3F8BC219966EA00ADE043 /* QMultiTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QMultiTextField.swift; sourceTree = "<group>"; };
 		40FBE6791F5311EB00F5194B /* QLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QLayout.swift; sourceTree = "<group>"; };
 		40FBE69D1F543EFD00F5194B /* IQText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQText.swift; sourceTree = "<group>"; };
 		40FBE69F1F543EFD00F5194B /* QAttributedText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QAttributedText.swift; sourceTree = "<group>"; };
 		40FBE6A01F543EFD00F5194B /* QText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QText.swift; sourceTree = "<group>"; };
 		40FBE6A11F543EFD00F5194B /* QTextStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTextStyle.swift; sourceTree = "<group>"; };
-		40FBE6A91F54591000F5194B /* QImageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QImageSource.swift; sourceTree = "<group>"; };
+		40FBE6A91F54591000F5194B /* QImageRemoteSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QImageRemoteSource.swift; sourceTree = "<group>"; };
 		40FC3F0520C7C4040013B71A /* IQModalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQModalViewController.swift; sourceTree = "<group>"; };
 		40FC3F0720C7F46A0013B71A /* QModalContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QModalContainerViewController.swift; sourceTree = "<group>"; };
 		40FC3F0920C7F4960013B71A /* QModalViewControllerAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QModalViewControllerAnimation.swift; sourceTree = "<group>"; };
@@ -1031,8 +1031,8 @@
 			isa = PBXGroup;
 			children = (
 				4039BCB91F51B20900E38090 /* QImageView.swift */,
-				40EFD0C220E613A400473D17 /* IQImageSource.swift */,
-				40FBE6A91F54591000F5194B /* QImageSource.swift */,
+				40EFD0C220E613A400473D17 /* QImageLocalSource.swift */,
+				40FBE6A91F54591000F5194B /* QImageRemoteSource.swift */,
 				40E2D5FD1F67850600B954E4 /* QImageCache.swift */,
 				40E2D5FE1F67850600B954E4 /* QImageLoader.swift */,
 				40E2D5FF1F67850600B954E4 /* QImageRequest.swift */,
@@ -1776,7 +1776,7 @@
 				406FDF6F209082E4004178CC /* IQApiPagination.swift in Sources */,
 				405A490E201F19020001D684 /* QTransparentView.swift in Sources */,
 				40134F031F63129E009F81A6 /* QCardExpirationDateStringFormatter.swift in Sources */,
-				40FBE6AA1F54591000F5194B /* QImageSource.swift in Sources */,
+				40FBE6AA1F54591000F5194B /* QImageRemoteSource.swift in Sources */,
 				4062C8C72088CE0F0098F809 /* QStackViewControllerAnimation.swift in Sources */,
 				4023D97B2146FBC7005F915D /* QPlaceholderImageTitleComposition.swift in Sources */,
 				40CF45C21F4DE6AB004D00D8 /* QCollectionView.swift in Sources */,
@@ -1805,7 +1805,7 @@
 				40CF45E41F4DE6AB004D00D8 /* QTableView.swift in Sources */,
 				4062C8C22088B9660098F809 /* QDialogViewControllerAnimation.swift in Sources */,
 				4007B0AA2144236900AE17DC /* QTitleDetailComposition.swift in Sources */,
-				40EFD0C320E613A400473D17 /* IQImageSource.swift in Sources */,
+				40EFD0C320E613A400473D17 /* QImageLocalSource.swift in Sources */,
 				4085C06720E4CCA80079AF90 /* QAnimationEaseQuintic.swift in Sources */,
 				4039F8E32072636A00A88E45 /* QDateFieldFormatter.swift in Sources */,
 				405810C1216F412F00B46610 /* QGroupViewController.swift in Sources */,

@@ -78,8 +78,8 @@ open class QImageTitleShapeComposition< Composable: QImageTitleShapeComposable >
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         let availableWidth = spec.containerSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
-        let imageSize = composable.image.source.size(CGSize(width: composable.imageWidth, height: availableWidth))
-        let titleTextSize = composable.title.text.size(width: availableWidth - (composable.imageWidth + composable.imageSpacing + composable.shapeWidth + composable.shapeSpacing))
+        let imageSize = composable.image.size(CGSize(width: composable.imageWidth, height: availableWidth))
+        let titleTextSize = composable.title.size(width: availableWidth - (composable.imageWidth + composable.imageSpacing + composable.shapeWidth + composable.shapeSpacing))
         let shapeSize = composable.shape.size
         return CGSize(
             width: spec.containerSize.width,

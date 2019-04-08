@@ -34,7 +34,7 @@ open class QTitleComposition< Composable: QTitleComposable > : QComposition< Com
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         let availableWidth = spec.containerSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
-        let textSize = composable.title.text.size(width: availableWidth)
+        let textSize = composable.title.size(width: availableWidth)
         return CGSize(
             width: spec.containerSize.width,
             height: composable.edgeInsets.top + textSize.height + composable.edgeInsets.bottom

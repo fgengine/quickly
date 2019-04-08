@@ -40,6 +40,18 @@ open class QLabelStyleSheet : QDisplayStyleSheet {
 
         super.init(styleSheet)
     }
+    
+    public func size(width: CGFloat) -> CGSize {
+        return self.text.size(width: width)
+    }
+    
+    public func size(height: CGFloat) -> CGSize {
+        return self.text.size(height: height)
+    }
+    
+    public func size(size: CGSize) -> CGSize {
+        return self.text.size(size: size)
+    }
 
 }
 

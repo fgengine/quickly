@@ -56,8 +56,8 @@ open class QTitleIconComposition< Composable: QTitleIconComposable > : QComposit
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         let availableWidth = spec.containerSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
-        let titleTextSize = composable.title.text.size(width: availableWidth - (composable.iconWidth + composable.iconSpacing))
-        let iconSize = composable.icon.source.size(CGSize(width: composable.iconWidth, height: availableWidth))
+        let titleTextSize = composable.title.size(width: availableWidth - (composable.iconWidth + composable.iconSpacing))
+        let iconSize = composable.icon.size(CGSize(width: composable.iconWidth, height: availableWidth))
         return CGSize(
             width: spec.containerSize.width,
             height: composable.edgeInsets.top + max(titleTextSize.height, iconSize.height) + composable.edgeInsets.bottom
