@@ -32,6 +32,7 @@ open class QPagebar : QView {
     public var selectedItem: QPagebarItem? {
         get { return self.collectionController.selectedItems.first as? QPagebarItem }
     }
+    
     private lazy var collectionView: QCollectionView = {
         let view = QCollectionView(frame: self.bounds, collectionViewLayout: self.collectionLayout)
         view.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
@@ -60,16 +61,12 @@ open class QPagebar : QView {
     }
 
     public init(
-        cellTypes: [ItemType.Type],
-        itemsSpacing: CGFloat = 0,
-        backgroundColor: UIColor? = nil
+        cellTypes: [ItemType.Type]
     ) {
         self.cellTypes = cellTypes
         super.init(
             frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
         )
-        self.itemsSpacing = itemsSpacing
-        self.backgroundColor = backgroundColor
     }
 
     public required init?(coder: NSCoder) {

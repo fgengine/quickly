@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QGradientStyleSheet : QDisplayStyleSheet {
+open class QGradientStyleSheet : IQStyleSheet {
 
     public var points: [QGradientView.Point]
     public var startPoint: CGPoint
@@ -16,36 +16,22 @@ open class QGradientStyleSheet : QDisplayStyleSheet {
         self.points = points
         self.startPoint = startPoint
         self.endPoint = endPoint
-
-        super.init(backgroundColor: UIColor.clear)
     }
 
     public init(_ styleSheet: QGradientStyleSheet) {
         self.points = styleSheet.points
         self.startPoint = styleSheet.startPoint
         self.endPoint = styleSheet.endPoint
-
-        super.init(styleSheet)
     }
 
 }
 
-open class QGradientView : QDisplayView {
+open class QGradientView : QView {
 
-    public var points: [Point] {
-        set(value) {
-            self.gradientLayer.colors = value.compactMap({ return $0.color.cgColor })
-            self.gradientLayer.locations = value.compactMap({ return NSNumber(value: Float($0.location)) })
-        }
-        get {
-            guard let colors = self.gradientLayer.colors as? [CGColor], let locations = self.gradientLayer.locations else { return [] }
-            let count = max(locations.count, locations.count)
-            return (0..<count).compactMap({
-                return Point(
-                    color: UIColor(cgColor: colors[$0]),
-                    location: CGFloat(locations[$0].floatValue)
-                )
-            })
+    public var points: [Point] = [] {
+        didSet {
+            self.gradientLayer.colors = self.points.compactMap({ return $0.color.cgColor })
+            self.gradientLayer.locations = self.points.compactMap({ return NSNumber(value: Float($0.location)) })
         }
     }
     public var startPoint: CGPoint {
@@ -64,9 +50,13 @@ open class QGradientView : QDisplayView {
         get { return CAGradientLayer.self }
     }
     
-    public func apply(_ styleSheet: QGradientStyleSheet) {
-        self.apply(styleSheet as QDisplayStyleSheet)
+    open override func setup() {
+        super.setup()
         
+        self.backgroundColor = UIColor.clear
+    }
+    
+    public func apply(_ styleSheet: QGradientStyleSheet) {
         self.points = styleSheet.points
         self.startPoint = styleSheet.startPoint
         self.endPoint = styleSheet.endPoint

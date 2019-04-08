@@ -8,6 +8,7 @@ public class QHamburgerViewControllerInteractiveAnimation : IQHamburgerViewContr
     public var currentState: QHamburgerViewControllerState
     public var targetState: QHamburgerViewControllerState
     public var contentViewController: IQHamburgerViewController!
+    public var contentShadow: QViewShadow
     public var contentBeginFrame: CGRect!
     public var contentEndFrame: CGRect!
     public var leftSize: CGFloat
@@ -27,6 +28,7 @@ public class QHamburgerViewControllerInteractiveAnimation : IQHamburgerViewContr
     public var canFinish: Bool
     
     init(
+        contentShadow: QViewShadow = QViewShadow(color: UIColor.black, opacity: 0.45, radius: 6, offset: CGSize.zero),
         leftSize: CGFloat = UIScreen.main.bounds.width * 0.6,
         rightSize: CGFloat = UIScreen.main.bounds.width * 0.6,
         acceleration: CGFloat = UIScreen.main.bounds.height * 0.85,
@@ -34,6 +36,7 @@ public class QHamburgerViewControllerInteractiveAnimation : IQHamburgerViewContr
     ) {
         self.currentState = .idle
         self.targetState = .idle
+        self.contentShadow = contentShadow
         self.leftSize = leftSize
         self.rightSize = rightSize
         self.position = CGPoint.zero
@@ -72,6 +75,7 @@ public class QHamburgerViewControllerInteractiveAnimation : IQHamburgerViewContr
         
         self.contentView.bringSubviewToFront(self.contentViewController.view)
         self.contentViewController.view.frame = self.contentBeginFrame
+        self.contentViewController.view.shadow = self.contentShadow
         if let vc = self.leftViewController {
             vc.view.frame = self.leftBeginFrame
             if currentState == .left { vc.prepareInteractiveDismiss() }
@@ -118,6 +122,7 @@ public class QHamburgerViewControllerInteractiveAnimation : IQHamburgerViewContr
         }, completion: { [weak self] (completed: Bool) in
             guard let strong = self else { return }
             strong.contentViewController.view.frame = strong.contentEndFrame
+            strong.contentViewController.view.shadow = strong.targetState != .idle ? strong.contentShadow : nil
             strong.contentViewController = nil
             if let vc = strong.leftViewController {
                 vc.view.frame = strong.leftEndFrame
@@ -144,6 +149,7 @@ public class QHamburgerViewControllerInteractiveAnimation : IQHamburgerViewContr
         }, completion: { [weak self] (completed: Bool) in
             guard let strong = self else { return }
             strong.contentViewController.view.frame = strong.contentBeginFrame
+            strong.contentViewController.view.shadow = strong.currentState != .idle ? strong.contentShadow : nil
             strong.contentViewController = nil
             if let vc = strong.leftViewController {
                 vc.view.frame = strong.leftBeginFrame

@@ -4,15 +4,18 @@
 
 public class QHamburgerViewControllerAnimation : IQHamburgerViewControllerFixedAnimation {
     
+    public var contentShadow: QViewShadow
     public var leftSize: CGFloat
     public var rightSize: CGFloat
     public var acceleration: CGFloat
     
     init(
+        contentShadow: QViewShadow = QViewShadow(color: UIColor.black, opacity: 0.45, radius: 6, offset: CGSize.zero),
         leftSize: CGFloat = UIScreen.main.bounds.width * 0.6,
         rightSize: CGFloat = UIScreen.main.bounds.width * 0.6,
         acceleration: CGFloat = UIScreen.main.bounds.height * 0.85
     ) {
+        self.contentShadow = contentShadow
         self.leftSize = leftSize
         self.rightSize = rightSize
         self.acceleration = acceleration
@@ -27,6 +30,7 @@ public class QHamburgerViewControllerAnimation : IQHamburgerViewControllerFixedA
     ) {
         if let vc = contentViewController {
             vc.view.frame = QHamburgerViewControllerAnimation._contentFrame(contentView: contentView, state: state, leftSize: self.leftSize, rightSize: self.rightSize)
+            vc.view.shadow = state != .idle ? self.contentShadow : nil
             contentView.bringSubviewToFront(vc.view)
         }
         leftViewController?.view.frame = QHamburgerViewControllerAnimation._leftFrame(contentView: contentView, state: state, leftSize: self.leftSize, rightSize: self.rightSize)
@@ -52,6 +56,7 @@ public class QHamburgerViewControllerAnimation : IQHamburgerViewControllerFixedA
             let targetFrame = QHamburgerViewControllerAnimation._contentFrame(contentView: contentView, state: targetState, leftSize: self.leftSize, rightSize: self.rightSize)
             if let vc = contentViewController {
                 vc.view.frame = currentFrame
+                vc.view.shadow = self.contentShadow
                 contentView.bringSubviewToFront(vc.view)
             }
             leftViewController?.view.frame = QHamburgerViewControllerAnimation._leftFrame(contentView: contentView, state: currentState, leftSize: self.leftSize, rightSize: self.rightSize)
@@ -62,6 +67,9 @@ public class QHamburgerViewControllerAnimation : IQHamburgerViewControllerFixedA
                 leftViewController?.view.frame = QHamburgerViewControllerAnimation._leftFrame(contentView: contentView, state: targetState, leftSize: self.leftSize, rightSize: self.rightSize)
                 rightViewController?.view.frame = QHamburgerViewControllerAnimation._rightFrame(contentView: contentView, state: targetState, leftSize: self.leftSize, rightSize: self.rightSize)
             }, completion: { (completed) in
+                if let vc = contentViewController {
+                    vc.view.shadow = targetState != .idle ? self.contentShadow : nil
+                }
                 if currentState == .left { leftViewController?.didDismiss(animated: animated) }
                 if currentState == .right { rightViewController?.didDismiss(animated: animated) }
                 if targetState == .left { leftViewController?.didPresent(animated: animated) }
@@ -71,6 +79,7 @@ public class QHamburgerViewControllerAnimation : IQHamburgerViewControllerFixedA
         } else {
             if let vc = contentViewController {
                 vc.view.frame = QHamburgerViewControllerAnimation._contentFrame(contentView: contentView, state: targetState, leftSize: self.leftSize, rightSize: self.rightSize)
+                vc.view.shadow = targetState != .idle ? self.contentShadow : nil
                 contentView.bringSubviewToFront(vc.view)
             }
             leftViewController?.view.frame = QHamburgerViewControllerAnimation._leftFrame(contentView: contentView, state: targetState, leftSize: self.leftSize, rightSize: self.rightSize)

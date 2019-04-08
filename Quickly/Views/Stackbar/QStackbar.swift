@@ -66,24 +66,66 @@ open class QStackbar : QView {
     }
     public var backgroundView: UIView? {
         willSet {
-            guard let backgroundView = self.backgroundView else { return }
-            backgroundView.removeFromSuperview()
+            guard let view = self.backgroundView else { return }
+            view.removeFromSuperview()
             self.setNeedsUpdateConstraints()
         }
         didSet {
-            guard let backgroundView = self.backgroundView else { return }
-            self.insertSubview(backgroundView, at: 0)
+            guard let view = self.backgroundView else { return }
+            view.translatesAutoresizingMaskIntoConstraints = false
+            self.insertSubview(view, at: 0)
             self.setNeedsUpdateConstraints()
+        }
+    }
+    public var separatorView: UIView? {
+        willSet {
+            guard let view = self.separatorView else { return }
+            self._separatorConstraint = nil
+            view.removeFromSuperview()
+            self.setNeedsUpdateConstraints()
+        }
+        didSet {
+            guard let view = self.separatorView else { return }
+            view.translatesAutoresizingMaskIntoConstraints = false
+            self.addSubview(view)
+            self._separatorConstraint = NSLayoutConstraint(
+                item: view,
+                attribute: .height,
+                relatedBy: .equal,
+                toItem: nil,
+                attribute: .notAnAttribute,
+                multiplier: 1,
+                constant: self.separatorHeight
+            )
+            self.setNeedsUpdateConstraints()
+        }
+    }
+    public var separatorHeight: CGFloat = 1 {
+        didSet(oldValue) {
+            if self.separatorHeight != oldValue {
+                if let constraint = self._separatorConstraint {
+                    constraint.constant = self.separatorHeight
+                }
+            }
         }
     }
 
     private var _leftView: WrapView!
     private var _centerView: WrapView!
     private var _rightView: WrapView!
-
     private var _constraints: [NSLayoutConstraint] = [] {
         willSet { self.removeConstraints(self._constraints) }
         didSet { self.addConstraints(self._constraints) }
+    }
+    private var _separatorConstraint: NSLayoutConstraint? {
+        willSet {
+            guard let view = self.separatorView, let constraint = self._separatorConstraint else { return }
+            view.removeConstraint(constraint)
+        }
+        didSet {
+            guard let view = self.separatorView, let constraint = self._separatorConstraint else { return }
+            view.addConstraint(constraint)
+        }
     }
 
     public required init() {
@@ -128,6 +170,13 @@ open class QStackbar : QView {
                 backgroundView.leadingLayout == self.leadingLayout,
                 backgroundView.trailingLayout == self.trailingLayout,
                 backgroundView.bottomLayout == self.bottomLayout
+            ])
+        }
+        if let separatorView = self.separatorView {
+            constraints.append(contentsOf: [
+                separatorView.topLayout == self.bottomLayout,
+                separatorView.leadingLayout == self.leadingLayout,
+                separatorView.trailingLayout == self.trailingLayout
             ])
         }
         constraints.append(contentsOf: [

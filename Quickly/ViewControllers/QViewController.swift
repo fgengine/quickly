@@ -99,7 +99,7 @@ open class QViewController : NSObject, IQViewController {
             )
         }
     }
-    open var view: UIView {
+    open var view: QDisplayView {
         get {
             self.loadViewIfNeeded()
             return self._view
@@ -349,26 +349,30 @@ open class QViewController : NSObject, IQViewController {
         }
     }
     
-    private class View : UIView {
+    private class View : QDisplayView {
         
-        public weak var viewController: IQViewController?
+        weak var viewController: IQViewController?
         
-        public init(viewController: QViewController) {
+        init(viewController: QViewController) {
             self.viewController = viewController
             super.init(frame: UIScreen.main.bounds)
             self.backgroundColor = UIColor.clear
             self.clipsToBounds = true
         }
         
-        public required init?(coder: NSCoder) {
+        required init() {
+            fatalError("init() has not been implemented")
+        }
+        
+        required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
         
-        open override func setNeedsLayout() {
+        override func setNeedsLayout() {
             super.setNeedsLayout()
         }
         
-        open override func layoutSubviews() {
+        override func layoutSubviews() {
             super.layoutSubviews()
             
             if let vc = self.viewController {
@@ -376,7 +380,7 @@ open class QViewController : NSObject, IQViewController {
             }
         }
         
-        open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
             let view = super.hitTest(point, with: event)
             if view == self {
                 return nil

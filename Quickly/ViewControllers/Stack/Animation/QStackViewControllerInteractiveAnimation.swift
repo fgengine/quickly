@@ -5,6 +5,7 @@
 public class QStackViewControllerinteractiveDismissAnimation : IQStackViewControllerInteractiveDismissAnimation {
 
     public var containerViewController: IQStackContainerViewController!
+    public var shadow: QViewShadow
     public var currentBeginFrame: CGRect
     public var currentEndFrame: CGRect
     public var currentViewController: IQStackViewController!
@@ -23,7 +24,13 @@ public class QStackViewControllerinteractiveDismissAnimation : IQStackViewContro
     public var ease: IQAnimationEase
     public private(set) var canFinish: Bool
 
-    public init(overlapping: CGFloat = 1, acceleration: CGFloat = 1200, dismissDistanceRate: CGFloat = 0.4) {
+    public init(
+        shadow: QViewShadow = QViewShadow(color: UIColor.black, opacity: 0.45, radius: 6, offset: CGSize.zero),
+        overlapping: CGFloat = 1,
+        acceleration: CGFloat = 1200,
+        dismissDistanceRate: CGFloat = 0.4
+    ) {
+        self.shadow = shadow
         self.currentBeginFrame = CGRect.zero
         self.currentEndFrame = CGRect.zero
         self.currentGroupbarVisibility = 1
@@ -64,6 +71,7 @@ public class QStackViewControllerinteractiveDismissAnimation : IQStackViewContro
         )
         self.currentViewController = currentViewController
         self.currentViewController.view.frame = self.currentBeginFrame
+        self.currentViewController.view.shadow = self.shadow
         self.currentViewController.layoutIfNeeded()
         self.currentViewController.prepareInteractiveDismiss()
         self.currentGroupbarVisibility = currentGroupbarVisibility
@@ -109,6 +117,7 @@ public class QStackViewControllerinteractiveDismissAnimation : IQStackViewContro
                 strong.containerViewController.groupbarVisibility = strong.previousGroupbarVisibility
                 strong.containerViewController = nil
                 strong.currentViewController.view.frame = strong.currentEndFrame
+                strong.currentViewController.view.shadow = nil
                 strong.currentViewController.finishInteractiveDismiss()
                 strong.currentViewController = nil
                 strong.previousViewController.view.frame = strong.previousEndFrame
@@ -130,6 +139,7 @@ public class QStackViewControllerinteractiveDismissAnimation : IQStackViewContro
                 strong.containerViewController.groupbarVisibility = strong.currentGroupbarVisibility
                 strong.containerViewController = nil
                 strong.currentViewController.view.frame = strong.currentBeginFrame
+                strong.currentViewController.view.shadow = nil
                 strong.currentViewController.cancelInteractiveDismiss()
                 strong.currentViewController = nil
                 strong.previousViewController.view.frame = strong.previousBeginFrame

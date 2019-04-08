@@ -17,7 +17,7 @@ public protocol IQViewController : class {
     var additionalEdgeInsets: UIEdgeInsets { set get }
     var inheritedEdgeInsets: UIEdgeInsets { get }
     var adjustedContentInset: UIEdgeInsets { get }
-    var view: UIView { get }
+    var view: QDisplayView { get }
     var isLoading: Bool { get }
     var isLoaded: Bool { get }
     var isPresented: Bool { get }

@@ -4,10 +4,16 @@
 
 public class QStackViewControllerPresentAnimation : IQStackViewControllerPresentAnimation {
 
+    public var shadow: QViewShadow
     public var overlapping: CGFloat
     public var acceleration: CGFloat
 
-    public init(overlapping: CGFloat = 1, acceleration: CGFloat = 1200) {
+    public init(
+        shadow: QViewShadow = QViewShadow(color: UIColor.black, opacity: 0.45, radius: 6, offset: CGSize.zero),
+        overlapping: CGFloat = 1,
+        acceleration: CGFloat = 1200
+    ) {
+        self.shadow = shadow
         self.overlapping = overlapping
         self.acceleration = acceleration
     }
@@ -31,6 +37,7 @@ public class QStackViewControllerPresentAnimation : IQStackViewControllerPresent
         currentViewController.view.frame = currentBeginFrame
         currentViewController.layoutIfNeeded()
         nextViewController.view.frame = nextBeginFrame
+        nextViewController.view.shadow = self.shadow
         nextViewController.layoutIfNeeded()
         containerViewController.groupbarVisibility = currentGroupbarVisibility
         contentView.bringSubviewToFront(nextViewController.view)
@@ -49,6 +56,7 @@ public class QStackViewControllerPresentAnimation : IQStackViewControllerPresent
                 currentViewController.view.frame = currentEndFrame
                 currentViewController.didDismiss(animated: animated)
                 nextViewController.view.frame = nextEndFrame
+                nextViewController.view.shadow = nil
                 nextViewController.didPresent(animated: animated)
                 complete()
             })
@@ -60,6 +68,7 @@ public class QStackViewControllerPresentAnimation : IQStackViewControllerPresent
             nextViewController.willPresent(animated: animated)
             nextViewController.didPresent(animated: animated)
             nextViewController.view.frame = nextEndFrame
+            nextViewController.view.shadow = nil
             complete()
         }
     }
@@ -68,10 +77,16 @@ public class QStackViewControllerPresentAnimation : IQStackViewControllerPresent
 
 public class QStackViewControllerDismissAnimation : IQStackViewControllerDismissAnimation {
 
+    public var shadow: QViewShadow
     public var overlapping: CGFloat
     public var acceleration: CGFloat
 
-    public init(overlapping: CGFloat = 1, acceleration: CGFloat = 1200) {
+    public init(
+        shadow: QViewShadow = QViewShadow(color: UIColor.black, opacity: 0.45, radius: 6, offset: CGSize.zero),
+        overlapping: CGFloat = 1,
+        acceleration: CGFloat = 1200
+    ) {
+        self.shadow = shadow
         self.overlapping = overlapping
         self.acceleration = acceleration
     }
@@ -93,6 +108,7 @@ public class QStackViewControllerDismissAnimation : IQStackViewControllerDismiss
         let previousEndFrame = frame
 
         currentViewController.view.frame = currentBeginFrame
+        currentViewController.view.shadow = self.shadow
         currentViewController.layoutIfNeeded()
         previousViewController.view.frame = previousBeginFrame
         previousViewController.layoutIfNeeded()
@@ -111,6 +127,7 @@ public class QStackViewControllerDismissAnimation : IQStackViewControllerDismiss
             }, completion: { (completed) in
                 containerViewController.groupbarVisibility = previousGroupbarVisibility
                 currentViewController.view.frame = currentEndFrame
+                currentViewController.view.shadow = nil
                 currentViewController.didDismiss(animated: animated)
                 previousViewController.view.frame = previousEndFrame
                 previousViewController.didPresent(animated: animated)
@@ -121,6 +138,7 @@ public class QStackViewControllerDismissAnimation : IQStackViewControllerDismiss
             currentViewController.willDismiss(animated: animated)
             currentViewController.didDismiss(animated: animated)
             currentViewController.view.frame = currentEndFrame
+            currentViewController.view.shadow = nil
             previousViewController.willPresent(animated: animated)
             previousViewController.didPresent(animated: animated)
             previousViewController.view.frame = previousEndFrame
