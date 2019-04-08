@@ -258,8 +258,8 @@ extension QImageView : IQImageLoaderTarget {
     
     public func imageLoader(_ imageLoader: QImageLoader, cacheImage: UIImage) {
         self._remoteView.image = cacheImage
-        self._localView.isHidden = false
-        self._remoteView.isHidden = true
+        self._localView.isHidden = true
+        self._remoteView.isHidden = false
         self.isDownloading = false
     }
     

@@ -160,11 +160,14 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
     // MARK: - Private
     
     private func _prepareComposition(row: RowType, spec: IQContainerSpec, highlighted: Bool, selected: Bool, animated: Bool) {
-        self.composition.prepare(
-            composable: self._currentComposable(row: row, highlighted: highlighted, selected: selected),
-            spec: spec,
-            animated: animated
-        )
+        let composable = self._currentComposable(row: row, highlighted: highlighted, selected: selected)
+        if self.composition.composable !== composable {
+            self.composition.prepare(
+                composable: composable,
+                spec: spec,
+                animated: animated
+            )
+        }
     }
     
     private func _currentComposable(row: RowType, highlighted: Bool, selected: Bool) -> Composition.Composable {
