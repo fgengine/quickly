@@ -179,23 +179,15 @@ public class QButton : QView {
             self._invalidate()
         }
     }
-    public private(set) lazy var pressGesture: UILongPressGestureRecognizer = {
-        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(self._handlePressGesture(_:)))
-        gesture.delaysTouchesBegan = true
-        gesture.minimumPressDuration = 0.02
-        gesture.allowableMovement = self._pressGestureAllowableMovement()
-        gesture.delegate = self
-        return gesture
-    }()
     public private(set) lazy var tapGesture: UITapGestureRecognizer = {
         let gesture = UITapGestureRecognizer(target: self, action: #selector(self._handleTapGesture(_:)))
-        gesture.delaysTouchesBegan = true
         gesture.delegate = self
         return gesture
     }()
     
     public var onPressed: Closure?
     
+    private var _pressTouch: UITouch?
     private var _constraints: [NSLayoutConstraint] = [] {
         willSet { self.removeConstraints(self._constraints) }
         didSet { self.addConstraints(self._constraints) }
@@ -208,7 +200,6 @@ public class QButton : QView {
     open override var frame: CGRect {
         didSet(oldValue) {
             if self.frame != oldValue {
-                self.pressGesture.allowableMovement = self._pressGestureAllowableMovement()
                 self.invalidateIntrinsicContentSize()
             }
         }
@@ -216,7 +207,6 @@ public class QButton : QView {
     open override var bounds: CGRect {
         didSet(oldValue) {
             if self.bounds != oldValue {
-                self.pressGesture.allowableMovement = self._pressGestureAllowableMovement()
                 self.invalidateIntrinsicContentSize()
             }
         }
@@ -264,7 +254,6 @@ public class QButton : QView {
         self.contentView.addSubview(self.imageView)
         self.contentView.addSubview(self.textLabel)
 
-        self.addGestureRecognizer(self.pressGesture)
         self.addGestureRecognizer(self.tapGesture)
         
         self._invalidate()
@@ -288,6 +277,24 @@ public class QButton : QView {
         if let spinnerView = self.spinnerView {
             spinnerView.stop()
             self._invalidate()
+        }
+    }
+    
+    public func set(isHighlighted: Bool, animated: Bool) {
+        if self.isHighlighted != isHighlighted {
+            UIView.animate(withDuration: self.durationChangeState, delay: 0, options: [ .beginFromCurrentState ], animations: {
+                self.isHighlighted = isHighlighted
+                self.layoutIfNeeded()
+            })
+        }
+    }
+    
+    public func set(isSelected: Bool, animated: Bool) {
+        if self.isSelected != isSelected {
+            UIView.animate(withDuration: self.durationChangeState, delay: 0, options: [ .beginFromCurrentState ], animations: {
+                self.isHighlighted = isSelected
+                self.layoutIfNeeded()
+            })
         }
     }
 
@@ -510,6 +517,47 @@ public class QButton : QView {
         }
         self._contentConstraints = contentConstraints
         super.updateConstraints()
+    }
+    
+    open override func touchesBegan(_ touches: Set< UITouch >, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        if let touch = touches.first {
+            let location = touch.location(in: self)
+            if self.bounds.contains(location) == true {
+                self._pressTouch = touch
+                self.set(isHighlighted: true, animated: true)
+            }
+        }
+    }
+    
+    open override func touchesMoved(_ touches: Set< UITouch >, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
+        if let touch = self._pressTouch {
+            if touches.contains(touch) == true {
+                let location = touch.location(in: self)
+                self.set(isHighlighted: self.bounds.contains(location), animated: true)
+            }
+        }
+    }
+    
+    open override func touchesEnded(_ touches: Set< UITouch >, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        if let touch = self._pressTouch {
+            if touches.contains(touch) == true {
+                self._pressTouch = nil
+                self.set(isHighlighted: false, animated: true)
+            }
+        }
+    }
+    
+    open override func touchesCancelled(_ touches: Set< UITouch >, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        if let touch = self._pressTouch {
+            if touches.contains(touch) == true {
+                self._pressTouch = nil
+                self.set(isHighlighted: false, animated: true)
+            }
+        }
     }
     
     public func apply(_ styleSheet: QButtonStyleSheet) {
@@ -853,21 +901,6 @@ extension QButton {
 }
 
 extension QButton {
-    
-    @objc
-    private func _handlePressGesture(_ sender: Any) {
-        var isHighlighted = self.isHighlighted
-        switch self.pressGesture.state {
-        case .began: isHighlighted = true
-        default: isHighlighted = false
-        }
-        if isHighlighted != self.isHighlighted {
-            UIView.animate(withDuration: self.durationChangeState, delay: 0, options: [ .beginFromCurrentState ], animations: {
-                self.isHighlighted = isHighlighted
-                self.layoutIfNeeded()
-            })
-        }
-    }
 
     @objc
     private func _handleTapGesture(_ sender: Any) {

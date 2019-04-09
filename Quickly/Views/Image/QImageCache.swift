@@ -13,7 +13,7 @@ public class QImageCache {
     public private(set) lazy var queue: DispatchQueue = DispatchQueue(
         label: self.name,
         qos: .background,
-        attributes: .concurrent,
+        attributes: [],
         autoreleaseFrequency: .inherit,
         target: nil
     )

@@ -5,6 +5,7 @@
 public class QImageRemoteSource {
     
     public var url: URL
+    public var size: CGSize?
     public var loader: QImageLoader?
     public var filter: IQImageLoaderFilter?
     public var scale: QImageViewScale
@@ -12,12 +13,14 @@ public class QImageRemoteSource {
     
     public init(
         url: URL,
+        size: CGSize? = nil,
         loader: QImageLoader? = nil,
         filter: IQImageLoaderFilter? = nil,
         scale: QImageViewScale = .originOrAspectFit,
         tintColor: UIColor? = nil
     ) {
         self.url = url
+        self.size = size
         self.loader = loader
         self.filter = filter
         self.scale = scale
@@ -26,12 +29,14 @@ public class QImageRemoteSource {
     
     public init(
         source: QImageRemoteSource,
+        size: CGSize? = nil,
         loader: QImageLoader? = nil,
         filter: IQImageLoaderFilter? = nil,
         scale: QImageViewScale? = nil,
         tintColor: UIColor? = nil
     ) {
         self.url = source.url
+        self.size = size ?? source.size
         self.loader = loader ?? source.loader
         self.filter = filter ?? source.filter
         self.scale = scale ?? source.scale
@@ -39,7 +44,7 @@ public class QImageRemoteSource {
     }
     
     func size(_ available: CGSize, image: UIImage) -> CGSize {
-        guard let size = self.scale.size(available, size: image.size) else {
+        guard let size = self.scale.size(available, size: self.size ?? image.size) else {
             return image.size.ceil()
         }
         return size

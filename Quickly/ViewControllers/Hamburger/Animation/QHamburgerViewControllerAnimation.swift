@@ -13,7 +13,7 @@ public class QHamburgerViewControllerAnimation : IQHamburgerViewControllerFixedA
         contentShadow: QViewShadow = QViewShadow(color: UIColor.black, opacity: 0.45, radius: 6, offset: CGSize.zero),
         leftSize: CGFloat = UIScreen.main.bounds.width * 0.6,
         rightSize: CGFloat = UIScreen.main.bounds.width * 0.6,
-        acceleration: CGFloat = UIScreen.main.bounds.height * 0.85
+        acceleration: CGFloat = 1200
     ) {
         self.contentShadow = contentShadow
         self.leftSize = leftSize

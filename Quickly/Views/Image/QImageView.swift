@@ -93,10 +93,12 @@ open class QImageView : QDisplayView {
         didSet {
             if let source = self.localSource {
                 self._localView.image = source.image
+                self._localView.size = source.size
                 self._localView.scale = source.scale
                 self._localView.tintColor = source.tintColor
             } else {
                 self._localView.image = nil
+                self._localView.size = nil
                 self._localView.scale = .origin
                 self._localView.tintColor = nil
             }
@@ -105,8 +107,14 @@ open class QImageView : QDisplayView {
     public var remoteSource: QImageRemoteSource? {
         didSet {
             if let source = self.remoteSource {
+                self._remoteView.size = source.size
+                self._remoteView.scale = source.scale
+                self._remoteView.tintColor = source.tintColor
                 self._start(url: source.url, loader: source.loader, filter: source.filter)
             } else {
+                self._remoteView.size = nil
+                self._remoteView.scale = .origin
+                self._remoteView.tintColor = nil
                 self._stop()
             }
         }
@@ -297,6 +305,9 @@ private extension QImageView {
         var image: UIImage? {
             didSet { self.setNeedsDisplay() }
         }
+        var size: CGSize? {
+            didSet { self.setNeedsDisplay() }
+        }
         
         override init(frame: CGRect) {
             self.verticalAlignment = .center
@@ -315,7 +326,7 @@ private extension QImageView {
             guard let context = UIGraphicsGetCurrentContext(), let image = self.image else { return }
             let bounds = self.bounds
             let imageRect: CGRect
-            if var scaleRect = self.scale.rect(bounds, size: image.size) {
+            if var scaleRect = self.scale.rect(bounds, size: self.size ?? image.size) {
                 switch self.verticalAlignment {
                 case .top: scaleRect.origin.y = bounds.origin.y
                 case .center: scaleRect.origin.y = bounds.midY - (scaleRect.height / 2)
