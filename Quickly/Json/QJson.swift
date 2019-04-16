@@ -22,6 +22,31 @@ public protocol IQJsonValue {
 
 }
 
+// MARK: - IQJsonEnum -
+
+public protocol IQJsonEnum : RawRepresentable {
+    
+    associatedtype RealValue
+    
+    var realValue: Self.RealValue { get }
+    
+    init(realValue: Self.RealValue)
+    
+}
+
+// MARK: - IQJsonModel -
+
+public protocol IQJsonModel {
+    
+    static func from(json: QJson) throws -> IQJsonModel
+    
+    init(json: QJson) throws
+    
+    func toJson() throws -> QJson?
+    func toJson(json: QJson) throws
+    
+}
+
 // MARK: - QJson -
 
 public final class QJson {
@@ -417,7 +442,7 @@ extension QJson : IQDebug {
 
 #endif
 
-// MARK: - Bool : IQJsonValue -
+// MARK: - Bool • IQJsonValue -
 
 extension Bool : IQJsonValue {
 
@@ -443,7 +468,7 @@ extension Bool : IQJsonValue {
 
 }
 
-// MARK: - String : IQJsonValue -
+// MARK: - String • IQJsonValue -
 
 extension String : IQJsonValue {
 
@@ -466,7 +491,7 @@ extension String : IQJsonValue {
 
 }
 
-// MARK: - URL : IQJsonValue -
+// MARK: - URL • IQJsonValue -
 
 extension URL : IQJsonValue {
 
@@ -486,7 +511,7 @@ extension URL : IQJsonValue {
 
 }
 
-// MARK: - NSNumber : IQJsonValue -
+// MARK: - NSNumber • IQJsonValue -
 
 extension NSNumber : IQJsonValue {
 
@@ -538,7 +563,7 @@ extension NSDecimalNumber {
 
 }
 
-// MARK: - Decimal : IQJsonValue -
+// MARK: - Decimal • IQJsonValue -
 
 extension Decimal : IQJsonValue {
 
@@ -552,7 +577,7 @@ extension Decimal : IQJsonValue {
 
 }
 
-// MARK: - Date : IQJsonValue -
+// MARK: - Date • IQJsonValue -
 
 extension Date : IQJsonValue {
 
@@ -567,7 +592,7 @@ extension Date : IQJsonValue {
 
 }
 
-// MARK: - Int : IQJsonValue -
+// MARK: - Int • IQJsonValue -
 
 extension Int : IQJsonValue {
 
@@ -581,7 +606,7 @@ extension Int : IQJsonValue {
 
 }
 
-// MARK: - UInt : IQJsonValue -
+// MARK: - UInt • IQJsonValue -
 
 extension UInt : IQJsonValue {
 
@@ -595,7 +620,7 @@ extension UInt : IQJsonValue {
 
 }
 
-// MARK: - Float : IQJsonValue -
+// MARK: - Float • IQJsonValue -
 
 extension Float : IQJsonValue {
 
@@ -609,7 +634,7 @@ extension Float : IQJsonValue {
 
 }
 
-// MARK: - Double : IQJsonValue -
+// MARK: - Double • IQJsonValue -
 
 extension Double : IQJsonValue {
 
@@ -623,7 +648,7 @@ extension Double : IQJsonValue {
 
 }
 
-// MARK: - CGFloat : IQJsonValue -
+// MARK: - CGFloat • IQJsonValue -
 
 extension CGFloat : IQJsonValue {
 
@@ -637,7 +662,7 @@ extension CGFloat : IQJsonValue {
 
 }
 
-// MARK: - UIColor : IQJsonValue -
+// MARK: - UIColor • IQJsonValue -
 
 extension UIColor : IQJsonValue {
 
@@ -658,7 +683,7 @@ extension UIColor : IQJsonValue {
 
 }
 
-// MARK: - RawRepresentable : IQJsonValue -
+// MARK: - RawRepresentable • IQJsonValue -
 
 extension RawRepresentable where Self.RawValue : IQJsonValue {
 

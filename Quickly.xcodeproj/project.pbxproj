@@ -79,9 +79,18 @@
 		4023D97C2146FCE9005F915D /* QPlaceholderImageTitleIconComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4007B05B2144236900AE17DC /* QPlaceholderImageTitleIconComposition.swift */; };
 		4023D97D2146FFFD005F915D /* QPlaceholderImageTitleShapeComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4007B0612144236900AE17DC /* QPlaceholderImageTitleShapeComposition.swift */; };
 		4023D97E21470637005F915D /* QPlaceholderImageTitleValueComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4007B0592144236900AE17DC /* QPlaceholderImageTitleValueComposition.swift */; };
+		402585792262232500BF9A66 /* IQDatabaseOutputValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402585782262232500BF9A66 /* IQDatabaseOutputValue.swift */; };
+		4025A7AA2260CB0A00B4160F /* IQDatabaseExpressable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4025A7A92260CB0A00B4160F /* IQDatabaseExpressable.swift */; };
+		4025A7B02261183F00B4160F /* QDatabaseLiteralExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4025A7AF2261183F00B4160F /* QDatabaseLiteralExpression.swift */; };
+		4025A7B22261188C00B4160F /* QDatabaseCompareExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4025A7B12261188C00B4160F /* QDatabaseCompareExpression.swift */; };
+		4025A7B4226118F700B4160F /* QDatabaseLogicExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4025A7B3226118F700B4160F /* QDatabaseLogicExpression.swift */; };
 		40266D2A2170D3FF009CC9B4 /* IQContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40266D292170D3FF009CC9B4 /* IQContext.swift */; };
 		40266D2C2170D427009CC9B4 /* IQContextable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40266D2B2170D427009CC9B4 /* IQContextable.swift */; };
 		402720D02074C88A00094287 /* IQStyleSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402720CE2074C88A00094287 /* IQStyleSheet.swift */; };
+		4027BCA822648F7C0018C593 /* QDatabaseInExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4027BCA722648F7C0018C593 /* QDatabaseInExpression.swift */; };
+		4028C59C225F504100C1E761 /* QDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4028C59B225F504100C1E761 /* QDatabase.swift */; };
+		4028C5A2225FB53D00C1E761 /* IQDatabaseInputValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4028C5A1225FB53D00C1E761 /* IQDatabaseInputValue.swift */; };
+		4028C5A5225FDC9D00C1E761 /* IQDatabaseDefaultValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4028C5A4225FDC9D00C1E761 /* IQDatabaseDefaultValue.swift */; };
 		402B99111F799FED004DFF24 /* QPhoneStringFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402B99101F799FED004DFF24 /* QPhoneStringFormatter.swift */; };
 		402BCEB420B7FA6400748D60 /* IQPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402BCEB320B7FA6400748D60 /* IQPageViewController.swift */; };
 		402BCEBA20B855EA00748D60 /* QPageContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402BCEB920B855EA00748D60 /* QPageContainerViewController.swift */; };
@@ -177,7 +186,6 @@
 		406FDF6F209082E4004178CC /* IQApiPagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406FDF6E209082E4004178CC /* IQApiPagination.swift */; };
 		4070B6A920628E4E00B568A9 /* QReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4070B6A720628E4E00B568A9 /* QReachability.swift */; };
 		4070B6AD206297BB00B568A9 /* QKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4070B6AB206297BB00B568A9 /* QKeyboard.swift */; };
-		40784DDD207DED22001828E3 /* IQJsonEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40784DDB207DED22001828E3 /* IQJsonEnum.swift */; };
 		4079B10B219ABCCB00917A5D /* QMultiTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F3F8BC219966EA00ADE043 /* QMultiTextField.swift */; };
 		4080082C206A9BEF00B5C9A7 /* QCollectionTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40800828206A9BEF00B5C9A7 /* QCollectionTableCell.swift */; };
 		408200432240F22F00D0779B /* QApplicationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 408200422240F22F00D0779B /* QApplicationState.swift */; };
@@ -221,7 +229,6 @@
 		40A95CF422121B9700BD3AD9 /* QEmailStringValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A95CF322121B9700BD3AD9 /* QEmailStringValidator.swift */; };
 		40B8A1921F4F49AC00204E5A /* QImplAuthenticationChallenge.m in Sources */ = {isa = PBXBuildFile; fileRef = 402F1FBC1F4F446F007625CA /* QImplAuthenticationChallenge.m */; };
 		40B8A1961F4F6BED00204E5A /* QShapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B8A1951F4F6BED00204E5A /* QShapeView.swift */; };
-		40B8A1991F4F806A00204E5A /* IQJsonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B8A1981F4F806A00204E5A /* IQJsonModel.swift */; };
 		40B8A19B1F4F80FF00204E5A /* QJsonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B8A19A1F4F80FF00204E5A /* QJsonModel.swift */; };
 		40B8A1AB1F50736C00204E5A /* QTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B8A1AA1F50736C00204E5A /* QTimer.swift */; };
 		40BFA8492018AFDE00E41933 /* IQPushViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40BFA8472018AFDE00E41933 /* IQPushViewController.swift */; };
@@ -403,9 +410,18 @@
 		40234CF6205A862D00CDAFFD /* QPushViewControllerAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QPushViewControllerAnimation.swift; sourceTree = "<group>"; };
 		40234CF9205A8A7100CDAFFD /* QPushViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QPushViewController.swift; sourceTree = "<group>"; };
 		40239D431F7BC90A002C4B9A /* QAmountStringValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QAmountStringValidator.swift; sourceTree = "<group>"; };
+		402585782262232500BF9A66 /* IQDatabaseOutputValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQDatabaseOutputValue.swift; sourceTree = "<group>"; };
+		4025A7A92260CB0A00B4160F /* IQDatabaseExpressable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQDatabaseExpressable.swift; sourceTree = "<group>"; };
+		4025A7AF2261183F00B4160F /* QDatabaseLiteralExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QDatabaseLiteralExpression.swift; sourceTree = "<group>"; };
+		4025A7B12261188C00B4160F /* QDatabaseCompareExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QDatabaseCompareExpression.swift; sourceTree = "<group>"; };
+		4025A7B3226118F700B4160F /* QDatabaseLogicExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QDatabaseLogicExpression.swift; sourceTree = "<group>"; };
 		40266D292170D3FF009CC9B4 /* IQContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQContext.swift; sourceTree = "<group>"; };
 		40266D2B2170D427009CC9B4 /* IQContextable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQContextable.swift; sourceTree = "<group>"; };
 		402720CE2074C88A00094287 /* IQStyleSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQStyleSheet.swift; sourceTree = "<group>"; };
+		4027BCA722648F7C0018C593 /* QDatabaseInExpression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QDatabaseInExpression.swift; sourceTree = "<group>"; };
+		4028C59B225F504100C1E761 /* QDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QDatabase.swift; sourceTree = "<group>"; };
+		4028C5A1225FB53D00C1E761 /* IQDatabaseInputValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQDatabaseInputValue.swift; sourceTree = "<group>"; };
+		4028C5A4225FDC9D00C1E761 /* IQDatabaseDefaultValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQDatabaseDefaultValue.swift; sourceTree = "<group>"; };
 		402B99101F799FED004DFF24 /* QPhoneStringFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QPhoneStringFormatter.swift; sourceTree = "<group>"; };
 		402BCEB320B7FA6400748D60 /* IQPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQPageViewController.swift; sourceTree = "<group>"; };
 		402BCEB920B855EA00748D60 /* QPageContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QPageContainerViewController.swift; sourceTree = "<group>"; };
@@ -483,7 +499,6 @@
 		406FDF6E209082E4004178CC /* IQApiPagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQApiPagination.swift; sourceTree = "<group>"; };
 		4070B6A720628E4E00B568A9 /* QReachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QReachability.swift; sourceTree = "<group>"; };
 		4070B6AB206297BB00B568A9 /* QKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QKeyboard.swift; sourceTree = "<group>"; };
-		40784DDB207DED22001828E3 /* IQJsonEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQJsonEnum.swift; sourceTree = "<group>"; };
 		40800828206A9BEF00B5C9A7 /* QCollectionTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCollectionTableCell.swift; sourceTree = "<group>"; };
 		408200422240F22F00D0779B /* QApplicationState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QApplicationState.swift; sourceTree = "<group>"; };
 		40836A9D216C88C400777404 /* QImageTitleDetailValueComposition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QImageTitleDetailValueComposition.swift; sourceTree = "<group>"; };
@@ -525,7 +540,6 @@
 		40A907A9206F6C3800655D2A /* IQField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQField.swift; sourceTree = "<group>"; };
 		40A95CF322121B9700BD3AD9 /* QEmailStringValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QEmailStringValidator.swift; sourceTree = "<group>"; };
 		40B8A1951F4F6BED00204E5A /* QShapeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QShapeView.swift; sourceTree = "<group>"; };
-		40B8A1981F4F806A00204E5A /* IQJsonModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQJsonModel.swift; sourceTree = "<group>"; };
 		40B8A19A1F4F80FF00204E5A /* QJsonModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QJsonModel.swift; sourceTree = "<group>"; };
 		40B8A1AA1F50736C00204E5A /* QTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTimer.swift; sourceTree = "<group>"; };
 		40BFA8472018AFDE00E41933 /* IQPushViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQPushViewController.swift; sourceTree = "<group>"; };
@@ -875,6 +889,7 @@
 				40CF45861F4DE6AB004D00D8 /* Keychain */,
 				40CF45821F4DE6AB004D00D8 /* Json */,
 				4034EFAB220C30D700DA2426 /* Xml */,
+				4028C59A225F502400C1E761 /* Database */,
 				40C94A251F69514500439961 /* Observer */,
 				4070B6AA206297BB00B568A9 /* Keyboard */,
 				408200412240F20800D0779B /* ApplicationState */,
@@ -977,6 +992,17 @@
 			path = Gradient;
 			sourceTree = "<group>";
 		};
+		4025A7AE2261182500B4160F /* Expressions */ = {
+			isa = PBXGroup;
+			children = (
+				4025A7AF2261183F00B4160F /* QDatabaseLiteralExpression.swift */,
+				4025A7B12261188C00B4160F /* QDatabaseCompareExpression.swift */,
+				4025A7B3226118F700B4160F /* QDatabaseLogicExpression.swift */,
+				4027BCA722648F7C0018C593 /* QDatabaseInExpression.swift */,
+			);
+			path = Expressions;
+			sourceTree = "<group>";
+		};
 		40266D282170D3E5009CC9B4 /* Context */ = {
 			isa = PBXGroup;
 			children = (
@@ -992,6 +1018,19 @@
 				402720CE2074C88A00094287 /* IQStyleSheet.swift */,
 			);
 			path = StyleSheet;
+			sourceTree = "<group>";
+		};
+		4028C59A225F502400C1E761 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				4025A7AE2261182500B4160F /* Expressions */,
+				4028C59B225F504100C1E761 /* QDatabase.swift */,
+				4028C5A4225FDC9D00C1E761 /* IQDatabaseDefaultValue.swift */,
+				4028C5A1225FB53D00C1E761 /* IQDatabaseInputValue.swift */,
+				402585782262232500BF9A66 /* IQDatabaseOutputValue.swift */,
+				4025A7A92260CB0A00B4160F /* IQDatabaseExpressable.swift */,
+			);
+			path = Database;
 			sourceTree = "<group>";
 		};
 		402D43471F7194A300EAA69C /* Debug */ = {
@@ -1439,10 +1478,8 @@
 		40CF45821F4DE6AB004D00D8 /* Json */ = {
 			isa = PBXGroup;
 			children = (
-				40B8A1981F4F806A00204E5A /* IQJsonModel.swift */,
-				40B8A19A1F4F80FF00204E5A /* QJsonModel.swift */,
-				40784DDB207DED22001828E3 /* IQJsonEnum.swift */,
 				40CF45831F4DE6AB004D00D8 /* QJson.swift */,
+				40B8A19A1F4F80FF00204E5A /* QJsonModel.swift */,
 			);
 			path = Json;
 			sourceTree = "<group>";
@@ -1722,6 +1759,7 @@
 				4007B0A12144236900AE17DC /* QTitleValueShapeComposition.swift in Sources */,
 				4007B09E2144236900AE17DC /* QTitleShapeComposition.swift in Sources */,
 				4085C05E20E4C7680079AF90 /* IQAnimationEase.swift in Sources */,
+				4025A7B4226118F700B4160F /* QDatabaseLogicExpression.swift in Sources */,
 				409403621F4E26D1008A8B90 /* IQApiQuery.swift in Sources */,
 				40C8A63C2142FD920064DD8E /* QPlaceholderView.swift in Sources */,
 				401E8F85206D3CC1008A5BE4 /* QPickerCell.swift in Sources */,
@@ -1751,7 +1789,6 @@
 				401E8F7B206D34C4008A5BE4 /* IQPickerRow.swift in Sources */,
 				4006EDB91F61363E0050AD91 /* QSeparatorCollectionCell.swift in Sources */,
 				4007B07E2144236900AE17DC /* QTitleDetailShapeComposition.swift in Sources */,
-				40784DDD207DED22001828E3 /* IQJsonEnum.swift in Sources */,
 				40A907AB206F6C3800655D2A /* IQField.swift in Sources */,
 				4055E9CE215E21EF00D66AA6 /* QSwitch.swift in Sources */,
 				40385F2121F86890001125D0 /* QMultiTextFieldComposition.swift in Sources */,
@@ -1863,7 +1900,9 @@
 				401E8F83206D3CC1008A5BE4 /* QPickerSection.swift in Sources */,
 				40D9C5AC2147DD7D0086DD57 /* QPlaceholderImageTitleDetailComposition.swift in Sources */,
 				40CF45BF1F4DE6AB004D00D8 /* QCollectionDecor.swift in Sources */,
+				4025A7AA2260CB0A00B4160F /* IQDatabaseExpressable.swift in Sources */,
 				40BFA8492018AFDE00E41933 /* IQPushViewController.swift in Sources */,
+				402585792262232500BF9A66 /* IQDatabaseOutputValue.swift in Sources */,
 				40CF45BB1F4DE6AB004D00D8 /* IQCollectionSection.swift in Sources */,
 				4007B0A22144236900AE17DC /* QTitleValueIconComposition.swift in Sources */,
 				4016D6BD216B40F20040EA5A /* Date.swift in Sources */,
@@ -1900,6 +1939,7 @@
 				4006EDB11F61363E0050AD91 /* QBackgroundColorCollectionCell.swift in Sources */,
 				40CF45F01F4DE6AB004D00D8 /* QWindow.swift in Sources */,
 				401E8F8C206D429D008A5BE4 /* QLabelPickerRow.swift in Sources */,
+				4028C5A2225FB53D00C1E761 /* IQDatabaseInputValue.swift in Sources */,
 				4043EA542148444F00AA5F98 /* QPlaceholderTitleDetailComposition.swift in Sources */,
 				40CF45BC1F4DE6AB004D00D8 /* QCollectionCell.swift in Sources */,
 				4003595B207F5BB800D7F449 /* QPagebar.swift in Sources */,
@@ -1909,6 +1949,7 @@
 				403B1C25214724D400995973 /* QPlaceholderImageTitleValueIconComposition.swift in Sources */,
 				4039F8DD2072629D00A88E45 /* QListFieldPickerCell.swift in Sources */,
 				401E8F84206D3CC1008A5BE4 /* QPickerRow.swift in Sources */,
+				4027BCA822648F7C0018C593 /* QDatabaseInExpression.swift in Sources */,
 				404C910120D164A4001DE192 /* QPushViewControllerInteractiveAnimation.swift in Sources */,
 				403FA9D1212436C2004E3DD8 /* QWebViewController.swift in Sources */,
 				40A95CF422121B9700BD3AD9 /* QEmailStringValidator.swift in Sources */,
@@ -1950,6 +1991,7 @@
 				403B3D9420D39704008F80D4 /* IQRouterable.swift in Sources */,
 				40A75B6A208FAF81000E5FBE /* NSDecimalNumber.swift in Sources */,
 				406CD7642255774100CC444B /* QHamburgerContainerViewController.swift in Sources */,
+				4025A7B22261188C00B4160F /* QDatabaseCompareExpression.swift in Sources */,
 				4039AF34221BF14300ED421C /* QSegmentedControlComposition.swift in Sources */,
 				402F1FBA1F4F380B007625CA /* QApiProvider+Internal.swift in Sources */,
 				404C910320D164F5001DE192 /* QModalViewControllerInteractiveAnimation.swift in Sources */,
@@ -1957,6 +1999,7 @@
 				40CF45C51F4DE6AB004D00D8 /* String.swift in Sources */,
 				40134EF81F62D20C009F81A6 /* QRegularExpressionStringValidator.swift in Sources */,
 				4023D97C2146FCE9005F915D /* QPlaceholderImageTitleIconComposition.swift in Sources */,
+				4028C59C225F504100C1E761 /* QDatabase.swift in Sources */,
 				40CF45DA1F4DE6AB004D00D8 /* IQTableDecor.swift in Sources */,
 				40020828216645C700BD04D5 /* QCompositionTableDecor.swift in Sources */,
 				4007B09C2144236900AE17DC /* QListFieldComposition.swift in Sources */,
@@ -1967,12 +2010,12 @@
 				401E8F7C206D34C4008A5BE4 /* IQPickerCell.swift in Sources */,
 				4007B0852144236900AE17DC /* QTextFieldComposition.swift in Sources */,
 				405ABE0D20C1745A005E1192 /* QPagebarTitleCell.swift in Sources */,
+				4025A7B02261183F00B4160F /* QDatabaseLiteralExpression.swift in Sources */,
 				40CF45DC1F4DE6AB004D00D8 /* IQTableRow.swift in Sources */,
 				4070B6A920628E4E00B568A9 /* QReachability.swift in Sources */,
 				4061E1A91F4ECDFA00AC3217 /* NSError.swift in Sources */,
 				4007B09B2144236900AE17DC /* QPincodeComposition.swift in Sources */,
 				4039BCB71F516F5900E38090 /* QControl.swift in Sources */,
-				40B8A1991F4F806A00204E5A /* IQJsonModel.swift in Sources */,
 				4007B0802144236900AE17DC /* QDateFieldComposition.swift in Sources */,
 				4055E9CB215E21BE00D66AA6 /* QTitleSwitchComposition.swift in Sources */,
 				40C94A271F69514500439961 /* QObserver.swift in Sources */,
@@ -1989,6 +2032,7 @@
 				4062C8BF2088AFF00098F809 /* QPushContainerViewController.swift in Sources */,
 				40D9C5AF2147DF0D0086DD57 /* QPlaceholderTitleComposition.swift in Sources */,
 				401E8F87206D3E88008A5BE4 /* QListField.swift in Sources */,
+				4028C5A5225FDC9D00C1E761 /* IQDatabaseDefaultValue.swift in Sources */,
 				4062C8C62088CD1C0098F809 /* QDialogViewController.swift in Sources */,
 				40FC3F0620C7C4040013B71A /* IQModalViewController.swift in Sources */,
 				40FBE6A61F543EFD00F5194B /* QTextStyle.swift in Sources */,
