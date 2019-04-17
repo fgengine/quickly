@@ -57,12 +57,22 @@ public class QDatabase {
         public let columns: [Column]
         public let mode: Mode
         
+        public init(columns: [Column], mode: Mode) {
+            self.columns = columns
+            self.mode = mode
+        }
+        
     }
     
     public struct Pagination {
         
         public let limit: Int
         public let offset: Int?
+        
+        public init(limit: Int, offset: Int?) {
+            self.limit = limit
+            self.offset = offset
+        }
         
     }
     
@@ -366,7 +376,7 @@ public extension QDatabase {
 
 public extension QDatabase {
     
-    func select< Type >(table: Table, columns: [Column]? = nil, where: IQDatabaseExpressable? = nil, orderBy: OrderBy? = nil, pagination: Pagination? = nil, processing: (QDatabase.Statement) -> Type) throws -> [Type] {
+    func select< Type >(table: Table, columns: [Column]? = nil, where: IQDatabaseExpressable? = nil, orderBy: OrderBy? = nil, pagination: Pagination? = nil, processing: (QDatabase.Statement) throws -> Type) throws -> [Type] {
         var bindables: [IQDatabaseInputValue] = []
         var query = "SELECT "
         if let columns = columns {
@@ -394,7 +404,7 @@ public extension QDatabase {
         return try statement.executeRows(processing)
     }
     
-    func selectFirst< Type >(table: Table, columns: [Column]? = nil, where: IQDatabaseExpressable? = nil, orderBy: OrderBy? = nil, pagination: Pagination? = nil, processing: (QDatabase.Statement) -> Type) throws -> Type? {
+    func selectFirst< Type >(table: Table, columns: [Column]? = nil, where: IQDatabaseExpressable? = nil, orderBy: OrderBy? = nil, pagination: Pagination? = nil, processing: (QDatabase.Statement) throws -> Type) throws -> Type? {
         var bindables: [IQDatabaseInputValue] = []
         var query = "SELECT "
         if let columns = columns {
@@ -618,23 +628,23 @@ internal extension QDatabase.Statement {
         }
     }
     
-    func executeFirstRow< Type >(_ block: (QDatabase.Statement) -> Type) throws -> Type? {
+    func executeFirstRow< Type >(_ block: (QDatabase.Statement) throws -> Type) throws -> Type? {
         while true {
             let step = sqlite3_step(self._statement)
             switch step {
-            case SQLITE_ROW: return block(self)
+            case SQLITE_ROW: return try block(self)
             case SQLITE_DONE: return nil
             default: throw QDatabase.Error.sqliteQuery(code: Int(step))
             }
         }
     }
     
-    func executeRows< Type >(_ block: (QDatabase.Statement) -> Type) throws -> [Type] {
+    func executeRows< Type >(_ block: (QDatabase.Statement) throws -> Type) throws -> [Type] {
         var results: [Type] = []
         while true {
             let step = sqlite3_step(self._statement)
             switch step {
-            case SQLITE_ROW: results.append(block(self))
+            case SQLITE_ROW: results.append(try block(self))
             case SQLITE_DONE: break
             default: throw QDatabase.Error.sqliteQuery(code: Int(step))
             }

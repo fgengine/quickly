@@ -87,6 +87,7 @@
 		40266D2A2170D3FF009CC9B4 /* IQContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40266D292170D3FF009CC9B4 /* IQContext.swift */; };
 		40266D2C2170D427009CC9B4 /* IQContextable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40266D2B2170D427009CC9B4 /* IQContextable.swift */; };
 		402720D02074C88A00094287 /* IQStyleSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402720CE2074C88A00094287 /* IQStyleSheet.swift */; };
+		4027491222670F2100CBBB06 /* UInt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4027491122670F2100CBBB06 /* UInt.swift */; };
 		4027BCA822648F7C0018C593 /* QDatabaseInExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4027BCA722648F7C0018C593 /* QDatabaseInExpression.swift */; };
 		4028C59C225F504100C1E761 /* QDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4028C59B225F504100C1E761 /* QDatabase.swift */; };
 		4028C5A2225FB53D00C1E761 /* IQDatabaseInputValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4028C5A1225FB53D00C1E761 /* IQDatabaseInputValue.swift */; };
@@ -418,6 +419,7 @@
 		40266D292170D3FF009CC9B4 /* IQContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQContext.swift; sourceTree = "<group>"; };
 		40266D2B2170D427009CC9B4 /* IQContextable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQContextable.swift; sourceTree = "<group>"; };
 		402720CE2074C88A00094287 /* IQStyleSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQStyleSheet.swift; sourceTree = "<group>"; };
+		4027491122670F2100CBBB06 /* UInt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UInt.swift; sourceTree = "<group>"; };
 		4027BCA722648F7C0018C593 /* QDatabaseInExpression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QDatabaseInExpression.swift; sourceTree = "<group>"; };
 		4028C59B225F504100C1E761 /* QDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QDatabase.swift; sourceTree = "<group>"; };
 		4028C5A1225FB53D00C1E761 /* IQDatabaseInputValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQDatabaseInputValue.swift; sourceTree = "<group>"; };
@@ -1442,6 +1444,7 @@
 				404BC19E2080D06A0071FC2F /* Object.swift */,
 				40E2D6051F6785F300B954E4 /* Data.swift */,
 				40CF45801F4DE6AB004D00D8 /* String.swift */,
+				4027491122670F2100CBBB06 /* UInt.swift */,
 				400DDF6E1F5622EB00D11991 /* Float.swift */,
 				4085C07620E4D5580079AF90 /* Double.swift */,
 				40A75B67208FAE13000E5FBE /* NSNumber.swift */,
@@ -1977,6 +1980,7 @@
 				4040717A205688B300F6ECC2 /* UIControl.swift in Sources */,
 				40CF45E31F4DE6AB004D00D8 /* QTableSection.swift in Sources */,
 				40527CB42245427700D921D3 /* IQAnalitics.swift in Sources */,
+				4027491222670F2100CBBB06 /* UInt.swift in Sources */,
 				4057FFEF205027DC004F3EDB /* IQDialogViewController.swift in Sources */,
 				4062C8C52088CC650098F809 /* QDialogContainerViewController.swift in Sources */,
 				4007B09A2144236900AE17DC /* QTitleIconComposition.swift in Sources */,
