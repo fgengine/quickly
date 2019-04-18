@@ -34,7 +34,7 @@ public extension QDatabase {
         }
         
         public func queryExpression() -> String {
-            return "\"" + self.column.name + "\" " + self.operator.queryString() + " " + self.expression.queryExpression()
+            return self.column.name + " " + self.operator.queryString() + " " + self.expression.queryExpression()
         }
         
     }

@@ -158,10 +158,11 @@ public class QDatabase {
         }
         
         deinit {
-            let result = sqlite3_finalize(self._statement)
-            if result != SQLITE_OK {
-                let error = QDatabase._error(database: self._database)
-                fatalError("QDatabase: Error closing statement (code: \(result)): \(error.localizedDescription)")
+            do {
+                try self.reset()
+                try self.finalize()
+            } catch let error {
+                fatalError("QDatabase: Error destruct statement: \(error)")
             }
         }
         
@@ -211,7 +212,8 @@ public extension QDatabase {
     
     func set(userVersion: Int) throws {
         let query = "PRAGMA USER_VERSION = \(userVersion)"
-        try self.execute(query: query)
+        let statement = try self.statement(query: query)
+        try statement.executeUntilDone()
     }
     
     func userVersion() throws -> Int {
@@ -233,8 +235,9 @@ public extension QDatabase {
         if ifNotExists == true {
             query += "IF NOT EXISTS "
         }
-        query += "\"" + table.name + "\" (" + columnsDeclarations.joined(separator: ", ") + ")"
-        try self.execute(query: query)
+        query += table.name + " (" + columnsDeclarations.joined(separator: ", ") + ")"
+        let statement = try self.statement(query: query)
+        try statement.executeUntilDone()
     }
     
     func drop(table: Table, ifExists: Bool = false) throws {
@@ -242,18 +245,20 @@ public extension QDatabase {
         if ifExists == true {
             query += "IF EXISTS "
         }
-        query += "\"" + table.name + "\""
-        try self.execute(query: query)
+        query += table.name
+        let statement = try self.statement(query: query)
+        try statement.executeUntilDone()
     }
     
     func rename(table: Table, to: String) throws {
-        let query = "ALTER TABLE \"" + table.name + "\" RENAME TO \"" + to + "\""
-        try self.execute(query: query)
+        let query = "ALTER TABLE " + table.name + " RENAME TO " + to
+        let statement = try self.statement(query: query)
+        try statement.executeUntilDone()
         table.name = to
     }
     
     func isExist(table: Table) throws -> Bool {
-        let query = "SELECT tbl_name FROM sqlite_master WHERE tbl_name == \"" + table.name + "\""
+        let query = "SELECT tbl_name FROM sqlite_master WHERE tbl_name == " + table.name
         let statement = try self.statement(query: query)
         try statement.executeUntilRow()
         return statement.numberOfRows > 0
@@ -266,29 +271,31 @@ public extension QDatabase {
 public extension QDatabase {
     
     func add(column: Column, in table: Table) throws {
-        let query = "ALTER TABLE \"\(table.name)\" ADD COLUMN " + column.queryString()
-        try self.execute(query: query)
+        let query = "ALTER TABLE \(table.name) ADD COLUMN " + column.queryString()
+        let statement = try self.statement(query: query)
+        try statement.executeUntilDone()
         table.add(column: column)
     }
     
     func remove(column: Column, in table: Table) throws {
         let columnsNames: [String] = table.columns.compactMap({
             guard $0 != column else { return nil }
-            return "\"" + $0.name + "\""
+            return $0.name
         })
         let columnsDeclarations: [String] = table.columns.compactMap({
             guard $0 != column else { return nil }
             return $0.queryString()
         })
         var query = "BEGIN TRANSACTION;\n"
-        query += "CREATE TEMPORARY TABLE \"" + table.name + "_temp\" (" + columnsDeclarations.joined(separator: ", ") + ");\n"
-        query += "INSERT INTO \"" + table.name + "_temp\" SELECT " + columnsNames.joined(separator: ", ") + " FROM \"" + table.name + "\";\n"
-        query += "DROP TABLE \"" + table.name + "\";\n"
-        query += "CREATE TABLE \"" + table.name + "\" (" + columnsDeclarations.joined(separator: ", ") + ");\n"
-        query += "INSERT INTO \"" + table.name + "\" SELECT " + columnsNames.joined(separator: ", ") + " FROM \"" + table.name + "_temp\";\n"
-        query += "DROP TABLE \"" + table.name + "_temp\";\n"
+        query += "CREATE TEMPORARY TABLE " + table.name + "_temp (" + columnsDeclarations.joined(separator: ", ") + ");\n"
+        query += "INSERT INTO " + table.name + "_temp SELECT " + columnsNames.joined(separator: ", ") + " FROM " + table.name + ";\n"
+        query += "DROP TABLE " + table.name + ";\n"
+        query += "CREATE TABLE " + table.name + " (" + columnsDeclarations.joined(separator: ", ") + ");\n"
+        query += "INSERT INTO " + table.name + " SELECT " + columnsNames.joined(separator: ", ") + " FROM " + table.name + "_temp;\n"
+        query += "DROP TABLE " + table.name + "_temp;\n"
         query += "COMMIT;"
-        try self.execute(query: query)
+        let statement = try self.statement(query: query)
+        try statement.executeUntilDone()
         table.remove(column: column)
     }
     
@@ -300,9 +307,9 @@ public extension QDatabase {
     
     @discardableResult
     func insert(table: Table, data: [Column : IQDatabaseInputValue]) throws -> Int64 {
-        let columns: [String] = data.compactMap({ return "\"" + $0.key.name + "\"" })
+        let columns: [String] = data.compactMap({ return $0.key.name })
         let values: [String] = data.compactMap({ _ in return "?" })
-        let query = "INSERT INTO \"" + table.name + "\" (" + columns.joined(separator: ", ") + ") VALUES (" + values.joined(separator: ", ") + ")"
+        let query = "INSERT INTO " + table.name + " (" + columns.joined(separator: ", ") + ") VALUES (" + values.joined(separator: ", ") + ")"
         let statement = try self.statement(query: query)
         try statement.bind(data.values)
         try statement.executeUntilDone()
@@ -317,15 +324,15 @@ public extension QDatabase {
     
     @discardableResult
     func update(table: Table, data: [Column : IQDatabaseInputValue], where: IQDatabaseExpressable?, orderBy: OrderBy? = nil, pagination: Pagination? = nil) throws -> Int {
-        let values: [String] = data.compactMap({ return "\"" + $0.key.name + "\" = ?" })
+        let values: [String] = data.compactMap({ return $0.key.name + " = ?" })
         var bindables = data.values.compactMap({ return $0 })
-        var query = "UPDATE \"" + table.name + "\" SET " + values.joined(separator: ", ")
+        var query = "UPDATE " + table.name + " SET " + values.joined(separator: ", ")
         if let whereExpr = `where` {
             bindables.append(contentsOf: whereExpr.inputValues())
             query += " WHERE " + whereExpr.queryExpression()
         }
         if let orderBy = orderBy {
-            let orderByColumns: [String] = orderBy.columns.compactMap({ return "\"" + $0.name + "\"" })
+            let orderByColumns: [String] = orderBy.columns.compactMap({ return $0.name })
             query += " ORDER BY " + orderByColumns.joined(separator: ", ") + " " + orderBy.mode.queryString()
         }
         if let pagination = pagination {
@@ -349,13 +356,13 @@ public extension QDatabase {
     @discardableResult
     func delete(table: Table, where: IQDatabaseExpressable? = nil, orderBy: OrderBy? = nil, pagination: Pagination? = nil) throws -> Int {
         var bindables: [IQDatabaseInputValue] = []
-        var query = "DELETE FROM \"" + table.name + "\""
+        var query = "DELETE FROM " + table.name
         if let whereExpr = `where` {
             bindables.append(contentsOf: whereExpr.inputValues())
             query += " WHERE " + whereExpr.queryExpression()
         }
         if let orderBy = orderBy {
-            let orderByColumns: [String] = orderBy.columns.compactMap({ return "\"" + $0.name + "\"" })
+            let orderByColumns: [String] = orderBy.columns.compactMap({ return $0.name })
             query += " ORDER BY " + orderByColumns.joined(separator: ", ") + " " + orderBy.mode.queryString()
         }
         if let pagination = pagination {
@@ -380,17 +387,17 @@ public extension QDatabase {
         var bindables: [IQDatabaseInputValue] = []
         var query = "SELECT "
         if let columns = columns {
-            query += columns.compactMap({ return "\"" + $0.name + "\"" }).joined(separator: ", ")
+            query += columns.compactMap({ return $0.name }).joined(separator: ", ")
         } else {
             query += "*"
         }
-        query += " FROM \"" + table.name + "\""
+        query += " FROM " + table.name
         if let whereExpr = `where` {
             bindables.append(contentsOf: whereExpr.inputValues())
             query += " WHERE " + whereExpr.queryExpression()
         }
         if let orderBy = orderBy {
-            let orderByColumns: [String] = orderBy.columns.compactMap({ return "\"" + $0.name + "\"" })
+            let orderByColumns: [String] = orderBy.columns.compactMap({ return $0.name })
             query += " ORDER BY " + orderByColumns.joined(separator: ", ") + " " + orderBy.mode.queryString()
         }
         if let pagination = pagination {
@@ -408,17 +415,17 @@ public extension QDatabase {
         var bindables: [IQDatabaseInputValue] = []
         var query = "SELECT "
         if let columns = columns {
-            query += columns.compactMap({ return "\"" + $0.name + "\"" }).joined(separator: ", ")
+            query += columns.compactMap({ return $0.name }).joined(separator: ", ")
         } else {
             query += "*"
         }
-        query += " FROM \"" + table.name + "\""
+        query += " FROM " + table.name
         if let whereExpr = `where` {
             bindables.append(contentsOf: whereExpr.inputValues())
             query += " WHERE " + whereExpr.queryExpression()
         }
         if let orderBy = orderBy {
-            let orderByColumns: [String] = orderBy.columns.compactMap({ return "\"" + $0.name + "\"" })
+            let orderByColumns: [String] = orderBy.columns.compactMap({ return $0.name })
             query += " ORDER BY " + orderByColumns.joined(separator: ", ") + " " + orderBy.mode.queryString()
         }
         if let pagination = pagination {
@@ -495,18 +502,6 @@ public extension QDatabase.Statement {
 // MARK: - Internal • QDatabase
 
 internal extension QDatabase {
-    
-    func execute(query: String) throws {
-        let statement = try self._prepareStatement(query)
-        switch sqlite3_step(statement) {
-        case SQLITE_DONE:
-            let result = sqlite3_finalize(statement)
-            if result != SQLITE_OK {
-                throw QDatabase._error(database: self._database)
-            }
-        default: throw QDatabase._error(database: self._database)
-        }
-    }
     
     func statement(query: String) throws -> Statement {
         return Statement(
@@ -592,7 +587,7 @@ internal extension QDatabase.Table {
 internal extension QDatabase.Column {
     
     func queryString() -> String {
-        var string: String = "\"\(self.name)\" \(self.dataType.queryString())"
+        var string: String = "\(self.name) \(self.dataType.queryString())"
         if self.isPrimaryKey == true { string += " PRIMARY KEY" }
         if self.isAutoincrement == true { string += " AUTOINCREMENT" }
         if self.isNonNull == true { string += " NOT NULL" }
@@ -610,13 +605,29 @@ internal extension QDatabase.Column {
 
 internal extension QDatabase.Statement {
     
+    // MARK: Reset
+    
+    func reset() throws {
+        let result = sqlite3_reset(self._statement)
+        if result != SQLITE_OK {
+            throw QDatabase._error(database: self._database)
+        }
+    }
+    
+    func finalize() throws {
+        let result = sqlite3_finalize(self._statement)
+        if result != SQLITE_OK {
+            throw QDatabase._error(database: self._database)
+        }
+    }
+    
     // MARK: Execute
     
     func executeUntilDone() throws {
         let step = sqlite3_step(self._statement)
         switch step {
         case SQLITE_DONE: return
-        default: throw QDatabase.Error.sqliteQuery(code: Int(step))
+        default: throw QDatabase._error(database: self._database)
         }
     }
     
@@ -624,7 +635,7 @@ internal extension QDatabase.Statement {
         let step = sqlite3_step(self._statement)
         switch step {
         case SQLITE_ROW: return
-        default: throw QDatabase.Error.sqliteQuery(code: Int(step))
+        default: throw QDatabase._error(database: self._database)
         }
     }
     
@@ -634,7 +645,7 @@ internal extension QDatabase.Statement {
             switch step {
             case SQLITE_ROW: return try block(self)
             case SQLITE_DONE: return nil
-            default: throw QDatabase.Error.sqliteQuery(code: Int(step))
+            default: throw QDatabase._error(database: self._database)
             }
         }
     }
@@ -645,8 +656,8 @@ internal extension QDatabase.Statement {
             let step = sqlite3_step(self._statement)
             switch step {
             case SQLITE_ROW: results.append(try block(self))
-            case SQLITE_DONE: break
-            default: throw QDatabase.Error.sqliteQuery(code: Int(step))
+            case SQLITE_DONE: return results
+            default: throw QDatabase._error(database: self._database)
             }
         }
         return results

@@ -25,7 +25,7 @@ public extension QDatabase {
         
         public func queryExpression() -> String {
             let values = self.values.compactMap({ _ in return "?" })
-            return "\"" + self.column.name + "\" IN [" +  values.joined(separator: ", ") + "]"
+            return self.column.name + " IN (" +  values.joined(separator: ", ") + ")"
         }
         
     }
