@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QListFieldStyleSheet : QDisplayStyleSheet {
+open class QListFieldStyleSheet : QDisplayStyleSheet {
 
     public var rows: [QListFieldPickerRow]
     public var rowHeight: CGFloat
