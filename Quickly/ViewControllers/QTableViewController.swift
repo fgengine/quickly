@@ -15,7 +15,7 @@ open class QTableViewControllerFooterView : QView {
     
 }
 
-open class QTableViewController : QViewController, IQTableControllerObserver, IQKeyboardObserver, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQHamburgerContentViewController {
+open class QTableViewController : QViewController, IQTableControllerObserver, IQKeyboardObserver, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController {
 
     public var contentOffset: CGPoint {
         get {
@@ -224,6 +224,9 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     }
 
     open func triggeredRefreshControl() {
+    }
+    
+    open func dialogDidPressedOutside() {
     }
     
     open func isLoading() -> Bool {

@@ -28,6 +28,7 @@ open class QDateFieldStyleSheet : QDisplayStyleSheet {
     public var maximumDate: Date?
     public var placeholder: IQText?
     public var isEnabled: Bool
+    public var toolbarStyle: QToolbarStyleSheet?
 
     public init(
         formatter: IQDateFieldFormatter,
@@ -38,6 +39,7 @@ open class QDateFieldStyleSheet : QDisplayStyleSheet {
         maximumDate: Date? = nil,
         placeholder: IQText? = nil,
         isEnabled: Bool = true,
+        toolbarStyle: QToolbarStyleSheet? = nil,
         backgroundColor: UIColor? = nil,
         cornerRadius: QViewCornerRadius = .none,
         border: QViewBorder = .none,
@@ -51,6 +53,7 @@ open class QDateFieldStyleSheet : QDisplayStyleSheet {
         self.maximumDate = maximumDate
         self.placeholder = placeholder
         self.isEnabled = isEnabled
+        self.toolbarStyle = toolbarStyle
         
         super.init(
             backgroundColor: backgroundColor,
@@ -69,6 +72,7 @@ open class QDateFieldStyleSheet : QDisplayStyleSheet {
         self.maximumDate = styleSheet.maximumDate
         self.placeholder = styleSheet.placeholder
         self.isEnabled = styleSheet.isEnabled
+        self.toolbarStyle = styleSheet.toolbarStyle
 
         super.init(styleSheet)
     }
@@ -80,6 +84,8 @@ public protocol IQDateFieldObserver : class {
     func beginEditing(dateField: QDateField)
     func select(dateField: QDateField, date: Date)
     func endEditing(dateField: QDateField)
+    func pressedCancel(dateField: QDateField)
+    func pressedDone(dateField: QDateField)
     
 }
 
@@ -93,46 +99,46 @@ public class QDateField : QDisplayView, IQField {
         didSet { self._updateText() }
     }
     public var mode: QDateFieldMode = .date {
-        didSet { self.pickerView.datePickerMode = self.mode.datePickerMode }
+        didSet { self._picker.datePickerMode = self.mode.datePickerMode }
     }
     public var calendar: Calendar? {
-        set(value) { self.pickerView.calendar = value }
-        get { return self.pickerView.calendar }
+        set(value) { self._picker.calendar = value }
+        get { return self._picker.calendar }
     }
     public var locale: Locale? {
-        set(value) { self.pickerView.locale = value }
-        get { return self.pickerView.locale }
+        set(value) { self._picker.locale = value }
+        get { return self._picker.locale }
     }
     public var date: Date? {
         didSet {
             if var date = self.date {
                 self._processDate(&date)
-                self.pickerView.setDate(date, animated: self.isFirstResponder)
+                self._picker.setDate(date, animated: self.isFirstResponder)
             }
             self._updateText()
         }
     }
     public var minimumDate: Date? {
         set(value) {
-            self.pickerView.minimumDate = value
+            self._picker.minimumDate = value
             if var date = self.date {
                 if self._processDate(&date) == true {
                     self.date = date
                 }
             }
         }
-        get { return self.pickerView.minimumDate }
+        get { return self._picker.minimumDate }
     }
     public var maximumDate: Date? {
         set(value) {
-            self.pickerView.maximumDate = value
+            self._picker.maximumDate = value
             if var date = self.date {
                 if self._processDate(&date) == true {
                     self.date = date
                 }
             }
         }
-        get { return self.pickerView.maximumDate }
+        get { return self._picker.maximumDate }
     }
     public var isValid: Bool {
         get { return self.date != nil }
@@ -140,6 +146,18 @@ public class QDateField : QDisplayView, IQField {
     public var placeholder: IQText? {
         didSet { self._updateText() }
     }
+    public lazy var toolbar: QToolbar = {
+        let bar = QToolbar(
+            items: [
+                self.toolbarCancelItem,
+                UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                self.toolbarDoneItem
+            ]
+        )
+        return bar
+    }()
+    public lazy var toolbarCancelItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self._pressedCancel(_:)))
+    public lazy var toolbarDoneItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self._pressedDone(_:)))
     public var isEnabled: Bool = true
     public var isEditing: Bool {
         get { return self.isFirstResponder }
@@ -149,6 +167,8 @@ public class QDateField : QDisplayView, IQField {
     public var onSelect: SelectClosure?
     public var onShouldEndEditing: ShouldClosure?
     public var onEndEditing: Closure?
+    public var onPressedCancel: Closure?
+    public var onPressedDone: Closure?
     
     open override var canBecomeFirstResponder: Bool {
         get {
@@ -164,16 +184,18 @@ public class QDateField : QDisplayView, IQField {
         }
     }
     open override var inputView: UIView? {
-        get { return self.pickerView }
+        get { return self._picker }
+    }
+    open override var inputAccessoryView: UIView? {
+        get { return self.toolbar }
     }
     open override var intrinsicContentSize: CGSize {
-        get { return self.valueLabel.intrinsicContentSize }
+        get { return self._label.intrinsicContentSize }
     }
 
-    internal private(set) var valueLabel: QLabel!
-    internal private(set) var pickerView: UIDatePicker!
-    internal private(set) var tapGesture: UITapGestureRecognizer!
-    
+    private var _label: QLabel!
+    private var _picker: UIDatePicker!
+    private var _tapGesture: UITapGestureRecognizer!
     private var _observer: QObserver< IQDateFieldObserver >
     
     public required init() {
@@ -196,16 +218,16 @@ public class QDateField : QDisplayView, IQField {
 
         self.backgroundColor = UIColor.clear
 
-        self.valueLabel = QLabel(frame: self.bounds)
-        self.valueLabel.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
-        self.addSubview(self.valueLabel)
+        self._label = QLabel(frame: self.bounds)
+        self._label.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
+        self.addSubview(self._label)
 
-        self.pickerView = UIDatePicker()
-        self.pickerView.datePickerMode = self.mode.datePickerMode
-        self.pickerView.addValueChanged(self, action: #selector(self._changeDate(_:)))
+        self._picker = UIDatePicker()
+        self._picker.datePickerMode = self.mode.datePickerMode
+        self._picker.addValueChanged(self, action: #selector(self._changeDate(_:)))
         
-        self.tapGesture = UITapGestureRecognizer(target: self, action: #selector(self._tapGesture(_:)))
-        self.addGestureRecognizer(self.tapGesture)
+        self._tapGesture = UITapGestureRecognizer(target: self, action: #selector(self._tapGesture(_:)))
+        self.addGestureRecognizer(self._tapGesture)
     }
     
     public func add(observer: IQDateFieldObserver, priority: UInt) {
@@ -221,23 +243,35 @@ public class QDateField : QDisplayView, IQField {
     }
 
     open override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return self.valueLabel.sizeThatFits(size)
+        return self._label.sizeThatFits(size)
     }
 
     open override func sizeToFit() {
-        return self.valueLabel.sizeToFit()
+        return self._label.sizeToFit()
     }
 
     @discardableResult
     open override func becomeFirstResponder() -> Bool {
         guard super.becomeFirstResponder() == true else { return false }
+        var changeSelection: Bool
         if self.date == nil {
-            self.date = self.pickerView.date
+            self.date = self._picker.date
+            changeSelection = true
+        } else {
+            changeSelection = false
         }
         self.onBeginEditing?(self)
         self._observer.notify({ (observer) in
             observer.beginEditing(dateField: self)
         })
+        if changeSelection == true {
+            if let closure = self.onSelect {
+                closure(self, self.date!)
+            }
+            self._observer.notify({ (observer) in
+                observer.select(dateField: self, date: self.date!)
+            })
+        }
         return true
     }
 
@@ -262,6 +296,12 @@ public class QDateField : QDisplayView, IQField {
         self.maximumDate = styleSheet.maximumDate
         self.placeholder = styleSheet.placeholder
         self.isEnabled = styleSheet.isEnabled
+        if let style = styleSheet.toolbarStyle {
+            self.toolbar.apply(style)
+            self.toolbar.isHidden = false
+        } else {
+            self.toolbar.isHidden = true
+        }
     }
     
 }
@@ -270,11 +310,11 @@ extension QDateField {
 
     private func _updateText() {
         guard let date = self.date, let formatter = self.formatter else {
-            self.valueLabel.text = self.placeholder
+            self._label.text = self.placeholder
             self.invalidateIntrinsicContentSize()
             return
         }
-        self.valueLabel.text = formatter.from(date)
+        self._label.text = formatter.from(date)
         self.invalidateIntrinsicContentSize()
     }
 
@@ -297,13 +337,13 @@ extension QDateField {
 
     @objc
     private func _changeDate(_ sender: Any) {
-        self.date = self.pickerView.date
+        self.date = self._picker.date
         self._updateText()
         if let closure = self.onSelect {
-            closure(self, self.pickerView.date)
+            closure(self, self._picker.date)
         }
         self._observer.notify({ (observer) in
-            observer.select(dateField: self, date: self.pickerView.date)
+            observer.select(dateField: self, date: self._picker.date)
         })
     }
     
@@ -312,6 +352,28 @@ extension QDateField {
         if self.canBecomeFirstResponder == true {
             self.becomeFirstResponder()
         }
+    }
+    
+    @objc
+    private func _pressedCancel(_ sender: Any) {
+        if let closure = self.onPressedCancel {
+            closure(self)
+        }
+        self._observer.notify({ (observer) in
+            observer.pressedCancel(dateField: self)
+        })
+        self.endEditing(false)
+    }
+    
+    @objc
+    private func _pressedDone(_ sender: Any) {
+        if let closure = self.onPressedDone {
+            closure(self)
+        }
+        self._observer.notify({ (observer) in
+            observer.pressedDone(dateField: self)
+        })
+        self.endEditing(false)
     }
 
 }

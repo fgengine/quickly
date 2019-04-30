@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDelegate, UIScrollViewDelegate, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQHamburgerContentViewController {
+open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDelegate, UIScrollViewDelegate, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController {
     
     public var contentOffset: CGPoint {
         get {
@@ -115,6 +115,9 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
             self.startLoading()
         }
         return navigation
+    }
+    
+    open func dialogDidPressedOutside() {
     }
     
     open func isLoading() -> Bool {

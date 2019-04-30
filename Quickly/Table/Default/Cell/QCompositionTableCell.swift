@@ -105,6 +105,12 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
     open func endEditing(textField: QTextField) {
     }
     
+    open func pressedCancel(textField: QTextField) {
+    }
+    
+    open func pressedDone(textField: QTextField) {
+    }
+    
     open func pressedClear(textField: QTextField) {
     }
     
@@ -123,7 +129,10 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
     open func endEditing(multiTextField: QMultiTextField) {
     }
     
-    open func pressedReturn(multiTextField: QMultiTextField) {
+    open func pressedCancel(multiTextField: QMultiTextField) {
+    }
+    
+    open func pressedDone(multiTextField: QMultiTextField) {
     }
     
     open func changed(multiTextField: QMultiTextField, height: CGFloat) {
@@ -145,6 +154,12 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
     open func endEditing(listField: QListField) {
     }
     
+    open func pressedCancel(listField: QListField) {
+    }
+    
+    open func pressedDone(listField: QListField) {
+    }
+    
     // MARK: - IQDateFieldObserver
     
     open func beginEditing(dateField: QDateField) {
@@ -155,6 +170,12 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
     }
     
     open func endEditing(dateField: QDateField) {
+    }
+    
+    open func pressedCancel(dateField: QDateField) {
+    }
+    
+    open func pressedDone(dateField: QDateField) {
     }
     
     // MARK: - Private

@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QCompositionViewController< Composition: IQComposition > : QViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQHamburgerContentViewController {
+open class QCompositionViewController< Composition: IQComposition > : QViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController {
 
     public var contentOffset: CGPoint {
         get { return CGPoint.zero }
@@ -72,6 +72,9 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
         if let loadingView = self.loadingView, loadingView.superview != nil {
             self._updateConstraints(self.view, loadingView: loadingView)
         }
+    }
+    
+    open func dialogDidPressedOutside() {
     }
     
     open func isLoading() -> Bool {
@@ -162,6 +165,12 @@ extension QCompositionViewController : IQTextFieldObserver {
     open func endEditing(textField: QTextField) {
     }
     
+    open func pressedCancel(textField: QTextField) {
+    }
+    
+    open func pressedDone(textField: QTextField) {
+    }
+    
     open func pressedClear(textField: QTextField) {
     }
     
@@ -180,8 +189,11 @@ extension QCompositionViewController : IQMultiTextFieldObserver {
 
     open func endEditing(multiTextField: QMultiTextField) {
     }
-
-    open func pressedReturn(multiTextField: QMultiTextField) {
+    
+    open func pressedCancel(multiTextField: QMultiTextField) {
+    }
+    
+    open func pressedDone(multiTextField: QMultiTextField) {
     }
 
     open func changed(multiTextField: QMultiTextField, height: CGFloat) {
@@ -200,6 +212,12 @@ extension QCompositionViewController : IQListFieldObserver {
     open func endEditing(listField: QListField) {
     }
     
+    open func pressedCancel(listField: QListField) {
+    }
+    
+    open func pressedDone(listField: QListField) {
+    }
+    
 }
 
 extension QCompositionViewController : IQDateFieldObserver {
@@ -211,6 +229,12 @@ extension QCompositionViewController : IQDateFieldObserver {
     }
     
     open func endEditing(dateField: QDateField) {
+    }
+    
+    open func pressedCancel(dateField: QDateField) {
+    }
+    
+    open func pressedDone(dateField: QDateField) {
     }
     
 }

@@ -66,6 +66,22 @@ open class QComposition< Composable: QComposable > : IQComposition {
         }
     }
     
+    open func relayout(animated: Bool) {
+        if let composable = self.composable, let spec = self.spec {
+            if animated == true {
+                self.preLayout(composable: composable, spec: spec)
+                UIView.animate(withDuration: composable.animationDuration, delay: composable.animationDelay, options: composable.animationOptions, animations: {
+                    self.contentView.layoutIfNeeded()
+                }, completion: { (_) in
+                    self.postLayout(composable: composable, spec: spec)
+                })
+            } else {
+                self.preLayout(composable: composable, spec: spec)
+                self.postLayout(composable: composable, spec: spec)
+            }
+        }
+    }
+    
     open func preLayout(composable: Composable, spec: IQContainerSpec) {
     }
 

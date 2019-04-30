@@ -48,7 +48,6 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
         self.interactiveDismissAnimation = QDialogViewControllerinteractiveDismissAnimation()
         self.isAnimating = false
         super.init()
-        self.edgesForExtendedLayout = []
     }
 
     open override func didLoad() {

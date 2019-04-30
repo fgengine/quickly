@@ -25,6 +25,7 @@ open class QMultiTextFieldStyleSheet : QDisplayStyleSheet {
     public var isSecureTextEntry: Bool
     public var textContentType: UITextContentType!
     public var isEnabled: Bool
+    public var toolbarStyle: QToolbarStyleSheet?
     
     public init(
         requireValidator: Bool = false,
@@ -48,6 +49,7 @@ open class QMultiTextFieldStyleSheet : QDisplayStyleSheet {
         isSecureTextEntry: Bool = false,
         textContentType: UITextContentType! = nil,
         isEnabled: Bool = true,
+        toolbarStyle: QToolbarStyleSheet? = nil,
         backgroundColor: UIColor? = nil,
         tintColor: UIColor? = nil,
         cornerRadius: QViewCornerRadius = .none,
@@ -75,6 +77,7 @@ open class QMultiTextFieldStyleSheet : QDisplayStyleSheet {
         self.isSecureTextEntry = isSecureTextEntry
         self.textContentType = textContentType
         self.isEnabled = isEnabled
+        self.toolbarStyle = toolbarStyle
         
         super.init(
             backgroundColor: backgroundColor,
@@ -107,6 +110,7 @@ open class QMultiTextFieldStyleSheet : QDisplayStyleSheet {
         self.isSecureTextEntry = styleSheet.isSecureTextEntry
         self.textContentType = styleSheet.textContentType
         self.isEnabled = styleSheet.isEnabled
+        self.toolbarStyle = styleSheet.toolbarStyle
         
         super.init(styleSheet)
     }
@@ -118,7 +122,8 @@ public protocol IQMultiTextFieldObserver : class {
     func beginEditing(multiTextField: QMultiTextField)
     func editing(multiTextField: QMultiTextField)
     func endEditing(multiTextField: QMultiTextField)
-    func pressedReturn(multiTextField: QMultiTextField)
+    func pressedCancel(multiTextField: QMultiTextField)
+    func pressedDone(multiTextField: QMultiTextField)
     func changed(multiTextField: QMultiTextField, height: CGFloat)
     
 }
@@ -130,38 +135,38 @@ public class QMultiTextField : QDisplayView, IQField {
     
     public var requireValidator: Bool = false
     public var validator: IQInputValidator? {
-        willSet { self.fieldView.delegate = nil }
-        didSet {self.fieldView.delegate = self._fieldDelegate }
+        willSet { self._field.delegate = nil }
+        didSet {self._field.delegate = self._fieldDelegate }
     }
     public var formatter: IQStringFormatter? {
         willSet {
             if let formatter = self.formatter {
-                if let text = self.fieldView.text {
+                if let text = self._field.text {
                     var caret: Int
-                    if let selected = self.fieldView.selectedTextRange {
-                        caret = self.fieldView.offset(from: self.fieldView.beginningOfDocument, to: selected.end)
+                    if let selected = self._field.selectedTextRange {
+                        caret = self._field.offset(from: self._field.beginningOfDocument, to: selected.end)
                     } else {
                         caret = text.count
                     }
-                    self.fieldView.text = formatter.unformat(text, caret: &caret)
-                    if let position = self.fieldView.position(from: self.fieldView.beginningOfDocument, offset: caret) {
-                        self.fieldView.selectedTextRange = self.fieldView.textRange(from: position, to: position)
+                    self._field.text = formatter.unformat(text, caret: &caret)
+                    if let position = self._field.position(from: self._field.beginningOfDocument, offset: caret) {
+                        self._field.selectedTextRange = self._field.textRange(from: position, to: position)
                     }
                 }
             }
         }
         didSet {
             if let formatter = self.formatter {
-                if let text = self.fieldView.text {
+                if let text = self._field.text {
                     var caret: Int
-                    if let selected = self.fieldView.selectedTextRange {
-                        caret = self.fieldView.offset(from: self.fieldView.beginningOfDocument, to: selected.end)
+                    if let selected = self._field.selectedTextRange {
+                        caret = self._field.offset(from: self._field.beginningOfDocument, to: selected.end)
                     } else {
                         caret = text.count
                     }
-                    self.fieldView.text = formatter.format(text, caret: &caret)
-                    if let position = self.fieldView.position(from: self.fieldView.beginningOfDocument, offset: caret) {
-                        self.fieldView.selectedTextRange = self.fieldView.textRange(from: position, to: position)
+                    self._field.text = formatter.format(text, caret: &caret)
+                    if let position = self._field.position(from: self._field.beginningOfDocument, offset: caret) {
+                        self._field.selectedTextRange = self._field.textRange(from: position, to: position)
                     }
                     self.textHeight = self._textHeight()
                 }
@@ -171,52 +176,52 @@ public class QMultiTextField : QDisplayView, IQField {
     }
     public var textStyle: IQTextStyle? {
         didSet {
-            self.fieldView.font = self.textStyle?.font ?? UIFont.systemFont(ofSize: UIFont.systemFontSize)
-            self.fieldView.textColor = self.textStyle?.color ?? UIColor.black
-            self.fieldView.textAlignment = self.textStyle?.alignment ?? .left
+            self._field.font = self.textStyle?.font ?? UIFont.systemFont(ofSize: UIFont.systemFontSize)
+            self._field.textColor = self.textStyle?.color ?? UIColor.black
+            self._field.textAlignment = self.textStyle?.alignment ?? .left
             self.textHeight = self._textHeight()
         }
     }
     public var textInsets: UIEdgeInsets {
         set(value) {
-            if self.fieldView.textContainerInset != value {
-                self.fieldView.textContainerInset = value
+            if self._field.textContainerInset != value {
+                self._field.textContainerInset = value
                 self.textHeight = self._textHeight()
             }
         }
-        get { return self.fieldView.textContainerInset }
+        get { return self._field.textContainerInset }
     }
     public var text: String {
         set(value) {
-            if self.fieldView.text != value {
-                self.fieldView.text = value
+            if self._field.text != value {
+                self._field.text = value
                 self._updatePlaceholderVisibility()
                 self.textHeight = self._textHeight()
             }
         }
-        get { return self.fieldView.text }
+        get { return self._field.text }
     }
     public var unformatText: String {
         set(value) {
             if let formatter = self.formatter {
                 var caret: Int
-                if let selected = self.fieldView.selectedTextRange {
-                    caret = self.fieldView.offset(from: self.fieldView.beginningOfDocument, to: selected.end)
+                if let selected = self._field.selectedTextRange {
+                    caret = self._field.offset(from: self._field.beginningOfDocument, to: selected.end)
                 } else {
                     caret = text.count
                 }
-                self.fieldView.text = formatter.format(value, caret: &caret)
-                if let position = self.fieldView.position(from: self.fieldView.beginningOfDocument, offset: caret) {
-                    self.fieldView.selectedTextRange = self.fieldView.textRange(from: position, to: position)
+                self._field.text = formatter.format(value, caret: &caret)
+                if let position = self._field.position(from: self._field.beginningOfDocument, offset: caret) {
+                    self._field.selectedTextRange = self._field.textRange(from: position, to: position)
                 }
             } else {
-                self.fieldView.text = value
+                self._field.text = value
             }
             self._updatePlaceholderVisibility()
         }
         get {
             var result: String
-            if let text = self.fieldView.text {
+            if let text = self._field.text {
                 if let formatter = self.formatter {
                     result = formatter.unformat(text)
                 } else {
@@ -237,14 +242,14 @@ public class QMultiTextField : QDisplayView, IQField {
     }
     public var placeholder: IQText? {
         set(value) {
-            self.placeholderLabel.text = value
+            self._placeholderLabel.text = value
             self._updatePlaceholderVisibility()
         }
-        get { return self.placeholderLabel.text }
+        get { return self._placeholderLabel.text }
     }
     public var selectedRange: NSRange {
-        set(value) { self.fieldView.selectedRange = value }
-        get { return self.fieldView.selectedRange }
+        set(value) { self._field.selectedRange = value }
+        get { return self._field.selectedRange }
     }
     public var maximumNumberOfCharecters: UInt = 0
     public var maximumNumberOfLines: UInt = 0
@@ -267,39 +272,52 @@ public class QMultiTextField : QDisplayView, IQField {
         get { return false }
     }
     public var isEditable: Bool {
-        set(value) { self.fieldView.isEditable = value }
-        get { return self.fieldView.isEditable }
+        set(value) { self._field.isEditable = value }
+        get { return self._field.isEditable }
     }
     public var isSelectable: Bool {
-        set(value) { self.fieldView.isSelectable = value }
-        get { return self.fieldView.isSelectable }
+        set(value) { self._field.isSelectable = value }
+        get { return self._field.isSelectable }
     }
     public var isEnabled: Bool {
-        set(value) { self.fieldView.isUserInteractionEnabled = value }
-        get { return self.fieldView.isUserInteractionEnabled }
+        set(value) { self._field.isUserInteractionEnabled = value }
+        get { return self._field.isUserInteractionEnabled }
     }
     public var isEditing: Bool {
-        get { return self.fieldView.isFirstResponder }
+        get { return self._field.isFirstResponder }
     }
+    public lazy var toolbar: QToolbar = {
+        let bar = QToolbar(
+            items: [
+                self.toolbarCancelItem,
+                UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                self.toolbarDoneItem
+            ]
+        )
+        return bar
+    }()
+    public lazy var toolbarCancelItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self._pressedCancel(_:)))
+    public lazy var toolbarDoneItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self._pressedDone(_:)))
     public var onShouldBeginEditing: ShouldClosure?
     public var onBeginEditing: Closure?
     public var onEditing: Closure?
     public var onShouldEndEditing: ShouldClosure?
     public var onEndEditing: Closure?
+    public var onPressedCancel: Closure?
+    public var onPressedDone: Closure?
     public var onChangedHeight: Closure?
     
     open override var intrinsicContentSize: CGSize {
         get {
-            if self.placeholderLabel.isHidden == false {
-                return self.placeholderLabel.intrinsicContentSize
+            if self._placeholderLabel.isHidden == false {
+                return self._placeholderLabel.intrinsicContentSize
             }
-            return self.fieldView.intrinsicContentSize
+            return self._field.intrinsicContentSize
         }
     }
 
-    internal private(set) var placeholderLabel: QLabel!
-    internal private(set) var fieldView: Field!
-    
+    private var _placeholderLabel: QLabel!
+    private var _field: Field!
     private var _fieldDelegate: FieldDelegate!
     private var _observer: QObserver< IQMultiTextFieldObserver > = QObserver< IQMultiTextFieldObserver >()
     
@@ -310,17 +328,18 @@ public class QMultiTextField : QDisplayView, IQField {
         
         self._fieldDelegate = FieldDelegate(field: self)
         
-        self.placeholderLabel = QLabel(frame: self.bounds.inset(by: self.placeholderInsets))
-        self.placeholderLabel.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
-        self.addSubview(self.placeholderLabel)
+        self._placeholderLabel = QLabel(frame: self.bounds.inset(by: self.placeholderInsets))
+        self._placeholderLabel.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
+        self.addSubview(self._placeholderLabel)
         
-        self.fieldView = Field(frame: self.bounds)
-        self.fieldView.textContainer.lineFragmentPadding = 0
-        self.fieldView.textContainerInset = UIEdgeInsets.zero
-        self.fieldView.layoutManager.usesFontLeading = false
-        self.fieldView.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
-        self.fieldView.delegate = self._fieldDelegate
-        self.insertSubview(self.fieldView, aboveSubview: self.placeholderLabel)
+        self._field = Field(frame: self.bounds)
+        self._field.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
+        self._field.textContainer.lineFragmentPadding = 0
+        self._field.textContainerInset = UIEdgeInsets.zero
+        self._field.layoutManager.usesFontLeading = false
+        self._field.inputAccessoryView = self.toolbar
+        self._field.delegate = self._fieldDelegate
+        self.insertSubview(self._field, aboveSubview: self._placeholderLabel)
         
         self.textHeight = self._textHeight()
     }
@@ -334,15 +353,15 @@ public class QMultiTextField : QDisplayView, IQField {
     }
     
     open func beginEditing() {
-        self.fieldView.becomeFirstResponder()
+        self._field.becomeFirstResponder()
     }
     
     open override func layoutSubviews() {
         super.layoutSubviews()
         
         let placeholderAvailableRect = self.bounds.inset(by: self.placeholderInsets)
-        let placeholderFitSize = self.placeholderLabel.sizeThatFits(placeholderAvailableRect.size)
-        self.placeholderLabel.frame = CGRect(
+        let placeholderFitSize = self._placeholderLabel.sizeThatFits(placeholderAvailableRect.size)
+        self._placeholderLabel.frame = CGRect(
             origin: placeholderAvailableRect.origin,
             size: CGSize(
                 width: placeholderAvailableRect.width,
@@ -352,11 +371,11 @@ public class QMultiTextField : QDisplayView, IQField {
     }
     
     open override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return self.fieldView.sizeThatFits(size)
+        return self._field.sizeThatFits(size)
     }
     
     open override func sizeToFit() {
-        return self.fieldView.sizeToFit()
+        return self._field.sizeToFit()
     }
     
     public func apply(_ styleSheet: QMultiTextFieldStyleSheet) {
@@ -386,8 +405,59 @@ public class QMultiTextField : QDisplayView, IQField {
         }
         self.isEnabled = styleSheet.isEnabled
     }
+    
+}
 
-    internal class Field : UITextView, IQView {
+// MARK: - Private -
+
+private extension QMultiTextField {
+    
+    func _updatePlaceholderVisibility() {
+        self._placeholderLabel.isHidden = self._field.text.count > 0
+    }
+    
+    func _textHeight() -> CGFloat {
+        let textContainerInset = self._field.textContainerInset
+        let textRect = self._field.layoutManager.usedRect(for: self._field.textContainer)
+        var height = textContainerInset.top + textRect.height + textContainerInset.bottom
+        if self.minimumHeight > CGFloat.leastNonzeroMagnitude {
+            height = max(height, self.minimumHeight)
+        }
+        if self.maximumHeight > CGFloat.leastNonzeroMagnitude {
+            height = min(height, self.maximumHeight)
+        }
+        return height
+    }
+    
+    @objc
+    func _pressedCancel(_ sender: Any) {
+        if let closure = self.onPressedCancel {
+            closure(self)
+        }
+        self._observer.notify({ (observer) in
+            observer.pressedCancel(multiTextField: self)
+        })
+        self.endEditing(false)
+    }
+    
+    @objc
+    func _pressedDone(_ sender: Any) {
+        if let closure = self.onPressedDone {
+            closure(self)
+        }
+        self._observer.notify({ (observer) in
+            observer.pressedDone(multiTextField: self)
+        })
+        self.endEditing(false)
+    }
+    
+}
+
+// MARK: - Private • Field -
+
+private extension QMultiTextField {
+
+    class Field : UITextView, IQView {
         
         required init() {
             super.init(
@@ -416,7 +486,13 @@ public class QMultiTextField : QDisplayView, IQField {
 
     }
     
-    private class FieldDelegate : NSObject, UITextViewDelegate {
+}
+
+// MARK: - Private • FieldDelegate -
+
+private extension QMultiTextField {
+    
+    class FieldDelegate : NSObject, UITextViewDelegate {
         
         public weak var field: QMultiTextField?
         
@@ -536,73 +612,54 @@ public class QMultiTextField : QDisplayView, IQField {
     
 }
 
-extension QMultiTextField {
-    
-    private func _updatePlaceholderVisibility() {
-        self.placeholderLabel.isHidden = self.fieldView.text.count > 0
-    }
-    
-    private func _textHeight() -> CGFloat {
-        let textContainerInset = self.fieldView.textContainerInset
-        let textRect = self.fieldView.layoutManager.usedRect(for: self.fieldView.textContainer)
-        var height = textContainerInset.top + textRect.height + textContainerInset.bottom
-        if self.minimumHeight > CGFloat.leastNonzeroMagnitude {
-            height = max(height, self.minimumHeight)
-        }
-        if self.maximumHeight > CGFloat.leastNonzeroMagnitude {
-            height = min(height, self.maximumHeight)
-        }
-        return height
-    }
-    
-}
+// MARK: - UITextInputTraits -
 
 extension QMultiTextField : UITextInputTraits {
 
     public var autocapitalizationType: UITextAutocapitalizationType {
-        set(value) { self.fieldView.autocapitalizationType = value }
-        get { return self.fieldView.autocapitalizationType }
+        set(value) { self._field.autocapitalizationType = value }
+        get { return self._field.autocapitalizationType }
     }
 
     public var autocorrectionType: UITextAutocorrectionType {
-        set(value) { self.fieldView.autocorrectionType = value }
-        get { return self.fieldView.autocorrectionType }
+        set(value) { self._field.autocorrectionType = value }
+        get { return self._field.autocorrectionType }
     }
 
     public var spellCheckingType: UITextSpellCheckingType {
-        set(value) { self.fieldView.spellCheckingType = value }
-        get { return self.fieldView.spellCheckingType }
+        set(value) { self._field.spellCheckingType = value }
+        get { return self._field.spellCheckingType }
     }
 
     public var keyboardType: UIKeyboardType {
-        set(value) { self.fieldView.keyboardType = value }
-        get { return self.fieldView.keyboardType }
+        set(value) { self._field.keyboardType = value }
+        get { return self._field.keyboardType }
     }
 
     public var keyboardAppearance: UIKeyboardAppearance {
-        set(value) { self.fieldView.keyboardAppearance = value }
-        get { return self.fieldView.keyboardAppearance }
+        set(value) { self._field.keyboardAppearance = value }
+        get { return self._field.keyboardAppearance }
     }
 
     public var returnKeyType: UIReturnKeyType {
-        set(value) { self.fieldView.returnKeyType = value }
-        get { return self.fieldView.returnKeyType }
+        set(value) { self._field.returnKeyType = value }
+        get { return self._field.returnKeyType }
     }
 
     public var enablesReturnKeyAutomatically: Bool {
-        set(value) { self.fieldView.enablesReturnKeyAutomatically = value }
-        get { return self.fieldView.enablesReturnKeyAutomatically }
+        set(value) { self._field.enablesReturnKeyAutomatically = value }
+        get { return self._field.enablesReturnKeyAutomatically }
     }
 
     public var isSecureTextEntry: Bool {
-        set(value) { self.fieldView.isSecureTextEntry = value }
-        get { return self.fieldView.isSecureTextEntry }
+        set(value) { self._field.isSecureTextEntry = value }
+        get { return self._field.isSecureTextEntry }
     }
 
     @available(iOS 10.0, *)
     public var textContentType: UITextContentType! {
-        set(value) { self.fieldView.textContentType = value }
-        get { return self.fieldView.textContentType }
+        set(value) { self._field.textContentType = value }
+        get { return self._field.textContentType }
     }
 
 }

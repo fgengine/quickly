@@ -8,12 +8,14 @@ open class QListFieldStyleSheet : QDisplayStyleSheet {
     public var rowHeight: CGFloat
     public var placeholder: IQText?
     public var isEnabled: Bool
+    public var toolbarStyle: QToolbarStyleSheet?
 
     public init(
         rows: [QListFieldPickerRow],
         rowHeight: CGFloat = 40,
         placeholder: IQText? = nil,
         isEnabled: Bool = true,
+        toolbarStyle: QToolbarStyleSheet? = nil,
         backgroundColor: UIColor? = nil,
         cornerRadius: QViewCornerRadius = .none,
         border: QViewBorder = .none,
@@ -23,6 +25,7 @@ open class QListFieldStyleSheet : QDisplayStyleSheet {
         self.rowHeight = rowHeight
         self.placeholder = placeholder
         self.isEnabled = isEnabled
+        self.toolbarStyle = toolbarStyle
         
         super.init(
             backgroundColor: backgroundColor,
@@ -37,6 +40,7 @@ open class QListFieldStyleSheet : QDisplayStyleSheet {
         self.rowHeight = styleSheet.rowHeight
         self.placeholder = styleSheet.placeholder
         self.isEnabled = styleSheet.isEnabled
+        self.toolbarStyle = styleSheet.toolbarStyle
 
         super.init(styleSheet)
     }
@@ -48,6 +52,8 @@ public protocol IQListFieldObserver : class {
     func beginEditing(listField: QListField)
     func select(listField: QListField, row: QListFieldPickerRow)
     func endEditing(listField: QListField)
+    func pressedCancel(listField: QListField)
+    func pressedDone(listField: QListField)
     
 }
 
@@ -58,26 +64,26 @@ public class QListField : QDisplayView, IQField {
     public typealias Closure = (_ listField: QListField) -> Void
 
     public var rows: [QListFieldPickerRow] {
-        set(value) { self.pickerSection.rows = value }
-        get { return self.pickerSection.rows as! [QListFieldPickerRow] }
+        set(value) { self._section.rows = value }
+        get { return self._section.rows as! [QListFieldPickerRow] }
     }
     public var selectedRow: QListFieldPickerRow? {
         didSet {
             if let selectedRow = self.selectedRow {
-                self.valieLabel.apply(selectedRow.field)
-                self.pickerController.select(row: selectedRow, animated: self.isEditing)
+                self._label.apply(selectedRow.field)
+                self._controller.select(row: selectedRow, animated: self.isEditing)
             } else {
-                self.valieLabel.text = self.placeholder
+                self._label.text = self.placeholder
             }
             self.invalidateIntrinsicContentSize()
         }
     }
     public var rowHeight: CGFloat {
         set(value) {
-            self.pickerSection.size.height = value
-            self.pickerController.reload()
+            self._section.size.height = value
+            self._controller.reload()
         }
-        get { return self.pickerSection.size.height }
+        get { return self._section.size.height }
     }
     public var isValid: Bool {
         get { return self.selectedRow != nil }
@@ -85,11 +91,23 @@ public class QListField : QDisplayView, IQField {
     public var placeholder: IQText? {
         didSet {
             if self.selectedRow == nil {
-                self.valieLabel.text = self.placeholder
+                self._label.text = self.placeholder
                 self.invalidateIntrinsicContentSize()
             }
         }
     }
+    public lazy var toolbar: QToolbar = {
+        let bar = QToolbar(
+            items: [
+                self.toolbarCancelItem,
+                UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+                self.toolbarDoneItem
+            ]
+        )
+        return bar
+    }()
+    public lazy var toolbarCancelItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self._pressedCancel(_:)))
+    public lazy var toolbarDoneItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self._pressedDone(_:)))
     public var isEnabled: Bool = true
     public var isEditing: Bool {
         get { return self.isFirstResponder }
@@ -99,6 +117,8 @@ public class QListField : QDisplayView, IQField {
     public var onSelect: SelectClosure?
     public var onShouldEndEditing: ShouldClosure?
     public var onEndEditing: Closure?
+    public var onPressedCancel: Closure?
+    public var onPressedDone: Closure?
     
     open override var canBecomeFirstResponder: Bool {
         get {
@@ -114,18 +134,20 @@ public class QListField : QDisplayView, IQField {
         }
     }
     open override var inputView: UIView? {
-        get { return self.pickerView }
+        get { return self._picker }
+    }
+    open override var inputAccessoryView: UIView? {
+        get { return self.toolbar }
     }
     open override var intrinsicContentSize: CGSize {
-        get { return self.valieLabel.intrinsicContentSize }
+        get { return self._label.intrinsicContentSize }
     }
 
-    internal private(set) var valieLabel: QLabel!
-    internal private(set) var pickerView: QPickerView!
-    internal private(set) var pickerSection: QPickerSection!
-    internal private(set) var pickerController: QPickerController!
-    internal private(set) var tapGesture: UITapGestureRecognizer!
-    
+    private var _label: QLabel!
+    private var _picker: QPickerView!
+    private var _section: QPickerSection!
+    private var _controller: QPickerController!
+    private var _tapGesture: UITapGestureRecognizer!
     private var _observer: QObserver< IQListFieldObserver >
     
     public required init() {
@@ -148,21 +170,21 @@ public class QListField : QDisplayView, IQField {
 
         self.backgroundColor = UIColor.clear
 
-        self.valieLabel = QLabel(frame: self.bounds)
-        self.valieLabel.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
-        self.addSubview(self.valieLabel)
+        self._label = QLabel(frame: self.bounds)
+        self._label.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
+        self.addSubview(self._label)
 
-        self.pickerView = QPickerView()
+        self._picker = QPickerView()
 
-        self.pickerSection = QPickerSection(cellType: QListFieldPickerCell.self, height: 40, rows: [])
+        self._section = QPickerSection(cellType: QListFieldPickerCell.self, height: 40, rows: [])
 
-        self.pickerController = QPickerController()
-        self.pickerController.sections = [ self.pickerSection ]
-        self.pickerController.delegate = self
-        self.pickerView.pickerController = self.pickerController
+        self._controller = QPickerController()
+        self._controller.sections = [ self._section ]
+        self._controller.delegate = self
+        self._picker.pickerController = self._controller
         
-        self.tapGesture = UITapGestureRecognizer(target: self, action: #selector(self._tapGesture(_:)))
-        self.addGestureRecognizer(self.tapGesture)
+        self._tapGesture = UITapGestureRecognizer(target: self, action: #selector(self._tapGesture(_:)))
+        self.addGestureRecognizer(self._tapGesture)
     }
     
     public func add(observer: IQListFieldObserver, priority: UInt) {
@@ -178,23 +200,35 @@ public class QListField : QDisplayView, IQField {
     }
 
     open override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return self.valieLabel.sizeThatFits(size)
+        return self._label.sizeThatFits(size)
     }
 
     open override func sizeToFit() {
-        return self.valieLabel.sizeToFit()
+        return self._label.sizeToFit()
     }
 
     @discardableResult
     open override func becomeFirstResponder() -> Bool {
         guard super.becomeFirstResponder() == true else { return false }
+        var changeSelection: Bool
         if self.selectedRow == nil {
             self.selectedRow = self.rows.first
+            changeSelection = self.selectedRow != nil
+        } else {
+            changeSelection = false
         }
         self.onBeginEditing?(self)
         self._observer.notify({ (observer) in
             observer.beginEditing(listField: self)
         })
+        if changeSelection == true {
+            if let closure = self.onSelect {
+                closure(self, self.selectedRow!)
+            }
+            self._observer.notify({ (observer) in
+                observer.select(listField: self, row: self.selectedRow!)
+            })
+        }
         return true
     }
 
@@ -215,6 +249,12 @@ public class QListField : QDisplayView, IQField {
         self.rowHeight = styleSheet.rowHeight
         self.placeholder = styleSheet.placeholder
         self.isEnabled = styleSheet.isEnabled
+        if let style = styleSheet.toolbarStyle {
+            self.toolbar.apply(style)
+            self.toolbar.isHidden = false
+        } else {
+            self.toolbar.isHidden = true
+        }
     }
     
 }
@@ -226,6 +266,28 @@ extension QListField {
         if self.canBecomeFirstResponder == true {
             self.becomeFirstResponder()
         }
+    }
+    
+    @objc
+    private func _pressedCancel(_ sender: Any) {
+        if let closure = self.onPressedCancel {
+            closure(self)
+        }
+        self._observer.notify({ (observer) in
+            observer.pressedCancel(listField: self)
+        })
+        self.endEditing(false)
+    }
+    
+    @objc
+    private func _pressedDone(_ sender: Any) {
+        if let closure = self.onPressedDone {
+            closure(self)
+        }
+        self._observer.notify({ (observer) in
+            observer.pressedDone(listField: self)
+        })
+        self.endEditing(false)
     }
 
 }

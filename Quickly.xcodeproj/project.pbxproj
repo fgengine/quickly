@@ -41,6 +41,7 @@
 		4007B0A92144236900AE17DC /* QTitleValueComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4007B07C2144236900AE17DC /* QTitleValueComposition.swift */; };
 		4007B0AA2144236900AE17DC /* QTitleDetailComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4007B07D2144236900AE17DC /* QTitleDetailComposition.swift */; };
 		4007B0AB2144632800AE17DC /* QPlaceholderTitleDetailIconComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4007B0602144236900AE17DC /* QPlaceholderTitleDetailIconComposition.swift */; };
+		400B29D8226DBF840012C099 /* QToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400B29D7226DBF840012C099 /* QToolbar.swift */; };
 		400DDF701F5622EB00D11991 /* Float.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400DDF6E1F5622EB00D11991 /* Float.swift */; };
 		400DDF711F5622EB00D11991 /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400DDF6F1F5622EB00D11991 /* CGRect.swift */; };
 		400DDF731F5623D400D11991 /* CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400DDF721F5623D400D11991 /* CGSize.swift */; };
@@ -366,6 +367,7 @@
 		4007B07B2144236900AE17DC /* QTitleDetailIconComposition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTitleDetailIconComposition.swift; sourceTree = "<group>"; };
 		4007B07C2144236900AE17DC /* QTitleValueComposition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTitleValueComposition.swift; sourceTree = "<group>"; };
 		4007B07D2144236900AE17DC /* QTitleDetailComposition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTitleDetailComposition.swift; sourceTree = "<group>"; };
+		400B29D7226DBF840012C099 /* QToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QToolbar.swift; sourceTree = "<group>"; };
 		400D35F8225503E4003C0FDA /* IQHamburgerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQHamburgerViewController.swift; sourceTree = "<group>"; };
 		400D360522552C83003C0FDA /* QHamburgerContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QHamburgerContainerViewController.swift; sourceTree = "<group>"; };
 		400D360722552DD9003C0FDA /* QHamburgerViewControllerAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QHamburgerViewControllerAnimation.swift; sourceTree = "<group>"; };
@@ -751,6 +753,14 @@
 				4007B0662144236900AE17DC /* QPlaceholderTitleDetailShapeComposition.swift */,
 			);
 			path = Placeholders;
+			sourceTree = "<group>";
+		};
+		400B29D6226DBF680012C099 /* Toolbar */ = {
+			isa = PBXGroup;
+			children = (
+				400B29D7226DBF840012C099 /* QToolbar.swift */,
+			);
+			path = Toolbar;
 			sourceTree = "<group>";
 		};
 		400CF9E52125646700F9238D /* AuthenticationChallenge */ = {
@@ -1565,6 +1575,7 @@
 				409CAC3B207B63F200EA54A5 /* Stackbar */,
 				409CAC3F207B668800EA54A5 /* Groupbar */,
 				40035958207F5B9F00D7F449 /* Pagebar */,
+				400B29D6226DBF680012C099 /* Toolbar */,
 				40035965207FA49500D7F449 /* Scroll */,
 				40CF45881F4DE6AB004D00D8 /* Labels */,
 				4039BCB81F51B1D800E38090 /* Image */,
@@ -1830,6 +1841,7 @@
 				40979EC21F62C88A0003ED1C /* IQStringValidator.swift in Sources */,
 				40EFD0BF20E60E0700473D17 /* IQTextStyle.swift in Sources */,
 				40CF45CF1F4DE6AB004D00D8 /* QAppWireframe.swift in Sources */,
+				400B29D8226DBF840012C099 /* QToolbar.swift in Sources */,
 				40D9C5B22147E4610086DD57 /* QPlaceholderTitleValueComposition.swift in Sources */,
 				40EC87962189A71D00B5F806 /* UIView.swift in Sources */,
 				404C90FB20D1641C001DE192 /* QStackViewControllerInteractiveAnimation.swift in Sources */,

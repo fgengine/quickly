@@ -56,7 +56,9 @@ open class QDialogViewController : QViewController, IQDialogViewController {
 
     open override func setup() {
         super.setup()
-
+        
+        self.edgesForExtendedLayout = []
+        
         self.contentViewController.parent = self
     }
 
