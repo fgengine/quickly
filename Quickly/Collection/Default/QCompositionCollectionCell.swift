@@ -158,13 +158,11 @@ open class QCompositionCollectionCell< Composition: IQComposition > : QBackgroun
     
     private func _prepareComposition(item: Item, spec: IQContainerSpec, highlighted: Bool, selected: Bool, animated: Bool) {
         let composable = self._currentComposable(item: item, highlighted: highlighted, selected: selected)
-        if self.composition.composable !== composable {
-            self.composition.prepare(
-                composable: composable,
-                spec: spec,
-                animated: animated
-            )
-        }
+        self.composition.prepare(
+            composable: composable,
+            spec: spec,
+            animated: animated
+        )
     }
     
     private func _currentComposable(item: Item, highlighted: Bool, selected: Bool) -> Composition.Composable {

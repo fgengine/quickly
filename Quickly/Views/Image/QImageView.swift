@@ -48,14 +48,22 @@ open class QImageViewStyleSheet : QDisplayStyleSheet {
         remoteSource: QImageRemoteSource? = nil,
         verticalAlignment: QViewVerticalAlignment = .center,
         horizontalAlignment: QViewHorizontalAlignment = .center,
-        backgroundColor: UIColor? = nil
+        backgroundColor: UIColor? = nil,
+        cornerRadius: QViewCornerRadius = .none,
+        border: QViewBorder = .none,
+        shadow: QViewShadow? = nil
     ) {
         self.localSource = localSource
         self.remoteSource = remoteSource
         self.verticalAlignment = verticalAlignment
         self.horizontalAlignment = horizontalAlignment
 
-        super.init(backgroundColor: backgroundColor)
+        super.init(
+            backgroundColor: backgroundColor,
+            cornerRadius: cornerRadius,
+            border: border,
+            shadow: shadow
+        )
     }
 
     public init(_ styleSheet: QImageViewStyleSheet) {

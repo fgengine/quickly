@@ -83,6 +83,8 @@ public extension UIImage {
     }
 
     func modify(_ draw: (CGContext, CGRect) -> ()) -> UIImage? {
+        let size = self.size
+        let scale = self.scale
         UIGraphicsBeginImageContextWithOptions(size, false, scale)
         if let context = UIGraphicsGetCurrentContext() {
             context.translateBy(x: 0, y: size.height)

@@ -2,6 +2,26 @@
 //  Quickly
 //
 
+open class QSpinnerViewStyleSheet : IQStyleSheet {
+    
+    var style: UIActivityIndicatorView.Style
+    var color: UIColor?
+    
+    public init(
+        style: UIActivityIndicatorView.Style = .white,
+        color: UIColor? = nil
+    ) {
+        self.style = style
+        self.color = color
+    }
+    
+    public init(_ styleSheet: QSpinnerViewStyleSheet) {
+        self.style = styleSheet.style
+        self.color = styleSheet.color
+    }
+    
+}
+
 open class QSpinnerView : QView, IQSpinnerView {
     
     public var style: UIActivityIndicatorView.Style {
@@ -57,6 +77,11 @@ open class QSpinnerView : QView, IQSpinnerView {
             origin: self.frame.origin,
             size: self._indicator.frame.size
         )
+    }
+    
+    public func apply(_ styleSheet: QSpinnerViewStyleSheet) {
+        self.style = styleSheet.style
+        self.color = styleSheet.color
     }
 
 }
