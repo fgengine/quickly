@@ -277,11 +277,11 @@ extension QModalContainerViewController {
     }
     
     private func _add(childViewController: IQModalViewController) {
-        childViewController.parent = self
+        childViewController.parentViewController = self
     }
     
     private func _remove(childViewController: IQModalViewController) {
-        childViewController.parent = nil
+        childViewController.parentViewController = nil
     }
 
     private func _appear(viewController: IQModalViewController) {
@@ -385,8 +385,8 @@ extension QModalContainerViewController : UIGestureRecognizerDelegate {
         guard let viewController = self.currentViewController else {
             return false
         }
-        let location = gestureRecognizer.location(in: viewController.contentViewController.view)
-        return viewController.contentViewController.view.point(inside: location, with: nil)
+        let location = gestureRecognizer.location(in: viewController.viewController.view)
+        return viewController.viewController.view.point(inside: location, with: nil)
     }
 
 }

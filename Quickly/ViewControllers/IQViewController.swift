@@ -11,8 +11,8 @@ public protocol IQViewControllerDelegate : class {
 public protocol IQViewController : class {
 
     var delegate: IQViewControllerDelegate? { set get }
-    var parent: IQViewController? { set get }
-    var child: [IQViewController] { get }
+    var parentViewController: IQViewController? { set get }
+    var childViewControllers: [IQViewController] { get }
     var edgesForExtendedLayout: UIRectEdge { set get }
     var additionalEdgeInsets: UIEdgeInsets { set get }
     var inheritedEdgeInsets: UIEdgeInsets { get }
@@ -50,10 +50,10 @@ public protocol IQViewController : class {
     func willTransition(size: CGSize)
     func didTransition(size: CGSize)
 
-    func parentOf< ParentType >() -> ParentType?
+    func parentViewControllerOf< ParentType >() -> ParentType?
 
-    func addChild(_ viewController: IQViewController)
-    func removeChild(_ viewController: IQViewController)
+    func add(childViewController viewController: IQViewController)
+    func remove(childViewController viewController: IQViewController)
 
     func supportedOrientations() -> UIInterfaceOrientationMask
 

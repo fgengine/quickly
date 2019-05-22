@@ -80,7 +80,7 @@ public protocol IQHamburgerContainerViewController : IQViewController {
 public protocol IQHamburgerViewController : IQViewController {
 
     var containerViewController: IQHamburgerContainerViewController? { get }
-    var contentViewController: IQHamburgerContentViewController { get }
+    var viewController: IQHamburgerContentViewController { get }
     
     func shouldInteractive() -> Bool
 
@@ -89,7 +89,7 @@ public protocol IQHamburgerViewController : IQViewController {
 public extension IQHamburgerViewController {
 
     var containerViewController: IQHamburgerContainerViewController? {
-        get { return self.parent as? IQHamburgerContainerViewController }
+        get { return self.parentViewController as? IQHamburgerContainerViewController }
     }
 
 }
@@ -107,7 +107,7 @@ public protocol IQHamburgerContentViewController : IQViewController {
 public extension IQHamburgerContentViewController {
 
     var hamburgerViewController: IQHamburgerViewController? {
-        get { return self.parentOf() }
+        get { return self.parentViewControllerOf() }
     }
     
     func hamburgerShouldInteractive() -> Bool {

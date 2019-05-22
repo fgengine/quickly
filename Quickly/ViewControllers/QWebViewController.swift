@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDelegate, UIScrollViewDelegate, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController {
+open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDelegate, UIScrollViewDelegate, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController {
     
     public var contentOffset: CGPoint {
         get {
@@ -16,8 +16,6 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
             return self.webView.scrollView.contentSize
         }
     }
-    public var leftEdgeInset: CGFloat = 0
-    public var rightEdgeInset: CGFloat = 0
     public var allowInvalidCertificates: Bool = false
     public var localCertificateUrls: [URL] = []
     public private(set) lazy var webView: WKWebView = {

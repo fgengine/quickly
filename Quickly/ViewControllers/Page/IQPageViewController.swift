@@ -86,7 +86,7 @@ public protocol IQPageContainerViewController : IQViewController {
 public protocol IQPageViewController : IQContentOwnerViewController {
 
     var containerViewController: IQPageContainerViewController? { get }
-    var contentViewController: IQPageContentViewController { get }
+    var viewController: IQPageContentViewController { get }
     var item: QPagebarItem? { set get }
     var forwardAnimation: IQPageViewControllerAnimation? { set get }
     var backwardAnimation: IQPageViewControllerAnimation? { set get }
@@ -99,7 +99,7 @@ public protocol IQPageViewController : IQContentOwnerViewController {
 extension IQPageViewController {
 
     public var containerViewController: IQPageContainerViewController? {
-        get { return self.parent as? IQPageContainerViewController }
+        get { return self.parentViewController as? IQPageContainerViewController }
     }
 
 }
@@ -121,7 +121,7 @@ public protocol IQPageContentViewController : IQContentViewController {
 extension IQPageContentViewController {
 
     public var pageViewController: IQPageViewController? {
-        get { return self.parentOf() }
+        get { return self.parentViewControllerOf() }
     }
     public var pageItem: QPagebarItem? {
         set(value) { self.pageViewController?.item = value }

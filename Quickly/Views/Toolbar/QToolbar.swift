@@ -28,7 +28,10 @@ open class QToolbarStyleSheet : IQStyleSheet {
 
 public class QToolbar : UIToolbar {
     
-    init(items: [UIBarButtonItem]) {
+    public init(
+        styleSheet: QToolbarStyleSheet? = nil,
+        items: [UIBarButtonItem] = []
+    ) {
         super.init(
             frame: CGRect(
                 x: 0,
@@ -37,7 +40,12 @@ public class QToolbar : UIToolbar {
                 height: 50
             )
         )
-        self.items = items
+        if let styleSheet = styleSheet {
+            self.apply(styleSheet)
+        }
+        if items.count > 0 {
+            self.items = items
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

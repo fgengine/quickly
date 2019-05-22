@@ -110,7 +110,7 @@ public protocol IQDialogContainerBackgroundView : class {
 public protocol IQDialogViewController : IQViewController {
 
     var containerViewController: IQDialogContainerViewController? { get }
-    var contentViewController: IQDialogContentViewController { get }
+    var viewController: IQDialogContentViewController { get }
     var widthBehaviour: QDialogViewControllerSizeBehaviour { set get }
     var heightBehaviour: QDialogViewControllerSizeBehaviour { set get }
     var verticalAlignment: QDialogViewControllerVerticalAlignment { set get }
@@ -126,7 +126,7 @@ public protocol IQDialogViewController : IQViewController {
 public extension IQDialogViewController {
 
     var containerViewController: IQDialogContainerViewController? {
-        get { return self.parent as? IQDialogContainerViewController }
+        get { return self.parentViewController as? IQDialogContainerViewController }
     }
 
     func dismissDialog(animated: Bool, completion: (() -> Swift.Void)?) {
@@ -149,7 +149,7 @@ public protocol IQDialogContentViewController : IQViewController {
 public extension IQDialogContentViewController {
 
     var dialogViewController: IQDialogViewController? {
-        get { return self.parentOf() }
+        get { return self.parentViewControllerOf() }
     }
 
 }

@@ -58,7 +58,7 @@ public protocol IQModalContainerViewController : IQViewController {
 public protocol IQModalViewController : IQViewController {
 
     var containerViewController: IQModalContainerViewController? { get }
-    var contentViewController: IQModalContentViewController { get }
+    var viewController: IQModalContentViewController { get }
     var presentAnimation: IQModalViewControllerFixedAnimation? { get }
     var dismissAnimation: IQModalViewControllerFixedAnimation? { get }
     var interactiveDismissAnimation: IQModalViewControllerInteractiveAnimation? { get }
@@ -70,7 +70,7 @@ public protocol IQModalViewController : IQViewController {
 public extension IQModalViewController {
 
     var containerViewController: IQModalContainerViewController? {
-        get { return self.parent as? IQModalContainerViewController }
+        get { return self.parentViewController as? IQModalContainerViewController }
     }
 
     func dismissModal(animated: Bool, completion: (() -> Swift.Void)?) {
@@ -91,7 +91,7 @@ public protocol IQModalContentViewController : IQViewController {
 public extension IQModalContentViewController {
 
     var modalViewController: IQModalViewController? {
-        get { return self.parentOf() }
+        get { return self.parentViewControllerOf() }
     }
 
 }

@@ -5,17 +5,17 @@
 open class QViewController : NSObject, IQViewController {
 
     open weak var delegate: IQViewControllerDelegate?
-    open weak var parent: IQViewController? {
+    open weak var parentViewController: IQViewController? {
         set(value) {
             guard self._parent !== value else { return }
             if self._parentChanging == false {
                 self._parentChanging = true
-                if let parent = self.parent {
-                    parent.removeChild(self)
+                if let parent = self.parentViewController {
+                    parent.remove(childViewController: self)
                 }
                 self._parent = value
-                if let parent = self.parent {
-                    parent.addChild(self)
+                if let parent = self.parentViewController {
+                    parent.add(childViewController: self)
                 }
                 if self.isLoaded == true {
                     self.didChangeContentEdgeInsets()
@@ -27,7 +27,11 @@ open class QViewController : NSObject, IQViewController {
         }
         get { return self._parent }
     }
-    open private(set) var child: [IQViewController] = []
+    open private(set) var childViewControllers: [IQViewController] = []
+    open var inputViewController: IQInputViewController? {
+        set(value) { self._view.customInputViewController = value }
+        get { return self._view.customInputViewController }
+    }
     open var edgesForExtendedLayout: UIRectEdge {
         didSet(oldValue) {
             if self.edgesForExtendedLayout != oldValue && self.isLoaded == true {
@@ -48,7 +52,7 @@ open class QViewController : NSObject, IQViewController {
                 self._needUpdateInheritedEdgeInsets = false
                 var edgeInsets = UIEdgeInsets.zero
                 var edges = self.edgesForExtendedLayout
-                var target = self.parent
+                var target = self.parentViewController
                 while let vc = target {
                     let additionalEdgeInsets = vc.additionalEdgeInsets
                     let edgesForExtendedLayout = vc.edgesForExtendedLayout
@@ -80,7 +84,7 @@ open class QViewController : NSObject, IQViewController {
                             edges.remove(.bottom)
                         }
                     }
-                    target = vc.parent
+                    target = vc.parentViewController
                 }
                 self._inheritedEdgeInsets = edgeInsets
             }
@@ -185,7 +189,7 @@ open class QViewController : NSObject, IQViewController {
         #endif
         self._needUpdateInheritedEdgeInsets = true
         self.setNeedLayout()
-        self.child.forEach({
+        self.childViewControllers.forEach({
             $0.didChangeContentEdgeInsets()
         })
     }
@@ -287,41 +291,33 @@ open class QViewController : NSObject, IQViewController {
         }
         #endif
     }
-
-    open func addViewController(_ viewController: IQViewController) {
-        viewController.parent = self
-    }
-
-    open func removeViewController(_ viewController: IQViewController) {
-        viewController.parent = nil
-    }
     
     open func removeFromParentViewController() {
-        self.parent = nil
+        self.parentViewController = nil
     }
 
-    open func parentOf< ParentType >() -> ParentType? {
-        var parent = self.parent
+    open func parentViewControllerOf< ParentType >() -> ParentType? {
+        var parent = self.parentViewController
         while let safe = parent {
             if let temp = safe as? ParentType {
                 return temp
             }
-            parent = safe.parent
+            parent = safe.parentViewController
         }
         return nil
     }
 
-    open func addChild(_ viewController: IQViewController) {
-        if self.child.contains(where: { return $0 === viewController }) == false {
-            self.child.append(viewController)
-            viewController.parent = self
+    open func add(childViewController viewController: IQViewController) {
+        if self.childViewControllers.contains(where: { return $0 === viewController }) == false {
+            self.childViewControllers.append(viewController)
+            viewController.parentViewController = self
         }
     }
 
-    open func removeChild(_ viewController: IQViewController) {
-        if let index = self.child.firstIndex(where: { return $0 === viewController }) {
-            self.child.remove(at: index)
-            viewController.parent = nil
+    open func remove(childViewController viewController: IQViewController) {
+        if let index = self.childViewControllers.firstIndex(where: { return $0 === viewController }) {
+            self.childViewControllers.remove(at: index)
+            viewController.parentViewController = nil
         }
     }
 
@@ -344,7 +340,7 @@ open class QViewController : NSObject, IQViewController {
     open func setNeedUpdateStatusBar() {
         if let delegate = self.delegate {
             delegate.requestUpdateStatusBar(viewController: self)
-        } else if let parent = self.parent {
+        } else if let parent = self.parentViewController {
             parent.setNeedUpdateStatusBar()
         }
     }
@@ -352,6 +348,39 @@ open class QViewController : NSObject, IQViewController {
     private class View : QDisplayView {
         
         weak var viewController: IQViewController?
+        var customInputViewController: IQInputViewController? {
+            didSet(oldValue) {
+                if(self.customInputViewController !== oldValue) {
+                    if(self.isFirstResponder == true) {
+                        if let vc = oldValue {
+                            vc.willDismiss(animated: true)
+                            vc.didDismiss(animated: true)
+                        }
+                        self.reloadInputViews()
+                        if let vc = self.customInputViewController {
+                            vc.willPresent(animated: true)
+                            vc.didPresent(animated: true)
+                        }
+                    } else {
+                        if self.customInputViewController != nil {
+                            self.becomeFirstResponder()
+                        } else {
+                            self.resignFirstResponder()
+                        }
+                    }
+                }
+            }
+        }
+        override var inputAccessoryView: UIView? {
+            get { return self.customInputViewController?.toolbar }
+        }
+        override var inputView: UIView? {
+            get { return self.customInputViewController?.view }
+        }
+        
+        override var canBecomeFirstResponder: Bool {
+            get { return self.customInputViewController != nil }
+        }
         
         init(viewController: QViewController) {
             self.viewController = viewController
@@ -378,6 +407,24 @@ open class QViewController : NSObject, IQViewController {
             if let vc = self.viewController {
                 vc.layout(bounds: self.bounds)
             }
+        }
+        
+        @discardableResult
+        open override func becomeFirstResponder() -> Bool {
+            guard super.becomeFirstResponder() == true else { return false }
+            guard let vc = self.customInputViewController else { return false }
+            vc.willPresent(animated: true)
+            vc.didPresent(animated: true)
+            return true
+        }
+        
+        @discardableResult
+        open override func resignFirstResponder() -> Bool {
+            guard super.resignFirstResponder() == true else { return false }
+            guard let vc = self.customInputViewController else { return false }
+            vc.willDismiss(animated: true)
+            vc.didDismiss(animated: true)
+            return true
         }
         
         override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {

@@ -98,32 +98,40 @@ open class QImageView : QDisplayView {
         }
     }
     public var localSource: QImageLocalSource? {
-        didSet {
-            if let source = self.localSource {
-                self._localView.image = source.image
-                self._localView.size = source.size
-                self._localView.scale = source.scale
-                self._localView.tintColor = source.tintColor
-            } else {
-                self._localView.image = nil
-                self._localView.size = nil
-                self._localView.scale = .origin
-                self._localView.tintColor = nil
+        didSet(oldValue) {
+            if self.localSource !== oldValue {
+                if let source = self.localSource {
+                    self._localView.image = source.image
+                    self._localView.size = source.size
+                    self._localView.scale = source.scale
+                    self._localView.tintColor = source.tintColor
+                } else {
+                    self._localView.image = nil
+                    self._localView.size = nil
+                    self._localView.scale = .origin
+                    self._localView.tintColor = nil
+                }
             }
         }
     }
     public var remoteSource: QImageRemoteSource? {
-        didSet {
-            if let source = self.remoteSource {
-                self._remoteView.size = source.size
-                self._remoteView.scale = source.scale
-                self._remoteView.tintColor = source.tintColor
-                self._start(url: source.url, loader: source.loader, filter: source.filter)
-            } else {
-                self._remoteView.size = nil
-                self._remoteView.scale = .origin
-                self._remoteView.tintColor = nil
-                self._stop()
+        didSet(oldValue) {
+            if self.remoteSource !== oldValue {
+                if let source = self.remoteSource {
+                    self._remoteView.image = nil
+                    self._remoteView.size = source.size
+                    self._remoteView.scale = source.scale
+                    self._remoteView.tintColor = source.tintColor
+                    self._start(url: source.url, loader: source.loader, filter: source.filter)
+                } else {
+                    self._remoteView.image = nil
+                    self._remoteView.size = nil
+                    self._remoteView.scale = .origin
+                    self._remoteView.tintColor = nil
+                    self._stop()
+                }
+                self._localView.isHidden = false
+                self._remoteView.isHidden = true
             }
         }
     }
@@ -184,7 +192,7 @@ open class QImageView : QDisplayView {
     
     deinit {
         if let loader = self.loader {
-            loader.cancel(self)
+            loader.cancel(target: self)
         }
     }
 
@@ -248,23 +256,21 @@ private extension QImageView {
     func _start(url: URL, loader: QImageLoader?, filter: IQImageLoaderFilter?) {
         if self.isDownloading == true {
             if let loader = self.loader {
-                loader.cancel(self)
+                loader.cancel(target: self)
             }
         }
         self.loader = loader ?? QImageLoader.shared
-        self.loader.download(url, filter: filter, target: self)
+        self.loader.download(url: url, filter: filter, target: self)
         self.isDownloading = true
-        self._remoteView.isHidden = true
     }
     
     func _stop() {
         if self.isDownloading == true {
             if let loader = self.loader {
-                loader.cancel(self)
+                loader.cancel(target: self)
                 self.loader = nil
             }
             self.isDownloading = false
-            self._remoteView.isHidden = true
         }
     }
     
@@ -272,24 +278,17 @@ private extension QImageView {
 
 extension QImageView : IQImageLoaderTarget {
     
-    public func imageLoader(_ imageLoader: QImageLoader, cacheImage: UIImage) {
-        self._remoteView.image = cacheImage
+    public func imageLoader(progress: Progress) {
+    }
+    
+    public func imageLoader(image: UIImage) {
+        self._remoteView.image = image
         self._localView.isHidden = true
         self._remoteView.isHidden = false
         self.isDownloading = false
     }
     
-    public func imageLoader(_ imageLoader: QImageLoader, downloadProgress: Progress) {
-    }
-    
-    public func imageLoader(_ imageLoader: QImageLoader, downloadImage: UIImage) {
-        self._remoteView.image = downloadImage
-        self._localView.isHidden = true
-        self._remoteView.isHidden = false
-        self.isDownloading = false
-    }
-    
-    public func imageLoader(_ imageLoader: QImageLoader, downloadError: Error) {
+    public func imageLoader(error: Error) {
         self._localView.isHidden = false
         self._remoteView.isHidden = true
         self.isDownloading = false

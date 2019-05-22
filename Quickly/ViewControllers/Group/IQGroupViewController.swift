@@ -47,7 +47,7 @@ public protocol IQGroupContainerViewController : IQViewController {
 public protocol IQGroupViewController : IQContentOwnerViewController {
 
     var containerViewController: IQGroupContainerViewController? { get }
-    var contentViewController: IQGroupContentViewController { get }
+    var viewController: IQGroupContentViewController { get }
     var barHidden: Bool { set get }
     var barVisibility: CGFloat { set get }
     var barItem: QGroupbarItem? { set get }
@@ -60,7 +60,7 @@ public protocol IQGroupViewController : IQContentOwnerViewController {
 extension IQGroupViewController {
 
     public var containerViewController: IQGroupContainerViewController? {
-        get { return self.parent as? IQGroupContainerViewController }
+        get { return self.parentViewController as? IQGroupContainerViewController }
     }
     public var barHidden: Bool {
         set(value) { self.containerViewController?.barHidden = value }
@@ -90,7 +90,7 @@ public protocol IQGroupContentViewController : IQContentViewController {
 extension IQGroupContentViewController {
 
     public var groupViewController: IQGroupViewController? {
-        get { return self.parentOf() }
+        get { return self.parentViewControllerOf() }
     }
     public var groupbarHidden: Bool {
         set(value) { self.groupViewController?.barHidden = value }

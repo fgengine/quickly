@@ -441,11 +441,11 @@ extension QHamburgerContainerViewController {
     }
     
     private func _add(childViewController: IQHamburgerViewController) {
-        childViewController.parent = self
+        childViewController.parentViewController = self
     }
     
     private func _remove(childViewController: IQHamburgerViewController) {
-        childViewController.parent = nil
+        childViewController.parentViewController = nil
     }
     
     private func _appear(viewController: IQHamburgerViewController) {

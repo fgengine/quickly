@@ -93,7 +93,7 @@ public protocol IQStackViewController : IQContentOwnerViewController {
     var barView: QStackbar? { set get }
     var barHeight: CGFloat { set get }
     var barHidden: Bool { set get }
-    var contentViewController: IQStackContentViewController { get }
+    var viewController: IQStackContentViewController { get }
 
     var presentAnimation: IQStackViewControllerPresentAnimation? { set get }
     var dismissAnimation: IQStackViewControllerDismissAnimation? { set get }
@@ -110,7 +110,7 @@ public protocol IQStackViewController : IQContentOwnerViewController {
 extension IQStackViewController {
 
     public var containerViewController: IQStackContainerViewController? {
-        get { return self.parent as? IQStackContainerViewController }
+        get { return self.parentViewController as? IQStackContainerViewController }
     }
 
     public func pop(animated: Bool, completion: (() -> Swift.Void)?) {
@@ -144,7 +144,7 @@ public protocol IQStackContentViewController : IQContentViewController {
 extension IQStackContentViewController {
 
     public var stackViewController: IQStackViewController? {
-        get { return self.parentOf() }
+        get { return self.parentViewControllerOf() }
     }
     public var stackbar: QStackbar? {
         set(value) { self.stackViewController?.barView = value }

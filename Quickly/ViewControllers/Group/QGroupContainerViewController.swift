@@ -341,11 +341,11 @@ extension QGroupContainerViewController {
     }
     
     private func _add(childViewController: IQGroupViewController) {
-        childViewController.parent = self
+        childViewController.parentViewController = self
     }
     
     private func _remove(childViewController: IQGroupViewController) {
-        childViewController.parent = nil
+        childViewController.parentViewController = nil
     }
 
     private func _appear(viewController: IQGroupViewController) {

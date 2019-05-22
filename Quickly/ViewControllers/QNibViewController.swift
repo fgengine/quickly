@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QNibViewController : QViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQHamburgerContentViewController {
+open class QNibViewController : QViewController, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQHamburgerContentViewController {
 
     public var contentOffset: CGPoint {
         get { return CGPoint.zero }
@@ -13,8 +13,6 @@ open class QNibViewController : QViewController, IQStackContentViewController, I
             return self.view.bounds.size
         }
     }
-    public var screenLeftInset: CGFloat = 0
-    public var screenRightInset: CGFloat = 0
     @IBOutlet
     public var rootView: UIView! {
         willSet {
@@ -134,10 +132,10 @@ extension QNibViewController : IQContainerSpec {
         get { return self.view.bounds.size }
     }
     open var containerLeftInset: CGFloat {
-        get { return self.screenLeftInset }
+        get { return self.inheritedEdgeInsets.left }
     }
     open var containerRightInset: CGFloat {
-        get { return self.screenRightInset }
+        get { return self.inheritedEdgeInsets.right }
     }
     
 }

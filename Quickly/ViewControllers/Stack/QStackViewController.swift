@@ -16,7 +16,7 @@ open class QStackViewController : QViewController, IQStackViewController {
         set(value) { self.set(barHidden: value) }
         get { return self._barHidden }
     }
-    open private(set) var contentViewController: IQStackContentViewController
+    open private(set) var viewController: IQStackContentViewController
     open var presentAnimation: IQStackViewControllerPresentAnimation?
     open var dismissAnimation: IQStackViewControllerDismissAnimation?
     open var interactiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation?
@@ -25,24 +25,24 @@ open class QStackViewController : QViewController, IQStackViewController {
     private var _barHeight: CGFloat
     private var _barHidden: Bool
 
-    public init(_ contentViewController: IQStackContentViewController) {
+    public init(barHeight: CGFloat = 50, barHidden: Bool = false, viewController: IQStackContentViewController) {
         self._barHeight = 50
         self._barHidden = false
-        self.contentViewController = contentViewController
+        self.viewController = viewController
         super.init()
     }
 
     open override func setup() {
         super.setup()
 
-        self.contentViewController.parent = self
+        self.viewController.parentViewController = self
     }
 
     open override func didLoad() {
         self._updateAdditionalEdgeInsets()
 
-        self.contentViewController.view.frame = self.view.bounds
-        self.view.addSubview(self.contentViewController.view)
+        self.viewController.view.frame = self.view.bounds
+        self.view.addSubview(self.viewController.view)
 
         if let stackbar = self._barView {
             self.view.addSubview(stackbar)
@@ -50,7 +50,7 @@ open class QStackViewController : QViewController, IQStackViewController {
     }
 
     open override func layout(bounds: CGRect) {
-        self.contentViewController.view.frame = bounds
+        self.viewController.view.frame = bounds
         if let stackbar = self._barView {
             stackbar.edgeInsets = self._barEdgeInsets()
             stackbar.frame = self._barFrame(bounds: bounds)
@@ -59,62 +59,62 @@ open class QStackViewController : QViewController, IQStackViewController {
 
     open override func prepareInteractivePresent() {
         super.prepareInteractivePresent()
-        self.contentViewController.prepareInteractivePresent()
+        self.viewController.prepareInteractivePresent()
     }
 
     open override func cancelInteractivePresent() {
         super.cancelInteractivePresent()
-        self.contentViewController.cancelInteractivePresent()
+        self.viewController.cancelInteractivePresent()
     }
 
     open override func finishInteractivePresent() {
         super.finishInteractivePresent()
-        self.contentViewController.finishInteractivePresent()
+        self.viewController.finishInteractivePresent()
     }
 
     open override func willPresent(animated: Bool) {
         super.willPresent(animated: animated)
-        self.contentViewController.willPresent(animated: animated)
+        self.viewController.willPresent(animated: animated)
     }
 
     open override func didPresent(animated: Bool) {
         super.didPresent(animated: animated)
-        self.contentViewController.didPresent(animated: animated)
+        self.viewController.didPresent(animated: animated)
     }
 
     open override func prepareInteractiveDismiss() {
         super.prepareInteractiveDismiss()
-        self.contentViewController.prepareInteractiveDismiss()
+        self.viewController.prepareInteractiveDismiss()
     }
 
     open override func cancelInteractiveDismiss() {
         super.cancelInteractiveDismiss()
-        self.contentViewController.cancelInteractiveDismiss()
+        self.viewController.cancelInteractiveDismiss()
     }
 
     open override func finishInteractiveDismiss() {
         super.finishInteractiveDismiss()
-        self.contentViewController.finishInteractiveDismiss()
+        self.viewController.finishInteractiveDismiss()
     }
 
     open override func willDismiss(animated: Bool) {
         super.willDismiss(animated: animated)
-        self.contentViewController.willDismiss(animated: animated)
+        self.viewController.willDismiss(animated: animated)
     }
 
     open override func didDismiss(animated: Bool) {
         super.didDismiss(animated: animated)
-        self.contentViewController.didDismiss(animated: animated)
+        self.viewController.didDismiss(animated: animated)
     }
 
     open override func willTransition(size: CGSize) {
         super.willTransition(size: size)
-        self.contentViewController.willTransition(size: size)
+        self.viewController.willTransition(size: size)
     }
 
     open override func didTransition(size: CGSize) {
         super.didTransition(size: size)
-        self.contentViewController.didTransition(size: size)
+        self.viewController.didTransition(size: size)
     }
 
     open func set(barView: QStackbar?, animated: Bool = false) {
@@ -126,7 +126,7 @@ open class QStackViewController : QViewController, IQStackViewController {
             if let view = self._barView {
                 view.frame = self._barFrame(bounds: self.view.bounds)
                 view.edgeInsets = self._barEdgeInsets()
-                self.view.insertSubview(view, aboveSubview: self.contentViewController.view)
+                self.view.insertSubview(view, aboveSubview: self.viewController.view)
             }
             self.setNeedLayout()
         } else {
@@ -165,19 +165,19 @@ open class QStackViewController : QViewController, IQStackViewController {
     }
 
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
-        return self.contentViewController.supportedOrientations()
+        return self.viewController.supportedOrientations()
     }
 
     open override func preferedStatusBarHidden() -> Bool {
-        return self.contentViewController.preferedStatusBarHidden()
+        return self.viewController.preferedStatusBarHidden()
     }
 
     open override func preferedStatusBarStyle() -> UIStatusBarStyle {
-        return self.contentViewController.preferedStatusBarStyle()
+        return self.viewController.preferedStatusBarStyle()
     }
 
     open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
-        return self.contentViewController.preferedStatusBarAnimation()
+        return self.viewController.preferedStatusBarAnimation()
     }
     
 }

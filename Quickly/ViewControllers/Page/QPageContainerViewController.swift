@@ -406,11 +406,11 @@ extension QPageContainerViewController {
     }
     
     private func _add(childViewController: IQPageViewController) {
-        childViewController.parent = self
+        childViewController.parentViewController = self
     }
     
     private func _remove(childViewController: IQPageViewController) {
-        childViewController.parent = nil
+        childViewController.parentViewController = nil
     }
 
     private func _appear(viewController: IQPageViewController, frame: CGRect) {

@@ -282,11 +282,11 @@ extension QDialogContainerViewController {
     }
     
     private func _add(childViewController: IQDialogViewController) {
-        childViewController.parent = self
+        childViewController.parentViewController = self
     }
     
     private func _remove(childViewController: IQDialogViewController) {
-        childViewController.parent = nil
+        childViewController.parentViewController = nil
     }
 
     private func _appear(viewController: IQDialogViewController) {
@@ -401,8 +401,8 @@ extension QDialogContainerViewController : UIGestureRecognizerDelegate {
 
     open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard let vc = self.currentViewController else { return false }
-        let location = gestureRecognizer.location(in: vc.contentViewController.view)
-        return vc.contentViewController.view.point(inside: location, with: nil)
+        let location = gestureRecognizer.location(in: vc.viewController.view)
+        return vc.viewController.view.point(inside: location, with: nil)
     }
 
 }

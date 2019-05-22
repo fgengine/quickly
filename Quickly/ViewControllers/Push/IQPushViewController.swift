@@ -62,7 +62,7 @@ public protocol IQPushContainerViewController : IQViewController {
 public protocol IQPushViewController : IQViewController {
 
     var containerViewController: IQPushContainerViewController? { get }
-    var contentViewController: IQPushContentViewController { get }
+    var viewController: IQPushContentViewController { get }
     var state: QPushViewControllerState { set get }
     var offset: CGFloat { set get }
     var displayTime: TimeInterval? { get }
@@ -77,7 +77,7 @@ public protocol IQPushViewController : IQViewController {
 public extension IQPushViewController {
 
     var containerViewController: IQPushContainerViewController? {
-        get { return self.parent as? IQPushContainerViewController }
+        get { return self.parentViewController as? IQPushContainerViewController }
     }
 
     func dismissPush(animated: Bool, completion: (() -> Swift.Void)?) {
@@ -101,7 +101,7 @@ public protocol IQPushContentViewController : IQViewController {
 public extension IQPushContentViewController {
 
     var pushViewController: IQPushViewController? {
-        get { return self.parentOf() }
+        get { return self.parentViewControllerOf() }
     }
 
 }

@@ -34,7 +34,7 @@ public class QPushViewControllerInteractiveDismissAnimation : IQPushViewControll
     public func update(position: CGPoint, velocity: CGPoint) {
         let deltaPosition = position.y - self.position.y
         if deltaPosition > 0 {
-            let height = self.viewController.contentViewController.view.frame.height
+            let height = self.viewController.viewController.view.frame.height
             let progress = abs(deltaPosition) / height
             if progress > self.deceleration {
                 var limit = self.deceleration
@@ -70,7 +70,7 @@ public class QPushViewControllerInteractiveDismissAnimation : IQPushViewControll
     public func finish(_ complete: @escaping (_ completed: Bool) -> Void) {
         self.viewController.willDismiss(animated: true)
         let offset = self.viewController.offset
-        let height = self.viewController.contentViewController.view.frame.height
+        let height = self.viewController.viewController.view.frame.height
         let edgeInsets = self.viewController.inheritedEdgeInsets
         let hideOffset = height + edgeInsets.top
         let duration = TimeInterval((hideOffset - offset) / self.acceleration)

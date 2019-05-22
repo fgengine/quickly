@@ -4,32 +4,24 @@
 
 public class QImageCache {
 
-    public typealias ImageClosure = (_ image: UIImage?) -> Void
-    public typealias SuccessClosure = () -> Void
-    public typealias FailureClosure = (_ error: Error) -> Void
-
-    public let name: String
+    public private(set) var name: String
     public private(set) var memory: [String: UIImage]
-    public private(set) lazy var queue: DispatchQueue = DispatchQueue(
-        label: self.name,
-        qos: .background,
-        attributes: [],
-        autoreleaseFrequency: .inherit,
-        target: nil
-    )
     public private(set) var url: URL
+    
+    private var fileManager: FileManager
 
     public init(name: String) throws {
         self.name = name
         self.memory = [:]
-        if let cachePath = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
+        self.fileManager = FileManager.default
+        if let cachePath = self.fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first {
             self.url = cachePath
         } else {
             self.url = URL(fileURLWithPath: NSHomeDirectory())
         }
         self.url.appendPathComponent(name)
-        if FileManager.default.fileExists(atPath: self.url.path) == false {
-            try FileManager.default.createDirectory(at: self.url, withIntermediateDirectories: true, attributes: nil)
+        if self.fileManager.fileExists(atPath: self.url.path) == false {
+            try self.fileManager.createDirectory(at: self.url, withIntermediateDirectories: true, attributes: nil)
         }
         NotificationCenter.default.addObserver(self, selector: #selector(self._didReceiveMemoryWarning(_:)), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
     }
@@ -38,140 +30,85 @@ public class QImageCache {
         NotificationCenter.default.removeObserver(self)
     }
 
-    public func isExist(_ key: String) -> Bool {
-        let memoryImage = self.queue.sync {
-            return self.memory[key]
+    public func isExist(url: URL, filter: IQImageLoaderFilter? = nil) -> Bool {
+        guard let key = self._key(url: url, filter: filter) else {
+            return false
         }
-        if memoryImage != nil {
+        if self.memory[key] != nil {
             return true
         }
         let url = self.url.appendingPathComponent(key)
-        return FileManager.default.fileExists(atPath: url.path)
+        return self.fileManager.fileExists(atPath: url.path)
     }
 
-    public func image(_ key: String) -> UIImage? {
-        let memoryImage = self.queue.sync {
-            return self.memory[key]
+    public func image(url: URL, filter: IQImageLoaderFilter? = nil) -> UIImage? {
+        guard let key = self._key(url: url, filter: filter) else {
+            return nil
         }
-        if let image = memoryImage {
+        if let image = self.memory[key] {
             return image
         }
         let url = self.url.appendingPathComponent(key)
         if let image = UIImage(contentsOfFile: url.path) {
-            self.queue.sync {
-                self.memory[key] = image
-            }
+            self.memory[key] = image
             return image
         }
         return nil
     }
 
-    public func image(_ key: String, complete: @escaping ImageClosure) {
-        self.queue.async {
-            if let image = self.memory[key] {
-                complete(image)
-            }
-            let url = self.url.appendingPathComponent(key)
-            if let image = UIImage(contentsOfFile: url.path) {
-                self.memory[key] = image
-                complete(image)
-            }
-        }
-    }
-
-    public func set(_ data: Data, image: UIImage, key: String, success: SuccessClosure?, failure: FailureClosure?) {
-        self.queue.sync {
-            self.memory[key] = image
-        }
+    public func set(data: Data, image: UIImage, url: URL, filter: IQImageLoaderFilter? = nil) throws {
+        guard let key = self._key(url: url, filter: filter) else { return }
         let url = self.url.appendingPathComponent(key)
-        if let success = success {
-            self.queue.async {
-                do {
-                    try data.write(to: url, options: .atomic)
-                    success()
-                } catch let error {
-                    failure?(error)
-                }
-            }
-        } else {
-            do {
-                try data.write(to: url, options: .atomic)
-            } catch let error {
-                failure?(error)
-            }
-        }
-    }
-
-    public func remove(_ key: String, success: SuccessClosure?, failure: FailureClosure?) {
-        self.queue.sync {
-            _ = self.memory.removeValue(forKey: key)
-        }
-        let url = self.url.appendingPathComponent(key)
-        if FileManager.default.fileExists(atPath: url.path) == true {
-            if let success = success {
-                self.queue.async {
-                    do {
-                        try FileManager.default.removeItem(at: url)
-                        success()
-                    } catch let error {
-                        failure?(error)
-                    }
-                }
-            } else {
-                do {
-                    try FileManager.default.removeItem(at: url)
-                } catch let error {
-                    failure?(error)
-                }
-            }
-        }
-    }
-
-    public func cleanup(_ success: SuccessClosure?, failure: FailureClosure?) {
-        self.queue.sync {
-            self.memory.removeAll()
-        }
         do {
-            let urls = try FileManager.default.contentsOfDirectory(at: self.url, includingPropertiesForKeys: nil, options: [ .skipsHiddenFiles ])
-            if let success = success {
-                self.queue.async {
-                    var lastError: Error? = nil
-                    for url in urls {
-                        do {
-                            try FileManager.default.removeItem(at: url)
-                        } catch let error {
-                            lastError = error
-                        }
-                    }
-                    if let lastError = lastError {
-                        failure?(lastError)
-                    } else {
-                        success()
-                    }
-                }
-            } else {
-                var lastError: Error? = nil
-                for url in urls {
-                    do {
-                        try FileManager.default.removeItem(at: url)
-                    } catch let error {
-                        lastError = error
-                    }
-                }
-                if let lastError = lastError {
-                    failure?(lastError)
-                }
-            }
+            try data.write(to: url, options: .atomic)
+            self.memory[key] = image
         } catch let error {
-            failure?(error)
+            throw error
+        }
+    }
+
+    public func remove(url: URL, filter: IQImageLoaderFilter? = nil) throws {
+        guard let key = self._key(url: url, filter: filter) else { return }
+        self.memory.removeValue(forKey: key)
+        let url = self.url.appendingPathComponent(key)
+        if self.fileManager.fileExists(atPath: url.path) == true {
+            do {
+                try self.fileManager.removeItem(at: url)
+            } catch let error {
+                throw error
+            }
+        }
+    }
+
+    public func cleanup() {
+        self.memory.removeAll()
+        if let urls = try? self.fileManager.contentsOfDirectory(at: self.url, includingPropertiesForKeys: nil, options: [ .skipsHiddenFiles ]) {
+            for url in urls {
+                try? self.fileManager.removeItem(at: url)
+            }
         }
     }
 
     @objc
     private func _didReceiveMemoryWarning(_ notification: NSNotification) {
-        self.queue.sync {
-            self.memory.removeAll()
-        }
+        self.memory.removeAll()
     }
 
+}
+
+private extension QImageCache {
+    
+    func _key(url: URL, filter: IQImageLoaderFilter?) -> String? {
+        var unique: String
+        if let filter = filter {
+            unique = "{\(filter.name)}{\(url.absoluteString)}"
+        } else {
+            unique = url.absoluteString
+        }
+        if let key = unique.sha256 {
+            return key
+        }
+        return nil
+    }
+    
 }

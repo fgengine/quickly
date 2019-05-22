@@ -14,11 +14,11 @@ open class QMainViewController : QViewController {
                     vc.view.removeFromSuperview()
                 }
             }
-            vc.parent = nil
+            vc.parentViewController = nil
         }
         didSet {
             guard let vc = self.backgroundViewController else { return }
-            vc.parent = self
+            vc.parentViewController = self
             if self.isLoaded == true {
                 self._appendBackgroundController(vc)
                 vc.willPresent(animated: false)
@@ -36,11 +36,11 @@ open class QMainViewController : QViewController {
                     vc.view.removeFromSuperview()
                 }
             }
-            vc.parent = nil
+            vc.parentViewController = nil
         }
         didSet {
             guard let vc = self.contentViewController else { return }
-            vc.parent = self
+            vc.parentViewController = self
             if self.isLoaded == true {
                 self._appendContentController(vc)
                 vc.willPresent(animated: false)
@@ -58,11 +58,11 @@ open class QMainViewController : QViewController {
                     vc.view.removeFromSuperview()
                 }
             }
-            vc.parent = nil
+            vc.parentViewController = nil
         }
         didSet {
             guard let vc = self.modalContainerViewController else { return }
-            vc.parent = self
+            vc.parentViewController = self
             if self.isLoaded == true {
                 self._appendModalContainer(vc)
                 vc.willPresent(animated: false)
@@ -80,11 +80,11 @@ open class QMainViewController : QViewController {
                     vc.view.removeFromSuperview()
                 }
             }
-            vc.parent = nil
+            vc.parentViewController = nil
         }
         didSet {
             guard let vc = self.pushContainerViewController else { return }
-            vc.parent = self
+            vc.parentViewController = self
             if self.isLoaded == true {
                 self._appendPushContainer(vc)
                 vc.willPresent(animated: false)
@@ -102,11 +102,11 @@ open class QMainViewController : QViewController {
                     vc.view.removeFromSuperview()
                 }
             }
-            vc.parent = nil
+            vc.parentViewController = nil
         }
         didSet {
             guard let vc = self.dialogContainerViewController else { return }
-            vc.parent = self
+            vc.parentViewController = self
             if self.isLoaded == true {
                 self._appendDialogContainer(vc)
                 vc.willPresent(animated: false)

@@ -18,7 +18,7 @@ public protocol IQContentViewController : IQViewController {
 extension IQContentViewController {
 
     public var contentOwnerViewController: IQContentOwnerViewController? {
-        get { return self.parent as? IQContentOwnerViewController }
+        get { return self.parentViewController as? IQContentOwnerViewController }
     }
 
 }

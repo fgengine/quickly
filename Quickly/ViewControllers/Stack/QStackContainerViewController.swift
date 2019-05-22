@@ -217,7 +217,7 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     }
 
     open func push(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        let stackViewController = QStackViewController(viewController)
+        let stackViewController = QStackViewController(viewController: viewController)
         self.push(viewController: stackViewController, animated: animated, completion: completion)
     }
     
@@ -232,7 +232,7 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     }
     
     open func replace(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?) {
-        let stackViewController = QStackViewController(viewController)
+        let stackViewController = QStackViewController(viewController: viewController)
         self.replace(viewController: stackViewController, animated: animated, completion: completion)
     }
 
@@ -358,11 +358,11 @@ extension QStackContainerViewController {
     }
     
     private func _add(childViewController: IQStackViewController) {
-        childViewController.parent = self
+        childViewController.parentViewController = self
     }
     
     private func _remove(childViewController: IQStackViewController) {
-        childViewController.parent = nil
+        childViewController.parentViewController = nil
     }
 
     private func _appear(viewController: IQStackViewController) {

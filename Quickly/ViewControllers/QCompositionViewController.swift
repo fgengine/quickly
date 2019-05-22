@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QCompositionViewController< Composition: IQComposition > : QViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController {
+open class QCompositionViewController< Composition: IQComposition > : QViewController, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController {
 
     public var contentOffset: CGPoint {
         get { return CGPoint.zero }
@@ -13,8 +13,6 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
             return self.view.bounds.size
         }
     }
-    public var screenLeftInset: CGFloat = 0
-    public var screenRightInset: CGFloat = 0
     public var backgroundView: UIView? {
         willSet {
             guard let backgroundView = self.backgroundView else { return }
@@ -146,10 +144,10 @@ extension QCompositionViewController : IQContainerSpec {
         get { return self.view.bounds.size }
     }
     open var containerLeftInset: CGFloat {
-        get { return self.screenLeftInset }
+        get { return self.inheritedEdgeInsets.left }
     }
     open var containerRightInset: CGFloat {
-        get { return self.screenRightInset }
+        get { return self.inheritedEdgeInsets.right }
     }
     
 }
