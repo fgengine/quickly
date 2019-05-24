@@ -9,7 +9,7 @@ public class QImageThumbnailLoaderFilter : IQImageLoaderFilter {
         get { return "\(self.size.width)x\(self.size.height)" }
     }
     
-    init(_ size: CGSize) {
+    public init(_ size: CGSize) {
         self.size = size
     }
     

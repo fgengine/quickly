@@ -68,15 +68,17 @@ public extension UIImage {
         guard let cgImage = self.cgImage, let colorSpace = cgImage.colorSpace else {
             return nil
         }
-        var rect = size.aspectFit(bounds: CGRect(origin: CGPoint.zero, size: size))
-        rect.size = CGSize(
-            width: floor(rect.width),
-            height: floor(rect.height)
+        let originalSize = self.size
+        let originalScale = self.scale
+        let aspectFitRect = originalSize.aspectFit(bounds: CGRect(origin: CGPoint.zero, size: size))
+        let newSize = CGSize(
+            width: floor(aspectFitRect.width),
+            height: floor(aspectFitRect.height)
         )
-        if let context = CGContext(data: nil, width: Int(rect.width), height: Int(rect.height), bitsPerComponent: cgImage.bitsPerComponent, bytesPerRow: 0, space: colorSpace, bitmapInfo: cgImage.bitmapInfo.rawValue) {
-            context.draw(cgImage, in: rect)
+        if let context = CGContext(data: nil, width: Int(newSize.width), height: Int(newSize.height), bitsPerComponent: cgImage.bitsPerComponent, bytesPerRow: 0, space: colorSpace, bitmapInfo: cgImage.bitmapInfo.rawValue) {
+            context.draw(cgImage, in: CGRect(origin: CGPoint.zero, size: newSize))
             if let image = context.makeImage() {
-                return UIImage(cgImage: image, scale: self.scale, orientation: .up)
+                return UIImage(cgImage: image, scale: originalScale, orientation: .up)
             }
         }
         return nil

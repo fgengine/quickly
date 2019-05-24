@@ -27,13 +27,20 @@ open class QInputViewController : QViewController, IQInputViewController {
     }
     
     open override func didLoad() {
-        self.view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: self.height)
+        self.view.frame = self._frame()
         self.viewController.view.frame = self.view.bounds
         self.view.addSubview(self.viewController.view)
     }
     
     open override func layout(bounds: CGRect) {
         self.viewController.view.frame = bounds
+    }
+    
+    open override func didChangeContentEdgeInsets() {
+        super.didChangeContentEdgeInsets()
+        if self.isLoaded == true {
+            self.view.frame = self._frame()
+        }
     }
     
     open override func prepareInteractivePresent() {
@@ -113,6 +120,15 @@ open class QInputViewController : QViewController, IQInputViewController {
     
     open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
         return self.viewController.preferedStatusBarAnimation()
+    }
+    
+}
+
+private extension QInputViewController {
+    
+    func _frame() -> CGRect {
+        let edgeInsets = self.inheritedEdgeInsets
+        return CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: edgeInsets.top + self.height + edgeInsets.bottom)
     }
     
 }

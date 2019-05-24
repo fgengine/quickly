@@ -42,7 +42,9 @@ public class QImageLoaderTask {
     
     public func execute(queue: DispatchQueue) {
         var workItem: DispatchWorkItem
-        if self.cache.isExist(url: self.url) == true {
+        if self.cache.isExist(url: self.url, filter: self.filter) == true {
+            workItem = self._cacheWorkItem()
+        } else if self.cache.isExist(url: self.url) == true {
             workItem = self._cacheWorkItem()
         } else if self.url.isFileURL == true {
             workItem = self._localWorkItem()

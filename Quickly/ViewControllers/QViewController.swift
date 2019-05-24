@@ -29,7 +29,21 @@ open class QViewController : NSObject, IQViewController {
     }
     open private(set) var childViewControllers: [IQViewController] = []
     open var inputViewController: IQInputViewController? {
-        set(value) { self._view.customInputViewController = value }
+        set(value) {
+            if self._view.customInputViewController !== value {
+                if let vc = self._view.customInputViewController {
+                    vc.parentViewController = nil
+                }
+                if let vc = value {
+                    var viewController: IQViewController = self
+                    while viewController.parentViewController != nil {
+                        viewController = viewController.parentViewController!
+                    }
+                    vc.parentViewController = viewController
+                }
+                self._view.customInputViewController = value
+            }
+        }
         get { return self._view.customInputViewController }
     }
     open var edgesForExtendedLayout: UIRectEdge {
