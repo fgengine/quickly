@@ -188,7 +188,7 @@ extension Data : IQDatabaseInputValue {
 
 // MARK: - Optional : IQDatabaseInputValue -
 
-extension Optional : IQDatabaseInputValue where Wrapped == IQDatabaseInputValue {
+extension Optional : IQDatabaseInputValue where Wrapped : IQDatabaseInputValue {
     
     public func bindTo(statement: QDatabase.Statement, at index: Int) throws {
         switch self {
@@ -201,7 +201,7 @@ extension Optional : IQDatabaseInputValue where Wrapped == IQDatabaseInputValue 
 
 // MARK: - RawRepresentable : IQDatabaseInputValue -
 
-extension RawRepresentable where RawValue == IQDatabaseInputValue {
+extension RawRepresentable where RawValue : IQDatabaseInputValue {
     
     public func bindTo(statement: QDatabase.Statement, at index: Int) throws {
         try self.rawValue.bindTo(statement: statement, at: index)

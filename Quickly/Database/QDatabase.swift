@@ -69,7 +69,7 @@ public class QDatabase {
         public let limit: Int
         public let offset: Int?
         
-        public init(limit: Int, offset: Int?) {
+        public init(limit: Int, offset: Int? = nil) {
             self.limit = limit
             self.offset = offset
         }
