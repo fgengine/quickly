@@ -106,6 +106,7 @@
 		402F1FB61F4EF525007625CA /* QApiError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402F1FB51F4EF525007625CA /* QApiError.swift */; };
 		402F1FBA1F4F380B007625CA /* QApiProvider+Internal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402F1FB91F4F380B007625CA /* QApiProvider+Internal.swift */; };
 		402F1FBD1F4F446F007625CA /* QImplAuthenticationChallenge.h in Headers */ = {isa = PBXBuildFile; fileRef = 402F1FBB1F4F446F007625CA /* QImplAuthenticationChallenge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		40311A85229C94F700578269 /* IQDatabaseEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40311A84229C94F700578269 /* IQDatabaseEnum.swift */; };
 		4034EFAD220C30F200DA2426 /* QXmlReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4034EFAC220C30F200DA2426 /* QXmlReader.swift */; };
 		4034EFAF220C319800DA2426 /* QXml.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4034EFAE220C319800DA2426 /* QXml.swift */; };
 		40385F2121F86890001125D0 /* QMultiTextFieldComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40385F2021F86890001125D0 /* QMultiTextFieldComposition.swift */; };
@@ -446,6 +447,7 @@
 		402F1FB91F4F380B007625CA /* QApiProvider+Internal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QApiProvider+Internal.swift"; sourceTree = "<group>"; };
 		402F1FBB1F4F446F007625CA /* QImplAuthenticationChallenge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QImplAuthenticationChallenge.h; sourceTree = "<group>"; };
 		402F1FBC1F4F446F007625CA /* QImplAuthenticationChallenge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QImplAuthenticationChallenge.m; sourceTree = "<group>"; };
+		40311A84229C94F700578269 /* IQDatabaseEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQDatabaseEnum.swift; sourceTree = "<group>"; };
 		4034EFAC220C30F200DA2426 /* QXmlReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QXmlReader.swift; sourceTree = "<group>"; };
 		4034EFAE220C319800DA2426 /* QXml.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QXml.swift; sourceTree = "<group>"; };
 		40385F2021F86890001125D0 /* QMultiTextFieldComposition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QMultiTextFieldComposition.swift; sourceTree = "<group>"; };
@@ -1058,6 +1060,7 @@
 			children = (
 				4025A7AE2261182500B4160F /* Expressions */,
 				4028C59B225F504100C1E761 /* QDatabase.swift */,
+				40311A84229C94F700578269 /* IQDatabaseEnum.swift */,
 				4028C5A4225FDC9D00C1E761 /* IQDatabaseDefaultValue.swift */,
 				4028C5A1225FB53D00C1E761 /* IQDatabaseInputValue.swift */,
 				402585782262232500BF9A66 /* IQDatabaseOutputValue.swift */,
@@ -1820,6 +1823,7 @@
 				4085C06D20E4CDCD0079AF90 /* QAnimationEaseExponencial.swift in Sources */,
 				4007B0A92144236900AE17DC /* QTitleValueComposition.swift in Sources */,
 				402720D02074C88A00094287 /* IQStyleSheet.swift in Sources */,
+				40311A85229C94F700578269 /* IQDatabaseEnum.swift in Sources */,
 				40035968207FA4A900D7F449 /* QScrollView.swift in Sources */,
 				4079B10B219ABCCB00917A5D /* QMultiTextField.swift in Sources */,
 				406BC12E2177231C00164485 /* IQProxy.swift in Sources */,

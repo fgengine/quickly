@@ -140,6 +140,16 @@ extension Double : IQDatabaseOutputValue {
     
 }
 
+// MARK: - Decimal : IQDatabaseOutputValue -
+
+extension Decimal : IQDatabaseOutputValue {
+    
+    public static func value(statement: QDatabase.Statement, at index: Int) -> Decimal {
+        return statement.value(at: index)
+    }
+    
+}
+
 // MARK: - String : IQDatabaseOutputValue -
 
 extension String : IQDatabaseOutputValue {

@@ -156,6 +156,16 @@ extension Double : IQDatabaseInputValue {
     
 }
 
+// MARK: - Decimal : IQDatabaseInputValue -
+
+extension Decimal : IQDatabaseInputValue {
+    
+    public func bindTo(statement: QDatabase.Statement, at index: Int) throws {
+        try statement.bind(at: index, value: self)
+    }
+    
+}
+
 // MARK: - String : IQDatabaseInputValue -
 
 extension String : IQDatabaseInputValue {
@@ -195,16 +205,6 @@ extension Optional : IQDatabaseInputValue where Wrapped : IQDatabaseInputValue {
         case .none: try statement.bindNull(at: index)
         case .some(let wrapped): try wrapped.bindTo(statement: statement, at: index)
         }
-    }
-    
-}
-
-// MARK: - RawRepresentable : IQDatabaseInputValue -
-
-extension RawRepresentable where RawValue : IQDatabaseInputValue {
-    
-    public func bindTo(statement: QDatabase.Statement, at index: Int) throws {
-        try self.rawValue.bindTo(statement: statement, at: index)
     }
     
 }

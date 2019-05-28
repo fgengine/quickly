@@ -473,7 +473,7 @@ public extension QDatabase.Statement {
         return Type.value(statement: self, at: index)
     }
     
-    func value< Type : IQDatabaseOutputValue >(of column: QDatabase.Column) throws -> Optional< Type > {
+    func value< Type : IQDatabaseOutputValue >(of column: QDatabase.Column) throws -> Type? {
         guard let index = self.columnIndex(of: column.name) else {
             throw QDatabase.Error.columnNotFound(name: column.name)
         }
@@ -716,6 +716,16 @@ internal extension QDatabase.Statement {
         try self.bind(at: index, value: value)
     }
     
+    // MARK: Bind • Decimal
+    
+    func bind(at index: Int, value: Decimal) throws {
+        try self.bind(at: index, value: NSDecimalNumber(decimal: value).int64Value)
+    }
+    
+    func bind(of name: String, value: Decimal) throws {
+        try self.bind(of: name, value: NSDecimalNumber(decimal: value).int64Value)
+    }
+    
     // MARK: Bind • String
     
     func bind(at index:Int, value: String) throws {
@@ -795,6 +805,13 @@ internal extension QDatabase.Statement {
     
     func value(at index: Int) -> Double {
         return sqlite3_column_double(self._statement, Int32(index))
+    }
+    
+    // MARK: Value • Decimal
+    
+    func value(at index: Int) -> Decimal {
+        let int64: Int64 = self.value(at: index)
+        return Decimal(int64)
     }
     
     // MARK: Value • String
