@@ -6,6 +6,7 @@ open class QTableCell< RowType: IQTableRow > : UITableViewCell, IQTypedTableCell
 
     open weak var tableDelegate: IQTableCellDelegate?
     open var row: RowType?
+    open var spec: IQContainerSpec?
 
     open class func currentNibName() -> String {
         return String(describing: self.classForCoder())
@@ -40,6 +41,7 @@ open class QTableCell< RowType: IQTableRow > : UITableViewCell, IQTypedTableCell
     open func set(row: RowType, spec: IQContainerSpec, animated: Bool) {
         self.row = row
         self.selectionStyle = row.selectionStyle
+        self.spec = spec
     }
 
 }

@@ -51,3 +51,11 @@ public class QImageRemoteSource {
     }
     
 }
+
+extension QImageRemoteSource : Equatable {
+    
+    public static func == (lhs: QImageRemoteSource, rhs: QImageRemoteSource) -> Bool {
+        return lhs.url == rhs.url && lhs.size == rhs.size && lhs.loader === rhs.loader && lhs.filter?.name == rhs.filter?.name && lhs.scale == rhs.scale && lhs.tintColor == rhs.tintColor
+    }
+
+}

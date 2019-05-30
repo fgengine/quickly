@@ -2,6 +2,30 @@
 //  Quickly
 //
 
+open class QPagesViewStyleSheet : IQStyleSheet {
+    
+    var hidesForSinglePage: Bool
+    var pageIndicatorColor: UIColor?
+    var currentPageIndicatorColor: UIColor?
+    
+    public init(
+        hidesForSinglePage: Bool = true,
+        pageIndicatorColor: UIColor? = nil,
+        currentPageIndicatorColor: UIColor? = nil
+    ) {
+        self.hidesForSinglePage = hidesForSinglePage
+        self.pageIndicatorColor = pageIndicatorColor
+        self.currentPageIndicatorColor = currentPageIndicatorColor
+    }
+    
+    public init(_ styleSheet: QPagesViewStyleSheet) {
+        self.hidesForSinglePage = styleSheet.hidesForSinglePage
+        self.pageIndicatorColor = styleSheet.pageIndicatorColor
+        self.currentPageIndicatorColor = styleSheet.currentPageIndicatorColor
+    }
+    
+}
+
 open class QPagesView : QView, IQPagesView {
 
     open var numberOfPages: UInt {
@@ -55,6 +79,12 @@ open class QPagesView : QView, IQPagesView {
             origin: self.frame.origin,
             size: self._pageControl.frame.size
         )
+    }
+    
+    public func apply(_ styleSheet: QPagesViewStyleSheet) {
+        self.hidesForSinglePage = styleSheet.hidesForSinglePage
+        self.pageIndicatorColor = styleSheet.pageIndicatorColor
+        self.currentPageIndicatorColor = styleSheet.currentPageIndicatorColor
     }
 
 }

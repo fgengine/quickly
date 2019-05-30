@@ -99,7 +99,7 @@ open class QImageView : QDisplayView {
     }
     public var localSource: QImageLocalSource? {
         didSet(oldValue) {
-            if self.localSource !== oldValue {
+            if self.localSource != oldValue {
                 if let source = self.localSource {
                     self._localView.image = source.image
                     self._localView.size = source.size
@@ -116,7 +116,7 @@ open class QImageView : QDisplayView {
     }
     public var remoteSource: QImageRemoteSource? {
         didSet(oldValue) {
-            if self.remoteSource !== oldValue {
+            if self.remoteSource != oldValue {
                 if let source = self.remoteSource {
                     self._remoteView.image = nil
                     self._remoteView.size = source.size

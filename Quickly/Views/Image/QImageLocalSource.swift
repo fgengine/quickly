@@ -55,3 +55,11 @@ public class QImageLocalSource {
     }
 
 }
+
+extension QImageLocalSource : Equatable {
+    
+    public static func == (lhs: QImageLocalSource, rhs: QImageLocalSource) -> Bool {
+        return lhs.image == rhs.image && lhs.size == rhs.size && lhs.scale == rhs.scale && lhs.tintColor == rhs.tintColor
+    }
+    
+}
