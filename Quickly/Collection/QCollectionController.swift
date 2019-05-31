@@ -414,13 +414,15 @@ extension QCollectionController : UIScrollViewDelegate {
 }
 
 extension QCollectionController : UICollectionViewDataSource {
-
+    
+    @objc
     open func numberOfSections(
         in collectionView: UICollectionView
     ) -> Int {
         return self.sections.count
     }
-
+    
+    @objc
     open func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection index: Int
@@ -431,7 +433,8 @@ extension QCollectionController : UICollectionViewDataSource {
         }
         return section.items.count
     }
-
+    
+    @objc
     open func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
@@ -439,7 +442,8 @@ extension QCollectionController : UICollectionViewDataSource {
         let item = self.item(indexPath: indexPath)
         return self.dequeue(item: item, indexPath: indexPath).unsafelyUnwrapped
     }
-
+    
+    @objc
     open func collectionView(
         _ collectionView: UICollectionView,
         viewForSupplementaryElementOfKind kind: String,
@@ -453,7 +457,8 @@ extension QCollectionController : UICollectionViewDataSource {
         }
         return self.dequeue(data: data!, kind: kind, indexPath: indexPath).unsafelyUnwrapped
     }
-
+    
+    @objc
     open func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
         let section = self.section(index: indexPath.section)
         if section.canMove == false {

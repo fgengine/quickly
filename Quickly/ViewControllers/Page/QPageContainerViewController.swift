@@ -88,6 +88,7 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
             pagebar.items = self._viewControllers.compactMap({ return $0.item })
             pagebar.setSelectedItem(self.currentViewController?.item, animated: false)
             self.view.addSubview(pagebar)
+            self.view.bringSubviewToFront(pagebar)
         }
     }
 
@@ -226,6 +227,7 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
                 pagebar.edgeInsets = self._barEdgeInsets()
                 pagebar.delegate = self
                 self.view.addSubview(pagebar)
+                self.view.bringSubviewToFront(pagebar)
             }
             self.setNeedLayout()
         } else {
@@ -355,7 +357,7 @@ extension QPageContainerViewController {
         if currently.2 !== displayed.2 {
             self.forwardViewController = displayed.2
             if let vc = self.forwardViewController {
-                let frame = self._backwardViewControllerFrame()
+                let frame = self._forwardViewControllerFrame()
                 self._appear(viewController: vc, frame: frame)
             }
         }
@@ -592,7 +594,7 @@ extension QPageContainerViewController {
         if currently.2 !== displayed.2 {
             self.forwardViewController = displayed.2
             if let vc = self.forwardViewController {
-                let frame = self._backwardViewControllerFrame()
+                let frame = self._forwardViewControllerFrame()
                 self._appear(viewController: vc, frame: frame)
             }
         }

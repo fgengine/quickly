@@ -299,6 +299,7 @@ open class QGroupbar : QView {
             super.init(cells: cells)
         }
         
+        @objc
         public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
             guard let groupbar = self.groupbar, let delegate = groupbar.delegate else { return }
             delegate.groupbar(groupbar, didSelectItem: groupbar.selectedItem!)
