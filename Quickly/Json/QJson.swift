@@ -190,7 +190,7 @@ public final class QJson {
                 }
                 root = temp
             } else if let array = root as? NSArray {
-                guard let index = subpath.jsonPathIndex else {
+                guard let index = subpath.jsonPathIndex, index < array.count else {
                     throw QJsonError.access(path: self._buildPath(subpaths, from: 0, to: subpathIndex))
                 }
                 root = array.object(at: index)
