@@ -136,6 +136,7 @@ public class QImageLoaderTask {
                     downloadData = response.data
                     downloadImage = response.image
                     resultError = response.error
+                    semaphore.signal()
                 }
             )
             semaphore.wait()
