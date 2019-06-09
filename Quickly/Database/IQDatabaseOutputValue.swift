@@ -6,7 +6,7 @@
 
 public protocol IQDatabaseOutputValue {
     
-    static func value(statement: QDatabase.Statement, at index: Int) -> Self
+    static func value(statement: QDatabase.Statement, at index: Int) throws -> Self
     
 }
 
@@ -14,7 +14,7 @@ public protocol IQDatabaseOutputValue {
 
 extension Bool : IQDatabaseOutputValue {
     
-    public static func value(statement: QDatabase.Statement, at index: Int) -> Bool {
+    public static func value(statement: QDatabase.Statement, at index: Int) throws -> Bool {
         return statement.value(at: index)
     }
     
@@ -24,7 +24,7 @@ extension Bool : IQDatabaseOutputValue {
 
 extension Int8 : IQDatabaseOutputValue {
     
-    public static func value(statement: QDatabase.Statement, at index: Int) -> Int8 {
+    public static func value(statement: QDatabase.Statement, at index: Int) throws -> Int8 {
         return Int8(Int64(statement.value(at: index)))
     }
     
@@ -34,7 +34,7 @@ extension Int8 : IQDatabaseOutputValue {
 
 extension UInt8 : IQDatabaseOutputValue {
     
-    public static func value(statement: QDatabase.Statement, at index: Int) -> UInt8 {
+    public static func value(statement: QDatabase.Statement, at index: Int) throws -> UInt8 {
         return UInt8(Int64(statement.value(at: index)))
     }
     
@@ -44,7 +44,7 @@ extension UInt8 : IQDatabaseOutputValue {
 
 extension Int16 : IQDatabaseOutputValue {
     
-    public static func value(statement: QDatabase.Statement, at index: Int) -> Int16 {
+    public static func value(statement: QDatabase.Statement, at index: Int) throws -> Int16 {
         return Int16(Int64(statement.value(at: index)))
     }
     
@@ -54,7 +54,7 @@ extension Int16 : IQDatabaseOutputValue {
 
 extension UInt16 : IQDatabaseOutputValue {
     
-    public static func value(statement: QDatabase.Statement, at index: Int) -> UInt16 {
+    public static func value(statement: QDatabase.Statement, at index: Int) throws -> UInt16 {
         return UInt16(Int64(statement.value(at: index)))
     }
     
@@ -64,7 +64,7 @@ extension UInt16 : IQDatabaseOutputValue {
 
 extension Int32 : IQDatabaseOutputValue {
     
-    public static func value(statement: QDatabase.Statement, at index: Int) -> Int32 {
+    public static func value(statement: QDatabase.Statement, at index: Int) throws -> Int32 {
         return Int32(Int64(statement.value(at: index)))
     }
     
@@ -74,7 +74,7 @@ extension Int32 : IQDatabaseOutputValue {
 
 extension UInt32 : IQDatabaseOutputValue {
     
-    public static func value(statement: QDatabase.Statement, at index: Int) -> UInt32 {
+    public static func value(statement: QDatabase.Statement, at index: Int) throws -> UInt32 {
         return UInt32(Int64(statement.value(at: index)))
     }
     
@@ -84,7 +84,7 @@ extension UInt32 : IQDatabaseOutputValue {
 
 extension Int64 : IQDatabaseOutputValue {
     
-    public static func value(statement: QDatabase.Statement, at index: Int) -> Int64 {
+    public static func value(statement: QDatabase.Statement, at index: Int) throws -> Int64 {
         return statement.value(at: index)
     }
     
@@ -94,7 +94,7 @@ extension Int64 : IQDatabaseOutputValue {
 
 extension UInt64 : IQDatabaseOutputValue {
     
-    public static func value(statement: QDatabase.Statement, at index: Int) -> UInt64 {
+    public static func value(statement: QDatabase.Statement, at index: Int) throws -> UInt64 {
         return UInt64(Int64(statement.value(at: index)))
     }
     
@@ -104,7 +104,7 @@ extension UInt64 : IQDatabaseOutputValue {
 
 extension Int : IQDatabaseOutputValue {
     
-    public static func value(statement: QDatabase.Statement, at index: Int) -> Int {
+    public static func value(statement: QDatabase.Statement, at index: Int) throws -> Int {
         return Int(Int64(statement.value(at: index)))
     }
     
@@ -114,7 +114,7 @@ extension Int : IQDatabaseOutputValue {
 
 extension UInt : IQDatabaseOutputValue {
     
-    public static func value(statement: QDatabase.Statement, at index: Int) -> UInt {
+    public static func value(statement: QDatabase.Statement, at index: Int) throws -> UInt {
         return UInt(Int64(statement.value(at: index)))
     }
     
@@ -124,7 +124,7 @@ extension UInt : IQDatabaseOutputValue {
 
 extension Float : IQDatabaseOutputValue {
     
-    public static func value(statement: QDatabase.Statement, at index: Int) -> Float {
+    public static func value(statement: QDatabase.Statement, at index: Int) throws -> Float {
         return Float(Double(statement.value(at: index)))
     }
     
@@ -134,7 +134,7 @@ extension Float : IQDatabaseOutputValue {
 
 extension Double : IQDatabaseOutputValue {
     
-    public static func value(statement: QDatabase.Statement, at index: Int) -> Double {
+    public static func value(statement: QDatabase.Statement, at index: Int) throws -> Double {
         return statement.value(at: index)
     }
     
@@ -144,7 +144,7 @@ extension Double : IQDatabaseOutputValue {
 
 extension Decimal : IQDatabaseOutputValue {
     
-    public static func value(statement: QDatabase.Statement, at index: Int) -> Decimal {
+    public static func value(statement: QDatabase.Statement, at index: Int) throws -> Decimal {
         return statement.value(at: index)
     }
     
@@ -154,8 +154,22 @@ extension Decimal : IQDatabaseOutputValue {
 
 extension String : IQDatabaseOutputValue {
     
-    public static func value(statement: QDatabase.Statement, at index: Int) -> String {
+    public static func value(statement: QDatabase.Statement, at index: Int) throws -> String {
         return statement.value(at: index)
+    }
+    
+}
+
+// MARK: - URL : IQDatabaseOutputValue -
+
+extension URL : IQDatabaseOutputValue {
+    
+    public static func value(statement: QDatabase.Statement, at index: Int) throws -> URL {
+        let string = statement.value(at: index) as String
+        guard let url = URL(string: string) else {
+            throw QDatabase.Statement.Error.cast(index: index)
+        }
+        return url
     }
     
 }
@@ -164,7 +178,7 @@ extension String : IQDatabaseOutputValue {
 
 extension Date : IQDatabaseOutputValue {
     
-    public static func value(statement: QDatabase.Statement, at index: Int) -> Date {
+    public static func value(statement: QDatabase.Statement, at index: Int) throws -> Date {
         let timestamp: Int64 = statement.value(at: index)
         return Date.init(timeIntervalSince1970: TimeInterval(timestamp))
     }
@@ -175,7 +189,7 @@ extension Date : IQDatabaseOutputValue {
 
 extension Data : IQDatabaseOutputValue {
     
-    public static func value(statement: QDatabase.Statement, at index: Int) -> Data {
+    public static func value(statement: QDatabase.Statement, at index: Int) throws -> Data {
         return statement.value(at: index)
     }
     

@@ -250,26 +250,29 @@ open class QMainViewController : QViewController {
     }
 
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
-        guard let cvc = self.contentViewController else { return super.supportedOrientations() }
-        return cvc.supportedOrientations()
+        if let vc = self.contentViewController { return vc.supportedOrientations() }
+        return super.supportedOrientations()
     }
 
     open override func preferedStatusBarHidden() -> Bool {
-        guard let cvc = self.contentViewController else { return super.preferedStatusBarHidden() }
-        guard let cdvc = self.dialogContainerViewController?.currentViewController else { return cvc.preferedStatusBarHidden() }
-        return cdvc.preferedStatusBarHidden()
+        if let vc = self.dialogContainerViewController?.currentViewController { return vc.preferedStatusBarHidden() }
+        if let vc = self.modalContainerViewController?.currentViewController { return vc.preferedStatusBarHidden() }
+        if let vc = self.contentViewController { return vc.preferedStatusBarHidden() }
+        return super.preferedStatusBarHidden()
     }
 
     open override func preferedStatusBarStyle() -> UIStatusBarStyle {
-        guard let cvc = self.contentViewController else { return super.preferedStatusBarStyle() }
-        guard let cdvc = self.dialogContainerViewController?.currentViewController else { return cvc.preferedStatusBarStyle() }
-        return cdvc.preferedStatusBarStyle()
+        if let vc = self.dialogContainerViewController?.currentViewController { return vc.preferedStatusBarStyle() }
+        if let vc = self.modalContainerViewController?.currentViewController { return vc.preferedStatusBarStyle() }
+        if let vc = self.contentViewController { return vc.preferedStatusBarStyle() }
+        return super.preferedStatusBarStyle()
     }
 
     open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
-        guard let cvc = self.contentViewController else { return super.preferedStatusBarAnimation() }
-        guard let cdvc = self.dialogContainerViewController?.currentViewController else { return cvc.preferedStatusBarAnimation() }
-        return cdvc.preferedStatusBarAnimation()
+        if let vc = self.dialogContainerViewController?.currentViewController { return vc.preferedStatusBarAnimation() }
+        if let vc = self.modalContainerViewController?.currentViewController { return vc.preferedStatusBarAnimation() }
+        if let vc = self.contentViewController { return vc.preferedStatusBarAnimation() }
+        return super.preferedStatusBarAnimation()
     }
 
     private func _appendBackgroundController(_ viewController: IQViewController) {

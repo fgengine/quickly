@@ -6,7 +6,7 @@ public class QModalViewControllerPresentAnimation : IQModalViewControllerFixedAn
     
     public var acceleration: CGFloat
     
-    public init(acceleration: CGFloat = 1400) {
+    public init(acceleration: CGFloat = 2200) {
         self.acceleration = acceleration
     }
 
@@ -80,7 +80,7 @@ public class QModalViewControllerDismissAnimation : IQModalViewControllerFixedAn
     
     public var acceleration: CGFloat
     
-    public init(acceleration: CGFloat = 1400) {
+    public init(acceleration: CGFloat = 2200) {
         self.acceleration = acceleration
     }
     

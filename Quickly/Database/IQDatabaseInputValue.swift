@@ -176,6 +176,16 @@ extension String : IQDatabaseInputValue {
     
 }
 
+// MARK: - URL : IQDatabaseInputValue -
+
+extension URL : IQDatabaseInputValue {
+    
+    public func bindTo(statement: QDatabase.Statement, at index: Int) throws {
+        try self.absoluteString.bindTo(statement: statement, at: index)
+    }
+    
+}
+
 // MARK: - Date : IQDatabaseInputValue -
 
 extension Date : IQDatabaseInputValue {

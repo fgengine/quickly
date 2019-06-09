@@ -31,6 +31,7 @@ public class QDatabase {
         case sqliteQuery(code: Int)
         case columnNotFound(name: String)
         case nullValueOf(column: String)
+        case cast(column: String)
     }
     
     public enum Location {
@@ -122,6 +123,10 @@ public class QDatabase {
     }
     
     public class Statement {
+        
+        public enum Error : Swift.Error {
+            case cast(index: Int)
+        }
         
         private static let DefaultDestructor = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
         
@@ -463,38 +468,43 @@ extension QDatabase.Column : Hashable {
 
 public extension QDatabase.Statement {
     
-    func value< Type : IQDatabaseOutputValue >(of column: QDatabase.Column) throws -> Type {
+    func value< Type: IQDatabaseOutputValue >(of column: QDatabase.Column) throws -> Type {
         guard let index = self.columnIndex(of: column.name) else {
             throw QDatabase.Error.columnNotFound(name: column.name)
         }
         if sqlite3_column_type(self._statement, Int32(index)) == SQLITE_NULL {
             throw QDatabase.Error.nullValueOf(column: column.name)
         }
-        return Type.value(statement: self, at: index)
+        var result: Type
+        do {
+            result = try Type.value(statement: self, at: index)
+        } catch Error.cast(let index) {
+            throw QDatabase.Error.cast(column: self.columnName(at: index))
+        } catch let error {
+            throw error
+        }
+        return result
     }
     
-    func value< Type : IQDatabaseOutputValue >(of column: QDatabase.Column) throws -> Type? {
-        guard let index = self.columnIndex(of: column.name) else {
-            throw QDatabase.Error.columnNotFound(name: column.name)
-        }
-        if sqlite3_column_type(self._statement, Int32(index)) == SQLITE_NULL {
-            return nil
-        }
-        return Type.value(statement: self, at: index)
-    }
-    
-    func value< Type : RawRepresentable, Value: IQDatabaseOutputValue >(of column: QDatabase.Column) throws -> Type where Type.RawValue == Value {
+    func value< Type: RawRepresentable, Value: IQDatabaseOutputValue >(of column: QDatabase.Column) throws -> Type where Type.RawValue == Value {
         guard let index = self.columnIndex(of: column.name) else {
             throw QDatabase.Error.columnNotFound(name: column.name)
         }
         if sqlite3_column_type(self._statement, Int32(index)) == SQLITE_NULL {
             throw QDatabase.Error.nullValueOf(column: column.name)
         }
-        let rawValue = Value.value(statement: self, at: index)
-        guard let type = Type(rawValue: rawValue) else {
-            throw QDatabase.Error.nullValueOf(column: column.name)
+        var rawValue: Value
+        do {
+            rawValue = try Value.value(statement: self, at: index)
+        } catch Error.cast(let index) {
+            throw QDatabase.Error.cast(column: self.columnName(at: index))
+        } catch let error {
+            throw error
         }
-        return type
+        guard let value = Type(rawValue: rawValue) else {
+            throw QDatabase.Error.cast(column: column.name)
+        }
+        return value
     }
     
 }

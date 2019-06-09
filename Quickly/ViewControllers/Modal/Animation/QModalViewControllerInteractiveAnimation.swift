@@ -38,7 +38,7 @@ public class QModalViewControllerInteractiveDismissAnimation : IQModalViewContro
     public var ease: IQAnimationEase
     public private(set) var canFinish: Bool
 
-    public init(acceleration: CGFloat = 1200, dismissDistanceRate: CGFloat = 0.4) {
+    public init(acceleration: CGFloat = 2200, dismissDistanceRate: CGFloat = 0.4) {
         self.position = CGPoint.zero
         self.deltaPosition = 0
         self.velocity = CGPoint.zero

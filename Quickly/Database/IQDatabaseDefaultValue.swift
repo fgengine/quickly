@@ -164,6 +164,16 @@ extension String : IQDatabaseDefaultValue {
     
 }
 
+// MARK: - URL : IQDatabaseDefaultValue -
+
+extension URL : IQDatabaseDefaultValue {
+    
+    public func queryDefaultValue() -> String {
+        return self.absoluteString.queryDefaultValue()
+    }
+    
+}
+
 // MARK: - Date : IQDatabaseDefaultValue -
 
 extension Date : IQDatabaseDefaultValue {

@@ -8,7 +8,7 @@ open class QJsonModel : IQJsonModel {
 
     open class func from(json: QJson) throws -> IQJsonModel {
         guard json.isDictionary() == true else {
-            throw QJsonError.cast(path: json.basePath)
+            throw QJsonError.cast
         }
         #if DEBUG
         do {
@@ -16,8 +16,8 @@ open class QJsonModel : IQJsonModel {
         } catch let error as QJsonError {
             switch error {
             case .notJson: print("QJsonModel::\(String(describing: self)) Not JSON")
-            case .access(let path): print("QJsonModel::\(String(describing: self)) invalid set/get from JSON in path '\(path)'")
-            case .cast(let path): print("QJsonModel::\(String(describing: self)) invalid cast from JSON in path '\(path)'")
+            case .access: print("QJsonModel::\(String(describing: self)) invalid set/get from JSON")
+            case .cast: print("QJsonModel::\(String(describing: self)) invalid cast from JSON")
             }
             throw error
         } catch let error {
@@ -35,7 +35,7 @@ open class QJsonModel : IQJsonModel {
     }
 
     public final func toJson() throws -> QJson? {
-        let json = QJson(basePath: "")
+        let json = QJson()
         try self.toJson(json: json)
         return json
     }
@@ -47,13 +47,13 @@ open class QJsonModel : IQJsonModel {
 
 extension QJsonModel : IQJsonValue {
 
-    public static func fromJson(value: Any, path: String) throws -> IQJsonModel {
-        return try self.from(json: QJson(root: value, basePath: path))
+    public static func fromJson(value: Any) throws -> IQJsonModel {
+        return try self.from(json: QJson(root: value))
     }
 
-    public func toJsonValue(path: String) throws -> Any {
+    public func toJsonValue() throws -> Any {
         guard let json = try self.toJson(), let root = json.root else {
-            throw QJsonError.cast(path: path)
+            throw QJsonError.cast
         }
         return root
     }
