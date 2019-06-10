@@ -45,8 +45,8 @@ open class QDialogBackgroundView : QView, IQDialogContainerBackgroundView {
             if animated == true {
                 UIView.animate(withDuration: Const.duration, delay: 0, options: [ .beginFromCurrentState ], animations: {
                     self.alpha = Const.hiddenAlpha
-                }, completion: { (complited) in
-                    if complited == true {
+                }, completion: { (completed) in
+                    if completed == true {
                         self.isHidden = true
                     }
                 })

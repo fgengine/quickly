@@ -96,7 +96,7 @@ open class QLoadingView : QView, IQLoadingView {
             self._counter = 0
             UIView.animate(withDuration: self.hideDuration, delay: 0, options: [ .beginFromCurrentState ], animations: {
                 self.alpha = 0
-            }, completion: { [weak self] (complited) in
+            }, completion: { [weak self] (completed) in
                 guard let strong = self else { return }
                 strong._didStop()
             })
