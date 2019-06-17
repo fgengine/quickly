@@ -144,6 +144,7 @@
 		40527CB32245427700D921D3 /* IQAnaliticsable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40527CB02245427700D921D3 /* IQAnaliticsable.swift */; };
 		40527CB42245427700D921D3 /* IQAnalitics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40527CB12245427700D921D3 /* IQAnalitics.swift */; };
 		40527CB52245427700D921D3 /* IQAnaliticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40527CB22245427700D921D3 /* IQAnaliticsProvider.swift */; };
+		40536F2622B6A5D3004547EE /* URLComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40536F2522B6A5D3004547EE /* URLComponents.swift */; };
 		4055E9CB215E21BE00D66AA6 /* QTitleSwitchComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4055E9CA215E21BE00D66AA6 /* QTitleSwitchComposition.swift */; };
 		4055E9CE215E21EF00D66AA6 /* QSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4055E9CD215E21EF00D66AA6 /* QSwitch.swift */; };
 		40571364217DB408009ED2E3 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40571363217DB408009ED2E3 /* Bundle.swift */; };
@@ -482,6 +483,7 @@
 		40527CB02245427700D921D3 /* IQAnaliticsable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQAnaliticsable.swift; sourceTree = "<group>"; };
 		40527CB12245427700D921D3 /* IQAnalitics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQAnalitics.swift; sourceTree = "<group>"; };
 		40527CB22245427700D921D3 /* IQAnaliticsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQAnaliticsProvider.swift; sourceTree = "<group>"; };
+		40536F2522B6A5D3004547EE /* URLComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLComponents.swift; sourceTree = "<group>"; };
 		4055E9CA215E21BE00D66AA6 /* QTitleSwitchComposition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTitleSwitchComposition.swift; sourceTree = "<group>"; };
 		4055E9CD215E21EF00D66AA6 /* QSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSwitch.swift; sourceTree = "<group>"; };
 		40571363217DB408009ED2E3 /* Bundle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
@@ -1501,6 +1503,7 @@
 				4040718020569F4500F6ECC2 /* CGPoint.swift */,
 				400DDF721F5623D400D11991 /* CGSize.swift */,
 				400DDF6F1F5622EB00D11991 /* CGRect.swift */,
+				40536F2522B6A5D3004547EE /* URLComponents.swift */,
 				40571363217DB408009ED2E3 /* Bundle.swift */,
 				40F73CDF22AC07F30035EC7A /* FileManager.swift */,
 			);
@@ -2094,6 +2097,7 @@
 				40FBE6A61F543EFD00F5194B /* QTextStyle.swift in Sources */,
 				40E2D6031F67850600B954E4 /* QImageRequest.swift in Sources */,
 				404DABB721708C2D004DF67B /* QGroupWireframe.swift in Sources */,
+				40536F2622B6A5D3004547EE /* URLComponents.swift in Sources */,
 				40134EF61F62D16C009F81A6 /* QCharacterSetStringValidator.swift in Sources */,
 				40266D2A2170D3FF009CC9B4 /* IQContext.swift in Sources */,
 				40B8A1AB1F50736C00204E5A /* QTimer.swift in Sources */,

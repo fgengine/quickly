@@ -23,5 +23,9 @@ open class QGroupWireframe< WireframeType: IQWireframe, ContextType: IQContext >
     
     open func setup() {
     }
+    
+    open func open(_ url: URL) -> Bool {
+        return true
+    }
 
 }

@@ -23,5 +23,9 @@ open class QHamburgerWireframe< WireframeType: IQWireframe, ContextType: IQConte
     
     open func setup() {
     }
+    
+    open func open(_ url: URL) -> Bool {
+        return true
+    }
 
 }

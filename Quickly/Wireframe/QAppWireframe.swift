@@ -9,7 +9,6 @@ public protocol IQAppWireframe : IQWireframe {
     var context: ContextType { get }
     
     func launch(_ options: [UIApplication.LaunchOptionsKey : Any]?)
-    func open(_ url: URL) -> Bool
     
     var backgroundViewController: IQViewController? { set get }
     var contentViewController: IQViewController? { set get }

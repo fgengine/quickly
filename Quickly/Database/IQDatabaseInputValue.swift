@@ -156,6 +156,16 @@ extension Double : IQDatabaseInputValue {
     
 }
 
+// MARK: - CGFloat : IQDatabaseInputValue -
+
+extension CGFloat : IQDatabaseInputValue {
+    
+    public func bindTo(statement: QDatabase.Statement, at index: Int) throws {
+        try statement.bind(at: index, value: self.native)
+    }
+    
+}
+
 // MARK: - Decimal : IQDatabaseInputValue -
 
 extension Decimal : IQDatabaseInputValue {

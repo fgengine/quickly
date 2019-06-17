@@ -25,7 +25,7 @@ extension Bool : IQDatabaseOutputValue {
 extension Int8 : IQDatabaseOutputValue {
     
     public static func value(statement: QDatabase.Statement, at index: Int) throws -> Int8 {
-        return Int8(Int64(statement.value(at: index)))
+        return Int8(statement.value(at: index) as Int64)
     }
     
 }
@@ -35,7 +35,7 @@ extension Int8 : IQDatabaseOutputValue {
 extension UInt8 : IQDatabaseOutputValue {
     
     public static func value(statement: QDatabase.Statement, at index: Int) throws -> UInt8 {
-        return UInt8(Int64(statement.value(at: index)))
+        return UInt8(statement.value(at: index) as Int64)
     }
     
 }
@@ -45,7 +45,7 @@ extension UInt8 : IQDatabaseOutputValue {
 extension Int16 : IQDatabaseOutputValue {
     
     public static func value(statement: QDatabase.Statement, at index: Int) throws -> Int16 {
-        return Int16(Int64(statement.value(at: index)))
+        return Int16(statement.value(at: index) as Int64)
     }
     
 }
@@ -55,7 +55,7 @@ extension Int16 : IQDatabaseOutputValue {
 extension UInt16 : IQDatabaseOutputValue {
     
     public static func value(statement: QDatabase.Statement, at index: Int) throws -> UInt16 {
-        return UInt16(Int64(statement.value(at: index)))
+        return UInt16(statement.value(at: index) as Int64)
     }
     
 }
@@ -65,7 +65,7 @@ extension UInt16 : IQDatabaseOutputValue {
 extension Int32 : IQDatabaseOutputValue {
     
     public static func value(statement: QDatabase.Statement, at index: Int) throws -> Int32 {
-        return Int32(Int64(statement.value(at: index)))
+        return Int32(statement.value(at: index) as Int64)
     }
     
 }
@@ -75,7 +75,7 @@ extension Int32 : IQDatabaseOutputValue {
 extension UInt32 : IQDatabaseOutputValue {
     
     public static func value(statement: QDatabase.Statement, at index: Int) throws -> UInt32 {
-        return UInt32(Int64(statement.value(at: index)))
+        return UInt32(statement.value(at: index) as Int64)
     }
     
 }
@@ -95,7 +95,7 @@ extension Int64 : IQDatabaseOutputValue {
 extension UInt64 : IQDatabaseOutputValue {
     
     public static func value(statement: QDatabase.Statement, at index: Int) throws -> UInt64 {
-        return UInt64(Int64(statement.value(at: index)))
+        return UInt64(statement.value(at: index) as Int64)
     }
     
 }
@@ -105,7 +105,7 @@ extension UInt64 : IQDatabaseOutputValue {
 extension Int : IQDatabaseOutputValue {
     
     public static func value(statement: QDatabase.Statement, at index: Int) throws -> Int {
-        return Int(Int64(statement.value(at: index)))
+        return Int(statement.value(at: index) as Int64)
     }
     
 }
@@ -115,7 +115,7 @@ extension Int : IQDatabaseOutputValue {
 extension UInt : IQDatabaseOutputValue {
     
     public static func value(statement: QDatabase.Statement, at index: Int) throws -> UInt {
-        return UInt(Int64(statement.value(at: index)))
+        return UInt(statement.value(at: index) as Int64)
     }
     
 }
@@ -125,7 +125,7 @@ extension UInt : IQDatabaseOutputValue {
 extension Float : IQDatabaseOutputValue {
     
     public static func value(statement: QDatabase.Statement, at index: Int) throws -> Float {
-        return Float(Double(statement.value(at: index)))
+        return Float(statement.value(at: index) as Double)
     }
     
 }
@@ -136,6 +136,16 @@ extension Double : IQDatabaseOutputValue {
     
     public static func value(statement: QDatabase.Statement, at index: Int) throws -> Double {
         return statement.value(at: index)
+    }
+    
+}
+
+// MARK: - CGFloat : IQDatabaseOutputValue -
+
+extension CGFloat : IQDatabaseOutputValue {
+    
+    public static func value(statement: QDatabase.Statement, at index: Int) throws -> CGFloat {
+        return CGFloat(statement.value(at: index) as CGFloat.NativeType)
     }
     
 }
@@ -179,8 +189,7 @@ extension URL : IQDatabaseOutputValue {
 extension Date : IQDatabaseOutputValue {
     
     public static func value(statement: QDatabase.Statement, at index: Int) throws -> Date {
-        let timestamp: Int64 = statement.value(at: index)
-        return Date.init(timeIntervalSince1970: TimeInterval(timestamp))
+        return Date(timeIntervalSince1970: TimeInterval(statement.value(at: index) as Int64))
     }
     
 }

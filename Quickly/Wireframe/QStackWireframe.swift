@@ -24,6 +24,10 @@ open class QStackWireframe< WireframeType: IQWireframe, ContextType: IQContext >
     open func setup() {
     }
     
+    open func open(_ url: URL) -> Bool {
+        return true
+    }
+    
     open func push(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         self.containerViewController.push(viewController: viewController, animated: animated, completion: completion)
     }

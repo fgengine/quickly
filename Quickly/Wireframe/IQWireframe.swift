@@ -6,6 +6,8 @@ public protocol IQWireframe : class {
     
     var viewController: IQViewController { get }
     
+    func open(_ url: URL) -> Bool
+    
     func present(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?)
     func dismiss(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?)
     
