@@ -318,21 +318,21 @@ open class QHamburgerContainerViewController : QViewController, IQHamburgerConta
         if self._leftViewController !== leftViewController {
             if animated == true && self._state == .left {
                 self._change(currentState: self._state, availableState: .idle, animated: true, completion: { [weak self] in
-                    guard let strong = self else { return }
-                    if let vc = strong._leftViewController {
-                        if strong.isLoaded == true {
-                            strong._disappear(viewController: vc)
+                    guard let self = self else { return }
+                    if let vc = self._leftViewController {
+                        if self.isLoaded == true {
+                            self._disappear(viewController: vc)
                         }
-                        strong._remove(childViewController: vc)
+                        self._remove(childViewController: vc)
                     }
-                    strong._leftViewController = leftViewController
-                    if let vc = strong._leftViewController {
-                        strong._add(childViewController: vc)
-                        if strong.isLoaded == true {
-                            strong._appear(viewController: vc)
+                    self._leftViewController = leftViewController
+                    if let vc = self._leftViewController {
+                        self._add(childViewController: vc)
+                        if self.isLoaded == true {
+                            self._appear(viewController: vc)
                         }
                     }
-                    strong._change(currentState: .idle, availableState: strong._state, animated: true, completion: completion)
+                    self._change(currentState: .idle, availableState: self._state, animated: true, completion: completion)
                 })
             } else {
                 if let vc = self._leftViewController {
@@ -360,21 +360,21 @@ open class QHamburgerContainerViewController : QViewController, IQHamburgerConta
         if self._rightViewController !== rightViewController {
             if animated == true && self._state == .right {
                 self._change(currentState: self._state, availableState: .idle, animated: true, completion: { [weak self] in
-                    guard let strong = self else { return }
-                    if let vc = strong._rightViewController {
-                        if strong.isLoaded == true {
-                            strong._disappear(viewController: vc)
+                    guard let self = self else { return }
+                    if let vc = self._rightViewController {
+                        if self.isLoaded == true {
+                            self._disappear(viewController: vc)
                         }
-                        strong._remove(childViewController: vc)
+                        self._remove(childViewController: vc)
                     }
-                    strong._rightViewController = rightViewController
-                    if let vc = strong._rightViewController {
-                        strong._add(childViewController: vc)
-                        if strong.isLoaded == true {
-                            strong._appear(viewController: vc)
+                    self._rightViewController = rightViewController
+                    if let vc = self._rightViewController {
+                        self._add(childViewController: vc)
+                        if self.isLoaded == true {
+                            self._appear(viewController: vc)
                         }
                     }
-                    strong._change(currentState: .idle, availableState: strong._state, animated: true, completion: completion)
+                    self._change(currentState: .idle, availableState: self._state, animated: true, completion: completion)
                 })
             } else {
                 if let vc = self._rightViewController {
@@ -433,8 +433,9 @@ extension QHamburgerContainerViewController {
             rightViewController: self._rightViewController,
             animated: animated,
             complete: { [weak self] in
-                guard let strong = self else { return }
-                strong.isAnimating = false
+                if let self = self {
+                    self.isAnimating = false
+                }
                 completion?()
             }
         )
@@ -490,15 +491,15 @@ extension QHamburgerContainerViewController {
             guard let animation = self._activeInteractiveAnimation else { return }
             if animation.canFinish == true {
                 animation.finish({ [weak self] (state) in
-                    guard let strong = self else { return }
-                    strong._state = state
-                    strong._endInteractiveAnimation()
+                    guard let self = self else { return }
+                    self._state = state
+                    self._endInteractiveAnimation()
                 })
             } else {
                 animation.cancel({ [weak self] (state) in
-                    guard let strong = self else { return }
-                    strong._state = state
-                    strong._endInteractiveAnimation()
+                    guard let self = self else { return }
+                    self._state = state
+                    self._endInteractiveAnimation()
                 })
             }
             break
@@ -538,15 +539,15 @@ extension QHamburgerContainerViewController {
             guard let animation = self._activeInteractiveAnimation else { return }
             if animation.canFinish == true {
                 animation.finish({ [weak self] (state) in
-                    guard let strong = self else { return }
-                    strong._state = state
-                    strong._endInteractiveAnimation()
+                    guard let self = self else { return }
+                    self._state = state
+                    self._endInteractiveAnimation()
                 })
             } else {
                 animation.cancel({ [weak self] (state) in
-                    guard let strong = self else { return }
-                    strong._state = state
-                    strong._endInteractiveAnimation()
+                    guard let self = self else { return }
+                    self._state = state
+                    self._endInteractiveAnimation()
                 })
             }
             break
@@ -586,15 +587,15 @@ extension QHamburgerContainerViewController {
             guard let animation = self._activeInteractiveAnimation else { return }
             if animation.canFinish == true {
                 animation.finish({ [weak self] (state) in
-                    guard let strong = self else { return }
-                    strong._state = state
-                    strong._endInteractiveAnimation()
+                    guard let self = self else { return }
+                    self._state = state
+                    self._endInteractiveAnimation()
                 })
             } else {
                 animation.cancel({ [weak self] (state) in
-                    guard let strong = self else { return }
-                    strong._state = state
-                    strong._endInteractiveAnimation()
+                    guard let self = self else { return }
+                    self._state = state
+                    self._endInteractiveAnimation()
                 })
             }
             break

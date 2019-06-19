@@ -51,26 +51,11 @@ open class QDateFieldComposition< Composable: QDateFieldComposable > : QComposit
     public lazy private(set) var field: QDateField = {
         let view = QDateField(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.onShouldBeginEditing = { [weak self] (dateField: QDateField) in
-            guard let strong = self else { return true }
-            return strong._shouldBeginEditing()
-        }
-        view.onBeginEditing = { [weak self] (dateField: QDateField) in
-            guard let strong = self else { return }
-            strong._beginEditing()
-        }
-        view.onSelect = { [weak self] (dateField: QDateField, date: Date) in
-            guard let strong = self else { return }
-            strong._select(date)
-        }
-        view.onShouldEndEditing = { [weak self] (dateField: QDateField) in
-            guard let strong = self else { return true }
-            return strong._shouldEndEditing()
-        }
-        view.onEndEditing = { [weak self] (dateField: QDateField) in
-            guard let strong = self else { return }
-            strong._endEditing()
-        }
+        view.onShouldBeginEditing = { [weak self] _ in return self?._shouldBeginEditing() ?? true }
+        view.onBeginEditing = { [weak self] _ in self?._beginEditing() }
+        view.onSelect = { [weak self] dateField, date in self?._select(date) }
+        view.onShouldEndEditing = { [weak self] _ in return self?._shouldEndEditing() ?? true }
+        view.onEndEditing = { [weak self] _ in self?._endEditing() }
         self.contentView.addSubview(view)
         return view
     }()

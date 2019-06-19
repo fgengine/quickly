@@ -68,30 +68,12 @@ open class QMultiTextFieldComposition< Composable: QMultiTextFieldComposable > :
     public lazy private(set) var field: QMultiTextField = {
         let view = QMultiTextField(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.onShouldBeginEditing = { [weak self] (multiTextField: QMultiTextField) in
-            guard let strong = self else { return true }
-            return strong._shouldBeginEditing()
-        }
-        view.onBeginEditing = { [weak self] (multiTextField: QMultiTextField) in
-            guard let strong = self else { return }
-            strong._beginEditing()
-        }
-        view.onEditing = { [weak self] (multiTextField: QMultiTextField) in
-            guard let strong = self else { return }
-            strong._editing()
-        }
-        view.onShouldEndEditing = { [weak self] (multiTextField: QMultiTextField) in
-            guard let strong = self else { return true }
-            return strong._shouldEndEditing()
-        }
-        view.onEndEditing = { [weak self] (multiTextField: QMultiTextField) in
-            guard let strong = self else { return }
-            strong._endEditing()
-        }
-        view.onChangedHeight = { [weak self] (multiTextField: QMultiTextField) in
-            guard let strong = self else { return }
-            strong._changedHeight()
-        }
+        view.onShouldBeginEditing = { [weak self] _ in return self?._shouldBeginEditing() ?? true }
+        view.onBeginEditing = { [weak self] _ in self?._beginEditing() }
+        view.onEditing = { [weak self] _ in self?._editing() }
+        view.onShouldEndEditing = { [weak self] _ in return self?._shouldEndEditing() ?? true }
+        view.onEndEditing = { [weak self] _ in self?._endEditing() }
+        view.onChangedHeight = { [weak self] _ in self?._changedHeight() }
         self.contentView.addSubview(view)
         return view
     }()

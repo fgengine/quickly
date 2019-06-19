@@ -205,9 +205,9 @@ extension QModalContainerViewController {
             currentViewController: viewController,
             animated: animated,
             complete: { [weak self] in
-                if let strong = self {
-                    strong.isAnimating = false
-                    strong._processDeferred()
+                if let self = self {
+                    self.isAnimating = false
+                    self._processDeferred()
                 }
                 completion?()
             }
@@ -254,11 +254,11 @@ extension QModalContainerViewController {
             currentViewController: currentViewController,
             animated: animated,
             complete: { [weak self] in
-                if let strong = self {
-                    strong._disappear(viewController: currentViewController)
-                    strong._remove(childViewController: currentViewController)
-                    strong.isAnimating = false
-                    strong._processDeferred()
+                if let self = self {
+                    self._disappear(viewController: currentViewController)
+                    self._remove(childViewController: currentViewController)
+                    self.isAnimating = false
+                    self._processDeferred()
                 }
                 completion?()
             }
@@ -337,13 +337,13 @@ extension QModalContainerViewController {
             guard let dismissAnimation = self._activeInteractiveDismissAnimation else { return }
             if dismissAnimation.canFinish == true {
                 dismissAnimation.finish({ [weak self] (completed: Bool) in
-                    guard let strong = self else { return }
-                    strong._finishInteractiveDismiss()
+                    guard let self = self else { return }
+                    self._finishInteractiveDismiss()
                 })
             } else {
                 dismissAnimation.cancel({ [weak self] (completed: Bool) in
-                    guard let strong = self else { return }
-                    strong._cancelInteractiveDismiss()
+                    guard let self = self else { return }
+                    self._cancelInteractiveDismiss()
                 })
             }
             break

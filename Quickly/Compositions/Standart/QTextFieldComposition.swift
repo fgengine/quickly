@@ -65,42 +65,15 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
     public lazy private(set) var field: QTextField = {
         let view = QTextField(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.onShouldBeginEditing = { [weak self] (textField: QTextField) in
-            guard let strong = self else { return true }
-            return strong._shouldBeginEditing()
-        }
-        view.onBeginEditing = { [weak self] (textField: QTextField) in
-            guard let strong = self else { return }
-            strong._beginEditing()
-        }
-        view.onEditing = { [weak self] (textField: QTextField) in
-            guard let strong = self else { return }
-            strong._editing()
-        }
-        view.onShouldEndEditing = { [weak self] (textField: QTextField) in
-            guard let strong = self else { return true }
-            return strong._shouldEndEditing()
-        }
-        view.onEndEditing = { [weak self] (textField: QTextField) in
-            guard let strong = self else { return }
-            strong._endEditing()
-        }
-        view.onShouldClear = { [weak self] (textField: QTextField) in
-            guard let strong = self else { return true }
-            return strong._shouldClear()
-        }
-        view.onPressedClear = { [weak self] (textField: QTextField) in
-            guard let strong = self else { return }
-            strong._pressedClear()
-        }
-        view.onShouldReturn = { [weak self] (textField: QTextField) in
-            guard let strong = self else { return true }
-            return strong._shouldReturn()
-        }
-        view.onPressedReturn = { [weak self] (textField: QTextField) in
-            guard let strong = self else { return }
-            strong._pressedReturn()
-        }
+        view.onShouldBeginEditing = { [weak self] _ in return self?._shouldBeginEditing() ?? true }
+        view.onBeginEditing = { [weak self] _ in self?._beginEditing() }
+        view.onEditing = { [weak self] _ in self?._editing() }
+        view.onShouldEndEditing = { [weak self] _ in return self?._shouldEndEditing() ?? true }
+        view.onEndEditing = { [weak self] _ in self?._endEditing() }
+        view.onShouldClear = { [weak self] _ in return self?._shouldClear() ?? true }
+        view.onPressedClear = { [weak self] _ in self?._pressedClear() }
+        view.onShouldReturn = { [weak self] _ in return self?._shouldReturn() ?? true }
+        view.onPressedReturn = { [weak self] _ in self?._pressedReturn() }
         self.contentView.addSubview(view)
         return view
     }()

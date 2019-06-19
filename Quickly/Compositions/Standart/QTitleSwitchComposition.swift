@@ -50,11 +50,9 @@ open class QTitleSwitchComposition< Composable: QTitleSwitchComposable > : QComp
             vertical: UILayoutPriority(rawValue: 252)
         )
         view.onChanged = { [weak self] (`switch`, isOn) in
-            guard let strong = self else { return }
-            if let composable = strong.composable {
-                composable.switchIsOn = strong.switch.isOn
-                composable.switchChanged(composable)
-            }
+            guard let self = self, let composable = self.composable else { return }
+            composable.switchIsOn = self.switch.isOn
+            composable.switchChanged(composable)
         }
         self.contentView.addSubview(view)
         return view

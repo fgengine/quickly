@@ -213,8 +213,8 @@ extension QDialogContainerViewController {
                 viewController: viewController,
                 animated: animated,
                 complete: { [weak self] in
-                    if let strong = self {
-                        strong.isAnimating = true
+                    if let self = self {
+                        self.isAnimating = true
                     }
                     completion?()
                 }
@@ -238,8 +238,8 @@ extension QDialogContainerViewController {
                     }
                     if let nextViewController = self.currentViewController {
                         self._dismissOne(viewController: viewController, animated: animated, completion: { [weak self] in
-                            if let strong = self {
-                                strong._present(viewController: nextViewController, animated: animated, completion: completion)
+                            if let self = self {
+                                self._present(viewController: nextViewController, animated: animated, completion: completion)
                             } else {
                                 completion?()
                             }
@@ -271,10 +271,10 @@ extension QDialogContainerViewController {
             viewController: viewController,
             animated: animated,
             complete: { [weak self] in
-                if let strong = self {
-                    strong._disappear(viewController: viewController)
-                    strong._remove(childViewController: viewController)
-                    strong.isAnimating = true
+                if let self = self {
+                    self._disappear(viewController: viewController)
+                    self._remove(childViewController: viewController)
+                    self.isAnimating = true
                 }
                 completion?()
             }
@@ -338,14 +338,14 @@ extension QDialogContainerViewController {
             guard let dismissAnimation = self._activeInteractiveDismissAnimation else { return }
             if dismissAnimation.canFinish == true {
                 dismissAnimation.finish({ [weak self] (completed: Bool) in
-                    guard let strong = self else { return }
-                    strong._finishInteractiveDismiss()
+                    guard let self = self else { return }
+                    self._finishInteractiveDismiss()
 
                 })
             } else {
                 dismissAnimation.cancel({ [weak self] (completed: Bool) in
-                    guard let strong = self else { return }
-                    strong._cancelInteractiveDismiss()
+                    guard let self = self else { return }
+                    self._cancelInteractiveDismiss()
                 })
             }
             break
@@ -372,8 +372,8 @@ extension QDialogContainerViewController {
             }
             if let nextViewController = self.currentViewController {
                 self._present(viewController: nextViewController, animated: true, completion: { [weak self] in
-                    guard let strong = self else { return }
-                    strong._endInteractiveDismiss()
+                    guard let self = self else { return }
+                    self._endInteractiveDismiss()
                 })
             } else {
                 self._endInteractiveDismiss()

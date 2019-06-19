@@ -120,23 +120,23 @@ public class QHamburgerViewControllerInteractiveAnimation : IQHamburgerViewContr
             self.leftViewController?.view.frame = self.leftEndFrame
             self.rightViewController?.view.frame = self.rightEndFrame
         }, completion: { [weak self] (completed: Bool) in
-            guard let strong = self else { return }
-            strong.contentViewController.view.frame = strong.contentEndFrame
-            strong.contentViewController.view.shadow = strong.targetState != .idle ? strong.contentShadow : nil
-            strong.contentViewController = nil
-            if let vc = strong.leftViewController {
-                vc.view.frame = strong.leftEndFrame
-                if strong.currentState == .left { vc.finishInteractiveDismiss() }
-                if strong.targetState == .left { vc.finishInteractivePresent() }
-                strong.leftViewController = nil
+            guard let self = self else { return }
+            self.contentViewController.view.frame = self.contentEndFrame
+            self.contentViewController.view.shadow = self.targetState != .idle ? self.contentShadow : nil
+            self.contentViewController = nil
+            if let vc = self.leftViewController {
+                vc.view.frame = self.leftEndFrame
+                if self.currentState == .left { vc.finishInteractiveDismiss() }
+                if self.targetState == .left { vc.finishInteractivePresent() }
+                self.leftViewController = nil
             }
-            if let vc = strong.rightViewController {
-                vc.view.frame = strong.rightEndFrame
-                if strong.currentState == .left { vc.finishInteractiveDismiss() }
-                if strong.targetState == .left { vc.finishInteractivePresent() }
-                strong.rightViewController = nil
+            if let vc = self.rightViewController {
+                vc.view.frame = self.rightEndFrame
+                if self.currentState == .left { vc.finishInteractiveDismiss() }
+                if self.targetState == .left { vc.finishInteractivePresent() }
+                self.rightViewController = nil
             }
-            complete(strong.targetState)
+            complete(self.targetState)
         })
     }
     
@@ -147,23 +147,23 @@ public class QHamburgerViewControllerInteractiveAnimation : IQHamburgerViewContr
             self.leftViewController?.view.frame = self.leftBeginFrame
             self.rightViewController?.view.frame = self.rightBeginFrame
         }, completion: { [weak self] (completed: Bool) in
-            guard let strong = self else { return }
-            strong.contentViewController.view.frame = strong.contentBeginFrame
-            strong.contentViewController.view.shadow = strong.currentState != .idle ? strong.contentShadow : nil
-            strong.contentViewController = nil
-            if let vc = strong.leftViewController {
-                vc.view.frame = strong.leftBeginFrame
-                if strong.currentState == .left { vc.cancelInteractiveDismiss() }
-                if strong.targetState == .left { vc.cancelInteractivePresent() }
-                strong.leftViewController = nil
+            guard let self = self else { return }
+            self.contentViewController.view.frame = self.contentBeginFrame
+            self.contentViewController.view.shadow = self.currentState != .idle ? self.contentShadow : nil
+            self.contentViewController = nil
+            if let vc = self.leftViewController {
+                vc.view.frame = self.leftBeginFrame
+                if self.currentState == .left { vc.cancelInteractiveDismiss() }
+                if self.targetState == .left { vc.cancelInteractivePresent() }
+                self.leftViewController = nil
             }
-            if let vc = strong.rightViewController {
-                vc.view.frame = strong.rightBeginFrame
-                if strong.currentState == .left { vc.cancelInteractiveDismiss() }
-                if strong.targetState == .left { vc.cancelInteractivePresent() }
-                strong.rightViewController = nil
+            if let vc = self.rightViewController {
+                vc.view.frame = self.rightBeginFrame
+                if self.currentState == .left { vc.cancelInteractiveDismiss() }
+                if self.targetState == .left { vc.cancelInteractivePresent() }
+                self.rightViewController = nil
             }
-            complete(strong.currentState)
+            complete(self.currentState)
         })
     }
     

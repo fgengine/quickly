@@ -32,7 +32,7 @@ open class QButtonComposition< Composable: QButtonComposable > : QComposition< C
         let view = QButton(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onPressed = { [weak self] _ in
-            guard let strong = self, let composable = strong.composable else { return }
+            guard let self = self, let composable = self.composable else { return }
             composable.buttonPressed(composable)
         }
         self.contentView.addSubview(view)

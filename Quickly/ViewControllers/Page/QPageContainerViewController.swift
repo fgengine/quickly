@@ -382,9 +382,10 @@ extension QPageContainerViewController {
                     targetViewController: targetViewController,
                     animated: true,
                     complete: { [weak self] in
-                        guard let strong = self else { return }
-                        strong._disappear(old: currently, new: displayed)
-                        strong.isAnimating = false
+                        if let self = self {
+                            self._disappear(old: currently, new: displayed)
+                            self.isAnimating = false
+                        }
                         completion?()
                     }
                 )
@@ -551,17 +552,17 @@ extension QPageContainerViewController {
             guard let animation = self._activeInteractiveAnimation else { return }
             if animation.canFinish == true {
                 animation.finish({ [weak self] (completed: Bool) in
-                    guard let strong = self else { return }
+                    guard let self = self else { return }
                     switch animation.finishMode {
-                    case .none: strong._endInteractive()
-                    case .backward: strong._endInteractive(viewController: strong._activeInteractiveBackwardViewController)
-                    case .forward: strong._endInteractive(viewController: strong._activeInteractiveForwardViewController)
+                    case .none: self._endInteractive()
+                    case .backward: self._endInteractive(viewController: self._activeInteractiveBackwardViewController)
+                    case .forward: self._endInteractive(viewController: self._activeInteractiveForwardViewController)
                     }
                 })
             } else {
                 animation.cancel({ [weak self] (completed: Bool) in
-                    guard let strong = self else { return }
-                    strong._endInteractive()
+                    guard let self = self else { return }
+                    self._endInteractive()
                 })
             }
             break

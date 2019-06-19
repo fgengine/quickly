@@ -68,15 +68,15 @@ public class QImageLoaderTask {
     
     private func _cacheWorkItem() -> DispatchWorkItem {
         return DispatchWorkItem(block: { [weak self] in
-            guard let strong = self else { return }
-            var resultImage = strong.cache.image(url: strong.url, filter: strong.filter)
+            guard let self = self else { return }
+            var resultImage = self.cache.image(url: self.url, filter: self.filter)
             var resultError: Error?
             if resultImage == nil {
-                if let filter = strong.filter {
-                    if let originImage = strong.cache.image(url: strong.url), let image = filter.apply(originImage) {
+                if let filter = self.filter {
+                    if let originImage = self.cache.image(url: self.url), let image = filter.apply(originImage) {
                         if let data = image.pngData() {
                             do {
-                                try strong.cache.set(data: data, image: image, url: strong.url, filter: filter)
+                                try self.cache.set(data: data, image: image, url: self.url, filter: filter)
                                 resultImage = image
                             } catch let error {
                                 resultError = error
@@ -85,23 +85,23 @@ public class QImageLoaderTask {
                     }
                 }
             }
-            strong._finish(image: resultImage, error: resultError)
+            self._finish(image: resultImage, error: resultError)
         })
     }
     
     private func _localWorkItem() -> DispatchWorkItem {
         return DispatchWorkItem(block: { [weak self] in
-            guard let strong = self else { return }
+            guard let self = self else { return }
             var resultImage: UIImage?
             var resultError: Error?
             do {
-                let data = try Data(contentsOf: strong.url)
+                let data = try Data(contentsOf: self.url)
                 if let originImage = UIImage(data: data) {
-                    try strong.cache.set(data: data, image: originImage, url: strong.url)
-                    if let filter = strong.filter, let image = filter.apply(originImage) {
+                    try self.cache.set(data: data, image: originImage, url: self.url)
+                    if let filter = self.filter, let image = filter.apply(originImage) {
                         if let data = image.pngData() {
                             do {
-                                try strong.cache.set(data: data, image: image, url: strong.url, filter: filter)
+                                try self.cache.set(data: data, image: image, url: self.url, filter: filter)
                                 resultImage = image
                             } catch let error {
                                 resultError = error
@@ -114,23 +114,23 @@ public class QImageLoaderTask {
             } catch let error {
                 resultError = error
             }
-            strong._finish(image: resultImage, error: resultError)
+            self._finish(image: resultImage, error: resultError)
         })
     }
     
     private func _remoteWorkItem() -> DispatchWorkItem {
         let semaphore = DispatchSemaphore(value: 0)
         return DispatchWorkItem(block: { [weak self] in
-            guard let strong = self else { return }
+            guard let self = self else { return }
             var downloadData: Data?
             var downloadImage: UIImage?
             var resultImage: UIImage?
             var resultError: Error?
-            strong.query = strong.provider.send(
-                request: QImageRequest(url: strong.url),
+            self.query = self.provider.send(
+                request: QImageRequest(url: self.url),
                 response: QImageResponse(),
                 download: { (progress) in
-                    strong._progress(progress: progress)
+                    self._progress(progress: progress)
                 },
                 completed: { (request, response) in
                     downloadData = response.data
@@ -140,14 +140,14 @@ public class QImageLoaderTask {
                 }
             )
             semaphore.wait()
-            strong.query = nil
+            self.query = nil
             if let data = downloadData, let originImage = downloadImage {
                 do {
-                    try strong.cache.set(data: data, image: originImage, url: strong.url)
-                    if let filter = strong.filter, let image = filter.apply(originImage) {
+                    try self.cache.set(data: data, image: originImage, url: self.url)
+                    if let filter = self.filter, let image = filter.apply(originImage) {
                         if let data = image.pngData() {
                             do {
-                                try strong.cache.set(data: data, image: image, url: strong.url, filter: filter)
+                                try self.cache.set(data: data, image: image, url: self.url, filter: filter)
                                 resultImage = image
                             } catch let error {
                                 resultError = error
@@ -160,14 +160,14 @@ public class QImageLoaderTask {
                     resultError = error
                 }
             }
-            strong._finish(image: resultImage, error: resultError)
+            self._finish(image: resultImage, error: resultError)
         })
     }
     
     private func _progress(progress: Progress) {
         DispatchQueue.main.async(execute: { [weak self] in
-            guard let strong = self else { return }
-            for target in strong.targets {
+            guard let self = self else { return }
+            for target in self.targets {
                 target.imageLoader(progress: progress)
             }
         })
@@ -175,18 +175,18 @@ public class QImageLoaderTask {
     
     private func _finish(image: UIImage?, error: Error?) {
         DispatchQueue.main.async(execute: { [weak self] in
-            guard let strong = self else { return }
-            if let delegate = strong.delegate {
-                delegate.didFinishImageLoaderTask(strong)
+            guard let self = self else { return }
+            if let delegate = self.delegate {
+                delegate.didFinishImageLoaderTask(self)
             }
-            if strong.workItem != nil {
-                strong.workItem = nil
+            if self.workItem != nil {
+                self.workItem = nil
                 if let image = image {
-                    for target in strong.targets {
+                    for target in self.targets {
                         target.imageLoader(image: image)
                     }
                 } else if let error = error {
-                    for target in strong.targets {
+                    for target in self.targets {
                         target.imageLoader(error: error)
                     }
                 }

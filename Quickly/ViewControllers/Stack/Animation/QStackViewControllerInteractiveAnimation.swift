@@ -113,16 +113,16 @@ public class QStackViewControllerinteractiveDismissAnimation : IQStackViewContro
             self.currentViewController.view.frame = self.currentEndFrame
             self.previousViewController.view.frame = self.previousEndFrame
         }, completion: { [weak self] (completed: Bool) in
-            if let strong = self {
-                strong.containerViewController.groupbarVisibility = strong.previousGroupbarVisibility
-                strong.containerViewController = nil
-                strong.currentViewController.view.frame = strong.currentEndFrame
-                strong.currentViewController.view.shadow = nil
-                strong.currentViewController.finishInteractiveDismiss()
-                strong.currentViewController = nil
-                strong.previousViewController.view.frame = strong.previousEndFrame
-                strong.previousViewController.finishInteractivePresent()
-                strong.previousViewController = nil
+            if let self = self {
+                self.containerViewController.groupbarVisibility = self.previousGroupbarVisibility
+                self.containerViewController = nil
+                self.currentViewController.view.frame = self.currentEndFrame
+                self.currentViewController.view.shadow = nil
+                self.currentViewController.finishInteractiveDismiss()
+                self.currentViewController = nil
+                self.previousViewController.view.frame = self.previousEndFrame
+                self.previousViewController.finishInteractivePresent()
+                self.previousViewController = nil
             }
             complete(completed)
         })
@@ -135,16 +135,16 @@ public class QStackViewControllerinteractiveDismissAnimation : IQStackViewContro
             self.currentViewController.view.frame = self.currentBeginFrame
             self.previousViewController.view.frame = self.previousBeginFrame
         }, completion: { [weak self] (completed: Bool) in
-            if let strong = self {
-                strong.containerViewController.groupbarVisibility = strong.currentGroupbarVisibility
-                strong.containerViewController = nil
-                strong.currentViewController.view.frame = strong.currentBeginFrame
-                strong.currentViewController.view.shadow = nil
-                strong.currentViewController.cancelInteractiveDismiss()
-                strong.currentViewController = nil
-                strong.previousViewController.view.frame = strong.previousBeginFrame
-                strong.previousViewController.cancelInteractivePresent()
-                strong.previousViewController = nil
+            if let self = self {
+                self.containerViewController.groupbarVisibility = self.currentGroupbarVisibility
+                self.containerViewController = nil
+                self.currentViewController.view.frame = self.currentBeginFrame
+                self.currentViewController.view.shadow = nil
+                self.currentViewController.cancelInteractiveDismiss()
+                self.currentViewController = nil
+                self.previousViewController.view.frame = self.previousBeginFrame
+                self.previousViewController.cancelInteractivePresent()
+                self.previousViewController = nil
             }
             complete(completed)
         })

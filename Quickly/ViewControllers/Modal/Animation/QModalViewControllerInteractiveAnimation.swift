@@ -94,14 +94,14 @@ public class QModalViewControllerInteractiveDismissAnimation : IQModalViewContro
                 vc.view.frame = self.previousBeginFrame
             }
         }, completion: { [weak self] (completed: Bool) in
-            if let strong = self {
-                strong.currentViewController.cancelInteractiveDismiss()
-                strong.currentViewController = nil
-                if let vc = strong.previousViewController {
+            if let self = self {
+                self.currentViewController.cancelInteractiveDismiss()
+                self.currentViewController = nil
+                if let vc = self.previousViewController {
                     vc.cancelInteractivePresent()
-                    strong.previousViewController = nil
+                    self.previousViewController = nil
                 }
-                strong.contentView = nil
+                self.contentView = nil
             }
             complete(completed)
         })
@@ -119,16 +119,16 @@ public class QModalViewControllerInteractiveDismissAnimation : IQModalViewContro
                 vc.view.frame = self.previousEndFrame
             }
         }, completion: { [weak self] (completed: Bool) in
-            if let strong = self {
-                strong.currentViewController.didDismiss(animated: true)
-                strong.currentViewController.finishInteractiveDismiss()
-                strong.currentViewController = nil
-                if let vc = strong.previousViewController {
+            if let self = self {
+                self.currentViewController.didDismiss(animated: true)
+                self.currentViewController.finishInteractiveDismiss()
+                self.currentViewController = nil
+                if let vc = self.previousViewController {
                     vc.didPresent(animated: true)
                     vc.finishInteractivePresent()
-                    strong.previousViewController = nil
+                    self.previousViewController = nil
                 }
-                strong.contentView = nil
+                self.contentView = nil
             }
             complete(completed)
         })

@@ -224,9 +224,9 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     open func replace(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         let currentViewController = self.currentViewController
         self.push(viewController: viewController, animated: animated, completion: { [weak self] in
-            guard let strong = self else { return }
+            guard let self = self else { return }
             if let currentViewController = currentViewController {
-                strong.pop(viewController: currentViewController, animated: false)
+                self.pop(viewController: currentViewController, animated: false)
             }
         })
     }
@@ -294,9 +294,9 @@ extension QStackContainerViewController {
                     nextGroupbarVisibility: self._groupbarVisibility(viewController: viewController),
                     animated: animated,
                     complete: { [weak self] in
-                        if let strong = self {
-                            strong._disappear(viewController: previousViewController)
-                            strong.isAnimating = false
+                        if let self = self {
+                            self._disappear(viewController: previousViewController)
+                            self.isAnimating = false
                         }
                         completion?()
                     }
@@ -336,10 +336,10 @@ extension QStackContainerViewController {
                         previousGroupbarVisibility: self._groupbarVisibility(viewController: previousViewController),
                         animated: animated,
                         complete: { [weak self] in
-                            if let strong = self {
-                                strong._disappear(viewController: viewController)
-                                strong._remove(childViewController: viewController)
-                                strong.isAnimating = false
+                            if let self = self {
+                                self._disappear(viewController: viewController)
+                                self._remove(childViewController: viewController)
+                                self.isAnimating = false
                             }
                             completion?()
                         }
@@ -431,13 +431,13 @@ extension QStackContainerViewController {
             guard let dismissAnimation = self._activeInteractiveDismissAnimation else { return }
             if dismissAnimation.canFinish == true {
                 dismissAnimation.finish({ [weak self] (completed: Bool) in
-                    guard let strong = self else { return }
-                    strong._finishInteractiveDismiss()
+                    guard let self = self else { return }
+                    self._finishInteractiveDismiss()
                 })
             } else {
                 dismissAnimation.cancel({ [weak self] (completed: Bool) in
-                    guard let strong = self else { return }
-                    strong._cancelInteractiveDismiss()
+                    guard let self = self else { return }
+                    self._cancelInteractiveDismiss()
                 })
             }
             break

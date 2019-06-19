@@ -49,7 +49,7 @@ open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComp
             vertical: UILayoutPriority(rawValue: 252)
         )
         view.onPressed = { [weak self] _ in
-            guard let strong = self, let composable = strong.composable else { return }
+            guard let self = self, let composable = self.composable else { return }
             composable.buttonPressed(composable)
         }
         self.contentView.addSubview(view)

@@ -189,8 +189,8 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.alpha = 0
         view.onPressed = { [weak self] _ in
-            guard let strong = self else { return }
-            strong.delegate?.pincodeCompositionLeftPressed(strong)
+            guard let self = self, let delegate = self.delegate else { return }
+            delegate.pincodeCompositionLeftPressed(self)
         }
         self.contentView.addSubview(view)
         return view
@@ -200,12 +200,14 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.alpha = 0
         view.onPressed = { [weak self] _ in
-            guard let strong = self else { return }
-            if strong.pincode.isEmpty == true {
-                strong.delegate?.pincodeCompositionRightPressed(strong)
+            guard let self = self else { return }
+            if self.pincode.isEmpty == true {
+                if let delegate = self.delegate {
+                    delegate.pincodeCompositionRightPressed(self)
+                }
             } else {
-                strong.pincode.removeLast()
-                strong._updateRightButton()
+                self.pincode.removeLast()
+                self._updateRightButton()
             }
         }
         self.contentView.addSubview(view)

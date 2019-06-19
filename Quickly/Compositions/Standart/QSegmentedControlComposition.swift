@@ -32,12 +32,10 @@ open class QSegmentedControlComposition< Composable: QSegmentedControlComposable
     private lazy var segment: QSegmentedControl = {
         let view = QSegmentedControl()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.onSelected = { [weak self] (segment, selected) in
-            guard let strong = self else { return }
-            if let composable = strong.composable {
-                composable.segmentSelectedItem = selected
-                composable.segmentChanged(composable)
-            }
+        view.onSelected = { [weak self] segment, selected in
+            guard let self = self, let composable = self.composable else { return }
+            composable.segmentSelectedItem = selected
+            composable.segmentChanged(composable)
         }
         self.contentView.addSubview(view)
         return view

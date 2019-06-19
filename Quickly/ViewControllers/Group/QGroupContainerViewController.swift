@@ -316,9 +316,10 @@ extension QGroupContainerViewController {
                     targetViewController: targetViewController,
                     animated: animated,
                     complete: { [weak self] in
-                        guard let strong = self else { return }
-                        strong._disappear(viewController: currentViewController)
-                        strong.isAnimating = false
+                        if let self = self {
+                            self._disappear(viewController: currentViewController)
+                            self.isAnimating = false
+                        }
                         completion?()
                     }
                 )
