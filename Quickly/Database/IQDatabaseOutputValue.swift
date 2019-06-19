@@ -145,7 +145,7 @@ extension Double : IQDatabaseOutputValue {
 extension CGFloat : IQDatabaseOutputValue {
     
     public static func value(statement: QDatabase.Statement, at index: Int) throws -> CGFloat {
-        return CGFloat(statement.value(at: index) as CGFloat.NativeType)
+        return CGFloat(statement.value(at: index) as Double)
     }
     
 }

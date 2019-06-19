@@ -161,7 +161,7 @@ extension Double : IQDatabaseInputValue {
 extension CGFloat : IQDatabaseInputValue {
     
     public func bindTo(statement: QDatabase.Statement, at index: Int) throws {
-        try statement.bind(at: index, value: self.native)
+        try statement.bind(at: index, value: Double(self.native))
     }
     
 }
