@@ -459,6 +459,14 @@ private extension QMultiTextField {
 
     class Field : UITextView, IQView {
         
+        public override var inputAccessoryView: UIView? {
+            set(value) { super.inputAccessoryView = value }
+            get {
+                guard let view = super.inputAccessoryView else { return nil }
+                return view.isHidden == true ? nil : view
+            }
+        }
+        
         required init() {
             super.init(
                 frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40),
