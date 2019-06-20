@@ -250,17 +250,21 @@ extension QApiRequest {
                 })
                 uploadedItems.forEach({ (uploadedItem) in
                     let encodeName = self._encode(value: uploadedItem.name)
-                    if let filename = uploadedItem.filename, let mimetype = uploadedItem.mimetype {
+                    var headerString = "--\(boundary)\r\nContent-Disposition: form-data; name=\"\(encodeName)\""
+                    if let filename = uploadedItem.filename {
                         let encodeFilename = self._encode(value: filename)
-                        let headerString = "--\(boundary)\r\nContent-Disposition: form-data; name=\"\(encodeName)\"; filename=\"\(encodeFilename)\"\r\nContent-Type: \(mimetype)\r\n\r\n"
-                        if let headerData = headerString.data(using: .ascii) {
-                            data.append(headerData)
-                        }
+                        headerString += "; filename=\"\(encodeFilename)\""
                     } else {
-                        let headerString = "--\(boundary)\r\nContent-Disposition: form-data; name=\"\(encodeName)\"\r\n\r\n"
-                        if let headerData = headerString.data(using: .ascii) {
-                            data.append(headerData)
-                        }
+                        headerString += "\r\n"
+                    }
+                    if let mimetype = uploadedItem.mimetype {
+                        headerString += "Content-Type: \(mimetype)\r\n"
+                    } else {
+                        headerString += "\r\n"
+                    }
+                    headerString += "\r\n"
+                    if let headerData = headerString.data(using: .ascii) {
+                        data.append(headerData)
                     }
                     data.append(uploadedItem.data)
                     let footerString = "\r\n"
