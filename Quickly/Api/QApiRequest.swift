@@ -250,10 +250,17 @@ extension QApiRequest {
                 })
                 uploadedItems.forEach({ (uploadedItem) in
                     let encodeName = self._encode(value: uploadedItem.name)
-                    let encodeFilename = self._encode(value: uploadedItem.filename)
-                    let headerString = "--\(boundary)\r\nContent-Disposition: form-data; name=\"\(encodeName)\"; filename=\"\(encodeFilename)\"\r\nContent-Type: \(uploadedItem.mimetype)\r\n\r\n"
-                    if let headerData = headerString.data(using: .ascii) {
-                        data.append(headerData)
+                    if let filename = uploadedItem.filename, let mimetype = uploadedItem.mimetype {
+                        let encodeFilename = self._encode(value: filename)
+                        let headerString = "--\(boundary)\r\nContent-Disposition: form-data; name=\"\(encodeName)\"; filename=\"\(encodeFilename)\"\r\nContent-Type: \(mimetype)\r\n\r\n"
+                        if let headerData = headerString.data(using: .ascii) {
+                            data.append(headerData)
+                        }
+                    } else {
+                        let headerString = "--\(boundary)\r\nContent-Disposition: form-data; name=\"\(encodeName)\"\r\n\r\n"
+                        if let headerData = headerString.data(using: .ascii) {
+                            data.append(headerData)
+                        }
                     }
                     data.append(uploadedItem.data)
                     let footerString = "\r\n"
@@ -472,11 +479,11 @@ extension QApiRequest : IQDebug {
 open class QApiRequestUploadItem {
 
     public private(set) var name: String
-    public private(set) var filename: String
-    public private(set) var mimetype: String
+    public private(set) var filename: String?
+    public private(set) var mimetype: String?
     public private(set) var data: Data
 
-    public init(name: String, filename: String, mimetype: String, data: Data) {
+    public init(name: String, filename: String? = nil, mimetype: String? = nil, data: Data) {
         self.name = name
         self.filename = filename
         self.mimetype = mimetype
@@ -498,8 +505,12 @@ extension QApiRequestUploadItem : IQDebug {
         buffer.append("<\(String(describing: self))\n")
 
         QDebugString("Name: \(self.name)\n", &buffer, indent, nextIndent, indent)
-        QDebugString("Filename: \(self.filename)\n", &buffer, indent, nextIndent, indent)
-        QDebugString("Mimetype: \(self.mimetype)\n", &buffer, indent, nextIndent, indent)
+        if let filename = self.filename {
+            QDebugString("Filename: \(filename)\n", &buffer, indent, nextIndent, indent)
+        }
+        if let mimetype = self.mimetype {
+            QDebugString("Mimetype: \(mimetype)\n", &buffer, indent, nextIndent, indent)
+        }
         QDebugString("Data: \(self.data)\n", &buffer, indent, nextIndent, indent)
 
         if footerIndent > 0 {
