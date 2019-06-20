@@ -253,7 +253,7 @@ extension QApiRequest {
                     var headerString = "--\(boundary)\r\nContent-Disposition: form-data; name=\"\(encodeName)\""
                     if let filename = uploadedItem.filename {
                         let encodeFilename = self._encode(value: filename)
-                        headerString += "; filename=\"\(encodeFilename)\""
+                        headerString += "; filename=\"\(encodeFilename)\"\r\n"
                     } else {
                         headerString += "\r\n"
                     }
