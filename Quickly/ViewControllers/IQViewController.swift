@@ -63,3 +63,17 @@ public protocol IQViewController : class {
     func setNeedUpdateStatusBar()
 
 }
+
+public extension IQViewController {
+    
+    var rootViewController: IQViewController? {
+        get {
+            var vc: IQViewController = self
+            while vc.parentViewController != nil {
+                vc = vc.parentViewController!
+            }
+            return vc
+        }
+    }
+    
+}

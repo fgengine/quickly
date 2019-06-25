@@ -29,21 +29,7 @@ open class QViewController : NSObject, IQViewController {
     }
     open private(set) var childViewControllers: [IQViewController] = []
     open var inputViewController: IQInputViewController? {
-        set(value) {
-            if self._view.customInputViewController !== value {
-                if let vc = self._view.customInputViewController {
-                    vc.parentViewController = nil
-                }
-                if let vc = value {
-                    var viewController: IQViewController = self
-                    while viewController.parentViewController != nil {
-                        viewController = viewController.parentViewController!
-                    }
-                    vc.parentViewController = viewController
-                }
-                self._view.customInputViewController = value
-            }
-        }
+        set(value) { self._view.customInputViewController = value }
         get { return self._view.customInputViewController }
     }
     open var edgesForExtendedLayout: UIRectEdge {
@@ -365,22 +351,26 @@ open class QViewController : NSObject, IQViewController {
         var customInputViewController: IQInputViewController? {
             didSet(oldValue) {
                 if(self.customInputViewController !== oldValue) {
+                    if let vc = oldValue {
+                        vc.willDismiss(animated: true)
+                        vc.didDismiss(animated: true)
+                        vc.parentViewController = nil
+                    }
+                    if let ovc = self.viewController, let vc = self.customInputViewController {
+                        vc.parentViewController = ovc.rootViewController
+                    }
                     if(self.isFirstResponder == true) {
-                        if let vc = oldValue {
-                            vc.willDismiss(animated: true)
-                            vc.didDismiss(animated: true)
-                        }
                         self.reloadInputViews()
                         if let vc = self.customInputViewController {
                             vc.willPresent(animated: true)
                             vc.didPresent(animated: true)
                         }
+                    } else if let vc = self.customInputViewController {
+                        self.becomeFirstResponder()
+                        vc.willPresent(animated: true)
+                        vc.didPresent(animated: true)
                     } else {
-                        if self.customInputViewController != nil {
-                            self.becomeFirstResponder()
-                        } else {
-                            self.resignFirstResponder()
-                        }
+                        self.resignFirstResponder()
                     }
                 }
             }
@@ -426,18 +416,13 @@ open class QViewController : NSObject, IQViewController {
         @discardableResult
         open override func becomeFirstResponder() -> Bool {
             guard super.becomeFirstResponder() == true else { return false }
-            guard let vc = self.customInputViewController else { return false }
-            vc.willPresent(animated: true)
-            vc.didPresent(animated: true)
             return true
         }
         
         @discardableResult
         open override func resignFirstResponder() -> Bool {
             guard super.resignFirstResponder() == true else { return false }
-            guard let vc = self.customInputViewController else { return false }
-            vc.willDismiss(animated: true)
-            vc.didDismiss(animated: true)
+            self.customInputViewController = nil
             return true
         }
         
