@@ -2,10 +2,7 @@
 //  Quickly
 //
 
-public class QApiQuery<
-    RequestType: IQApiRequest,
-    ResponseType: IQApiResponse
-> : IQApiQuery {
+public final class QApiTaskQuery< RequestType: IQApiRequest, ResponseType: IQApiResponse > : IQApiTaskQuery {
 
     public typealias ProgressClosure = (_ progress: Progress) -> Void
     public typealias CompleteClosure = (_ request: RequestType, _ response: ResponseType) -> Void
@@ -18,10 +15,10 @@ public class QApiQuery<
     public private(set) var response: ResponseType
     public private(set) var queue: DispatchQueue
     public private(set) var downloadProgress: Progress = Progress()
-    public private(set) var download: ProgressClosure?
+    public private(set) var onDownload: ProgressClosure?
     public private(set) var uploadProgress: Progress = Progress()
-    public private(set) var upload: ProgressClosure?
-    public private(set) var completed: CompleteClosure
+    public private(set) var onUpload: ProgressClosure?
+    public private(set) var onCompleted: CompleteClosure
 
     internal var receivedResponse: URLResponse?
     internal var receivedData: Data?
@@ -32,60 +29,56 @@ public class QApiQuery<
         request: RequestType,
         response: ResponseType,
         queue: DispatchQueue,
-        completed: @escaping CompleteClosure
+        onCompleted: @escaping CompleteClosure
     ) {
-        self.createAt = Date()
         self.provider = provider
+        self.createAt = Date()
         self.request = request
         self.response = response
         self.queue = queue
-        self.completed = completed
+        self.onCompleted = onCompleted
     }
 
-    public convenience init(
+    public init(
         provider: IQApiProvider,
         request: RequestType,
         response: ResponseType,
         queue: DispatchQueue,
-        download: @escaping ProgressClosure,
-        completed: @escaping CompleteClosure
+        onDownload: @escaping ProgressClosure,
+        onCompleted: @escaping CompleteClosure
     ) {
-        self.init(
-            provider: provider,
-            request: request,
-            response: response,
-            queue: queue,
-            completed: completed
-        )
-
-        self.download = download
+        self.provider = provider
+        self.createAt = Date()
+        self.request = request
+        self.response = response
+        self.queue = queue
+        self.onDownload = onDownload
+        self.onCompleted = onCompleted
     }
 
-    public convenience init(
+    public init(
         provider: IQApiProvider,
         request: RequestType,
         response: ResponseType,
         queue: DispatchQueue,
-        upload: @escaping ProgressClosure,
-        completed: @escaping CompleteClosure
+        onUpload: @escaping ProgressClosure,
+        onCompleted: @escaping CompleteClosure
     ) {
-        self.init(
-            provider: provider,
-            request: request,
-            response: response,
-            queue: queue,
-            completed: completed
-        )
-
-        self.upload = upload
+        self.provider = provider
+        self.createAt = Date()
+        self.request = request
+        self.response = response
+        self.queue = queue
+        self.onUpload = onUpload
+        self.onCompleted = onCompleted
     }
 
     public func prepare(session: URLSession) -> Bool {
         if self.task == nil {
             if let urlRequest = self.request.urlRequest(provider: self.provider) {
-                if self.download != nil {
+                if self.onDownload != nil {
                     self.task = session.downloadTask(with: urlRequest)
-                } else if self.upload != nil {
+                } else if self.onUpload != nil {
                     self.task = session.uploadTask(withStreamedRequest: urlRequest)
                 } else {
                     self.task = session.dataTask(with: urlRequest)
@@ -95,15 +88,9 @@ public class QApiQuery<
         return self.task != nil
     }
 
-    public func resume() {
+    public func start() {
         if let task = self.task {
             task.resume()
-        }
-    }
-
-    public func suspend() {
-        if let task = self.task {
-            task.suspend()
         }
     }
 
@@ -120,7 +107,7 @@ public class QApiQuery<
     public func upload(bytes: Int64, totalBytes: Int64) {
         self.uploadProgress.totalUnitCount = totalBytes
         self.uploadProgress.completedUnitCount = bytes
-        if let upload = self.upload {
+        if let upload = self.onUpload {
             self.queue.async {
                 upload(self.uploadProgress)
             }
@@ -130,7 +117,7 @@ public class QApiQuery<
     public func resumeDownload(bytes: Int64, totalBytes: Int64) {
         self.downloadProgress.totalUnitCount = totalBytes
         self.downloadProgress.completedUnitCount = bytes
-        if let download = self.download {
+        if let download = self.onDownload {
             self.queue.async {
                 download(self.downloadProgress)
             }
@@ -140,7 +127,7 @@ public class QApiQuery<
     public func download(bytes: Int64, totalBytes: Int64) {
         self.downloadProgress.totalUnitCount = totalBytes
         self.downloadProgress.completedUnitCount = bytes
-        if let download = self.download {
+        if let download = self.onDownload {
             self.queue.async {
                 download(self.downloadProgress)
             }
@@ -179,19 +166,25 @@ public class QApiQuery<
             self._parse()
         }
     }
+    
+}
 
-    private func _parse() {
+// MARK: Private
+
+private extension QApiTaskQuery {
+
+    func _parse() {
         guard let response = self.receivedResponse else { return }
         self.response.parse(response: response, data: self.receivedData)
         self._completeIfNeeded()
     }
 
-    private func _parse(error: Error) {
+    func _parse(error: Error) {
         self.response.parse(error: error)
         self._completeIfNeeded()
     }
 
-    private func _completeIfNeeded() {
+    func _completeIfNeeded() {
         if self.response.error == nil {
             self._complete()
         } else {
@@ -206,21 +199,21 @@ public class QApiQuery<
         }
     }
 
-    private func _complete() {
+    func _complete() {
         #if DEBUG
         if self._logging(self.request.logging) == false {
             self._logging(self.provider.logging)
         }
         #endif
-        self.queue.async {
-            self.completed(self.request, self.response)
-        }
+        self.queue.async(execute: {
+            self.onCompleted(self.request, self.response)
+        })
     }
     
     #if DEBUG
     
     @discardableResult
-    private func _logging(_ logging: QApiLogging) -> Bool {
+    func _logging(_ logging: QApiLogging) -> Bool {
         switch logging {
         case .never:
             return false
@@ -242,9 +235,9 @@ public class QApiQuery<
 
 #if DEBUG
 
-extension QApiQuery : IQDebug {
+extension QApiTaskQuery : IQDebug {
 
-    open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+    public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         let nextIndent = indent + 1
 
         if headerIndent > 0 {

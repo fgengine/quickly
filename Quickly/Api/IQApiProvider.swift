@@ -14,6 +14,4 @@ public protocol IQApiProvider : class {
 
     func send(query: IQApiQuery)
 
-    func cancel(query: IQApiQuery)
-
 }
