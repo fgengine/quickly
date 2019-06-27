@@ -249,6 +249,9 @@
 		40C8F8281F55145D00C75D34 /* QSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F8271F55145D00C75D34 /* QSpinnerView.swift */; };
 		40C8F82A1F552F7400C75D34 /* QTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F8291F552F7400C75D34 /* QTextField.swift */; };
 		40C94A271F69514500439961 /* QObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C94A261F69514500439961 /* QObserver.swift */; };
+		40CA3C0622C56EF400C4C1DC /* QProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CA3C0222C56EF400C4C1DC /* QProgressView.swift */; };
+		40CA3C0722C56EF400C4C1DC /* IQProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CA3C0322C56EF400C4C1DC /* IQProgressView.swift */; };
+		40CA3C0822C56EF400C4C1DC /* IQProgressFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CA3C0522C56EF400C4C1DC /* IQProgressFactory.swift */; };
 		40CF45B51F4DE6AB004D00D8 /* IQCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF456F1F4DE6AB004D00D8 /* IQCollectionCell.swift */; };
 		40CF45B61F4DE6AB004D00D8 /* IQCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45701F4DE6AB004D00D8 /* IQCollectionController.swift */; };
 		40CF45B71F4DE6AB004D00D8 /* IQCollectionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CF45711F4DE6AB004D00D8 /* IQCollectionData.swift */; };
@@ -574,6 +577,9 @@
 		40C8F8271F55145D00C75D34 /* QSpinnerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QSpinnerView.swift; sourceTree = "<group>"; };
 		40C8F8291F552F7400C75D34 /* QTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTextField.swift; sourceTree = "<group>"; };
 		40C94A261F69514500439961 /* QObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QObserver.swift; sourceTree = "<group>"; };
+		40CA3C0222C56EF400C4C1DC /* QProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QProgressView.swift; sourceTree = "<group>"; };
+		40CA3C0322C56EF400C4C1DC /* IQProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQProgressView.swift; sourceTree = "<group>"; };
+		40CA3C0522C56EF400C4C1DC /* IQProgressFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQProgressFactory.swift; sourceTree = "<group>"; };
 		40CF456F1F4DE6AB004D00D8 /* IQCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionCell.swift; sourceTree = "<group>"; };
 		40CF45701F4DE6AB004D00D8 /* IQCollectionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionController.swift; sourceTree = "<group>"; };
 		40CF45711F4DE6AB004D00D8 /* IQCollectionData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQCollectionData.swift; sourceTree = "<group>"; };
@@ -1461,6 +1467,24 @@
 			path = Observer;
 			sourceTree = "<group>";
 		};
+		40CA3C0122C56EF400C4C1DC /* Progress */ = {
+			isa = PBXGroup;
+			children = (
+				40CA3C0422C56EF400C4C1DC /* Factory */,
+				40CA3C0322C56EF400C4C1DC /* IQProgressView.swift */,
+				40CA3C0222C56EF400C4C1DC /* QProgressView.swift */,
+			);
+			path = Progress;
+			sourceTree = "<group>";
+		};
+		40CA3C0422C56EF400C4C1DC /* Factory */ = {
+			isa = PBXGroup;
+			children = (
+				40CA3C0522C56EF400C4C1DC /* IQProgressFactory.swift */,
+			);
+			path = Factory;
+			sourceTree = "<group>";
+		};
 		40CF456E1F4DE6AB004D00D8 /* Collection */ = {
 			isa = PBXGroup;
 			children = (
@@ -1623,6 +1647,7 @@
 				4039AF30221BE91800ED421C /* SegmentedControl */,
 				40CF45811F4DE6AB004D00D8 /* Fields */,
 				40C8F8221F55109100C75D34 /* Spinner */,
+				40CA3C0122C56EF400C4C1DC /* Progress */,
 				403E7C102225034E001098BD /* Pages */,
 				406C598721D1B02000CAA611 /* Loading */,
 				4022460A2076516F0020B357 /* Pincode */,
@@ -1957,6 +1982,7 @@
 				40266D2C2170D427009CC9B4 /* IQContextable.swift in Sources */,
 				400102BA208A7D4A00C64069 /* QCompositionCollectionCell.swift in Sources */,
 				401E8F83206D3CC1008A5BE4 /* QPickerSection.swift in Sources */,
+				40CA3C0622C56EF400C4C1DC /* QProgressView.swift in Sources */,
 				40D9C5AC2147DD7D0086DD57 /* QPlaceholderImageTitleDetailComposition.swift in Sources */,
 				40CF45BF1F4DE6AB004D00D8 /* QCollectionDecor.swift in Sources */,
 				4025A7AA2260CB0A00B4160F /* IQDatabaseExpressable.swift in Sources */,
@@ -2052,6 +2078,7 @@
 				40836AB0216CB21100777404 /* QPlaceholderTitleDetailValueComposition.swift in Sources */,
 				401E8F7D206D34C4008A5BE4 /* QPickerView.swift in Sources */,
 				4007B0A52144236900AE17DC /* QImageTitleValueIconComposition.swift in Sources */,
+				40CA3C0722C56EF400C4C1DC /* IQProgressView.swift in Sources */,
 				403B3D9420D39704008F80D4 /* IQRouterable.swift in Sources */,
 				40A75B6A208FAF81000E5FBE /* NSDecimalNumber.swift in Sources */,
 				406CD7642255774100CC444B /* QHamburgerContainerViewController.swift in Sources */,
@@ -2110,6 +2137,7 @@
 				4007B07F2144236900AE17DC /* QImageTitleComposition.swift in Sources */,
 				40836A9E216C88C400777404 /* QImageTitleDetailValueComposition.swift in Sources */,
 				4023D97D2146FFFD005F915D /* QPlaceholderImageTitleShapeComposition.swift in Sources */,
+				40CA3C0822C56EF400C4C1DC /* IQProgressFactory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

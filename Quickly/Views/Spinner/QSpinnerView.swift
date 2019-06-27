@@ -26,23 +26,23 @@ open class QSpinnerView : QView, IQSpinnerView {
     
     public var style: UIActivityIndicatorView.Style {
         set(value) {
-            if self._indicator.style != value {
-                let color = self._indicator.color
-                self._indicator.style = value
-                self._indicator.color = color
+            if self._view.style != value {
+                let color = self._view.color
+                self._view.style = value
+                self._view.color = color
             }
         }
-        get { return self._indicator.style }
+        get { return self._view.style }
     }
     public var color: UIColor? {
-        set(value) { self._indicator.color = value }
-        get { return self._indicator.color }
+        set(value) { self._view.color = value }
+        get { return self._view.color }
     }
 
-    private var _indicator: UIActivityIndicatorView!
+    private var _view: UIActivityIndicatorView!
 
     open override var intrinsicContentSize: CGSize {
-        get { return self._indicator.intrinsicContentSize }
+        get { return self._view.intrinsicContentSize }
     }
 
     open override func setup() {
@@ -50,32 +50,32 @@ open class QSpinnerView : QView, IQSpinnerView {
 
         self.backgroundColor = UIColor.clear
 
-        self._indicator = UIActivityIndicatorView(frame: self.bounds)
-        self._indicator.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
-        self.addSubview(self._indicator)
+        self._view = UIActivityIndicatorView(frame: self.bounds)
+        self._view.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
+        self.addSubview(self._view)
     }
 
     open func isAnimating() -> Bool  {
-        return self._indicator.isAnimating
+        return self._view.isAnimating
     }
 
     open func start() {
-        self._indicator.startAnimating()
+        self._view.startAnimating()
     }
 
     open func stop() {
-        self._indicator.stopAnimating()
+        self._view.stopAnimating()
     }
 
     open override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return self._indicator.sizeThatFits(size)
+        return self._view.sizeThatFits(size)
     }
 
     open override func sizeToFit() {
-        self._indicator.sizeToFit()
+        self._view.sizeToFit()
         self.frame = CGRect(
             origin: self.frame.origin,
-            size: self._indicator.frame.size
+            size: self._view.frame.size
         )
     }
     

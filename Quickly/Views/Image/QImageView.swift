@@ -85,6 +85,14 @@ open class QImageViewStyleSheet : QDisplayStyleSheet {
 
 open class QImageView : QDisplayView {
 
+    public var progressView: QProgressViewType? {
+        didSet {
+            if let progressView = self.progressView {
+                progressView.progress = 0
+                progressView.isHidden = self.isDownloading == false
+            }
+        }
+    }
     public var verticalAlignment: QViewVerticalAlignment = .center {
         didSet {
             self._localView.verticalAlignment = self.verticalAlignment
@@ -259,6 +267,10 @@ private extension QImageView {
                 loader.cancel(target: self)
             }
         }
+        if let progressView = self.progressView {
+            progressView.progress = 0
+            progressView.isHidden = false
+        }
         self.loader = loader ?? QImageLoader.shared
         self.loader.download(url: url, filter: filter, target: self)
         self.isDownloading = true
@@ -270,6 +282,9 @@ private extension QImageView {
                 loader.cancel(target: self)
                 self.loader = nil
             }
+            if let progressView = self.progressView {
+                progressView.isHidden = true
+            }
             self.isDownloading = false
         }
     }
@@ -279,18 +294,27 @@ private extension QImageView {
 extension QImageView : IQImageLoaderTarget {
     
     public func imageLoader(progress: Progress) {
+        if let progressView = self.progressView {
+            progressView.setProgress(CGFloat(progress.fractionCompleted), animated: true)
+        }
     }
     
     public func imageLoader(image: UIImage) {
         self._remoteView.image = image
         self._localView.isHidden = true
         self._remoteView.isHidden = false
+        if let progressView = self.progressView {
+            progressView.isHidden = true
+        }
         self.isDownloading = false
     }
     
     public func imageLoader(error: Error) {
         self._localView.isHidden = false
         self._remoteView.isHidden = true
+        if let progressView = self.progressView {
+            progressView.isHidden = true
+        }
         self.isDownloading = false
     }
     
