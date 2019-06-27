@@ -310,11 +310,16 @@ private extension QImageView {
             didSet { self.setNeedsDisplay() }
         }
         var image: UIImage? {
-            didSet { self.setNeedsDisplay() }
+            didSet {
+                self._tintImage = nil
+                self.setNeedsDisplay()
+            }
         }
         var size: CGSize? {
             didSet { self.setNeedsDisplay() }
         }
+        
+        private var _tintImage: UIImage?
         
         override init(frame: CGRect) {
             self.verticalAlignment = .center
@@ -357,7 +362,14 @@ private extension QImageView {
                 }
             case .alwaysTemplate:
                 if let tintColor = self.tintColor {
-                    if let tintImage = image.tintImage(tintColor) {
+                    var tintImage: UIImage?
+                    if let cacheTintImage = self._tintImage {
+                        tintImage = cacheTintImage
+                    } else if let realtimeTintImage = image.tintImage(tintColor) {
+                        self._tintImage = realtimeTintImage
+                        tintImage = realtimeTintImage
+                    }
+                    if let tintImage = tintImage {
                         if let cgTintImage = tintImage.cgImage {
                             context.draw(cgTintImage, in: imageRect)
                         }
