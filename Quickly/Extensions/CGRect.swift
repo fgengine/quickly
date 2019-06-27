@@ -41,4 +41,44 @@ public extension CGRect {
         )
     }
     
+    func aspectFit(size: CGSize) -> CGRect {
+        let iw = floor(size.width)
+        let ih = floor(size.height)
+        let bw = floor(self.size.width)
+        let bh = floor(self.size.height)
+        let fw = bw / iw
+        let fh = bh / ih
+        let sc = (fw < fh) ? fw : fh
+        let rw = iw * sc
+        let rh = ih * sc
+        let rx = (bw - rw) / 2
+        let ry = (bh - rh) / 2
+        return CGRect(
+            x: self.origin.x + rx,
+            y: self.origin.y + ry,
+            width: rw,
+            height: rh
+        )
+    }
+    
+    func aspectFill(size: CGSize) -> CGRect {
+        let iw = floor(size.width)
+        let ih = floor(size.height)
+        let bw = floor(self.size.width)
+        let bh = floor(self.size.height)
+        let fw = bw / iw
+        let fh = bh / ih
+        let sc = (fw > fh) ? fw : fh
+        let rw = iw * sc
+        let rh = ih * sc
+        let rx = (bw - rw) / 2
+        let ry = (bh - rh) / 2
+        return CGRect(
+            x: self.origin.x + rx,
+            y: self.origin.y + ry,
+            width: rw,
+            height: rh
+        )
+    }
+    
 }

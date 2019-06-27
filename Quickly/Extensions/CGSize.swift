@@ -17,42 +17,34 @@ public extension CGSize {
             height: self.height.lerp(to.height, progress: progress)
         )
     }
-
-    func aspectFit(bounds: CGRect) -> CGRect {
+    
+    func aspectFit(size: CGSize) -> CGSize {
         let iw = floor(self.width)
         let ih = floor(self.height)
-        let bw = floor(bounds.size.width)
-        let bh = floor(bounds.size.height)
+        let bw = floor(size.width)
+        let bh = floor(size.height)
         let fw = bw / iw
         let fh = bh / ih
         let sc = (fw < fh) ? fw : fh
         let rw = iw * sc
         let rh = ih * sc
-        let rx = (bw - rw) / 2
-        let ry = (bh - rh) / 2
-        return CGRect(
-            x: bounds.origin.x + rx,
-            y: bounds.origin.y + ry,
+        return CGSize(
             width: rw,
             height: rh
         )
     }
-
-    func aspectFill(bounds: CGRect) -> CGRect {
+    
+    func aspectFill(size: CGSize) -> CGSize {
         let iw = floor(self.width)
         let ih = floor(self.height)
-        let bw = floor(bounds.size.width)
-        let bh = floor(bounds.size.height)
+        let bw = floor(size.width)
+        let bh = floor(size.height)
         let fw = bw / iw
         let fh = bh / ih
         let sc = (fw > fh) ? fw : fh
         let rw = iw * sc
         let rh = ih * sc
-        let rx = (bw - rw) / 2
-        let ry = (bh - rh) / 2
-        return CGRect(
-            x: bounds.origin.x + rx,
-            y: bounds.origin.y + ry,
+        return CGSize(
             width: rw,
             height: rh
         )

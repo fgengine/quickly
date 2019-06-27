@@ -70,7 +70,7 @@ public extension UIImage {
         }
         let originalSize = self.size
         let originalScale = self.scale
-        let aspectFitRect = originalSize.aspectFit(bounds: CGRect(origin: CGPoint.zero, size: size))
+        let aspectFitRect = CGRect(origin: CGPoint.zero, size: size).aspectFit(size: originalSize)
         let newSize = CGSize(
             width: floor(aspectFitRect.width),
             height: floor(aspectFitRect.height)

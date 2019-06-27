@@ -16,14 +16,14 @@ public enum QImageViewScale : Int {
         switch self {
         case .origin: return CGRect(origin: bounds.origin, size: size)
         case .stretch: return CGRect(origin: bounds.origin, size: size)
-        case .aspectFit: return size.aspectFit(bounds: bounds)
-        case .aspectFill: return size.aspectFill(bounds: bounds)
+        case .aspectFit: return bounds.aspectFit(size: size)
+        case .aspectFill: return bounds.aspectFill(size: size)
         case .originOrAspectFit: return (bounds.width > size.width) && (bounds.height > size.height) ?
             CGRect(x: bounds.midX - (size.width / 2), y: bounds.midY - (size.height / 2), width: size.width, height: size.height) :
-            size.aspectFit(bounds: bounds)
+            bounds.aspectFit(size: size)
         case .originOrAspectFill: return (bounds.width > size.width) && (bounds.height > size.height) ?
             CGRect(x: bounds.midX - (size.width / 2), y: bounds.midY - (size.height / 2), width: size.width, height: size.height) :
-            size.aspectFill(bounds: bounds)
+            bounds.aspectFill(size: size)
         }
     }
     
