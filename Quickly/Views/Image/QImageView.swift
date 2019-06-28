@@ -89,7 +89,7 @@ open class QImageView : QDisplayView {
         didSet {
             if let progressView = self.progressView {
                 progressView.progress = 0
-                progressView.isHidden = self.isDownloading == false
+                progressView.isHidden = true
             }
         }
     }
@@ -267,10 +267,6 @@ private extension QImageView {
                 loader.cancel(target: self)
             }
         }
-        if let progressView = self.progressView {
-            progressView.progress = 0
-            progressView.isHidden = false
-        }
         self.loader = loader ?? QImageLoader.shared
         self.loader.download(url: url, filter: filter, target: self)
         self.isDownloading = true
@@ -295,6 +291,10 @@ extension QImageView : IQImageLoaderTarget {
     
     public func imageLoader(progress: Progress) {
         if let progressView = self.progressView {
+            if progressView.isHidden == true {
+                progressView.progress = 0
+                progressView.isHidden = false
+            }
             progressView.setProgress(CGFloat(progress.fractionCompleted), animated: true)
         }
     }

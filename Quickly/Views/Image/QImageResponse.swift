@@ -17,7 +17,10 @@ open class QImageResponse : QApiResponse {
     }
 
     open func image(data: Data) throws -> UIImage? {
-        return UIImage(data: data)
+        guard let image = UIImage(data: data) else {
+            throw QApiError.invalidResponse
+        }
+        return image
     }
 
 }

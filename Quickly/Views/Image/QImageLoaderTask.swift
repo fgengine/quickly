@@ -68,13 +68,13 @@ public class QImageLoaderTask {
     
     private func _cacheWorkItem() -> DispatchWorkItem {
         return DispatchWorkItem(block: { [weak self] in
-            guard let self = self else { return }
+            guard let self = self, let workItem = self.workItem else { return }
             var resultImage = self.cache.image(url: self.url, filter: self.filter)
             var resultError: Error?
             if resultImage == nil {
-                if let filter = self.filter {
-                    if let originImage = self.cache.image(url: self.url), let image = filter.apply(originImage) {
-                        if let data = image.pngData() {
+                if workItem.isCancelled == false, let filter = self.filter {
+                    if workItem.isCancelled == false, let originImage = self.cache.image(url: self.url), let image = filter.apply(originImage) {
+                        if workItem.isCancelled == false, let data = image.pngData() {
                             do {
                                 try self.cache.set(data: data, image: image, url: self.url, filter: filter)
                                 resultImage = image
@@ -85,21 +85,21 @@ public class QImageLoaderTask {
                     }
                 }
             }
-            self._finish(image: resultImage, error: resultError)
+            self._finish(workItem: workItem, image: resultImage, error: resultError)
         })
     }
     
     private func _localWorkItem() -> DispatchWorkItem {
         return DispatchWorkItem(block: { [weak self] in
-            guard let self = self else { return }
+            guard let self = self, let workItem = self.workItem else { return }
             var resultImage: UIImage?
             var resultError: Error?
             do {
                 let data = try Data(contentsOf: self.url)
-                if let originImage = UIImage(data: data) {
+                if workItem.isCancelled == false, let originImage = UIImage(data: data) {
                     try self.cache.set(data: data, image: originImage, url: self.url)
-                    if let filter = self.filter, let image = filter.apply(originImage) {
-                        if let data = image.pngData() {
+                    if workItem.isCancelled == false, let filter = self.filter, let image = filter.apply(originImage) {
+                        if workItem.isCancelled == false, let data = image.pngData() {
                             do {
                                 try self.cache.set(data: data, image: image, url: self.url, filter: filter)
                                 resultImage = image
@@ -107,25 +107,26 @@ public class QImageLoaderTask {
                                 resultError = error
                             }
                         }
-                    } else {
+                    } else if workItem.isCancelled == false {
                         resultImage = originImage
                     }
                 }
             } catch let error {
                 resultError = error
             }
-            self._finish(image: resultImage, error: resultError)
+            self._finish(workItem: workItem, image: resultImage, error: resultError)
         })
     }
     
     private func _remoteWorkItem() -> DispatchWorkItem {
         let semaphore = DispatchSemaphore(value: 0)
         return DispatchWorkItem(block: { [weak self] in
-            guard let self = self else { return }
+            guard let self = self, let workItem = self.workItem else { return }
             var downloadData: Data?
             var downloadImage: UIImage?
             var resultImage: UIImage?
             var resultError: Error?
+            self._progress(progress: Progress(totalUnitCount: 0))
             self.query = self.provider.send(
                 request: QImageRequest(url: self.url),
                 response: QImageResponse(),
@@ -141,11 +142,11 @@ public class QImageLoaderTask {
             )
             semaphore.wait()
             self.query = nil
-            if let data = downloadData, let originImage = downloadImage {
+            if workItem.isCancelled == false, let data = downloadData, let originImage = downloadImage {
                 do {
                     try self.cache.set(data: data, image: originImage, url: self.url)
-                    if let filter = self.filter, let image = filter.apply(originImage) {
-                        if let data = image.pngData() {
+                    if workItem.isCancelled == false, let filter = self.filter, let image = filter.apply(originImage) {
+                        if workItem.isCancelled == false, let data = image.pngData() {
                             do {
                                 try self.cache.set(data: data, image: image, url: self.url, filter: filter)
                                 resultImage = image
@@ -153,14 +154,14 @@ public class QImageLoaderTask {
                                 resultError = error
                             }
                         }
-                    } else {
+                    } else if workItem.isCancelled == false {
                         resultImage = originImage
                     }
                 } catch let error {
                     resultError = error
                 }
             }
-            self._finish(image: resultImage, error: resultError)
+            self._finish(workItem: workItem, image: resultImage, error: resultError)
         })
     }
     
@@ -173,14 +174,14 @@ public class QImageLoaderTask {
         })
     }
     
-    private func _finish(image: UIImage?, error: Error?) {
+    private func _finish(workItem: DispatchWorkItem, image: UIImage?, error: Error?) {
         DispatchQueue.main.async(execute: { [weak self] in
             guard let self = self else { return }
             if let delegate = self.delegate {
                 delegate.didFinishImageLoaderTask(self)
             }
-            if self.workItem != nil {
-                self.workItem = nil
+            self.workItem = nil
+            if workItem.isCancelled == false {
                 if let image = image {
                     for target in self.targets {
                         target.imageLoader(image: image)
