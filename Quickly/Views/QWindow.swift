@@ -123,6 +123,59 @@ open class QWindow : UIWindow, IQView, IQApplicationStateObserver {
         override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
             get { return self.contentViewController.supportedOrientations() }
         }
+        override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+            get {
+                let supportedOrientations = self.supportedInterfaceOrientations
+                switch UIDevice.current.orientation {
+                case .portrait:
+                    if supportedOrientations.contains(.portrait) == true {
+                        return .portrait
+                    } else if supportedOrientations.contains(.portraitUpsideDown) == true {
+                        return .portraitUpsideDown
+                    } else if supportedOrientations.contains(.landscapeLeft) == true {
+                        return .landscapeLeft
+                    } else if supportedOrientations.contains(.landscapeRight) == true {
+                        return .landscapeRight
+                    }
+                    break
+                case .portraitUpsideDown:
+                    if supportedOrientations.contains(.portraitUpsideDown) == true {
+                        return .portraitUpsideDown
+                    } else if supportedOrientations.contains(.portrait) == true {
+                        return .portrait
+                    } else if supportedOrientations.contains(.landscapeLeft) == true {
+                        return .landscapeLeft
+                    } else if supportedOrientations.contains(.landscapeRight) == true {
+                        return .landscapeRight
+                    }
+                    break
+                case .landscapeLeft:
+                    if supportedOrientations.contains(.landscapeLeft) == true {
+                        return .landscapeLeft
+                    } else if supportedOrientations.contains(.landscapeRight) == true {
+                        return .landscapeRight
+                    } else if supportedOrientations.contains(.portrait) == true {
+                        return .portrait
+                    } else if supportedOrientations.contains(.portraitUpsideDown) == true {
+                        return .portraitUpsideDown
+                    }
+                    break
+                case .landscapeRight:
+                    if supportedOrientations.contains(.landscapeRight) == true {
+                        return .landscapeRight
+                    } else if supportedOrientations.contains(.landscapeLeft) == true {
+                        return .landscapeLeft
+                    } else if supportedOrientations.contains(.portrait) == true {
+                        return .portrait
+                    } else if supportedOrientations.contains(.portraitUpsideDown) == true {
+                        return .portraitUpsideDown
+                    }
+                    break
+                default: break
+                }
+                return .unknown
+            }
+        }
         
         private var _isShowedSecurityView: Bool
 
