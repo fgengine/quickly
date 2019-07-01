@@ -172,6 +172,7 @@ extension QPushContainerViewController {
     private func _present(viewController: IQPushViewController, animated: Bool, completion: (() -> Void)?) {
         if self.isLoaded == true {
             self._appear(viewController: viewController)
+            self.setNeedUpdateOrientations()
             self.setNeedUpdateStatusBar()
             self.isAnimating = true
             let presentAnimation = self._presentAnimation(viewController: viewController)
@@ -194,6 +195,7 @@ extension QPushContainerViewController {
         let currentViewController = self.currentViewController
         if let index = self.viewControllers.firstIndex(where: { return $0 === viewController }) {
             self.viewControllers.remove(at: index)
+            self.setNeedUpdateOrientations()
             self.setNeedUpdateStatusBar()
             if self.isLoaded == true {
                 if currentViewController === viewController {
@@ -325,6 +327,7 @@ extension QPushContainerViewController {
         self._disappear(viewController: viewController)
         if let index = self.viewControllers.firstIndex(where: { return $0 === viewController }) {
             self.viewControllers.remove(at: index)
+            self.setNeedUpdateOrientations()
             self.setNeedUpdateStatusBar()
             if let nextViewController = self.currentViewController {
                 self._present(viewController: nextViewController, animated: true, completion: { [weak self] in

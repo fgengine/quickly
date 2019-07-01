@@ -206,6 +206,7 @@ extension QDialogContainerViewController {
                 )
             }
             self._appear(viewController: viewController)
+            self.setNeedUpdateOrientations()
             self.setNeedUpdateStatusBar()
             self.isAnimating = true
             let presentAnimation = self._presentAnimation(viewController: viewController)
@@ -229,6 +230,7 @@ extension QDialogContainerViewController {
         if let index = self.viewControllers.firstIndex(where: { return $0 === viewController }) {
             self.viewControllers.remove(at: index)
             if self.isLoaded == true {
+                self.setNeedUpdateOrientations()
                 self.setNeedUpdateStatusBar()
                 if currentViewController === viewController {
                     if self.interactiveDismissGesture.state != .possible {
@@ -362,6 +364,7 @@ extension QDialogContainerViewController {
         self._disappear(viewController: viewController)
         if let index = self.viewControllers.firstIndex(where: { return $0 === viewController }) {
             self.viewControllers.remove(at: index)
+            self.setNeedUpdateOrientations()
             self.setNeedUpdateStatusBar()
             if let backgroundView = self.backgroundView {
                 backgroundView.dismiss(

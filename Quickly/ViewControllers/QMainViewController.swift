@@ -39,6 +39,10 @@ open class QMainViewController : QViewController {
             vc.parentViewController = nil
         }
         didSet {
+            defer {
+                self.setNeedUpdateOrientations()
+                self.setNeedUpdateStatusBar()
+            }
             guard let vc = self.contentViewController else { return }
             vc.parentViewController = self
             if self.isLoaded == true {
@@ -61,6 +65,10 @@ open class QMainViewController : QViewController {
             vc.parentViewController = nil
         }
         didSet {
+            defer {
+                self.setNeedUpdateOrientations()
+                self.setNeedUpdateStatusBar()
+            }
             guard let vc = self.modalContainerViewController else { return }
             vc.parentViewController = self
             if self.isLoaded == true {

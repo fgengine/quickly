@@ -5,6 +5,7 @@
 public protocol IQViewControllerDelegate : class {
 
     func requestUpdateStatusBar(viewController: IQViewController)
+    func requestUpdateOrientation(viewController: IQViewController)
 
 }
 
@@ -56,6 +57,7 @@ public protocol IQViewController : class {
     func remove(childViewController viewController: IQViewController)
 
     func supportedOrientations() -> UIInterfaceOrientationMask
+    func setNeedUpdateOrientations()
 
     func preferedStatusBarHidden() -> Bool
     func preferedStatusBarStyle() -> UIStatusBarStyle

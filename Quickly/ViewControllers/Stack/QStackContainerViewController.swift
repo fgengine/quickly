@@ -282,6 +282,7 @@ extension QStackContainerViewController {
         if self.isLoaded == true {
             if let previousViewController = self.previousViewController {
                 self._appear(viewController: viewController)
+                self.setNeedUpdateOrientations()
                 self.setNeedUpdateStatusBar()
                 self.isAnimating = true
                 let presentAnimation = self._presentAnimation(viewController: viewController)
@@ -303,6 +304,7 @@ extension QStackContainerViewController {
                 )
             } else {
                 self._appear(viewController: viewController)
+                self.setNeedUpdateOrientations()
                 self.setNeedUpdateStatusBar()
                 completion?()
             }
@@ -317,6 +319,7 @@ extension QStackContainerViewController {
             let previousViewController = self.previousViewController
             self._viewControllers.remove(at: index)
             if self.isLoaded == true {
+                self.setNeedUpdateOrientations()
                 self.setNeedUpdateStatusBar()
                 if currentViewController === viewController, let previousViewController = previousViewController {
                     if self.interactiveDismissGesture.state != .possible {
@@ -453,6 +456,7 @@ extension QStackContainerViewController {
             }
             self._disappear(viewController: vc)
         }
+        self.setNeedUpdateOrientations()
         self.setNeedUpdateStatusBar()
         self._endInteractiveDismiss()
     }

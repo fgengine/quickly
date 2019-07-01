@@ -324,6 +324,14 @@ open class QViewController : NSObject, IQViewController {
     open func supportedOrientations() -> UIInterfaceOrientationMask {
         return .all
     }
+    
+    open func setNeedUpdateOrientations() {
+        if let delegate = self.delegate {
+            delegate.requestUpdateOrientation(viewController: self)
+        } else if let parent = self.parentViewController {
+            parent.setNeedUpdateOrientations()
+        }
+    }
 
     open func preferedStatusBarHidden() -> Bool {
         return false

@@ -197,6 +197,7 @@ extension QModalContainerViewController {
         }
         self.isAnimating = true
         self._appear(viewController: viewController)
+        self.setNeedUpdateOrientations()
         self.setNeedUpdateStatusBar()
         let presentAnimation = self._presentAnimation(viewController: viewController)
         presentAnimation.animate(
@@ -223,6 +224,7 @@ extension QModalContainerViewController {
             }
             self.isAnimating = true
             self.viewControllers.remove(at: index)
+            self.setNeedUpdateOrientations()
             self.setNeedUpdateStatusBar()
             if self.isLoaded == true {
                 if currentViewController === viewController {
@@ -360,6 +362,7 @@ extension QModalContainerViewController {
         self._disappear(viewController: currentViewController)
         if let index = self.viewControllers.firstIndex(where: { return $0 === currentViewController }) {
             self.viewControllers.remove(at: index)
+            self.setNeedUpdateOrientations()
             self.setNeedUpdateStatusBar()
         }
         self._endInteractiveDismiss()

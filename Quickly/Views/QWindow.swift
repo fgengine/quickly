@@ -124,57 +124,7 @@ open class QWindow : UIWindow, IQView, IQApplicationStateObserver {
             get { return self.contentViewController.supportedOrientations() }
         }
         override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-            get {
-                let supportedOrientations = self.supportedInterfaceOrientations
-                switch UIDevice.current.orientation {
-                case .portrait:
-                    if supportedOrientations.contains(.portrait) == true {
-                        return .portrait
-                    } else if supportedOrientations.contains(.portraitUpsideDown) == true {
-                        return .portraitUpsideDown
-                    } else if supportedOrientations.contains(.landscapeLeft) == true {
-                        return .landscapeLeft
-                    } else if supportedOrientations.contains(.landscapeRight) == true {
-                        return .landscapeRight
-                    }
-                    break
-                case .portraitUpsideDown:
-                    if supportedOrientations.contains(.portraitUpsideDown) == true {
-                        return .portraitUpsideDown
-                    } else if supportedOrientations.contains(.portrait) == true {
-                        return .portrait
-                    } else if supportedOrientations.contains(.landscapeLeft) == true {
-                        return .landscapeLeft
-                    } else if supportedOrientations.contains(.landscapeRight) == true {
-                        return .landscapeRight
-                    }
-                    break
-                case .landscapeLeft:
-                    if supportedOrientations.contains(.landscapeLeft) == true {
-                        return .landscapeLeft
-                    } else if supportedOrientations.contains(.landscapeRight) == true {
-                        return .landscapeRight
-                    } else if supportedOrientations.contains(.portrait) == true {
-                        return .portrait
-                    } else if supportedOrientations.contains(.portraitUpsideDown) == true {
-                        return .portraitUpsideDown
-                    }
-                    break
-                case .landscapeRight:
-                    if supportedOrientations.contains(.landscapeRight) == true {
-                        return .landscapeRight
-                    } else if supportedOrientations.contains(.landscapeLeft) == true {
-                        return .landscapeLeft
-                    } else if supportedOrientations.contains(.portrait) == true {
-                        return .portrait
-                    } else if supportedOrientations.contains(.portraitUpsideDown) == true {
-                        return .portraitUpsideDown
-                    }
-                    break
-                default: break
-                }
-                return .unknown
-            }
+            get { return self._interfaceOrientation() }
         }
         
         private var _isShowedSecurityView: Bool
@@ -276,11 +226,82 @@ open class QWindow : UIWindow, IQView, IQApplicationStateObserver {
                 }
             }
         }
+        
+        // MARK: Private
+        
+        private func _interfaceOrientation() -> UIInterfaceOrientation {
+            let supportedOrientations = self.supportedInterfaceOrientations
+            switch UIDevice.current.orientation {
+            case .unknown, .portrait, .faceUp, .faceDown:
+                if supportedOrientations.contains(.portrait) == true {
+                    return .portrait
+                } else if supportedOrientations.contains(.portraitUpsideDown) == true {
+                    return .portraitUpsideDown
+                } else if supportedOrientations.contains(.landscapeLeft) == true {
+                    return .landscapeLeft
+                } else if supportedOrientations.contains(.landscapeRight) == true {
+                    return .landscapeRight
+                }
+                break
+            case .portraitUpsideDown:
+                if supportedOrientations.contains(.portraitUpsideDown) == true {
+                    return .portraitUpsideDown
+                } else if supportedOrientations.contains(.portrait) == true {
+                    return .portrait
+                } else if supportedOrientations.contains(.landscapeLeft) == true {
+                    return .landscapeLeft
+                } else if supportedOrientations.contains(.landscapeRight) == true {
+                    return .landscapeRight
+                }
+                break
+            case .landscapeLeft:
+                if supportedOrientations.contains(.landscapeLeft) == true {
+                    return .landscapeLeft
+                } else if supportedOrientations.contains(.landscapeRight) == true {
+                    return .landscapeRight
+                } else if supportedOrientations.contains(.portrait) == true {
+                    return .portrait
+                } else if supportedOrientations.contains(.portraitUpsideDown) == true {
+                    return .portraitUpsideDown
+                }
+                break
+            case .landscapeRight:
+                if supportedOrientations.contains(.landscapeRight) == true {
+                    return .landscapeRight
+                } else if supportedOrientations.contains(.landscapeLeft) == true {
+                    return .landscapeLeft
+                } else if supportedOrientations.contains(.portrait) == true {
+                    return .portrait
+                } else if supportedOrientations.contains(.portraitUpsideDown) == true {
+                    return .portraitUpsideDown
+                }
+                break
+            @unknown default:
+                break
+            }
+            return .unknown
+        }
 
         // MARK: IQViewControllerDelegate
 
         func requestUpdateStatusBar(viewController: IQViewController) {
             self.setNeedsStatusBarAppearanceUpdate()
+        }
+        
+        func requestUpdateOrientation(viewController: IQViewController) {
+            let interfaceOrientation = self._interfaceOrientation()
+            var deviceOrientation = UIDevice.current.orientation
+            switch interfaceOrientation {
+            case .portrait: deviceOrientation = UIDeviceOrientation.portrait
+            case .portraitUpsideDown: deviceOrientation = UIDeviceOrientation.portraitUpsideDown
+            case .landscapeLeft: deviceOrientation = UIDeviceOrientation.landscapeLeft
+            case .landscapeRight: deviceOrientation = UIDeviceOrientation.landscapeRight
+            case .unknown: break
+            @unknown default: break
+            }
+            if deviceOrientation != UIDevice.current.orientation {
+                UIDevice.current.setValue(deviceOrientation.rawValue, forKey: "orientation")
+            }
         }
 
     }
