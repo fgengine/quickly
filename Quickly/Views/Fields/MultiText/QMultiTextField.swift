@@ -218,6 +218,7 @@ public class QMultiTextField : QDisplayView, IQField {
                 self._field.text = value
             }
             self._updatePlaceholderVisibility()
+            self.textHeight = self._textHeight()
         }
         get {
             var result: String
