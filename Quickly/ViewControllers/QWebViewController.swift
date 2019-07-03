@@ -133,7 +133,47 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
         loadingView.stop()
     }
     
+    open func canNavigationAction(with request: URLRequest) -> WKNavigationActionPolicy {
+        return .allow
+    }
+    
+    // MARK: WKUIDelegate
+    
+    open func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        if let url = navigationAction.request.url {
+            if navigationAction.targetFrame?.isMainFrame == true {
+                webView.load(navigationAction.request)
+            } else {
+                let application = UIApplication.shared
+                if application.canOpenURL(url) == true {
+                    application.openURL(url)
+                }
+            }
+        }
+        return nil
+    }
+    
     // MARK: WKNavigationDelegate
+    
+    open func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        var actionPolicy: WKNavigationActionPolicy = .allow
+        let request = navigationAction.request
+        if let url = request.url, let sheme = url.scheme {
+            switch sheme {
+            case "tel", "mailto":
+                let application = UIApplication.shared
+                if application.canOpenURL(url) == true {
+                    application.openURL(url)
+                }
+                actionPolicy = .cancel
+                break
+            default:
+                actionPolicy = .allow
+                break
+            }
+        }
+        decisionHandler(actionPolicy)
+    }
     
     open func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         let challenge = QImplAuthenticationChallenge(
