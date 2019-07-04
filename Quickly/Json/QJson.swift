@@ -120,8 +120,8 @@ public extension QJson {
 // MARK: - QJson • Set -
 
 public extension QJson {
-
-    func set(_ value: Any, path: String? = nil) throws {
+    
+    func setAny(_ value: Any, path: String? = nil) throws {
         if let path = path {
             try self._set(value, subpaths: self._subpaths(path))
         } else {
@@ -131,7 +131,7 @@ public extension QJson {
 
     func set< Type: IQJsonValue >(_ value: Type, path: String? = nil) throws {
         let jsonValue = try value.toJsonValue()
-        try self.set(jsonValue, path: path)
+        try self.setAny(jsonValue, path: path)
     }
 
     func set< Type: IQJsonValue >(_ value: [Type], mandatory: Bool, path: String? = nil) throws {
@@ -148,7 +148,7 @@ public extension QJson {
             }
             index += 1
         }
-        try self.set(jsonArray, path: path)
+        try self.setAny(jsonArray, path: path)
     }
 
     func set< Key: IQJsonValue, Value: IQJsonValue >(_ value: [Key: Value], mandatory: Bool, path: String? = nil) throws {
@@ -166,7 +166,7 @@ public extension QJson {
             }
             index += 1
         }
-        try self.set(jsonDictionary, path: path)
+        try self.setAny(jsonDictionary, path: path)
     }
     
     func set(_ value: Date, format: String, path: String? = nil) throws {
@@ -194,8 +194,8 @@ public extension QJson {
 // MARK: - QJson • Get -
 
 public extension QJson {
-
-    func get(path: String? = nil) throws -> Any {
+    
+    func getAny(path: String? = nil) throws -> Any {
         guard var root = self.root else { throw QJsonError.notJson }
         guard let path = path else { return root }
         var subpathIndex: Int = 0
@@ -222,19 +222,19 @@ public extension QJson {
     }
 
     func get< Type: IQJsonValue >(path: String? = nil) throws -> Type {
-        let jsonValue: Any = try self.get(path: path)
+        let jsonValue: Any = try self.getAny(path: path)
         return try Type.fromJson(value: jsonValue) as! Type
     }
     
     func get< Type: RawRepresentable, TypeRawValue: IQJsonValue >(path: String? = nil) throws -> Type where Type.RawValue == TypeRawValue {
-        let jsonValue: Any = try self.get(path: path)
+        let jsonValue: Any = try self.getAny(path: path)
         let rawValue = try TypeRawValue.fromJson(value: jsonValue) as! TypeRawValue
         guard let result = Type(rawValue: rawValue) else { throw QJsonError.cast }
         return result
     }
 
     func get< Type: IQJsonValue >(mandatory: Bool, path: String? = nil) throws -> [Type] {
-        let jsonValue: Any = try self.get(path: path)
+        let jsonValue: Any = try self.getAny(path: path)
         guard let jsonArray = jsonValue as? NSArray else { throw QJsonError.cast }
         var result: [Type] = []
         var index: Int = 0
@@ -252,7 +252,7 @@ public extension QJson {
     }
     
     func get< Type: RawRepresentable, TypeRawValue: IQJsonValue >(mandatory: Bool, path: String? = nil) throws -> [Type] where Type.RawValue == TypeRawValue {
-        let jsonValue: Any = try self.get(path: path)
+        let jsonValue: Any = try self.getAny(path: path)
         guard let jsonArray = jsonValue as? NSArray else { throw QJsonError.cast }
         var result: [Type] = []
         var index: Int = 0
@@ -271,7 +271,7 @@ public extension QJson {
     }
 
     func get< Key: IQJsonValue, Value: IQJsonValue >(mandatory: Bool, path: String? = nil) throws -> [Key : Value] {
-        let jsonValue: Any = try self.get(path: path)
+        let jsonValue: Any = try self.getAny(path: path)
         guard let jsonDictionary = jsonValue as? NSDictionary else { throw QJsonError.cast }
         var result: [Key : Value] = [:]
         for jsonItem in jsonDictionary {
@@ -288,7 +288,7 @@ public extension QJson {
     }
     
     func get< Key: RawRepresentable, KeyRawValue: IQJsonValue, Value: IQJsonValue >(mandatory: Bool, path: String? = nil) throws -> [Key : Value] where Key.RawValue == KeyRawValue {
-        let jsonValue: Any = try self.get(path: path)
+        let jsonValue: Any = try self.getAny(path: path)
         guard let jsonDictionary = jsonValue as? NSDictionary else { throw QJsonError.cast }
         var result: [Key : Value] = [:]
         for jsonItem in jsonDictionary {
@@ -306,7 +306,7 @@ public extension QJson {
     }
     
     func get< Key: IQJsonValue, Value: RawRepresentable, ValueRawValue: IQJsonValue >(mandatory: Bool, path: String? = nil) throws -> [Key : Value] where Value.RawValue == ValueRawValue {
-        let jsonValue: Any = try self.get(path: path)
+        let jsonValue: Any = try self.getAny(path: path)
         guard let jsonDictionary = jsonValue as? NSDictionary else { throw QJsonError.cast }
         var result: [Key : Value] = [:]
         for jsonItem in jsonDictionary {
@@ -324,7 +324,7 @@ public extension QJson {
     }
     
     func get< Key: RawRepresentable, KeyRawValue: IQJsonValue, Value: RawRepresentable, ValueRawValue: IQJsonValue >(mandatory: Bool, path: String? = nil) throws -> [Key : Value] where Key.RawValue == KeyRawValue, Value.RawValue == ValueRawValue {
-        let jsonValue: Any = try self.get(path: path)
+        let jsonValue: Any = try self.getAny(path: path)
         guard let jsonDictionary = jsonValue as? NSDictionary else { throw QJsonError.cast }
         var result: [Key : Value] = [:]
         for jsonItem in jsonDictionary {
@@ -359,21 +359,6 @@ public extension QJson {
 // MARK: - QJson • Private -
 
 private extension QJson {
-
-    func _subpaths(_ path: String) -> [IQJsonPath] {
-        guard path.contains(Const.pathSeparator) == true else { return [ path ] }
-        let components = path.components(separatedBy: Const.pathSeparator)
-        return components.compactMap({ (subpath: String) -> IQJsonPath? in
-            guard let match = Const.pathIndexPattern.firstMatch(in: subpath, options: [], range: NSRange(location: 0, length: subpath.count)) else { return subpath }
-            if((match.range.location != NSNotFound) && (match.range.length > 0)) {
-                let startIndex = subpath.index(subpath.startIndex, offsetBy: 1)
-                let endIndex = subpath.index(subpath.endIndex, offsetBy: -1)
-                let indexString = String(subpath[startIndex..<endIndex])
-                return NSNumber.number(from: indexString)
-            }
-            return subpath
-        })
-    }
 
     func _set(_ value: Any?, subpaths: [IQJsonPath]) throws {
         if self.root == nil {
@@ -450,6 +435,21 @@ private extension QJson {
             subpathIndex += 1
             prevRoot = root
         }
+    }
+    
+    func _subpaths(_ path: String) -> [IQJsonPath] {
+        guard path.contains(Const.pathSeparator) == true else { return [ path ] }
+        let components = path.components(separatedBy: Const.pathSeparator)
+        return components.compactMap({ (subpath: String) -> IQJsonPath? in
+            guard let match = Const.pathIndexPattern.firstMatch(in: subpath, options: [], range: NSRange(location: 0, length: subpath.count)) else { return subpath }
+            if((match.range.location != NSNotFound) && (match.range.length > 0)) {
+                let startIndex = subpath.index(subpath.startIndex, offsetBy: 1)
+                let endIndex = subpath.index(subpath.endIndex, offsetBy: -1)
+                let indexString = String(subpath[startIndex..<endIndex])
+                return NSNumber.number(from: indexString)
+            }
+            return subpath
+        })
     }
 
     struct Const {
