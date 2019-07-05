@@ -346,6 +346,7 @@ public class QTextField : QDisplayView, IQField {
 
         self._field = Field(frame: self.bounds)
         self._field.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
+        self._field.inputAccessoryView = self.toolbar
         self._field.delegate = self._fieldDelegate
         self.addSubview(self._field)
     }
