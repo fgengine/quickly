@@ -19,8 +19,7 @@ open class QAmountStringValidator : QRegularExpressionStringValidator {
             patterns.append("^[1-9][0-9]{0,\(maximumSimbol - 1)}\\\(decimalSeparator)[0-9]{0,\(maximumDecimalSimbol)}$")
         }
         super.init(
-            expression: try NSRegularExpression(pattern: patterns.joined(separator: "|"), options: [ .caseInsensitive ]),
-            minimumLength: 0
+            expression: try NSRegularExpression(pattern: patterns.joined(separator: "|"), options: [ .caseInsensitive ])
         )
     }
 

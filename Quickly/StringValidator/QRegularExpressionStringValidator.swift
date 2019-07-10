@@ -2,37 +2,27 @@
 //  Quickly
 //
 
-open class QRegularExpressionStringValidator : QLengthStringValidator {
+open class QRegularExpressionStringValidator : IQStringValidator {
 
     public var expression: NSRegularExpression
 
     public init(
-        expression: NSRegularExpression,
-        minimumLength: Int,
-        maximumLength: Int? = nil
+        expression: NSRegularExpression
     ) {
         self.expression = expression
-        super.init(
-            minimumLength: minimumLength,
-            maximumLength: maximumLength
-        )
     }
 
     public convenience init(
-        pattern: String,
-        minimumLength: Int,
-        maximumLength: Int? = nil
+        pattern: String
     ) throws {
         self.init(
-            expression: try NSRegularExpression(pattern: pattern, options: [ .caseInsensitive ]),
-            minimumLength: minimumLength,
-            maximumLength: maximumLength
+            expression: try NSRegularExpression(pattern: pattern, options: [ .caseInsensitive ])
         )
     }
 
-    public override func validate(_ string: String, complete: Bool) -> Bool {
-        var valid = super.validate(string, complete: complete)
-        if valid == true && complete == true {
+    public func validate(_ string: String, complete: Bool) -> Bool {
+        var valid = true
+        if complete == true {
             let stringRange = NSRange(location: 0, length: string.count)
             let matchRange = self.expression.rangeOfFirstMatch(in: string, options: .reportProgress, range: stringRange)
             valid = matchRange.location == 0 && matchRange.length == string.count
