@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QNibViewController : QViewController, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQHamburgerContentViewController {
+open class QNibViewController : QViewController, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController {
 
     public var contentOffset: CGPoint {
         get { return CGPoint.zero }
@@ -70,6 +70,9 @@ open class QNibViewController : QViewController, IQInputContentViewController, I
         if let loadingView = self.loadingView, loadingView.superview != nil {
             self._updateConstraints(self.view, loadingView: loadingView)
         }
+    }
+    
+    open func dialogDidPressedOutside() {
     }
     
     open func isLoading() -> Bool {
