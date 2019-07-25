@@ -4,12 +4,6 @@
 
 open class QStackContainerViewController : QViewController, IQStackContainerViewController, IQModalContentViewController, IQHamburgerContentViewController {
 
-    public var contentOffset: CGPoint {
-        get { return CGPoint.zero }
-    }
-    public var contentSize: CGSize {
-        get { return CGSize.zero }
-    }
     open var viewControllers: [IQStackViewController] {
         set(value) { self.set(viewControllers: value, animated: false, completion: nil) }
         get { return self._viewControllers }
@@ -270,6 +264,41 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
     open func popTo(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         guard let stackPageViewController = viewController.stackViewController else { return }
         self.popTo(viewController: stackPageViewController, animated: animated, completion: completion)
+    }
+    
+    // MARK: IQContentViewController
+    
+    public var contentOffset: CGPoint {
+        get { return CGPoint.zero }
+    }
+    
+    public var contentSize: CGSize {
+        get { return CGSize.zero }
+    }
+    
+    open func notifyBeginUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.beginUpdateContent()
+        }
+    }
+    
+    open func notifyUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.updateContent()
+        }
+    }
+    
+    open func notifyFinishUpdateContent(velocity: CGPoint) -> CGPoint? {
+        if let viewController = self.contentOwnerViewController {
+            return viewController.finishUpdateContent(velocity: velocity)
+        }
+        return nil
+    }
+    
+    open func notifyEndUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.endUpdateContent()
+        }
     }
     
 }

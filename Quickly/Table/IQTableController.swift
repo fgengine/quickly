@@ -16,7 +16,11 @@ public struct QTableControllerReloadOption : OptionSet {
 
 public protocol IQTableControllerObserver : class {
 
+    func beginScroll(_ controller: IQTableController, tableView: UITableView)
     func scroll(_ controller: IQTableController, tableView: UITableView)
+    func finishScroll(_ controller: IQTableController, tableView: UITableView, velocity: CGPoint) -> CGPoint?
+    func endScroll(_ controller: IQTableController, tableView: UITableView)
+
     func update(_ controller: IQTableController)
 
 }

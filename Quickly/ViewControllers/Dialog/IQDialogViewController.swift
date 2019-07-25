@@ -107,7 +107,7 @@ public protocol IQDialogContainerBackgroundView : class {
 
 // MARK: - IQDialogViewController -
 
-public protocol IQDialogViewController : IQViewController {
+public protocol IQDialogViewController : IQContentOwnerViewController {
 
     var containerViewController: IQDialogContainerViewController? { get }
     var viewController: IQDialogContentViewController { get }
@@ -138,7 +138,7 @@ public extension IQDialogViewController {
 
 // MARK: - IQDialogContentViewController -
 
-public protocol IQDialogContentViewController : IQViewController {
+public protocol IQDialogContentViewController : IQContentViewController {
 
     var dialogViewController: IQDialogViewController? { get }
 

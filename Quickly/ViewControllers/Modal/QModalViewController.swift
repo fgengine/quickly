@@ -89,9 +89,6 @@ open class QModalViewController : QViewController, IQModalViewController {
         self.viewController.didTransition(size: size)
     }
 
-    open func updateContent() {
-    }
-
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
         return self.viewController.supportedOrientations()
     }
@@ -106,6 +103,21 @@ open class QModalViewController : QViewController, IQModalViewController {
 
     open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
         return self.viewController.preferedStatusBarAnimation()
+    }
+    
+    // MARK: IQContentOwnerViewController
+    
+    open func beginUpdateContent() {
+    }
+    
+    open func updateContent() {
+    }
+    
+    open func finishUpdateContent(velocity: CGPoint) -> CGPoint? {
+        return nil
+    }
+    
+    open func endUpdateContent() {
     }
 
 }

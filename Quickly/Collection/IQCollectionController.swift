@@ -4,8 +4,15 @@
 
 public protocol IQCollectionControllerObserver : class {
 
+    func beginScroll(_ controller: IQCollectionController, collectionView: UICollectionView)
     func scroll(_ controller: IQCollectionController, collectionView: UICollectionView)
+    func finishScroll(_ controller: IQCollectionController, collectionView: UICollectionView, velocity: CGPoint) -> CGPoint?
+    func endScroll(_ controller: IQCollectionController, collectionView: UICollectionView)
+    
+    func beginZoom(_ controller: IQCollectionController, collectionView: UICollectionView)
     func zoom(_ controller: IQCollectionController, collectionView: UICollectionView)
+    func endZoom(_ controller: IQCollectionController, collectionView: UICollectionView)
+    
     func update(_ controller: IQCollectionController)
 
 }

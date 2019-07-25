@@ -101,18 +101,6 @@ open class QPageViewController : QViewController, IQPageViewController {
         self.viewController.didTransition(size: size)
     }
 
-    open func setItem(_ item: QPagebarItem?, animated: Bool = false) {
-        if self._item !== item {
-            self._item = item
-            if let vc = self.containerViewController {
-                vc.didUpdate(viewController: self, animated: animated)
-            }
-        }
-    }
-
-    open func updateContent() {
-    }
-
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
         return self.viewController.supportedOrientations()
     }
@@ -127,6 +115,30 @@ open class QPageViewController : QViewController, IQPageViewController {
 
     open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
         return self.viewController.preferedStatusBarAnimation()
+    }
+    
+    open func setItem(_ item: QPagebarItem?, animated: Bool = false) {
+        if self._item !== item {
+            self._item = item
+            if let vc = self.containerViewController {
+                vc.didUpdate(viewController: self, animated: animated)
+            }
+        }
+    }
+    
+    // MARK: IQContentOwnderViewController
+    
+    open func beginUpdateContent() {
+    }
+    
+    open func updateContent() {
+    }
+    
+    open func finishUpdateContent(velocity: CGPoint) -> CGPoint? {
+        return nil
+    }
+    
+    open func endUpdateContent() {
     }
 
 }

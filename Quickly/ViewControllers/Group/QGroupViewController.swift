@@ -103,9 +103,6 @@ open class QGroupViewController : QViewController, IQGroupViewController {
         }
     }
 
-    open func updateContent() {
-    }
-
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
         return self.viewController.supportedOrientations()
     }
@@ -120,6 +117,21 @@ open class QGroupViewController : QViewController, IQGroupViewController {
 
     open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
         return self.viewController.preferedStatusBarAnimation()
+    }
+    
+    // MARK: IQContentOwnderViewController
+    
+    open func beginUpdateContent() {
+    }
+    
+    open func updateContent() {
+    }
+    
+    open func finishUpdateContent(velocity: CGPoint) -> CGPoint? {
+        return nil
+    }
+    
+    open func endUpdateContent() {
     }
 
 }

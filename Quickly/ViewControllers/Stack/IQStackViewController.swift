@@ -2,6 +2,13 @@
 //  Quickly
 //
 
+// MARK: - QStackViewControllerBarSize -
+
+public enum QStackViewControllerBarSize : Equatable {
+    case fixed(height: CGFloat)
+    case range(minHeight: CGFloat, maxHeight: CGFloat)
+}
+
 // MARK: - IQStackViewControllerAnimation -
 
 public protocol IQStackViewControllerPresentAnimation : class {
@@ -91,7 +98,7 @@ public protocol IQStackViewController : IQContentOwnerViewController {
 
     var containerViewController: IQStackContainerViewController? { get }
     var barView: QStackbar? { set get }
-    var barHeight: CGFloat { set get }
+    var barSize: QStackViewControllerBarSize { set get }
     var barHidden: Bool { set get }
     var viewController: IQStackContentViewController { get }
 
@@ -100,7 +107,7 @@ public protocol IQStackViewController : IQContentOwnerViewController {
     var interactiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation? { set get }
 
     func set(barView: QStackbar?, animated: Bool)
-    func set(barHeight: CGFloat, animated: Bool)
+    func set(barSize: QStackViewControllerBarSize, animated: Bool)
     func set(barHidden: Bool, animated: Bool)
     
     func pop(animated: Bool, completion: (() -> Swift.Void)?)
@@ -127,14 +134,14 @@ public protocol IQStackContentViewController : IQContentViewController {
     var stackViewController: IQStackViewController? { get }
 
     var stackbar: QStackbar? { set get }
-    var stackbarHeight: CGFloat { set get }
+    var stackbarSize: QStackViewControllerBarSize { set get }
     var stackbarHidden: Bool { set get }
     var stackPresentAnimation: IQStackViewControllerPresentAnimation? { set get }
     var stackDismissAnimation: IQStackViewControllerDismissAnimation? { set get }
     var stackInteractiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation? { set get }
 
     func setStackbar(_ stackbar: QStackbar?, animated: Bool)
-    func setStackbarHeight(_ height: CGFloat, animated: Bool)
+    func setStackbarSize(_ size: QStackViewControllerBarSize, animated: Bool)
     func setStackbarHidden(_ hidden: Bool, animated: Bool)
 
     func popStack(animated: Bool, completion: (() -> Swift.Void)?)
@@ -150,9 +157,9 @@ extension IQStackContentViewController {
         set(value) { self.stackViewController?.barView = value }
         get { return self.stackViewController?.barView }
     }
-    public var stackbarHeight: CGFloat {
-        set(value) { self.stackViewController?.barHeight = value }
-        get { return self.stackViewController?.barHeight ?? 0 }
+    public var stackbarSize: QStackViewControllerBarSize {
+        set(value) { self.stackViewController?.barSize = value }
+        get { return self.stackViewController?.barSize ?? .fixed(height: 0) }
     }
     public var stackbarHidden: Bool {
         set(value) { self.stackViewController?.barHidden = value }
@@ -176,9 +183,9 @@ extension IQStackContentViewController {
         vc.set(barView: stackbar, animated: animated)
     }
 
-    public func setStackbarHeight(_ height: CGFloat, animated: Bool) {
+    public func setStackbarSize(_ size: QStackViewControllerBarSize, animated: Bool) {
         guard let vc = self.stackViewController else { return }
-        vc.set(barHeight: height, animated: animated)
+        vc.set(barSize: size, animated: animated)
     }
 
     public func setStackbarHidden(_ hidden: Bool, animated: Bool) {

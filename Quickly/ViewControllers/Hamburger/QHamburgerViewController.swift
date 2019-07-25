@@ -86,9 +86,6 @@ open class QHamburgerViewController : QViewController, IQHamburgerViewController
         self.viewController.didTransition(size: size)
     }
 
-    open func updateContent() {
-    }
-
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
         return self.viewController.supportedOrientations()
     }
@@ -107,6 +104,21 @@ open class QHamburgerViewController : QViewController, IQHamburgerViewController
     
     open func shouldInteractive() -> Bool {
         return self.viewController.hamburgerShouldInteractive()
+    }
+    
+    // MARK: IQContentOwnderViewController
+    
+    open func beginUpdateContent() {
+    }
+    
+    open func updateContent() {
+    }
+    
+    open func finishUpdateContent(velocity: CGPoint) -> CGPoint? {
+        return nil
+    }
+    
+    open func endUpdateContent() {
     }
 
 }

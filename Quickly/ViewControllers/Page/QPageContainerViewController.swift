@@ -4,12 +4,6 @@
 
 open class QPageContainerViewController : QViewController, IQPageContainerViewController, IQStackContentViewController, IQGroupContentViewController, IQModalContentViewController, IQHamburgerContentViewController {
 
-    public var contentOffset: CGPoint {
-        get { return CGPoint.zero }
-    }
-    public var contentSize: CGSize {
-        get { return CGSize.zero }
-    }
     open var barView: QPagebar? {
         set(value) { self.set(barView: value) }
         get { return self._barView }
@@ -316,6 +310,41 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
         guard let index = self._viewControllers.firstIndex(where: { $0 === viewController }) else { return }
         guard let pagebarItem = viewController.item else { return }
         pagebar.replaceItem(pagebarItem, index: index)
+    }
+    
+    // MARK: IQContentViewController
+    
+    public var contentOffset: CGPoint {
+        get { return CGPoint.zero }
+    }
+    
+    public var contentSize: CGSize {
+        get { return CGSize.zero }
+    }
+    
+    open func notifyBeginUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.beginUpdateContent()
+        }
+    }
+    
+    open func notifyUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.updateContent()
+        }
+    }
+    
+    open func notifyFinishUpdateContent(velocity: CGPoint) -> CGPoint? {
+        if let viewController = self.contentOwnerViewController {
+            return viewController.finishUpdateContent(velocity: velocity)
+        }
+        return nil
+    }
+    
+    open func notifyEndUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.endUpdateContent()
+        }
     }
     
 }

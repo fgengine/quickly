@@ -461,11 +461,57 @@ extension QTableController {
 }
 
 extension QTableController : UIScrollViewDelegate {
+    
+    @objc
+    open func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        let tableView = self.tableView!
+        self._observer.notify({ $0.beginScroll(self, tableView: tableView) })
+    }
 
+    @objc
     open func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self._observer.notify({ $0.scroll(self, tableView: self.tableView!) })
+        let tableView = self.tableView!
+        self._observer.notify({ $0.scroll(self, tableView: tableView) })
     }
     
+    @objc
+    open func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if decelerate == false {
+            let tableView = self.tableView!
+            self._observer.notify({ $0.endScroll(self, tableView: tableView) })
+        }
+    }
+    
+    @objc
+    open func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer< CGPoint >) {
+        let tableView = self.tableView!
+        var targetContentOffsets: [CGPoint] = []
+        self._observer.notify({
+            if let contentOffset = $0.finishScroll(self, tableView: tableView, velocity: velocity) {
+                targetContentOffsets.append(contentOffset)
+            }
+        })
+        if targetContentOffsets.count > 0 {
+            var avgTargetContentOffset = targetContentOffsets.first!
+            if targetContentOffsets.count > 1 {
+                for nextTargetContentOffset in targetContentOffsets {
+                    avgTargetContentOffset = CGPoint(
+                        x: (avgTargetContentOffset.x + nextTargetContentOffset.x) / 2,
+                        y: (avgTargetContentOffset.y + nextTargetContentOffset.y) / 2
+                    )
+                }
+            }
+            targetContentOffset.pointee = avgTargetContentOffset
+        }
+    }
+    
+    @objc
+    open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let tableView = self.tableView!
+        self._observer.notify({ $0.endScroll(self, tableView: tableView) })
+    }
+    
+    @objc
     open func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
     }
 

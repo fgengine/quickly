@@ -4,15 +4,6 @@
 
 open class QCompositionViewController< Composition: IQComposition > : QViewController, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController {
 
-    public var contentOffset: CGPoint {
-        get { return CGPoint.zero }
-    }
-    public var contentSize: CGSize {
-        get {
-            guard self.isLoaded == true else { return CGSize.zero }
-            return self.view.bounds.size
-        }
-    }
     public var backgroundView: UIView? {
         willSet {
             guard let backgroundView = self.backgroundView else { return }
@@ -88,6 +79,44 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
     open func stopLoading() {
         guard let loadingView = self.loadingView else { return }
         loadingView.stop()
+    }
+    
+    // MARK: IQContentViewController
+    
+    public var contentOffset: CGPoint {
+        get { return CGPoint.zero }
+    }
+    
+    public var contentSize: CGSize {
+        get {
+            guard self.isLoaded == true else { return CGSize.zero }
+            return self.view.bounds.size
+        }
+    }
+    
+    open func notifyBeginUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.beginUpdateContent()
+        }
+    }
+    
+    open func notifyUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.updateContent()
+        }
+    }
+    
+    open func notifyFinishUpdateContent(velocity: CGPoint) -> CGPoint? {
+        if let viewController = self.contentOwnerViewController {
+            return viewController.finishUpdateContent(velocity: velocity)
+        }
+        return nil
+    }
+    
+    open func notifyEndUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.endUpdateContent()
+        }
     }
     
 }

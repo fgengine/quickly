@@ -77,7 +77,7 @@ public protocol IQHamburgerContainerViewController : IQViewController {
 
 // MARK: - IQHamburgerViewController -
 
-public protocol IQHamburgerViewController : IQViewController {
+public protocol IQHamburgerViewController : IQContentOwnerViewController {
 
     var containerViewController: IQHamburgerContainerViewController? { get }
     var viewController: IQHamburgerContentViewController { get }
@@ -96,7 +96,7 @@ public extension IQHamburgerViewController {
 
 // MARK: - IQHamburgerContentViewController -
 
-public protocol IQHamburgerContentViewController : IQViewController {
+public protocol IQHamburgerContentViewController : IQContentViewController {
 
     var hamburgerViewController: IQHamburgerViewController? { get }
 

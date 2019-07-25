@@ -55,7 +55,7 @@ public protocol IQModalContainerViewController : IQViewController {
 
 // MARK: - IQModalViewController -
 
-public protocol IQModalViewController : IQViewController {
+public protocol IQModalViewController : IQContentOwnerViewController {
 
     var containerViewController: IQModalContainerViewController? { get }
     var viewController: IQModalContentViewController { get }
@@ -82,7 +82,7 @@ public extension IQModalViewController {
 
 // MARK: - IQModalContentViewController -
 
-public protocol IQModalContentViewController : IQViewController {
+public protocol IQModalContentViewController : IQContentViewController {
 
     var modalViewController: IQModalViewController? { get }
 

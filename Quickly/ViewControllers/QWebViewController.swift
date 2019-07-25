@@ -4,18 +4,6 @@
 
 open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDelegate, UIScrollViewDelegate, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController {
     
-    public var contentOffset: CGPoint {
-        get {
-            guard self.isLoaded == true else { return CGPoint.zero }
-            return self.webView.scrollView.contentOffset
-        }
-    }
-    public var contentSize: CGSize {
-        get {
-            guard self.isLoaded == true else { return CGSize.zero }
-            return self.webView.scrollView.contentSize
-        }
-    }
     public var allowInvalidCertificates: Bool = false
     public var localCertificateUrls: [URL] = []
     public private(set) lazy var webView: WKWebView = {
@@ -135,6 +123,47 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
     
     open func canNavigationAction(with request: URLRequest) -> WKNavigationActionPolicy {
         return .allow
+    }
+    
+    // MARK: IQContentViewController
+    
+    public var contentOffset: CGPoint {
+        get {
+            guard self.isLoaded == true else { return CGPoint.zero }
+            return self.webView.scrollView.contentOffset
+        }
+    }
+    
+    public var contentSize: CGSize {
+        get {
+            guard self.isLoaded == true else { return CGSize.zero }
+            return self.webView.scrollView.contentSize
+        }
+    }
+    
+    open func notifyBeginUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.beginUpdateContent()
+        }
+    }
+    
+    open func notifyUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.updateContent()
+        }
+    }
+    
+    open func notifyFinishUpdateContent(velocity: CGPoint) -> CGPoint? {
+        if let viewController = self.contentOwnerViewController {
+            return viewController.finishUpdateContent(velocity: velocity)
+        }
+        return nil
+    }
+    
+    open func notifyEndUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.endUpdateContent()
+        }
     }
     
     // MARK: WKUIDelegate

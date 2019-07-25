@@ -153,6 +153,21 @@ open class QDialogViewController : QViewController, IQDialogViewController {
         return self.viewController.preferedStatusBarAnimation()
     }
     
+    // MARK: IQContentOwnderViewController
+    
+    open func beginUpdateContent() {
+    }
+    
+    open func updateContent() {
+    }
+    
+    open func finishUpdateContent(velocity: CGPoint) -> CGPoint? {
+        return nil
+    }
+    
+    open func endUpdateContent() {
+    }
+    
 }
 
 // MARK: - Private -

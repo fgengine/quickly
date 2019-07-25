@@ -9,23 +9,6 @@ open class QCollectionViewController : QViewController, IQInputContentViewContro
         case bottom(offset: CGFloat)
     }
 
-    public var contentOffset: CGPoint {
-        get {
-            guard let collectionView = self.collectionView else { return CGPoint.zero }
-            let contentOffset = collectionView.contentOffset
-            let contentInset = collectionView.contentInset
-            return CGPoint(
-                x: contentInset.left + contentOffset.x,
-                y: contentInset.top + contentOffset.y
-            )
-        }
-    }
-    public var contentSize: CGSize {
-        get {
-            guard let collectionView = self.collectionView else { return CGSize.zero }
-            return collectionView.contentSize
-        }
-    }
     public private(set) var collectionView: QCollectionView? {
         willSet {
             guard let collectionView = self.collectionView else { return }
@@ -225,21 +208,83 @@ open class QCollectionViewController : QViewController, IQInputContentViewContro
         loadingView.stop()
     }
     
-    // MARK: IQCollectionControllerObserver
+    // MARK: IQContentViewController
     
-    open func scroll(_ controller: IQCollectionController, collectionView: UICollectionView) {
-        if let pagesView = self.pagesView {
-            self._updateCurrentPage(pagesView: pagesView)
+    public var contentOffset: CGPoint {
+        get {
+            guard let collectionView = self.collectionView else { return CGPoint.zero }
+            let contentOffset = collectionView.contentOffset
+            let contentInset = collectionView.contentInset
+            return CGPoint(
+                x: contentInset.left + contentOffset.x,
+                y: contentInset.top + contentOffset.y
+            )
         }
+    }
+    
+    public var contentSize: CGSize {
+        get {
+            guard let collectionView = self.collectionView else { return CGSize.zero }
+            return collectionView.contentSize
+        }
+    }
+    
+    open func notifyBeginUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.beginUpdateContent()
+        }
+    }
+    
+    open func notifyUpdateContent() {
         if let viewController = self.contentOwnerViewController {
             viewController.updateContent()
         }
     }
     
-    open func zoom(_ controller: IQCollectionController, collectionView: UICollectionView) {
+    open func notifyFinishUpdateContent(velocity: CGPoint) -> CGPoint? {
         if let viewController = self.contentOwnerViewController {
-            viewController.updateContent()
+            return viewController.finishUpdateContent(velocity: velocity)
         }
+        return nil
+    }
+    
+    open func notifyEndUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.endUpdateContent()
+        }
+    }
+    
+    // MARK: IQCollectionControllerObserver
+    
+    open func beginScroll(_ controller: IQCollectionController, collectionView: UICollectionView) {
+        self.notifyBeginUpdateContent()
+    }
+    
+    open func scroll(_ controller: IQCollectionController, collectionView: UICollectionView) {
+        if let pagesView = self.pagesView {
+            self._updateCurrentPage(pagesView: pagesView)
+        }
+        self.notifyUpdateContent()
+    }
+    
+    open func finishScroll(_ controller: IQCollectionController, collectionView: UICollectionView, velocity: CGPoint) -> CGPoint? {
+        return self.notifyFinishUpdateContent(velocity: velocity)
+    }
+    
+    open func endScroll(_ controller: IQCollectionController, collectionView: UICollectionView) {
+        self.notifyEndUpdateContent()
+    }
+    
+    open func beginZoom(_ controller: IQCollectionController, collectionView: UICollectionView) {
+        self.notifyBeginUpdateContent()
+    }
+
+    open func zoom(_ controller: IQCollectionController, collectionView: UICollectionView) {
+        self.notifyUpdateContent()
+    }
+    
+    open func endZoom(_ controller: IQCollectionController, collectionView: UICollectionView) {
+        self.notifyEndUpdateContent()
     }
     
     open func update(_ controller: IQCollectionController) {
