@@ -6,6 +6,7 @@ open class QMultiTextFieldStyleSheet : QDisplayStyleSheet {
 
     public var requireValidator: Bool
     public var validator: IQInputValidator?
+    public var form: IQFieldForm?
     public var formatter: IQStringFormatter?
     public var textInsets: UIEdgeInsets
     public var textStyle: IQTextStyle?
@@ -30,6 +31,7 @@ open class QMultiTextFieldStyleSheet : QDisplayStyleSheet {
     public init(
         requireValidator: Bool = false,
         validator: IQInputValidator? = nil,
+        form: IQFieldForm? = nil,
         formatter: IQStringFormatter? = nil,
         textInsets: UIEdgeInsets = UIEdgeInsets.zero,
         textStyle: IQTextStyle? = nil,
@@ -58,6 +60,7 @@ open class QMultiTextFieldStyleSheet : QDisplayStyleSheet {
     ) {
         self.requireValidator = requireValidator
         self.validator = validator
+        self.form = form
         self.formatter = formatter
         self.textInsets = textInsets
         self.textStyle = textStyle
@@ -91,6 +94,7 @@ open class QMultiTextFieldStyleSheet : QDisplayStyleSheet {
     public init(_ styleSheet: QMultiTextFieldStyleSheet) {
         self.requireValidator = styleSheet.requireValidator
         self.validator = styleSheet.validator
+        self.form = styleSheet.form
         self.formatter = styleSheet.formatter
         self.textInsets = styleSheet.textInsets
         self.textStyle = styleSheet.textStyle
@@ -138,6 +142,18 @@ public class QMultiTextField : QDisplayView, IQField {
         willSet { self._field.delegate = nil }
         didSet {self._field.delegate = self._fieldDelegate }
     }
+    public var form: IQFieldForm? {
+        didSet(oldValue) {
+            if self.form !== oldValue {
+                if let form = oldValue {
+                    form.remove(field: self)
+                }
+                if let form = self.form {
+                    form.add(field: self)
+                }
+            }
+        }
+    }
     public var formatter: IQStringFormatter? {
         willSet {
             if let formatter = self.formatter {
@@ -172,6 +188,9 @@ public class QMultiTextField : QDisplayView, IQField {
                 }
             }
             self._updatePlaceholderVisibility()
+            if let form = self.form {
+                form.changed(field: self)
+            }
         }
     }
     public var textStyle: IQTextStyle? {
@@ -197,6 +216,9 @@ public class QMultiTextField : QDisplayView, IQField {
                 self._field.text = value
                 self._updatePlaceholderVisibility()
                 self.textHeight = self._textHeight()
+                if let form = self.form {
+                    form.changed(field: self)
+                }
             }
         }
         get { return self._field.text }
@@ -219,6 +241,9 @@ public class QMultiTextField : QDisplayView, IQField {
             }
             self._updatePlaceholderVisibility()
             self.textHeight = self._textHeight()
+            if let form = self.form {
+                form.changed(field: self)
+            }
         }
         get {
             var result: String
@@ -270,7 +295,10 @@ public class QMultiTextField : QDisplayView, IQField {
     }
     public private(set) var textHeight: CGFloat = 0
     public var isValid: Bool {
-        get { return false }
+        get {
+            guard let validator = self.validator else { return true }
+            return validator.validate(self.unformatText)
+        }
     }
     public var isEditable: Bool {
         set(value) { self._field.isEditable = value }
@@ -384,6 +412,7 @@ public class QMultiTextField : QDisplayView, IQField {
         
         self.requireValidator = styleSheet.requireValidator
         self.validator = styleSheet.validator
+        self.form = styleSheet.form
         self.formatter = styleSheet.formatter
         self.textInsets = styleSheet.textInsets
         self.textStyle = styleSheet.textStyle
@@ -612,6 +641,9 @@ private extension QMultiTextField {
                     field._observer.notify({ (observer) in
                         observer.editing(multiTextField: field)
                     })
+                    if let form = field.form {
+                        form.changed(field: field)
+                    }
                 }
             }
             return false

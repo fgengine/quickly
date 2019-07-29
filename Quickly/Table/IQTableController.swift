@@ -46,6 +46,8 @@ public protocol IQTableController : UITableViewDataSource, UITableViewDelegate {
     var canMove: Bool { get }
     var isBatchUpdating: Bool { get }
 
+    func setup()
+    
     func configure()
 
     func add(observer: IQTableControllerObserver, priority: UInt)

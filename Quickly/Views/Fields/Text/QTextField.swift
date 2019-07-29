@@ -6,6 +6,7 @@ open class QTextFieldStyleSheet : QDisplayStyleSheet {
 
     public var requireValidator: Bool
     public var validator: IQInputValidator?
+    public var form: IQFieldForm?
     public var formatter: IQStringFormatter?
     public var textInsets: UIEdgeInsets
     public var textStyle: IQTextStyle?
@@ -28,6 +29,7 @@ open class QTextFieldStyleSheet : QDisplayStyleSheet {
     public init(
         requireValidator: Bool = false,
         validator: IQInputValidator? = nil,
+        form: IQFieldForm? = nil,
         formatter: IQStringFormatter? = nil,
         textInsets: UIEdgeInsets = UIEdgeInsets.zero,
         textStyle: IQTextStyle? = nil,
@@ -54,6 +56,7 @@ open class QTextFieldStyleSheet : QDisplayStyleSheet {
     ) {
         self.requireValidator = requireValidator
         self.validator = validator
+        self.form = form
         self.formatter = formatter
         self.textInsets = textInsets
         self.textStyle = textStyle
@@ -84,6 +87,7 @@ open class QTextFieldStyleSheet : QDisplayStyleSheet {
     public init(_ styleSheet: QTextFieldStyleSheet) {
         self.requireValidator = styleSheet.requireValidator
         self.validator = styleSheet.validator
+        self.form = styleSheet.form
         self.formatter = styleSheet.formatter
         self.textInsets = styleSheet.textInsets
         self.textStyle = styleSheet.textStyle
@@ -129,6 +133,18 @@ public class QTextField : QDisplayView, IQField {
         willSet { self._field.delegate = nil }
         didSet {self._field.delegate = self._fieldDelegate }
     }
+    public var form: IQFieldForm? {
+        didSet(oldValue) {
+            if self.form !== oldValue {
+                if let form = oldValue {
+                    form.remove(field: self)
+                }
+                if let form = self.form {
+                    form.add(field: self)
+                }
+            }
+        }
+    }
     public var formatter: IQStringFormatter? {
         willSet {
             if let formatter = self.formatter {
@@ -160,6 +176,9 @@ public class QTextField : QDisplayView, IQField {
                         self._field.selectedTextRange = self._field.textRange(from: position, to: position)
                     }
                 }
+            }
+            if let form = self.form {
+                form.changed(field: self)
             }
         }
     }
@@ -196,7 +215,12 @@ public class QTextField : QDisplayView, IQField {
         }
     }
     public var text: String {
-        set(value) { self._field.text = value }
+        set(value) {
+            self._field.text = value
+            if let form = self.form {
+                form.changed(field: self)
+            }
+        }
         get {
             if let text = self._field.text {
                 return text
@@ -219,6 +243,9 @@ public class QTextField : QDisplayView, IQField {
                 }
             } else {
                 self._field.text = value
+            }
+            if let form = self.form {
+                form.changed(field: self)
             }
         }
         get {
@@ -376,6 +403,7 @@ public class QTextField : QDisplayView, IQField {
         
         self.requireValidator = styleSheet.requireValidator
         self.validator = styleSheet.validator
+        self.form = styleSheet.form
         self.formatter = styleSheet.formatter
         self.textInsets = styleSheet.textInsets
         self.textStyle = styleSheet.textStyle
@@ -569,6 +597,9 @@ private extension QTextField {
                 field._observer.notify({ (observer) in
                     observer.editing(textField: field)
                 })
+                if let form = field.form {
+                    form.changed(field: field)
+                }
             }
             return false
         }

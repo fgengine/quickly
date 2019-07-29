@@ -177,6 +177,8 @@
 		4062C8D1208A005F0098F809 /* IQComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4062C8D0208A005F0098F809 /* IQComposition.swift */; };
 		4062C8D3208A02030098F809 /* QComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4062C8D2208A02030098F809 /* QComposition.swift */; };
 		40691540208487BE008934D5 /* IQStackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4069153C208487BD008934D5 /* IQStackViewController.swift */; };
+		406A2EFD22EEE50A00664CA2 /* IQFieldForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406A2EFC22EEE50A00664CA2 /* IQFieldForm.swift */; };
+		406A2EFF22EEE58D00664CA2 /* QFieldForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406A2EFE22EEE58D00664CA2 /* QFieldForm.swift */; };
 		406BC12C217722EA00164485 /* QProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406BC12B217722EA00164485 /* QProxy.swift */; };
 		406BC12E2177231C00164485 /* IQProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406BC12D2177231C00164485 /* IQProxy.swift */; };
 		406C598921D1B04000CAA611 /* IQLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406C598821D1B04000CAA611 /* IQLoadingView.swift */; };
@@ -511,6 +513,8 @@
 		4069153C208487BD008934D5 /* IQStackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQStackViewController.swift; sourceTree = "<group>"; };
 		406915432084C904008934D5 /* QStackContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QStackContainerViewController.swift; sourceTree = "<group>"; };
 		406915452084CA26008934D5 /* QStackViewControllerAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QStackViewControllerAnimation.swift; sourceTree = "<group>"; };
+		406A2EFC22EEE50A00664CA2 /* IQFieldForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQFieldForm.swift; sourceTree = "<group>"; };
+		406A2EFE22EEE58D00664CA2 /* QFieldForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QFieldForm.swift; sourceTree = "<group>"; };
 		406BC12B217722EA00164485 /* QProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QProxy.swift; sourceTree = "<group>"; };
 		406BC12D2177231C00164485 /* IQProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQProxy.swift; sourceTree = "<group>"; };
 		406C598821D1B04000CAA611 /* IQLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQLoadingView.swift; sourceTree = "<group>"; };
@@ -1548,6 +1552,8 @@
 				4039F8D62072626B00A88E45 /* List */,
 				4039F8D72072627000A88E45 /* Date */,
 				40A907A9206F6C3800655D2A /* IQField.swift */,
+				406A2EFC22EEE50A00664CA2 /* IQFieldForm.swift */,
+				406A2EFE22EEE58D00664CA2 /* QFieldForm.swift */,
 			);
 			path = Fields;
 			sourceTree = "<group>";
@@ -1838,6 +1844,7 @@
 				4062C8CD2088DD4C0098F809 /* QStackWireframe.swift in Sources */,
 				4007B0A12144236900AE17DC /* QTitleValueShapeComposition.swift in Sources */,
 				4007B09E2144236900AE17DC /* QTitleShapeComposition.swift in Sources */,
+				406A2EFF22EEE58D00664CA2 /* QFieldForm.swift in Sources */,
 				4085C05E20E4C7680079AF90 /* IQAnimationEase.swift in Sources */,
 				4025A7B4226118F700B4160F /* QDatabaseLogicExpression.swift in Sources */,
 				409403621F4E26D1008A8B90 /* IQApiQuery.swift in Sources */,
@@ -1870,6 +1877,7 @@
 				4039BCBA1F51B20900E38090 /* QImageView.swift in Sources */,
 				401E8F7B206D34C4008A5BE4 /* IQPickerRow.swift in Sources */,
 				4006EDB91F61363E0050AD91 /* QSeparatorCollectionCell.swift in Sources */,
+				406A2EFD22EEE50A00664CA2 /* IQFieldForm.swift in Sources */,
 				4007B07E2144236900AE17DC /* QTitleDetailShapeComposition.swift in Sources */,
 				40A907AB206F6C3800655D2A /* IQField.swift in Sources */,
 				4055E9CE215E21EF00D66AA6 /* QSwitch.swift in Sources */,

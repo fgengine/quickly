@@ -20,6 +20,7 @@ public enum QDateFieldMode {
 
 open class QDateFieldStyleSheet : QDisplayStyleSheet {
 
+    public var form: IQFieldForm?
     public var formatter: IQDateFieldFormatter
     public var mode: QDateFieldMode
     public var calendar: Calendar?
@@ -31,6 +32,7 @@ open class QDateFieldStyleSheet : QDisplayStyleSheet {
     public var toolbarStyle: QToolbarStyleSheet?
 
     public init(
+        form: IQFieldForm? = nil,
         formatter: IQDateFieldFormatter,
         mode: QDateFieldMode = .date,
         calendar: Calendar? = nil,
@@ -45,6 +47,7 @@ open class QDateFieldStyleSheet : QDisplayStyleSheet {
         border: QViewBorder = .none,
         shadow: QViewShadow? = nil
     ) {
+        self.form = form
         self.formatter = formatter
         self.mode = mode
         self.calendar = calendar
@@ -64,6 +67,7 @@ open class QDateFieldStyleSheet : QDisplayStyleSheet {
     }
 
     public init(_ styleSheet: QDateFieldStyleSheet) {
+        self.form = styleSheet.form
         self.formatter = styleSheet.formatter
         self.mode = styleSheet.mode
         self.calendar = styleSheet.calendar
@@ -95,6 +99,18 @@ public class QDateField : QDisplayView, IQField {
     public typealias SelectClosure = (_ dateField: QDateField, _ date: Date) -> Void
     public typealias Closure = (_ dateField: QDateField) -> Void
 
+    public var form: IQFieldForm? {
+        didSet(oldValue) {
+            if self.form !== oldValue {
+                if let form = oldValue {
+                    form.remove(field: self)
+                }
+                if let form = self.form {
+                    form.add(field: self)
+                }
+            }
+        }
+    }
     public var formatter: IQDateFieldFormatter? {
         didSet { self._updateText() }
     }
@@ -271,6 +287,9 @@ public class QDateField : QDisplayView, IQField {
             self._observer.notify({ (observer) in
                 observer.select(dateField: self, date: self.date!)
             })
+            if let form = self.form {
+                form.changed(field: self)
+            }
         }
         return true
     }
@@ -288,6 +307,7 @@ public class QDateField : QDisplayView, IQField {
     public func apply(_ styleSheet: QDateFieldStyleSheet) {
         self.apply(styleSheet as QDisplayStyleSheet)
         
+        self.form = styleSheet.form
         self.formatter = styleSheet.formatter
         self.mode = styleSheet.mode
         self.calendar = styleSheet.calendar
@@ -345,6 +365,9 @@ extension QDateField {
         self._observer.notify({ (observer) in
             observer.select(dateField: self, date: self._picker.date)
         })
+        if let form = self.form {
+            form.changed(field: self)
+        }
     }
     
     @objc

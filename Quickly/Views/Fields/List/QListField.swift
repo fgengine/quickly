@@ -4,6 +4,7 @@
 
 open class QListFieldStyleSheet : QDisplayStyleSheet {
 
+    public var form: IQFieldForm?
     public var rows: [QListFieldPickerRow]
     public var rowHeight: CGFloat
     public var placeholder: IQText?
@@ -11,6 +12,7 @@ open class QListFieldStyleSheet : QDisplayStyleSheet {
     public var toolbarStyle: QToolbarStyleSheet?
 
     public init(
+        form: IQFieldForm? = nil,
         rows: [QListFieldPickerRow],
         rowHeight: CGFloat = 40,
         placeholder: IQText? = nil,
@@ -21,6 +23,7 @@ open class QListFieldStyleSheet : QDisplayStyleSheet {
         border: QViewBorder = .none,
         shadow: QViewShadow? = nil
     ) {
+        self.form = form
         self.rows = rows
         self.rowHeight = rowHeight
         self.placeholder = placeholder
@@ -36,6 +39,7 @@ open class QListFieldStyleSheet : QDisplayStyleSheet {
     }
 
     public init(_ styleSheet: QListFieldStyleSheet) {
+        self.form = styleSheet.form
         self.rows = styleSheet.rows
         self.rowHeight = styleSheet.rowHeight
         self.placeholder = styleSheet.placeholder
@@ -63,6 +67,18 @@ public class QListField : QDisplayView, IQField {
     public typealias SelectClosure = (_ listField: QListField, _ row: QListFieldPickerRow) -> Void
     public typealias Closure = (_ listField: QListField) -> Void
 
+    public var form: IQFieldForm? {
+        didSet(oldValue) {
+            if self.form !== oldValue {
+                if let form = oldValue {
+                    form.remove(field: self)
+                }
+                if let form = self.form {
+                    form.add(field: self)
+                }
+            }
+        }
+    }
     public var rows: [QListFieldPickerRow] {
         set(value) { self._section.rows = value }
         get { return self._section.rows as! [QListFieldPickerRow] }
@@ -228,6 +244,9 @@ public class QListField : QDisplayView, IQField {
             self._observer.notify({ (observer) in
                 observer.select(listField: self, row: self.selectedRow!)
             })
+            if let form = self.form {
+                form.changed(field: self)
+            }
         }
         return true
     }
@@ -245,6 +264,7 @@ public class QListField : QDisplayView, IQField {
     public func apply(_ styleSheet: QListFieldStyleSheet) {
         self.apply(styleSheet as QDisplayStyleSheet)
         
+        self.form = styleSheet.form
         self.rows = styleSheet.rows
         self.rowHeight = styleSheet.rowHeight
         self.placeholder = styleSheet.placeholder
@@ -303,6 +323,9 @@ extension QListField : IQPickerControllerDelegate {
         self._observer.notify({ (observer) in
             observer.select(listField: self, row: row)
         })
+        if let form = self.form {
+            form.changed(field: self)
+        }
     }
 
 }

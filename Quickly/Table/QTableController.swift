@@ -79,6 +79,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         self._cacheHeight = [:]
         self._observer = QObserver< IQTableControllerObserver >()
         super.init()
+        self.setup()
     }
 
     public init(
@@ -99,6 +100,10 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         self._cacheHeight = [:]
         self._observer = QObserver< IQTableControllerObserver >()
         super.init()
+        self.setup()
+    }
+    
+    open func setup() {
     }
 
     open func configure() {

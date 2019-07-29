@@ -2,25 +2,7 @@
 //  Quickly
 //
 
-#if os(iOS)
-    #if (arch(i386) || arch(x86_64))
-        import QuicklySqlite3IOSSimulator
-    #else
-        import QuicklySqlite3IOS
-    #endif
-#elseif os(tvOS)
-    #if (arch(i386) || arch(x86_64))
-        import QuicklySqlite3TvOSSimulator
-    #else
-        import QuicklySqlite3TvOS
-    #endif
-#elseif os(watchOS)
-    #if (arch(i386) || arch(x86_64))
-        import QuicklySqlite3WatchOSSimulator
-    #else
-        import QuicklySqlite3WatchOS
-    #endif
-#endif
+import QuicklySqlite3
 
 // MARK: - QDatabase
 
