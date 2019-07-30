@@ -276,7 +276,7 @@ open class QStackbar : QView {
             } else if self.leftViews.count > 0 {
                 contentConstraints.append(contentsOf: [
                     self._centerView.leadingLayout >= self._leftView.trailingLayout.offset(self.leftViewsOffset),
-                    self._centerView.trailingLayout <= self.trailingLayout,
+                    self._centerView.trailingLayout <= self._contentView.trailingLayout,
                     self._centerView.centerXLayout == self._contentView.centerXLayout
                 ])
             } else if self.rightViews.count > 0 {
