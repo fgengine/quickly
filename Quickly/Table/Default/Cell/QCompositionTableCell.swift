@@ -40,6 +40,37 @@ open class QCompositionTableRow< Composable: IQComposable > : QBackgroundColorTa
             editingStyle: editingStyle
         )
     }
+    
+    @available(iOS 11.0, *)
+    public init(
+        composable: Composable,
+        selectedComposable: Composable? = nil,
+        sizeBehaviour: QCompositionTableRowSizeBehaviour = .dynamic,
+        backgroundColor: UIColor? = nil,
+        selectedBackgroundColor: UIColor? = nil,
+        canSelect: Bool = true,
+        canEdit: Bool = false,
+        canMove: Bool = false,
+        selectionStyle: UITableViewCell.SelectionStyle = .default,
+        editingStyle: UITableViewCell.EditingStyle = .none,
+        leadingSwipeConfiguration: UISwipeActionsConfiguration? = nil,
+        trailingSwipeConfiguration: UISwipeActionsConfiguration? = nil
+    ) {
+        self.composable = composable
+        self.selectedComposable = selectedComposable
+        self.sizeBehaviour = sizeBehaviour
+        super.init(
+            backgroundColor: backgroundColor,
+            selectedBackgroundColor: selectedBackgroundColor,
+            canSelect: canSelect,
+            canEdit: canEdit,
+            canMove: canMove,
+            selectionStyle: selectionStyle,
+            editingStyle: editingStyle,
+            leadingSwipeConfiguration: leadingSwipeConfiguration,
+            trailingSwipeConfiguration: trailingSwipeConfiguration
+        )
+    }
 
 }
 

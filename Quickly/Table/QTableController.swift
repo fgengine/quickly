@@ -524,12 +524,14 @@ extension QTableController : UIScrollViewDelegate {
 
 extension QTableController : UITableViewDataSource {
 
+    @objc
     open func numberOfSections(
         in tableView: UITableView
     ) -> Int {
         return self.sections.count
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection index: Int
@@ -541,6 +543,7 @@ extension QTableController : UITableViewDataSource {
         return section.rows.count
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
@@ -549,6 +552,7 @@ extension QTableController : UITableViewDataSource {
         return self.dequeue(row: row, indexPath: indexPath).unsafelyUnwrapped
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         canEditRowAt indexPath: IndexPath
@@ -561,6 +565,7 @@ extension QTableController : UITableViewDataSource {
         return row.canEdit;
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         canMoveRowAt indexPath: IndexPath
@@ -577,6 +582,7 @@ extension QTableController : UITableViewDataSource {
 
 extension QTableController : UITableViewDelegate {
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         willDisplay cell: UITableViewCell,
@@ -588,6 +594,7 @@ extension QTableController : UITableViewDelegate {
         }
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         willDisplayHeaderView view: UIView,
@@ -600,6 +607,7 @@ extension QTableController : UITableViewDelegate {
         }
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         willDisplayFooterView view: UIView,
@@ -612,6 +620,7 @@ extension QTableController : UITableViewDelegate {
         }
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         heightForRowAt indexPath: IndexPath
@@ -630,6 +639,7 @@ extension QTableController : UITableViewDelegate {
         return caclulatedHeight
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         heightForHeaderInSection section: Int
@@ -648,6 +658,7 @@ extension QTableController : UITableViewDelegate {
         return caclulatedHeight
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         heightForFooterInSection section: Int
@@ -666,6 +677,7 @@ extension QTableController : UITableViewDelegate {
         return caclulatedHeight
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         viewForHeaderInSection section: Int
@@ -678,6 +690,7 @@ extension QTableController : UITableViewDelegate {
         return nil
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         viewForFooterInSection section: Int
@@ -690,6 +703,7 @@ extension QTableController : UITableViewDelegate {
         return nil
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         shouldHighlightRowAt indexPath: IndexPath
@@ -698,6 +712,7 @@ extension QTableController : UITableViewDelegate {
         return row.canSelect
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         willSelectRowAt indexPath: IndexPath
@@ -709,6 +724,7 @@ extension QTableController : UITableViewDelegate {
         return indexPath
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         willDeselectRowAt indexPath: IndexPath
@@ -720,12 +736,33 @@ extension QTableController : UITableViewDelegate {
         return indexPath
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         editingStyleForRowAt indexPath: IndexPath
     ) -> UITableViewCell.EditingStyle {
         let row = self.row(indexPath: indexPath)
         return row.editingStyle
+    }
+    
+    @objc
+    @available(iOS 11.0, *)
+    open func tableView(
+        _ tableView: UITableView,
+        leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath
+    ) -> UISwipeActionsConfiguration? {
+        let row = self.row(indexPath: indexPath)
+        return row.leadingSwipeConfiguration
+    }
+    
+    @objc
+    @available(iOS 11.0, *)
+    open func tableView(
+        _ tableView: UITableView,
+        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
+    ) -> UISwipeActionsConfiguration? {
+        let row = self.row(indexPath: indexPath)
+        return row.trailingSwipeConfiguration
     }
 
 }
