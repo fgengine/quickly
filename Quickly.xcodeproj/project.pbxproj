@@ -328,6 +328,7 @@
 		40FC3F0620C7C4040013B71A /* IQModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FC3F0520C7C4040013B71A /* IQModalViewController.swift */; };
 		40FC3F0820C7F46A0013B71A /* QModalContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FC3F0720C7F46A0013B71A /* QModalContainerViewController.swift */; };
 		40FC3F0A20C7F4960013B71A /* QModalViewControllerAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FC3F0920C7F4960013B71A /* QModalViewControllerAnimation.swift */; };
+		576E6FF922F41E0C00F2A6E6 /* QDatabaseLikeExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576E6FF822F41E0C00F2A6E6 /* QDatabaseLikeExpression.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -658,6 +659,7 @@
 		40FC3F0520C7C4040013B71A /* IQModalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQModalViewController.swift; sourceTree = "<group>"; };
 		40FC3F0720C7F46A0013B71A /* QModalContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QModalContainerViewController.swift; sourceTree = "<group>"; };
 		40FC3F0920C7F4960013B71A /* QModalViewControllerAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QModalViewControllerAnimation.swift; sourceTree = "<group>"; };
+		576E6FF822F41E0C00F2A6E6 /* QDatabaseLikeExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QDatabaseLikeExpression.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1043,6 +1045,7 @@
 				4025A7B12261188C00B4160F /* QDatabaseCompareExpression.swift */,
 				4025A7B3226118F700B4160F /* QDatabaseLogicExpression.swift */,
 				4027BCA722648F7C0018C593 /* QDatabaseInExpression.swift */,
+				576E6FF822F41E0C00F2A6E6 /* QDatabaseLikeExpression.swift */,
 			);
 			path = Expressions;
 			sourceTree = "<group>";
@@ -2106,6 +2109,7 @@
 				40020828216645C700BD04D5 /* QCompositionTableDecor.swift in Sources */,
 				4007B09C2144236900AE17DC /* QListFieldComposition.swift in Sources */,
 				406FDF6B20908071004178CC /* QApiPagination.swift in Sources */,
+				576E6FF922F41E0C00F2A6E6 /* QDatabaseLikeExpression.swift in Sources */,
 				40224617207662C50020B357 /* QDisplayView.swift in Sources */,
 				40134F021F63129E009F81A6 /* IQStringFormatter.swift in Sources */,
 				4085C06320E4C9290079AF90 /* QAnimationEaseCubic.swift in Sources */,
