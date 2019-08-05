@@ -229,6 +229,21 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
         let stackViewController = QStackViewController(viewController: viewController)
         self.replace(viewController: stackViewController, animated: animated, completion: completion)
     }
+    
+    open func replaceAll(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        let popViewControllers = self.viewControllers.count > 1 ? self.viewControllers[1..<self.viewControllers.count] :  ArraySlice< IQStackViewController >()
+        self.push(viewController: viewController, animated: animated, completion: { [weak self] in
+            guard let self = self else { return }
+            for popViewController in popViewControllers {
+                self.pop(viewController: popViewController, animated: false)
+            }
+        })
+    }
+    
+    open func replaceAll(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        let stackViewController = QStackViewController(viewController: viewController)
+        self.replaceAll(viewController: stackViewController, animated: animated, completion: completion)
+    }
 
     open func pop(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         self._dismiss(viewController: viewController, animated: animated, completion: completion)
