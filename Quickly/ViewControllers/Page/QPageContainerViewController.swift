@@ -237,27 +237,37 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
     }
 
     open func set(barHeight: CGFloat, animated: Bool = false) {
-        self._barHeight = barHeight
-        self.setNeedLayout()
-        self._updateAdditionalEdgeInsets()
-        if self.isLoaded == true {
-            if animated == true {
-                UIView.animate(withDuration: 0.1, delay: 0, options: [ .beginFromCurrentState ], animations: {
-                    self.layoutIfNeeded()
-                })
+        if self._barHeight != barHeight {
+            self._barHeight = barHeight
+            if let pagebar = self._barView {
+                pagebar.frame = self._barFrame(bounds: self.view.bounds)
+            }
+            self.setNeedLayout()
+            self._updateAdditionalEdgeInsets()
+            if self.isLoaded == true {
+                if animated == true {
+                    UIView.animate(withDuration: 0.1, delay: 0, options: [ .beginFromCurrentState ], animations: {
+                        self.layoutIfNeeded()
+                    })
+                }
             }
         }
     }
 
     open func set(barHidden: Bool, animated: Bool = false) {
-        self._barHidden = barHidden
-        self.setNeedLayout()
-        self._updateAdditionalEdgeInsets()
-        if self.isLoaded == true {
-            if animated == true {
-                UIView.animate(withDuration: 0.1, delay: 0, options: [ .beginFromCurrentState ], animations: {
-                    self.layoutIfNeeded()
-                })
+        if self._barHidden != barHidden {
+            self._barHidden = barHidden
+            if let pagebar = self._barView {
+                pagebar.frame = self._barFrame(bounds: self.view.bounds)
+            }
+            self.setNeedLayout()
+            self._updateAdditionalEdgeInsets()
+            if self.isLoaded == true {
+                if animated == true {
+                    UIView.animate(withDuration: 0.1, delay: 0, options: [ .beginFromCurrentState ], animations: {
+                        self.layoutIfNeeded()
+                    })
+                }
             }
         }
     }
