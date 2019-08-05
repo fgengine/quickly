@@ -2,55 +2,6 @@
 //  Quickly
 //
 
-open class QListFieldStyleSheet : QDisplayStyleSheet {
-
-    public var form: IQFieldForm?
-    public var rows: [QListFieldPickerRow]
-    public var rowHeight: CGFloat
-    public var placeholder: IQText?
-    public var isEnabled: Bool
-    public var toolbarStyle: QToolbarStyleSheet?
-
-    public init(
-        form: IQFieldForm? = nil,
-        rows: [QListFieldPickerRow],
-        rowHeight: CGFloat = 40,
-        placeholder: IQText? = nil,
-        isEnabled: Bool = true,
-        toolbarStyle: QToolbarStyleSheet? = nil,
-        backgroundColor: UIColor? = nil,
-        cornerRadius: QViewCornerRadius = .none,
-        border: QViewBorder = .none,
-        shadow: QViewShadow? = nil
-    ) {
-        self.form = form
-        self.rows = rows
-        self.rowHeight = rowHeight
-        self.placeholder = placeholder
-        self.isEnabled = isEnabled
-        self.toolbarStyle = toolbarStyle
-        
-        super.init(
-            backgroundColor: backgroundColor,
-            cornerRadius: cornerRadius,
-            border: border,
-            shadow: shadow
-        )
-    }
-
-    public init(_ styleSheet: QListFieldStyleSheet) {
-        self.form = styleSheet.form
-        self.rows = styleSheet.rows
-        self.rowHeight = styleSheet.rowHeight
-        self.placeholder = styleSheet.placeholder
-        self.isEnabled = styleSheet.isEnabled
-        self.toolbarStyle = styleSheet.toolbarStyle
-
-        super.init(styleSheet)
-    }
-
-}
-
 public protocol IQListFieldObserver : class {
     
     func beginEditing(listField: QListField)
@@ -112,22 +63,19 @@ public class QListField : QDisplayView, IQField {
             }
         }
     }
-    public lazy var toolbar: QToolbar = {
-        let bar = QToolbar(
-            items: [
-                self.toolbarCancelItem,
-                UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-                self.toolbarDoneItem
-            ]
-        )
-        return bar
-    }()
-    public lazy var toolbarCancelItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self._pressedCancel(_:)))
-    public lazy var toolbarDoneItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self._pressedDone(_:)))
     public var isEnabled: Bool = true
     public var isEditing: Bool {
         get { return self.isFirstResponder }
     }
+    public lazy var toolbar: QToolbar = QToolbar(items: self._toolbarItems())
+    public var toolbarActions: QFieldAction = [] {
+        didSet(oldValue) {
+            if self.toolbarActions != oldValue {
+                self.toolbar.items = self._toolbarItems()
+            }
+        }
+    }
+    
     public var onShouldBeginEditing: ShouldClosure?
     public var onBeginEditing: Closure?
     public var onSelect: SelectClosure?
@@ -271,15 +219,27 @@ public class QListField : QDisplayView, IQField {
         self.isEnabled = styleSheet.isEnabled
         if let style = styleSheet.toolbarStyle {
             self.toolbar.apply(style)
-            self.toolbar.isHidden = false
-        } else {
-            self.toolbar.isHidden = true
         }
+        self.toolbarActions = styleSheet.toolbarActions
     }
     
 }
 
 extension QListField {
+    
+    private func _toolbarItems() -> [UIBarButtonItem] {
+        var items: [UIBarButtonItem] = []
+        if self.toolbarActions.isEmpty == false {
+            if self.toolbarActions.contains(.cancel) == true {
+                items.append(UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self._pressedCancel(_:))))
+            }
+            items.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+            if self.toolbarActions.contains(.done) == true {
+                items.append(UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self._pressedDone(_:))))
+            }
+        }
+        return items
+    }
     
     @objc
     private func _tapGesture(_ sender: Any) {

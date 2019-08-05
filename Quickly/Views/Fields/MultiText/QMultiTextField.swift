@@ -2,125 +2,6 @@
 //  Quickly
 //
 
-open class QMultiTextFieldStyleSheet : QDisplayStyleSheet {
-
-    public var requireValidator: Bool
-    public var validator: IQInputValidator?
-    public var form: IQFieldForm?
-    public var formatter: IQStringFormatter?
-    public var textInsets: UIEdgeInsets
-    public var textStyle: IQTextStyle?
-    public var placeholderInsets: UIEdgeInsets
-    public var placeholder: IQText?
-    public var maximumNumberOfCharecters: UInt
-    public var maximumNumberOfLines: UInt
-    public var minimumHeight: CGFloat
-    public var maximumHeight: CGFloat
-    public var autocapitalizationType: UITextAutocapitalizationType
-    public var autocorrectionType: UITextAutocorrectionType
-    public var spellCheckingType: UITextSpellCheckingType
-    public var keyboardType: UIKeyboardType
-    public var keyboardAppearance: UIKeyboardAppearance
-    public var returnKeyType: UIReturnKeyType
-    public var enablesReturnKeyAutomatically: Bool
-    public var isSecureTextEntry: Bool
-    public var textContentType: UITextContentType!
-    public var isEnabled: Bool
-    public var toolbarStyle: QToolbarStyleSheet?
-    
-    public init(
-        requireValidator: Bool = false,
-        validator: IQInputValidator? = nil,
-        form: IQFieldForm? = nil,
-        formatter: IQStringFormatter? = nil,
-        textInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        textStyle: IQTextStyle? = nil,
-        placeholderInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        placeholder: IQText? = nil,
-        maximumNumberOfCharecters: UInt = 0,
-        maximumNumberOfLines: UInt = 0,
-        minimumHeight: CGFloat = 0,
-        maximumHeight: CGFloat = 0,
-        autocapitalizationType: UITextAutocapitalizationType = .none,
-        autocorrectionType: UITextAutocorrectionType = .default,
-        spellCheckingType: UITextSpellCheckingType = .default,
-        keyboardType: UIKeyboardType = .default,
-        keyboardAppearance: UIKeyboardAppearance = .default,
-        returnKeyType: UIReturnKeyType = .default,
-        enablesReturnKeyAutomatically: Bool = true,
-        isSecureTextEntry: Bool = false,
-        textContentType: UITextContentType! = nil,
-        isEnabled: Bool = true,
-        toolbarStyle: QToolbarStyleSheet? = nil,
-        backgroundColor: UIColor? = nil,
-        tintColor: UIColor? = nil,
-        cornerRadius: QViewCornerRadius = .none,
-        border: QViewBorder = .none,
-        shadow: QViewShadow? = nil
-    ) {
-        self.requireValidator = requireValidator
-        self.validator = validator
-        self.form = form
-        self.formatter = formatter
-        self.textInsets = textInsets
-        self.textStyle = textStyle
-        self.placeholderInsets = placeholderInsets
-        self.placeholder = placeholder
-        self.maximumNumberOfCharecters = maximumNumberOfCharecters
-        self.maximumNumberOfLines = maximumNumberOfLines
-        self.minimumHeight = minimumHeight
-        self.maximumHeight = maximumHeight
-        self.autocapitalizationType = autocapitalizationType
-        self.autocorrectionType = autocorrectionType
-        self.spellCheckingType = spellCheckingType
-        self.keyboardType = keyboardType
-        self.keyboardAppearance = keyboardAppearance
-        self.returnKeyType = returnKeyType
-        self.enablesReturnKeyAutomatically = enablesReturnKeyAutomatically
-        self.isSecureTextEntry = isSecureTextEntry
-        self.textContentType = textContentType
-        self.isEnabled = isEnabled
-        self.toolbarStyle = toolbarStyle
-        
-        super.init(
-            backgroundColor: backgroundColor,
-            tintColor: tintColor,
-            cornerRadius: cornerRadius,
-            border: border,
-            shadow: shadow
-        )
-    }
-
-    public init(_ styleSheet: QMultiTextFieldStyleSheet) {
-        self.requireValidator = styleSheet.requireValidator
-        self.validator = styleSheet.validator
-        self.form = styleSheet.form
-        self.formatter = styleSheet.formatter
-        self.textInsets = styleSheet.textInsets
-        self.textStyle = styleSheet.textStyle
-        self.placeholderInsets = styleSheet.placeholderInsets
-        self.placeholder = styleSheet.placeholder
-        self.maximumNumberOfCharecters = styleSheet.maximumNumberOfCharecters
-        self.maximumNumberOfLines = styleSheet.maximumNumberOfLines
-        self.minimumHeight = styleSheet.minimumHeight
-        self.maximumHeight = styleSheet.maximumHeight
-        self.autocapitalizationType = styleSheet.autocapitalizationType
-        self.autocorrectionType = styleSheet.autocorrectionType
-        self.spellCheckingType = styleSheet.spellCheckingType
-        self.keyboardType = styleSheet.keyboardType
-        self.keyboardAppearance = styleSheet.keyboardAppearance
-        self.returnKeyType = styleSheet.returnKeyType
-        self.enablesReturnKeyAutomatically = styleSheet.enablesReturnKeyAutomatically
-        self.isSecureTextEntry = styleSheet.isSecureTextEntry
-        self.textContentType = styleSheet.textContentType
-        self.isEnabled = styleSheet.isEnabled
-        self.toolbarStyle = styleSheet.toolbarStyle
-        
-        super.init(styleSheet)
-    }
-
-}
-
 public protocol IQMultiTextFieldObserver : class {
     
     func beginEditing(multiTextField: QMultiTextField)
@@ -266,13 +147,6 @@ public class QMultiTextField : QDisplayView, IQField {
             }
         }
     }
-    public var placeholder: IQText? {
-        set(value) {
-            self._placeholderLabel.text = value
-            self._updatePlaceholderVisibility()
-        }
-        get { return self._placeholderLabel.text }
-    }
     public var selectedRange: NSRange {
         set(value) { self._field.selectedRange = value }
         get { return self._field.selectedRange }
@@ -300,6 +174,13 @@ public class QMultiTextField : QDisplayView, IQField {
             return validator.validate(self.unformatText)
         }
     }
+    public var placeholder: IQText? {
+        set(value) {
+            self._placeholderLabel.text = value
+            self._updatePlaceholderVisibility()
+        }
+        get { return self._placeholderLabel.text }
+    }
     public var isEditable: Bool {
         set(value) { self._field.isEditable = value }
         get { return self._field.isEditable }
@@ -315,18 +196,15 @@ public class QMultiTextField : QDisplayView, IQField {
     public var isEditing: Bool {
         get { return self._field.isFirstResponder }
     }
-    public lazy var toolbar: QToolbar = {
-        let bar = QToolbar(
-            items: [
-                self.toolbarCancelItem,
-                UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-                self.toolbarDoneItem
-            ]
-        )
-        return bar
-    }()
-    public lazy var toolbarCancelItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self._pressedCancel(_:)))
-    public lazy var toolbarDoneItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self._pressedDone(_:)))
+    public lazy var toolbar: QToolbar = QToolbar(items: self._toolbarItems())
+    public var toolbarActions: QFieldAction = [] {
+        didSet(oldValue) {
+            if self.toolbarActions != oldValue {
+                self.toolbar.items = self._toolbarItems()
+            }
+        }
+    }
+    
     public var onShouldBeginEditing: ShouldClosure?
     public var onBeginEditing: Closure?
     public var onEditing: Closure?
@@ -434,6 +312,10 @@ public class QMultiTextField : QDisplayView, IQField {
             self.textContentType = styleSheet.textContentType
         }
         self.isEnabled = styleSheet.isEnabled
+        if let style = styleSheet.toolbarStyle {
+            self.toolbar.apply(style)
+        }
+        self.toolbarActions = styleSheet.toolbarActions
     }
     
 }
@@ -457,6 +339,20 @@ private extension QMultiTextField {
             height = min(height, self.maximumHeight)
         }
         return height
+    }
+    
+    private func _toolbarItems() -> [UIBarButtonItem] {
+        var items: [UIBarButtonItem] = []
+        if self.toolbarActions.isEmpty == false {
+            if self.toolbarActions.contains(.cancel) == true {
+                items.append(UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self._pressedCancel(_:))))
+            }
+            items.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+            if self.toolbarActions.contains(.done) == true {
+                items.append(UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self._pressedDone(_:))))
+            }
+        }
+        return items
     }
     
     @objc
