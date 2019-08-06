@@ -4,14 +4,45 @@
 
 open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDelegate, UIScrollViewDelegate, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController {
     
+    public class WebView : WKWebView {
+        
+        public override var safeAreaInsets: UIEdgeInsets {
+            get { return self.customInsets }
+        }
+        
+        public var customInsets: UIEdgeInsets = UIEdgeInsets.zero {
+            didSet(oldValue) {
+                if self.customInsets != oldValue {
+                    if #available(iOS 11.0, *) {
+                        self.safeAreaInsetsDidChange()
+                    } else {
+                        self.scrollView.contentInset = UIEdgeInsets(
+                            top: self.customInsets.top,
+                            left: 0,
+                            bottom: self.customInsets.bottom,
+                            right: 0
+                        )
+                        self.scrollView.scrollIndicatorInsets = UIEdgeInsets(
+                            top: self.customInsets.top,
+                            left: self.customInsets.left,
+                            bottom: self.customInsets.bottom,
+                            right: self.customInsets.right
+                        )
+                    }
+                }
+            }
+        }
+        
+    }
+    
     public var allowInvalidCertificates: Bool = false
     public var localCertificateUrls: [URL] = []
-    public private(set) lazy var webView: WKWebView = {
-        let webView = WKWebView(frame: self.view.bounds, configuration: self.prepareConfiguration())
+    public private(set) lazy var webView: WebView = {
+        let webView = WebView(frame: self.view.bounds, configuration: self.prepareConfiguration())
         webView.uiDelegate = self
         webView.navigationDelegate = self
         if #available(iOS 11.0, *) {
-            webView.scrollView.contentInsetAdjustmentBehavior = .never
+            webView.scrollView.contentInsetAdjustmentBehavior = .always
         }
         webView.scrollView.delegate = self
         self.view.addSubview(webView)
@@ -224,19 +255,7 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
     // MARK: Private
     
     private func _updateContentInsets(webView: WKWebView) {
-        let edgeInsets = self.adjustedContentInset
-        webView.scrollView.contentInset = UIEdgeInsets(
-            top: edgeInsets.top,
-            left: 0,
-            bottom: edgeInsets.bottom,
-            right: 0
-        )
-        webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(
-            top: edgeInsets.top,
-            left: edgeInsets.left,
-            bottom: edgeInsets.bottom,
-            right: edgeInsets.right
-        )
+        self.webView.customInsets = self.adjustedContentInset
     }
     
     private func _updateFrame(loadingView: QLoadingViewType, bounds: CGRect) {
