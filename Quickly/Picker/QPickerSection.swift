@@ -16,7 +16,7 @@ open class QPickerSection : IQPickerSection {
     public private(set) var index: Int?
 
     public var rows: [IQPickerRow] {
-        willSet { self.unbind() }
+        willSet { self._unbindRows() }
         didSet {
             self._rebindRows(from: self.rows.startIndex, to: self.rows.endIndex)
             self._reloadColumn()
