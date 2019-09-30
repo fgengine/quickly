@@ -27,7 +27,7 @@ open class QCollectionTableRow : QBackgroundColorTableRow {
 
 }
 
-open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundColorTableCell< RowType > {
+open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundColorTableCell< RowType >, IQCollectionControllerObserver {
 
     public private(set) lazy var collectionView: QCollectionView = {
         let view = QCollectionView(frame: self.contentView.bounds, collectionViewLayout: UICollectionViewFlowLayout())
@@ -36,7 +36,15 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
         return view
     }()
     private weak var _collectionController: IQCollectionController? {
-        set(value) { self.collectionView.collectionController = value }
+        set(value) {
+            if let controller = self.collectionView.collectionController {
+                controller.remove(observer: self)
+            }
+            if let controller = value {
+                controller.add(observer: self, priority: 0)
+            }
+            self.collectionView.collectionController = value
+        }
         get { return self.collectionView.collectionController }
     }
     private var _collectionViewLayout: UICollectionViewLayout {
@@ -72,4 +80,31 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
         self._collectionController = row.controller
     }
 
+    // MARK: IQCollectionControllerObserver
+    
+    open func beginScroll(_ controller: IQCollectionController, collectionView: UICollectionView) {
+    }
+    
+    open func scroll(_ controller: IQCollectionController, collectionView: UICollectionView) {
+    }
+    
+    open func finishScroll(_ controller: IQCollectionController, collectionView: UICollectionView, velocity: CGPoint) -> CGPoint? {
+        return nil
+    }
+    
+    open func endScroll(_ controller: IQCollectionController, collectionView: UICollectionView) {
+    }
+    
+    open func beginZoom(_ controller: IQCollectionController, collectionView: UICollectionView) {
+    }
+    
+    open func zoom(_ controller: IQCollectionController, collectionView: UICollectionView) {
+    }
+    
+    open func endZoom(_ controller: IQCollectionController, collectionView: UICollectionView) {
+    }
+    
+    open func update(_ controller: IQCollectionController) {
+    }
+    
 }

@@ -131,5 +131,5 @@ public extension IQTableController {
     func reloadSection(_ section: IQTableSection, with animation: UITableView.RowAnimation? = nil) {
         self.reloadSection([ section ], with: animation)
     }
-
+    
 }

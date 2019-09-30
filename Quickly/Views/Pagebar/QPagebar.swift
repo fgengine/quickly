@@ -13,48 +13,51 @@ open class QPagebar : QView {
     public typealias ItemType = IQCollectionController.Cell
 
     public weak var delegate: QPagebarDelegate?
-    public var edgeInsets: UIEdgeInsets {
-        set(value) { self.collectionView.contentInset = value }
-        get { return self.collectionView.contentInset }
-    }
+    public var edgeInsets: UIEdgeInsets = UIEdgeInsets() {
+           didSet(oldValue) { if self.edgeInsets != oldValue { self.setNeedsUpdateConstraints() } }
+       }
     public private(set) var cellTypes: [ItemType.Type]
     public var itemsSpacing: CGFloat {
-        set(value) { self.collectionLayout.minimumInteritemSpacing = value }
-        get { return self.collectionLayout.minimumInteritemSpacing }
+        set(value) { self._collectionLayout.minimumInteritemSpacing = value }
+        get { return self._collectionLayout.minimumInteritemSpacing }
     }
     public var items: [QPagebarItem] {
         set(value) {
-            self.collectionSection.setItems(value)
-            self.collectionController.reload()
+            self._collectionSection.setItems(value)
+            self._collectionController.reload()
         }
-        get { return self.collectionSection.items as! [QPagebarItem] }
+        get { return self._collectionSection.items as! [QPagebarItem] }
     }
     public var selectedItem: QPagebarItem? {
-        get { return self.collectionController.selectedItems.first as? QPagebarItem }
+        get { return self._collectionController.selectedItems.first as? QPagebarItem }
     }
     
-    private lazy var collectionView: QCollectionView = {
-        let view = QCollectionView(frame: self.bounds, collectionViewLayout: self.collectionLayout)
-        view.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
+    private lazy var _collectionView: QCollectionView = {
+        let view = QCollectionView(frame: self.bounds.inset(by: self.edgeInsets), collectionViewLayout: self._collectionLayout)
+        view.translatesAutoresizingMaskIntoConstraints = false
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
         view.allowsMultipleSelection = false
-        view.collectionController = self.collectionController
+        view.collectionController = self._collectionController
         return view
     }()
-    private lazy var collectionLayout: CollectionLayout = {
+    private lazy var _collectionLayout: CollectionLayout = {
         let layout = CollectionLayout()
         layout.scrollDirection = .horizontal
         return layout
     }()
-    private lazy var collectionController: CollectionController = {
+    private lazy var _collectionController: CollectionController = {
         let controller = CollectionController(self, cells: self.cellTypes)
-        controller.sections = [ self.collectionSection ]
+        controller.sections = [ self._collectionSection ]
         return controller
     }()
-    private lazy var collectionSection: QCollectionSection = {
+    private lazy var _collectionSection: QCollectionSection = {
         return QCollectionSection(items: [])
     }()
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.removeConstraints(self._constraints) }
+        didSet { self.addConstraints(self._constraints) }
+    }
     
     public required init() {
         fatalError("init(coder:) has not been implemented")
@@ -78,64 +81,75 @@ open class QPagebar : QView {
 
         self.backgroundColor = UIColor.clear
 
-        self.addSubview(self.collectionView)
+        self.addSubview(self._collectionView)
+    }
+    
+    open override func updateConstraints() {
+        super.updateConstraints()
+        
+        self._constraints = [
+            self._collectionView.topLayout == self.topLayout.offset(self.edgeInsets.top),
+            self._collectionView.leadingLayout == self.leadingLayout.offset(self.edgeInsets.left),
+            self._collectionView.trailingLayout == self.trailingLayout.offset(-self.edgeInsets.right),
+            self._collectionView.bottomLayout == self.bottomLayout.offset(-self.edgeInsets.bottom)
+        ]
     }
 
     public func performBatchUpdates(_ updates: (() -> Void)?, completion: ((Bool) -> Void)? = nil) {
-        self.collectionController.performBatchUpdates(updates, completion: completion)
+        self._collectionController.performBatchUpdates(updates, completion: completion)
     }
 
     public func prependItem(_ item: QPagebarItem) {
-        self.collectionSection.prependItem(item)
+        self._collectionSection.prependItem(item)
     }
 
     public func prependItem(_ items: [QPagebarItem]) {
-        self.collectionSection.prependItem(items)
+        self._collectionSection.prependItem(items)
     }
 
     public func appendItem(_ item: QPagebarItem) {
-        self.collectionSection.appendItem(item)
+        self._collectionSection.appendItem(item)
     }
 
     public func appendItem(_ items: [QPagebarItem]) {
-        self.collectionSection.appendItem(items)
+        self._collectionSection.appendItem(items)
     }
 
     public func insertItem(_ item: QPagebarItem, index: Int) {
-        self.collectionSection.insertItem(item, index: index)
+        self._collectionSection.insertItem(item, index: index)
     }
 
     public func insertItem(_ items: [QPagebarItem], index: Int) {
-        self.collectionSection.insertItem(items, index: index)
+        self._collectionSection.insertItem(items, index: index)
     }
 
     public func deleteItem(_ item: QPagebarItem) {
-        self.collectionSection.deleteItem(item)
+        self._collectionSection.deleteItem(item)
     }
 
     public func deleteItem(_ items: [QPagebarItem]) {
-        self.collectionSection.deleteItem(items)
+        self._collectionSection.deleteItem(items)
     }
 
     public func replaceItem(_ item: QPagebarItem, index: Int) {
-        self.collectionSection.replaceItem(item, index: index)
+        self._collectionSection.replaceItem(item, index: index)
     }
 
     public func reloadItem(_ item: QPagebarItem) {
-        self.collectionSection.reloadItem(item)
+        self._collectionSection.reloadItem(item)
     }
 
     public func reloadItem(_ items: [QPagebarItem]) {
-        self.collectionSection.reloadItem(items)
+        self._collectionSection.reloadItem(items)
     }
 
     public func setSelectedItem(_ selectedItem: QPagebarItem?, animated: Bool) {
         if let item = selectedItem {
-            if self.collectionController.isSelected(item: item) == false {
-                self.collectionController.select(item: item, scroll: [ .centeredHorizontally, .centeredVertically ], animated: animated)
+            if self._collectionController.isSelected(item: item) == false {
+                self._collectionController.select(item: item, scroll: [ .centeredHorizontally, .centeredVertically ], animated: animated)
             }
         } else {
-            self.collectionController.selectedItems = []
+            self._collectionController.selectedItems = []
         }
     }
 
@@ -148,7 +162,7 @@ open class QPagebar : QView {
                 let attributes = NSArray(array: superAttributes, copyItems: true) as? [UICollectionViewLayoutAttributes]
                 else { return nil }
             let contentSize = self.collectionViewContentSize
-            let boundsSize = collectionView.bounds.inset(by: collectionView.contentInset).size
+            let boundsSize = collectionView.bounds.size
             if (contentSize.width < boundsSize.width) || (contentSize.height < boundsSize.height) {
                 let offset = CGPoint(
                     x: (boundsSize.width - contentSize.width) / 2,

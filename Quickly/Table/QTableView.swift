@@ -73,7 +73,10 @@ open class QTableView : UITableView, IQView {
         
         if #available(iOS 11.0, *) {
             self.contentInsetAdjustmentBehavior = .never
-            self.insetsContentViewsToSafeArea = false
+            // self.insetsContentViewsToSafeArea = false
+        }
+        if #available(iOS 13.0, *) {
+            self.automaticallyAdjustsScrollIndicatorInsets = false
         }
     }
     

@@ -388,7 +388,7 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     }
     
     private func _updateFrame(loadingView: QLoadingViewType, bounds: CGRect) {
-        loadingView.frame = bounds.inset(by: self.inheritedEdgeInsets)
+        loadingView.frame = bounds
     }
     
     private func _footerViewFrame() -> CGRect {

@@ -402,7 +402,7 @@ open class QCollectionViewController : QViewController, IQInputContentViewContro
     }
     
     private func _updateFrame(loadingView: QLoadingViewType, bounds: CGRect) {
-        loadingView.frame = bounds.inset(by: self.inheritedEdgeInsets)
+        loadingView.frame = bounds
     }
     
     private func _updateCurrentPage(pagesView: QPagesViewType) {

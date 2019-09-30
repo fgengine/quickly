@@ -7,10 +7,12 @@ open class QLengthStringValidator : IQStringValidator {
     public var minimumLength: Int
     public var maximumLength: Int?
     
-    public init(
-        minimumLength: Int,
-        maximumLength: Int? = nil
-    ) {
+    public init(length: Int) {
+        self.minimumLength = length
+        self.maximumLength = length
+    }
+    
+    public init(minimumLength: Int, maximumLength: Int? = nil) {
         self.minimumLength = minimumLength
         self.maximumLength = maximumLength
     }

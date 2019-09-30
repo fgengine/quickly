@@ -9,6 +9,7 @@ open class QTitleButtonComposable : QComposable {
     public var title: QLabelStyleSheet
 
     public var button: QButtonStyleSheet
+    public var buttonIsHidden: Bool
     public var buttonHeight: CGFloat
     public var buttonSpacing: CGFloat
     public var buttonIsSpinnerAnimating: Bool
@@ -18,12 +19,14 @@ open class QTitleButtonComposable : QComposable {
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         title: QLabelStyleSheet,
         button: QButtonStyleSheet,
+        buttonIsHidden: Bool = false,
         buttonHeight: CGFloat = 44,
         buttonSpacing: CGFloat = 4,
         buttonPressed: @escaping Closure
     ) {
         self.title = title
         self.button = button
+        self.buttonIsHidden = buttonIsHidden
         self.buttonHeight = buttonHeight
         self.buttonSpacing = buttonSpacing
         self.buttonIsSpinnerAnimating = false
@@ -57,6 +60,7 @@ open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComp
     }()
 
     private var _edgeInsets: UIEdgeInsets?
+    private var _buttonIsHidden: Bool?
     private var _buttonSpacing: CGFloat?
 
     private var _constraints: [NSLayoutConstraint] = [] {
@@ -74,18 +78,28 @@ open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComp
     }
     
     open override func preLayout(composable: Composable, spec: IQContainerSpec) {
-        if self._edgeInsets != composable.edgeInsets || self._buttonSpacing != composable.buttonSpacing {
+        if self._edgeInsets != composable.edgeInsets || self._buttonIsHidden != composable.buttonIsHidden || self._buttonSpacing != composable.buttonSpacing {
             self._edgeInsets = composable.edgeInsets
+            self._buttonIsHidden = composable.buttonIsHidden
             self._buttonSpacing = composable.buttonSpacing
-            self._constraints = [
+            var constraints: [NSLayoutConstraint] = [
                 self.titleLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
                 self.titleLabel.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
-                self.titleLabel.trailingLayout == self.button.leadingLayout.offset(-composable.buttonSpacing),
                 self.titleLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
                 self.button.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
-                self.button.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
                 self.button.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+                self.button.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right)
             ]
+            if composable.buttonIsHidden == false {
+                constraints.append(contentsOf: [
+                    self.titleLabel.trailingLayout == self.button.leadingLayout.offset(-composable.buttonSpacing)
+                ])
+            } else {
+                constraints.append(contentsOf: [
+                    self.titleLabel.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right)
+                ])
+            }
+            self._constraints = constraints
         }
     }
     
@@ -95,6 +109,7 @@ open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComp
     }
     
     open override func postLayout(composable: Composable, spec: IQContainerSpec) {
+        self.button.alpha = (composable.buttonIsHidden == false) ? 1 : 0
         if composable.buttonIsSpinnerAnimating == true {
             self.button.startSpinner()
         } else {

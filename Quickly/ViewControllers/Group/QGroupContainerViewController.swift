@@ -61,6 +61,8 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
             self.currentViewController = vc
         }
         if let groupbar = self._groupbar {
+            groupbar.frame = self._barFrame(bounds: self.view.bounds)
+            groupbar.edgeInsets = self._barEdgeInsets()
             groupbar.items = self._viewControllers.compactMap({ return $0.barItem })
             groupbar.setSelectedItem(self.currentViewController?.barItem, animated: false)
             self.view.addSubview(groupbar)

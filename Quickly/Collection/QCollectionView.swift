@@ -76,6 +76,11 @@ open class QCollectionView : UICollectionView, IQView {
             self.contentInsetAdjustmentBehavior = .never
         }
     }
+    
+    @available(iOS 11.0, *)
+    open override func adjustedContentInsetDidChange() {
+        super.adjustedContentInsetDidChange()
+    }
 
 }
 

@@ -44,6 +44,9 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
         if #available(iOS 11.0, *) {
             webView.scrollView.contentInsetAdjustmentBehavior = .always
         }
+        if #available(iOS 13.0, *) {
+            webView.scrollView.automaticallyAdjustsScrollIndicatorInsets = false
+        }
         webView.scrollView.delegate = self
         self.view.addSubview(webView)
         return webView
@@ -259,7 +262,7 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
     }
     
     private func _updateFrame(loadingView: QLoadingViewType, bounds: CGRect) {
-        loadingView.frame = bounds.inset(by: self.inheritedEdgeInsets)
+        loadingView.frame = bounds
     }
     
 }

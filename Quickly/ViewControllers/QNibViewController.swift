@@ -58,9 +58,6 @@ open class QNibViewController : QViewController, IQInputContentViewController, I
         if let rootView = self.rootView {
             self._updateConstraints(self.view, rootView: rootView)
         }
-        if let loadingView = self.loadingView, loadingView.superview != nil {
-            self._updateConstraints(self.view, loadingView: loadingView)
-        }
     }
     
     open func dialogDidPressedOutside() {
@@ -134,12 +131,11 @@ extension QNibViewController {
     }
     
     private func _updateConstraints(_ view: UIView, loadingView: QLoadingViewType) {
-        let edgeInsets = self.inheritedEdgeInsets
         self._loadingConstraints = [
-            loadingView.topLayout == view.topLayout.offset(edgeInsets.top),
-            loadingView.leadingLayout == view.leadingLayout.offset(edgeInsets.left),
-            loadingView.trailingLayout == view.trailingLayout.offset(-edgeInsets.right),
-            loadingView.bottomLayout == view.bottomLayout.offset(-edgeInsets.bottom)
+            loadingView.topLayout == view.topLayout,
+            loadingView.leadingLayout == view.leadingLayout,
+            loadingView.trailingLayout == view.trailingLayout,
+            loadingView.bottomLayout == view.bottomLayout
         ]
     }
 

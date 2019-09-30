@@ -29,7 +29,10 @@ open class QPagesViewStyleSheet : IQStyleSheet {
 open class QPagesView : QView, IQPagesView {
 
     open var numberOfPages: UInt {
-        set(value) { self._pageControl.numberOfPages = Int(value) }
+        set(value) {
+            self._pageControl.numberOfPages = Int(value)
+            self.invalidateIntrinsicContentSize()
+        }
         get { return UInt(self._pageControl.numberOfPages) }
     }
     open var currentPage: UInt {
