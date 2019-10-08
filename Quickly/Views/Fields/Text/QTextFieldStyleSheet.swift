@@ -26,6 +26,7 @@ open class QTextFieldStyleSheet : QDisplayStyleSheet {
     public var isEnabled: Bool
     public var toolbarStyle: QToolbarStyleSheet?
     public var toolbarActions: QFieldAction
+    public var suggestionStyle: QToolbarStyleSheet?
     public var suggestion: IQTextFieldSuggestion?
     
     public init(
@@ -51,6 +52,7 @@ open class QTextFieldStyleSheet : QDisplayStyleSheet {
         isEnabled: Bool = true,
         toolbarStyle: QToolbarStyleSheet? = nil,
         toolbarActions: QFieldAction = [ .cancel, .done ],
+        suggestionStyle: QToolbarStyleSheet? = nil,
         suggestion: IQTextFieldSuggestion? = nil,
         backgroundColor: UIColor? = nil,
         tintColor: UIColor? = nil,
@@ -79,6 +81,7 @@ open class QTextFieldStyleSheet : QDisplayStyleSheet {
         self.isEnabled = isEnabled
         self.toolbarStyle = toolbarStyle
         self.toolbarActions = toolbarActions
+        self.suggestionStyle = suggestionStyle
         self.suggestion = suggestion
         
         super.init(
@@ -112,6 +115,7 @@ open class QTextFieldStyleSheet : QDisplayStyleSheet {
         self.isEnabled = styleSheet.isEnabled
         self.toolbarStyle = styleSheet.toolbarStyle
         self.toolbarActions = styleSheet.toolbarActions
+        self.suggestionStyle = styleSheet.suggestionStyle
         self.suggestion = styleSheet.suggestion
         
         super.init(styleSheet)

@@ -28,10 +28,6 @@ open class QToolbarStyleSheet : IQStyleSheet {
 
 public class QToolbar : UIToolbar {
     
-    public override var items: [UIBarButtonItem]? {
-        didSet { self.isHidden = (self.items ?? []).isEmpty }
-    }
-    
     public init(
         styleSheet: QToolbarStyleSheet? = nil,
         items: [UIBarButtonItem] = []
@@ -47,10 +43,7 @@ public class QToolbar : UIToolbar {
         if let styleSheet = styleSheet {
             self.apply(styleSheet)
         }
-        if items.count > 0 {
-            self.items = items
-        }
-        self.isHidden = items.isEmpty
+        self.items = items
     }
     
     required init?(coder aDecoder: NSCoder) {

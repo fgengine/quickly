@@ -71,7 +71,9 @@ public class QListField : QDisplayView, IQField {
     public var toolbarActions: QFieldAction = [] {
         didSet(oldValue) {
             if self.toolbarActions != oldValue {
-                self.toolbar.items = self._toolbarItems()
+                let items = self._toolbarItems()
+                self.toolbar.items = items
+                self.toolbar.isHidden = items.isEmpty
             }
         }
     }

@@ -5,6 +5,7 @@
 public protocol IQTextFieldSuggestion : class {
     
     func autoComplete(_ text: String) -> String?
+    func variants(_ text: String) -> [String]
     
 }
 
@@ -221,11 +222,21 @@ public class QTextField : QDisplayView, IQField {
     public var toolbarActions: QFieldAction = [] {
         didSet(oldValue) {
             if self.toolbarActions != oldValue {
-                self.toolbar.items = self._toolbarItems()
+                let items = self._toolbarItems()
+                self.toolbar.items = items
+                self.toolbar.isHidden = items.isEmpty
+                self._updateAccessoryView()
             }
         }
     }
-    public var suggestion: IQTextFieldSuggestion?
+    public lazy var suggestionToolbar: QToolbar = QToolbar(items: [])
+    public var suggestion: IQTextFieldSuggestion? {
+        didSet(oldValue) {
+            if self.suggestion !== oldValue {
+                self._updateAccessoryView()
+            }
+        }
+    }
     
     public var onShouldBeginEditing: ShouldClosure?
     public var onBeginEditing: Closure?
@@ -246,6 +257,7 @@ public class QTextField : QDisplayView, IQField {
     private var _field: Field!
     private var _fieldDelegate: FieldDelegate!
     private var _observer: QObserver< IQTextFieldObserver > = QObserver< IQTextFieldObserver >()
+    private lazy var _accessoryView: AccessoryView = AccessoryView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 0))
     
     public required init() {
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
@@ -268,7 +280,7 @@ public class QTextField : QDisplayView, IQField {
 
         self._field = Field(frame: self.bounds)
         self._field.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
-        self._field.inputAccessoryView = self.toolbar
+        self._field.inputAccessoryView = self._accessoryView
         self._field.delegate = self._fieldDelegate
         self.addSubview(self._field)
     }
@@ -322,6 +334,9 @@ public class QTextField : QDisplayView, IQField {
             self.toolbar.apply(style)
         }
         self.toolbarActions = styleSheet.toolbarActions
+        if let style = styleSheet.suggestionStyle {
+            self.suggestionToolbar.apply(style)
+        }
         self.suggestion = styleSheet.suggestion
     }
     
@@ -329,9 +344,9 @@ public class QTextField : QDisplayView, IQField {
 
 // MARK: - Private -
 
-extension QTextField {
+private extension QTextField {
     
-    private func _toolbarItems() -> [UIBarButtonItem] {
+    func _toolbarItems() -> [UIBarButtonItem] {
         var items: [UIBarButtonItem] = []
         if self.toolbarActions.isEmpty == false {
             if self.toolbarActions.contains(.cancel) == true {
@@ -345,8 +360,54 @@ extension QTextField {
         return items
     }
     
+    func _createBarButtonItem(suggestion: String) -> UIBarButtonItem {
+        return UIBarButtonItem(title: suggestion, style: .plain, target: self, action: #selector(self._pressedSuggestion))
+    }
+    
+    func _updateAccessoryView() {
+        var height: CGFloat = 0
+        if self.toolbarActions.isEmpty == false {
+            self._accessoryView.addSubview(self.toolbar)
+            height += self.toolbar.frame.height
+        }
+        if self.suggestion != nil {
+            self._accessoryView.addSubview(self.suggestionToolbar)
+            height += self.suggestionToolbar.frame.height
+        }
+        let origin = self._accessoryView.frame.origin
+        let size = self._accessoryView.frame.size
+        if size.height != height {
+            self._accessoryView.frame = CGRect(
+                origin: origin,
+                size: CGSize(
+                    width: size.width,
+                    height: height
+                )
+            )
+            self._field.reloadInputViews()
+        }
+    }
+    
     @objc
-    private func _pressedCancel(_ sender: Any) {
+    func _pressedSuggestion(_ sender: UIBarButtonItem) {
+        self.suggestionToolbar.items = []
+        self._field.text = sender.title
+        self._field.sendActions(for: .editingChanged)
+        NotificationCenter.default.post(name: UITextField.textDidChangeNotification, object: self._field)
+        if let closure = self.onEditing {
+            closure(self)
+        }
+        self._observer.notify({ (observer) in
+            observer.editing(textField: self)
+        })
+        if let form = self.form {
+            form.changed(field: self)
+        }
+        self.endEditing(false)
+    }
+    
+    @objc
+    func _pressedCancel(_ sender: Any) {
         if let closure = self.onPressedCancel {
             closure(self)
         }
@@ -357,7 +418,7 @@ extension QTextField {
     }
     
     @objc
-    private func _pressedDone(_ sender: Any) {
+    func _pressedDone(_ sender: Any) {
         if let closure = self.onPressedDone {
             closure(self)
         }
@@ -367,6 +428,28 @@ extension QTextField {
         self.endEditing(false)
     }
     
+}
+
+// MARK: - Private • AccessoryView -
+
+private extension QTextField {
+    
+    class AccessoryView : UIView {
+        
+        override func layoutSubviews() {
+            super.layoutSubviews()
+            
+            let bounds = self.bounds
+            var offset: CGFloat = 0
+            for subview in self.subviews {
+                let height = subview.frame.height
+                subview.frame = CGRect(x: bounds.origin.x, y: offset, width: bounds.size.width, height: height)
+                offset += height
+            }
+        }
+        
+    }
+
 }
 
 // MARK: - Private • Field -
@@ -479,10 +562,16 @@ private extension QTextField {
             } else {
                 sourceUnformat = sourceText
             }
-            if sourceUnformat.isEmpty == false && sourceUnformat.count <= caretPosition && string.count > 0 {
-                if let autoComplete = field.suggestion?.autoComplete(sourceUnformat) {
-                    caretLength = autoComplete.count - sourceUnformat.count
-                    sourceUnformat = autoComplete
+            var autoCompleteVariants: [String] = []
+            if let suggestion = field.suggestion {
+                if sourceUnformat.count > 0 {
+                    autoCompleteVariants = suggestion.variants(sourceUnformat)
+                }
+                if sourceUnformat.isEmpty == false && sourceUnformat.count <= caretPosition && string.count > 0 {
+                    if let autoComplete = suggestion.autoComplete(sourceUnformat) {
+                        caretLength = autoComplete.count - sourceUnformat.count
+                        sourceUnformat = autoComplete
+                    }
                 }
             }
             var isValid: Bool
@@ -507,6 +596,9 @@ private extension QTextField {
                 if let selectionFrom = selectionFrom, let selectionTo = selectionTo {
                     textField.selectedTextRange = textField.textRange(from: selectionFrom, to: selectionTo)
                 }
+                field.suggestionToolbar.items = autoCompleteVariants.compactMap({
+                    return field._createBarButtonItem(suggestion: $0)
+                })
                 textField.sendActions(for: .editingChanged)
                 NotificationCenter.default.post(name: UITextField.textDidChangeNotification, object: textField)
                 if let closure = field.onEditing {
