@@ -4,7 +4,7 @@
 
 public class QLabelPickerCell< RowType: QLabelPickerRow > : QPickerCell< RowType > {
 
-    private lazy var _label: QLabel = {
+    public private(set) lazy var labelView: QLabel = {
         let view = QLabel(frame: self.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(view)
@@ -27,13 +27,13 @@ public class QLabelPickerCell< RowType: QLabelPickerRow > : QPickerCell< RowType
         if self._edgeInsets != row.edgeInsets {
             self._edgeInsets = row.edgeInsets
             self._constraints = [
-                self._label.topLayout == self.topLayout.offset(row.edgeInsets.top),
-                self._label.leadingLayout == self.leadingLayout.offset(row.edgeInsets.left),
-                self._label.trailingLayout == self.trailingLayout.offset(-row.edgeInsets.right),
-                self._label.bottomLayout == self.bottomLayout.offset(-row.edgeInsets.bottom)
+                self.labelView.topLayout == self.topLayout.offset(row.edgeInsets.top),
+                self.labelView.leadingLayout == self.leadingLayout.offset(row.edgeInsets.left),
+                self.labelView.trailingLayout == self.trailingLayout.offset(-row.edgeInsets.right),
+                self.labelView.bottomLayout == self.bottomLayout.offset(-row.edgeInsets.bottom)
             ]
         }
-        self._label.apply(row.label)
+        self.labelView.apply(row.label)
     }
 
 }

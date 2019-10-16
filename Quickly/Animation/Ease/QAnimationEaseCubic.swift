@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QAnimationEaseCubicIn : IQAnimationEase {
+public final class QAnimationEaseCubicIn : IQAnimationEase {
 
     public func perform(_ x: Double) -> Double {
         return x * x * x
@@ -10,7 +10,7 @@ public class QAnimationEaseCubicIn : IQAnimationEase {
 
 }
 
-public class QAnimationEaseCubicOut : IQAnimationEase {
+public final class QAnimationEaseCubicOut : IQAnimationEase {
 
     public func perform(_ x: Double) -> Double {
         let p = x - 1
@@ -19,7 +19,7 @@ public class QAnimationEaseCubicOut : IQAnimationEase {
 
 }
 
-public class QAnimationEaseCubicInOut : IQAnimationEase {
+public final class QAnimationEaseCubicInOut : IQAnimationEase {
 
     public func perform(_ x: Double) -> Double {
         if x < 1/2 {

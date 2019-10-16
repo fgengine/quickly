@@ -342,7 +342,7 @@ public class QTextField : QDisplayView, IQField {
     
 }
 
-// MARK: - Private -
+// MARK: Private
 
 private extension QTextField {
     
@@ -430,7 +430,7 @@ private extension QTextField {
     
 }
 
-// MARK: - Private • AccessoryView -
+// MARK: Private • AccessoryView
 
 private extension QTextField {
     
@@ -452,7 +452,7 @@ private extension QTextField {
 
 }
 
-// MARK: - Private • Field -
+// MARK: Private • Field
 
 private extension QTextField {
 
@@ -505,7 +505,7 @@ private extension QTextField {
     
 }
 
-// MARK: - Private • FieldDelegate -
+// MARK: Private • FieldDelegate
 
 private extension QTextField {
 
@@ -662,7 +662,7 @@ private extension QTextField {
     
 }
 
-// MARK: - UITextInputTraits -
+// MARK: UITextInputTraits
 
 extension QTextField : UITextInputTraits {
 

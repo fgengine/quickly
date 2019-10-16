@@ -4,34 +4,34 @@
 
 open class QPlaceholderTitleValueShapeComposable : QComposable {
     
-    public var title: QPlaceholderStyleSheet
-    public var titleHeight: CGFloat
-    public var titleSpacing: CGFloat
+    public private(set) var titleStyle: QPlaceholderStyleSheet
+    public private(set) var titleHeight: CGFloat
+    public private(set) var titleSpacing: CGFloat
     
-    public var value: QPlaceholderStyleSheet
-    public var valueHeight: CGFloat
+    public private(set) var valueStyle: QPlaceholderStyleSheet
+    public private(set) var valueHeight: CGFloat
     
-    public var shape: QShapeView.Model
-    public var shapeWidth: CGFloat
-    public var shapeSpacing: CGFloat
+    public private(set) var shapeModel: QShapeView.Model
+    public private(set) var shapeWidth: CGFloat
+    public private(set) var shapeSpacing: CGFloat
     
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        title: QPlaceholderStyleSheet,
+        titleStyle: QPlaceholderStyleSheet,
         titleHeight: CGFloat,
         titleSpacing: CGFloat = 4,
-        value: QPlaceholderStyleSheet,
+        valueStyle: QPlaceholderStyleSheet,
         valueHeight: CGFloat,
-        shape: QShapeView.Model,
+        shapeModel: QShapeView.Model,
         shapeWidth: CGFloat = 16,
         shapeSpacing: CGFloat = 4
     ) {
-        self.title = title
+        self.titleStyle = titleStyle
         self.titleHeight = titleHeight
         self.titleSpacing = titleSpacing
-        self.value = value
+        self.valueStyle = valueStyle
         self.valueHeight = valueHeight
-        self.shape = shape
+        self.shapeModel = shapeModel
         self.shapeWidth = shapeWidth
         self.shapeSpacing = shapeSpacing
         super.init(edgeInsets: edgeInsets)
@@ -41,19 +41,19 @@ open class QPlaceholderTitleValueShapeComposable : QComposable {
 
 open class QPlaceholderTitleValueShapeComposition< Composable: QPlaceholderTitleValueShapeComposable > : QComposition< Composable > {
     
-    private lazy var titleLabel: QPlaceholderView = {
+    public private(set) lazy var titleView: QPlaceholderView = {
         let view = QPlaceholderView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var valueLabel: QPlaceholderView = {
+    public private(set) lazy var valueView: QPlaceholderView = {
         let view = QPlaceholderView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var shapeView: QShapeView = {
+    public private(set) lazy var shapeView: QShapeView = {
         let view = QShapeView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
@@ -72,12 +72,12 @@ open class QPlaceholderTitleValueShapeComposition< Composable: QPlaceholderTitle
         didSet { self.contentView.addConstraints(self._constraints) }
     }
     private var _titleConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.titleLabel.removeConstraints(self._titleConstraints) }
-        didSet { self.titleLabel.addConstraints(self._titleConstraints) }
+        willSet { self.titleView.removeConstraints(self._titleConstraints) }
+        didSet { self.titleView.addConstraints(self._titleConstraints) }
     }
     private var _valueConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.valueLabel.removeConstraints(self._valueConstraints) }
-        didSet { self.valueLabel.addConstraints(self._valueConstraints) }
+        willSet { self.valueView.removeConstraints(self._valueConstraints) }
+        didSet { self.valueView.addConstraints(self._valueConstraints) }
     }
     private var _shapeConstraints: [NSLayoutConstraint] = [] {
         willSet { self.shapeView.removeConstraints(self._shapeConstraints) }
@@ -85,7 +85,7 @@ open class QPlaceholderTitleValueShapeComposition< Composable: QPlaceholderTitle
     }
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
-        let shapeSzie = composable.shape.size
+        let shapeSzie = composable.shapeModel.size
         return CGSize(
             width: spec.containerSize.width,
             height: composable.edgeInsets.top + max(composable.titleHeight, composable.valueHeight, shapeSzie.height) + composable.edgeInsets.bottom
@@ -98,13 +98,13 @@ open class QPlaceholderTitleValueShapeComposition< Composable: QPlaceholderTitle
             self._titleSpacing = composable.titleSpacing
             self._shapeSpacing = composable.shapeSpacing
             self._constraints = [
-                self.titleLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
-                self.titleLabel.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
-                self.titleLabel.trailingLayout == self.valueLabel.leadingLayout.offset(-composable.titleSpacing),
-                self.titleLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
-                self.valueLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
-                self.valueLabel.trailingLayout == self.shapeView.leadingLayout.offset(-composable.shapeSpacing),
-                self.valueLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+                self.titleView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.titleView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.titleView.trailingLayout == self.valueView.leadingLayout.offset(-composable.titleSpacing),
+                self.titleView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+                self.valueView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.valueView.trailingLayout == self.shapeView.leadingLayout.offset(-composable.shapeSpacing),
+                self.valueView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
                 self.shapeView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
                 self.shapeView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
                 self.shapeView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
@@ -113,13 +113,13 @@ open class QPlaceholderTitleValueShapeComposition< Composable: QPlaceholderTitle
         if self._titleHeight != composable.titleHeight {
             self._titleHeight = composable.titleHeight
             self._titleConstraints = [
-                self.titleLabel.heightLayout == composable.titleHeight
+                self.titleView.heightLayout == composable.titleHeight
             ]
         }
         if self._valueHeight != composable.valueHeight {
             self._valueHeight = composable.valueHeight
             self._valueConstraints = [
-                self.valueLabel.heightLayout == composable.valueHeight
+                self.valueView.heightLayout == composable.valueHeight
             ]
         }
         if self._shapeWidth != composable.shapeWidth {
@@ -131,9 +131,9 @@ open class QPlaceholderTitleValueShapeComposition< Composable: QPlaceholderTitle
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        self.titleLabel.apply(composable.title)
-        self.valueLabel.apply(composable.value)
-        self.shapeView.model = composable.shape
+        self.titleView.apply(composable.titleStyle)
+        self.valueView.apply(composable.valueStyle)
+        self.shapeView.model = composable.shapeModel
     }
     
 }

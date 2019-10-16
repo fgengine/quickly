@@ -326,11 +326,11 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
     
 }
 
-// MARK: - Private -
+// MARK: Private
 
-extension QGroupContainerViewController {
+private extension QGroupContainerViewController {
 
-    private func _update(viewController: IQGroupViewController?, animated: Bool, updation: (() -> Swift.Void)? = nil, completion: (() -> Swift.Void)? = nil) {
+    func _update(viewController: IQGroupViewController?, animated: Bool, updation: (() -> Swift.Void)? = nil, completion: (() -> Swift.Void)? = nil) {
         if self.currentViewController !== viewController {
             let previousViewController = self.currentViewController
             self.currentViewController = viewController
@@ -372,15 +372,15 @@ extension QGroupContainerViewController {
         }
     }
     
-    private func _add(childViewController: IQGroupViewController) {
+    func _add(childViewController: IQGroupViewController) {
         childViewController.parentViewController = self
     }
     
-    private func _remove(childViewController: IQGroupViewController) {
+    func _remove(childViewController: IQGroupViewController) {
         childViewController.parentViewController = nil
     }
 
-    private func _appear(viewController: IQGroupViewController) {
+    func _appear(viewController: IQGroupViewController) {
         viewController.view.frame = self.view.bounds
         if let groupbar = self._groupbar {
             self.view.insertSubview(viewController.view, belowSubview: groupbar)
@@ -389,16 +389,16 @@ extension QGroupContainerViewController {
         }
     }
 
-    private func _disappear(viewController: IQGroupViewController) {
+    func _disappear(viewController: IQGroupViewController) {
         viewController.view.removeFromSuperview()
     }
 
-    private func _animation(viewController: IQGroupViewController) -> IQGroupViewControllerAnimation {
+    func _animation(viewController: IQGroupViewController) -> IQGroupViewControllerAnimation {
         if let animation = viewController.animation { return animation }
         return self.animation
     }
 
-    private func _updateAdditionalEdgeInsets() {
+    func _updateAdditionalEdgeInsets() {
         self.additionalEdgeInsets = UIEdgeInsets(
             top: 0,
             left: 0,
@@ -407,7 +407,7 @@ extension QGroupContainerViewController {
         )
     }
     
-    private func _updateBar(bounds: CGRect, animated: Bool) {
+    func _updateBar(bounds: CGRect, animated: Bool) {
         guard let groupbar = self._groupbar else { return }
         if animated == true {
             UIView.animate(withDuration: 0.1, delay: 0, options: [ .beginFromCurrentState ], animations: {
@@ -420,7 +420,7 @@ extension QGroupContainerViewController {
         }
     }
 
-    private func _barFrame(bounds: CGRect) -> CGRect {
+    func _barFrame(bounds: CGRect) -> CGRect {
         let edgeInsets = self.inheritedEdgeInsets
         let fullHeight = self._groupbarHeight + edgeInsets.bottom
         if self._groupbarHidden == true {
@@ -439,7 +439,7 @@ extension QGroupContainerViewController {
         )
     }
 
-    private func _barEdgeInsets() -> UIEdgeInsets {
+    func _barEdgeInsets() -> UIEdgeInsets {
         let edgeInsets = self.inheritedEdgeInsets
         return UIEdgeInsets(
             top: 0,
@@ -451,7 +451,7 @@ extension QGroupContainerViewController {
 
 }
 
-// MARK: - QGroupbarDelegate -
+// MARK: QGroupbarDelegate
 
 extension QGroupContainerViewController : QGroupbarDelegate {
 

@@ -325,9 +325,11 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
 
 }
 
-extension QCollectionController {
+// MARK: Private
 
-    private func _bindSections() {
+private extension QCollectionController {
+
+    func _bindSections() {
         var sectionIndex: Int = 0
         for section in self.sections {
             section.bind(self, sectionIndex)
@@ -335,23 +337,23 @@ extension QCollectionController {
         }
     }
 
-    private func _bindSections(from: Int, to: Int) {
+    func _bindSections(from: Int, to: Int) {
         for index in from..<to {
             self.sections[index].bind(self, index)
         }
     }
 
-    private func _unbindSections() {
+    func _unbindSections() {
         for section in self.sections {
             section.unbind()
         }
     }
 
-    private func _notifyUpdate() {
+    func _notifyUpdate() {
         self._observer.notify({ $0.update(self) })
     }
     
-    private func _decorClass(data: IQCollectionData) -> IQCollectionDecor.Type? {
+    func _decorClass(data: IQCollectionData) -> IQCollectionDecor.Type? {
         let dataMetatype = QMetatype(data)
         if let metatype = self._aliasDecors.first(where: { return $0.key == dataMetatype }) {
             return metatype.value
@@ -375,7 +377,7 @@ extension QCollectionController {
         }
     }
     
-    private func _cellClass(item: IQCollectionItem) -> IQCollectionCell.Type? {
+    func _cellClass(item: IQCollectionItem) -> IQCollectionCell.Type? {
         let rowMetatype = QMetatype(item)
         if let metatype = self._aliasCells.first(where: { return $0.key == rowMetatype }) {
             return metatype.value
@@ -400,6 +402,8 @@ extension QCollectionController {
     }
 
 }
+
+// MARK: UIScrollViewDelegate
 
 extension QCollectionController : UIScrollViewDelegate {
 
@@ -472,6 +476,8 @@ extension QCollectionController : UIScrollViewDelegate {
 
 }
 
+// MARK: UICollectionViewDataSource
+
 extension QCollectionController : UICollectionViewDataSource {
     
     @objc
@@ -529,8 +535,11 @@ extension QCollectionController : UICollectionViewDataSource {
 
 }
 
-extension QCollectionController : UICollectionViewDelegate {
+// MARK: UICollectionViewDelegate
 
+extension QCollectionController : UICollectionViewDelegate {
+    
+    @objc
     open func collectionView(
         _ collectionView: UICollectionView,
         willDisplay cell: UICollectionViewCell,
@@ -541,7 +550,8 @@ extension QCollectionController : UICollectionViewDelegate {
             collectionCell.set(any: item, spec: collectionView as! IQContainerSpec, animated: false)
         }
     }
-
+    
+    @objc
     open func collectionView(
         _ collectionView: UICollectionView,
         willDisplaySupplementaryView view: UICollectionReusableView,
@@ -560,7 +570,8 @@ extension QCollectionController : UICollectionViewDelegate {
             }
         }
     }
-
+    
+    @objc
     open func collectionView(
         _ collectionView: UICollectionView,
         shouldHighlightItemAt indexPath: IndexPath
@@ -568,7 +579,8 @@ extension QCollectionController : UICollectionViewDelegate {
         let item = self.item(indexPath: indexPath)
         return item.canSelect
     }
-
+    
+    @objc
     open func collectionView(
         _ collectionView: UICollectionView,
         shouldSelectItemAt indexPath: IndexPath
@@ -576,7 +588,8 @@ extension QCollectionController : UICollectionViewDelegate {
         let item = self.item(indexPath: indexPath)
         return item.canSelect
     }
-
+    
+    @objc
     open func collectionView(
         _ collectionView: UICollectionView,
         shouldDeselectItemAt indexPath: IndexPath
@@ -587,8 +600,11 @@ extension QCollectionController : UICollectionViewDelegate {
 
 }
 
-extension QCollectionController : UICollectionViewDelegateFlowLayout {
+// MARK: UICollectionViewDelegateFlowLayout
 
+extension QCollectionController : UICollectionViewDelegateFlowLayout {
+    
+    @objc
     open func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -601,7 +617,8 @@ extension QCollectionController : UICollectionViewDelegateFlowLayout {
         }
         return CGSize.zero
     }
-
+    
+    @objc
     open func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -610,7 +627,8 @@ extension QCollectionController : UICollectionViewDelegateFlowLayout {
         let section = self.section(index: index)
         return section.insets
     }
-
+    
+    @objc
     open func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -619,7 +637,8 @@ extension QCollectionController : UICollectionViewDelegateFlowLayout {
         let section = self.section(index: index)
         return section.minimumLineSpacing
     }
-
+    
+    @objc
     open func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -628,7 +647,8 @@ extension QCollectionController : UICollectionViewDelegateFlowLayout {
         let section = self.section(index: index)
         return section.minimumInteritemSpacing
     }
-
+    
+    @objc
     open func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -642,7 +662,8 @@ extension QCollectionController : UICollectionViewDelegateFlowLayout {
         }
         return CGSize.zero
     }
-
+    
+    @objc
     open func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,

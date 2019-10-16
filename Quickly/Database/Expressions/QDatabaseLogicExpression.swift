@@ -40,7 +40,7 @@ public extension QDatabase {
     
 }
 
-// MARK: - Internal • QDatabase.LogicExpression.Operator
+// MARK: Internal • QDatabase.LogicExpression.Operator
 
 internal extension QDatabase.LogicExpression.Operator {
     

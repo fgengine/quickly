@@ -322,7 +322,7 @@ public class QMultiTextField : QDisplayView, IQField {
     
 }
 
-// MARK: - Private -
+// MARK: Private
 
 private extension QMultiTextField {
     
@@ -381,7 +381,7 @@ private extension QMultiTextField {
     
 }
 
-// MARK: - Private • Field -
+// MARK: Private • Field
 
 private extension QMultiTextField {
 
@@ -424,7 +424,7 @@ private extension QMultiTextField {
     
 }
 
-// MARK: - Private • FieldDelegate -
+// MARK: Private • FieldDelegate
 
 private extension QMultiTextField {
     
@@ -551,7 +551,7 @@ private extension QMultiTextField {
     
 }
 
-// MARK: - UITextInputTraits -
+// MARK: UITextInputTraits
 
 extension QMultiTextField : UITextInputTraits {
 

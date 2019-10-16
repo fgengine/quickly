@@ -5,8 +5,8 @@
 open class QCollectionCell< Type: IQCollectionItem > : UICollectionViewCell, IQTypedCollectionCell {
     
     public weak var collectionDelegate: CollectionCellDelegate?
-    public var item: Type?
-    public var spec: IQContainerSpec?
+    public private(set) var item: Type?
+    public private(set) var spec: IQContainerSpec?
 
     public override init(frame: CGRect) {
         super.init(frame: frame)

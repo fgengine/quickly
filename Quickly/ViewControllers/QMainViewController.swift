@@ -282,13 +282,19 @@ open class QMainViewController : QViewController {
         if let vc = self.contentViewController { return vc.preferedStatusBarAnimation() }
         return super.preferedStatusBarAnimation()
     }
+    
+}
 
-    private func _appendBackgroundController(_ viewController: IQViewController) {
+// MARK: Private
+
+private extension QMainViewController {
+
+    func _appendBackgroundController(_ viewController: IQViewController) {
         viewController.view.frame = self.view.bounds
         self.view.insertSubview(viewController.view, at: 0)
     }
 
-    private func _appendContentController(_ viewController: IQViewController) {
+    func _appendContentController(_ viewController: IQViewController) {
         viewController.view.frame = self.view.bounds
         if let vc = self.backgroundViewController, vc.view.superview == self.view {
             self.view.insertSubview(viewController.view, aboveSubview: vc.view)
@@ -303,7 +309,7 @@ open class QMainViewController : QViewController {
         }
     }
 
-    private func _appendModalContainer(_ viewController: IQModalContainerViewController) {
+    func _appendModalContainer(_ viewController: IQModalContainerViewController) {
         viewController.view.frame = self.view.bounds
         if let vc = self.contentViewController, vc.view.superview == self.view {
             self.view.insertSubview(viewController.view, aboveSubview: vc.view)
@@ -318,7 +324,7 @@ open class QMainViewController : QViewController {
         }
     }
 
-    private func _appendDialogContainer(_ viewController: IQDialogContainerViewController) {
+    func _appendDialogContainer(_ viewController: IQDialogContainerViewController) {
         viewController.view.frame = self.view.bounds
         if let vc = self.modalContainerViewController, vc.view.superview == self.view {
             self.view.insertSubview(viewController.view, aboveSubview: vc.view)
@@ -333,7 +339,7 @@ open class QMainViewController : QViewController {
         }
     }
     
-    private func _appendPushContainer(_ viewController: IQPushContainerViewController) {
+    func _appendPushContainer(_ viewController: IQPushContainerViewController) {
         viewController.view.frame = self.view.bounds
         if let vc = self.dialogContainerViewController, vc.view.superview == self.view {
             self.view.insertSubview(viewController.view, aboveSubview: vc.view)

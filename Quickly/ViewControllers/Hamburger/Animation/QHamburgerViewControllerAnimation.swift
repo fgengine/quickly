@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QHamburgerViewControllerAnimation : IQHamburgerViewControllerFixedAnimation {
+public final class QHamburgerViewControllerAnimation : IQHamburgerViewControllerFixedAnimation {
     
     public var contentShadow: QViewShadow
     public var leftSize: CGFloat
@@ -93,6 +93,8 @@ public class QHamburgerViewControllerAnimation : IQHamburgerViewControllerFixedA
     }
     
 }
+
+// MARK: Private
 
 private extension QHamburgerViewControllerAnimation {
     

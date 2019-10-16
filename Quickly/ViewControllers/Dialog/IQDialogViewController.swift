@@ -2,14 +2,14 @@
 //  Quickly
 //
 
-// MARK: - QDialogViewControllerSizeBehaviour -
+// MARK: QDialogViewControllerSizeBehaviour
 
 public enum QDialogViewControllerSizeBehaviour {
     case fit(min: CGFloat, max: CGFloat)
     case fill(before: CGFloat, after: CGFloat)
 }
 
-// MARK: - QDialogViewControllerVerticalAlignment -
+// MARK: QDialogViewControllerVerticalAlignment
 
 public enum QDialogViewControllerVerticalAlignment {
     case top(offset: CGFloat)
@@ -27,7 +27,7 @@ public enum QDialogViewControllerVerticalAlignment {
     }
 }
 
-// MARK: - QDialogViewControllerHorizontalAlignment -
+// MARK: QDialogViewControllerHorizontalAlignment
 
 public enum QDialogViewControllerHorizontalAlignment {
     case left(offset: CGFloat)
@@ -45,7 +45,7 @@ public enum QDialogViewControllerHorizontalAlignment {
     }
 }
 
-// MARK: - IQDialogViewControllerFixedAnimation -
+// MARK: IQDialogViewControllerFixedAnimation
 
 public protocol IQDialogViewControllerFixedAnimation : class {
 
@@ -57,7 +57,7 @@ public protocol IQDialogViewControllerFixedAnimation : class {
 
 }
 
-// MARK: - IQDialogViewControllerInteractiveAnimation -
+// MARK: IQDialogViewControllerInteractiveAnimation
 
 public protocol IQDialogViewControllerInteractiveAnimation : class {
 
@@ -75,7 +75,7 @@ public protocol IQDialogViewControllerInteractiveAnimation : class {
 
 }
 
-// MARK: - IQDialogContainerViewController -
+// MARK: IQDialogContainerViewController
 
 public protocol IQDialogContainerViewController : IQViewController {
 
@@ -94,7 +94,7 @@ public protocol IQDialogContainerViewController : IQViewController {
 
 }
 
-// MARK: - IQDialogContainerBackgroundView -
+// MARK: IQDialogContainerBackgroundView
 
 public protocol IQDialogContainerBackgroundView : class {
 
@@ -105,7 +105,7 @@ public protocol IQDialogContainerBackgroundView : class {
 
 }
 
-// MARK: - IQDialogViewController -
+// MARK: IQDialogViewController
 
 public protocol IQDialogViewController : IQContentOwnerViewController {
 
@@ -136,7 +136,7 @@ public extension IQDialogViewController {
 
 }
 
-// MARK: - IQDialogContentViewController -
+// MARK: IQDialogContentViewController
 
 public protocol IQDialogContentViewController : IQContentViewController {
 

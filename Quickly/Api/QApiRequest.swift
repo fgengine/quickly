@@ -478,7 +478,7 @@ extension QApiRequest : IQDebug {
 
 #endif
 
-// MARK: - QApiRequestUploadItem -
+// MARK: QApiRequestUploadItem
 
 open class QApiRequestUploadItem {
 

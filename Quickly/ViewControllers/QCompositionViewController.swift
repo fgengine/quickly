@@ -118,9 +118,11 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
     
 }
 
-extension QCompositionViewController {
+// MARK: Private
+
+private extension QCompositionViewController {
     
-    private func _updateConstraints(_ view: UIView, backgroundView: UIView) {
+    func _updateConstraints(_ view: UIView, backgroundView: UIView) {
         self._backgroundConstraints = [
             backgroundView.topLayout == view.topLayout,
             backgroundView.leadingLayout == view.leadingLayout,
@@ -129,7 +131,7 @@ extension QCompositionViewController {
         ]
     }
     
-    private func _updateConstraints(_ view: UIView, contentView: UIView) {
+    func _updateConstraints(_ view: UIView, contentView: UIView) {
         let edgeInsets = self.inheritedEdgeInsets
         self._contentConstraints = [
             contentView.topLayout == view.topLayout.offset(edgeInsets.top),
@@ -139,7 +141,7 @@ extension QCompositionViewController {
         ]
     }
     
-    private func _updateConstraints(_ view: UIView, loadingView: QLoadingViewType) {
+    func _updateConstraints(_ view: UIView, loadingView: QLoadingViewType) {
         self._loadingConstraints = [
             loadingView.topLayout == view.topLayout,
             loadingView.leadingLayout == view.leadingLayout,
@@ -149,6 +151,8 @@ extension QCompositionViewController {
     }
 
 }
+
+// MARK: IQLoadingViewDelegate
 
 extension QCompositionViewController : IQLoadingViewDelegate {
     
@@ -163,6 +167,8 @@ extension QCompositionViewController : IQLoadingViewDelegate {
     
 }
 
+// MARK: IQContainerSpec
+
 extension QCompositionViewController : IQContainerSpec {
     
     open var containerSize: CGSize {
@@ -176,6 +182,8 @@ extension QCompositionViewController : IQContainerSpec {
     }
     
 }
+
+// MARK: IQTextFieldObserver
 
 extension QCompositionViewController : IQTextFieldObserver {
     
@@ -202,6 +210,8 @@ extension QCompositionViewController : IQTextFieldObserver {
     
 }
 
+// MARK: IQMultiTextFieldObserver
+
 extension QCompositionViewController : IQMultiTextFieldObserver {
     
     open func beginEditing(multiTextField: QMultiTextField) {
@@ -224,6 +234,8 @@ extension QCompositionViewController : IQMultiTextFieldObserver {
 
 }
 
+// MARK: IQListFieldObserver
+
 extension QCompositionViewController : IQListFieldObserver {
     
     open func beginEditing(listField: QListField) {
@@ -242,6 +254,8 @@ extension QCompositionViewController : IQListFieldObserver {
     }
     
 }
+
+// MARK: IQDateFieldObserver
 
 extension QCompositionViewController : IQDateFieldObserver {
     

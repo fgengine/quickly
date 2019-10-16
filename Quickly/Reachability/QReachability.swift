@@ -21,7 +21,7 @@ public protocol QReachabilityObserver {
 
 }
 
-public class QReachability {
+public final class QReachability {
 
     public var allowsCellularConnection: Bool
     public private(set) var isRunning: Bool
@@ -126,8 +126,14 @@ public class QReachability {
         SCNetworkReachabilitySetDispatchQueue(self._reachability, nil)
         self.isRunning = false
     }
+    
+}
 
-    private func _isRunningOnDevice() -> Bool {
+// MARK: Private
+
+private extension QReachability {
+
+    func _isRunningOnDevice() -> Bool {
         #if targetEnvironment(simulator)
             return false
         #else
@@ -135,7 +141,7 @@ public class QReachability {
         #endif
     }
 
-    private func _isOnWWANFlagSet() -> Bool {
+    func _isOnWWANFlagSet() -> Bool {
         #if os(iOS)
             return self._currentFlags.contains(.isWWAN)
         #else
@@ -143,47 +149,53 @@ public class QReachability {
         #endif
     }
 
-    private func _isReachableFlagSet() -> Bool {
+    func _isReachableFlagSet() -> Bool {
         return self._currentFlags.contains(.reachable)
     }
 
-    private func _isConnectionRequiredFlagSet() -> Bool {
+    func _isConnectionRequiredFlagSet() -> Bool {
         return self._currentFlags.contains(.connectionRequired)
     }
 
-    private func _isInterventionRequiredFlagSet() -> Bool {
+    func _isInterventionRequiredFlagSet() -> Bool {
         return self._currentFlags.contains(.interventionRequired)
     }
 
-    private func _isConnectionOnTrafficFlagSet() -> Bool {
+    func _isConnectionOnTrafficFlagSet() -> Bool {
         return self._currentFlags.contains(.connectionOnTraffic)
     }
 
-    private func _isConnectionOnDemandFlagSet() -> Bool {
+    func _isConnectionOnDemandFlagSet() -> Bool {
         return self._currentFlags.contains(.connectionOnDemand)
     }
 
-    private func _isConnectionOnTrafficOrDemandFlagSet() -> Bool {
+    func _isConnectionOnTrafficOrDemandFlagSet() -> Bool {
         return self._currentFlags.intersection([.connectionOnTraffic, .connectionOnDemand]).isEmpty == false
     }
 
-    private func _isTransientConnectionFlagSet() -> Bool {
+    func _isTransientConnectionFlagSet() -> Bool {
         return self._currentFlags.contains(.transientConnection)
     }
 
-    private func _isLocalAddressFlagSet() -> Bool {
+    func _isLocalAddressFlagSet() -> Bool {
         return self._currentFlags.contains(.isLocalAddress)
     }
 
-    private func _isDirectFlagSet() -> Bool {
+    func _isDirectFlagSet() -> Bool {
         return self._currentFlags.contains(.isDirect)
     }
 
-    private func _isConnectionRequiredAndTransientFlagSet() -> Bool {
+    func _isConnectionRequiredAndTransientFlagSet() -> Bool {
         return self._currentFlags.intersection([.connectionRequired, .transientConnection]) == [.connectionRequired, .transientConnection]
     }
+        
+}
 
-    fileprivate func _changed() {
+// MARK: Fileprivate
+
+fileprivate extension QReachability {
+
+    func _changed() {
         var flags = SCNetworkReachabilityFlags()
         if SCNetworkReachabilityGetFlags(self._reachability, &flags) == true {
             if self._previousFlags != flags {
@@ -198,7 +210,7 @@ public class QReachability {
             }
         }
     }
-
+    
 }
 
 private func QReachabilityCallback(

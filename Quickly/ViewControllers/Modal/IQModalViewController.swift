@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-// MARK: - IQModalViewControllerFixedAnimation -
+// MARK: IQModalViewControllerFixedAnimation
 
 public protocol IQModalViewControllerFixedAnimation : class {
 
@@ -16,7 +16,7 @@ public protocol IQModalViewControllerFixedAnimation : class {
 
 }
 
-// MARK: - IQModalViewControllerInteractiveAnimation -
+// MARK: IQModalViewControllerInteractiveAnimation
 
 public protocol IQModalViewControllerInteractiveAnimation : class {
 
@@ -36,7 +36,7 @@ public protocol IQModalViewControllerInteractiveAnimation : class {
 
 }
 
-// MARK: - IQModalContainerViewController -
+// MARK: IQModalContainerViewController
 
 public protocol IQModalContainerViewController : IQViewController {
 
@@ -53,7 +53,7 @@ public protocol IQModalContainerViewController : IQViewController {
 
 }
 
-// MARK: - IQModalViewController -
+// MARK: IQModalViewController
 
 public protocol IQModalViewController : IQContentOwnerViewController {
 
@@ -80,7 +80,7 @@ public extension IQModalViewController {
 
 }
 
-// MARK: - IQModalContentViewController -
+// MARK: IQModalContentViewController
 
 public protocol IQModalContentViewController : IQContentViewController {
 

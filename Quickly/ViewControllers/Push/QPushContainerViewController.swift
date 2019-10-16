@@ -165,11 +165,11 @@ open class QPushContainerViewController : QViewController, IQPushContainerViewCo
     
 }
 
-// MARK: - Private -
+// MARK: Private
 
-extension QPushContainerViewController {
+private extension QPushContainerViewController {
 
-    private func _present(viewController: IQPushViewController, animated: Bool, completion: (() -> Void)?) {
+    func _present(viewController: IQPushViewController, animated: Bool, completion: (() -> Void)?) {
         if self.isLoaded == true {
             self._appear(viewController: viewController)
             self.setNeedUpdateOrientations()
@@ -191,7 +191,7 @@ extension QPushContainerViewController {
         }
     }
 
-    private func _dismiss(viewController: IQPushViewController, animated: Bool, completion: (() -> Void)?) {
+    func _dismiss(viewController: IQPushViewController, animated: Bool, completion: (() -> Void)?) {
         let currentViewController = self.currentViewController
         if let index = self.viewControllers.firstIndex(where: { return $0 === viewController }) {
             self.viewControllers.remove(at: index)
@@ -226,7 +226,7 @@ extension QPushContainerViewController {
         }
     }
 
-    private func _dismissOne(viewController: IQPushViewController, animated: Bool, completion: (() -> Void)?) {
+    func _dismissOne(viewController: IQPushViewController, animated: Bool, completion: (() -> Void)?) {
         let dismissAnimation = self._dismissAnimation(viewController: viewController)
         self.isAnimating = true
         dismissAnimation.animate(
@@ -243,42 +243,42 @@ extension QPushContainerViewController {
         )
     }
     
-    private func _add(childViewController: IQPushViewController) {
+    func _add(childViewController: IQPushViewController) {
         childViewController.parentViewController = self
     }
     
-    private func _remove(childViewController: IQPushViewController) {
+    func _remove(childViewController: IQPushViewController) {
         childViewController.parentViewController = nil
     }
 
-    private func _appear(viewController: IQPushViewController) {
+    func _appear(viewController: IQPushViewController) {
         viewController.view.frame = self.view.bounds
         viewController.view.addGestureRecognizer(self.interactiveDismissGesture)
         self.view.addSubview(viewController.view)
     }
 
-    private func _disappear(viewController: IQPushViewController) {
+    func _disappear(viewController: IQPushViewController) {
         viewController.view.removeGestureRecognizer(self.interactiveDismissGesture)
         viewController.view.removeFromSuperview()
     }
 
-    private func _presentAnimation(viewController: IQPushViewController) -> IQPushViewControllerFixedAnimation {
+    func _presentAnimation(viewController: IQPushViewController) -> IQPushViewControllerFixedAnimation {
         if let animation = viewController.presentAnimation { return animation }
         return self.presentAnimation
     }
 
-    private func _dismissAnimation(viewController: IQPushViewController) -> IQPushViewControllerFixedAnimation {
+    func _dismissAnimation(viewController: IQPushViewController) -> IQPushViewControllerFixedAnimation {
         if let animation = viewController.dismissAnimation { return animation }
         return self.dismissAnimation
     }
 
-    private func _interactiveDismissAnimation(viewController: IQPushViewController) -> IQPushViewControllerInteractiveAnimation? {
+    func _interactiveDismissAnimation(viewController: IQPushViewController) -> IQPushViewControllerInteractiveAnimation? {
         if let animation = viewController.interactiveDismissAnimation { return animation }
         return self.interactiveDismissAnimation
     }
 
     @objc
-    private func _handleInteractiveDismissGesture(_ sender: Any) {
+    func _handleInteractiveDismissGesture(_ sender: Any) {
         let position = self.interactiveDismissGesture.location(in: nil)
         let velocity = self.interactiveDismissGesture.velocity(in: nil)
         switch self.interactiveDismissGesture.state {
@@ -319,7 +319,7 @@ extension QPushContainerViewController {
         }
     }
 
-    private func _finishInteractiveDismiss() {
+    func _finishInteractiveDismiss() {
         guard let viewController = self._activeInteractiveViewController else {
             self._endInteractiveDismiss()
             return
@@ -342,11 +342,11 @@ extension QPushContainerViewController {
         }
     }
 
-    private func _cancelInteractiveDismiss() {
+    func _cancelInteractiveDismiss() {
         self._endInteractiveDismiss()
     }
 
-    private func _endInteractiveDismiss() {
+    func _endInteractiveDismiss() {
         self._activeInteractiveViewController = nil
         self._activeInteractiveDismissAnimation = nil
         self.isAnimating = false
@@ -354,7 +354,7 @@ extension QPushContainerViewController {
 
 }
 
-// MARK: - UIGestureRecognizerDelegate -
+// MARK: UIGestureRecognizerDelegate
 
 extension QPushContainerViewController : UIGestureRecognizerDelegate {
 

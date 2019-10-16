@@ -6,18 +6,18 @@ open class QButtonComposable : QComposable {
 
     public typealias Closure = (_ composable: QButtonComposable) -> Void
 
-    public var button: QButtonStyleSheet
-    public var buttonHeight: CGFloat
-    public var buttonIsSpinnerAnimating: Bool
-    public var buttonPressed: Closure
+    public private(set) var buttonStyle: QButtonStyleSheet
+    public private(set) var buttonHeight: CGFloat
+    public fileprivate(set) var buttonIsSpinnerAnimating: Bool
+    public private(set) var buttonPressed: Closure
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        button: QButtonStyleSheet,
+        buttonStyle: QButtonStyleSheet,
         buttonHeight: CGFloat = 44,
         buttonPressed: @escaping Closure
     ) {
-        self.button = button
+        self.buttonStyle = buttonStyle
         self.buttonHeight = buttonHeight
         self.buttonIsSpinnerAnimating = false
         self.buttonPressed = buttonPressed
@@ -28,7 +28,7 @@ open class QButtonComposable : QComposable {
 
 open class QButtonComposition< Composable: QButtonComposable > : QComposition< Composable > {
 
-    private lazy var button: QButton = {
+    public private(set) lazy var buttonView: QButton = {
         let view = QButton(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onPressed = { [weak self] _ in
@@ -56,40 +56,40 @@ open class QButtonComposition< Composable: QButtonComposable > : QComposition< C
         if self._edgeInsets != composable.edgeInsets {
             self._edgeInsets = composable.edgeInsets
             self._constraints = [
-                self.button.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
-                self.button.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
-                self.button.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
-                self.button.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
+                self.buttonView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.buttonView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.buttonView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                self.buttonView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
             ]
         }
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        self.button.apply(composable.button)
+        self.buttonView.apply(composable.buttonStyle)
     }
     
     open override func postLayout(composable: Composable, spec: IQContainerSpec) {
         if composable.buttonIsSpinnerAnimating == true {
-            self.button.startSpinner()
+            self.buttonView.startSpinner()
         } else {
-            self.button.stopSpinner()
+            self.buttonView.stopSpinner()
         }
     }
 
     public func isSpinnerAnimating() -> Bool {
-        return self.button.isSpinnerAnimating()
+        return self.buttonView.isSpinnerAnimating()
     }
 
     public func startSpinner() {
         guard let composable = self.composable else { return }
         composable.buttonIsSpinnerAnimating = true
-        self.button.startSpinner()
+        self.buttonView.startSpinner()
     }
 
     public func stopSpinner() {
         guard let composable = self.composable else { return }
         composable.buttonIsSpinnerAnimating = false
-        self.button.stopSpinner()
+        self.buttonView.stopSpinner()
     }
 
 }

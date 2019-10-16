@@ -103,8 +103,14 @@ public final class QKeychain {
         let code = SecItemDelete(query as CFDictionary)
         return code == noErr
     }
+    
+}
 
-    private func _processSet(_ value: Data, key: String, access: QKeychainAccessOptions) -> Bool {
+// MARK: Private
+
+private extension QKeychain {
+
+    func _processSet(_ value: Data, key: String, access: QKeychainAccessOptions) -> Bool {
         self._processDelete(key)
         let query = self._process(
             query: [
@@ -119,18 +125,18 @@ public final class QKeychain {
         return code == noErr
     }
 
-    private func _processSet(_ value: String, key: String, access: QKeychainAccessOptions) -> Bool {
+    func _processSet(_ value: String, key: String, access: QKeychainAccessOptions) -> Bool {
         guard let data = value.data(using: String.Encoding.utf8) else { return false }
         return self._processSet(data, key: key, access: access)
     }
 
-    private func _processSet(_ value: Bool, key: String, access: QKeychainAccessOptions) -> Bool {
+    func _processSet(_ value: Bool, key: String, access: QKeychainAccessOptions) -> Bool {
         let bytes: [UInt8] = (value == true) ? [1] : [0]
         return self._processSet(Data(bytes), key: key, access: access)
     }
 
     @discardableResult
-    private func _processDelete(_ key: String) -> Bool {
+    func _processDelete(_ key: String) -> Bool {
         let query = self._process(
             query: [
                 Constants.klass : kSecClassGenericPassword,
@@ -142,7 +148,7 @@ public final class QKeychain {
         return code == noErr
     }
 
-    private func _process(query: [String: Any], forceSync: Bool) -> [String: Any] {
+    func _process(query: [String: Any], forceSync: Bool) -> [String: Any] {
         var result = query
         if let accessGroup = self.accessGroup {
             result[Constants.accessGroup] = accessGroup
@@ -157,7 +163,7 @@ public final class QKeychain {
         return result
     }
 
-    private struct Constants {
+    struct Constants {
 
         public static var accessGroup: String { return kSecAttrAccessGroup as String }
         public static var accessible: String { return kSecAttrAccessible as String }

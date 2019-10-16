@@ -254,18 +254,24 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
     open func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         self.stopLoading()
     }
+        
+}
+
+// MARK: Private
+
+private extension QWebViewController {
     
-    // MARK: Private
-    
-    private func _updateContentInsets(webView: WKWebView) {
+    func _updateContentInsets(webView: WKWebView) {
         self.webView.customInsets = self.adjustedContentInset
     }
     
-    private func _updateFrame(loadingView: QLoadingViewType, bounds: CGRect) {
+    func _updateFrame(loadingView: QLoadingViewType, bounds: CGRect) {
         loadingView.frame = bounds
     }
     
 }
+
+// MARK: IQLoadingViewDelegate
 
 extension QWebViewController : IQLoadingViewDelegate {
     

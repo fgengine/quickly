@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QAnimationEaseCircularIn : IQAnimationEase {
+public final class QAnimationEaseCircularIn : IQAnimationEase {
 
     public func perform(_ x: Double) -> Double {
         return 1 - sqrt(1 - (x * x))
@@ -10,7 +10,7 @@ public class QAnimationEaseCircularIn : IQAnimationEase {
 
 }
 
-public class QAnimationEaseCircularOut : IQAnimationEase {
+public final class QAnimationEaseCircularOut : IQAnimationEase {
 
     public func perform(_ x: Double) -> Double {
         return sqrt((2 - x) * x)
@@ -18,7 +18,7 @@ public class QAnimationEaseCircularOut : IQAnimationEase {
 
 }
 
-public class QAnimationEaseCircularInOut : IQAnimationEase {
+public final class QAnimationEaseCircularInOut : IQAnimationEase {
 
     public func perform(_ x: Double) -> Double {
         if x < 1 / 2 {

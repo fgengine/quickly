@@ -4,41 +4,41 @@
 
 open class QImageTitleComposable : QComposable {
 
-    public var direction: QViewDirection
+    public private(set) var direction: QViewDirection
     
-    public var image: QImageViewStyleSheet
-    public var imageSize: CGSize
-    public var imageSpacing: CGFloat
+    public private(set) var imageStyle: QImageViewStyleSheet
+    public private(set) var imageSize: CGSize
+    public private(set) var imageSpacing: CGFloat
 
-    public var title: QLabelStyleSheet
+    public private(set) var titleStyle: QLabelStyleSheet
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        image: QImageViewStyleSheet,
+        imageStyle: QImageViewStyleSheet,
         imageWidth: CGFloat = 96,
         imageSpacing: CGFloat = 4,
-        title: QLabelStyleSheet
+        titleStyle: QLabelStyleSheet
     ) {
         self.direction = .horizontal
-        self.image = image
+        self.imageStyle = imageStyle
         self.imageSize = CGSize(width: imageWidth, height: imageWidth)
         self.imageSpacing = imageSpacing
-        self.title = title
+        self.titleStyle = titleStyle
         super.init(edgeInsets: edgeInsets)
     }
     
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        image: QImageViewStyleSheet,
+        imageStyle: QImageViewStyleSheet,
         imageHeight: CGFloat = 96,
         imageSpacing: CGFloat = 8,
-        title: QLabelStyleSheet
+        titleStyle: QLabelStyleSheet
     ) {
         self.direction = .vertical
-        self.image = image
+        self.imageStyle = imageStyle
         self.imageSize = CGSize(width: imageHeight, height: imageHeight)
         self.imageSpacing = imageSpacing
-        self.title = title
+        self.titleStyle = titleStyle
         super.init(edgeInsets: edgeInsets)
     }
 
@@ -46,13 +46,13 @@ open class QImageTitleComposable : QComposable {
 
 open class QImageTitleComposition< Composable: QImageTitleComposable > : QComposition< Composable > {
 
-    private lazy var imageView: QImageView = {
+    public private(set) lazy var imageView: QImageView = {
         let view = QImageView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var titleLabel: QLabel = {
+    public private(set) lazy var titleView: QLabel = {
         let view = QLabel(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
@@ -77,15 +77,15 @@ open class QImageTitleComposition< Composable: QImageTitleComposable > : QCompos
         let availableWidth = spec.containerSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
         switch composable.direction {
         case .horizontal:
-            let imageSize = composable.image.size(CGSize(width: composable.imageSize.width, height: availableWidth))
-            let titleTextSize = composable.title.size(width: availableWidth - (composable.imageSize.width + composable.imageSpacing))
+            let imageSize = composable.imageStyle.size(CGSize(width: composable.imageSize.width, height: availableWidth))
+            let titleTextSize = composable.titleStyle.size(width: availableWidth - (composable.imageSize.width + composable.imageSpacing))
             return CGSize(
                 width: spec.containerSize.width,
                 height: composable.edgeInsets.top + max(imageSize.height, titleTextSize.height) + composable.edgeInsets.bottom
             )
         case .vertical:
             let imageSize = composable.imageSize
-            let titleTextSize = composable.title.size(width: availableWidth)
+            let titleTextSize = composable.titleStyle.size(width: availableWidth)
             return CGSize(
                 width: composable.edgeInsets.left + max(imageSize.width, titleTextSize.width) + composable.edgeInsets.right,
                 height: composable.edgeInsets.top + imageSize.height + composable.imageSpacing + titleTextSize.height + composable.edgeInsets.bottom
@@ -112,21 +112,21 @@ open class QImageTitleComposition< Composable: QImageTitleComposable > : QCompos
                 self._constraints = [
                     self.imageView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
                     self.imageView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
-                    self.imageView.trailingLayout == self.titleLabel.leadingLayout.offset(-composable.imageSpacing),
+                    self.imageView.trailingLayout == self.titleView.leadingLayout.offset(-composable.imageSpacing),
                     self.imageView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
-                    self.titleLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
-                    self.titleLabel.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
-                    self.titleLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
+                    self.titleView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                    self.titleView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                    self.titleView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
                 ]
             case .vertical:
                 self._constraints = [
                     self.imageView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
                     self.imageView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
                     self.imageView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
-                    self.imageView.bottomLayout == self.titleLabel.topLayout.offset(-composable.edgeInsets.bottom),
-                    self.titleLabel.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
-                    self.titleLabel.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
-                    self.titleLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
+                    self.imageView.bottomLayout == self.titleView.topLayout.offset(-composable.edgeInsets.bottom),
+                    self.titleView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                    self.titleView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                    self.titleView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
                 ]
             }
         }
@@ -145,8 +145,8 @@ open class QImageTitleComposition< Composable: QImageTitleComposable > : QCompos
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        self.imageView.apply(composable.image)
-        self.titleLabel.apply(composable.title)
+        self.imageView.apply(composable.imageStyle)
+        self.titleView.apply(composable.titleStyle)
     }
 
 }

@@ -2,9 +2,9 @@
 //  Quickly
 //
 
-open class QInputValidator : IQInputValidator {
+public final class QInputValidator : IQInputValidator {
 
-    public var validator: IQStringValidator
+    public private(set) var validator: IQStringValidator
 
     public init(validator: IQStringValidator) {
         self.validator = validator

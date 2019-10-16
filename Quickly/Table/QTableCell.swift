@@ -5,8 +5,8 @@
 open class QTableCell< RowType: IQTableRow > : UITableViewCell, IQTypedTableCell {
 
     open weak var tableDelegate: IQTableCellDelegate?
-    open var row: RowType?
-    open var spec: IQContainerSpec?
+    open private(set) var row: RowType?
+    open private(set) var spec: IQContainerSpec?
 
     open class func currentNibName() -> String {
         return String(describing: self.classForCoder())

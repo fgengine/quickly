@@ -4,34 +4,34 @@
 
 open class QPlaceholderTitleDetailIconComposable : QComposable {
     
-    public var title: QPlaceholderStyleSheet
-    public var titleHeight: CGFloat
-    public var titleSpacing: CGFloat
+    public private(set) var titleStyle: QPlaceholderStyleSheet
+    public private(set) var titleHeight: CGFloat
+    public private(set) var titleSpacing: CGFloat
     
-    public var detail: QPlaceholderStyleSheet
-    public var detailHeight: CGFloat
+    public private(set) var detailStyle: QPlaceholderStyleSheet
+    public private(set) var detailHeight: CGFloat
     
-    public var icon: QImageViewStyleSheet
-    public var iconWidth: CGFloat
-    public var iconSpacing: CGFloat
+    public private(set) var iconStyle: QImageViewStyleSheet
+    public private(set) var iconWidth: CGFloat
+    public private(set) var iconSpacing: CGFloat
     
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        title: QPlaceholderStyleSheet,
+        titleStyle: QPlaceholderStyleSheet,
         titleHeight: CGFloat,
         titleSpacing: CGFloat = 4,
-        detail: QPlaceholderStyleSheet,
+        detailStyle: QPlaceholderStyleSheet,
         detailHeight: CGFloat,
-        icon: QImageViewStyleSheet,
+        iconStyle: QImageViewStyleSheet,
         iconWidth: CGFloat = 16,
         iconSpacing: CGFloat = 4
     ) {
-        self.title = title
+        self.titleStyle = titleStyle
         self.titleHeight = titleHeight
         self.titleSpacing = titleSpacing
-        self.detail = detail
+        self.detailStyle = detailStyle
         self.detailHeight = detailHeight
-        self.icon = icon
+        self.iconStyle = iconStyle
         self.iconWidth = iconWidth
         self.iconSpacing = iconSpacing
         super.init(edgeInsets: edgeInsets)
@@ -41,19 +41,19 @@ open class QPlaceholderTitleDetailIconComposable : QComposable {
 
 open class QPlaceholderTitleDetailIconComposition< Composable: QPlaceholderTitleDetailIconComposable > : QComposition< Composable > {
     
-    private lazy var titleLabel: QPlaceholderView = {
+    public private(set) lazy var titleView: QPlaceholderView = {
         let view = QPlaceholderView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var detailLabel: QPlaceholderView = {
+    public private(set) lazy var detailView: QPlaceholderView = {
         let view = QPlaceholderView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var iconView: QImageView = {
+    public private(set) lazy var iconView: QImageView = {
         let view = QImageView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
@@ -72,12 +72,12 @@ open class QPlaceholderTitleDetailIconComposition< Composable: QPlaceholderTitle
         didSet { self.contentView.addConstraints(self._constraints) }
     }
     private var _titleConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.titleLabel.removeConstraints(self._titleConstraints) }
-        didSet { self.titleLabel.addConstraints(self._titleConstraints) }
+        willSet { self.titleView.removeConstraints(self._titleConstraints) }
+        didSet { self.titleView.addConstraints(self._titleConstraints) }
     }
     private var _detailConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.detailLabel.removeConstraints(self._detailConstraints) }
-        didSet { self.detailLabel.addConstraints(self._detailConstraints) }
+        willSet { self.detailView.removeConstraints(self._detailConstraints) }
+        didSet { self.detailView.addConstraints(self._detailConstraints) }
     }
     private var _iconConstraints: [NSLayoutConstraint] = [] {
         willSet { self.iconView.removeConstraints(self._iconConstraints) }
@@ -86,7 +86,7 @@ open class QPlaceholderTitleDetailIconComposition< Composable: QPlaceholderTitle
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         let availableWidth = spec.containerSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
-        let iconSize = composable.icon.size(CGSize(width: composable.iconWidth, height: availableWidth))
+        let iconSize = composable.iconStyle.size(CGSize(width: composable.iconWidth, height: availableWidth))
         return CGSize(
             width: spec.containerSize.width,
             height: composable.edgeInsets.top + max(composable.titleHeight + composable.titleSpacing + composable.detailHeight, iconSize.height) + composable.edgeInsets.bottom
@@ -99,14 +99,14 @@ open class QPlaceholderTitleDetailIconComposition< Composable: QPlaceholderTitle
             self._titleSpacing = composable.titleSpacing
             self._iconSpacing = composable.iconSpacing
             self._constraints = [
-                self.titleLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
-                self.titleLabel.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
-                self.titleLabel.bottomLayout <= self.detailLabel.topLayout.offset(-composable.titleSpacing),
-                self.detailLabel.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
-                self.detailLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+                self.titleView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.titleView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.titleView.bottomLayout <= self.detailView.topLayout.offset(-composable.titleSpacing),
+                self.detailView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.detailView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
                 self.iconView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
-                self.iconView.leadingLayout == self.titleLabel.trailingLayout.offset(composable.iconSpacing),
-                self.iconView.leadingLayout == self.detailLabel.trailingLayout.offset(composable.iconSpacing),
+                self.iconView.leadingLayout == self.titleView.trailingLayout.offset(composable.iconSpacing),
+                self.iconView.leadingLayout == self.detailView.trailingLayout.offset(composable.iconSpacing),
                 self.iconView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
                 self.iconView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
             ]
@@ -114,13 +114,13 @@ open class QPlaceholderTitleDetailIconComposition< Composable: QPlaceholderTitle
         if self._titleHeight != composable.titleHeight {
             self._titleHeight = composable.titleHeight
             self._titleConstraints = [
-                self.titleLabel.heightLayout == composable.titleHeight
+                self.titleView.heightLayout == composable.titleHeight
             ]
         }
         if self._detailHeight != composable.detailHeight {
             self._detailHeight = composable.detailHeight
             self._detailConstraints = [
-                self.detailLabel.heightLayout == composable.detailHeight
+                self.detailView.heightLayout == composable.detailHeight
             ]
         }
         if self._iconWidth != composable.iconWidth {
@@ -132,9 +132,9 @@ open class QPlaceholderTitleDetailIconComposition< Composable: QPlaceholderTitle
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        self.titleLabel.apply(composable.title)
-        self.detailLabel.apply(composable.detail)
-        self.iconView.apply(composable.icon)
+        self.titleView.apply(composable.titleStyle)
+        self.detailView.apply(composable.detailStyle)
+        self.iconView.apply(composable.iconStyle)
     }
     
 }

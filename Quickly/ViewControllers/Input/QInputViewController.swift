@@ -124,6 +124,8 @@ open class QInputViewController : QViewController, IQInputViewController {
     
 }
 
+// MARK: Private
+
 private extension QInputViewController {
     
     func _frame() -> CGRect {

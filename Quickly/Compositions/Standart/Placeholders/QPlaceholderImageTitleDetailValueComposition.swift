@@ -4,44 +4,44 @@
 
 open class QPlaceholderImageTitleDetailValueComposable : QComposable {
     
-    public var image: QImageViewStyleSheet
-    public var imageWidth: CGFloat
-    public var imageSpacing: CGFloat
+    public private(set) var imageStyle: QImageViewStyleSheet
+    public private(set) var imageWidth: CGFloat
+    public private(set) var imageSpacing: CGFloat
     
-    public var title: QPlaceholderStyleSheet
-    public var titleHeight: CGFloat
-    public var titleSpacing: CGFloat
+    public private(set) var titleStyle: QPlaceholderStyleSheet
+    public private(set) var titleHeight: CGFloat
+    public private(set) var titleSpacing: CGFloat
     
-    public var detail: QPlaceholderStyleSheet
-    public var detailHeight: CGFloat
+    public private(set) var detailStyle: QPlaceholderStyleSheet
+    public private(set) var detailHeight: CGFloat
     
-    public var value: QPlaceholderStyleSheet
-    public var valueSize: CGSize
-    public var valueSpacing: CGFloat
+    public private(set) var valueStyle: QPlaceholderStyleSheet
+    public private(set) var valueSize: CGSize
+    public private(set) var valueSpacing: CGFloat
     
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        image: QImageViewStyleSheet,
+        imageStyle: QImageViewStyleSheet,
         imageWidth: CGFloat = 96,
         imageSpacing: CGFloat = 4,
-        title: QPlaceholderStyleSheet,
+        titleStyle: QPlaceholderStyleSheet,
         titleHeight: CGFloat,
         titleSpacing: CGFloat = 4,
-        detail: QPlaceholderStyleSheet,
+        detailStyle: QPlaceholderStyleSheet,
         detailHeight: CGFloat,
-        value: QPlaceholderStyleSheet,
+        valueStyle: QPlaceholderStyleSheet,
         valueSize: CGSize,
         valueSpacing: CGFloat = 4
     ) {
-        self.image = image
+        self.imageStyle = imageStyle
         self.imageWidth = imageWidth
         self.imageSpacing = imageSpacing
-        self.title = title
+        self.titleStyle = titleStyle
         self.titleHeight = titleHeight
         self.titleSpacing = titleSpacing
-        self.detail = detail
+        self.detailStyle = detailStyle
         self.detailHeight = detailHeight
-        self.value = value
+        self.valueStyle = valueStyle
         self.valueSize = valueSize
         self.valueSpacing = valueSpacing
         super.init(edgeInsets: edgeInsets)
@@ -51,25 +51,25 @@ open class QPlaceholderImageTitleDetailValueComposable : QComposable {
 
 open class QPlaceholderImageTitleDetailValueComposition< Composable: QPlaceholderImageTitleDetailValueComposable > : QComposition< Composable > {
     
-    private lazy var imageView: QImageView = {
+    public private(set) lazy var imageView: QImageView = {
         let view = QImageView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var titleLabel: QPlaceholderView = {
+    public private(set) lazy var titleView: QPlaceholderView = {
         let view = QPlaceholderView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var detailLabel: QPlaceholderView = {
+    public private(set) lazy var detailView: QPlaceholderView = {
         let view = QPlaceholderView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var valueLabel: QPlaceholderView = {
+    public private(set) lazy var valueView: QPlaceholderView = {
         let view = QPlaceholderView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
@@ -94,21 +94,21 @@ open class QPlaceholderImageTitleDetailValueComposition< Composable: QPlaceholde
         didSet { self.imageView.addConstraints(self._imageConstraints) }
     }
     private var _titleConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.titleLabel.removeConstraints(self._titleConstraints) }
-        didSet { self.titleLabel.addConstraints(self._titleConstraints) }
+        willSet { self.titleView.removeConstraints(self._titleConstraints) }
+        didSet { self.titleView.addConstraints(self._titleConstraints) }
     }
     private var _detailConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.detailLabel.removeConstraints(self._detailConstraints) }
-        didSet { self.detailLabel.addConstraints(self._detailConstraints) }
+        willSet { self.detailView.removeConstraints(self._detailConstraints) }
+        didSet { self.detailView.addConstraints(self._detailConstraints) }
     }
     private var _valueConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.valueLabel.removeConstraints(self._valueConstraints) }
-        didSet { self.valueLabel.addConstraints(self._valueConstraints) }
+        willSet { self.valueView.removeConstraints(self._valueConstraints) }
+        didSet { self.valueView.addConstraints(self._valueConstraints) }
     }
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         let availableWidth = spec.containerSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
-        let imageSize = composable.image.size(CGSize(width: composable.imageWidth, height: availableWidth))
+        let imageSize = composable.imageStyle.size(CGSize(width: composable.imageWidth, height: availableWidth))
         return CGSize(
             width: spec.containerSize.width,
             height: composable.edgeInsets.top + max(imageSize.height, composable.titleHeight + composable.titleSpacing + composable.detailHeight, composable.valueSize.height) + composable.edgeInsets.bottom
@@ -125,17 +125,17 @@ open class QPlaceholderImageTitleDetailValueComposition< Composable: QPlaceholde
                 self.imageView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
                 self.imageView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
                 self.imageView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
-                self.titleLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
-                self.titleLabel.leadingLayout == self.imageView.trailingLayout.offset(composable.imageSpacing),
-                self.titleLabel.trailingLayout == self.valueLabel.leadingLayout.offset(-composable.valueSpacing),
-                self.titleLabel.bottomLayout <= self.detailLabel.topLayout.offset(-composable.titleSpacing),
-                self.detailLabel.leadingLayout == self.imageView.trailingLayout.offset(composable.imageSpacing),
-                self.detailLabel.trailingLayout == self.valueLabel.leadingLayout.offset(-composable.valueSpacing),
-                self.detailLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
-                self.valueLabel.topLayout >= self.contentView.topLayout.offset(composable.edgeInsets.top),
-                self.valueLabel.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
-                self.valueLabel.bottomLayout <= self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
-                self.valueLabel.centerYLayout == self.contentView.centerYLayout
+                self.titleView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.titleView.leadingLayout == self.imageView.trailingLayout.offset(composable.imageSpacing),
+                self.titleView.trailingLayout == self.valueView.leadingLayout.offset(-composable.valueSpacing),
+                self.titleView.bottomLayout <= self.detailView.topLayout.offset(-composable.titleSpacing),
+                self.detailView.leadingLayout == self.imageView.trailingLayout.offset(composable.imageSpacing),
+                self.detailView.trailingLayout == self.valueView.leadingLayout.offset(-composable.valueSpacing),
+                self.detailView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+                self.valueView.topLayout >= self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.valueView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                self.valueView.bottomLayout <= self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+                self.valueView.centerYLayout == self.contentView.centerYLayout
             ]
         }
         if self._imageWidth != composable.imageWidth {
@@ -147,29 +147,29 @@ open class QPlaceholderImageTitleDetailValueComposition< Composable: QPlaceholde
         if self._titleHeight != composable.titleHeight {
             self._titleHeight = composable.titleHeight
             self._titleConstraints = [
-                self.titleLabel.heightLayout == composable.titleHeight
+                self.titleView.heightLayout == composable.titleHeight
             ]
         }
         if self._detailHeight != composable.detailHeight {
             self._detailHeight = composable.detailHeight
             self._detailConstraints = [
-                self.detailLabel.heightLayout == composable.detailHeight
+                self.detailView.heightLayout == composable.detailHeight
             ]
         }
         if self._valueSize != composable.valueSize {
             self._valueSize = composable.valueSize
             self._valueConstraints = [
-                self.valueLabel.widthLayout == composable.valueSize.width,
-                self.valueLabel.heightLayout == composable.valueSize.height
+                self.valueView.widthLayout == composable.valueSize.width,
+                self.valueView.heightLayout == composable.valueSize.height
             ]
         }
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        self.imageView.apply(composable.image)
-        self.titleLabel.apply(composable.title)
-        self.detailLabel.apply(composable.detail)
-        self.valueLabel.apply(composable.value)
+        self.imageView.apply(composable.imageStyle)
+        self.titleView.apply(composable.titleStyle)
+        self.detailView.apply(composable.detailStyle)
+        self.valueView.apply(composable.valueStyle)
     }
     
 }

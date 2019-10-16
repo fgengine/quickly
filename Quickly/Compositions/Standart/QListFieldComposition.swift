@@ -7,22 +7,22 @@ open class QListFieldComposable : QComposable {
     public typealias ShouldClosure = (_ composable: QListFieldComposable) -> Bool
     public typealias Closure = (_ composable: QListFieldComposable) -> Void
 
-    public var field: QListFieldStyleSheet
-    public var selectedRow: QListFieldPickerRow?
-    public var height: CGFloat
+    public private(set) var fieldStyle: QListFieldStyleSheet
+    public fileprivate(set) var selectedRow: QListFieldPickerRow?
+    public private(set) var height: CGFloat
     public var isValid: Bool{
         get { return self.selectedRow != nil }
     }
-    public var isEditing: Bool
-    public var shouldBeginEditing: ShouldClosure?
-    public var beginEditing: Closure?
-    public var select: Closure?
-    public var shouldEndEditing: ShouldClosure?
-    public var endEditing: Closure?
+    public fileprivate(set) var isEditing: Bool
+    public private(set) var shouldBeginEditing: ShouldClosure?
+    public private(set) var beginEditing: Closure?
+    public private(set) var select: Closure?
+    public private(set) var shouldEndEditing: ShouldClosure?
+    public private(set) var endEditing: Closure?
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        field: QListFieldStyleSheet,
+        fieldStyle: QListFieldStyleSheet,
         height: CGFloat = 44,
         selectedRow: QListFieldPickerRow? = nil,
         shouldBeginEditing: ShouldClosure? = nil,
@@ -31,7 +31,7 @@ open class QListFieldComposable : QComposable {
         shouldEndEditing: ShouldClosure? = nil,
         endEditing: Closure? = nil
     ) {
-        self.field = field
+        self.fieldStyle = fieldStyle
         self.selectedRow = selectedRow
         self.height = height
         self.isEditing = false
@@ -47,7 +47,7 @@ open class QListFieldComposable : QComposable {
 
 open class QListFieldComposition< Composable: QListFieldComposable > : QComposition< Composable >, IQEditableComposition {
 
-    public lazy private(set) var field: QListField = {
+    public lazy private(set) var fieldView: QListField = {
         let view = QListField(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onShouldBeginEditing = { [weak self] _ in return self?._shouldBeginEditing() ?? true }
@@ -75,7 +75,7 @@ open class QListFieldComposition< Composable: QListFieldComposable > : QComposit
     
     deinit {
         if let observer = self.owner as? IQListFieldObserver {
-            self.field.remove(observer: observer)
+            self.fieldView.remove(observer: observer)
         }
     }
     
@@ -83,7 +83,7 @@ open class QListFieldComposition< Composable: QListFieldComposable > : QComposit
         super.setup(owner: owner)
         
         if let observer = owner as? IQListFieldObserver {
-            self.field.add(observer: observer, priority: 0)
+            self.fieldView.add(observer: observer, priority: 0)
         }
     }
     
@@ -91,33 +91,33 @@ open class QListFieldComposition< Composable: QListFieldComposable > : QComposit
         if self._edgeInsets != composable.edgeInsets {
             self._edgeInsets = composable.edgeInsets
             self._constraints = [
-                self.field.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
-                self.field.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
-                self.field.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
-                self.field.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
+                self.fieldView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.fieldView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.fieldView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                self.fieldView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
             ]
         }
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        self.field.apply(composable.field)
+        self.fieldView.apply(composable.fieldStyle)
     }
     
     open override func postLayout(composable: Composable, spec: IQContainerSpec) {
-        self.field.selectedRow = composable.selectedRow
+        self.fieldView.selectedRow = composable.selectedRow
     }
     
-    // MARK: - IQCompositionEditable
+    // MARK: IQCompositionEditable
     
     open func beginEditing() {
-        self.field.beginEditing()
+        self.fieldView.beginEditing()
     }
     
     open func endEditing() {
-        self.field.endEditing(false)
+        self.fieldView.endEditing(false)
     }
     
-    // MARK: - Private
+    // MARK: Private
 
     private func _shouldBeginEditing() -> Bool {
         guard let composable = self.composable else { return true }
@@ -129,8 +129,8 @@ open class QListFieldComposition< Composable: QListFieldComposable > : QComposit
 
     private func _beginEditing() {
         guard let composable = self.composable else { return }
-        composable.selectedRow = self.field.selectedRow
-        composable.isEditing = self.field.isEditing
+        composable.selectedRow = self.fieldView.selectedRow
+        composable.isEditing = self.fieldView.isEditing
         if let closure = composable.beginEditing {
             closure(composable)
         }
@@ -154,7 +154,7 @@ open class QListFieldComposition< Composable: QListFieldComposable > : QComposit
 
     private func _endEditing() {
         guard let composable = self.composable else { return }
-        composable.isEditing = self.field.isEditing
+        composable.isEditing = self.fieldView.isEditing
         if let closure = composable.endEditing {
             closure(composable)
         }

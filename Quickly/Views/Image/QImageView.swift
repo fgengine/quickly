@@ -34,7 +34,7 @@ public enum QImageViewScale : Int {
     }
 }
 
-// MARK: - QImageViewStyleSheet -
+// MARK: QImageViewStyleSheet
 
 open class QImageViewStyleSheet : QDisplayStyleSheet {
 
@@ -81,7 +81,7 @@ open class QImageViewStyleSheet : QDisplayStyleSheet {
 
 }
 
-// MARK: - QImageView -
+// MARK: QImageView
 
 open class QImageView : QDisplayView {
 

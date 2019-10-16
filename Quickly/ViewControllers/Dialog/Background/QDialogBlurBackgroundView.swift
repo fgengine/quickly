@@ -2,9 +2,9 @@
 //  Quickly
 //
 
-open class QDialogBlurBackgroundView : QBlurView, IQDialogContainerBackgroundView {
+public final class QDialogBlurBackgroundView : QBlurView, IQDialogContainerBackgroundView {
 
-    open weak var containerViewController: IQDialogContainerViewController?
+    public weak var containerViewController: IQDialogContainerViewController?
 
     public required init() {
         super.init(blurRadius: Const.hiddenBlurRadius)
@@ -14,7 +14,7 @@ open class QDialogBlurBackgroundView : QBlurView, IQDialogContainerBackgroundVie
         fatalError("init(coder:) has not been implemented")
     }
 
-    open override func setup() {
+    public override func setup() {
         super.setup()
 
         self.blurRadius = Const.hiddenBlurRadius
@@ -48,8 +48,14 @@ open class QDialogBlurBackgroundView : QBlurView, IQDialogContainerBackgroundVie
             }
         }
     }
+        
+}
 
-    private struct Const {
+// MARK: Private
+
+private extension QDialogBlurBackgroundView {
+
+    struct Const {
 
         static let duration: TimeInterval = 0.25
         static let hiddenBlurRadius: CGFloat = 0

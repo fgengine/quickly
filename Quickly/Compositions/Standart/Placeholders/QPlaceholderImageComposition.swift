@@ -4,15 +4,15 @@
 
 open class QPlaceholderImageComposable : QComposable {
 
-    public var image: QPlaceholderStyleSheet
-    public var imageHeight: CGFloat
+    public private(set) var imageStyle: QPlaceholderStyleSheet
+    public private(set) var imageHeight: CGFloat
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        image: QPlaceholderStyleSheet,
+        imageStyle: QPlaceholderStyleSheet,
         imageHeight: CGFloat
     ) {
-        self.image = image
+        self.imageStyle = imageStyle
         self.imageHeight = imageHeight
         super.init(edgeInsets: edgeInsets)
     }
@@ -21,7 +21,7 @@ open class QPlaceholderImageComposable : QComposable {
 
 open class QPlaceholderImageComposition< Composable: QPlaceholderImageComposable > : QComposition< Composable > {
 
-    private lazy var imageView: QPlaceholderView = {
+    public private(set) lazy var imageView: QPlaceholderView = {
         let view = QPlaceholderView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
@@ -55,7 +55,7 @@ open class QPlaceholderImageComposition< Composable: QPlaceholderImageComposable
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        self.imageView.apply(composable.image)
+        self.imageView.apply(composable.imageStyle)
     }
 
 }

@@ -5,35 +5,25 @@
 open class QTableRow : IQTableRow {
 
     public private(set) weak var section: IQTableSection?
-    
     public private(set) var indexPath: IndexPath?
-    
     public var canSelect: Bool
-    
     public var canEdit: Bool
-    
     public var canMove: Bool
-    
     public var selectionStyle: UITableViewCell.SelectionStyle
-    
     public var editingStyle: UITableViewCell.EditingStyle
-    
     @available(iOS 11.0, *)
     public var leadingSwipeConfiguration: UISwipeActionsConfiguration? {
         set(value) { self._leadingSwipeConfiguration = value }
         get { return self._leadingSwipeConfiguration as? UISwipeActionsConfiguration }
     }
-    
     @available(iOS 11.0, *)
     public var trailingSwipeConfiguration: UISwipeActionsConfiguration? {
         set(value) { self._trailingSwipeConfiguration = value }
         get { return self._trailingSwipeConfiguration as? UISwipeActionsConfiguration }
     }
-    
     public var cacheHeight: CGFloat?
     
     private var _leadingSwipeConfiguration: Any?
-    
     private var _trailingSwipeConfiguration: Any?
 
     public init(

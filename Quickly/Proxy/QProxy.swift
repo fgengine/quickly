@@ -2,12 +2,12 @@
 //  Quickly
 //
 
-open class QProxy : IQProxy {
+public final class QProxy : IQProxy {
     
-    public var host: String
-    public var port: Int
-    public var username: String?
-    public var password: String?
+    public private(set) var host: String
+    public private(set) var port: Int
+    public private(set) var username: String?
+    public private(set) var password: String?
     
     public var dictionary: [AnyHashable : Any] {
         get {

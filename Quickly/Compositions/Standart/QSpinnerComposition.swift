@@ -4,8 +4,8 @@
 
 open class QSpinnerComposable : QComposable {
     
-    public var size: CGFloat
-    public var isAnimating: Bool
+    public private(set) var size: CGFloat
+    public fileprivate(set) var isAnimating: Bool
     
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,

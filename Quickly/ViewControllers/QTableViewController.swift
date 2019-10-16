@@ -331,15 +331,19 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     
     open func didHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
     }
-    
-    // MARK: Private
+        
+}
+
+// MARK: Private
+
+private extension QTableViewController {
 
     @objc
-    private func _triggeredRefreshControl(_ sender: Any) {
+    func _triggeredRefreshControl(_ sender: Any) {
         self.triggeredRefreshControl()
     }
 
-    private func _updateRefreshControlState() {
+    func _updateRefreshControlState() {
         if let tableView = self.tableView {
             if self.refreshControlHidden == false && self.isPresented == true {
                 tableView.refreshControl = self._refreshControl
@@ -352,7 +356,7 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
         }
     }
     
-    private func _updateContentInsets(_ tableView: QTableView) {
+    func _updateContentInsets(_ tableView: QTableView) {
         let edgeInsets = self.adjustedContentInset
         let footerHeight = (self.footerView != nil) ? self.footerViewHeight : 0
         let oldContentInset = tableView.contentInset
@@ -387,11 +391,11 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
         }
     }
     
-    private func _updateFrame(loadingView: QLoadingViewType, bounds: CGRect) {
+    func _updateFrame(loadingView: QLoadingViewType, bounds: CGRect) {
         loadingView.frame = bounds
     }
     
-    private func _footerViewFrame() -> CGRect {
+    func _footerViewFrame() -> CGRect {
         let bounds = self.view.bounds
         let edgeInsets = self._footerViewInsets()
         let height = self.footerViewHeight + edgeInsets.bottom
@@ -403,7 +407,7 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
         )
     }
     
-    private func _footerViewInsets() -> UIEdgeInsets {
+    func _footerViewInsets() -> UIEdgeInsets {
         let edgeInsets = self.adjustedContentInset
         return UIEdgeInsets(
             top: 0,
@@ -414,6 +418,8 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     }
     
 }
+
+// MARK: IQLoadingViewDelegate
 
 extension QTableViewController : IQLoadingViewDelegate {
     

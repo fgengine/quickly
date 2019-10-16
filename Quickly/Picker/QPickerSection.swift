@@ -80,9 +80,11 @@ open class QPickerSection : IQPickerSection {
 
 }
 
-extension QPickerSection {
+// MARK: Private
 
-    private func _bindRows() {
+private extension QPickerSection {
+
+    func _bindRows() {
         guard let sectionIndex = self.index else { return }
         var rowIndex: Int = 0
         for row in self.rows {
@@ -91,20 +93,20 @@ extension QPickerSection {
         }
     }
 
-    private func _rebindRows(from: Int, to: Int) {
+    func _rebindRows(from: Int, to: Int) {
         guard let sectionIndex = self.index else { return }
         for rowIndex in from..<to {
             self.rows[rowIndex].rebind(IndexPath(row: rowIndex, section: sectionIndex))
         }
     }
 
-    private func _unbindRows() {
+    func _unbindRows() {
         for row in self.rows {
             row.unbind()
         }
     }
 
-    private func _reloadColumn() {
+    func _reloadColumn() {
         guard
             let index = self.index,
             let controller = self.controller,

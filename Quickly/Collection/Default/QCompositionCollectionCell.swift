@@ -71,7 +71,7 @@ open class QCompositionCollectionCell< Composition: IQComposition > : QBackgroun
         self._prepareComposition(item: item, spec: spec, highlighted: self.isHighlighted, selected: self.isSelected, animated: animated)
     }
 
-    // MARK: - IQTextFieldObserver
+    // MARK: IQTextFieldObserver
     
     open func beginEditing(textField: QTextField) {
         self._scroll(animated: true)
@@ -95,7 +95,7 @@ open class QCompositionCollectionCell< Composition: IQComposition > : QBackgroun
     open func pressedReturn(textField: QTextField) {
     }
     
-    // MARK: - IQMultiTextFieldObserver
+    // MARK: IQMultiTextFieldObserver
     
     open func beginEditing(multiTextField: QMultiTextField) {
         self._scroll(animated: true)
@@ -118,7 +118,7 @@ open class QCompositionCollectionCell< Composition: IQComposition > : QBackgroun
         layout.invalidateLayout()
     }
     
-    // MARK: - IQListFieldObserver
+    // MARK: IQListFieldObserver
     
     open func beginEditing(listField: QListField) {
         self._scroll(animated: true)
@@ -136,7 +136,7 @@ open class QCompositionCollectionCell< Composition: IQComposition > : QBackgroun
     open func pressedDone(listField: QListField) {
     }
     
-    // MARK: - IQDateFieldObserver
+    // MARK: IQDateFieldObserver
     
     open func beginEditing(dateField: QDateField) {
         self._scroll(animated: true)
@@ -154,7 +154,7 @@ open class QCompositionCollectionCell< Composition: IQComposition > : QBackgroun
     open func pressedDone(dateField: QDateField) {
     }
     
-    // MARK: - Private
+    // MARK: Private
     
     private func _prepareComposition(item: Item, spec: IQContainerSpec, highlighted: Bool, selected: Bool, animated: Bool) {
         let composable = self._currentComposable(item: item, highlighted: highlighted, selected: selected)

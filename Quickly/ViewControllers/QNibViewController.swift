@@ -118,9 +118,11 @@ open class QNibViewController : QViewController, IQInputContentViewController, I
 
 }
 
-extension QNibViewController {
+// MARK: Private
+
+private extension QNibViewController {
     
-    private func _updateConstraints(_ view: UIView, rootView: UIView) {
+    func _updateConstraints(_ view: UIView, rootView: UIView) {
         let edgeInsets = self.inheritedEdgeInsets
         self._rootConstraints = [
             rootView.topLayout == view.topLayout.offset(edgeInsets.top),
@@ -130,7 +132,7 @@ extension QNibViewController {
         ]
     }
     
-    private func _updateConstraints(_ view: UIView, loadingView: QLoadingViewType) {
+    func _updateConstraints(_ view: UIView, loadingView: QLoadingViewType) {
         self._loadingConstraints = [
             loadingView.topLayout == view.topLayout,
             loadingView.leadingLayout == view.leadingLayout,
@@ -140,6 +142,8 @@ extension QNibViewController {
     }
 
 }
+
+// MARK: IQLoadingViewDelegate
 
 extension QNibViewController : IQLoadingViewDelegate {
     
@@ -153,6 +157,8 @@ extension QNibViewController : IQLoadingViewDelegate {
     }
     
 }
+
+// MARK: IQContainerSpec
 
 extension QNibViewController : IQContainerSpec {
     

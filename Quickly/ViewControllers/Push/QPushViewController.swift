@@ -156,17 +156,17 @@ open class QPushViewController : QViewController, IQPushViewController {
     
 }
 
-// MARK: - Private -
+// MARK: Private
 
-extension QPushViewController {
+private extension QPushViewController {
 
-    private func _relayoutContentViewController() {
+    func _relayoutContentViewController() {
         guard self.isLoaded == true else { return }
         self._unlayoutContentViewController()
         self._layoutContentViewController()
     }
 
-    private func _layoutContentViewController() {
+    func _layoutContentViewController() {
         let additionalEdgeInsets = self.additionalEdgeInsets
         let inheritedEdgeInsets = self.inheritedEdgeInsets
         let edgeInsets = UIEdgeInsets(
@@ -191,20 +191,21 @@ extension QPushViewController {
         }
     }
     
-    private func _unlayoutContentViewController() {
+    func _unlayoutContentViewController() {
         if self._contentLayoutConstraints.count > 0 {
             self.view.removeConstraints(self._contentLayoutConstraints)
             self._contentLayoutConstraints.removeAll()
         }
     }
 
-    @objc private func _handleTapGesture(_ sender: Any) {
+    @objc
+    func _handleTapGesture(_ sender: Any) {
         self.viewController.didPressed()
     }
 
 }
 
-// MARK: - UIGestureRecognizerDelegate -
+// MARK: UIGestureRecognizerDelegate
     
 extension QPushViewController : UIGestureRecognizerDelegate {
 

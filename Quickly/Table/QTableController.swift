@@ -389,9 +389,11 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
 
 }
 
-extension QTableController {
+// MARK: Private
+
+private extension QTableController {
     
-    private func _bindSections() {
+    func _bindSections() {
         var sectionIndex: Int = 0
         for section in self.sections {
             section.bind(self, sectionIndex)
@@ -399,23 +401,23 @@ extension QTableController {
         }
     }
     
-    private func _bindSections(from: Int, to: Int) {
+    func _bindSections(from: Int, to: Int) {
         for index in from..<to {
             self.sections[index].bind(self, index)
         }
     }
     
-    private func _unbindSections() {
+    func _unbindSections() {
         for section in self.sections {
             section.unbind()
         }
     }
     
-    private func _notifyUpdate() {
+    func _notifyUpdate() {
         self._observer.notify({ $0.update(self) })
     }
     
-    private func _decorClass(data: IQTableData) -> IQTableDecor.Type? {
+    func _decorClass(data: IQTableData) -> IQTableDecor.Type? {
         let dataMetatype = QMetatype(data)
         if let metatype = self._aliasDecors.first(where: { return $0.key == dataMetatype }) {
             return metatype.value
@@ -439,7 +441,7 @@ extension QTableController {
         }
     }
     
-    private func _cellClass(row: IQTableRow) -> IQTableCell.Type? {
+    func _cellClass(row: IQTableRow) -> IQTableCell.Type? {
         let rowMetatype = QMetatype(row)
         if let metatype = self._aliasCells.first(where: { return $0.key == rowMetatype }) {
             return metatype.value
@@ -464,6 +466,8 @@ extension QTableController {
     }
 
 }
+
+// MARK: UIScrollViewDelegate
 
 extension QTableController : UIScrollViewDelegate {
     
@@ -522,6 +526,8 @@ extension QTableController : UIScrollViewDelegate {
 
 }
 
+// MARK: UITableViewDataSource
+
 extension QTableController : UITableViewDataSource {
 
     @objc
@@ -579,6 +585,8 @@ extension QTableController : UITableViewDataSource {
     }
 
 }
+
+// MARK: UITableViewDelegate
 
 extension QTableController : UITableViewDelegate {
 

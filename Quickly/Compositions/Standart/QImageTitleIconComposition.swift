@@ -4,31 +4,31 @@
 
 open class QImageTitleIconComposable : QComposable {
 
-    public var image: QImageViewStyleSheet
-    public var imageWidth: CGFloat
-    public var imageSpacing: CGFloat
+    public private(set) var imageStyle: QImageViewStyleSheet
+    public private(set) var imageWidth: CGFloat
+    public private(set) var imageSpacing: CGFloat
 
-    public var title: QLabelStyleSheet
+    public private(set) var titleStyle: QLabelStyleSheet
 
-    public var icon: QImageViewStyleSheet
-    public var iconWidth: CGFloat
-    public var iconSpacing: CGFloat
+    public private(set) var iconStyle: QImageViewStyleSheet
+    public private(set) var iconWidth: CGFloat
+    public private(set) var iconSpacing: CGFloat
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        image: QImageViewStyleSheet,
+        imageStyle: QImageViewStyleSheet,
         imageWidth: CGFloat = 96,
         imageSpacing: CGFloat = 4,
-        title: QLabelStyleSheet,
-        icon: QImageViewStyleSheet,
+        titleStyle: QLabelStyleSheet,
+        iconStyle: QImageViewStyleSheet,
         iconWidth: CGFloat = 16,
         iconSpacing: CGFloat = 4
     ) {
-        self.image = image
+        self.imageStyle = imageStyle
         self.imageWidth = imageWidth
         self.imageSpacing = imageSpacing
-        self.title = title
-        self.icon = icon
+        self.titleStyle = titleStyle
+        self.iconStyle = iconStyle
         self.iconWidth = iconWidth
         self.iconSpacing = iconSpacing
         super.init(edgeInsets: edgeInsets)
@@ -38,19 +38,19 @@ open class QImageTitleIconComposable : QComposable {
 
 open class QImageTitleIconComposition< Composable: QImageTitleIconComposable > : QComposition< Composable > {
 
-    private lazy var imageView: QImageView = {
+    public private(set) lazy var imageView: QImageView = {
         let view = QImageView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var titleLabel: QLabel = {
+    public private(set) lazy var titleView: QLabel = {
         let view = QLabel(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var iconView: QImageView = {
+    public private(set) lazy var iconView: QImageView = {
         let view = QImageView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
@@ -78,9 +78,9 @@ open class QImageTitleIconComposition< Composable: QImageTitleIconComposable > :
 
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         let availableWidth = spec.containerSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
-        let imageSize = composable.image.size(CGSize(width: composable.imageWidth, height: availableWidth))
-        let titleTextSize = composable.title.size(width: availableWidth - (composable.imageWidth + composable.imageSpacing + composable.iconWidth + composable.iconSpacing))
-        let iconSize = composable.icon.size(CGSize(width: composable.iconWidth, height: availableWidth))
+        let imageSize = composable.imageStyle.size(CGSize(width: composable.imageWidth, height: availableWidth))
+        let titleTextSize = composable.titleStyle.size(width: availableWidth - (composable.imageWidth + composable.imageSpacing + composable.iconWidth + composable.iconSpacing))
+        let iconSize = composable.iconStyle.size(CGSize(width: composable.iconWidth, height: availableWidth))
         return CGSize(
             width: spec.containerSize.width,
             height: composable.edgeInsets.top + max(imageSize.height, titleTextSize.height, iconSize.height) + composable.edgeInsets.bottom
@@ -95,13 +95,13 @@ open class QImageTitleIconComposition< Composable: QImageTitleIconComposable > :
             self._constraints = [
                 self.imageView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
                 self.imageView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
-                self.imageView.trailingLayout == self.titleLabel.leadingLayout.offset(-composable.imageSpacing),
+                self.imageView.trailingLayout == self.titleView.leadingLayout.offset(-composable.imageSpacing),
                 self.imageView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
-                self.titleLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
-                self.titleLabel.trailingLayout == self.iconView.leadingLayout.offset(-composable.iconSpacing),
-                self.titleLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+                self.titleView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.titleView.trailingLayout == self.iconView.leadingLayout.offset(-composable.iconSpacing),
+                self.titleView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
                 self.iconView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
-                self.iconView.leadingLayout == self.titleLabel.trailingLayout.offset(composable.iconSpacing),
+                self.iconView.leadingLayout == self.titleView.trailingLayout.offset(composable.iconSpacing),
                 self.iconView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
                 self.iconView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
             ]
@@ -121,9 +121,9 @@ open class QImageTitleIconComposition< Composable: QImageTitleIconComposable > :
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        self.imageView.apply(composable.image)
-        self.titleLabel.apply(composable.title)
-        self.iconView.apply(composable.icon)
+        self.imageView.apply(composable.imageStyle)
+        self.titleView.apply(composable.titleStyle)
+        self.iconView.apply(composable.iconStyle)
     }
 
 }

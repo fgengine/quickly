@@ -2,14 +2,14 @@
 //  Quickly
 //
 
-// MARK: - QStackViewControllerBarSize -
+// MARK: QStackViewControllerBarSize
 
 public enum QStackViewControllerBarSize : Equatable {
     case fixed(height: CGFloat)
     case range(minHeight: CGFloat, maxHeight: CGFloat)
 }
 
-// MARK: - IQStackViewControllerAnimation -
+// MARK: IQStackViewControllerAnimation
 
 public protocol IQStackViewControllerPresentAnimation : class {
 
@@ -62,7 +62,7 @@ public protocol IQStackViewControllerInteractiveDismissAnimation : class {
 
 }
 
-// MARK: - IQStackContainerViewController -
+// MARK: IQStackContainerViewController
 
 public protocol IQStackContainerViewController : IQGroupContentViewController {
 
@@ -92,7 +92,7 @@ public protocol IQStackContainerViewController : IQGroupContentViewController {
 
 }
 
-// MARK: - IQStackPageViewController -
+// MARK: IQStackPageViewController
 
 public protocol IQStackViewController : IQContentOwnerViewController {
 
@@ -127,7 +127,7 @@ extension IQStackViewController {
 
 }
 
-// MARK: - IQStackContentViewController -
+// MARK: IQStackContentViewController
 
 public protocol IQStackContentViewController : IQContentViewController {
 

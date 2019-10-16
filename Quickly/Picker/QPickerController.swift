@@ -139,9 +139,11 @@ open class QPickerController : NSObject, IQPickerController {
 
 }
 
-extension QPickerController {
+// MARK: Private
 
-    private func _bindSections() {
+private extension QPickerController {
+
+    func _bindSections() {
         var sectionIndex: Int = 0
         for section in self.sections {
             section.bind(self, sectionIndex)
@@ -149,13 +151,13 @@ extension QPickerController {
         }
     }
 
-    private func _rebindSections(from: Int, to: Int) {
+    func _rebindSections(from: Int, to: Int) {
         for index in from..<to {
             self.sections[index].rebind(index)
         }
     }
 
-    private func _unbindSections() {
+    func _unbindSections() {
         for section in self.sections {
             section.unbind()
         }
@@ -163,20 +165,27 @@ extension QPickerController {
 
 }
 
+// MARK: UIPickerViewDataSource
+
 extension QPickerController : UIPickerViewDataSource {
 
+    @objc
     public func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return self.sections.count
     }
-
+    
+    @objc
     public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return self.sections[component].rows.count
     }
 
 }
 
-extension QPickerController : UIPickerViewDelegate {
+// MARK: UIPickerViewDelegate
 
+extension QPickerController : UIPickerViewDelegate {
+    
+    @objc
     public func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
         let section = self.sections[component]
         if(section.size.width > CGFloat.leastNormalMagnitude) {
@@ -185,20 +194,23 @@ extension QPickerController : UIPickerViewDelegate {
         let pickerWidth = pickerView.bounds.width
         return pickerWidth / CGFloat(self.sections.count)
     }
-
+    
+    @objc
     public func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         guard self.sections.count > component else { return 0 }
         let section = self.sections[component]
         return section.size.height
     }
-
+    
+    @objc
     public func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         let section = self.sections[component]
         guard let cell = section.cellType.dequeue(view) else { return UIView() }
         cell.set(any: section.rows[row])
         return cell
     }
-
+    
+    @objc
     public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         guard let delegate = self.delegate else { return }
         let section = self.sections[component]

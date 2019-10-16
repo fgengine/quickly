@@ -227,9 +227,11 @@ open class QStackViewController : QViewController, IQStackViewController {
     
 }
 
-extension QStackViewController {
+// MARK: Private
 
-    private func _updateAdditionalEdgeInsets() {
+private extension QStackViewController {
+
+    func _updateAdditionalEdgeInsets() {
         guard self._barView != nil && self._barHidden == false else {
             self.additionalEdgeInsets = UIEdgeInsets.zero
             return
@@ -252,7 +254,7 @@ extension QStackViewController {
         }
     }
 
-    private func _barFrame(bounds: CGRect) -> CGRect {
+    func _barFrame(bounds: CGRect) -> CGRect {
         let edgeInsets = self.inheritedEdgeInsets
         var barHeight: CGFloat
         switch self._barSize {
@@ -269,7 +271,7 @@ extension QStackViewController {
         return CGRect(x: bounds.origin.x, y: bounds.origin.y, width: bounds.size.width, height: barHeight)
     }
 
-    private func _barEdgeInsets() -> UIEdgeInsets {
+    func _barEdgeInsets() -> UIEdgeInsets {
         let edgeInsets = self.inheritedEdgeInsets
         return UIEdgeInsets(
             top: edgeInsets.top,

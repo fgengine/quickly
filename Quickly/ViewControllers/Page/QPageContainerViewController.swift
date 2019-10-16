@@ -359,11 +359,11 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
     
 }
 
-// MARK: - Private -
+// MARK: Private
 
-extension QPageContainerViewController {
+private extension QPageContainerViewController {
 
-    private func _displayed(viewController: IQPageViewController?) -> (IQPageViewController?, IQPageViewController?, IQPageViewController?) {
+    func _displayed(viewController: IQPageViewController?) -> (IQPageViewController?, IQPageViewController?, IQPageViewController?) {
         var displayedBackward: IQPageViewController?
         var displayedCurrent: IQPageViewController?
         var displayedForward: IQPageViewController?
@@ -383,7 +383,7 @@ extension QPageContainerViewController {
         return (displayedBackward, displayedCurrent, displayedForward)
     }
 
-    private func _update(viewController: IQPageViewController?, mode: QPageViewControllerAnimationMode, updation: (() -> Swift.Void)? = nil, completion: (() -> Swift.Void)? = nil) {
+    func _update(viewController: IQPageViewController?, mode: QPageViewControllerAnimationMode, updation: (() -> Swift.Void)? = nil, completion: (() -> Swift.Void)? = nil) {
         let currently = (self.backwardViewController, self.currentViewController, self.forwardViewController)
         let displayed = self._displayed(viewController: viewController)
         if currently.0 !== displayed.0 {
@@ -447,15 +447,15 @@ extension QPageContainerViewController {
         }
     }
     
-    private func _add(childViewController: IQPageViewController) {
+    func _add(childViewController: IQPageViewController) {
         childViewController.parentViewController = self
     }
     
-    private func _remove(childViewController: IQPageViewController) {
+    func _remove(childViewController: IQPageViewController) {
         childViewController.parentViewController = nil
     }
 
-    private func _appear(viewController: IQPageViewController, frame: CGRect) {
+    func _appear(viewController: IQPageViewController, frame: CGRect) {
         viewController.view.frame = frame
         if viewController.view.superview !== self.view {
             if let pagebar = self._barView {
@@ -466,7 +466,7 @@ extension QPageContainerViewController {
         }
     }
 
-    private func _disappear(old: (IQPageViewController?, IQPageViewController?, IQPageViewController?), new: (IQPageViewController?, IQPageViewController?, IQPageViewController?)) {
+    func _disappear(old: (IQPageViewController?, IQPageViewController?, IQPageViewController?), new: (IQPageViewController?, IQPageViewController?, IQPageViewController?)) {
         if let vc = old.0, (new.0 !== vc) && (new.1 !== vc) && (new.2 !== vc) {
             self._disappear(viewController: vc)
         }
@@ -478,26 +478,26 @@ extension QPageContainerViewController {
         }
     }
 
-    private func _disappear(viewController: IQPageViewController) {
+    func _disappear(viewController: IQPageViewController) {
         viewController.view.removeFromSuperview()
     }
 
-    private func _forwardAnimation(viewController: IQPageViewController) -> IQPageViewControllerAnimation {
+    func _forwardAnimation(viewController: IQPageViewController) -> IQPageViewControllerAnimation {
         if let animation = viewController.forwardAnimation { return animation }
         return self.forwardAnimation
     }
 
-    private func _backwardAnimation(viewController: IQPageViewController) -> IQPageViewControllerAnimation {
+    func _backwardAnimation(viewController: IQPageViewController) -> IQPageViewControllerAnimation {
         if let animation = viewController.backwardAnimation { return animation }
         return self.backwardAnimation
     }
 
-    private func _interactiveAnimation(viewController: IQPageViewController) -> IQPageViewControllerInteractiveAnimation? {
+    func _interactiveAnimation(viewController: IQPageViewController) -> IQPageViewControllerInteractiveAnimation? {
         if let animation = viewController.interactiveAnimation { return animation }
         return self.interactiveAnimation
     }
 
-    private func _updateAdditionalEdgeInsets() {
+    func _updateAdditionalEdgeInsets() {
         self.additionalEdgeInsets = UIEdgeInsets(
             top: (self._barView != nil && self._barHidden == false) ? self._barHeight : 0,
             left: 0,
@@ -506,11 +506,11 @@ extension QPageContainerViewController {
         )
     }
 
-    private func _currentViewControllerFrame() -> CGRect {
+    func _currentViewControllerFrame() -> CGRect {
         return self.view.bounds
     }
 
-    private func _forwardViewControllerFrame() -> CGRect {
+    func _forwardViewControllerFrame() -> CGRect {
         let current = self._currentViewControllerFrame()
         return CGRect(
             x: current.origin.x + current.size.width,
@@ -520,7 +520,7 @@ extension QPageContainerViewController {
         )
     }
 
-    private func _backwardViewControllerFrame() -> CGRect {
+    func _backwardViewControllerFrame() -> CGRect {
         let current = self._currentViewControllerFrame()
         return CGRect(
             x: current.origin.x - current.size.width,
@@ -530,7 +530,7 @@ extension QPageContainerViewController {
         )
     }
 
-    private func _barFrame(bounds: CGRect) -> CGRect {
+    func _barFrame(bounds: CGRect) -> CGRect {
         let edgeInsets = self.inheritedEdgeInsets
         let fullHeight = self._barHeight + edgeInsets.top
         if self._barHidden == true {
@@ -549,7 +549,7 @@ extension QPageContainerViewController {
         )
     }
 
-    private func _barEdgeInsets() -> UIEdgeInsets {
+    func _barEdgeInsets() -> UIEdgeInsets {
         let edgeInsets = self.inheritedEdgeInsets
         return UIEdgeInsets(
             top: edgeInsets.top,
@@ -560,7 +560,7 @@ extension QPageContainerViewController {
     }
 
     @objc
-    private func _handleInteractiveGesture(_ sender: Any) {
+    func _handleInteractiveGesture(_ sender: Any) {
         let position = self.interactiveGesture.location(in: nil)
         let velocity = self.interactiveGesture.velocity(in: nil)
         switch self.interactiveGesture.state {
@@ -610,7 +610,7 @@ extension QPageContainerViewController {
         }
     }
 
-    private func _endInteractive(viewController: IQPageViewController?) {
+    func _endInteractive(viewController: IQPageViewController?) {
         let currently = (
             self._activeInteractiveBackwardViewController,
             self._activeInteractiveCurrentViewController,
@@ -645,7 +645,7 @@ extension QPageContainerViewController {
         self._endInteractive()
     }
 
-    private func _endInteractive() {
+    func _endInteractive() {
         self._activeInteractiveBackwardViewController = nil
         self._activeInteractiveCurrentViewController = nil
         self._activeInteractiveForwardViewController = nil
@@ -655,7 +655,7 @@ extension QPageContainerViewController {
 
 }
 
-// MARK: - QPagebarDelegate -
+// MARK: QPagebarDelegate
 
 extension QPageContainerViewController : QPagebarDelegate {
 
@@ -673,7 +673,7 @@ extension QPageContainerViewController : QPagebarDelegate {
 
 }
 
-// MARK: - UIGestureRecognizerDelegate -
+// MARK: UIGestureRecognizerDelegate
 
 extension QPageContainerViewController : UIGestureRecognizerDelegate {
     

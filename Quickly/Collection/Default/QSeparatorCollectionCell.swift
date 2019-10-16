@@ -27,7 +27,7 @@ open class QSeparatorCollectionItem : QBackgroundColorCollectionItem {
 
 open class QSeparatorCollectionCell< Item: QSeparatorCollectionItem > : QBackgroundColorCollectionCell< Item > {
 
-    private var _separator: QView!
+    public private(set) var lineView: QView!
 
     private var _edgeInsets: UIEdgeInsets?
 
@@ -61,12 +61,12 @@ open class QSeparatorCollectionCell< Item: QSeparatorCollectionItem > : QBackgro
     open override func setup() {
         super.setup()
 
-        self._separator = self.prepareView()
-        self._separator.translatesAutoresizingMaskIntoConstraints = false
-        self.contentView.addSubview(self._separator)
+        self.lineView = self.prepareLineView()
+        self.lineView.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(self.lineView)
     }
 
-    open func prepareView() -> QView {
+    open func prepareLineView() -> QView {
         return QView(frame: self.contentView.bounds)
     }
 
@@ -76,13 +76,13 @@ open class QSeparatorCollectionCell< Item: QSeparatorCollectionItem > : QBackgro
         if self._edgeInsets != item.edgeInsets {
             self._edgeInsets = item.edgeInsets
             self._constraints = [
-                self._separator.topLayout == self.contentView.topLayout.offset(item.edgeInsets.top),
-                self._separator.leadingLayout == self.contentView.leadingLayout.offset(item.edgeInsets.left),
-                self._separator.trailingLayout == self.contentView.trailingLayout.offset(-item.edgeInsets.right),
-                self._separator.bottomLayout == self.contentView.bottomLayout.offset(-item.edgeInsets.bottom)
+                self.lineView.topLayout == self.contentView.topLayout.offset(item.edgeInsets.top),
+                self.lineView.leadingLayout == self.contentView.leadingLayout.offset(item.edgeInsets.left),
+                self.lineView.trailingLayout == self.contentView.trailingLayout.offset(-item.edgeInsets.right),
+                self.lineView.bottomLayout == self.contentView.bottomLayout.offset(-item.edgeInsets.bottom)
             ]
         }
-        self._separator.backgroundColor = item.color
+        self.lineView.backgroundColor = item.color
     }
 
 }

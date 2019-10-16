@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-// MARK: - IQGroupViewControllerAnimation -
+// MARK: IQGroupViewControllerAnimation
 
 public protocol IQGroupViewControllerAnimation : class {
 
@@ -16,7 +16,7 @@ public protocol IQGroupViewControllerAnimation : class {
 
 }
 
-// MARK: - IQGroupViewController -
+// MARK: IQGroupViewController
 
 public protocol IQGroupContainerViewController : IQViewController {
 
@@ -42,7 +42,7 @@ public protocol IQGroupContainerViewController : IQViewController {
 
 }
 
-// MARK: - IQGroupSlideViewController -
+// MARK: IQGroupSlideViewController
 
 public protocol IQGroupViewController : IQContentOwnerViewController {
 
@@ -73,7 +73,7 @@ extension IQGroupViewController {
 
 }
 
-// MARK: - IQGroupContentViewController -
+// MARK: IQGroupContentViewController
 
 public protocol IQGroupContentViewController : IQContentViewController {
 

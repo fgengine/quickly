@@ -4,7 +4,7 @@
 
 open class QCollectionSection : IQCollectionSection {
 
-    public weak var controller: IQCollectionController?
+    public private(set) weak var controller: IQCollectionController?
     public private(set) var index: Int?
     public var insets: UIEdgeInsets = UIEdgeInsets.zero {
         didSet { self._reloadSection() }
@@ -149,33 +149,35 @@ open class QCollectionSection : IQCollectionSection {
 
 }
 
-extension QCollectionSection {
+// MARK: Private
+
+private extension QCollectionSection {
     
-    private func _bindHeader() {
+    func _bindHeader() {
         if let header = self.header {
             header.bind(self)
         }
     }
     
-    private func _unbindHeader() {
+    func _unbindHeader() {
         if let header = self.header {
             header.unbind()
         }
     }
     
-    private func _bindFooter() {
+    func _bindFooter() {
         if let footer = self.header {
             footer.bind(self)
         }
     }
     
-    private func _unbindFooter() {
+    func _unbindFooter() {
         if let footer = self.header {
             footer.unbind()
         }
     }
     
-    private func _bindItems() {
+    func _bindItems() {
         guard let sectionIndex = self.index else { return }
         var itemIndex = 0
         for item in self.items {
@@ -184,20 +186,20 @@ extension QCollectionSection {
         }
     }
     
-    private func _bindItems(from: Int, to: Int) {
+    func _bindItems(from: Int, to: Int) {
         guard let sectionIndex = self.index else { return }
         for itemIndex in from..<to {
             self.items[itemIndex].bind(self, IndexPath(item: itemIndex, section: sectionIndex))
         }
     }
     
-    private func _unbindItems() {
+    func _unbindItems() {
         for item in self.items {
             item.unbind()
         }
     }
 
-    private func _reloadSection() {
+    func _reloadSection() {
         guard
             let index = self.index,
             let controller = self.controller,

@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QDialogViewControllerinteractiveDismissAnimation : IQDialogViewControllerInteractiveAnimation {
+public final class QDialogViewControllerinteractiveDismissAnimation : IQDialogViewControllerInteractiveAnimation {
 
     internal var viewController: IQDialogViewController!
     internal var verticalAlignment: QDialogViewControllerVerticalAlignment

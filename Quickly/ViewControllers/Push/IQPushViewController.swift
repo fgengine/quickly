@@ -2,14 +2,14 @@
 //  Quickly
 //
 
-// MARK: - QPushViewControllerState -
+// MARK: QPushViewControllerState
 
 public enum QPushViewControllerState {
     case hide
     case show
 }
 
-// MARK: - IQPushViewControllerFixedAnimation -
+// MARK: IQPushViewControllerFixedAnimation
 
 public protocol IQPushViewControllerFixedAnimation : class {
 
@@ -21,7 +21,7 @@ public protocol IQPushViewControllerFixedAnimation : class {
 
 }
 
-// MARK: - IQPushViewControllerInteractiveAnimation -
+// MARK: IQPushViewControllerInteractiveAnimation
 
 public protocol IQPushViewControllerInteractiveAnimation : class {
 
@@ -41,7 +41,7 @@ public protocol IQPushViewControllerInteractiveAnimation : class {
 
 }
 
-// MARK: - IQPushContainerViewController -
+// MARK: IQPushContainerViewController
 
 public protocol IQPushContainerViewController : IQViewController {
 
@@ -57,7 +57,7 @@ public protocol IQPushContainerViewController : IQViewController {
 
 }
 
-// MARK: - IQPushViewController -
+// MARK: IQPushViewController
 
 public protocol IQPushViewController : IQViewController {
 
@@ -87,7 +87,7 @@ public extension IQPushViewController {
 
 }
 
-// MARK: - IQPushContentViewController -
+// MARK: IQPushContentViewController
 
 public protocol IQPushContentViewController : IQViewController {
 

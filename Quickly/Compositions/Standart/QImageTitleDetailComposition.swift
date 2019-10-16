@@ -4,30 +4,30 @@
 
 open class QImageTitleDetailComposable : QComposable {
 
-    public var image: QImageViewStyleSheet
-    public var imageWidth: CGFloat
-    public var imageSpacing: CGFloat
+    public private(set) var imageStyle: QImageViewStyleSheet
+    public private(set) var imageWidth: CGFloat
+    public private(set) var imageSpacing: CGFloat
 
-    public var title: QLabelStyleSheet
-    public var titleSpacing: CGFloat
+    public private(set) var titleStyle: QLabelStyleSheet
+    public private(set) var titleSpacing: CGFloat
 
-    public var detail: QLabelStyleSheet
+    public private(set) var detailStyle: QLabelStyleSheet
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        image: QImageViewStyleSheet,
+        imageStyle: QImageViewStyleSheet,
         imageWidth: CGFloat = 96,
         imageSpacing: CGFloat = 4,
-        title: QLabelStyleSheet,
+        titleStyle: QLabelStyleSheet,
         titleSpacing: CGFloat = 4,
-        detail: QLabelStyleSheet
+        detailStyle: QLabelStyleSheet
     ) {
-        self.image = image
+        self.imageStyle = imageStyle
         self.imageWidth = imageWidth
         self.imageSpacing = imageSpacing
-        self.title = title
+        self.titleStyle = titleStyle
         self.titleSpacing = titleSpacing
-        self.detail = detail
+        self.detailStyle = detailStyle
         super.init(edgeInsets: edgeInsets)
     }
 
@@ -35,13 +35,13 @@ open class QImageTitleDetailComposable : QComposable {
 
 open class QImageTitleDetailComposition< Composable: QImageTitleDetailComposable > : QComposition< Composable > {
 
-    private lazy var imageView: QImageView = {
+    public private(set) lazy var imageView: QImageView = {
         let view = QImageView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var titleLabel: QLabel = {
+    public private(set) lazy var titleView: QLabel = {
         let view = QLabel(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.setContentHuggingPriority(
@@ -51,7 +51,7 @@ open class QImageTitleDetailComposition< Composable: QImageTitleDetailComposable
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var detailLabel: QLabel = {
+    public private(set) lazy var detailView: QLabel = {
         let view = QLabel(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
@@ -74,9 +74,9 @@ open class QImageTitleDetailComposition< Composable: QImageTitleDetailComposable
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         let availableWidth = spec.containerSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
-        let imageSize = composable.image.size(CGSize(width: composable.imageWidth, height: availableWidth))
-        let titleTextSize = composable.title.size(width: availableWidth - (composable.imageWidth + composable.imageSpacing))
-        let detailTextSize = composable.detail.size(width: availableWidth - (composable.imageWidth + composable.imageSpacing))
+        let imageSize = composable.imageStyle.size(CGSize(width: composable.imageWidth, height: availableWidth))
+        let titleTextSize = composable.titleStyle.size(width: availableWidth - (composable.imageWidth + composable.imageSpacing))
+        let detailTextSize = composable.detailStyle.size(width: availableWidth - (composable.imageWidth + composable.imageSpacing))
         return CGSize(
             width: spec.containerSize.width,
             height: composable.edgeInsets.top + max(imageSize.height, titleTextSize.height + composable.titleSpacing + detailTextSize.height) + composable.edgeInsets.bottom
@@ -92,13 +92,13 @@ open class QImageTitleDetailComposition< Composable: QImageTitleDetailComposable
                 self.imageView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
                 self.imageView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
                 self.imageView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
-                self.titleLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
-                self.titleLabel.leadingLayout == self.imageView.trailingLayout.offset(composable.imageSpacing),
-                self.titleLabel.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
-                self.titleLabel.bottomLayout <= self.detailLabel.topLayout.offset(-composable.titleSpacing),
-                self.detailLabel.leadingLayout == self.imageView.trailingLayout.offset(composable.imageSpacing),
-                self.detailLabel.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
-                self.detailLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
+                self.titleView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.titleView.leadingLayout == self.imageView.trailingLayout.offset(composable.imageSpacing),
+                self.titleView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                self.titleView.bottomLayout <= self.detailView.topLayout.offset(-composable.titleSpacing),
+                self.detailView.leadingLayout == self.imageView.trailingLayout.offset(composable.imageSpacing),
+                self.detailView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                self.detailView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
             ]
         }
         if self._imageWidth != composable.imageWidth {
@@ -110,9 +110,9 @@ open class QImageTitleDetailComposition< Composable: QImageTitleDetailComposable
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        self.imageView.apply(composable.image)
-        self.titleLabel.apply(composable.title)
-        self.detailLabel.apply(composable.detail)
+        self.imageView.apply(composable.imageStyle)
+        self.titleView.apply(composable.titleStyle)
+        self.detailView.apply(composable.detailStyle)
     }
 
 }

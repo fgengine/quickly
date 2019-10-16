@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-// MARK: - Public • QDatabase.LiteralExpression
+// MARK: Public • QDatabase.LiteralExpression
 
 public extension QDatabase {
     

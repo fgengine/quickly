@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-// MARK: - QJsonError -
+// MARK: QJsonError
 
 public enum QJsonError : Error {
     case notJson
@@ -10,7 +10,7 @@ public enum QJsonError : Error {
     case cast
 }
 
-// MARK: - IQJsonValue -
+// MARK: IQJsonValue
 
 public protocol IQJsonValue {
 
@@ -21,7 +21,7 @@ public protocol IQJsonValue {
 
 }
 
-// MARK: - IQJsonEnum -
+// MARK: IQJsonEnum
 
 public protocol IQJsonEnum : RawRepresentable {
     
@@ -33,7 +33,7 @@ public protocol IQJsonEnum : RawRepresentable {
     
 }
 
-// MARK: - IQJsonModel -
+// MARK: IQJsonModel
 
 public protocol IQJsonModel {
     
@@ -46,7 +46,7 @@ public protocol IQJsonModel {
     
 }
 
-// MARK: - QJson -
+// MARK: QJson
 
 public final class QJson {
 
@@ -72,7 +72,7 @@ public final class QJson {
     
 }
 
-// MARK: - QJson • Core -
+// MARK: QJson • Core
 
 public extension QJson {
     
@@ -100,7 +100,7 @@ public extension QJson {
     
 }
 
-// MARK: - QJson • Save -
+// MARK: QJson • Save
 
 public extension QJson {
 
@@ -117,7 +117,7 @@ public extension QJson {
     
 }
 
-// MARK: - QJson • Set -
+// MARK: QJson • Set
 
 public extension QJson {
     
@@ -181,7 +181,7 @@ public extension QJson {
     
 }
 
-// MARK: - QJson • Remove -
+// MARK: QJson • Remove
 
 public extension QJson {
 
@@ -191,7 +191,7 @@ public extension QJson {
     
 }
 
-// MARK: - QJson • Get -
+// MARK: QJson • Get
 
 public extension QJson {
     
@@ -356,7 +356,7 @@ public extension QJson {
     
 }
 
-// MARK: - QJson • Private -
+// MARK: QJson • Private
 
 private extension QJson {
 
@@ -459,7 +459,7 @@ private extension QJson {
 
 }
 
-// MARK: - IQDebug
+// MARK: IQDebug
 
 #if DEBUG
 
@@ -484,7 +484,7 @@ extension QJson : IQDebug {
 
 #endif
 
-// MARK: - Bool • IQJsonValue -
+// MARK: Bool • IQJsonValue
 
 extension Bool : IQJsonValue {
 
@@ -510,7 +510,7 @@ extension Bool : IQJsonValue {
 
 }
 
-// MARK: - String • IQJsonValue -
+// MARK: String • IQJsonValue
 
 extension String : IQJsonValue {
 
@@ -533,7 +533,7 @@ extension String : IQJsonValue {
 
 }
 
-// MARK: - URL • IQJsonValue -
+// MARK: URL • IQJsonValue
 
 extension URL : IQJsonValue {
 
@@ -550,7 +550,7 @@ extension URL : IQJsonValue {
 
 }
 
-// MARK: - NSNumber • IQJsonValue -
+// MARK: NSNumber • IQJsonValue
 
 extension NSNumber : IQJsonValue {
 
@@ -594,7 +594,7 @@ extension NSDecimalNumber {
 
 }
 
-// MARK: - Decimal • IQJsonValue -
+// MARK: Decimal • IQJsonValue
 
 extension Decimal : IQJsonValue {
 
@@ -608,7 +608,7 @@ extension Decimal : IQJsonValue {
 
 }
 
-// MARK: - Date • IQJsonValue -
+// MARK: Date • IQJsonValue
 
 extension Date : IQJsonValue {
 
@@ -623,7 +623,7 @@ extension Date : IQJsonValue {
 
 }
 
-// MARK: - Int • IQJsonValue -
+// MARK: Int • IQJsonValue
 
 extension Int : IQJsonValue {
 
@@ -637,7 +637,7 @@ extension Int : IQJsonValue {
 
 }
 
-// MARK: - UInt • IQJsonValue -
+// MARK: UInt • IQJsonValue
 
 extension UInt : IQJsonValue {
 
@@ -651,7 +651,7 @@ extension UInt : IQJsonValue {
 
 }
 
-// MARK: - Float • IQJsonValue -
+// MARK: Float • IQJsonValue
 
 extension Float : IQJsonValue {
 
@@ -665,7 +665,7 @@ extension Float : IQJsonValue {
 
 }
 
-// MARK: - Double • IQJsonValue -
+// MARK: Double • IQJsonValue
 
 extension Double : IQJsonValue {
 
@@ -679,7 +679,7 @@ extension Double : IQJsonValue {
 
 }
 
-// MARK: - CGFloat • IQJsonValue -
+// MARK: CGFloat • IQJsonValue
 
 extension CGFloat : IQJsonValue {
 
@@ -693,7 +693,7 @@ extension CGFloat : IQJsonValue {
 
 }
 
-// MARK: - UIColor • IQJsonValue -
+// MARK: UIColor • IQJsonValue
 
 extension UIColor : IQJsonValue {
 
@@ -712,7 +712,7 @@ extension UIColor : IQJsonValue {
 
 }
 
-// MARK: - IQJsonPath -
+// MARK: IQJsonPath
 
 fileprivate protocol IQJsonPath {
 
@@ -721,7 +721,7 @@ fileprivate protocol IQJsonPath {
 
 }
 
-// MARK: - String : IQJsonPath -
+// MARK: String : IQJsonPath -
 
 extension String : IQJsonPath {
 
@@ -734,7 +734,7 @@ extension String : IQJsonPath {
 
 }
 
-// MARK: - NSNumber : IQJsonPath -
+// MARK: NSNumber : IQJsonPath -
 
 extension NSNumber : IQJsonPath {
 

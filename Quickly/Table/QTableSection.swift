@@ -4,7 +4,7 @@
 
 open class QTableSection : IQTableSection {
 
-    public weak var controller: IQTableController?
+    public private(set) weak var controller: IQTableController?
     public private(set) var index: Int?
     public var canEdit: Bool = true {
         didSet { self._reloadSection() }
@@ -136,33 +136,35 @@ open class QTableSection : IQTableSection {
 
 }
 
-extension QTableSection {
+// MARK: Private
 
-    private func _bindHeader() {
+private extension QTableSection {
+
+    func _bindHeader() {
         if let header = self.header {
             header.bind(self)
         }
     }
 
-    private func _unbindHeader() {
+    func _unbindHeader() {
         if let header = self.header {
             header.unbind()
         }
     }
 
-    private func _bindFooter() {
+    func _bindFooter() {
         if let footer = self.header {
             footer.bind(self)
         }
     }
 
-    private func _unbindFooter() {
+    func _unbindFooter() {
         if let footer = self.header {
             footer.unbind()
         }
     }
 
-    private func _bindRows() {
+    func _bindRows() {
         guard let sectionIndex = self.index else { return }
         var rowIndex: Int = 0
         for row in self.rows {
@@ -171,20 +173,20 @@ extension QTableSection {
         }
     }
     
-    private func _bindRows(from: Int, to: Int) {
+    func _bindRows(from: Int, to: Int) {
         guard let sectionIndex = self.index else { return }
         for rowIndex in from..<to {
             self.rows[rowIndex].bind(self, IndexPath(row: rowIndex, section: sectionIndex))
         }
     }
 
-    private func _unbindRows() {
+    func _unbindRows() {
         for row in self.rows {
             row.unbind()
         }
     }
 
-    private func _reloadSection() {
+    func _reloadSection() {
         guard
             let index = self.index,
             let controller = self.controller,

@@ -2,9 +2,9 @@
 //  Quickly
 //
 
-open class QDialogBackgroundView : QView, IQDialogContainerBackgroundView {
+public final class QDialogBackgroundView : QView, IQDialogContainerBackgroundView {
 
-    open weak var containerViewController: IQDialogContainerViewController?
+    public weak var containerViewController: IQDialogContainerViewController?
     
     public required init() {
         super.init(frame: CGRect())
@@ -20,7 +20,7 @@ open class QDialogBackgroundView : QView, IQDialogContainerBackgroundView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    open override func setup() {
+    public override func setup() {
         super.setup()
 
         self.alpha = Const.hiddenAlpha
@@ -56,8 +56,14 @@ open class QDialogBackgroundView : QView, IQDialogContainerBackgroundView {
             }
         }
     }
+    
+}
 
-    private struct Const {
+// MARK: Private
+
+private extension QDialogBackgroundView {
+
+    struct Const {
 
         static let duration: TimeInterval = 0.25
         static let hiddenAlpha: CGFloat = 0

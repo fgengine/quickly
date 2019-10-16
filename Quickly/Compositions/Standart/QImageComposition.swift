@@ -4,13 +4,13 @@
 
 open class QImageComposable : QComposable {
 
-    public var image: QImageViewStyleSheet
+    public private(set) var imageStyle: QImageViewStyleSheet
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        image: QImageViewStyleSheet
+        imageStyle: QImageViewStyleSheet
     ) {
-        self.image = image
+        self.imageStyle = imageStyle
         super.init(edgeInsets: edgeInsets)
     }
 
@@ -18,7 +18,7 @@ open class QImageComposable : QComposable {
 
 open class QImageComposition< Composable: QImageComposable > : QComposition< Composable > {
 
-    private lazy var imageView: QImageView = {
+    public private(set) lazy var imageView: QImageView = {
         let view = QImageView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
@@ -34,7 +34,7 @@ open class QImageComposition< Composable: QImageComposable > : QComposition< Com
 
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         let availableWidth = spec.containerSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
-        let imageSize = composable.image.size(CGSize(width: availableWidth, height: availableWidth))
+        let imageSize = composable.imageStyle.size(CGSize(width: availableWidth, height: availableWidth))
         return CGSize(
             width: spec.containerSize.width,
             height: composable.edgeInsets.top + imageSize.height + composable.edgeInsets.bottom
@@ -54,7 +54,7 @@ open class QImageComposition< Composable: QImageComposable > : QComposition< Com
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        self.imageView.apply(composable.image)
+        self.imageView.apply(composable.imageStyle)
     }
 
 }

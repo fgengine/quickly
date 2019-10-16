@@ -331,14 +331,18 @@ open class QCollectionViewController : QViewController, IQInputContentViewContro
     open func didHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
     }
     
-    // MARK: Private
+}
 
+// MARK: Private
+
+private extension QCollectionViewController {
+    
     @objc
-    private func _triggeredRefreshControl(_ sender: Any) {
+    func _triggeredRefreshControl(_ sender: Any) {
         self.triggeredRefreshControl()
     }
 
-    private func _updateRefreshControlState() {
+    func _updateRefreshControlState() {
         if let collectionView = self.collectionView {
             if self.refreshControlHidden == false && self.isPresented == true {
                 collectionView.refreshControl = self._refreshControl
@@ -351,7 +355,7 @@ open class QCollectionViewController : QViewController, IQInputContentViewContro
         }
     }
     
-    private func _updateContentInsets(_ collectionView: QCollectionView) {
+    func _updateContentInsets(_ collectionView: QCollectionView) {
         let edgeInsets = self.adjustedContentInset
         let oldContentInset = collectionView.contentInset
         let newContentInset = UIEdgeInsets(
@@ -380,7 +384,7 @@ open class QCollectionViewController : QViewController, IQInputContentViewContro
         }
     }
     
-    private func _updateFrame(pagesView: QPagesViewType, bounds: CGRect) {
+    func _updateFrame(pagesView: QPagesViewType, bounds: CGRect) {
         let edgeInset = self.adjustedContentInset
         let pagesHeight = pagesView.frame.height
         switch self.pagesPosition {
@@ -401,11 +405,11 @@ open class QCollectionViewController : QViewController, IQInputContentViewContro
         }
     }
     
-    private func _updateFrame(loadingView: QLoadingViewType, bounds: CGRect) {
+    func _updateFrame(loadingView: QLoadingViewType, bounds: CGRect) {
         loadingView.frame = bounds
     }
     
-    private func _updateCurrentPage(pagesView: QPagesViewType) {
+    func _updateCurrentPage(pagesView: QPagesViewType) {
         if let collectionView = self.collectionView {
             let contentSize = collectionView.collectionViewLayout.collectionViewContentSize
             let contentOffset = collectionView.contentOffset
@@ -417,7 +421,7 @@ open class QCollectionViewController : QViewController, IQInputContentViewContro
         }
     }
     
-    private func _updateNumberOfPages(pagesView: QPagesViewType, bounds: CGRect) {
+    func _updateNumberOfPages(pagesView: QPagesViewType, bounds: CGRect) {
         if let collectionView = self.collectionView {
             let contentBounds = collectionView.bounds
             let contentSize = collectionView.collectionViewLayout.collectionViewContentSize
@@ -430,6 +434,8 @@ open class QCollectionViewController : QViewController, IQInputContentViewContro
     }
     
 }
+
+// MARK: IQLoadingViewDelegate
 
 extension QCollectionViewController : IQLoadingViewDelegate {
     
