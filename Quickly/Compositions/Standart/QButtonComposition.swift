@@ -6,10 +6,10 @@ open class QButtonComposable : QComposable {
 
     public typealias Closure = (_ composable: QButtonComposable) -> Void
 
-    public private(set) var buttonStyle: QButtonStyleSheet
-    public private(set) var buttonHeight: CGFloat
-    public fileprivate(set) var buttonIsSpinnerAnimating: Bool
-    public private(set) var buttonPressed: Closure
+    public var buttonStyle: QButtonStyleSheet
+    public var buttonHeight: CGFloat
+    public var buttonIsSpinnerAnimating: Bool
+    public var buttonPressed: Closure
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,

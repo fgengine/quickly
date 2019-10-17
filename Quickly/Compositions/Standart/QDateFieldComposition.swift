@@ -7,18 +7,18 @@ open class QDateFieldComposable : QComposable {
     public typealias ShouldClosure = (_ composable: QDateFieldComposable) -> Bool
     public typealias Closure = (_ composable: QDateFieldComposable) -> Void
 
-    public private(set) var fieldStyle: QDateFieldStyleSheet
-    public private(set) var height: CGFloat
-    public fileprivate(set) var date: Date?
+    public var fieldStyle: QDateFieldStyleSheet
+    public var height: CGFloat
+    public var date: Date?
     public var isValid: Bool {
         get { return self.date != nil }
     }
-    public fileprivate(set) var isEditing: Bool
-    public private(set) var shouldBeginEditing: ShouldClosure?
-    public private(set) var beginEditing: Closure?
-    public private(set) var select: Closure?
-    public private(set) var shouldEndEditing: ShouldClosure?
-    public private(set) var endEditing: Closure?
+    public var isEditing: Bool
+    public var shouldBeginEditing: ShouldClosure?
+    public var beginEditing: Closure?
+    public var select: Closure?
+    public var shouldEndEditing: ShouldClosure?
+    public var endEditing: Closure?
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,

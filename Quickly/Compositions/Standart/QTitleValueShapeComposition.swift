@@ -4,14 +4,14 @@
 
 open class QTitleValueShapeComposable : QComposable {
 
-    public private(set) var titleStyle: QLabelStyleSheet
-    public private(set) var titleSpacing: CGFloat
+    public var titleStyle: QLabelStyleSheet
+    public var titleSpacing: CGFloat
 
-    public private(set) var valueStyle: QLabelStyleSheet
+    public var valueStyle: QLabelStyleSheet
 
-    public private(set) var shapeModel: QShapeView.Model
-    public private(set) var shapeWidth: CGFloat
-    public private(set) var shapeSpacing: CGFloat
+    public var shapeModel: QShapeView.Model
+    public var shapeWidth: CGFloat
+    public var shapeSpacing: CGFloat
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,

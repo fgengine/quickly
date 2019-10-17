@@ -4,16 +4,16 @@
 
 open class QPlaceholderTitleDetailIconComposable : QComposable {
     
-    public private(set) var titleStyle: QPlaceholderStyleSheet
-    public private(set) var titleHeight: CGFloat
-    public private(set) var titleSpacing: CGFloat
+    public var titleStyle: QPlaceholderStyleSheet
+    public var titleHeight: CGFloat
+    public var titleSpacing: CGFloat
     
-    public private(set) var detailStyle: QPlaceholderStyleSheet
-    public private(set) var detailHeight: CGFloat
+    public var detailStyle: QPlaceholderStyleSheet
+    public var detailHeight: CGFloat
     
-    public private(set) var iconStyle: QImageViewStyleSheet
-    public private(set) var iconWidth: CGFloat
-    public private(set) var iconSpacing: CGFloat
+    public var iconStyle: QImageViewStyleSheet
+    public var iconWidth: CGFloat
+    public var iconSpacing: CGFloat
     
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,

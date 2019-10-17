@@ -7,18 +7,18 @@ open class QListFieldComposable : QComposable {
     public typealias ShouldClosure = (_ composable: QListFieldComposable) -> Bool
     public typealias Closure = (_ composable: QListFieldComposable) -> Void
 
-    public private(set) var fieldStyle: QListFieldStyleSheet
-    public fileprivate(set) var selectedRow: QListFieldPickerRow?
-    public private(set) var height: CGFloat
+    public var fieldStyle: QListFieldStyleSheet
+    public var selectedRow: QListFieldPickerRow?
+    public var height: CGFloat
     public var isValid: Bool{
         get { return self.selectedRow != nil }
     }
-    public fileprivate(set) var isEditing: Bool
-    public private(set) var shouldBeginEditing: ShouldClosure?
-    public private(set) var beginEditing: Closure?
-    public private(set) var select: Closure?
-    public private(set) var shouldEndEditing: ShouldClosure?
-    public private(set) var endEditing: Closure?
+    public var isEditing: Bool
+    public var shouldBeginEditing: ShouldClosure?
+    public var beginEditing: Closure?
+    public var select: Closure?
+    public var shouldEndEditing: ShouldClosure?
+    public var endEditing: Closure?
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,

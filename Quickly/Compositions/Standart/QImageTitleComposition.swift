@@ -4,13 +4,13 @@
 
 open class QImageTitleComposable : QComposable {
 
-    public private(set) var direction: QViewDirection
+    public var direction: QViewDirection
     
-    public private(set) var imageStyle: QImageViewStyleSheet
-    public private(set) var imageSize: CGSize
-    public private(set) var imageSpacing: CGFloat
+    public var imageStyle: QImageViewStyleSheet
+    public var imageSize: CGSize
+    public var imageSpacing: CGFloat
 
-    public private(set) var titleStyle: QLabelStyleSheet
+    public var titleStyle: QLabelStyleSheet
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,

@@ -4,7 +4,7 @@
 
 open class QTitleComposable : QComposable {
 
-    public private(set) var titleStyle: QLabelStyleSheet
+    public var titleStyle: QLabelStyleSheet
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,

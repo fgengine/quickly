@@ -4,14 +4,14 @@
 
 open class QPlaceholderImageTitleComposable : QComposable {
 
-    public private(set) var direction: QViewDirection
+    public var direction: QViewDirection
     
-    public private(set) var imageStyle: QImageViewStyleSheet
-    public private(set) var imageSize: CGSize
-    public private(set) var imageSpacing: CGFloat
+    public var imageStyle: QImageViewStyleSheet
+    public var imageSize: CGSize
+    public var imageSpacing: CGFloat
 
-    public private(set) var titleStyle: QPlaceholderStyleSheet
-    public private(set) var titleHeight: CGFloat
+    public var titleStyle: QPlaceholderStyleSheet
+    public var titleHeight: CGFloat
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,

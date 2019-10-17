@@ -6,14 +6,14 @@ open class QTitleButtonComposable : QComposable {
 
     public typealias Closure = (_ composable: QTitleButtonComposable) -> Void
 
-    public private(set) var titleStyle: QLabelStyleSheet
+    public var titleStyle: QLabelStyleSheet
 
-    public private(set) var buttonStyle: QButtonStyleSheet
-    public private(set) var buttonIsHidden: Bool
-    public private(set) var buttonHeight: CGFloat
-    public private(set) var buttonSpacing: CGFloat
-    public fileprivate(set) var buttonIsSpinnerAnimating: Bool
-    public private(set) var buttonPressed: Closure
+    public var buttonStyle: QButtonStyleSheet
+    public var buttonIsHidden: Bool
+    public var buttonHeight: CGFloat
+    public var buttonSpacing: CGFloat
+    public var buttonIsSpinnerAnimating: Bool
+    public var buttonPressed: Closure
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,

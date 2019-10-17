@@ -4,14 +4,14 @@
 
 open class QImageTitleDetailComposable : QComposable {
 
-    public private(set) var imageStyle: QImageViewStyleSheet
-    public private(set) var imageWidth: CGFloat
-    public private(set) var imageSpacing: CGFloat
+    public var imageStyle: QImageViewStyleSheet
+    public var imageWidth: CGFloat
+    public var imageSpacing: CGFloat
 
-    public private(set) var titleStyle: QLabelStyleSheet
-    public private(set) var titleSpacing: CGFloat
+    public var titleStyle: QLabelStyleSheet
+    public var titleSpacing: CGFloat
 
-    public private(set) var detailStyle: QLabelStyleSheet
+    public var detailStyle: QLabelStyleSheet
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,

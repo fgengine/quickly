@@ -7,26 +7,26 @@ open class QMultiTextFieldComposable : QComposable {
     public typealias ShouldClosure = (_ composable: QMultiTextFieldComposable) -> Bool
     public typealias Closure = (_ composable: QMultiTextFieldComposable) -> Void
 
-    public private(set) var fieldStyle: QMultiTextFieldStyleSheet
-    public private(set) var maximumNumberOfCharecters: UInt
-    public private(set) var maximumNumberOfLines: UInt
-    public private(set) var minimumHeight: CGFloat
-    public private(set) var maximumHeight: CGFloat
-    public fileprivate(set) var height: CGFloat
-    public fileprivate(set) var text: String
+    public var fieldStyle: QMultiTextFieldStyleSheet
+    public var maximumNumberOfCharecters: UInt
+    public var maximumNumberOfLines: UInt
+    public var minimumHeight: CGFloat
+    public var maximumHeight: CGFloat
+    public var height: CGFloat
+    public var text: String
     public var isValid: Bool {
         get {
             guard let validator = self.fieldStyle.validator else { return true }
             return validator.validate(self.text)
         }
     }
-    public fileprivate(set) var isEditing: Bool
-    public private(set) var shouldBeginEditing: ShouldClosure?
-    public private(set) var beginEditing: Closure?
-    public private(set) var editing: Closure?
-    public private(set) var shouldEndEditing: ShouldClosure?
-    public private(set) var endEditing: Closure?
-    public private(set) var changedHeight: Closure?
+    public var isEditing: Bool
+    public var shouldBeginEditing: ShouldClosure?
+    public var beginEditing: Closure?
+    public var editing: Closure?
+    public var shouldEndEditing: ShouldClosure?
+    public var endEditing: Closure?
+    public var changedHeight: Closure?
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,

@@ -7,25 +7,25 @@ open class QTextFieldComposable : QComposable {
     public typealias ShouldClosure = (_ composable: QTextFieldComposable) -> Bool
     public typealias Closure = (_ composable: QTextFieldComposable) -> Void
 
-    public private(set) var field: QTextFieldStyleSheet
-    public private(set) var height: CGFloat
-    public fileprivate(set) var text: String
+    public var field: QTextFieldStyleSheet
+    public var height: CGFloat
+    public var text: String
     public var isValid: Bool {
         get {
             guard let validator = self.field.validator else { return true }
             return validator.validate(self.text)
         }
     }
-    public fileprivate(set) var isEditing: Bool
-    public private(set) var shouldBeginEditing: ShouldClosure?
-    public private(set) var beginEditing: Closure?
-    public private(set) var editing: Closure?
-    public private(set) var shouldEndEditing: ShouldClosure?
-    public private(set) var endEditing: Closure?
-    public private(set) var shouldClear: ShouldClosure?
-    public private(set) var pressedClear: Closure?
-    public private(set) var shouldReturn: ShouldClosure?
-    public private(set) var pressedReturn: Closure?
+    public var isEditing: Bool
+    public var shouldBeginEditing: ShouldClosure?
+    public var beginEditing: Closure?
+    public var editing: Closure?
+    public var shouldEndEditing: ShouldClosure?
+    public var endEditing: Closure?
+    public var shouldClear: ShouldClosure?
+    public var pressedClear: Closure?
+    public var shouldReturn: ShouldClosure?
+    public var pressedReturn: Closure?
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,

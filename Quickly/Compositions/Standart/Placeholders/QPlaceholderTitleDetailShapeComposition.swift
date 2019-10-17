@@ -4,16 +4,16 @@
 
 open class QPlaceholderTitleDetailShapeComposable : QComposable {
     
-    public private(set) var titleStyle: QPlaceholderStyleSheet
-    public private(set) var titleHeight: CGFloat
-    public private(set) var titleSpacing: CGFloat
+    public var titleStyle: QPlaceholderStyleSheet
+    public var titleHeight: CGFloat
+    public var titleSpacing: CGFloat
     
-    public private(set) var detailStyle: QPlaceholderStyleSheet
-    public private(set) var detailHeight: CGFloat
+    public var detailStyle: QPlaceholderStyleSheet
+    public var detailHeight: CGFloat
     
-    public private(set) var shapeModel: QShapeView.Model
-    public private(set) var shapeWidth: CGFloat
-    public private(set) var shapeSpacing: CGFloat
+    public var shapeModel: QShapeView.Model
+    public var shapeWidth: CGFloat
+    public var shapeSpacing: CGFloat
     
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,

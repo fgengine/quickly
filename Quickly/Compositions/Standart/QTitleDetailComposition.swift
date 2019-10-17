@@ -4,9 +4,9 @@
 
 open class QTitleDetailComposable : QComposable {
 
-    public private(set) var titleStyle: QLabelStyleSheet
-    public private(set) var titleSpacing: CGFloat
-    public private(set) var detailStyle: QLabelStyleSheet
+    public var titleStyle: QLabelStyleSheet
+    public var titleSpacing: CGFloat
+    public var detailStyle: QLabelStyleSheet
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,

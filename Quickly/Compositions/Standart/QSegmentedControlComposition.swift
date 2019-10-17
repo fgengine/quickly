@@ -6,10 +6,10 @@ open class QSegmentedControlComposable : QComposable {
 
     public typealias Closure = (_ composable: QSegmentedControlComposable) -> Void
 
-    public private(set) var segmentStyle: QSegmentedControlStyleSheet
-    public fileprivate(set) var segmentSelectedItem: QSegmentedControl.Item?
-    public private(set) var segmentHeight: CGFloat
-    public private(set) var segmentChanged: Closure
+    public var segmentStyle: QSegmentedControlStyleSheet
+    public var segmentSelectedItem: QSegmentedControl.Item?
+    public var segmentHeight: CGFloat
+    public var segmentChanged: Closure
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,

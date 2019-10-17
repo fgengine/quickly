@@ -4,8 +4,8 @@
 
 open class QSpinnerComposable : QComposable {
     
-    public private(set) var size: CGFloat
-    public fileprivate(set) var isAnimating: Bool
+    public var size: CGFloat
+    public var isAnimating: Bool
     
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
@@ -21,7 +21,7 @@ open class QSpinnerComposable : QComposable {
 
 open class QSpinnerComposition< Composable: QSpinnerComposable, Spinner: QSpinnerView > : QComposition< Composable > {
 
-    lazy public private(set) var spinnerView: QSpinnerView = {
+    lazy public var spinnerView: QSpinnerView = {
         let view = Spinner()
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)

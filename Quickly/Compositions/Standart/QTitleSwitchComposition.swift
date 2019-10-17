@@ -6,13 +6,13 @@ open class QTitleSwitchComposable : QComposable {
 
     public typealias Closure = (_ composable: QTitleSwitchComposable) -> Void
 
-    public private(set) var titleStyle: QLabelStyleSheet
+    public var titleStyle: QLabelStyleSheet
 
-    public private(set) var switchStyle: QSwitchStyleSheet
-    public private(set) var switchHeight: CGFloat
-    public private(set) var switchSpacing: CGFloat
-    public fileprivate(set) var switchIsOn: Bool
-    public private(set) var switchChanged: Closure
+    public var switchStyle: QSwitchStyleSheet
+    public var switchHeight: CGFloat
+    public var switchSpacing: CGFloat
+    public var switchIsOn: Bool
+    public var switchChanged: Closure
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
