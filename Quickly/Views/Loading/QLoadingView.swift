@@ -4,7 +4,7 @@
 
 open class QLoadingView : QView, IQLoadingView {
     
-    public var delegate: IQLoadingViewDelegate?
+    public weak var delegate: IQLoadingViewDelegate?
     
     public var showDuration: TimeInterval = 0.2
     public var hideDuration: TimeInterval = 0.2
