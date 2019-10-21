@@ -4,10 +4,8 @@
 
 open class QMultiTextFieldStyleSheet : QDisplayStyleSheet {
     
-    public var requireValidator: Bool
     public var validator: IQInputValidator?
     public var form: IQFieldForm?
-    public var formatter: IQStringFormatter?
     public var textInsets: UIEdgeInsets
     public var textStyle: IQTextStyle?
     public var placeholderInsets: UIEdgeInsets
@@ -30,10 +28,8 @@ open class QMultiTextFieldStyleSheet : QDisplayStyleSheet {
     public var toolbarActions: QFieldAction
     
     public init(
-        requireValidator: Bool = false,
         validator: IQInputValidator? = nil,
         form: IQFieldForm? = nil,
-        formatter: IQStringFormatter? = nil,
         textInsets: UIEdgeInsets = UIEdgeInsets.zero,
         textStyle: IQTextStyle? = nil,
         placeholderInsets: UIEdgeInsets = UIEdgeInsets.zero,
@@ -60,10 +56,8 @@ open class QMultiTextFieldStyleSheet : QDisplayStyleSheet {
         border: QViewBorder = .none,
         shadow: QViewShadow? = nil
     ) {
-        self.requireValidator = requireValidator
         self.validator = validator
         self.form = form
-        self.formatter = formatter
         self.textInsets = textInsets
         self.textStyle = textStyle
         self.placeholderInsets = placeholderInsets
@@ -95,10 +89,8 @@ open class QMultiTextFieldStyleSheet : QDisplayStyleSheet {
     }
     
     public init(_ styleSheet: QMultiTextFieldStyleSheet) {
-        self.requireValidator = styleSheet.requireValidator
         self.validator = styleSheet.validator
         self.form = styleSheet.form
-        self.formatter = styleSheet.formatter
         self.textInsets = styleSheet.textInsets
         self.textStyle = styleSheet.textStyle
         self.placeholderInsets = styleSheet.placeholderInsets

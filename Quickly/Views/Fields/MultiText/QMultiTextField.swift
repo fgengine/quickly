@@ -18,7 +18,6 @@ public class QMultiTextField : QDisplayView, IQField {
     public typealias ShouldClosure = (_ multiTextField: QMultiTextField) -> Bool
     public typealias Closure = (_ multiTextField: QMultiTextField) -> Void
     
-    public var requireValidator: Bool = false
     public var validator: IQInputValidator? {
         willSet { self._field.delegate = nil }
         didSet {self._field.delegate = self._fieldDelegate }
@@ -32,45 +31,6 @@ public class QMultiTextField : QDisplayView, IQField {
                 if let form = self.form {
                     form.add(field: self)
                 }
-            }
-        }
-    }
-    public var formatter: IQStringFormatter? {
-        willSet {
-            if let formatter = self.formatter {
-                if let text = self._field.text {
-                    var caret: Int
-                    if let selected = self._field.selectedTextRange {
-                        caret = self._field.offset(from: self._field.beginningOfDocument, to: selected.end)
-                    } else {
-                        caret = text.count
-                    }
-                    self._field.text = formatter.unformat(text, caret: &caret)
-                    if let position = self._field.position(from: self._field.beginningOfDocument, offset: caret) {
-                        self._field.selectedTextRange = self._field.textRange(from: position, to: position)
-                    }
-                }
-            }
-        }
-        didSet {
-            if let formatter = self.formatter {
-                if let text = self._field.text {
-                    var caret: Int
-                    if let selected = self._field.selectedTextRange {
-                        caret = self._field.offset(from: self._field.beginningOfDocument, to: selected.end)
-                    } else {
-                        caret = text.count
-                    }
-                    self._field.text = formatter.format(text, caret: &caret)
-                    if let position = self._field.position(from: self._field.beginningOfDocument, offset: caret) {
-                        self._field.selectedTextRange = self._field.textRange(from: position, to: position)
-                    }
-                    self.textHeight = self._textHeight()
-                }
-            }
-            self._updatePlaceholderVisibility()
-            if let form = self.form {
-                form.changed(field: self)
             }
         }
     }
@@ -106,20 +66,7 @@ public class QMultiTextField : QDisplayView, IQField {
     }
     public var unformatText: String {
         set(value) {
-            if let formatter = self.formatter {
-                var caret: Int
-                if let selected = self._field.selectedTextRange {
-                    caret = self._field.offset(from: self._field.beginningOfDocument, to: selected.end)
-                } else {
-                    caret = text.count
-                }
-                self._field.text = formatter.format(value, caret: &caret)
-                if let position = self._field.position(from: self._field.beginningOfDocument, offset: caret) {
-                    self._field.selectedTextRange = self._field.textRange(from: position, to: position)
-                }
-            } else {
-                self._field.text = value
-            }
+            self._field.text = value
             self._updatePlaceholderVisibility()
             self.textHeight = self._textHeight()
             if let form = self.form {
@@ -127,17 +74,10 @@ public class QMultiTextField : QDisplayView, IQField {
             }
         }
         get {
-            var result: String
             if let text = self._field.text {
-                if let formatter = self.formatter {
-                    result = formatter.unformat(text)
-                } else {
-                    result = text
-                }
-            } else {
-                result = ""
+                return text
             }
-            return result
+            return ""
         }
     }
     public var placeholderInsets: UIEdgeInsets = UIEdgeInsets.zero {
@@ -290,10 +230,8 @@ public class QMultiTextField : QDisplayView, IQField {
     public func apply(_ styleSheet: QMultiTextFieldStyleSheet) {
         self.apply(styleSheet as QDisplayStyleSheet)
         
-        self.requireValidator = styleSheet.requireValidator
         self.validator = styleSheet.validator
         self.form = styleSheet.form
-        self.formatter = styleSheet.formatter
         self.textInsets = styleSheet.textInsets
         self.textStyle = styleSheet.textStyle
         self.placeholderInsets = styleSheet.placeholderInsets
@@ -469,7 +407,6 @@ private extension QMultiTextField {
         
         public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
             guard let field = self.field else { return true }
-            var caret = range.location + text.count
             var sourceText = textView.text ?? ""
             if let sourceTextRange = sourceText.range(from: range) {
                 sourceText = sourceText.replacingCharacters(in: sourceTextRange, with: text)
@@ -493,58 +430,36 @@ private extension QMultiTextField {
                     }
                 }
             }
-            if isValid == true {
-                var sourceUnformat: String
-                if let formatter = field.formatter {
-                    sourceUnformat = formatter.unformat(sourceText, caret: &caret)
-                } else {
-                    sourceUnformat = sourceText
-                }
-                if let validator = field.validator {
-                    isValid = validator.validate(sourceUnformat)
-                }
-                if field.requireValidator == false || text.isEmpty == true || isValid == true {
-                    var location: UITextPosition?
-                    if let formatter = field.formatter {
-                        let format = formatter.format(sourceUnformat, caret: &caret)
-                        location = textView.position(from: textView.beginningOfDocument, offset: caret)
-                        textView.text = format
-                    } else {
-                        location = textView.position(from: textView.beginningOfDocument, offset: caret)
-                        textView.text = sourceUnformat
-                    }
-                    if let location = location {
-                        textView.selectedTextRange = textView.textRange(from: location, to: location)
-                    }
-                    field._updatePlaceholderVisibility()
-                    let height = field._textHeight()
-                    if abs(field.textHeight - height) > CGFloat.leastNonzeroMagnitude {
-                        field.textHeight = height
-                        UIView.animate(withDuration: 0.1, animations: {
-                            if let onChangedHeight = field.onChangedHeight {
-                                onChangedHeight(field)
-                            }
-                            field._observer.notify({ (observer) in
-                                observer.changed(multiTextField: field, height: height)
-                            })
-                            textView.scrollRangeToVisible(textView.selectedRange)
-                        }, completion: { _ in
-                            textView.scrollRangeToVisible(textView.selectedRange)
-                        })
-                    }
-                    NotificationCenter.default.post(name: UITextView.textDidChangeNotification, object: textView)
-                    if let closure = field.onEditing {
-                        closure(field)
+            return isValid
+        }
+        
+        public func textViewDidChange(_ textView: UITextView) {
+            guard let field = self.field else { return }
+            field._updatePlaceholderVisibility()
+            let height = field._textHeight()
+            if abs(field.textHeight - height) > CGFloat.leastNonzeroMagnitude {
+                field.textHeight = height
+                UIView.animate(withDuration: 0.1, animations: {
+                    if let onChangedHeight = field.onChangedHeight {
+                        onChangedHeight(field)
                     }
                     field._observer.notify({ (observer) in
-                        observer.editing(multiTextField: field)
+                        observer.changed(multiTextField: field, height: height)
                     })
-                    if let form = field.form {
-                        form.changed(field: field)
-                    }
-                }
+                    textView.scrollRangeToVisible(textView.selectedRange)
+                }, completion: { _ in
+                    textView.scrollRangeToVisible(textView.selectedRange)
+                })
             }
-            return false
+            if let closure = field.onEditing {
+                closure(field)
+            }
+            field._observer.notify({ (observer) in
+                observer.editing(multiTextField: field)
+            })
+            if let form = field.form {
+                form.changed(field: field)
+            }
         }
         
     }
