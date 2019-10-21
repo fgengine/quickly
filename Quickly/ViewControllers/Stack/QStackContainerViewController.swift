@@ -499,6 +499,7 @@ private extension QStackContainerViewController {
                 self._viewControllers.remove(at: index)
             }
             self._disappear(viewController: vc)
+            self._remove(childViewController: vc)
         }
         self.setNeedUpdateOrientations()
         self.setNeedUpdateStatusBar()
