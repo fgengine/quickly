@@ -29,6 +29,14 @@ public extension QDatabase {
             self.expression = expression
         }
         
+        public init(
+            _ column: QDatabase.Column,
+            _ `operator`: Operator,
+            _ value: IQDatabaseInputValue
+        ) {
+            self.init(column, `operator`, LiteralExpression(value))
+        }
+        
         public func inputValues() -> [IQDatabaseInputValue] {
             return self.expression.inputValues()
         }
@@ -41,7 +49,7 @@ public extension QDatabase {
 
 }
 
-// MARK: - Internal • QDatabase.CompareExpression.Operator
+// MARK: Internal • QDatabase.CompareExpression.Operator
 
 internal extension QDatabase.CompareExpression.Operator {
     

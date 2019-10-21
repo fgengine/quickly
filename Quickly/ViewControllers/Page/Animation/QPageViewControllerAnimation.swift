@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QPageViewControllerForwardAnimation : IQPageViewControllerAnimation {
+public final class QPageViewControllerForwardAnimation : IQPageViewControllerAnimation {
     
     public var overlapping: CGFloat
     public var acceleration: CGFloat
@@ -67,7 +67,7 @@ public class QPageViewControllerForwardAnimation : IQPageViewControllerAnimation
 
 }
 
-public class QPageViewControllerBackwardAnimation : IQPageViewControllerAnimation {
+public final class QPageViewControllerBackwardAnimation : IQPageViewControllerAnimation {
     
     public var overlapping: CGFloat
     public var acceleration: CGFloat

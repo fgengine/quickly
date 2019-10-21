@@ -13,9 +13,8 @@ open class QGroupbar : QView {
     public typealias ItemType = IQCollectionController.Cell
     
     public weak var delegate: QGroupbarDelegate?
-    public var edgeInsets: UIEdgeInsets {
-        set(value) { self._collectionView.contentInset = value }
-        get { return self._collectionView.contentInset }
+    public var edgeInsets: UIEdgeInsets = UIEdgeInsets() {
+        didSet(oldValue) { if self.edgeInsets != oldValue { self.setNeedsUpdateConstraints() } }
     }
     public private(set) var cellTypes: [ItemType.Type]
     public var items: [QGroupbarItem] {
@@ -75,7 +74,7 @@ open class QGroupbar : QView {
     }
     
     private lazy var _collectionView: QCollectionView = {
-        let view = QCollectionView(frame: self.bounds, collectionViewLayout: self._collectionLayout)
+        let view = QCollectionView(frame: self.bounds.inset(by: self.edgeInsets), collectionViewLayout: self._collectionLayout)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
@@ -138,9 +137,9 @@ open class QGroupbar : QView {
         super.updateConstraints()
         
         var constraints: [NSLayoutConstraint] = [
-            self._collectionView.leadingLayout == self.leadingLayout,
-            self._collectionView.trailingLayout == self.trailingLayout,
-            self._collectionView.bottomLayout == self.bottomLayout
+            self._collectionView.leadingLayout == self.leadingLayout.offset(self.edgeInsets.left),
+            self._collectionView.trailingLayout == self.trailingLayout.offset(-self.edgeInsets.right),
+            self._collectionView.bottomLayout == self.bottomLayout.offset(-self.edgeInsets.bottom)
         ]
         if let backgroundView = self.backgroundView {
             constraints.append(contentsOf: [
@@ -151,7 +150,7 @@ open class QGroupbar : QView {
         }
         if let separatorView = self.separatorView {
             constraints.append(contentsOf: [
-                separatorView.topLayout == self.topLayout,
+                separatorView.topLayout == self.topLayout.offset(self.edgeInsets.top),
                 separatorView.leadingLayout == self.leadingLayout,
                 separatorView.trailingLayout == self.trailingLayout,
                 self._collectionView.topLayout == separatorView.bottomLayout
@@ -160,7 +159,7 @@ open class QGroupbar : QView {
                 constraints.append(backgroundView.topLayout == separatorView.bottomLayout)
             }
         } else {
-            constraints.append(self._collectionView.topLayout == self.topLayout)
+            constraints.append(self._collectionView.topLayout == self.topLayout.offset(self.edgeInsets.top))
         }
         self._constraints = constraints
     }

@@ -4,13 +4,13 @@
 
 open class QTitleComposable : QComposable {
 
-    public var title: QLabelStyleSheet
+    public var titleStyle: QLabelStyleSheet
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        title: QLabelStyleSheet
+        titleStyle: QLabelStyleSheet
     ) {
-        self.title = title
+        self.titleStyle = titleStyle
         super.init(edgeInsets: edgeInsets)
     }
 
@@ -18,7 +18,7 @@ open class QTitleComposable : QComposable {
 
 open class QTitleComposition< Composable: QTitleComposable > : QComposition< Composable > {
 
-    private lazy var titleLabel: QLabel = {
+    public private(set) lazy var titleView: QLabel = {
         let view = QLabel(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
@@ -34,7 +34,7 @@ open class QTitleComposition< Composable: QTitleComposable > : QComposition< Com
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         let availableWidth = spec.containerSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
-        let textSize = composable.title.size(width: availableWidth)
+        let textSize = composable.titleStyle.size(width: availableWidth)
         return CGSize(
             width: spec.containerSize.width,
             height: composable.edgeInsets.top + textSize.height + composable.edgeInsets.bottom
@@ -45,16 +45,16 @@ open class QTitleComposition< Composable: QTitleComposable > : QComposition< Com
         if self._edgeInsets != composable.edgeInsets {
             self._edgeInsets = composable.edgeInsets
             self._constraints = [
-                self.titleLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
-                self.titleLabel.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
-                self.titleLabel.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
-                self.titleLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
+                self.titleView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.titleView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.titleView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                self.titleView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
             ]
         }
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        self.titleLabel.apply(composable.title)
+        self.titleView.apply(composable.titleStyle)
     }
 
 }

@@ -4,8 +4,8 @@
 
 open class QCollectionItem : IQCollectionItem {
 
-    public weak var section: IQCollectionSection?
-    public var indexPath: IndexPath?
+    public private(set) weak var section: IQCollectionSection?
+    public private(set) var indexPath: IndexPath?
     public var canSelect: Bool = true
     public var canDeselect: Bool = true
     public var canMove: Bool = false

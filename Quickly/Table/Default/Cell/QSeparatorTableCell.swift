@@ -18,7 +18,7 @@ open class QSeparatorTableRow : QBackgroundColorTableRow {
 
 open class QSeparatorTableCell< RowType: QSeparatorTableRow > : QBackgroundColorTableCell< RowType > {
 
-    private var _separator: QView!
+    private var lineView: QView!
 
     private var _edgeInsets: UIEdgeInsets?
 
@@ -34,9 +34,9 @@ open class QSeparatorTableCell< RowType: QSeparatorTableRow > : QBackgroundColor
     open override func setup() {
         super.setup()
 
-        self._separator = QView(frame: self.contentView.bounds)
-        self._separator.translatesAutoresizingMaskIntoConstraints = false
-        self.contentView.addSubview(self._separator)
+        self.lineView = QView(frame: self.contentView.bounds)
+        self.lineView.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(self.lineView)
     }
 
     open override func set(row: RowType, spec: IQContainerSpec, animated: Bool) {
@@ -45,13 +45,13 @@ open class QSeparatorTableCell< RowType: QSeparatorTableRow > : QBackgroundColor
         if self._edgeInsets != row.edgeInsets {
             self._edgeInsets = row.edgeInsets
             self._constraints = [
-                self._separator.topLayout == self.contentView.topLayout.offset(row.edgeInsets.top),
-                self._separator.leadingLayout == self.contentView.leadingLayout.offset(row.edgeInsets.left),
-                self._separator.trailingLayout == self.contentView.trailingLayout.offset(-row.edgeInsets.right),
-                self._separator.bottomLayout == self.contentView.bottomLayout.offset(-row.edgeInsets.bottom)
+                self.lineView.topLayout == self.contentView.topLayout.offset(row.edgeInsets.top),
+                self.lineView.leadingLayout == self.contentView.leadingLayout.offset(row.edgeInsets.left),
+                self.lineView.trailingLayout == self.contentView.trailingLayout.offset(-row.edgeInsets.right),
+                self.lineView.bottomLayout == self.contentView.bottomLayout.offset(-row.edgeInsets.bottom)
             ]
         }
-        self._separator.backgroundColor = row.color
+        self.lineView.backgroundColor = row.color
     }
 
 }

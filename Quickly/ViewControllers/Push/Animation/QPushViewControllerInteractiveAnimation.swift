@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QPushViewControllerInteractiveDismissAnimation : IQPushViewControllerInteractiveAnimation {
+public final class QPushViewControllerInteractiveDismissAnimation : IQPushViewControllerInteractiveAnimation {
 
     public var viewController: IQPushViewController!
     public var position: CGPoint

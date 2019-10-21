@@ -21,7 +21,7 @@ open class QSpinnerComposable : QComposable {
 
 open class QSpinnerComposition< Composable: QSpinnerComposable, Spinner: QSpinnerView > : QComposition< Composable > {
 
-    lazy public private(set) var spinnerView: QSpinnerView = {
+    lazy public var spinnerView: QSpinnerView = {
         let view = Spinner()
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)

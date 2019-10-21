@@ -6,43 +6,43 @@ open class QPlaceholderImageTitleComposable : QComposable {
 
     public var direction: QViewDirection
     
-    public var image: QImageViewStyleSheet
+    public var imageStyle: QImageViewStyleSheet
     public var imageSize: CGSize
     public var imageSpacing: CGFloat
 
-    public var title: QPlaceholderStyleSheet
+    public var titleStyle: QPlaceholderStyleSheet
     public var titleHeight: CGFloat
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        image: QImageViewStyleSheet,
+        imageStyle: QImageViewStyleSheet,
         imageWidth: CGFloat = 96,
         imageSpacing: CGFloat = 4,
-        title: QPlaceholderStyleSheet,
+        titleStyle: QPlaceholderStyleSheet,
         titleHeight: CGFloat
     ) {
         self.direction = .horizontal
-        self.image = image
+        self.imageStyle = imageStyle
         self.imageSize = CGSize(width: imageWidth, height: imageWidth)
         self.imageSpacing = imageSpacing
-        self.title = title
+        self.titleStyle = titleStyle
         self.titleHeight = titleHeight
         super.init(edgeInsets: edgeInsets)
     }
     
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        image: QImageViewStyleSheet,
+        imageStyle: QImageViewStyleSheet,
         imageHeight: CGFloat = 96,
         imageSpacing: CGFloat = 8,
-        title: QPlaceholderStyleSheet,
+        titleStyle: QPlaceholderStyleSheet,
         titleHeight: CGFloat
     ) {
         self.direction = .vertical
-        self.image = image
+        self.imageStyle = imageStyle
         self.imageSize = CGSize(width: imageHeight, height: imageHeight)
         self.imageSpacing = imageSpacing
-        self.title = title
+        self.titleStyle = titleStyle
         self.titleHeight = titleHeight
         super.init(edgeInsets: edgeInsets)
     }
@@ -51,13 +51,13 @@ open class QPlaceholderImageTitleComposable : QComposable {
 
 open class QPlaceholderImageTitleComposition< Composable: QPlaceholderImageTitleComposable > : QComposition< Composable > {
 
-    private lazy var imageView: QImageView = {
+    public private(set) lazy var imageView: QImageView = {
         let view = QImageView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var titleLabel: QPlaceholderView = {
+    public private(set) lazy var titleView: QPlaceholderView = {
         let view = QPlaceholderView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
@@ -79,8 +79,8 @@ open class QPlaceholderImageTitleComposition< Composable: QPlaceholderImageTitle
         didSet { self.imageView.addConstraints(self._imageConstraints) }
     }
     private var _titleConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.titleLabel.removeConstraints(self._titleConstraints) }
-        didSet { self.titleLabel.addConstraints(self._titleConstraints) }
+        willSet { self.titleView.removeConstraints(self._titleConstraints) }
+        didSet { self.titleView.addConstraints(self._titleConstraints) }
     }
 
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
@@ -120,21 +120,21 @@ open class QPlaceholderImageTitleComposition< Composable: QPlaceholderImageTitle
                 self._constraints = [
                     self.imageView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
                     self.imageView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
-                    self.imageView.trailingLayout == self.titleLabel.leadingLayout.offset(-composable.imageSpacing),
+                    self.imageView.trailingLayout == self.titleView.leadingLayout.offset(-composable.imageSpacing),
                     self.imageView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
-                    self.titleLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
-                    self.titleLabel.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
-                    self.titleLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
+                    self.titleView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                    self.titleView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                    self.titleView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
                 ]
             case .vertical:
                 self._constraints = [
                     self.imageView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
                     self.imageView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
                     self.imageView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
-                    self.imageView.bottomLayout == self.titleLabel.topLayout.offset(-composable.edgeInsets.bottom),
-                    self.titleLabel.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
-                    self.titleLabel.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
-                    self.titleLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
+                    self.imageView.bottomLayout == self.titleView.topLayout.offset(-composable.edgeInsets.bottom),
+                    self.titleView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                    self.titleView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                    self.titleView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
                 ]
             }
         }
@@ -153,14 +153,14 @@ open class QPlaceholderImageTitleComposition< Composable: QPlaceholderImageTitle
         }
         if changedDirection == true || changedTitleHeight == true {
             self._titleConstraints = [
-                self.titleLabel.heightLayout == composable.titleHeight
+                self.titleView.heightLayout == composable.titleHeight
             ]
         }
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        self.imageView.apply(composable.image)
-        self.titleLabel.apply(composable.title)
+        self.imageView.apply(composable.imageStyle)
+        self.titleView.apply(composable.titleStyle)
     }
 
 }

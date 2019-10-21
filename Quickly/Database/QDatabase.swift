@@ -2,27 +2,9 @@
 //  Quickly
 //
 
-#if os(iOS)
-    #if (arch(i386) || arch(x86_64))
-        import QuicklySqlite3IOSSimulator
-    #else
-        import QuicklySqlite3IOS
-    #endif
-#elseif os(tvOS)
-    #if (arch(i386) || arch(x86_64))
-        import QuicklySqlite3TvOSSimulator
-    #else
-        import QuicklySqlite3TvOS
-    #endif
-#elseif os(watchOS)
-    #if (arch(i386) || arch(x86_64))
-        import QuicklySqlite3WatchOSSimulator
-    #else
-        import QuicklySqlite3WatchOS
-    #endif
-#endif
+import QuicklySqlite3
 
-// MARK: - QDatabase
+// MARK: QDatabase
 
 public class QDatabase {
     
@@ -122,7 +104,7 @@ public class QDatabase {
         
     }
     
-    public class Statement {
+    public final class Statement {
         
         public enum Error : Swift.Error {
             case cast(index: Int)
@@ -211,7 +193,7 @@ public class QDatabase {
     
 }
 
-// MARK: - Public • QDatabase
+// MARK: Public • QDatabase
 
 public extension QDatabase {
     
@@ -230,7 +212,7 @@ public extension QDatabase {
     
 }
 
-// MARK: - Public • QDatabase • Table
+// MARK: Public • QDatabase • Table
 
 public extension QDatabase {
     
@@ -271,7 +253,7 @@ public extension QDatabase {
 
 }
 
-// MARK: - Public • QDatabase • Column
+// MARK: Public • QDatabase • Column
 
 public extension QDatabase {
     
@@ -306,7 +288,7 @@ public extension QDatabase {
     
 }
 
-// MARK: - Public • QDatabase • Insert
+// MARK: Public • QDatabase • Insert
 
 public extension QDatabase {
     
@@ -323,7 +305,7 @@ public extension QDatabase {
     
 }
 
-// MARK: - Public • QDatabase • Update
+// MARK: Public • QDatabase • Update
 
 public extension QDatabase {
     
@@ -354,7 +336,7 @@ public extension QDatabase {
     
 }
 
-// MARK: - Public • QDatabase • Delete
+// MARK: Public • QDatabase • Delete
 
 public extension QDatabase {
     
@@ -384,7 +366,7 @@ public extension QDatabase {
     
 }
 
-// MARK: - Public • QDatabase • Select
+// MARK: Public • QDatabase • Select
 
 public extension QDatabase {
     
@@ -446,7 +428,7 @@ public extension QDatabase {
     
 }
 
-// MARK: - Public • QDatabase.Column : Hashable
+// MARK: Public • QDatabase.Column : Hashable
 
 extension QDatabase.Column : Hashable {
     
@@ -464,7 +446,7 @@ extension QDatabase.Column : Hashable {
     
 }
 
-// MARK: - Public • QDatabase.Statement
+// MARK: Public • QDatabase.Statement
 
 public extension QDatabase.Statement {
     
@@ -509,7 +491,7 @@ public extension QDatabase.Statement {
     
 }
 
-// MARK: - Internal • QDatabase
+// MARK: Internal • QDatabase
 
 internal extension QDatabase {
     
@@ -522,7 +504,7 @@ internal extension QDatabase {
     
 }
 
-// MARK: - Internal QDatabase.Location
+// MARK: Internal QDatabase.Location
 
 internal extension QDatabase.Location {
     
@@ -538,7 +520,7 @@ internal extension QDatabase.Location {
     
 }
 
-// MARK: - Internal QDatabase.DataType
+// MARK: Internal QDatabase.DataType
 
 internal extension QDatabase.DataType {
     
@@ -565,7 +547,7 @@ internal extension QDatabase.DataType {
     
 }
 
-// MARK: - Internal QDatabase.OrderBy.Mode
+// MARK: Internal QDatabase.OrderBy.Mode
 
 internal extension QDatabase.OrderBy.Mode {
     
@@ -578,7 +560,7 @@ internal extension QDatabase.OrderBy.Mode {
     
 }
 
-// MARK: - Internal • QDatabase.Table
+// MARK: Internal • QDatabase.Table
 
 internal extension QDatabase.Table {
     
@@ -592,7 +574,7 @@ internal extension QDatabase.Table {
     
 }
 
-// MARK: - Internal • QDatabase.Column
+// MARK: Internal • QDatabase.Column
 
 internal extension QDatabase.Column {
     
@@ -611,7 +593,7 @@ internal extension QDatabase.Column {
     
 }
 
-// MARK: - Internal • QDatabase.Statement
+// MARK: Internal • QDatabase.Statement
 
 internal extension QDatabase.Statement {
     
@@ -843,7 +825,7 @@ internal extension QDatabase.Statement {
     
 }
 
-// MARK: - Private
+// MARK: Private
 
 private extension QDatabase {
     

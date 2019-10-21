@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QHamburgerViewControllerInteractiveAnimation : IQHamburgerViewControllerInteractiveAnimation {
+public final class QHamburgerViewControllerInteractiveAnimation : IQHamburgerViewControllerInteractiveAnimation {
     
     public var contentView: UIView!
     public var currentState: QHamburgerViewControllerState
@@ -168,6 +168,8 @@ public class QHamburgerViewControllerInteractiveAnimation : IQHamburgerViewContr
     }
     
 }
+
+// MARK: Private
 
 private extension QHamburgerViewControllerInteractiveAnimation {
     

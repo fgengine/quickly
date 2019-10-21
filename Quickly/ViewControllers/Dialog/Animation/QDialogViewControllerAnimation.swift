@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QDialogViewControllerPresentAnimation : IQDialogViewControllerFixedAnimation {
+public final class QDialogViewControllerPresentAnimation : IQDialogViewControllerFixedAnimation {
     
     public var duration: TimeInterval
     public var verticalOffset: CGFloat
@@ -45,7 +45,7 @@ public class QDialogViewControllerPresentAnimation : IQDialogViewControllerFixed
 
 }
 
-public class QDialogViewControllerDismissAnimation : IQDialogViewControllerFixedAnimation {
+public final class QDialogViewControllerDismissAnimation : IQDialogViewControllerFixedAnimation {
     
     public var duration: TimeInterval
     public var verticalOffset: CGFloat

@@ -123,7 +123,7 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
         self.field.unformatText = composable.text
     }
     
-    // MARK: - IQCompositionEditable
+    // MARK: IQCompositionEditable
     
     open func beginEditing() {
         self.field.beginEditing()
@@ -133,7 +133,7 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
         self.field.endEditing(false)
     }
     
-    // MARK: - Private
+    // MARK: Private
 
     private func _shouldBeginEditing() -> Bool {
         guard let composable = self.composable else { return true }

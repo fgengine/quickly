@@ -43,9 +43,7 @@ public class QToolbar : UIToolbar {
         if let styleSheet = styleSheet {
             self.apply(styleSheet)
         }
-        if items.count > 0 {
-            self.items = items
-        }
+        self.items = items
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -4,7 +4,7 @@
 
 open class QPickerCell< Type: IQPickerRow > : UIView, IQTypedPickerCell {
 
-    open var row: Type?
+    public private(set) var row: Type?
 
     public override init(frame: CGRect) {
         super.init(frame: frame)

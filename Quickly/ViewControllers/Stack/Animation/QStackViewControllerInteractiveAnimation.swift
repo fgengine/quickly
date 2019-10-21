@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QStackViewControllerinteractiveDismissAnimation : IQStackViewControllerInteractiveDismissAnimation {
+public final class QStackViewControllerinteractiveDismissAnimation : IQStackViewControllerInteractiveDismissAnimation {
 
     public var containerViewController: IQStackContainerViewController!
     public var shadow: QViewShadow

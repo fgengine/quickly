@@ -9,12 +9,17 @@ public extension Bundle {
             return self.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
         }
     }
+    var shortVersion: String? {
+        get {
+            return self.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
+        }
+    }
     var version: String? {
         get {
             return self.object(forInfoDictionaryKey: "CFBundleVersion") as? String
         }
     }
-    
+
     func containsUrlSheme(url: URL) -> Bool {
         var shemes: [String] = []
         guard let scheme = url.scheme else { return false }

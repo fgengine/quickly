@@ -17,23 +17,6 @@ open class QTableViewControllerFooterView : QView {
 
 open class QTableViewController : QViewController, IQTableControllerObserver, IQKeyboardObserver, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController {
 
-    public var contentOffset: CGPoint {
-        get {
-            guard let tableView = self.tableView else { return CGPoint.zero }
-            let contentOffset = tableView.contentOffset
-            let contentInset = tableView.contentInset
-            return CGPoint(
-                x: contentInset.left + contentOffset.x,
-                y: contentInset.top + contentOffset.y
-            )
-        }
-    }
-    public var contentSize: CGSize {
-        get {
-            guard let tableView = self.tableView else { return CGSize.zero }
-            return tableView.contentSize
-        }
-    }
     public private(set) var tableView: QTableView? {
         willSet {
             guard let tableView = self.tableView else { return }
@@ -244,12 +227,68 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
         loadingView.stop()
     }
     
-    // MARK: IQTableControllerObserver
+    // MARK: IQContentViewController
     
-    open func scroll(_ controller: IQTableController, tableView: UITableView) {
+    public var contentOffset: CGPoint {
+        get {
+            guard let tableView = self.tableView else { return CGPoint.zero }
+            let contentOffset = tableView.contentOffset
+            let contentInset = tableView.contentInset
+            return CGPoint(
+                x: contentInset.left + contentOffset.x,
+                y: contentInset.top + contentOffset.y
+            )
+        }
+    }
+    
+    public var contentSize: CGSize {
+        get {
+            guard let tableView = self.tableView else { return CGSize.zero }
+            return tableView.contentSize
+        }
+    }
+    
+    open func notifyBeginUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.beginUpdateContent()
+        }
+    }
+    
+    open func notifyUpdateContent() {
         if let viewController = self.contentOwnerViewController {
             viewController.updateContent()
         }
+    }
+    
+    open func notifyFinishUpdateContent(velocity: CGPoint) -> CGPoint? {
+        if let viewController = self.contentOwnerViewController {
+            return viewController.finishUpdateContent(velocity: velocity)
+        }
+        return nil
+    }
+    
+    open func notifyEndUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.endUpdateContent()
+        }
+    }
+    
+    // MARK: IQTableControllerObserver
+    
+    open func beginScroll(_ controller: IQTableController, tableView: UITableView) {
+        self.notifyBeginUpdateContent()
+    }
+    
+    open func scroll(_ controller: IQTableController, tableView: UITableView) {
+        self.notifyUpdateContent()
+    }
+    
+    open func finishScroll(_ controller: IQTableController, tableView: UITableView, velocity: CGPoint) -> CGPoint? {
+        return self.notifyFinishUpdateContent(velocity: velocity)
+    }
+    
+    open func endScroll(_ controller: IQTableController, tableView: UITableView) {
+        self.notifyEndUpdateContent()
     }
     
     open func update(_ controller: IQTableController) {
@@ -292,15 +331,19 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     
     open func didHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
     }
-    
-    // MARK: Private
+        
+}
+
+// MARK: Private
+
+private extension QTableViewController {
 
     @objc
-    private func _triggeredRefreshControl(_ sender: Any) {
+    func _triggeredRefreshControl(_ sender: Any) {
         self.triggeredRefreshControl()
     }
 
-    private func _updateRefreshControlState() {
+    func _updateRefreshControlState() {
         if let tableView = self.tableView {
             if self.refreshControlHidden == false && self.isPresented == true {
                 tableView.refreshControl = self._refreshControl
@@ -313,7 +356,7 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
         }
     }
     
-    private func _updateContentInsets(_ tableView: QTableView) {
+    func _updateContentInsets(_ tableView: QTableView) {
         let edgeInsets = self.adjustedContentInset
         let footerHeight = (self.footerView != nil) ? self.footerViewHeight : 0
         let oldContentInset = tableView.contentInset
@@ -348,11 +391,11 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
         }
     }
     
-    private func _updateFrame(loadingView: QLoadingViewType, bounds: CGRect) {
-        loadingView.frame = bounds.inset(by: self.inheritedEdgeInsets)
+    func _updateFrame(loadingView: QLoadingViewType, bounds: CGRect) {
+        loadingView.frame = bounds
     }
     
-    private func _footerViewFrame() -> CGRect {
+    func _footerViewFrame() -> CGRect {
         let bounds = self.view.bounds
         let edgeInsets = self._footerViewInsets()
         let height = self.footerViewHeight + edgeInsets.bottom
@@ -364,7 +407,7 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
         )
     }
     
-    private func _footerViewInsets() -> UIEdgeInsets {
+    func _footerViewInsets() -> UIEdgeInsets {
         let edgeInsets = self.adjustedContentInset
         return UIEdgeInsets(
             top: 0,
@@ -375,6 +418,8 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     }
     
 }
+
+// MARK: IQLoadingViewDelegate
 
 extension QTableViewController : IQLoadingViewDelegate {
     

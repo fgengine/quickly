@@ -6,9 +6,10 @@ open class QTitleButtonComposable : QComposable {
 
     public typealias Closure = (_ composable: QTitleButtonComposable) -> Void
 
-    public var title: QLabelStyleSheet
+    public var titleStyle: QLabelStyleSheet
 
-    public var button: QButtonStyleSheet
+    public var buttonStyle: QButtonStyleSheet
+    public var buttonIsHidden: Bool
     public var buttonHeight: CGFloat
     public var buttonSpacing: CGFloat
     public var buttonIsSpinnerAnimating: Bool
@@ -16,14 +17,16 @@ open class QTitleButtonComposable : QComposable {
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        title: QLabelStyleSheet,
-        button: QButtonStyleSheet,
+        titleStyle: QLabelStyleSheet,
+        buttonStyle: QButtonStyleSheet,
+        buttonIsHidden: Bool = false,
         buttonHeight: CGFloat = 44,
         buttonSpacing: CGFloat = 4,
         buttonPressed: @escaping Closure
     ) {
-        self.title = title
-        self.button = button
+        self.titleStyle = titleStyle
+        self.buttonStyle = buttonStyle
+        self.buttonIsHidden = buttonIsHidden
         self.buttonHeight = buttonHeight
         self.buttonSpacing = buttonSpacing
         self.buttonIsSpinnerAnimating = false
@@ -35,13 +38,13 @@ open class QTitleButtonComposable : QComposable {
 
 open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComposition< Composable > {
 
-    private lazy var titleLabel: QLabel = {
+    public private(set) lazy var titleView: QLabel = {
         let view = QLabel(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var button: QButton = {
+    public private(set) lazy var buttonView: QButton = {
         let view = QButton(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.setContentHuggingPriority(
@@ -57,6 +60,7 @@ open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComp
     }()
 
     private var _edgeInsets: UIEdgeInsets?
+    private var _buttonIsHidden: Bool?
     private var _buttonSpacing: CGFloat?
 
     private var _constraints: [NSLayoutConstraint] = [] {
@@ -66,7 +70,7 @@ open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComp
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         let availableWidth = spec.containerSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
-        let textSize = composable.title.size(width: availableWidth)
+        let textSize = composable.titleStyle.size(width: availableWidth)
         return CGSize(
             width: spec.containerSize.width,
             height: composable.edgeInsets.top + max(textSize.height, composable.buttonHeight) + composable.edgeInsets.bottom
@@ -74,49 +78,60 @@ open class QTitleButtonComposition< Composable: QTitleButtonComposable > : QComp
     }
     
     open override func preLayout(composable: Composable, spec: IQContainerSpec) {
-        if self._edgeInsets != composable.edgeInsets || self._buttonSpacing != composable.buttonSpacing {
+        if self._edgeInsets != composable.edgeInsets || self._buttonIsHidden != composable.buttonIsHidden || self._buttonSpacing != composable.buttonSpacing {
             self._edgeInsets = composable.edgeInsets
+            self._buttonIsHidden = composable.buttonIsHidden
             self._buttonSpacing = composable.buttonSpacing
-            self._constraints = [
-                self.titleLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
-                self.titleLabel.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
-                self.titleLabel.trailingLayout == self.button.leadingLayout.offset(-composable.buttonSpacing),
-                self.titleLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
-                self.button.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
-                self.button.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
-                self.button.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+            var constraints: [NSLayoutConstraint] = [
+                self.titleView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.titleView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.titleView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+                self.buttonView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.buttonView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+                self.buttonView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right)
             ]
+            if composable.buttonIsHidden == false {
+                constraints.append(contentsOf: [
+                    self.titleView.trailingLayout == self.buttonView.leadingLayout.offset(-composable.buttonSpacing)
+                ])
+            } else {
+                constraints.append(contentsOf: [
+                    self.titleView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right)
+                ])
+            }
+            self._constraints = constraints
         }
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        self.titleLabel.apply(composable.title)
-        self.button.apply(composable.button)
+        self.titleView.apply(composable.titleStyle)
+        self.buttonView.apply(composable.buttonStyle)
     }
     
     open override func postLayout(composable: Composable, spec: IQContainerSpec) {
+        self.buttonView.alpha = (composable.buttonIsHidden == false) ? 1 : 0
         if composable.buttonIsSpinnerAnimating == true {
-            self.button.startSpinner()
+            self.buttonView.startSpinner()
         } else {
-            self.button.stopSpinner()
+            self.buttonView.stopSpinner()
         }
     }
 
     public func isSpinnerAnimating() -> Bool {
-        return self.button.isSpinnerAnimating()
+        return self.buttonView.isSpinnerAnimating()
     }
 
     public func startSpinner() {
         if let composable = self.composable {
             composable.buttonIsSpinnerAnimating = true
-            self.button.startSpinner()
+            self.buttonView.startSpinner()
         }
     }
 
     public func stopSpinner() {
         if let composable = self.composable {
             composable.buttonIsSpinnerAnimating = false
-            self.button.stopSpinner()
+            self.buttonView.stopSpinner()
         }
     }
 

@@ -4,12 +4,6 @@
 
 open class QStackContainerViewController : QViewController, IQStackContainerViewController, IQModalContentViewController, IQHamburgerContentViewController {
 
-    public var contentOffset: CGPoint {
-        get { return CGPoint.zero }
-    }
-    public var contentSize: CGSize {
-        get { return CGSize.zero }
-    }
     open var viewControllers: [IQStackViewController] {
         set(value) { self.set(viewControllers: value, animated: false, completion: nil) }
         get { return self._viewControllers }
@@ -235,6 +229,21 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
         let stackViewController = QStackViewController(viewController: viewController)
         self.replace(viewController: stackViewController, animated: animated, completion: completion)
     }
+    
+    open func replaceAll(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        let popViewControllers = self.viewControllers.count > 1 ? self.viewControllers[1..<self.viewControllers.count] :  ArraySlice< IQStackViewController >()
+        self.push(viewController: viewController, animated: animated, completion: { [weak self] in
+            guard let self = self else { return }
+            for popViewController in popViewControllers {
+                self.pop(viewController: popViewController, animated: false)
+            }
+        })
+    }
+    
+    open func replaceAll(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        let stackViewController = QStackViewController(viewController: viewController)
+        self.replaceAll(viewController: stackViewController, animated: animated, completion: completion)
+    }
 
     open func pop(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         self._dismiss(viewController: viewController, animated: animated, completion: completion)
@@ -272,13 +281,48 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
         self.popTo(viewController: stackPageViewController, animated: animated, completion: completion)
     }
     
+    // MARK: IQContentViewController
+    
+    public var contentOffset: CGPoint {
+        get { return CGPoint.zero }
+    }
+    
+    public var contentSize: CGSize {
+        get { return CGSize.zero }
+    }
+    
+    open func notifyBeginUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.beginUpdateContent()
+        }
+    }
+    
+    open func notifyUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.updateContent()
+        }
+    }
+    
+    open func notifyFinishUpdateContent(velocity: CGPoint) -> CGPoint? {
+        if let viewController = self.contentOwnerViewController {
+            return viewController.finishUpdateContent(velocity: velocity)
+        }
+        return nil
+    }
+    
+    open func notifyEndUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.endUpdateContent()
+        }
+    }
+    
 }
 
-// MARK: - Private -
+// MARK: Private
 
-extension QStackContainerViewController {
+private extension QStackContainerViewController {
 
-    private func _present(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+    func _present(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         if self.isLoaded == true {
             if let previousViewController = self.previousViewController {
                 self._appear(viewController: viewController)
@@ -313,7 +357,7 @@ extension QStackContainerViewController {
         }
     }
 
-    private func _dismiss(viewController: IQStackViewController, animated: Bool, completion: (() -> Void)?) {
+    func _dismiss(viewController: IQStackViewController, animated: Bool, completion: (() -> Void)?) {
         if let index = self._viewControllers.firstIndex(where: { return $0 === viewController }) {
             let currentViewController = self.currentViewController
             let previousViewController = self.previousViewController
@@ -360,47 +404,47 @@ extension QStackContainerViewController {
         }
     }
     
-    private func _add(childViewController: IQStackViewController) {
+    func _add(childViewController: IQStackViewController) {
         childViewController.parentViewController = self
     }
     
-    private func _remove(childViewController: IQStackViewController) {
+    func _remove(childViewController: IQStackViewController) {
         childViewController.parentViewController = nil
     }
 
-    private func _appear(viewController: IQStackViewController) {
+    func _appear(viewController: IQStackViewController) {
         viewController.view.bounds = self.view.bounds
         self.view.addSubview(viewController.view)
     }
 
-    private func _disappear(viewController: IQStackViewController) {
+    func _disappear(viewController: IQStackViewController) {
         viewController.view.removeFromSuperview()
     }
     
-    private func _groupbarVisibility(viewController: IQStackViewController) -> CGFloat {
+    func _groupbarVisibility(viewController: IQStackViewController) -> CGFloat {
         if self.hidesGroupbarWhenPushed == true {
             return self._viewControllers.first === viewController ? 1 : 0
         }
         return 1
     }
 
-    private func _presentAnimation(viewController: IQStackViewController) -> IQStackViewControllerPresentAnimation {
+    func _presentAnimation(viewController: IQStackViewController) -> IQStackViewControllerPresentAnimation {
         if let animation = viewController.presentAnimation { return animation }
         return self.presentAnimation
     }
 
-    private func _dismissAnimation(viewController: IQStackViewController) -> IQStackViewControllerDismissAnimation {
+    func _dismissAnimation(viewController: IQStackViewController) -> IQStackViewControllerDismissAnimation {
         if let animation = viewController.dismissAnimation { return animation }
         return self.dismissAnimation
     }
 
-    private func _interactiveDismissAnimation(viewController: IQStackViewController) -> IQStackViewControllerInteractiveDismissAnimation? {
+    func _interactiveDismissAnimation(viewController: IQStackViewController) -> IQStackViewControllerInteractiveDismissAnimation? {
         if let animation = viewController.interactiveDismissAnimation { return animation }
         return self.interactiveDismissAnimation
     }
 
     @objc
-    private func _handleInteractiveDismissGesture(_ sender: Any) {
+    func _handleInteractiveDismissGesture(_ sender: Any) {
         let position = self.interactiveDismissGesture.location(in: nil)
         let velocity = self.interactiveDismissGesture.velocity(in: nil)
         switch self.interactiveDismissGesture.state {
@@ -449,7 +493,7 @@ extension QStackContainerViewController {
         }
     }
 
-    private func _finishInteractiveDismiss() {
+    func _finishInteractiveDismiss() {
         if let vc = self._activeInteractiveCurrentViewController {
             if let index = self._viewControllers.firstIndex(where: { return $0 === vc }) {
                 self._viewControllers.remove(at: index)
@@ -461,14 +505,14 @@ extension QStackContainerViewController {
         self._endInteractiveDismiss()
     }
 
-    private func _cancelInteractiveDismiss() {
+    func _cancelInteractiveDismiss() {
         if let vc = self._activeInteractivePreviousViewController {
             self._disappear(viewController: vc)
         }
         self._endInteractiveDismiss()
     }
 
-    private func _endInteractiveDismiss() {
+    func _endInteractiveDismiss() {
         self._activeInteractiveCurrentViewController = nil
         self._activeInteractivePreviousViewController = nil
         self._activeInteractiveDismissAnimation = nil
@@ -477,7 +521,7 @@ extension QStackContainerViewController {
 
 }
 
-// MARK: - UIGestureRecognizerDelegate -
+// MARK: UIGestureRecognizerDelegate
 
 extension QStackContainerViewController : UIGestureRecognizerDelegate {
 

@@ -4,24 +4,24 @@
 
 open class QPlaceholderTitleIconComposable : QComposable {
     
-    public var title: QPlaceholderStyleSheet
+    public var titleStyle: QPlaceholderStyleSheet
     public var titleHeight: CGFloat
     
-    public var icon: QImageViewStyleSheet
+    public var iconStyle: QImageViewStyleSheet
     public var iconWidth: CGFloat
     public var iconSpacing: CGFloat
     
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        title: QPlaceholderStyleSheet,
+        titleStyle: QPlaceholderStyleSheet,
         titleHeight: CGFloat,
-        icon: QImageViewStyleSheet,
+        iconStyle: QImageViewStyleSheet,
         iconWidth: CGFloat = 16,
         iconSpacing: CGFloat = 4
     ) {
-        self.title = title
+        self.titleStyle = titleStyle
         self.titleHeight = titleHeight
-        self.icon = icon
+        self.iconStyle = iconStyle
         self.iconWidth = iconWidth
         self.iconSpacing = iconSpacing
         super.init(edgeInsets: edgeInsets)
@@ -31,13 +31,13 @@ open class QPlaceholderTitleIconComposable : QComposable {
 
 open class QPlaceholderTitleIconComposition< Composable: QPlaceholderTitleIconComposable > : QComposition< Composable > {
     
-    private lazy var titleLabel: QPlaceholderView = {
+    public private(set) lazy var titleView: QPlaceholderView = {
         let view = QPlaceholderView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var iconView: QImageView = {
+    public private(set) lazy var iconView: QImageView = {
         let view = QImageView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
@@ -54,8 +54,8 @@ open class QPlaceholderTitleIconComposition< Composable: QPlaceholderTitleIconCo
         didSet { self.contentView.addConstraints(self._constraints) }
     }
     private var _titleConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.titleLabel.removeConstraints(self._titleConstraints) }
-        didSet { self.titleLabel.addConstraints(self._titleConstraints) }
+        willSet { self.titleView.removeConstraints(self._titleConstraints) }
+        didSet { self.titleView.addConstraints(self._titleConstraints) }
     }
     private var _iconConstraints: [NSLayoutConstraint] = [] {
         willSet { self.iconView.removeConstraints(self._iconConstraints) }
@@ -64,7 +64,7 @@ open class QPlaceholderTitleIconComposition< Composable: QPlaceholderTitleIconCo
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
         let availableWidth = spec.containerSize.width - (composable.edgeInsets.left + composable.edgeInsets.right)
-        let iconSize = composable.icon.size(CGSize(width: composable.iconWidth, height: availableWidth))
+        let iconSize = composable.iconStyle.size(CGSize(width: composable.iconWidth, height: availableWidth))
         return CGSize(
             width: spec.containerSize.width,
             height: composable.edgeInsets.top + max(composable.titleHeight, iconSize.height) + composable.edgeInsets.bottom
@@ -76,10 +76,10 @@ open class QPlaceholderTitleIconComposition< Composable: QPlaceholderTitleIconCo
             self._edgeInsets = composable.edgeInsets
             self._iconSpacing = composable.iconSpacing
             self._constraints = [
-                self.titleLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
-                self.titleLabel.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
-                self.titleLabel.trailingLayout == self.iconView.leadingLayout.offset(-composable.iconSpacing),
-                self.titleLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+                self.titleView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.titleView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.titleView.trailingLayout == self.iconView.leadingLayout.offset(-composable.iconSpacing),
+                self.titleView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
                 self.iconView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
                 self.iconView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
                 self.iconView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
@@ -88,7 +88,7 @@ open class QPlaceholderTitleIconComposition< Composable: QPlaceholderTitleIconCo
         if self._titleHeight != composable.titleHeight {
             self._titleHeight = composable.titleHeight
             self._titleConstraints = [
-                self.titleLabel.heightLayout == composable.titleHeight
+                self.titleView.heightLayout == composable.titleHeight
             ]
         }
         if self._iconWidth != composable.iconWidth {
@@ -100,8 +100,8 @@ open class QPlaceholderTitleIconComposition< Composable: QPlaceholderTitleIconCo
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        self.titleLabel.apply(composable.title)
-        self.iconView.apply(composable.icon)
+        self.titleView.apply(composable.titleStyle)
+        self.iconView.apply(composable.iconStyle)
     }
     
 }

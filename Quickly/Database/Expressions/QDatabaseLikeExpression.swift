@@ -2,10 +2,10 @@
 //  Quickly
 //
 
-// MARK: - Public • QDatabase.LikeExpression
+// MARK: Public • QDatabase.LikeExpression
 
 public extension QDatabase {
-    
+
     struct LikeExpression : IQDatabaseExpressable {
         
         public let column: QDatabase.Column

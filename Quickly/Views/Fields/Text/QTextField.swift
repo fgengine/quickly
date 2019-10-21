@@ -2,109 +2,11 @@
 //  Quickly
 //
 
-open class QTextFieldStyleSheet : QDisplayStyleSheet {
-
-    public var requireValidator: Bool
-    public var validator: IQInputValidator?
-    public var formatter: IQStringFormatter?
-    public var textInsets: UIEdgeInsets
-    public var textStyle: IQTextStyle?
-    public var editingInsets: UIEdgeInsets?
-    public var placeholderInsets: UIEdgeInsets?
-    public var placeholder: IQText?
-    public var typingStyle: IQTextStyle?
-    public var autocapitalizationType: UITextAutocapitalizationType
-    public var autocorrectionType: UITextAutocorrectionType
-    public var spellCheckingType: UITextSpellCheckingType
-    public var keyboardType: UIKeyboardType
-    public var keyboardAppearance: UIKeyboardAppearance
-    public var returnKeyType: UIReturnKeyType
-    public var enablesReturnKeyAutomatically: Bool
-    public var isSecureTextEntry: Bool
-    public var textContentType: UITextContentType!
-    public var isEnabled: Bool
-    public var toolbarStyle: QToolbarStyleSheet?
-
-    public init(
-        requireValidator: Bool = false,
-        validator: IQInputValidator? = nil,
-        formatter: IQStringFormatter? = nil,
-        textInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        textStyle: IQTextStyle? = nil,
-        editingInsets: UIEdgeInsets? = nil,
-        placeholderInsets: UIEdgeInsets? = nil,
-        placeholder: IQText? = nil,
-        typingStyle: IQTextStyle? = nil,
-        autocapitalizationType: UITextAutocapitalizationType = .none,
-        autocorrectionType: UITextAutocorrectionType = .default,
-        spellCheckingType: UITextSpellCheckingType = .default,
-        keyboardType: UIKeyboardType = .default,
-        keyboardAppearance: UIKeyboardAppearance = .default,
-        returnKeyType: UIReturnKeyType = .default,
-        enablesReturnKeyAutomatically: Bool = true,
-        isSecureTextEntry: Bool = false,
-        textContentType: UITextContentType! = nil,
-        isEnabled: Bool = true,
-        toolbarStyle: QToolbarStyleSheet? = nil,
-        backgroundColor: UIColor? = nil,
-        tintColor: UIColor? = nil,
-        cornerRadius: QViewCornerRadius = .none,
-        border: QViewBorder = .none,
-        shadow: QViewShadow? = nil
-    ) {
-        self.requireValidator = requireValidator
-        self.validator = validator
-        self.formatter = formatter
-        self.textInsets = textInsets
-        self.textStyle = textStyle
-        self.editingInsets = editingInsets
-        self.placeholderInsets = placeholderInsets
-        self.placeholder = placeholder
-        self.autocapitalizationType = autocapitalizationType
-        self.autocorrectionType = autocorrectionType
-        self.spellCheckingType = spellCheckingType
-        self.keyboardType = keyboardType
-        self.keyboardAppearance = keyboardAppearance
-        self.returnKeyType = returnKeyType
-        self.enablesReturnKeyAutomatically = enablesReturnKeyAutomatically
-        self.isSecureTextEntry = isSecureTextEntry
-        self.textContentType = textContentType
-        self.isEnabled = isEnabled
-        self.toolbarStyle = toolbarStyle
-
-        super.init(
-            backgroundColor: backgroundColor,
-            tintColor: tintColor,
-            cornerRadius: cornerRadius,
-            border: border,
-            shadow: shadow
-        )
-    }
-
-    public init(_ styleSheet: QTextFieldStyleSheet) {
-        self.requireValidator = styleSheet.requireValidator
-        self.validator = styleSheet.validator
-        self.formatter = styleSheet.formatter
-        self.textInsets = styleSheet.textInsets
-        self.textStyle = styleSheet.textStyle
-        self.editingInsets = styleSheet.editingInsets
-        self.placeholderInsets = styleSheet.placeholderInsets
-        self.placeholder = styleSheet.placeholder
-        self.autocapitalizationType = styleSheet.autocapitalizationType
-        self.autocorrectionType = styleSheet.autocorrectionType
-        self.spellCheckingType = styleSheet.spellCheckingType
-        self.keyboardType = styleSheet.keyboardType
-        self.keyboardAppearance = styleSheet.keyboardAppearance
-        self.returnKeyType = styleSheet.returnKeyType
-        self.enablesReturnKeyAutomatically = styleSheet.enablesReturnKeyAutomatically
-        self.isSecureTextEntry = styleSheet.isSecureTextEntry
-        self.textContentType = styleSheet.textContentType
-        self.isEnabled = styleSheet.isEnabled
-        self.toolbarStyle = styleSheet.toolbarStyle
-
-        super.init(styleSheet)
-    }
-
+public protocol IQTextFieldSuggestion : class {
+    
+    func autoComplete(_ text: String) -> String?
+    func variants(_ text: String) -> [String]
+    
 }
 
 public protocol IQTextFieldObserver : class {
@@ -128,6 +30,18 @@ public class QTextField : QDisplayView, IQField {
     public var validator: IQInputValidator? {
         willSet { self._field.delegate = nil }
         didSet {self._field.delegate = self._fieldDelegate }
+    }
+    public var form: IQFieldForm? {
+        didSet(oldValue) {
+            if self.form !== oldValue {
+                if let form = oldValue {
+                    form.remove(field: self)
+                }
+                if let form = self.form {
+                    form.add(field: self)
+                }
+            }
+        }
     }
     public var formatter: IQStringFormatter? {
         willSet {
@@ -160,6 +74,9 @@ public class QTextField : QDisplayView, IQField {
                         self._field.selectedTextRange = self._field.textRange(from: position, to: position)
                     }
                 }
+            }
+            if let form = self.form {
+                form.changed(field: self)
             }
         }
     }
@@ -196,7 +113,12 @@ public class QTextField : QDisplayView, IQField {
         }
     }
     public var text: String {
-        set(value) { self._field.text = value }
+        set(value) {
+            self._field.text = value
+            if let form = self.form {
+                form.changed(field: self)
+            }
+        }
         get {
             if let text = self._field.text {
                 return text
@@ -219,6 +141,9 @@ public class QTextField : QDisplayView, IQField {
                 }
             } else {
                 self._field.text = value
+            }
+            if let form = self.form {
+                form.changed(field: self)
             }
         }
         get {
@@ -293,18 +218,26 @@ public class QTextField : QDisplayView, IQField {
     public var isEditing: Bool {
         get { return self._field.isEditing }
     }
-    public lazy var toolbar: QToolbar = {
-        let bar = QToolbar(
-            items: [
-                self.toolbarCancelItem,
-                UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-                self.toolbarDoneItem
-            ]
-        )
-        return bar
-    }()
-    public lazy var toolbarCancelItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self._pressedCancel(_:)))
-    public lazy var toolbarDoneItem: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self._pressedDone(_:)))
+    public lazy var toolbar: QToolbar = QToolbar(items: self._toolbarItems())
+    public var toolbarActions: QFieldAction = [] {
+        didSet(oldValue) {
+            if self.toolbarActions != oldValue {
+                let items = self._toolbarItems()
+                self.toolbar.items = items
+                self.toolbar.isHidden = items.isEmpty
+                self._updateAccessoryView()
+            }
+        }
+    }
+    public lazy var suggestionToolbar: QToolbar = QToolbar(items: [])
+    public var suggestion: IQTextFieldSuggestion? {
+        didSet(oldValue) {
+            if self.suggestion !== oldValue {
+                self._updateAccessoryView()
+            }
+        }
+    }
+    
     public var onShouldBeginEditing: ShouldClosure?
     public var onBeginEditing: Closure?
     public var onEditing: Closure?
@@ -324,6 +257,7 @@ public class QTextField : QDisplayView, IQField {
     private var _field: Field!
     private var _fieldDelegate: FieldDelegate!
     private var _observer: QObserver< IQTextFieldObserver > = QObserver< IQTextFieldObserver >()
+    private lazy var _accessoryView: AccessoryView = AccessoryView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 0))
     
     public required init() {
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
@@ -346,7 +280,7 @@ public class QTextField : QDisplayView, IQField {
 
         self._field = Field(frame: self.bounds)
         self._field.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
-        self._field.inputAccessoryView = self.toolbar
+        self._field.inputAccessoryView = self._accessoryView
         self._field.delegate = self._fieldDelegate
         self.addSubview(self._field)
     }
@@ -376,6 +310,7 @@ public class QTextField : QDisplayView, IQField {
         
         self.requireValidator = styleSheet.requireValidator
         self.validator = styleSheet.validator
+        self.form = styleSheet.form
         self.formatter = styleSheet.formatter
         self.textInsets = styleSheet.textInsets
         self.textStyle = styleSheet.textStyle
@@ -397,20 +332,82 @@ public class QTextField : QDisplayView, IQField {
         self.isEnabled = styleSheet.isEnabled
         if let style = styleSheet.toolbarStyle {
             self.toolbar.apply(style)
-            self.toolbar.isHidden = false
-        } else {
-            self.toolbar.isHidden = true
         }
+        self.toolbarActions = styleSheet.toolbarActions
+        if let style = styleSheet.suggestionStyle {
+            self.suggestionToolbar.apply(style)
+        }
+        self.suggestion = styleSheet.suggestion
     }
     
 }
 
-// MARK: - Private -
+// MARK: Private
 
-extension QTextField {
+private extension QTextField {
+    
+    func _toolbarItems() -> [UIBarButtonItem] {
+        var items: [UIBarButtonItem] = []
+        if self.toolbarActions.isEmpty == false {
+            if self.toolbarActions.contains(.cancel) == true {
+                items.append(UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self._pressedCancel(_:))))
+            }
+            items.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
+            if self.toolbarActions.contains(.done) == true {
+                items.append(UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self._pressedDone(_:))))
+            }
+        }
+        return items
+    }
+    
+    func _createBarButtonItem(suggestion: String) -> UIBarButtonItem {
+        return UIBarButtonItem(title: suggestion, style: .plain, target: self, action: #selector(self._pressedSuggestion))
+    }
+    
+    func _updateAccessoryView() {
+        var height: CGFloat = 0
+        if self.toolbarActions.isEmpty == false {
+            self._accessoryView.addSubview(self.toolbar)
+            height += self.toolbar.frame.height
+        }
+        if self.suggestion != nil {
+            self._accessoryView.addSubview(self.suggestionToolbar)
+            height += self.suggestionToolbar.frame.height
+        }
+        let origin = self._accessoryView.frame.origin
+        let size = self._accessoryView.frame.size
+        if size.height != height {
+            self._accessoryView.frame = CGRect(
+                origin: origin,
+                size: CGSize(
+                    width: size.width,
+                    height: height
+                )
+            )
+            self._field.reloadInputViews()
+        }
+    }
     
     @objc
-    private func _pressedCancel(_ sender: Any) {
+    func _pressedSuggestion(_ sender: UIBarButtonItem) {
+        self.suggestionToolbar.items = []
+        self._field.text = sender.title
+        self._field.sendActions(for: .editingChanged)
+        NotificationCenter.default.post(name: UITextField.textDidChangeNotification, object: self._field)
+        if let closure = self.onEditing {
+            closure(self)
+        }
+        self._observer.notify({ (observer) in
+            observer.editing(textField: self)
+        })
+        if let form = self.form {
+            form.changed(field: self)
+        }
+        self.endEditing(false)
+    }
+    
+    @objc
+    func _pressedCancel(_ sender: Any) {
         if let closure = self.onPressedCancel {
             closure(self)
         }
@@ -421,7 +418,7 @@ extension QTextField {
     }
     
     @objc
-    private func _pressedDone(_ sender: Any) {
+    func _pressedDone(_ sender: Any) {
         if let closure = self.onPressedDone {
             closure(self)
         }
@@ -433,7 +430,29 @@ extension QTextField {
     
 }
 
-// MARK: - Private • Field -
+// MARK: Private • AccessoryView
+
+private extension QTextField {
+    
+    class AccessoryView : UIView {
+        
+        override func layoutSubviews() {
+            super.layoutSubviews()
+            
+            let bounds = self.bounds
+            var offset: CGFloat = 0
+            for subview in self.subviews {
+                let height = subview.frame.height
+                subview.frame = CGRect(x: bounds.origin.x, y: offset, width: bounds.size.width, height: height)
+                offset += height
+            }
+        }
+        
+    }
+
+}
+
+// MARK: Private • Field
 
 private extension QTextField {
 
@@ -486,7 +505,7 @@ private extension QTextField {
     
 }
 
-// MARK: - Private • FieldDelegate -
+// MARK: Private • FieldDelegate
 
 private extension QTextField {
 
@@ -531,16 +550,29 @@ private extension QTextField {
 
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             guard let field = self.field else { return true }
-            var caret = range.location + string.count
+            var caretPosition: Int = range.location + string.count
+            var caretLength: Int = 0
             var sourceText = textField.text ?? ""
             if let sourceTextRange = sourceText.range(from: range) {
                 sourceText = sourceText.replacingCharacters(in: sourceTextRange, with: string)
             }
             var sourceUnformat: String
             if let formatter = field.formatter {
-                sourceUnformat = formatter.unformat(sourceText, caret: &caret)
+                sourceUnformat = formatter.unformat(sourceText, caret: &caretPosition)
             } else {
                 sourceUnformat = sourceText
+            }
+            var autoCompleteVariants: [String] = []
+            if let suggestion = field.suggestion {
+                if sourceUnformat.count > 0 {
+                    autoCompleteVariants = suggestion.variants(sourceUnformat)
+                }
+                if sourceUnformat.isEmpty == false && sourceUnformat.count <= caretPosition && string.count > 0 {
+                    if let autoComplete = suggestion.autoComplete(sourceUnformat) {
+                        caretLength = autoComplete.count - sourceUnformat.count
+                        sourceUnformat = autoComplete
+                    }
+                }
             }
             var isValid: Bool
             if let validator = field.validator {
@@ -549,18 +581,24 @@ private extension QTextField {
                 isValid = true
             }
             if field.requireValidator == false || string.isEmpty == true || isValid == true {
-                var location: UITextPosition?
+                var selectionFrom: UITextPosition?
+                var selectionTo: UITextPosition?
                 if let formatter = field.formatter {
-                    let format = formatter.format(sourceUnformat, caret: &caret)
-                    location = textField.position(from: textField.beginningOfDocument, offset: caret)
+                    let format = formatter.format(sourceUnformat, caret: &caretPosition)
                     textField.text = format
+                    selectionFrom = textField.position(from: textField.beginningOfDocument, offset: caretPosition)
+                    selectionTo = textField.position(from: textField.beginningOfDocument, offset: caretPosition + caretLength)
                 } else {
-                    location = textField.position(from: textField.beginningOfDocument, offset: caret)
                     textField.text = sourceUnformat
+                    selectionFrom = textField.position(from: textField.beginningOfDocument, offset: caretPosition)
+                    selectionTo = textField.position(from: textField.beginningOfDocument, offset: caretPosition + caretLength)
                 }
-                if let location = location {
-                    textField.selectedTextRange = textField.textRange(from: location, to: location)
+                if let selectionFrom = selectionFrom, let selectionTo = selectionTo {
+                    textField.selectedTextRange = textField.textRange(from: selectionFrom, to: selectionTo)
                 }
+                field.suggestionToolbar.items = autoCompleteVariants.compactMap({
+                    return field._createBarButtonItem(suggestion: $0)
+                })
                 textField.sendActions(for: .editingChanged)
                 NotificationCenter.default.post(name: UITextField.textDidChangeNotification, object: textField)
                 if let closure = field.onEditing {
@@ -569,6 +607,9 @@ private extension QTextField {
                 field._observer.notify({ (observer) in
                     observer.editing(textField: field)
                 })
+                if let form = field.form {
+                    form.changed(field: field)
+                }
             }
             return false
         }
@@ -621,7 +662,7 @@ private extension QTextField {
     
 }
 
-// MARK: - UITextInputTraits -
+// MARK: UITextInputTraits
 
 extension QTextField : UITextInputTraits {
 

@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-// MARK: - IQDatabaseExpressable
+// MARK: IQDatabaseExpressable
 
 public protocol IQDatabaseExpressable {
     

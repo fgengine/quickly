@@ -153,19 +153,34 @@ open class QDialogViewController : QViewController, IQDialogViewController {
         return self.viewController.preferedStatusBarAnimation()
     }
     
+    // MARK: IQContentOwnderViewController
+    
+    open func beginUpdateContent() {
+    }
+    
+    open func updateContent() {
+    }
+    
+    open func finishUpdateContent(velocity: CGPoint) -> CGPoint? {
+        return nil
+    }
+    
+    open func endUpdateContent() {
+    }
+    
 }
 
-// MARK: - Private -
+// MARK: Private
 
-extension QDialogViewController {
+private extension QDialogViewController {
 
-    private func _relayoutContentViewController() {
+    func _relayoutContentViewController() {
         guard self.isLoaded == true else { return }
         self._unlayoutContentViewController()
         self._layoutContentViewController()
     }
 
-    private func _unlayoutContentViewController() {
+    func _unlayoutContentViewController() {
         if self._contentLayoutConstraints.count > 0 {
             self.view.removeConstraints(self._contentLayoutConstraints)
             self._contentLayoutConstraints.removeAll()
@@ -176,7 +191,7 @@ extension QDialogViewController {
         }
     }
 
-    private func _layoutContentViewController() {
+    func _layoutContentViewController() {
         switch self.widthBehaviour {
         case .fit(let min, let max):
             if min > CGFloat.leastNonzeroMagnitude || max > CGFloat.leastNonzeroMagnitude {
@@ -264,13 +279,13 @@ extension QDialogViewController {
     }
 
     @objc
-    private func _handleTapGesture(_ sender: Any) {
+    func _handleTapGesture(_ sender: Any) {
         self.viewController.dialogDidPressedOutside()
     }
 
 }
 
-// MARK: - UIGestureRecognizerDelegate -
+// MARK: UIGestureRecognizerDelegate
 
 extension QDialogViewController : UIGestureRecognizerDelegate {
 

@@ -408,11 +408,11 @@ open class QHamburgerContainerViewController : QViewController, IQHamburgerConta
     
 }
 
-// MARK: - Private -
+// MARK: Private
 
-extension QHamburgerContainerViewController {
+private extension QHamburgerContainerViewController {
     
-    private func _apply(state: QHamburgerViewControllerState) {
+    func _apply(state: QHamburgerViewControllerState) {
         self.animation.layout(
             contentView: self.view,
             state: state,
@@ -422,7 +422,7 @@ extension QHamburgerContainerViewController {
         )
     }
     
-    private func _change(currentState: QHamburgerViewControllerState, availableState: QHamburgerViewControllerState, animated: Bool, completion: (() -> Void)?) {
+    func _change(currentState: QHamburgerViewControllerState, availableState: QHamburgerViewControllerState, animated: Bool, completion: (() -> Void)?) {
         self.isAnimating = true
         self.animation.animate(
             contentView: self.view,
@@ -441,27 +441,27 @@ extension QHamburgerContainerViewController {
         )
     }
     
-    private func _add(childViewController: IQHamburgerViewController) {
+    func _add(childViewController: IQHamburgerViewController) {
         childViewController.parentViewController = self
     }
     
-    private func _remove(childViewController: IQHamburgerViewController) {
+    func _remove(childViewController: IQHamburgerViewController) {
         childViewController.parentViewController = nil
     }
     
-    private func _appear(viewController: IQHamburgerViewController) {
+    func _appear(viewController: IQHamburgerViewController) {
         viewController.view.frame = self.view.bounds
         self.view.addSubview(viewController.view)
     }
     
-    private func _disappear(viewController: IQHamburgerViewController) {
+    func _disappear(viewController: IQHamburgerViewController) {
         if viewController.isLoaded == true {
             viewController.view.removeFromSuperview()
         }
     }
     
     @objc
-    private func _handleLeftInteractivePresentGesture(_ gesture: UIScreenEdgePanGestureRecognizer) {
+    func _handleLeftInteractivePresentGesture(_ gesture: UIScreenEdgePanGestureRecognizer) {
         let position = gesture.location(in: nil)
         let velocity = gesture.velocity(in: nil)
         switch gesture.state {
@@ -509,7 +509,7 @@ extension QHamburgerContainerViewController {
     }
     
     @objc
-    private func _handleRightInteractivePresentGesture(_ gesture: UIScreenEdgePanGestureRecognizer) {
+    func _handleRightInteractivePresentGesture(_ gesture: UIScreenEdgePanGestureRecognizer) {
         let position = gesture.location(in: nil)
         let velocity = gesture.velocity(in: nil)
         switch gesture.state {
@@ -557,7 +557,7 @@ extension QHamburgerContainerViewController {
     }
     
     @objc
-    private func _handleInteractiveDismissGesture(_ gesture: UIPanGestureRecognizer) {
+    func _handleInteractiveDismissGesture(_ gesture: UIPanGestureRecognizer) {
         let position = gesture.location(in: nil)
         let velocity = gesture.velocity(in: nil)
         switch gesture.state {
@@ -605,11 +605,11 @@ extension QHamburgerContainerViewController {
     }
     
     @objc
-    private func _handleDismissTabGesture(_ gesture: UITapGestureRecognizer) {
+    func _handleDismissTabGesture(_ gesture: UITapGestureRecognizer) {
         self.change(state: .idle, animated: true, completion: nil)
     }
     
-    private func _endInteractiveAnimation() {
+    func _endInteractiveAnimation() {
         self._activeInteractiveContentViewController = nil
         self._activeInteractiveLeftViewController = nil
         self._activeInteractiveRightViewController = nil
@@ -619,7 +619,7 @@ extension QHamburgerContainerViewController {
     
 }
 
-// MARK: - UIGestureRecognizerDelegate -
+// MARK: UIGestureRecognizerDelegate
 
 extension QHamburgerContainerViewController : UIGestureRecognizerDelegate {
 

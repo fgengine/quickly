@@ -73,7 +73,9 @@ open class QTableView : UITableView, IQView {
         
         if #available(iOS 11.0, *) {
             self.contentInsetAdjustmentBehavior = .never
-            self.insetsContentViewsToSafeArea = false
+        }
+        if #available(iOS 13.0, *) {
+            self.automaticallyAdjustsScrollIndicatorInsets = false
         }
     }
     
@@ -107,13 +109,15 @@ open class QTableView : UITableView, IQView {
     
 }
 
-extension QTableView {
+// MARK: Private
+
+private extension QTableView {
     
-    private func _tableFooterDefaultFrame(_ view: UIView) -> CGFloat {
+    func _tableFooterDefaultFrame(_ view: UIView) -> CGFloat {
         return view.frame.height
     }
     
-    private func _tableFooterStretchFrame(_ view: UIView, minimum: CGFloat) -> CGFloat {
+    func _tableFooterStretchFrame(_ view: UIView, minimum: CGFloat) -> CGFloat {
         let contentOffset = self.contentOffset.y
         let contentHeight = self.contentSize.height
         var contentInset: UIEdgeInsets
@@ -128,6 +132,8 @@ extension QTableView {
     }
 
 }
+
+// MARK: IQContainerSpec
 
 extension QTableView : IQContainerSpec {
     

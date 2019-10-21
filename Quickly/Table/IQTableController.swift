@@ -16,7 +16,11 @@ public struct QTableControllerReloadOption : OptionSet {
 
 public protocol IQTableControllerObserver : class {
 
+    func beginScroll(_ controller: IQTableController, tableView: UITableView)
     func scroll(_ controller: IQTableController, tableView: UITableView)
+    func finishScroll(_ controller: IQTableController, tableView: UITableView, velocity: CGPoint) -> CGPoint?
+    func endScroll(_ controller: IQTableController, tableView: UITableView)
+
     func update(_ controller: IQTableController)
 
 }
@@ -42,6 +46,8 @@ public protocol IQTableController : UITableViewDataSource, UITableViewDelegate {
     var canMove: Bool { get }
     var isBatchUpdating: Bool { get }
 
+    func setup()
+    
     func configure()
 
     func add(observer: IQTableControllerObserver, priority: UInt)
@@ -125,5 +131,5 @@ public extension IQTableController {
     func reloadSection(_ section: IQTableSection, with animation: UITableView.RowAnimation? = nil) {
         self.reloadSection([ section ], with: animation)
     }
-
+    
 }

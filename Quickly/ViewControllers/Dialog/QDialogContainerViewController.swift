@@ -192,11 +192,11 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
     
 }
     
-// MARK: - Private -
+// MARK: Private
 
-extension QDialogContainerViewController {
+private extension QDialogContainerViewController {
 
-    private func _present(viewController: IQDialogViewController, animated: Bool, completion: (() -> Void)?) {
+    func _present(viewController: IQDialogViewController, animated: Bool, completion: (() -> Void)?) {
         if self.isLoaded == true {
             if let backgroundView = self.backgroundView {
                 backgroundView.present(
@@ -225,7 +225,7 @@ extension QDialogContainerViewController {
         }
     }
 
-    private func _dismiss(viewController: IQDialogViewController, animated: Bool, completion: (() -> Void)?) {
+    func _dismiss(viewController: IQDialogViewController, animated: Bool, completion: (() -> Void)?) {
         let currentViewController = self.currentViewController
         if let index = self.viewControllers.firstIndex(where: { return $0 === viewController }) {
             self.viewControllers.remove(at: index)
@@ -260,7 +260,7 @@ extension QDialogContainerViewController {
         }
     }
 
-    private func _dismissOne(viewController: IQDialogViewController, animated: Bool, completion: (() -> Void)?) {
+    func _dismissOne(viewController: IQDialogViewController, animated: Bool, completion: (() -> Void)?) {
         if let backgroundView = self.backgroundView {
             backgroundView.dismiss(
                 viewController: viewController,
@@ -283,42 +283,42 @@ extension QDialogContainerViewController {
         )
     }
     
-    private func _add(childViewController: IQDialogViewController) {
+    func _add(childViewController: IQDialogViewController) {
         childViewController.parentViewController = self
     }
     
-    private func _remove(childViewController: IQDialogViewController) {
+    func _remove(childViewController: IQDialogViewController) {
         childViewController.parentViewController = nil
     }
 
-    private func _appear(viewController: IQDialogViewController) {
+    func _appear(viewController: IQDialogViewController) {
         viewController.view.bounds = self.view.bounds
         viewController.view.addGestureRecognizer(self.interactiveDismissGesture)
         self.view.addSubview(viewController.view)
     }
 
-    private func _disappear(viewController: IQDialogViewController) {
+    func _disappear(viewController: IQDialogViewController) {
         viewController.view.removeGestureRecognizer(self.interactiveDismissGesture)
         viewController.view.removeFromSuperview()
     }
 
-    private func _presentAnimation(viewController: IQDialogViewController) -> IQDialogViewControllerFixedAnimation {
+    func _presentAnimation(viewController: IQDialogViewController) -> IQDialogViewControllerFixedAnimation {
         if let animation = viewController.presentAnimation { return animation }
         return self.presentAnimation
     }
 
-    private func _dismissAnimation(viewController: IQDialogViewController) -> IQDialogViewControllerFixedAnimation {
+    func _dismissAnimation(viewController: IQDialogViewController) -> IQDialogViewControllerFixedAnimation {
         if let animation = viewController.dismissAnimation { return animation }
         return self.dismissAnimation
     }
 
-    private func _interactiveDismissAnimation(viewController: IQDialogViewController) -> IQDialogViewControllerInteractiveAnimation? {
+    func _interactiveDismissAnimation(viewController: IQDialogViewController) -> IQDialogViewControllerInteractiveAnimation? {
         if let animation = viewController.interactiveDismissAnimation { return animation }
         return self.interactiveDismissAnimation
     }
 
     @objc
-    private func _handleInteractiveDismissGesture(_ sender: Any) {
+    func _handleInteractiveDismissGesture(_ sender: Any) {
         let position = self.interactiveDismissGesture.location(in: nil)
         let velocity = self.interactiveDismissGesture.velocity(in: nil)
         switch self.interactiveDismissGesture.state {
@@ -356,7 +356,7 @@ extension QDialogContainerViewController {
         }
     }
 
-    private func _finishInteractiveDismiss() {
+    func _finishInteractiveDismiss() {
         guard let viewController = self._activeInteractiveViewController else {
             self._endInteractiveDismiss()
             return
@@ -386,11 +386,11 @@ extension QDialogContainerViewController {
         }
     }
 
-    private func _cancelInteractiveDismiss() {
+    func _cancelInteractiveDismiss() {
         self._endInteractiveDismiss()
     }
 
-    private func _endInteractiveDismiss() {
+    func _endInteractiveDismiss() {
         self._activeInteractiveViewController = nil
         self._activeInteractiveDismissAnimation = nil
         self.isAnimating = false
@@ -398,7 +398,7 @@ extension QDialogContainerViewController {
 
 }
 
-// MARK: - UIGestureRecognizerDelegate -
+// MARK: UIGestureRecognizerDelegate
 
 extension QDialogContainerViewController : UIGestureRecognizerDelegate {
 

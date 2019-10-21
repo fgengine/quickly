@@ -79,6 +79,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         self._cacheHeight = [:]
         self._observer = QObserver< IQTableControllerObserver >()
         super.init()
+        self.setup()
     }
 
     public init(
@@ -99,6 +100,10 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         self._cacheHeight = [:]
         self._observer = QObserver< IQTableControllerObserver >()
         super.init()
+        self.setup()
+    }
+    
+    open func setup() {
     }
 
     open func configure() {
@@ -384,9 +389,11 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
 
 }
 
-extension QTableController {
+// MARK: Private
+
+private extension QTableController {
     
-    private func _bindSections() {
+    func _bindSections() {
         var sectionIndex: Int = 0
         for section in self.sections {
             section.bind(self, sectionIndex)
@@ -394,23 +401,23 @@ extension QTableController {
         }
     }
     
-    private func _bindSections(from: Int, to: Int) {
+    func _bindSections(from: Int, to: Int) {
         for index in from..<to {
             self.sections[index].bind(self, index)
         }
     }
     
-    private func _unbindSections() {
+    func _unbindSections() {
         for section in self.sections {
             section.unbind()
         }
     }
     
-    private func _notifyUpdate() {
+    func _notifyUpdate() {
         self._observer.notify({ $0.update(self) })
     }
     
-    private func _decorClass(data: IQTableData) -> IQTableDecor.Type? {
+    func _decorClass(data: IQTableData) -> IQTableDecor.Type? {
         let dataMetatype = QMetatype(data)
         if let metatype = self._aliasDecors.first(where: { return $0.key == dataMetatype }) {
             return metatype.value
@@ -434,7 +441,7 @@ extension QTableController {
         }
     }
     
-    private func _cellClass(row: IQTableRow) -> IQTableCell.Type? {
+    func _cellClass(row: IQTableRow) -> IQTableCell.Type? {
         let rowMetatype = QMetatype(row)
         if let metatype = self._aliasCells.first(where: { return $0.key == rowMetatype }) {
             return metatype.value
@@ -460,25 +467,77 @@ extension QTableController {
 
 }
 
-extension QTableController : UIScrollViewDelegate {
+// MARK: UIScrollViewDelegate
 
+extension QTableController : UIScrollViewDelegate {
+    
+    @objc
+    open func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        let tableView = self.tableView!
+        self._observer.notify({ $0.beginScroll(self, tableView: tableView) })
+    }
+
+    @objc
     open func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self._observer.notify({ $0.scroll(self, tableView: self.tableView!) })
+        let tableView = self.tableView!
+        self._observer.notify({ $0.scroll(self, tableView: tableView) })
     }
     
+    @objc
+    open func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if decelerate == false {
+            let tableView = self.tableView!
+            self._observer.notify({ $0.endScroll(self, tableView: tableView) })
+        }
+    }
+    
+    @objc
+    open func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer< CGPoint >) {
+        let tableView = self.tableView!
+        var targetContentOffsets: [CGPoint] = []
+        self._observer.notify({
+            if let contentOffset = $0.finishScroll(self, tableView: tableView, velocity: velocity) {
+                targetContentOffsets.append(contentOffset)
+            }
+        })
+        if targetContentOffsets.count > 0 {
+            var avgTargetContentOffset = targetContentOffsets.first!
+            if targetContentOffsets.count > 1 {
+                for nextTargetContentOffset in targetContentOffsets {
+                    avgTargetContentOffset = CGPoint(
+                        x: (avgTargetContentOffset.x + nextTargetContentOffset.x) / 2,
+                        y: (avgTargetContentOffset.y + nextTargetContentOffset.y) / 2
+                    )
+                }
+            }
+            targetContentOffset.pointee = avgTargetContentOffset
+        }
+    }
+    
+    @objc
+    open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let tableView = self.tableView!
+        self._observer.notify({ $0.endScroll(self, tableView: tableView) })
+    }
+    
+    @objc
     open func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
     }
 
 }
 
+// MARK: UITableViewDataSource
+
 extension QTableController : UITableViewDataSource {
 
+    @objc
     open func numberOfSections(
         in tableView: UITableView
     ) -> Int {
         return self.sections.count
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection index: Int
@@ -490,6 +549,7 @@ extension QTableController : UITableViewDataSource {
         return section.rows.count
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
@@ -498,6 +558,7 @@ extension QTableController : UITableViewDataSource {
         return self.dequeue(row: row, indexPath: indexPath).unsafelyUnwrapped
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         canEditRowAt indexPath: IndexPath
@@ -510,6 +571,7 @@ extension QTableController : UITableViewDataSource {
         return row.canEdit;
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         canMoveRowAt indexPath: IndexPath
@@ -524,8 +586,11 @@ extension QTableController : UITableViewDataSource {
 
 }
 
+// MARK: UITableViewDelegate
+
 extension QTableController : UITableViewDelegate {
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         willDisplay cell: UITableViewCell,
@@ -537,6 +602,7 @@ extension QTableController : UITableViewDelegate {
         }
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         willDisplayHeaderView view: UIView,
@@ -549,6 +615,7 @@ extension QTableController : UITableViewDelegate {
         }
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         willDisplayFooterView view: UIView,
@@ -561,6 +628,7 @@ extension QTableController : UITableViewDelegate {
         }
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         heightForRowAt indexPath: IndexPath
@@ -579,6 +647,7 @@ extension QTableController : UITableViewDelegate {
         return caclulatedHeight
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         heightForHeaderInSection section: Int
@@ -597,6 +666,7 @@ extension QTableController : UITableViewDelegate {
         return caclulatedHeight
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         heightForFooterInSection section: Int
@@ -615,6 +685,7 @@ extension QTableController : UITableViewDelegate {
         return caclulatedHeight
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         viewForHeaderInSection section: Int
@@ -627,6 +698,7 @@ extension QTableController : UITableViewDelegate {
         return nil
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         viewForFooterInSection section: Int
@@ -639,6 +711,7 @@ extension QTableController : UITableViewDelegate {
         return nil
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         shouldHighlightRowAt indexPath: IndexPath
@@ -647,6 +720,7 @@ extension QTableController : UITableViewDelegate {
         return row.canSelect
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         willSelectRowAt indexPath: IndexPath
@@ -658,6 +732,7 @@ extension QTableController : UITableViewDelegate {
         return indexPath
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         willDeselectRowAt indexPath: IndexPath
@@ -669,12 +744,33 @@ extension QTableController : UITableViewDelegate {
         return indexPath
     }
 
+    @objc
     open func tableView(
         _ tableView: UITableView,
         editingStyleForRowAt indexPath: IndexPath
     ) -> UITableViewCell.EditingStyle {
         let row = self.row(indexPath: indexPath)
         return row.editingStyle
+    }
+    
+    @objc
+    @available(iOS 11.0, *)
+    open func tableView(
+        _ tableView: UITableView,
+        leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath
+    ) -> UISwipeActionsConfiguration? {
+        let row = self.row(indexPath: indexPath)
+        return row.leadingSwipeConfiguration
+    }
+    
+    @objc
+    @available(iOS 11.0, *)
+    open func tableView(
+        _ tableView: UITableView,
+        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
+    ) -> UISwipeActionsConfiguration? {
+        let row = self.row(indexPath: indexPath)
+        return row.trailingSwipeConfiguration
     }
 
 }

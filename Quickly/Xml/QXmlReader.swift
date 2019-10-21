@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QXmlReader {
+public final class QXmlReader {
     
     public var document: QXmlDocument
     
@@ -27,7 +27,11 @@ public class QXmlReader {
         try self.init(data: data)
     }
     
-    private class Delegate : NSObject, XMLParserDelegate {
+}
+
+private extension QXmlReader {
+    
+    class Delegate : NSObject, XMLParserDelegate {
         
         public var document: QXmlDocument
         private var rootNodes: [QXmlNode]

@@ -6,19 +6,19 @@ open class QSegmentedControlComposable : QComposable {
 
     public typealias Closure = (_ composable: QSegmentedControlComposable) -> Void
 
-    public var segment: QSegmentedControlStyleSheet
+    public var segmentStyle: QSegmentedControlStyleSheet
     public var segmentSelectedItem: QSegmentedControl.Item?
     public var segmentHeight: CGFloat
     public var segmentChanged: Closure
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        segment: QSegmentedControlStyleSheet,
+        segmentStyle: QSegmentedControlStyleSheet,
         segmentSelectedItem: QSegmentedControl.Item? = nil,
         segmentHeight: CGFloat = 44,
         segmentChanged: @escaping Closure
     ) {
-        self.segment = segment
+        self.segmentStyle = segmentStyle
         self.segmentSelectedItem = segmentSelectedItem
         self.segmentHeight = segmentHeight
         self.segmentChanged = segmentChanged
@@ -29,10 +29,10 @@ open class QSegmentedControlComposable : QComposable {
 
 open class QSegmentedControlComposition< Composable: QSegmentedControlComposable > : QComposition< Composable > {
 
-    private lazy var segment: QSegmentedControl = {
+    public private(set) lazy var segmentView: QSegmentedControl = {
         let view = QSegmentedControl()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.onSelected = { [weak self] segment, selected in
+        view.onSelected = { [weak self] (_, selected) in
             guard let self = self, let composable = self.composable else { return }
             composable.segmentSelectedItem = selected
             composable.segmentChanged(composable)
@@ -59,20 +59,20 @@ open class QSegmentedControlComposition< Composable: QSegmentedControlComposable
         if self._edgeInsets != composable.edgeInsets {
             self._edgeInsets = composable.edgeInsets
             self._constraints = [
-                self.segment.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
-                self.segment.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
-                self.segment.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
-                self.segment.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+                self.segmentView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.segmentView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.segmentView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
+                self.segmentView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
             ]
         }
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        self.segment.apply(composable.segment)
+        self.segmentView.apply(composable.segmentStyle)
     }
     
     open override func postLayout(composable: Composable, spec: IQContainerSpec) {
-        self.segment.selectedItem = composable.segmentSelectedItem
+        self.segmentView.selectedItem = composable.segmentSelectedItem
     }
 
 }

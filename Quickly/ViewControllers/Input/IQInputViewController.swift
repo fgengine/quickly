@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-// MARK: - IQInputViewController -
+// MARK: IQInputViewController
 
 public protocol IQInputViewController : IQViewController {
     
@@ -12,7 +12,7 @@ public protocol IQInputViewController : IQViewController {
 
 }
 
-// MARK: - IQHamburgerContentViewController -
+// MARK: IQHamburgerContentViewController
 
 public protocol IQInputContentViewController : IQViewController {
     

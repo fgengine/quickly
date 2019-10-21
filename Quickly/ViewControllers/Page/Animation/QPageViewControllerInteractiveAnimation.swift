@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QPageViewControllerInteractiveAnimation : IQPageViewControllerInteractiveAnimation {
+public final class QPageViewControllerInteractiveAnimation : IQPageViewControllerInteractiveAnimation {
 
     public var contentView: UIView!
     public var backwardBeginFrame: CGRect {

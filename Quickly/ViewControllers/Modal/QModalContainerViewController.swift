@@ -186,7 +186,7 @@ open class QModalContainerViewController : QViewController, IQModalContainerView
     
 }
 
-// MARK: - Private -
+// MARK: Private
 
 extension QModalContainerViewController {
 
@@ -380,7 +380,7 @@ extension QModalContainerViewController {
 
 }
 
-// MARK: - UIGestureRecognizerDelegate -
+// MARK: UIGestureRecognizerDelegate
 
 extension QModalContainerViewController : UIGestureRecognizerDelegate {
 

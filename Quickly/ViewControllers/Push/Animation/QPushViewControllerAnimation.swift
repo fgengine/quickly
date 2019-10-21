@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QPushViewControllerPresentAnimation : IQPushViewControllerFixedAnimation {
+public final class QPushViewControllerPresentAnimation : IQPushViewControllerFixedAnimation {
     
     public var duration: TimeInterval
     
@@ -36,7 +36,7 @@ public class QPushViewControllerPresentAnimation : IQPushViewControllerFixedAnim
 
 }
 
-public class QPushViewControllerDismissAnimation : IQPushViewControllerFixedAnimation {
+public final class QPushViewControllerDismissAnimation : IQPushViewControllerFixedAnimation {
     
     public var duration: TimeInterval
     

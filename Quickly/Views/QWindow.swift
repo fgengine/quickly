@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-// MARK: - IQWindowSecurityView -
+// MARK: IQWindowSecurityView
 
 public protocol IQWindowSecurityView : IQView {
     
@@ -11,11 +11,11 @@ public protocol IQWindowSecurityView : IQView {
     
 }
 
-// MARK: - QWindowSecurityViewType -
+// MARK: QWindowSecurityViewType
 
 public typealias QWindowSecurityViewType = UIView & IQWindowSecurityView
 
-// MARK: - QWindow -
+// MARK: QWindow
 
 open class QWindow : UIWindow, IQView, IQApplicationStateObserver {
 

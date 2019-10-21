@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QModalViewControllerPresentAnimation : IQModalViewControllerFixedAnimation {
+public final class QModalViewControllerPresentAnimation : IQModalViewControllerFixedAnimation {
     
     public var acceleration: CGFloat
     
@@ -76,7 +76,7 @@ public class QModalViewControllerPresentAnimation : IQModalViewControllerFixedAn
 
 }
 
-public class QModalViewControllerDismissAnimation : IQModalViewControllerFixedAnimation {
+public final class QModalViewControllerDismissAnimation : IQModalViewControllerFixedAnimation {
     
     public var acceleration: CGFloat
     

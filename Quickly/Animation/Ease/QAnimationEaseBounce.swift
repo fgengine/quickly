@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QAnimationEaseBounceIn : IQAnimationEase {
+public final class QAnimationEaseBounceIn : IQAnimationEase {
 
     private let easeOut: QAnimationEaseBounceOut
 
@@ -16,7 +16,7 @@ public class QAnimationEaseBounceIn : IQAnimationEase {
 
 }
 
-public class QAnimationEaseBounceOut : IQAnimationEase {
+public final class QAnimationEaseBounceOut : IQAnimationEase {
 
     public func perform(_ x: Double) -> Double {
         if x < 4 / 11 {
@@ -37,7 +37,7 @@ public class QAnimationEaseBounceOut : IQAnimationEase {
 
 }
 
-public class QAnimationEaseBounceInOut : IQAnimationEase {
+public final class QAnimationEaseBounceInOut : IQAnimationEase {
 
     private let easeIn: QAnimationEaseBounceIn
     private let easeOut: QAnimationEaseBounceOut

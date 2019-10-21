@@ -2,26 +2,6 @@
 //  Quickly
 //
 
-#if os(iOS)
-    #if (arch(i386) || arch(x86_64))
-        import QuicklyCryptoIOSSimulator
-    #else
-        import QuicklyCryptoIOS
-    #endif
-#elseif os(tvOS)
-    #if (arch(i386) || arch(x86_64))
-        import QuicklyCryptoTvOSSimulator
-    #else
-        import QuicklyCryptoTvOS
-    #endif
-#elseif os(watchOS)
-    #if (arch(i386) || arch(x86_64))
-        import QuicklyCryptoWatchOSSimulator
-    #else
-        import QuicklyCryptoWatchOS
-    #endif
-#endif
-
 public extension Data {
 
     var hexString: String {

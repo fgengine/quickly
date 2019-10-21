@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QAnimationEaseQuadraticIn : IQAnimationEase {
+public final class QAnimationEaseQuadraticIn : IQAnimationEase {
 
     public func perform(_ x: Double) -> Double {
         return x * x
@@ -10,7 +10,7 @@ public class QAnimationEaseQuadraticIn : IQAnimationEase {
 
 }
 
-public class QAnimationEaseQuadraticOut : IQAnimationEase {
+public final class QAnimationEaseQuadraticOut : IQAnimationEase {
 
     public func perform(_ x: Double) -> Double {
         return -(x * (x - 2))
@@ -18,7 +18,7 @@ public class QAnimationEaseQuadraticOut : IQAnimationEase {
 
 }
 
-public class QAnimationEaseQuadraticInOut : IQAnimationEase {
+public final class QAnimationEaseQuadraticInOut : IQAnimationEase {
 
     public func perform(_ x: Double) -> Double {
         if x < 1 / 2 {

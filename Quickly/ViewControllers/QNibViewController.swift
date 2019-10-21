@@ -2,17 +2,8 @@
 //  Quickly
 //
 
-open class QNibViewController : QViewController, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQHamburgerContentViewController {
+open class QNibViewController : QViewController, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController {
 
-    public var contentOffset: CGPoint {
-        get { return CGPoint.zero }
-    }
-    public var contentSize: CGSize {
-        get {
-            guard self.isLoaded == true else { return CGSize.zero }
-            return self.view.bounds.size
-        }
-    }
     @IBOutlet
     public var rootView: UIView! {
         willSet {
@@ -67,9 +58,9 @@ open class QNibViewController : QViewController, IQInputContentViewController, I
         if let rootView = self.rootView {
             self._updateConstraints(self.view, rootView: rootView)
         }
-        if let loadingView = self.loadingView, loadingView.superview != nil {
-            self._updateConstraints(self.view, loadingView: loadingView)
-        }
+    }
+    
+    open func dialogDidPressedOutside() {
     }
     
     open func isLoading() -> Bool {
@@ -86,12 +77,52 @@ open class QNibViewController : QViewController, IQInputContentViewController, I
         guard let loadingView = self.loadingView else { return }
         loadingView.stop()
     }
+    
+    // MARK: IQContentViewController
+    
+    public var contentOffset: CGPoint {
+        get { return CGPoint.zero }
+    }
+    
+    public var contentSize: CGSize {
+        get {
+            guard self.isLoaded == true else { return CGSize.zero }
+            return self.view.bounds.size
+        }
+    }
+    
+    open func notifyBeginUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.beginUpdateContent()
+        }
+    }
+    
+    open func notifyUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.updateContent()
+        }
+    }
+    
+    open func notifyFinishUpdateContent(velocity: CGPoint) -> CGPoint? {
+        if let viewController = self.contentOwnerViewController {
+            return viewController.finishUpdateContent(velocity: velocity)
+        }
+        return nil
+    }
+    
+    open func notifyEndUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.endUpdateContent()
+        }
+    }
 
 }
 
-extension QNibViewController {
+// MARK: Private
+
+private extension QNibViewController {
     
-    private func _updateConstraints(_ view: UIView, rootView: UIView) {
+    func _updateConstraints(_ view: UIView, rootView: UIView) {
         let edgeInsets = self.inheritedEdgeInsets
         self._rootConstraints = [
             rootView.topLayout == view.topLayout.offset(edgeInsets.top),
@@ -101,17 +132,18 @@ extension QNibViewController {
         ]
     }
     
-    private func _updateConstraints(_ view: UIView, loadingView: QLoadingViewType) {
-        let edgeInsets = self.inheritedEdgeInsets
+    func _updateConstraints(_ view: UIView, loadingView: QLoadingViewType) {
         self._loadingConstraints = [
-            loadingView.topLayout == view.topLayout.offset(edgeInsets.top),
-            loadingView.leadingLayout == view.leadingLayout.offset(edgeInsets.left),
-            loadingView.trailingLayout == view.trailingLayout.offset(-edgeInsets.right),
-            loadingView.bottomLayout == view.bottomLayout.offset(-edgeInsets.bottom)
+            loadingView.topLayout == view.topLayout,
+            loadingView.leadingLayout == view.leadingLayout,
+            loadingView.trailingLayout == view.trailingLayout,
+            loadingView.bottomLayout == view.bottomLayout
         ]
     }
 
 }
+
+// MARK: IQLoadingViewDelegate
 
 extension QNibViewController : IQLoadingViewDelegate {
     
@@ -125,6 +157,8 @@ extension QNibViewController : IQLoadingViewDelegate {
     }
     
 }
+
+// MARK: IQContainerSpec
 
 extension QNibViewController : IQContainerSpec {
     

@@ -22,7 +22,7 @@ public protocol IQWireframe : class {
     
 }
 
-// MARK: - IQChildWireframe -
+// MARK: IQChildWireframe
 
 public protocol IQChildWireframe : IQWireframe {
     

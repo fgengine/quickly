@@ -2,4 +2,4 @@
 //  Quickly
 //
 
-MODULEMAP_FILE= $(SRCROOT)/Quickly/Quickly.modulemap
+MODULEMAP_FILE = $(SRCROOT)/Quickly/Quickly.modulemap

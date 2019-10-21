@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QGroupViewControllerAnimation : IQGroupViewControllerAnimation {
+public final class QGroupViewControllerAnimation : IQGroupViewControllerAnimation {
     
     public var overlapping: CGFloat
     public var acceleration: CGFloat

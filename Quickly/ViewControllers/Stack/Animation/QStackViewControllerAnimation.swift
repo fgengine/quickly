@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QStackViewControllerPresentAnimation : IQStackViewControllerPresentAnimation {
+public final class QStackViewControllerPresentAnimation : IQStackViewControllerPresentAnimation {
 
     public var shadow: QViewShadow
     public var overlapping: CGFloat
@@ -75,7 +75,7 @@ public class QStackViewControllerPresentAnimation : IQStackViewControllerPresent
 
 }
 
-public class QStackViewControllerDismissAnimation : IQStackViewControllerDismissAnimation {
+public final class QStackViewControllerDismissAnimation : IQStackViewControllerDismissAnimation {
 
     public var shadow: QViewShadow
     public var overlapping: CGFloat

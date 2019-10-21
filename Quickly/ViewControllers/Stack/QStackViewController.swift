@@ -8,9 +8,9 @@ open class QStackViewController : QViewController, IQStackViewController {
         set(value) { self.set(barView: value) }
         get { return self._barView }
     }
-    open var barHeight: CGFloat {
-        set(value) { self.set(barHeight: value) }
-        get { return self._barHeight }
+    open var barSize: QStackViewControllerBarSize {
+        set(value) { self.set(barSize: value) }
+        get { return self._barSize }
     }
     open var barHidden: Bool {
         set(value) { self.set(barHidden: value) }
@@ -22,11 +22,11 @@ open class QStackViewController : QViewController, IQStackViewController {
     open var interactiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation?
     
     private var _barView: QStackbar?
-    private var _barHeight: CGFloat
+    private var _barSize: QStackViewControllerBarSize
     private var _barHidden: Bool
 
-    public init(barHeight: CGFloat = 50, barHidden: Bool = false, viewController: IQStackContentViewController) {
-        self._barHeight = 50
+    public init(barSize: QStackViewControllerBarSize = .fixed(height: 50), barHidden: Bool = false, viewController: IQStackContentViewController) {
+        self._barSize = barSize
         self._barHidden = false
         self.viewController = viewController
         super.init()
@@ -116,103 +116,162 @@ open class QStackViewController : QViewController, IQStackViewController {
         super.didTransition(size: size)
         self.viewController.didTransition(size: size)
     }
-
-    open func set(barView: QStackbar?, animated: Bool = false) {
-        if self.isLoaded == true {
-            if let view = self._barView {
-                view.removeFromSuperview()
-            }
-            self._barView = barView
-            if let view = self._barView {
-                view.frame = self._barFrame(bounds: self.view.bounds)
-                view.edgeInsets = self._barEdgeInsets()
-                self.view.insertSubview(view, aboveSubview: self.viewController.view)
-            }
-            self.setNeedLayout()
-        } else {
-            self._barView = barView
-        }
-        self._updateAdditionalEdgeInsets()
+    
+    open override func supportedOrientations() -> UIInterfaceOrientationMask {
+        return self.viewController.supportedOrientations()
+    }
+    
+    open override func preferedStatusBarHidden() -> Bool {
+        return self.viewController.preferedStatusBarHidden()
+    }
+    
+    open override func preferedStatusBarStyle() -> UIStatusBarStyle {
+        return self.viewController.preferedStatusBarStyle()
+    }
+    
+    open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
+        return self.viewController.preferedStatusBarAnimation()
     }
 
-    open func set(barHeight: CGFloat, animated: Bool = false) {
-        self._barHeight = barHeight
-        self.setNeedLayout()
-        self._updateAdditionalEdgeInsets()
-        if self.isLoaded == true {
-            if animated == true {
-                UIView.animate(withDuration: 0.1, delay: 0, options: [ .beginFromCurrentState ], animations: {
-                    self.layoutIfNeeded()
-                })
+    open func set(barView: QStackbar?, animated: Bool = false) {
+        if self._barView != barView {
+            if self.isLoaded == true {
+                if let view = self._barView {
+                    view.removeFromSuperview()
+                }
+                self._barView = barView
+                if let view = self._barView {
+                    view.frame = self._barFrame(bounds: self.view.bounds)
+                    view.edgeInsets = self._barEdgeInsets()
+                    self.view.insertSubview(view, aboveSubview: self.viewController.view)
+                }
+                self.setNeedLayout()
+            } else {
+                self._barView = barView
+            }
+            self._updateAdditionalEdgeInsets()
+        }
+    }
+
+    open func set(barSize: QStackViewControllerBarSize, animated: Bool = false) {
+        if self._barSize != barSize {
+            self._barSize = barSize
+            self.setNeedLayout()
+            self._updateAdditionalEdgeInsets()
+            if self.isLoaded == true {
+                if animated == true {
+                    UIView.animate(withDuration: 0.1, delay: 0, options: [ .beginFromCurrentState ], animations: {
+                        self.layoutIfNeeded()
+                    })
+                }
             }
         }
     }
 
     open func set(barHidden: Bool, animated: Bool = false) {
-        self._barHidden = barHidden
-        self.setNeedLayout()
-        self._updateAdditionalEdgeInsets()
-        if self.isLoaded == true {
-            if animated == true {
-                UIView.animate(withDuration: 0.1, delay: 0, options: [ .beginFromCurrentState ], animations: {
-                    self.layoutIfNeeded()
-                })
+        if self._barHidden != barHidden {
+            self._barHidden = barHidden
+            self.setNeedLayout()
+            self._updateAdditionalEdgeInsets()
+            if self.isLoaded == true {
+                if animated == true {
+                    UIView.animate(withDuration: 0.1, delay: 0, options: [ .beginFromCurrentState ], animations: {
+                        self.layoutIfNeeded()
+                    })
+                }
             }
         }
     }
-
+    
+    // MARK: IQContentOwnerViewController
+    
+    open func beginUpdateContent() {
+    }
+    
     open func updateContent() {
+        if let view = self._barView {
+            view.frame = self._barFrame(bounds: self.view.bounds)
+        }
     }
-
-    open override func supportedOrientations() -> UIInterfaceOrientationMask {
-        return self.viewController.supportedOrientations()
+    
+    open func finishUpdateContent(velocity: CGPoint) -> CGPoint? {
+        if self._barHidden == true {
+            return nil
+        }
+        switch self._barSize {
+        case .fixed(_):
+            return nil
+        case .range(let minHeight, let maxHeight):
+            let edgeInsets = self.inheritedEdgeInsets
+            let contentOffset = self.viewController.contentOffset
+            let interactiveBarHeight = maxHeight - contentOffset.y
+            let normalizedBarHeight = max(minHeight, min(interactiveBarHeight, maxHeight)) + edgeInsets.top
+            let minimalBarHeight = minHeight + edgeInsets.top
+            let maximalBarHeight = maxHeight + edgeInsets.top
+            if (normalizedBarHeight > minimalBarHeight) && (normalizedBarHeight < maximalBarHeight) {
+                let middleBarHeight = minimalBarHeight + ((maximalBarHeight - minimalBarHeight) / 2)
+                return CGPoint(
+                    x: contentOffset.x,
+                    y: normalizedBarHeight > middleBarHeight ? -maximalBarHeight : -minimalBarHeight
+                )
+            }
+            return nil
+        }
     }
-
-    open override func preferedStatusBarHidden() -> Bool {
-        return self.viewController.preferedStatusBarHidden()
-    }
-
-    open override func preferedStatusBarStyle() -> UIStatusBarStyle {
-        return self.viewController.preferedStatusBarStyle()
-    }
-
-    open override func preferedStatusBarAnimation() -> UIStatusBarAnimation {
-        return self.viewController.preferedStatusBarAnimation()
+    
+    open func endUpdateContent() {
+        if let view = self._barView {
+            view.frame = self._barFrame(bounds: self.view.bounds)
+        }
     }
     
 }
 
-extension QStackViewController {
+// MARK: Private
 
-    private func _updateAdditionalEdgeInsets() {
-        self.additionalEdgeInsets = UIEdgeInsets(
-            top: (self._barView != nil && self._barHidden == false) ? self._barHeight : 0,
-            left: 0,
-            bottom: 0,
-            right: 0
-        )
-    }
+private extension QStackViewController {
 
-    private func _barFrame(bounds: CGRect) -> CGRect {
-        let edgeInsets = self.inheritedEdgeInsets
-        let fullHeight = self._barHeight + edgeInsets.top
-        if self._barHidden == true {
-            return CGRect(
-                x: bounds.origin.x,
-                y: bounds.origin.y - fullHeight,
-                width: bounds.size.width,
-                height: fullHeight
+    func _updateAdditionalEdgeInsets() {
+        guard self._barView != nil && self._barHidden == false else {
+            self.additionalEdgeInsets = UIEdgeInsets.zero
+            return
+        }
+        switch self._barSize {
+        case .fixed(let height):
+            self.additionalEdgeInsets = UIEdgeInsets(
+                top: height,
+                left: 0,
+                bottom: 0,
+                right: 0
+            )
+        case .range(_, let max):
+            self.additionalEdgeInsets = UIEdgeInsets(
+                top: max,
+                left: 0,
+                bottom: 0,
+                right: 0
             )
         }
-        return CGRect(
-            x: bounds.origin.x,
-            y: bounds.origin.y,
-            width: bounds.size.width,
-            height: fullHeight
-        )
     }
 
-    private func _barEdgeInsets() -> UIEdgeInsets {
+    func _barFrame(bounds: CGRect) -> CGRect {
+        let edgeInsets = self.inheritedEdgeInsets
+        var barHeight: CGFloat
+        switch self._barSize {
+        case .fixed(let height):
+            barHeight = height + edgeInsets.top
+        case .range(let minHeight, let maxHeight):
+            let contentOffset = self.viewController.contentOffset
+            let interactiveBarHeight = maxHeight - contentOffset.y
+            barHeight = max(minHeight, min(interactiveBarHeight, maxHeight)) + edgeInsets.top
+        }
+        if self._barHidden == true {
+            return CGRect(x: bounds.origin.x, y: bounds.origin.y - barHeight, width: bounds.size.width, height: barHeight)
+        }
+        return CGRect(x: bounds.origin.x, y: bounds.origin.y, width: bounds.size.width, height: barHeight)
+    }
+
+    func _barEdgeInsets() -> UIEdgeInsets {
         let edgeInsets = self.inheritedEdgeInsets
         return UIEdgeInsets(
             top: edgeInsets.top,

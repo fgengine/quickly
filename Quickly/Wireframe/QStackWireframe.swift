@@ -43,6 +43,14 @@ open class QStackWireframe< WireframeType: IQWireframe, ContextType: IQContext >
     open func replace(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         self.containerViewController.replace(viewController: viewController, animated: animated, completion: completion)
     }
+    
+    open func replaceAll(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        self.containerViewController.replaceAll(viewController: viewController, animated: animated, completion: completion)
+    }
+    
+    open func replaceAll(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+        self.containerViewController.replaceAll(viewController: viewController, animated: animated, completion: completion)
+    }
 
     open func pop(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
         self.containerViewController.pop(viewController: viewController, animated: animated, completion: completion)

@@ -40,6 +40,37 @@ open class QCompositionTableRow< Composable: IQComposable > : QBackgroundColorTa
             editingStyle: editingStyle
         )
     }
+    
+    @available(iOS 11.0, *)
+    public init(
+        composable: Composable,
+        selectedComposable: Composable? = nil,
+        sizeBehaviour: QCompositionTableRowSizeBehaviour = .dynamic,
+        backgroundColor: UIColor? = nil,
+        selectedBackgroundColor: UIColor? = nil,
+        canSelect: Bool = true,
+        canEdit: Bool = false,
+        canMove: Bool = false,
+        selectionStyle: UITableViewCell.SelectionStyle = .default,
+        editingStyle: UITableViewCell.EditingStyle = .none,
+        leadingSwipeConfiguration: UISwipeActionsConfiguration? = nil,
+        trailingSwipeConfiguration: UISwipeActionsConfiguration? = nil
+    ) {
+        self.composable = composable
+        self.selectedComposable = selectedComposable
+        self.sizeBehaviour = sizeBehaviour
+        super.init(
+            backgroundColor: backgroundColor,
+            selectedBackgroundColor: selectedBackgroundColor,
+            canSelect: canSelect,
+            canEdit: canEdit,
+            canMove: canMove,
+            selectionStyle: selectionStyle,
+            editingStyle: editingStyle,
+            leadingSwipeConfiguration: leadingSwipeConfiguration,
+            trailingSwipeConfiguration: trailingSwipeConfiguration
+        )
+    }
 
 }
 
@@ -93,7 +124,7 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
         }
     }
 
-    // MARK: - IQTextFieldObserver
+    // MARK: IQTextFieldObserver
     
     open func beginEditing(textField: QTextField) {
         self._scroll(animated: true)
@@ -117,7 +148,7 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
     open func pressedReturn(textField: QTextField) {
     }
     
-    // MARK: - IQMultiTextFieldObserver
+    // MARK: IQMultiTextFieldObserver
     
     open func beginEditing(multiTextField: QMultiTextField) {
         self._scroll(animated: true)
@@ -142,7 +173,7 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
         })
     }
     
-    // MARK: - IQListFieldObserver
+    // MARK: IQListFieldObserver
     
     open func beginEditing(listField: QListField) {
         self._scroll(animated: true)
@@ -160,7 +191,7 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
     open func pressedDone(listField: QListField) {
     }
     
-    // MARK: - IQDateFieldObserver
+    // MARK: IQDateFieldObserver
     
     open func beginEditing(dateField: QDateField) {
         self._scroll(animated: true)
@@ -178,7 +209,7 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
     open func pressedDone(dateField: QDateField) {
     }
     
-    // MARK: - Private
+    // MARK: Private
     
     private func _prepareComposition(row: RowType, spec: IQContainerSpec, highlighted: Bool, selected: Bool, animated: Bool) {
         let composable = self._currentComposable(row: row, highlighted: highlighted, selected: selected)

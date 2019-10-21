@@ -4,24 +4,24 @@
 
 open class QPlaceholderTitleShapeComposable : QComposable {
     
-    public var title: QPlaceholderStyleSheet
+    public var titleStyle: QPlaceholderStyleSheet
     public var titleHeight: CGFloat
     
-    public var shape: QShapeView.Model
+    public var shapeModel: QShapeView.Model
     public var shapeWidth: CGFloat
     public var shapeSpacing: CGFloat
     
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
-        title: QPlaceholderStyleSheet,
+        titleStyle: QPlaceholderStyleSheet,
         titleHeight: CGFloat,
-        shape: QShapeView.Model,
+        shapeModel: QShapeView.Model,
         shapeWidth: CGFloat = 16,
         shapeSpacing: CGFloat = 4
     ) {
-        self.title = title
+        self.titleStyle = titleStyle
         self.titleHeight = titleHeight
-        self.shape = shape
+        self.shapeModel = shapeModel
         self.shapeWidth = shapeWidth
         self.shapeSpacing = shapeSpacing
         super.init(edgeInsets: edgeInsets)
@@ -31,13 +31,13 @@ open class QPlaceholderTitleShapeComposable : QComposable {
 
 open class QPlaceholderTitleShapeComposition< Composable: QPlaceholderTitleShapeComposable > : QComposition< Composable > {
     
-    private lazy var titleLabel: QPlaceholderView = {
+    public private(set) lazy var titleView: QPlaceholderView = {
         let view = QPlaceholderView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var shapeView: QShapeView = {
+    public private(set) lazy var shapeView: QShapeView = {
         let view = QShapeView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
@@ -54,8 +54,8 @@ open class QPlaceholderTitleShapeComposition< Composable: QPlaceholderTitleShape
         didSet { self.contentView.addConstraints(self._constraints) }
     }
     private var _titleConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.titleLabel.removeConstraints(self._titleConstraints) }
-        didSet { self.titleLabel.addConstraints(self._titleConstraints) }
+        willSet { self.titleView.removeConstraints(self._titleConstraints) }
+        didSet { self.titleView.addConstraints(self._titleConstraints) }
     }
     private var _shapeConstraints: [NSLayoutConstraint] = [] {
         willSet { self.shapeView.removeConstraints(self._shapeConstraints) }
@@ -63,7 +63,7 @@ open class QPlaceholderTitleShapeComposition< Composable: QPlaceholderTitleShape
     }
     
     open override class func size(composable: Composable, spec: IQContainerSpec) -> CGSize {
-        let shapeSzie = composable.shape.size
+        let shapeSzie = composable.shapeModel.size
         return CGSize(
             width: spec.containerSize.width,
             height: composable.edgeInsets.top + max(composable.titleHeight, shapeSzie.height) + composable.edgeInsets.bottom
@@ -75,10 +75,10 @@ open class QPlaceholderTitleShapeComposition< Composable: QPlaceholderTitleShape
             self._edgeInsets = composable.edgeInsets
             self._shapeSpacing = composable.shapeSpacing
             self._constraints = [
-                self.titleLabel.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
-                self.titleLabel.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
-                self.titleLabel.trailingLayout == self.shapeView.leadingLayout.offset(-composable.shapeSpacing),
-                self.titleLabel.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
+                self.titleView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
+                self.titleView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left),
+                self.titleView.trailingLayout == self.shapeView.leadingLayout.offset(-composable.shapeSpacing),
+                self.titleView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom),
                 self.shapeView.topLayout == self.contentView.topLayout.offset(composable.edgeInsets.top),
                 self.shapeView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right),
                 self.shapeView.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom)
@@ -87,7 +87,7 @@ open class QPlaceholderTitleShapeComposition< Composable: QPlaceholderTitleShape
         if self._titleHeight != composable.titleHeight {
             self._titleHeight = composable.titleHeight
             self._titleConstraints = [
-                self.titleLabel.heightLayout == composable.titleHeight
+                self.titleView.heightLayout == composable.titleHeight
             ]
         }
         if self._shapeWidth != composable.shapeWidth {
@@ -99,8 +99,8 @@ open class QPlaceholderTitleShapeComposition< Composable: QPlaceholderTitleShape
     }
     
     open override func apply(composable: Composable, spec: IQContainerSpec) {
-        self.titleLabel.apply(composable.title)
-        self.shapeView.model = composable.shape
+        self.titleView.apply(composable.titleStyle)
+        self.shapeView.model = composable.shapeModel
     }
     
 }

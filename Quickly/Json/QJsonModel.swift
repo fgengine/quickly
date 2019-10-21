@@ -45,6 +45,8 @@ open class QJsonModel : IQJsonModel {
 
 }
 
+// MARK: IQJsonValue
+
 extension QJsonModel : IQJsonValue {
 
     public static func fromJson(value: Any) throws -> IQJsonModel {
@@ -59,6 +61,8 @@ extension QJsonModel : IQJsonValue {
     }
 
 }
+
+// MARK: IQDebug
 
 #if DEBUG
 

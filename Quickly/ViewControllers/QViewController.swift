@@ -353,7 +353,13 @@ open class QViewController : NSObject, IQViewController {
         }
     }
     
-    private class View : QDisplayView {
+}
+
+// MARK: Private
+
+private extension QViewController {
+    
+    class View : QDisplayView {
         
         weak var viewController: IQViewController?
         var customInputViewController: IQInputViewController? {
@@ -422,13 +428,13 @@ open class QViewController : NSObject, IQViewController {
         }
         
         @discardableResult
-        open override func becomeFirstResponder() -> Bool {
+        override func becomeFirstResponder() -> Bool {
             guard super.becomeFirstResponder() == true else { return false }
             return true
         }
         
         @discardableResult
-        open override func resignFirstResponder() -> Bool {
+        override func resignFirstResponder() -> Bool {
             guard super.resignFirstResponder() == true else { return false }
             self.customInputViewController = nil
             return true

@@ -26,6 +26,31 @@ open class QBackgroundColorTableRow : QTableRow {
             editingStyle: editingStyle
         )
     }
+    
+    @available(iOS 11.0, *)
+    public init(
+        backgroundColor: UIColor? = nil,
+        selectedBackgroundColor: UIColor? = nil,
+        canSelect: Bool = true,
+        canEdit: Bool = false,
+        canMove: Bool = false,
+        selectionStyle: UITableViewCell.SelectionStyle = .default,
+        editingStyle: UITableViewCell.EditingStyle = .none,
+        leadingSwipeConfiguration: UISwipeActionsConfiguration? = nil,
+        trailingSwipeConfiguration: UISwipeActionsConfiguration? = nil
+    ) {
+        self.backgroundColor = backgroundColor
+        self.selectedBackgroundColor = selectedBackgroundColor
+        super.init(
+            canSelect: canSelect,
+            canEdit: canEdit,
+            canMove: canMove,
+            selectionStyle: selectionStyle,
+            editingStyle: editingStyle,
+            leadingSwipeConfiguration: leadingSwipeConfiguration,
+            trailingSwipeConfiguration: trailingSwipeConfiguration
+        )
+    }
 
 }
 

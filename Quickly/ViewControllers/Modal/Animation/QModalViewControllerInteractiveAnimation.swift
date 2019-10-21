@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QModalViewControllerInteractiveDismissAnimation : IQModalViewControllerInteractiveAnimation {
+public final class QModalViewControllerInteractiveDismissAnimation : IQModalViewControllerInteractiveAnimation {
 
     public var contentView: UIView!
     public var previousBeginFrame: CGRect {

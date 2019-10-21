@@ -2,15 +2,15 @@
 //  Quickly
 //
 
-// MARK: - QXmlError -
+// MARK: QXmlError
 
 public enum QXmlError : Error {
     case notXml
 }
 
-// MARK: - QXmlDocument -
+// MARK: QXmlDocument
 
-public class QXmlDocument {
+public final class QXmlDocument {
     
     public var nodes: [QXmlNode]
     
@@ -40,7 +40,7 @@ public class QXmlDocument {
 
 extension QXmlDocument : IQDebug {
     
-    open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+    public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         let nextIndent = indent + 1
         
         if headerIndent > 0 {
@@ -62,9 +62,9 @@ extension QXmlDocument : IQDebug {
 
 #endif
 
-// MARK: - QXmlNode -
+// MARK: QXmlNode
 
-public class QXmlNode {
+public final class QXmlNode {
     
     public var name: String
     public var attributes: [QXmlAttribute]
@@ -110,7 +110,7 @@ public class QXmlNode {
 
 extension QXmlNode : IQDebug {
     
-    open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+    public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         let nextIndent = indent + 1
         
         if headerIndent > 0 {
@@ -142,9 +142,9 @@ extension QXmlNode : IQDebug {
 
 #endif
 
-// MARK: - QXmlAttribute -
+// MARK: QXmlAttribute
 
-public class QXmlAttribute {
+public final class QXmlAttribute {
     
     public var name: String
     public var value: QXmlValue
@@ -160,7 +160,7 @@ public class QXmlAttribute {
 
 extension QXmlAttribute : IQDebug {
     
-    open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+    public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         let nextIndent = indent + 1
         
         if headerIndent > 0 {
@@ -182,9 +182,9 @@ extension QXmlAttribute : IQDebug {
 
 #endif
 
-// MARK: - QXmlValue -
+// MARK: QXmlValue
 
-public class QXmlValue {
+public final class QXmlValue {
     
     public var text: String
     
@@ -231,7 +231,7 @@ public class QXmlValue {
 
 extension QXmlValue : IQDebug {
     
-    open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+    public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         let nextIndent = indent + 1
         
         if headerIndent > 0 {

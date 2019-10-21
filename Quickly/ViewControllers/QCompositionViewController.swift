@@ -4,15 +4,6 @@
 
 open class QCompositionViewController< Composition: IQComposition > : QViewController, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController {
 
-    public var contentOffset: CGPoint {
-        get { return CGPoint.zero }
-    }
-    public var contentSize: CGSize {
-        get {
-            guard self.isLoaded == true else { return CGSize.zero }
-            return self.view.bounds.size
-        }
-    }
     public var backgroundView: UIView? {
         willSet {
             guard let backgroundView = self.backgroundView else { return }
@@ -67,9 +58,6 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
         if self.isLoaded == true {
             self._updateConstraints(self.view, contentView: self.composition.contentView)
         }
-        if let loadingView = self.loadingView, loadingView.superview != nil {
-            self._updateConstraints(self.view, loadingView: loadingView)
-        }
     }
     
     open func dialogDidPressedOutside() {
@@ -90,11 +78,51 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
         loadingView.stop()
     }
     
+    // MARK: IQContentViewController
+    
+    public var contentOffset: CGPoint {
+        get { return CGPoint.zero }
+    }
+    
+    public var contentSize: CGSize {
+        get {
+            guard self.isLoaded == true else { return CGSize.zero }
+            return self.view.bounds.size
+        }
+    }
+    
+    open func notifyBeginUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.beginUpdateContent()
+        }
+    }
+    
+    open func notifyUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.updateContent()
+        }
+    }
+    
+    open func notifyFinishUpdateContent(velocity: CGPoint) -> CGPoint? {
+        if let viewController = self.contentOwnerViewController {
+            return viewController.finishUpdateContent(velocity: velocity)
+        }
+        return nil
+    }
+    
+    open func notifyEndUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.endUpdateContent()
+        }
+    }
+    
 }
 
-extension QCompositionViewController {
+// MARK: Private
+
+private extension QCompositionViewController {
     
-    private func _updateConstraints(_ view: UIView, backgroundView: UIView) {
+    func _updateConstraints(_ view: UIView, backgroundView: UIView) {
         self._backgroundConstraints = [
             backgroundView.topLayout == view.topLayout,
             backgroundView.leadingLayout == view.leadingLayout,
@@ -103,7 +131,7 @@ extension QCompositionViewController {
         ]
     }
     
-    private func _updateConstraints(_ view: UIView, contentView: UIView) {
+    func _updateConstraints(_ view: UIView, contentView: UIView) {
         let edgeInsets = self.inheritedEdgeInsets
         self._contentConstraints = [
             contentView.topLayout == view.topLayout.offset(edgeInsets.top),
@@ -113,17 +141,18 @@ extension QCompositionViewController {
         ]
     }
     
-    private func _updateConstraints(_ view: UIView, loadingView: QLoadingViewType) {
-        let edgeInsets = self.inheritedEdgeInsets
+    func _updateConstraints(_ view: UIView, loadingView: QLoadingViewType) {
         self._loadingConstraints = [
-            loadingView.topLayout == view.topLayout.offset(edgeInsets.top),
-            loadingView.leadingLayout == view.leadingLayout.offset(edgeInsets.left),
-            loadingView.trailingLayout == view.trailingLayout.offset(-edgeInsets.right),
-            loadingView.bottomLayout == view.bottomLayout.offset(-edgeInsets.bottom)
+            loadingView.topLayout == view.topLayout,
+            loadingView.leadingLayout == view.leadingLayout,
+            loadingView.trailingLayout == view.trailingLayout,
+            loadingView.bottomLayout == view.bottomLayout
         ]
     }
 
 }
+
+// MARK: IQLoadingViewDelegate
 
 extension QCompositionViewController : IQLoadingViewDelegate {
     
@@ -138,6 +167,8 @@ extension QCompositionViewController : IQLoadingViewDelegate {
     
 }
 
+// MARK: IQContainerSpec
+
 extension QCompositionViewController : IQContainerSpec {
     
     open var containerSize: CGSize {
@@ -151,6 +182,8 @@ extension QCompositionViewController : IQContainerSpec {
     }
     
 }
+
+// MARK: IQTextFieldObserver
 
 extension QCompositionViewController : IQTextFieldObserver {
     
@@ -177,6 +210,8 @@ extension QCompositionViewController : IQTextFieldObserver {
     
 }
 
+// MARK: IQMultiTextFieldObserver
+
 extension QCompositionViewController : IQMultiTextFieldObserver {
     
     open func beginEditing(multiTextField: QMultiTextField) {
@@ -199,6 +234,8 @@ extension QCompositionViewController : IQMultiTextFieldObserver {
 
 }
 
+// MARK: IQListFieldObserver
+
 extension QCompositionViewController : IQListFieldObserver {
     
     open func beginEditing(listField: QListField) {
@@ -217,6 +254,8 @@ extension QCompositionViewController : IQListFieldObserver {
     }
     
 }
+
+// MARK: IQDateFieldObserver
 
 extension QCompositionViewController : IQDateFieldObserver {
     

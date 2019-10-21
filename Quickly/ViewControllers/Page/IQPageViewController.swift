@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-// MARK: - QPageViewControllerAnimationMode -
+// MARK: QPageViewControllerAnimationMode
 
 public enum QPageViewControllerAnimationMode {
     case none
@@ -20,7 +20,7 @@ public enum QPageViewControllerAnimationMode {
     }
 }
 
-// MARK: - IQPageViewControllerAnimation -
+// MARK: IQPageViewControllerAnimation
 
 public protocol IQPageViewControllerAnimation : class {
 
@@ -53,7 +53,7 @@ public protocol IQPageViewControllerInteractiveAnimation : class {
 
 }
 
-// MARK: - IQPageViewController -
+// MARK: IQPageViewController
 
 public protocol IQPageContainerViewController : IQViewController {
 
@@ -81,7 +81,7 @@ public protocol IQPageContainerViewController : IQViewController {
 
 }
 
-// MARK: - IQPageSlideViewController -
+// MARK: IQPageSlideViewController
 
 public protocol IQPageViewController : IQContentOwnerViewController {
 
@@ -104,7 +104,7 @@ extension IQPageViewController {
 
 }
 
-// MARK: - IQPageContentViewController -
+// MARK: IQPageContentViewController
 
 public protocol IQPageContentViewController : IQContentViewController {
 

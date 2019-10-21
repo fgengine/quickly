@@ -4,71 +4,71 @@
 
 open class QPincodeComposable : QComposable {
 
-    public let title: QLabelStyleSheet
+    public let titleStyle: QLabelStyleSheet
     public let titleSpacing: CGFloat
     
-    public let pincode: QPincodeStyleSheet
+    public let pincodeStyle: QPincodeStyleSheet
     public let pincodeSpacing: CGFloat
     
     public let errorSpacing: CGFloat
     
-    public let button1: QButtonStyleSheet
-    public let button2: QButtonStyleSheet
-    public let button3: QButtonStyleSheet
-    public let button4: QButtonStyleSheet
-    public let button5: QButtonStyleSheet
-    public let button6: QButtonStyleSheet
-    public let button7: QButtonStyleSheet
-    public let button8: QButtonStyleSheet
-    public let button9: QButtonStyleSheet
-    public let button0: QButtonStyleSheet
-    public let buttonLeft: QButtonStyleSheet?
-    public let buttonRight: QButtonStyleSheet?
-    public let buttonBackspace: QButtonStyleSheet
+    public let button1Style: QButtonStyleSheet
+    public let button2Style: QButtonStyleSheet
+    public let button3Style: QButtonStyleSheet
+    public let button4Style: QButtonStyleSheet
+    public let button5Style: QButtonStyleSheet
+    public let button6Style: QButtonStyleSheet
+    public let button7Style: QButtonStyleSheet
+    public let button8Style: QButtonStyleSheet
+    public let button9Style: QButtonStyleSheet
+    public let button0Style: QButtonStyleSheet
+    public let buttonLeftStyle: QButtonStyleSheet?
+    public let buttonRightStyle: QButtonStyleSheet?
+    public let buttonBackspaceStyle: QButtonStyleSheet
     public let buttonsSpacing: UIOffset
     public let buttonsSize: CGFloat
 
     public init(
-        title: QLabelStyleSheet,
+        titleStyle: QLabelStyleSheet,
         titleSpacing: CGFloat,
-        pincode: QPincodeStyleSheet,
+        pincodeStyle: QPincodeStyleSheet,
         pincodeSpacing: CGFloat,
         errorSpacing: CGFloat,
-        button1: QButtonStyleSheet,
-        button2: QButtonStyleSheet,
-        button3: QButtonStyleSheet,
-        button4: QButtonStyleSheet,
-        button5: QButtonStyleSheet,
-        button6: QButtonStyleSheet,
-        button7: QButtonStyleSheet,
-        button8: QButtonStyleSheet,
-        button9: QButtonStyleSheet,
-        button0: QButtonStyleSheet,
-        buttonLeft: QButtonStyleSheet?,
-        buttonRight: QButtonStyleSheet?,
-        buttonBackspace: QButtonStyleSheet,
+        button1Style: QButtonStyleSheet,
+        button2Style: QButtonStyleSheet,
+        button3Style: QButtonStyleSheet,
+        button4Style: QButtonStyleSheet,
+        button5Style: QButtonStyleSheet,
+        button6Style: QButtonStyleSheet,
+        button7Style: QButtonStyleSheet,
+        button8Style: QButtonStyleSheet,
+        button9Style: QButtonStyleSheet,
+        button0Style: QButtonStyleSheet,
+        buttonLeftStyle: QButtonStyleSheet?,
+        buttonRightStyle: QButtonStyleSheet?,
+        buttonBackspaceStyle: QButtonStyleSheet,
         buttonsSpacing: UIOffset,
         buttonsSize: CGFloat,
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero
     ) {
-        self.title = title
+        self.titleStyle = titleStyle
         self.titleSpacing = titleSpacing
-        self.pincode = pincode
+        self.pincodeStyle = pincodeStyle
         self.pincodeSpacing = pincodeSpacing
         self.errorSpacing = errorSpacing
-        self.button1 = button1
-        self.button2 = button2
-        self.button3 = button3
-        self.button4 = button4
-        self.button5 = button5
-        self.button6 = button6
-        self.button7 = button7
-        self.button8 = button8
-        self.button9 = button9
-        self.button0 = button0
-        self.buttonLeft = buttonLeft
-        self.buttonRight = buttonRight
-        self.buttonBackspace = buttonBackspace
+        self.button1Style = button1Style
+        self.button2Style = button2Style
+        self.button3Style = button3Style
+        self.button4Style = button4Style
+        self.button5Style = button5Style
+        self.button6Style = button6Style
+        self.button7Style = button7Style
+        self.button8Style = button8Style
+        self.button9Style = button9Style
+        self.button0Style = button0Style
+        self.buttonLeftStyle = buttonLeftStyle
+        self.buttonRightStyle = buttonRightStyle
+        self.buttonBackspaceStyle = buttonBackspaceStyle
         self.buttonsSpacing = buttonsSpacing
         self.buttonsSize = buttonsSize
         super.init(edgeInsets: edgeInsets)
@@ -95,96 +95,96 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
     
     private var _error: QLabelStyleSheet?
     
-    private lazy var titleLabel: QLabel = {
+    public private(set) lazy var titleView: QLabel = {
         let view = QLabel(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var pincode: QPincodeView = {
+    public private(set) lazy var pincodeView: QPincodeView = {
         let view = QPincodeView(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var errorLabel: QLabel = {
+    public private(set) lazy var errorView: QLabel = {
         let view = QLabel(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.alpha = 0
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var button1: QButton = {
+    public private(set) lazy var button1View: QButton = {
         let view = QButton(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onPressed = { [weak self] _ in self?._pressedButton(number: 1) }
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var button2: QButton = {
+    public private(set) lazy var button2View: QButton = {
         let view = QButton(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onPressed = { [weak self] _ in self?._pressedButton(number: 2) }
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var button3: QButton = {
+    public private(set) lazy var button3View: QButton = {
         let view = QButton(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onPressed = { [weak self] _ in self?._pressedButton(number: 3) }
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var button4: QButton = {
+    public private(set) lazy var button4View: QButton = {
         let view = QButton(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onPressed = { [weak self] _ in self?._pressedButton(number: 4) }
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var button5: QButton = {
+    public private(set) lazy var button5View: QButton = {
         let view = QButton(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onPressed = { [weak self] _ in self?._pressedButton(number: 5) }
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var button6: QButton = {
+    public private(set) lazy var button6View: QButton = {
         let view = QButton(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onPressed = { [weak self] _ in self?._pressedButton(number: 6) }
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var button7: QButton = {
+    public private(set) lazy var button7View: QButton = {
         let view = QButton(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onPressed = { [weak self] _ in self?._pressedButton(number: 7) }
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var button8: QButton = {
+    public private(set) lazy var button8View: QButton = {
         let view = QButton(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onPressed = { [weak self] _ in self?._pressedButton(number: 8) }
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var button9: QButton = {
+    public private(set) lazy var button9View: QButton = {
         let view = QButton(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onPressed = { [weak self] _ in self?._pressedButton(number: 9) }
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var button0: QButton = {
+    public private(set) lazy var button0View: QButton = {
         let view = QButton(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onPressed = { [weak self] _ in self?._pressedButton(number: 0) }
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var buttonLeft: QButton = {
+    public private(set) lazy var buttonLeftView: QButton = {
         let view = QButton(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.alpha = 0
@@ -195,18 +195,18 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
         self.contentView.addSubview(view)
         return view
     }()
-    private lazy var buttonRight: QButton = {
+    public private(set) lazy var buttonRightView: QButton = {
         let view = QButton(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.alpha = 0
         view.onPressed = { [weak self] _ in
             guard let self = self else { return }
-            if self.pincode.isEmpty == true {
+            if self.pincodeView.isEmpty == true {
                 if let delegate = self.delegate {
                     delegate.pincodeCompositionRightPressed(self)
                 }
             } else {
-                self.pincode.removeLast()
+                self.pincodeView.removeLast()
                 self._updateRightButton()
             }
         }
@@ -227,52 +227,52 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
         didSet { self.contentView.addConstraints(self._constraints) }
     }
     private var _button1Constraints: [NSLayoutConstraint] = [] {
-        willSet { self.button1.removeConstraints(self._button1Constraints) }
-        didSet { self.button1.addConstraints(self._button1Constraints) }
+        willSet { self.button1View.removeConstraints(self._button1Constraints) }
+        didSet { self.button1View.addConstraints(self._button1Constraints) }
     }
     private var _button2Constraints: [NSLayoutConstraint] = [] {
-        willSet { self.button2.removeConstraints(self._button2Constraints) }
-        didSet { self.button2.addConstraints(self._button2Constraints) }
+        willSet { self.button2View.removeConstraints(self._button2Constraints) }
+        didSet { self.button2View.addConstraints(self._button2Constraints) }
     }
     private var _button3Constraints: [NSLayoutConstraint] = [] {
-        willSet { self.button3.removeConstraints(self._button3Constraints) }
-        didSet { self.button3.addConstraints(self._button3Constraints) }
+        willSet { self.button3View.removeConstraints(self._button3Constraints) }
+        didSet { self.button3View.addConstraints(self._button3Constraints) }
     }
     private var _button4Constraints: [NSLayoutConstraint] = [] {
-        willSet { self.button4.removeConstraints(self._button4Constraints) }
-        didSet { self.button4.addConstraints(self._button4Constraints) }
+        willSet { self.button4View.removeConstraints(self._button4Constraints) }
+        didSet { self.button4View.addConstraints(self._button4Constraints) }
     }
     private var _button5Constraints: [NSLayoutConstraint] = [] {
-        willSet { self.button5.removeConstraints(self._button5Constraints) }
-        didSet { self.button5.addConstraints(self._button5Constraints) }
+        willSet { self.button5View.removeConstraints(self._button5Constraints) }
+        didSet { self.button5View.addConstraints(self._button5Constraints) }
     }
     private var _button6Constraints: [NSLayoutConstraint] = [] {
-        willSet { self.button6.removeConstraints(self._button6Constraints) }
-        didSet { self.button6.addConstraints(self._button6Constraints) }
+        willSet { self.button6View.removeConstraints(self._button6Constraints) }
+        didSet { self.button6View.addConstraints(self._button6Constraints) }
     }
     private var _button7Constraints: [NSLayoutConstraint] = [] {
-        willSet { self.button7.removeConstraints(self._button7Constraints) }
-        didSet { self.button7.addConstraints(self._button7Constraints) }
+        willSet { self.button7View.removeConstraints(self._button7Constraints) }
+        didSet { self.button7View.addConstraints(self._button7Constraints) }
     }
     private var _button8Constraints: [NSLayoutConstraint] = [] {
-        willSet { self.button8.removeConstraints(self._button8Constraints) }
-        didSet { self.button8.addConstraints(self._button8Constraints) }
+        willSet { self.button8View.removeConstraints(self._button8Constraints) }
+        didSet { self.button8View.addConstraints(self._button8Constraints) }
     }
     private var _button9Constraints: [NSLayoutConstraint] = [] {
-        willSet { self.button9.removeConstraints(self._button9Constraints) }
-        didSet { self.button9.addConstraints(self._button9Constraints) }
+        willSet { self.button9View.removeConstraints(self._button9Constraints) }
+        didSet { self.button9View.addConstraints(self._button9Constraints) }
     }
     private var _button0Constraints: [NSLayoutConstraint] = [] {
-        willSet { self.button0.removeConstraints(self._button0Constraints) }
-        didSet { self.button0.addConstraints(self._button0Constraints) }
+        willSet { self.button0View.removeConstraints(self._button0Constraints) }
+        didSet { self.button0View.addConstraints(self._button0Constraints) }
     }
     private var _buttonLeftConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.buttonLeft.removeConstraints(self._buttonLeftConstraints) }
-        didSet { self.buttonLeft.addConstraints(self._buttonLeftConstraints) }
+        willSet { self.buttonLeftView.removeConstraints(self._buttonLeftConstraints) }
+        didSet { self.buttonLeftView.addConstraints(self._buttonLeftConstraints) }
     }
     private var _buttonRightConstraints: [NSLayoutConstraint] = [] {
-        willSet { self.buttonRight.removeConstraints(self._buttonRightConstraints) }
-        didSet { self.buttonRight.addConstraints(self._buttonRightConstraints) }
+        willSet { self.buttonRightView.removeConstraints(self._buttonRightConstraints) }
+        didSet { self.buttonRightView.addConstraints(self._buttonRightConstraints) }
     }
     
     open override func setup(owner: AnyObject) {
@@ -299,77 +299,77 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
             
             var constraints: [NSLayoutConstraint] = []
             
-            constraints.append(self.titleLabel.topLayout >= self.contentView.topLayout.offset(composable.edgeInsets.top))
-            constraints.append(self.titleLabel.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left))
-            constraints.append(self.titleLabel.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right))
+            constraints.append(self.titleView.topLayout >= self.contentView.topLayout.offset(composable.edgeInsets.top))
+            constraints.append(self.titleView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left))
+            constraints.append(self.titleView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right))
             
-            constraints.append(self.pincode.topLayout == self.titleLabel.bottomLayout.offset(composable.titleSpacing))
-            constraints.append(self.pincode.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left))
-            constraints.append(self.pincode.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right))
+            constraints.append(self.pincodeView.topLayout == self.titleView.bottomLayout.offset(composable.titleSpacing))
+            constraints.append(self.pincodeView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left))
+            constraints.append(self.pincodeView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right))
             
-            constraints.append(self.errorLabel.topLayout == self.pincode.bottomLayout.offset(composable.errorSpacing))
-            constraints.append(self.errorLabel.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left))
-            constraints.append(self.errorLabel.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right))
+            constraints.append(self.errorView.topLayout == self.pincodeView.bottomLayout.offset(composable.errorSpacing))
+            constraints.append(self.errorView.leadingLayout == self.contentView.leadingLayout.offset(composable.edgeInsets.left))
+            constraints.append(self.errorView.trailingLayout == self.contentView.trailingLayout.offset(-composable.edgeInsets.right))
             
             if errorVisible == true {
-                constraints.append(self.button1.topLayout == self.errorLabel.bottomLayout.offset(composable.pincodeSpacing))
+                constraints.append(self.button1View.topLayout == self.errorView.bottomLayout.offset(composable.pincodeSpacing))
             } else {
-                constraints.append(self.button1.topLayout == self.pincode.bottomLayout.offset(composable.pincodeSpacing))
+                constraints.append(self.button1View.topLayout == self.pincodeView.bottomLayout.offset(composable.pincodeSpacing))
             }
-            constraints.append(self.button1.leadingLayout >= self.contentView.leadingLayout.offset(composable.edgeInsets.left))
-            constraints.append(self.button1.trailingLayout == self.button2.leadingLayout.offset(-composable.buttonsSpacing.horizontal))
+            constraints.append(self.button1View.leadingLayout >= self.contentView.leadingLayout.offset(composable.edgeInsets.left))
+            constraints.append(self.button1View.trailingLayout == self.button2View.leadingLayout.offset(-composable.buttonsSpacing.horizontal))
             
-            constraints.append(self.button2.topLayout == self.button1.topLayout)
-            constraints.append(self.button2.centerXLayout == self.contentView.centerXLayout)
-            constraints.append(self.button2.bottomLayout == self.button1.bottomLayout)
+            constraints.append(self.button2View.topLayout == self.button1View.topLayout)
+            constraints.append(self.button2View.centerXLayout == self.contentView.centerXLayout)
+            constraints.append(self.button2View.bottomLayout == self.button1View.bottomLayout)
             
-            constraints.append(self.button3.topLayout == self.button2.topLayout)
-            constraints.append(self.button3.leadingLayout == self.button2.trailingLayout.offset(composable.buttonsSpacing.horizontal))
-            constraints.append(self.button3.trailingLayout <= self.contentView.trailingLayout.offset(-composable.edgeInsets.right))
-            constraints.append(self.button3.bottomLayout == self.button2.bottomLayout)
+            constraints.append(self.button3View.topLayout == self.button2View.topLayout)
+            constraints.append(self.button3View.leadingLayout == self.button2View.trailingLayout.offset(composable.buttonsSpacing.horizontal))
+            constraints.append(self.button3View.trailingLayout <= self.contentView.trailingLayout.offset(-composable.edgeInsets.right))
+            constraints.append(self.button3View.bottomLayout == self.button2View.bottomLayout)
             
-            constraints.append(self.button4.topLayout == self.button1.bottomLayout.offset(composable.buttonsSpacing.vertical))
-            constraints.append(self.button4.leadingLayout >= self.contentView.leadingLayout.offset(composable.edgeInsets.left))
-            constraints.append(self.button4.trailingLayout == self.button1.trailingLayout)
+            constraints.append(self.button4View.topLayout == self.button1View.bottomLayout.offset(composable.buttonsSpacing.vertical))
+            constraints.append(self.button4View.leadingLayout >= self.contentView.leadingLayout.offset(composable.edgeInsets.left))
+            constraints.append(self.button4View.trailingLayout == self.button1View.trailingLayout)
             
-            constraints.append(self.button5.topLayout == self.button4.topLayout)
-            constraints.append(self.button5.leadingLayout == self.button2.leadingLayout)
-            constraints.append(self.button5.trailingLayout == self.button2.trailingLayout)
-            constraints.append(self.button5.bottomLayout == self.button4.bottomLayout)
+            constraints.append(self.button5View.topLayout == self.button4View.topLayout)
+            constraints.append(self.button5View.leadingLayout == self.button2View.leadingLayout)
+            constraints.append(self.button5View.trailingLayout == self.button2View.trailingLayout)
+            constraints.append(self.button5View.bottomLayout == self.button4View.bottomLayout)
             
-            constraints.append(self.button6.topLayout == self.button5.topLayout)
-            constraints.append(self.button6.leadingLayout == self.button3.leadingLayout)
-            constraints.append(self.button6.trailingLayout <= self.contentView.trailingLayout.offset(-composable.edgeInsets.right))
-            constraints.append(self.button6.bottomLayout == self.button5.bottomLayout)
+            constraints.append(self.button6View.topLayout == self.button5View.topLayout)
+            constraints.append(self.button6View.leadingLayout == self.button3View.leadingLayout)
+            constraints.append(self.button6View.trailingLayout <= self.contentView.trailingLayout.offset(-composable.edgeInsets.right))
+            constraints.append(self.button6View.bottomLayout == self.button5View.bottomLayout)
             
-            constraints.append(self.button7.topLayout == self.button4.bottomLayout.offset(composable.buttonsSpacing.vertical))
-            constraints.append(self.button7.leadingLayout >= self.contentView.leadingLayout.offset(composable.edgeInsets.left))
-            constraints.append(self.button7.trailingLayout == self.button4.trailingLayout)
+            constraints.append(self.button7View.topLayout == self.button4View.bottomLayout.offset(composable.buttonsSpacing.vertical))
+            constraints.append(self.button7View.leadingLayout >= self.contentView.leadingLayout.offset(composable.edgeInsets.left))
+            constraints.append(self.button7View.trailingLayout == self.button4View.trailingLayout)
             
-            constraints.append(self.button8.topLayout == self.button7.topLayout)
-            constraints.append(self.button8.leadingLayout == self.button5.leadingLayout)
-            constraints.append(self.button8.trailingLayout == self.button5.trailingLayout)
-            constraints.append(self.button8.bottomLayout == self.button7.bottomLayout)
+            constraints.append(self.button8View.topLayout == self.button7View.topLayout)
+            constraints.append(self.button8View.leadingLayout == self.button5View.leadingLayout)
+            constraints.append(self.button8View.trailingLayout == self.button5View.trailingLayout)
+            constraints.append(self.button8View.bottomLayout == self.button7View.bottomLayout)
             
-            constraints.append(self.button9.topLayout == self.button8.topLayout)
-            constraints.append(self.button9.leadingLayout == self.button6.leadingLayout)
-            constraints.append(self.button9.trailingLayout <= self.contentView.trailingLayout.offset(-composable.edgeInsets.right))
-            constraints.append(self.button9.bottomLayout == self.button8.bottomLayout)
+            constraints.append(self.button9View.topLayout == self.button8View.topLayout)
+            constraints.append(self.button9View.leadingLayout == self.button6View.leadingLayout)
+            constraints.append(self.button9View.trailingLayout <= self.contentView.trailingLayout.offset(-composable.edgeInsets.right))
+            constraints.append(self.button9View.bottomLayout == self.button8View.bottomLayout)
             
-            constraints.append(self.buttonLeft.topLayout == self.button0.topLayout)
-            constraints.append(self.buttonLeft.bottomLayout == self.button0.bottomLayout)
-            constraints.append(self.buttonLeft.leadingLayout >= self.contentView.leadingLayout.offset(composable.edgeInsets.left))
-            constraints.append(self.buttonLeft.trailingLayout == self.button7.trailingLayout)
+            constraints.append(self.buttonLeftView.topLayout == self.button0View.topLayout)
+            constraints.append(self.buttonLeftView.bottomLayout == self.button0View.bottomLayout)
+            constraints.append(self.buttonLeftView.leadingLayout >= self.contentView.leadingLayout.offset(composable.edgeInsets.left))
+            constraints.append(self.buttonLeftView.trailingLayout == self.button7View.trailingLayout)
             
-            constraints.append(self.button0.topLayout == self.button8.bottomLayout.offset(composable.buttonsSpacing.vertical))
-            constraints.append(self.button0.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom))
-            constraints.append(self.button0.leadingLayout == self.button8.leadingLayout)
-            constraints.append(self.button0.trailingLayout == self.button8.trailingLayout)
+            constraints.append(self.button0View.topLayout == self.button8View.bottomLayout.offset(composable.buttonsSpacing.vertical))
+            constraints.append(self.button0View.bottomLayout == self.contentView.bottomLayout.offset(-composable.edgeInsets.bottom))
+            constraints.append(self.button0View.leadingLayout == self.button8View.leadingLayout)
+            constraints.append(self.button0View.trailingLayout == self.button8View.trailingLayout)
             
-            constraints.append(self.buttonRight.topLayout == self.button0.topLayout)
-            constraints.append(self.buttonRight.bottomLayout == self.button0.bottomLayout)
-            constraints.append(self.buttonRight.leadingLayout == self.button9.leadingLayout)
-            constraints.append(self.buttonRight.trailingLayout <= self.contentView.trailingLayout.offset(-composable.edgeInsets.right))
+            constraints.append(self.buttonRightView.topLayout == self.button0View.topLayout)
+            constraints.append(self.buttonRightView.bottomLayout == self.button0View.bottomLayout)
+            constraints.append(self.buttonRightView.leadingLayout == self.button9View.leadingLayout)
+            constraints.append(self.buttonRightView.trailingLayout <= self.contentView.trailingLayout.offset(-composable.edgeInsets.right))
             
             self._constraints = constraints
         }
@@ -377,103 +377,103 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
             self._buttonsSize = composable.buttonsSize
             
             self._button1Constraints = [
-                self.button1.widthLayout == composable.buttonsSize,
-                self.button1.heightLayout == composable.buttonsSize
+                self.button1View.widthLayout == composable.buttonsSize,
+                self.button1View.heightLayout == composable.buttonsSize
             ]
             self._button2Constraints = [
-                self.button2.widthLayout == composable.buttonsSize,
-                self.button2.heightLayout == composable.buttonsSize
+                self.button2View.widthLayout == composable.buttonsSize,
+                self.button2View.heightLayout == composable.buttonsSize
             ]
             self._button3Constraints = [
-                self.button3.widthLayout == composable.buttonsSize,
-                self.button3.heightLayout == composable.buttonsSize
+                self.button3View.widthLayout == composable.buttonsSize,
+                self.button3View.heightLayout == composable.buttonsSize
             ]
             self._button4Constraints = [
-                self.button4.widthLayout == composable.buttonsSize,
-                self.button4.heightLayout == composable.buttonsSize
+                self.button4View.widthLayout == composable.buttonsSize,
+                self.button4View.heightLayout == composable.buttonsSize
             ]
             self._button5Constraints = [
-                self.button5.widthLayout == composable.buttonsSize,
-                self.button5.heightLayout == composable.buttonsSize
+                self.button5View.widthLayout == composable.buttonsSize,
+                self.button5View.heightLayout == composable.buttonsSize
             ]
             self._button6Constraints = [
-                self.button6.widthLayout == composable.buttonsSize,
-                self.button6.heightLayout == composable.buttonsSize
+                self.button6View.widthLayout == composable.buttonsSize,
+                self.button6View.heightLayout == composable.buttonsSize
             ]
             self._button7Constraints = [
-                self.button7.widthLayout == composable.buttonsSize,
-                self.button7.heightLayout == composable.buttonsSize
+                self.button7View.widthLayout == composable.buttonsSize,
+                self.button7View.heightLayout == composable.buttonsSize
             ]
             self._button8Constraints = [
-                self.button8.widthLayout == composable.buttonsSize,
-                self.button8.heightLayout == composable.buttonsSize
+                self.button8View.widthLayout == composable.buttonsSize,
+                self.button8View.heightLayout == composable.buttonsSize
             ]
             self._button9Constraints = [
-                self.button9.widthLayout == composable.buttonsSize,
-                self.button9.heightLayout == composable.buttonsSize
+                self.button9View.widthLayout == composable.buttonsSize,
+                self.button9View.heightLayout == composable.buttonsSize
             ]
             self._button0Constraints = [
-                self.button0.widthLayout == composable.buttonsSize,
-                self.button0.heightLayout == composable.buttonsSize
+                self.button0View.widthLayout == composable.buttonsSize,
+                self.button0View.heightLayout == composable.buttonsSize
             ]
             self._buttonLeftConstraints = [
-                self.buttonLeft.widthLayout >= composable.buttonsSize,
-                self.buttonLeft.heightLayout >= composable.buttonsSize
+                self.buttonLeftView.widthLayout >= composable.buttonsSize,
+                self.buttonLeftView.heightLayout >= composable.buttonsSize
             ]
             self._buttonRightConstraints = [
-                self.buttonRight.widthLayout >= composable.buttonsSize,
-                self.buttonRight.heightLayout >= composable.buttonsSize
+                self.buttonRightView.widthLayout >= composable.buttonsSize,
+                self.buttonRightView.heightLayout >= composable.buttonsSize
             ]
         }
     }
     
     open override func apply(composable: QPincodeComposable, spec: IQContainerSpec) {
-        self.titleLabel.apply(composable.title)
-        self.pincode.apply(composable.pincode)
+        self.titleView.apply(composable.titleStyle)
+        self.pincodeView.apply(composable.pincodeStyle)
         if let error = self._error {
-            self.errorLabel.apply(error)
+            self.errorView.apply(error)
         }
-        self.button0.apply(composable.button0)
-        self.button1.apply(composable.button1)
-        self.button2.apply(composable.button2)
-        self.button3.apply(composable.button3)
-        self.button4.apply(composable.button4)
-        self.button5.apply(composable.button5)
-        self.button6.apply(composable.button6)
-        self.button7.apply(composable.button7)
-        self.button8.apply(composable.button8)
-        self.button9.apply(composable.button9)
-        if let buttonLeft = composable.buttonLeft {
-            self.buttonLeft.apply(buttonLeft)
+        self.button0View.apply(composable.button0Style)
+        self.button1View.apply(composable.button1Style)
+        self.button2View.apply(composable.button2Style)
+        self.button3View.apply(composable.button3Style)
+        self.button4View.apply(composable.button4Style)
+        self.button5View.apply(composable.button5Style)
+        self.button6View.apply(composable.button6Style)
+        self.button7View.apply(composable.button7Style)
+        self.button8View.apply(composable.button8Style)
+        self.button9View.apply(composable.button9Style)
+        if let style = composable.buttonLeftStyle {
+            self.buttonLeftView.apply(style)
         }
-        if self.pincode.isEmpty == true {
-            if let buttonRight = composable.buttonRight {
-                self.buttonRight.apply(buttonRight)
+        if self.pincodeView.isEmpty == true {
+            if let style = composable.buttonRightStyle {
+                self.buttonRightView.apply(style)
             }
         } else {
-            self.buttonRight.apply(composable.buttonBackspace)
+            self.buttonRightView.apply(composable.buttonBackspaceStyle)
         }
     }
     
     open override func postLayout(composable: Composable, spec: IQContainerSpec) {
-        self.errorLabel.alpha = (self._error != nil) ? 1 : 0
-        self.buttonLeft.alpha = (composable.buttonLeft != nil) ? 1 : 0
-        if (self.pincode.isEmpty == false) || (composable.buttonRight != nil) {
-            self.buttonRight.alpha = 1
+        self.errorView.alpha = (self._error != nil) ? 1 : 0
+        self.buttonLeftView.alpha = (composable.buttonLeftStyle != nil) ? 1 : 0
+        if (self.pincodeView.isEmpty == false) || (composable.buttonRightStyle != nil) {
+            self.buttonRightView.alpha = 1
         } else {
-            self.buttonRight.alpha = 0
+            self.buttonRightView.alpha = 0
         }
     }
     
     public func resetPincode() {
-        self.pincode.text = ""
+        self.pincodeView.text = ""
         self._updateRightButton()
     }
     
     public func showError(text: String) {
         if let composable = self.composable, let spec = self.spec {
             self._error = composable.styleSheet(error: text)
-            self.errorLabel.apply(self._error!)
+            self.errorView.apply(self._error!)
             self.preLayout(composable: composable, spec: spec)
             UIView.animate(withDuration: 0.125, delay: 0, options: [ .beginFromCurrentState ], animations: {
                 self.postLayout(composable: composable, spec: spec)
@@ -498,34 +498,34 @@ open class QPincodeComposition : QComposition< QPincodeComposable > {
     }
     
     private func _pressedButton(number: Int) {
-        self.pincode.append(number: number)
+        self.pincodeView.append(number: number)
         self._updateRightButton()
-        if self.pincode.isFilled == true {
+        if self.pincodeView.isFilled == true {
             if let delegate = self.delegate {
-                delegate.pincodeCompositionCompited(self, pin: self.pincode.text)
+                delegate.pincodeCompositionCompited(self, pin: self.pincodeView.text)
             }
         } else {
             if let delegate = self.delegate {
-                delegate.pincodeCompositionUpdated(self, pin: self.pincode.text)
+                delegate.pincodeCompositionUpdated(self, pin: self.pincodeView.text)
             }
         }
     }
     
     private func _updateRightButton() {
         if let composable = self.composable {
-            if self.pincode.isEmpty == true {
-                if let buttonRight = composable.buttonRight {
-                    self.buttonRight.apply(buttonRight)
-                    self.buttonRight.alpha = 1
+            if self.pincodeView.isEmpty == true {
+                if let style = composable.buttonRightStyle {
+                    self.buttonRightView.apply(style)
+                    self.buttonRightView.alpha = 1
                 } else {
-                    self.buttonRight.alpha = 0
+                    self.buttonRightView.alpha = 0
                 }
             } else {
-                self.buttonRight.apply(composable.buttonBackspace)
-                self.buttonRight.alpha = 1
+                self.buttonRightView.apply(composable.buttonBackspaceStyle)
+                self.buttonRightView.alpha = 1
             }
         } else {
-            self.buttonRight.alpha = 0
+            self.buttonRightView.alpha = 0
         }
     }
     
