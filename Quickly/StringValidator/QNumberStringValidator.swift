@@ -4,31 +4,68 @@
 
 open class QNumberStringValidator : IQStringValidator {
 
-    open var minimumValue: Decimal?
-    open var maximumValue: Decimal?
+    public var minimumValue: Decimal?
+    public let minimumError: String?
+    public var maximumValue: Decimal?
+    public let maximumError: String?
+    public let notNumberError: String
 
     public init(
-        minimumValue: Decimal? = nil,
-        maximumValue: Decimal? = nil
+        minimumValue: Decimal,
+        minimumError: String,
+        notNumberError: String
     ) {
         self.minimumValue = minimumValue
-        self.maximumValue = maximumValue
+        self.minimumError = minimumError
+        self.maximumValue = nil
+        self.maximumError = nil
+        self.notNumberError = notNumberError
     }
 
-    open func validate(_ string: String, complete: Bool) -> Bool {
-        var valid = true
+    public init(
+        maximumValue: Decimal,
+        maximumError: String,
+        notNumberError: String
+    ) {
+        self.minimumValue = nil
+        self.minimumError = nil
+        self.maximumValue = maximumValue
+        self.maximumError = maximumError
+        self.notNumberError = notNumberError
+    }
+
+    public init(
+        minimumValue: Decimal,
+        minimumError: String,
+        maximumValue: Decimal,
+        maximumError: String,
+        notNumberError: String
+    ) {
+        self.minimumValue = minimumValue
+        self.minimumError = minimumError
+        self.maximumValue = maximumValue
+        self.maximumError = maximumError
+        self.notNumberError = notNumberError
+    }
+
+    open func validate(_ string: String) -> QStringValidatorResult {
+        var errors: [String] = []
         if let number = NSDecimalNumber.decimalNumber(from: string) {
             let value = number as Decimal
-            if let maximumValue = self.maximumValue {
-                valid = value <= maximumValue
-            }
-            if valid == true && complete == true {
-                if let minimumValue = self.minimumValue {
-                    valid = value >= minimumValue
+            if let limit = self.minimumValue, let error = self.minimumError {
+                if value > limit {
+                    errors.append(error)
                 }
             }
+            if let limit = self.maximumValue, let error = self.maximumError {
+                if value > limit {
+                    errors.append(error)
+                }
+            }
+        } else {
+            errors.append(self.notNumberError)
         }
-        return valid
+        return QStringValidatorResult(errors: errors)
     }
 
 }

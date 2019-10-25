@@ -9,8 +9,8 @@ open class QLogicStringValidator : IQStringValidator {
         case or
     }
 
-    public private(set) var mode: Mode
-    public private(set) var validators: [IQStringValidator]
+    public let mode: Mode
+    public let validators: [IQStringValidator]
     
     public init(
         mode: Mode,
@@ -20,23 +20,29 @@ open class QLogicStringValidator : IQStringValidator {
         self.validators = validators
     }
 
-    public func validate(_ string: String, complete: Bool) -> Bool {
+    public func validate(_ string: String) -> QStringValidatorResult {
+        var errors: [String] = []
         switch self.mode {
         case .and:
             for validator in self.validators {
-                if validator.validate(string, complete: complete) == false {
-                    return false
+                let result = validator.validate(string)
+                if result.isValid == false {
+                    errors.append(contentsOf: result.errors)
                 }
             }
-            return true
         case .or:
             for validator in self.validators {
-                if validator.validate(string, complete: complete) == true {
-                    return true
+                let result = validator.validate(string)
+                if result.isValid == true {
+                    break
+                } else {
+                    errors.append(contentsOf: result.errors)
                 }
             }
-            return false
         }
+        return QStringValidatorResult(
+            errors: errors
+        )
     }
 
 }

@@ -4,29 +4,34 @@
 
 open class QRegularExpressionStringValidator : IQStringValidator {
 
-    public var expression: NSRegularExpression
+    public let expression: NSRegularExpression
+    public let error: String
 
     public init(
-        expression: NSRegularExpression
+        expression: NSRegularExpression,
+        error: String
     ) {
         self.expression = expression
+        self.error = error
     }
 
     public convenience init(
-        pattern: String
+        pattern: String,
+        error: String
     ) throws {
         self.init(
-            expression: try NSRegularExpression(pattern: pattern, options: [ .caseInsensitive ])
+            expression: try NSRegularExpression(pattern: pattern, options: [ .caseInsensitive ]),
+            error: error
         )
     }
 
-    public func validate(_ string: String, complete: Bool) -> Bool {
-        var valid = true
-        if complete == true {
-            let stringRange = NSRange(location: 0, length: string.count)
-            let matchRange = self.expression.rangeOfFirstMatch(in: string, options: .reportProgress, range: stringRange)
-            valid = matchRange.location == 0 && matchRange.length == string.count
+    public func validate(_ string: String) -> QStringValidatorResult {
+        var errors: [String] = []
+        let range = NSRange(location: 0, length: string.count)
+        let match = self.expression.rangeOfFirstMatch(in: string, options: .reportProgress, range: range)
+        if match.location != 0 && match.length != string.count {
+            errors.append(self.error)
         }
-        return valid
+        return QStringValidatorResult(errors: errors)
     }
 }
