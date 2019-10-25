@@ -399,7 +399,7 @@ private extension QJson {
                 }
                 if subpathIndex == subpaths.endIndex - 1 {
                     if let value = value {
-                        mutable.setValue(value, forKey: key)
+                        mutable[key] = value
                     } else {
                         mutable.removeObject(forKey: key)
                     }
@@ -443,8 +443,21 @@ private extension QJson {
                     } else {
                         mutable.removeObject(at: index)
                     }
-                } else {
+                } else if index < mutable.count {
                     root = mutable[index]
+                } else {
+                    let nextSubpath = subpaths[subpathIndex + 1]
+                    if nextSubpath.jsonPathKey != nil {
+                        let nextRoot = NSMutableDictionary()
+                        mutable[index] = nextRoot
+                        root = nextRoot
+                    } else if nextSubpath.jsonPathIndex != nil {
+                        let nextRoot = NSMutableArray()
+                        mutable[index] = nextRoot
+                        root = nextRoot
+                    } else {
+                        throw QJsonError.access
+                    }
                 }
             } else {
                 throw QJsonError.access
