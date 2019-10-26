@@ -565,11 +565,13 @@ internal extension QDatabase.OrderBy.Mode {
 internal extension QDatabase.Table {
     
     func add(column: QDatabase.Column) {
+        guard self.columns.contains(where: { return $0.name == column.name }) == false else { return }
         self.columns.append(column)
     }
     
     func remove(column: QDatabase.Column) {
-        self.columns.append(column)
+        guard let index = self.columns.firstIndex(where: { return $0.name == column.name }) else { return }
+        self.columns.remove(at: index)
     }
     
 }
