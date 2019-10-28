@@ -359,7 +359,7 @@ extension QApiRequest {
         var result: [(String, String)] = []
         params.forEach({ (key, value) in
             let encodeKey = self._encode(key: key)
-            let encodeValue = self._encode(value: value)
+            let encodeValue = self._encode(urlPrameterValue: value)
             result.append((encodeKey, encodeValue))
         })
         return result
@@ -404,6 +404,10 @@ extension QApiRequest {
 
     private func _encode(value: String) -> String {
         return value.addingPercentEncoding(withAllowedCharacters: QApiRequest.ParamsCharacterSet)!
+    }
+    
+    private func _encode(urlPrameterValue: String) -> String {
+        return urlPrameterValue.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
     }
 
 }
