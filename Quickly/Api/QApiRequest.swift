@@ -128,15 +128,9 @@ open class QApiRequest : IQApiRequest {
     
 }
 
-extension QApiRequest {
-    
-    public static let ParamsCharacterSet: CharacterSet = CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[] ").inverted
-    
-}
+private extension QApiRequest {
 
-extension QApiRequest {
-
-    private func _prepareUrlComponents(provider: IQApiProvider) -> URLComponents? {
+    func _prepareUrlComponents(provider: IQApiProvider) -> URLComponents? {
         if let selfUrl = self.url {
             return URLComponents(string: selfUrl.absoluteString)
         } else if let providerUrl = provider.baseUrl {
@@ -162,7 +156,7 @@ extension QApiRequest {
         return nil
     }
 
-    private func _prepareUrlQuery(query: String?, provider: IQApiProvider) -> String? {
+    func _prepareUrlQuery(query: String?, provider: IQApiProvider) -> String? {
         var rawParams: [String: Any] = [:]
         provider.urlParams.forEach({ (key, value) in
             rawParams[key] = value
@@ -194,7 +188,7 @@ extension QApiRequest {
         return nil
     }
     
-    private func _processingUrl(params: [String: Any]) -> [(String, String)] {
+    func _processingUrl(params: [String: Any]) -> [(String, String)] {
         let flatParams = self._flat(params: params)
         if flatParams.count == 0 {
             return []
@@ -206,7 +200,7 @@ extension QApiRequest {
         return self._encodeUrl(params: processedParams)
     }
 
-    private func _prepareHeaders(provider: IQApiProvider) -> [(String, String)] {
+    func _prepareHeaders(provider: IQApiProvider) -> [(String, String)] {
         var rawHeaders: [String: String] = [:]
         provider.headers.forEach({ (key, value) in
             rawHeaders[key] = value
@@ -221,7 +215,7 @@ extension QApiRequest {
         return self.processing(headers: flatHeaders)
     }
 
-    private func _prepareBody(provider: IQApiProvider, headers: inout [(String, String)]) -> Data? {
+    func _prepareBody(provider: IQApiProvider, headers: inout [(String, String)]) -> Data? {
         if let bodyData = self.bodyData {
             self._insert(params: &headers, key: "Content-Length", value: "\(bodyData.count)")
             return bodyData
@@ -299,7 +293,7 @@ extension QApiRequest {
         return nil
     }
     
-    private func _processingBody(params: [String: Any]) -> [(String, String)] {
+    func _processingBody(params: [String: Any]) -> [(String, String)] {
         let flatParams = self._flat(params: params)
         if flatParams.count == 0 {
             return []
@@ -311,7 +305,7 @@ extension QApiRequest {
         return self._encodeBody(params: processedParams)
     }
     
-    private func _processingMultipartBody(params: [String: Any]) -> [(String, String)] {
+    func _processingMultipartBody(params: [String: Any]) -> [(String, String)] {
         let flatParams = self._flat(params: params)
         if flatParams.count == 0 {
             return []
@@ -323,7 +317,7 @@ extension QApiRequest {
         return self._encodeMultipartBody(params: processedParams)
     }
     
-    private func _insert(params: inout [(String, String)], key: String, value: String) {
+    func _insert(params: inout [(String, String)], key: String, value: String) {
         if let index = params.firstIndex(where: { return $0.0 == key }) {
             params[index] = (key, value)
         } else {
@@ -331,13 +325,13 @@ extension QApiRequest {
         }
     }
 
-    private func _flat(params: [String: Any]) -> [(String, String)] {
+    func _flat(params: [String: Any]) -> [(String, String)] {
         var flatParams: [(String, String)] = []
         params.forEach({ self._flat(flatParams: &flatParams, path: $0.0, value: $0.1) })
         return flatParams
     }
 
-    private func _flat(flatParams: inout [(String, String)], path: String, value: Any) {
+    func _flat(flatParams: inout [(String, String)], path: String, value: Any) {
         if let valueDictionary = value as? [String: Any] {
             valueDictionary.forEach { (subPath, subValue) in
                 self._flat(flatParams: &flatParams, path: "\(path)[\(subPath)]", value: subValue)
@@ -355,7 +349,7 @@ extension QApiRequest {
         }
     }
     
-    private func _encodeUrl(params: [(String, String)]) -> [(String, String)] {
+    func _encodeUrl(params: [(String, String)]) -> [(String, String)] {
         var result: [(String, String)] = []
         params.forEach({ (key, value) in
             let encodeKey = self._encode(key: key)
@@ -365,7 +359,7 @@ extension QApiRequest {
         return result
     }
     
-    private func _encodeBody(params: [(String, String)]) -> [(String, String)] {
+    func _encodeBody(params: [(String, String)]) -> [(String, String)] {
         var result: [(String, String)] = []
         params.forEach({ (key, value) in
             let encodeKey = self._encode(key: key)
@@ -375,7 +369,7 @@ extension QApiRequest {
         return result
     }
     
-    private func _encodeMultipartBody(params: [(String, String)]) -> [(String, String)] {
+    func _encodeMultipartBody(params: [(String, String)]) -> [(String, String)] {
         var result: [(String, String)] = []
         params.forEach({ (key, value) in
             let encodeKey = self._encode(key: key)
@@ -384,7 +378,7 @@ extension QApiRequest {
         return result
     }
 
-    private func _encode(key: String) -> String {
+    func _encode(key: String) -> String {
         var string = key
         if self.trimArraySymbolsUrlParams == true {
             if let regexp = try? NSRegularExpression(pattern: "\\[[0-9]+\\]", options: []) {
@@ -394,7 +388,7 @@ extension QApiRequest {
         return self._encode(value: string)
     }
 
-    private func _encode(value: Any) -> String {
+    func _encode(value: Any) -> String {
         if let string = value as? String {
             return self._encode(value: string)
         } else {
@@ -402,8 +396,8 @@ extension QApiRequest {
         }
     }
 
-    private func _encode(value: String) -> String {
-        return value.addingPercentEncoding(withAllowedCharacters: QApiRequest.ParamsCharacterSet)!
+    func _encode(value: String) -> String {
+        return value.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
     }
 
 }
