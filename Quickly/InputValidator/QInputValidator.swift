@@ -11,7 +11,7 @@ public final class QInputValidator : IQInputValidator {
     }
 
     public func validate(_ string: String) -> Bool {
-        return self.validator.validate(string, complete: true)
+        return self.validator.validate(string).isValid
     }
 
 }

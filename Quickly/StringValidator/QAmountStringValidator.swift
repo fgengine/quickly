@@ -7,7 +7,8 @@ open class QAmountStringValidator : QRegularExpressionStringValidator {
     public init(
         maximumSimbol: Int,
         decimalSeparator: String,
-        maximumDecimalSimbol: Int
+        maximumDecimalSimbol: Int,
+        error: String
     ) throws {
         var patterns: [String] = []
         patterns.append("^0$")
@@ -19,27 +20,27 @@ open class QAmountStringValidator : QRegularExpressionStringValidator {
             patterns.append("^[1-9][0-9]{0,\(maximumSimbol - 1)}\\\(decimalSeparator)[0-9]{0,\(maximumDecimalSimbol)}$")
         }
         super.init(
-            expression: try NSRegularExpression(pattern: patterns.joined(separator: "|"), options: [ .caseInsensitive ])
+            expression: try NSRegularExpression(pattern: patterns.joined(separator: "|"), options: [ .caseInsensitive ]),
+            error: error
         )
     }
 
     public convenience init(
         maximumSimbol: Int,
         locale: Locale,
-        maximumDecimalSimbol: Int
+        maximumDecimalSimbol: Int,
+        error: String
     ) throws {
         try self.init(
             maximumSimbol: maximumSimbol,
             decimalSeparator: locale.decimalSeparator ?? ".",
-            maximumDecimalSimbol: maximumDecimalSimbol
+            maximumDecimalSimbol: maximumDecimalSimbol,
+            error: error
         )
     }
 
-    public override func validate(_ string: String, complete: Bool) -> Bool {
-        if string.count > 0 {
-            return super.validate(string, complete: complete)
-        }
-        return true
+    public override func validate(_ string: String) -> QStringValidatorResult {
+        return super.validate(string)
     }
 
 }

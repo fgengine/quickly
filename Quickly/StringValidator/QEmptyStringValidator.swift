@@ -4,11 +4,20 @@
 
 open class QEmptyStringValidator : IQStringValidator {
     
-    public init() {
+    public let error: String
+    
+    public init(
+        error: String
+    ) {
+        self.error = error
     }
 
-    public func validate(_ string: String, complete: Bool) -> Bool {
-        return string.count == 0
+    public func validate(_ string: String) -> QStringValidatorResult {
+        var errors: [String] = []
+        if string.count == 0 {
+            errors.append(self.error)
+        }
+        return QStringValidatorResult(errors: errors)
     }
 
 }

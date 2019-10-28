@@ -4,26 +4,38 @@
 
 open class QEmailStringValidator : IQStringValidator {
     
-    public init() {
+    public let error: String
+    
+    public init(
+        error: String
+    ) {
+        self.error = error
     }
     
-    public func validate(_ string: String, complete: Bool) -> Bool {
+    public func validate(_ string: String) -> QStringValidatorResult {
+        var errors: [String] = []
         let parts = string.split(separator: "@")
         if parts.count != 2 {
-            return false
+            errors.append(self.error)
+        } else {
+            let name = parts[0]
+            if name.count < 1 {
+                errors.append(self.error)
+            } else {
+                let host = parts[1]
+                let hostParts = host.split(separator: ".")
+                if hostParts.count != 2 {
+                    errors.append(self.error)
+                } else {
+                    let hostName = hostParts[0]
+                    let hostZone = hostParts[1]
+                    if (hostName.count == 0) && (hostZone.count == 0) {
+                        errors.append(self.error)
+                    }
+                }
+            }
         }
-        let name = parts[0]
-        if name.count < 1 {
-            return false
-        }
-        let host = parts[1]
-        let hostParts = host.split(separator: ".")
-        if hostParts.count != 2 {
-            return false
-        }
-        let hostName = hostParts[0]
-        let hostZone = hostParts[1]
-        return (hostName.count > 1) && (hostZone.count > 1)
+        return QStringValidatorResult(errors: errors)
     }
     
 }
