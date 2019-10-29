@@ -53,7 +53,7 @@ open class QNumberStringValidator : IQStringValidator {
         if let number = NSDecimalNumber.decimalNumber(from: string) {
             let value = number as Decimal
             if let limit = self.minimumValue, let error = self.minimumError {
-                if value > limit {
+                if value < limit {
                     errors.append(error)
                 }
             }
