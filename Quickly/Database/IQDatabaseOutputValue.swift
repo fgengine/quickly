@@ -189,7 +189,7 @@ extension URL : IQDatabaseOutputValue {
 extension Date : IQDatabaseOutputValue {
     
     public static func value(statement: QDatabase.Statement, at index: Int) throws -> Date {
-        return Date(timeIntervalSince1970: TimeInterval((statement.value(at: index) as Int64) / 1000))
+        return Date(timeIntervalSince1970: TimeInterval(statement.value(at: index) as Double))
     }
     
 }

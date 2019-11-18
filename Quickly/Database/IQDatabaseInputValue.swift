@@ -201,7 +201,7 @@ extension URL : IQDatabaseInputValue {
 extension Date : IQDatabaseInputValue {
     
     public func bindTo(statement: QDatabase.Statement, at index: Int) throws {
-        try statement.bind(at: index, value: Int64(self.timeIntervalSince1970 * 1000))
+        try statement.bind(at: index, value: Double(self.timeIntervalSince1970))
     }
     
 }

@@ -530,7 +530,7 @@ internal extension QDatabase.DataType {
             case .integer: return SQLITE_INTEGER
             case .double: return SQLITE_FLOAT
             case .string: return SQLITE_TEXT
-            case .dateTime: return SQLITE_INTEGER
+            case .dateTime: return SQLITE_FLOAT
             case .data: return SQLITE_BLOB
             }
         }
@@ -538,8 +538,8 @@ internal extension QDatabase.DataType {
     
     func queryString() -> String {
         switch self {
-        case .integer, .dateTime: return "INTEGER"
-        case .double: return "REAL"
+        case .integer: return "INTEGER"
+        case .double, .dateTime: return "REAL"
         case .string: return "TEXT"
         case .data: return "BLOB"
         }
