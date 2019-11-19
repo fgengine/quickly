@@ -195,6 +195,7 @@ open class QViewController : NSObject, IQViewController {
     }
 
     open func prepareInteractivePresent() {
+        self.isPresented = true
         #if DEBUG
         if self.logging == true {
             print("\(String(describing: self.classForCoder)).prepareInteractivePresent()")
@@ -203,6 +204,7 @@ open class QViewController : NSObject, IQViewController {
     }
 
     open func cancelInteractivePresent() {
+        self.isPresented = false
         #if DEBUG
         if self.logging == true {
             print("\(String(describing: self.classForCoder)).cancelInteractivePresent()")
@@ -252,6 +254,7 @@ open class QViewController : NSObject, IQViewController {
     }
 
     open func finishInteractiveDismiss() {
+        self.isPresented = false
         #if DEBUG
         if self.logging == true {
             print("\(String(describing: self.classForCoder)).finishInteractiveDismiss()")
