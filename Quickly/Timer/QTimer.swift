@@ -12,8 +12,6 @@ public final class QTimer : NSObject {
     public private(set) var isDelaying: Bool
     public private(set) var isStarted: Bool
     public private(set) var isPaused: Bool
-    public private(set) var duration: TimeInterval
-    public private(set) var elapsed: TimeInterval
     public private(set) var repeated: UInt
 
     public var onStarted: Closure?
@@ -35,8 +33,6 @@ public final class QTimer : NSObject {
         self.isDelaying = false
         self.isStarted = false
         self.isPaused = false
-        self.duration = 0
-        self.elapsed = 0
         self.repeated = 0
     }
 
