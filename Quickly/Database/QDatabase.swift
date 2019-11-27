@@ -157,6 +157,7 @@ public class QDatabase {
     
     public private(set) var location: Location
     public private(set) var isReadonly: Bool
+    public var deletingAfterClose: Bool
     public var lastInsertedRowId: Int64 {
         get { return sqlite3_last_insert_rowid(self._database) }
     }
@@ -172,28 +173,54 @@ public class QDatabase {
     
     private let _database: OpaquePointer
     
-    public init(location: Location, readonly: Bool = false) throws {
+    public init(location: Location, readonly: Bool = false, deletingAfterClose: Bool = false) throws {
         self.location = location
         self.isReadonly = readonly
+        self.deletingAfterClose = deletingAfterClose
         self._database = try QDatabase._open(location, readonly)
     }
     
-    public convenience init(filename: String, readonly: Bool = false) throws {
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        try self.init(location: .uri("\(paths.first!)/\(filename).sqlite"), readonly: readonly)
+    public convenience init(filename: String, readonly: Bool = false, deletingAfterClose: Bool = false) throws {
+        let path = try FileManager.default.documentDirectory() as String
+        try self.init(location: .uri("\(path)/\(filename).sqlite"), readonly: readonly, deletingAfterClose: deletingAfterClose)
     }
     
     deinit {
-        let result = sqlite3_close(self._database)
-        if result != SQLITE_OK {
-            let error = QDatabase._error(database: self._database)
-            fatalError("QDatabase: Error closing database (code: \(result)): \(error.localizedDescription)")
+        do {
+            let result = sqlite3_close(self._database)
+            if result != SQLITE_OK {
+                throw QDatabase._error(database: self._database)
+            }
+        } catch let error {
+            fatalError("QDatabase: Error closing database: \(error.localizedDescription)")
         }
+        if self.deletingAfterClose == true {
+            switch self.location {
+            case .inMemory, .temporary: break
+            case .uri(let path):
+                do {
+                    try FileManager.default.removeItem(atPath: path)
+                } catch let error {
+                    fatalError("QDatabase: Error deleting database: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+        
+}
+
+// MARK: Public • QDatabase
+
+public extension QDatabase {
+    
+    static func isExist(filename: String) throws -> Bool {
+        let path = try FileManager.default.documentDirectory() as String
+        return FileManager.default.fileExists(atPath: "\(path)/\(filename).sqlite")
     }
     
 }
 
-// MARK: Public • QDatabase
+// MARK: Public • QDatabase • UserVersion
 
 public extension QDatabase {
     
@@ -513,7 +540,7 @@ internal extension QDatabase.Location {
             switch self {
             case .inMemory: return ":memory:"
             case .temporary: return ""
-            case .uri(let URI): return URI
+            case .uri(let path): return path
             }
         }
     }
