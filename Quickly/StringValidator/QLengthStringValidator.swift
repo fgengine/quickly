@@ -16,7 +16,7 @@ open class QLengthStringValidator : IQStringValidator {
         self.minimumLength = length
         self.minimumError = error
         self.maximumLength = length
-        self.maximumError = nil
+        self.maximumError = error
     }
     
     public init(
@@ -46,7 +46,7 @@ open class QLengthStringValidator : IQStringValidator {
         if let maximumLength = self.maximumLength, let maximumError = self.maximumError {
             if self.minimumLength == maximumLength {
                 if string.count != maximumLength {
-                    errors.append(self.minimumError)
+                    errors.append(maximumError)
                 }
             } else {
                 if string.count < self.minimumLength {
