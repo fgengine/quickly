@@ -119,6 +119,21 @@ open class QTableSection : IQTableSection {
             }
         }
     }
+    
+    public func replaceRow(_ rows: [IQTableRow], to: [IQTableRow], with animation: UITableView.RowAnimation?) {
+        let indexPaths = rows.compactMap({ return $0.indexPath })
+        for index in 0..<rows.count {
+            let row = self.rows[index]
+            self.rows[index] = to[index]
+            row.unbind()
+        }
+        self._bindRows()
+        if indexPaths.count > 0 {
+            if let controller = self.controller, let tableView = controller.tableView, let animation = animation {
+                tableView.reloadRows(at: indexPaths, with: animation)
+            }
+        }
+    }
 
     public func moveRow(_ fromIndex: Int, toIndex: Int) {
         let row = self.rows[fromIndex]

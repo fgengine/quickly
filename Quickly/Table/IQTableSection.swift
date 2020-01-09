@@ -29,6 +29,8 @@ public protocol IQTableSection : class {
     func deleteRow(_ rows: [IQTableRow], with animation: UITableView.RowAnimation?)
     func reloadRow(_ row: IQTableRow, with animation: UITableView.RowAnimation?)
     func reloadRow(_ rows: [IQTableRow], with animation: UITableView.RowAnimation?)
+    func replaceRow(_ row: IQTableRow, to: IQTableRow, with animation: UITableView.RowAnimation?)
+    func replaceRow(_ rows: [IQTableRow], to: [IQTableRow], with animation: UITableView.RowAnimation?)
 
     func moveRow(_ fromRow: IQTableRow, toIndex: Int) -> Bool
     func moveRow(_ fromIndex: Int, toIndex: Int)
@@ -65,6 +67,10 @@ public extension IQTableSection {
 
     func reloadRow(_ row: IQTableRow, with animation: UITableView.RowAnimation? = nil) {
         self.reloadRow([ row ], with: animation)
+    }
+    
+    func replaceRow(_ row: IQTableRow, to: IQTableRow, with animation: UITableView.RowAnimation?) {
+        self.replaceRow([ row ], to: [ to ], with: animation)
     }
 
     func moveRow(_ fromRow: IQTableRow, toIndex: Int) -> Bool {
