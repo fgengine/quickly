@@ -20,4 +20,12 @@ public protocol IQLoadingView : IQView {
     
 }
 
+public protocol IQProgressLoadingView : IQLoadingView {
+    
+    var progress: CGFloat { set get }
+    
+    func setProgress(_ progress: CGFloat, animated: Bool)
+    
+}
+
 public typealias QLoadingViewType = UIView & IQLoadingView
