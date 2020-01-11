@@ -5,7 +5,7 @@
 open class QPagebarItem : QCollectionItem {
 }
 
-open class QPagebarCell< Type: QPagebarItem > : QCollectionCell< Type > {
+open class QPagebarCell< Item: QPagebarItem > : QCollectionCell< Item > {
 }
 
 open class QPagebar : QView {

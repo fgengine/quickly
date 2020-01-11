@@ -5,7 +5,7 @@
 open class QGroupbarItem : QCollectionItem {
 }
 
-open class QGroupbarCell< Type: QGroupbarItem > : QCollectionCell< Type > {
+open class QGroupbarCell< Item: QGroupbarItem > : QCollectionCell< Item > {
 }
 
 open class QGroupbar : QView {

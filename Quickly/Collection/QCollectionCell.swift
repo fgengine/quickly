@@ -2,10 +2,10 @@
 //  Quickly
 //
 
-open class QCollectionCell< Type: IQCollectionItem > : UICollectionViewCell, IQTypedCollectionCell {
+open class QCollectionCell< Item: IQCollectionItem > : UICollectionViewCell, IQTypedCollectionCell {
     
     public weak var collectionDelegate: CollectionCellDelegate?
-    public private(set) var item: Type?
+    public private(set) var item: Item?
     public private(set) var spec: IQContainerSpec?
 
     public override init(frame: CGRect) {
@@ -27,14 +27,14 @@ open class QCollectionCell< Type: IQCollectionItem > : UICollectionViewCell, IQT
         self.configure()
     }
 
-    open class func size(item: Type, layout: UICollectionViewLayout, section: IQCollectionSection, spec: IQContainerSpec) -> CGSize {
+    open class func size(item: Item, layout: UICollectionViewLayout, section: IQCollectionSection, spec: IQContainerSpec) -> CGSize {
         return CGSize.zero
     }
 
     open func configure() {
     }
 
-    open func set(item: Type, spec: IQContainerSpec, animated: Bool) {
+    open func set(item: Item, spec: IQContainerSpec, animated: Bool) {
         self.item = item
         self.spec = spec
     }
