@@ -59,6 +59,12 @@ public class QDatabase {
         
     }
     
+    public enum TransactionMode {
+        case deferred
+        case immediate
+        case exclusive
+    }
+    
     open class Table {
         
         public internal(set) var name: String
@@ -280,6 +286,26 @@ public extension QDatabase {
         let statement = try self.statement(query: query)
         try statement.executeUntilRow()
         return statement.numberOfRows > 0
+    }
+
+}
+
+// MARK: Public • QDatabase • Transactions
+
+public extension QDatabase {
+    
+    func transaction(mode: TransactionMode = .deferred, block: () throws -> Void) throws {
+        let beginStatement = try self.statement(query: "BEGIN \(mode.queryString()) TRANSACTION")
+        try beginStatement.executeUntilDone()
+        do {
+            try block()
+            let commitStatement = try self.statement(query: "COMMIT TRANSACTION")
+            try commitStatement.executeUntilDone()
+        } catch let error {
+            let commitStatement = try self.statement(query: "ROLLBACK TRANSACTION")
+            try commitStatement.executeUntilDone()
+            throw error
+        }
     }
 
 }
@@ -586,6 +612,20 @@ internal extension QDatabase.OrderBy.Mode {
         switch self {
         case .asc: return "ASC"
         case .desc: return "DESC"
+        }
+    }
+    
+}
+
+// MARK: Internal QDatabase.TransactionMode
+
+internal extension QDatabase.TransactionMode {
+    
+    func queryString() -> String {
+        switch self {
+        case .deferred: return "DEFERRED"
+        case .immediate: return "IMMEDIATE"
+        case .exclusive: return "EXCLUSIVE"
         }
     }
     
