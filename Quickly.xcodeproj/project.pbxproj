@@ -54,7 +54,6 @@
 		40134F021F63129E009F81A6 /* IQStringFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40134EFF1F63129E009F81A6 /* IQStringFormatter.swift */; };
 		40134F031F63129E009F81A6 /* QCardExpirationDateStringFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40134F001F63129E009F81A6 /* QCardExpirationDateStringFormatter.swift */; };
 		40134F041F63129E009F81A6 /* QCardNumberStringFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40134F011F63129E009F81A6 /* QCardNumberStringFormatter.swift */; };
-		4015F2E92237FEB000FAD036 /* QAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4015F2E82237FEB000FAD036 /* QAction.swift */; };
 		4016D6BD216B40F20040EA5A /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4016D6BC216B40F20040EA5A /* Date.swift */; };
 		4018295E1F4C1C0A005C9949 /* Quickly.h in Headers */ = {isa = PBXBuildFile; fileRef = 4018295C1F4C1C0A005C9949 /* Quickly.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40182E682109E0A600CDD45F /* IQContainerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40182E672109E0A600CDD45F /* IQContainerSpec.swift */; };
@@ -409,7 +408,6 @@
 		40134EFF1F63129E009F81A6 /* IQStringFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQStringFormatter.swift; sourceTree = "<group>"; };
 		40134F001F63129E009F81A6 /* QCardExpirationDateStringFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCardExpirationDateStringFormatter.swift; sourceTree = "<group>"; };
 		40134F011F63129E009F81A6 /* QCardNumberStringFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCardNumberStringFormatter.swift; sourceTree = "<group>"; };
-		4015F2E82237FEB000FAD036 /* QAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QAction.swift; sourceTree = "<group>"; };
 		4016D6BC216B40F20040EA5A /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		401829591F4C1C0A005C9949 /* Quickly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Quickly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4018295C1F4C1C0A005C9949 /* Quickly.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Quickly.h; sourceTree = "<group>"; };
@@ -912,14 +910,6 @@
 			path = StringFormatter;
 			sourceTree = "<group>";
 		};
-		4015F2E72237FE9900FAD036 /* Action */ = {
-			isa = PBXGroup;
-			children = (
-				4015F2E82237FEB000FAD036 /* QAction.swift */,
-			);
-			path = Action;
-			sourceTree = "<group>";
-		};
 		4018294F1F4C1C09005C9949 = {
 			isa = PBXGroup;
 			children = (
@@ -943,7 +933,6 @@
 			children = (
 				40CF457D1F4DE6AB004D00D8 /* Extensions */,
 				402D43471F7194A300EAA69C /* Debug */,
-				4015F2E72237FE9900FAD036 /* Action */,
 				40134EFE1F63129E009F81A6 /* StringFormatter */,
 				40979EBC1F62C88A0003ED1C /* StringValidator */,
 				40CF45861F4DE6AB004D00D8 /* Keychain */,
@@ -1967,7 +1956,6 @@
 				4039F8E32072636A00A88E45 /* QDateFieldFormatter.swift in Sources */,
 				4028BE90233CA7E900B24C5B /* QEmptyStringValidator.swift in Sources */,
 				405810C1216F412F00B46610 /* QGroupViewController.swift in Sources */,
-				4015F2E92237FEB000FAD036 /* QAction.swift in Sources */,
 				403B3D9720D39837008F80D4 /* IQWireframe.swift in Sources */,
 				40CF45ED1F4DE6AB004D00D8 /* QPincodeView.swift in Sources */,
 				40CF45B51F4DE6AB004D00D8 /* IQCollectionCell.swift in Sources */,
