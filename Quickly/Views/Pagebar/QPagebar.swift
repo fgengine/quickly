@@ -168,10 +168,19 @@ open class QPagebar : QView {
                     x: (boundsSize.width - contentSize.width) / 2,
                     y: (boundsSize.height - contentSize.height) / 2
                 )
-                attributes.forEach { layoutAttribute in
+                attributes.forEach({ layoutAttribute in
                     layoutAttribute.frame = layoutAttribute.frame.offsetBy(dx: offset.x, dy: offset.y)
-                }
+                })
             }
+            attributes.forEach({ layoutAttribute in
+                layoutAttribute.frame = CGRect(
+                    origin: layoutAttribute.frame.origin,
+                    size: CGSize(
+                        width: layoutAttribute.frame.width,
+                        height: boundsSize.height
+                    )
+                )
+            })
             return attributes
         }
 
