@@ -422,8 +422,10 @@ private extension QTableController {
         if let metatype = self._aliasDecors.first(where: { return $0.key == dataMetatype }) {
             return metatype.value
         }
+        if let cellType = self._aliasDecors[dataMetatype] {
+            return cellType
+        }
         let usings = self._decors.filter({ return $0.using(any: data) })
-        guard usings.count > 0 else { return nil }
         if usings.count > 1 {
             let typeOfData = type(of: data)
             let levels = usings.compactMap({ (type) -> (IQTableDecor.Type, UInt)? in
@@ -434,11 +436,12 @@ private extension QTableController {
             let decorType = sorted.first!.0
             self._aliasDecors[dataMetatype] = decorType
             return decorType
-        } else {
+        } else if usings.count == 1 {
             let decorType = usings.first!
             self._aliasDecors[dataMetatype] = decorType
             return decorType
         }
+        return nil
     }
     
     func _cellClass(row: IQTableRow) -> IQTableCell.Type? {
@@ -446,8 +449,10 @@ private extension QTableController {
         if let metatype = self._aliasCells.first(where: { return $0.key == rowMetatype }) {
             return metatype.value
         }
+        if let cellType = self._aliasCells[rowMetatype] {
+            return cellType
+        }
         let usings = self._cells.filter({ return $0.using(any: row) })
-        guard usings.count > 0 else { return nil }
         if usings.count > 1 {
             let typeOfData = type(of: row)
             let levels = usings.compactMap({ (type) -> (IQTableCell.Type, UInt)? in
@@ -458,11 +463,12 @@ private extension QTableController {
             let cellType = sorted.first!.0
             self._aliasCells[rowMetatype] = cellType
             return cellType
-        } else {
+        } else if usings.count == 1 {
             let cellType = usings.first!
             self._aliasCells[rowMetatype] = cellType
             return cellType
         }
+        return nil
     }
 
 }

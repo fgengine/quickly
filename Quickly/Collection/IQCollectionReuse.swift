@@ -19,7 +19,7 @@ public protocol IQCollectionReuse : IQView {
 extension IQCollectionReuse where Self : UIView {
 
     public static func reuseIdentifier() -> String {
-        return String(describing: self)
+        return NSStringFromClass(self)
     }
 
     public static func currentNib() -> UINib? {

@@ -282,9 +282,9 @@ public extension QDatabase {
     }
     
     func isExist(table: String) throws -> Bool {
-        let query = "SELECT tbl_name FROM sqlite_master WHERE tbl_name == " + table
+        let query = "SELECT tbl_name FROM sqlite_master WHERE tbl_name == \"\(table)\""
         let statement = try self.statement(query: query)
-        try statement.executeUntilRow()
+        try statement.executeUntilDone()
         return statement.numberOfRows > 0
     }
 

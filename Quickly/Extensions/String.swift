@@ -14,22 +14,12 @@ public extension String {
 
     static func localized(_ key: String, args: [String: String]) -> String {
         let result = self.localized(key)
-        return self.replace(result, keys: args)
+        return result.replace(keys: args)
     }
 
     static func localized(_ key: String, bundle: Bundle, args: [String: String]) -> String {
         let result = self.localized(key, bundle: bundle)
-        return self.replace(result, keys: args)
-    }
-
-    static func replace(_ string: String, keys: [String: String]) -> String {
-        var result = string
-        keys.forEach { (key: String, value: String) in
-            if let range = result.range(of: key) {
-                result.replaceSubrange(range, with: value)
-            }
-        }
-        return result
+        return result.replace(keys: args)
     }
 
 }
@@ -38,6 +28,16 @@ public extension String {
 
     func remove(_ characterSet: CharacterSet) -> String {
         return self.components(separatedBy: characterSet).joined()
+    }
+
+    func replace(keys: [String: String]) -> String {
+        var result = self
+        keys.forEach { (key: String, value: String) in
+            if let range = result.range(of: key) {
+                result.replaceSubrange(range, with: value)
+            }
+        }
+        return result
     }
 
 }

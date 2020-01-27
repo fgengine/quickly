@@ -21,7 +21,7 @@ public protocol IQTableReuse : IQView {
 extension IQTableReuse where Self : UIView {
 
     public static func reuseIdentifier() -> String {
-        return String(describing: self)
+        return NSStringFromClass(self)
     }
 
     public static func currentNib() -> UINib? {
