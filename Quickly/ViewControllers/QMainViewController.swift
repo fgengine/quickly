@@ -258,6 +258,7 @@ open class QMainViewController : QViewController {
     }
 
     open override func supportedOrientations() -> UIInterfaceOrientationMask {
+        if let vc = self.modalContainerViewController?.currentViewController { return vc.supportedOrientations() }
         if let vc = self.contentViewController { return vc.supportedOrientations() }
         return super.supportedOrientations()
     }
