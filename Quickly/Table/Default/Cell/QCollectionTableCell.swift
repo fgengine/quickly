@@ -71,6 +71,10 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
         ]
     }
     
+    deinit {
+        self._collectionController = nil
+    }
+    
     open override func set(row: RowType, spec: IQContainerSpec, animated: Bool) {
         super.set(row: row, spec: spec, animated: animated)
 
@@ -78,6 +82,12 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
         self.collectionView.scrollIndicatorInsets = row.edgeInsets
         self._collectionViewLayout = row.layout
         self._collectionController = row.controller
+    }
+    
+    open override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        self._collectionController = nil
     }
 
     // MARK: IQCollectionControllerObserver
