@@ -4,6 +4,13 @@
 
 public extension CGSize {
     
+    func wrap() -> CGSize {
+        return CGSize(
+            width: self.height,
+            height: self.width
+        )
+    }
+    
     func ceil() -> CGSize {
         return CGSize(
             width: self.width.ceil(),

@@ -73,6 +73,7 @@ public protocol IQCollectionController : UICollectionViewDataSource, UICollectio
     func isSelected(item: IQCollectionItem) -> Bool
     func select(item: IQCollectionItem, scroll: UICollectionView.ScrollPosition, animated: Bool)
     func deselect(item: IQCollectionItem, animated: Bool)
+    func deselectAll(animated: Bool)
 
     func update(header: IQCollectionData, animated: Bool)
     func update(footer: IQCollectionData, animated: Bool)

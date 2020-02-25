@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QNibViewController : QViewController, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController {
+open class QNibViewController : QViewController, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController, IQLoadingViewDelegate {
 
     @IBOutlet
     public var rootView: UIView! {
@@ -60,9 +60,6 @@ open class QNibViewController : QViewController, IQInputContentViewController, I
         }
     }
     
-    open func dialogDidPressedOutside() {
-    }
-    
     open func isLoading() -> Bool {
         guard let loadingView = self.loadingView else { return false }
         return loadingView.isAnimating()
@@ -115,6 +112,22 @@ open class QNibViewController : QViewController, IQInputContentViewController, I
             viewController.endUpdateContent()
         }
     }
+    
+    // MARK: IQDialogContentViewController
+    
+    open func dialogDidPressedOutside() {
+    }
+
+    // MARK: IQLoadingViewDelegate
+
+    open func willShow(loadingView: QLoadingViewType) {
+        self.view.addSubview(loadingView)
+        self._updateConstraints(self.view, loadingView: loadingView)
+    }
+
+    open func didHide(loadingView: QLoadingViewType) {
+        loadingView.removeFromSuperview()
+    }
 
 }
 
@@ -141,21 +154,6 @@ private extension QNibViewController {
         ]
     }
 
-}
-
-// MARK: IQLoadingViewDelegate
-
-extension QNibViewController : IQLoadingViewDelegate {
-    
-    open func willShow(loadingView: QLoadingViewType) {
-        self.view.addSubview(loadingView)
-        self._updateConstraints(self.view, loadingView: loadingView)
-    }
-    
-    open func didHide(loadingView: QLoadingViewType) {
-        loadingView.removeFromSuperview()
-    }
-    
 }
 
 // MARK: IQContainerSpec

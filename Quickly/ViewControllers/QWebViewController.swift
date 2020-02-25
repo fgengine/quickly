@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDelegate, UIScrollViewDelegate, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController {
+open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDelegate, UIScrollViewDelegate, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController, IQLoadingViewDelegate {
     
     public class WebView : WKWebView {
         
@@ -87,7 +87,8 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
                 self._updateFrame(loadingView: view, bounds: self.view.bounds)
             }
         }
-    }    
+    }
+    
     open func prepareConfiguration() -> WKWebViewConfiguration {
         return WKWebViewConfiguration()
     }
@@ -137,7 +138,8 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
         return navigation
     }
     
-    open func dialogDidPressedOutside() {
+    open func canNavigationAction(with request: URLRequest) -> WKNavigationActionPolicy {
+        return .allow
     }
     
     open func isLoading() -> Bool {
@@ -154,52 +156,7 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
         guard let loadingView = self.loadingView else { return }
         loadingView.stop()
     }
-    
-    open func canNavigationAction(with request: URLRequest) -> WKNavigationActionPolicy {
-        return .allow
-    }
-    
-    // MARK: IQContentViewController
-    
-    public var contentOffset: CGPoint {
-        get {
-            guard self.isLoaded == true else { return CGPoint.zero }
-            return self.webView.scrollView.contentOffset
-        }
-    }
-    
-    public var contentSize: CGSize {
-        get {
-            guard self.isLoaded == true else { return CGSize.zero }
-            return self.webView.scrollView.contentSize
-        }
-    }
-    
-    open func notifyBeginUpdateContent() {
-        if let viewController = self.contentOwnerViewController {
-            viewController.beginUpdateContent()
-        }
-    }
-    
-    open func notifyUpdateContent() {
-        if let viewController = self.contentOwnerViewController {
-            viewController.updateContent()
-        }
-    }
-    
-    open func notifyFinishUpdateContent(velocity: CGPoint) -> CGPoint? {
-        if let viewController = self.contentOwnerViewController {
-            return viewController.finishUpdateContent(velocity: velocity)
-        }
-        return nil
-    }
-    
-    open func notifyEndUpdateContent() {
-        if let viewController = self.contentOwnerViewController {
-            viewController.endUpdateContent()
-        }
-    }
-    
+
     // MARK: WKUIDelegate
     
     open func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
@@ -215,7 +172,6 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
         }
         return nil
     }
-    
     // MARK: WKNavigationDelegate
     
     open func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -254,6 +210,67 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
     open func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         self.stopLoading()
     }
+    
+    // MARK: UIScrollViewDelegate
+    
+    
+    
+    // MARK: IQContentViewController
+
+    public var contentOffset: CGPoint {
+        get {
+            guard self.isLoaded == true else { return CGPoint.zero }
+            return self.webView.scrollView.contentOffset
+        }
+    }
+
+    public var contentSize: CGSize {
+        get {
+            guard self.isLoaded == true else { return CGSize.zero }
+            return self.webView.scrollView.contentSize
+        }
+    }
+
+    open func notifyBeginUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.beginUpdateContent()
+        }
+    }
+
+    open func notifyUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.updateContent()
+        }
+    }
+
+    open func notifyFinishUpdateContent(velocity: CGPoint) -> CGPoint? {
+        if let viewController = self.contentOwnerViewController {
+            return viewController.finishUpdateContent(velocity: velocity)
+        }
+        return nil
+    }
+
+    open func notifyEndUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.endUpdateContent()
+        }
+    }
+    
+    // MARK: IQDialogContentViewController
+    
+    open func dialogDidPressedOutside() {
+    }
+
+    // MARK: IQLoadingViewDelegate
+
+    open func willShow(loadingView: QLoadingViewType) {
+        self._updateFrame(loadingView: loadingView, bounds: self.view.bounds)
+        self.view.addSubview(loadingView)
+    }
+
+    open func didHide(loadingView: QLoadingViewType) {
+        loadingView.removeFromSuperview()
+    }
         
 }
 
@@ -267,21 +284,6 @@ private extension QWebViewController {
     
     func _updateFrame(loadingView: QLoadingViewType, bounds: CGRect) {
         loadingView.frame = bounds
-    }
-    
-}
-
-// MARK: IQLoadingViewDelegate
-
-extension QWebViewController : IQLoadingViewDelegate {
-    
-    open func willShow(loadingView: QLoadingViewType) {
-        self._updateFrame(loadingView: loadingView, bounds: self.view.bounds)
-        self.view.addSubview(loadingView)
-    }
-    
-    open func didHide(loadingView: QLoadingViewType) {
-        loadingView.removeFromSuperview()
     }
     
 }

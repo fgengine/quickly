@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QCompositionViewController< Composition: IQComposition > : QViewController, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController {
+open class QCompositionViewController< Composition: IQComposition > : QViewController, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController, IQLoadingViewDelegate {
 
     public var backgroundView: UIView? {
         willSet {
@@ -60,9 +60,6 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
         }
     }
     
-    open func dialogDidPressedOutside() {
-    }
-    
     open func isLoading() -> Bool {
         guard let loadingView = self.loadingView else { return false }
         return loadingView.isAnimating()
@@ -116,6 +113,22 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
         }
     }
     
+    // MARK: IQDialogContentViewController
+    
+    open func dialogDidPressedOutside() {
+    }
+
+    // MARK: IQLoadingViewDelegate
+
+    open func willShow(loadingView: QLoadingViewType) {
+        self.view.addSubview(loadingView)
+        self._updateConstraints(self.view, loadingView: loadingView)
+    }
+
+    open func didHide(loadingView: QLoadingViewType) {
+        loadingView.removeFromSuperview()
+    }
+    
 }
 
 // MARK: Private
@@ -150,21 +163,6 @@ private extension QCompositionViewController {
         ]
     }
 
-}
-
-// MARK: IQLoadingViewDelegate
-
-extension QCompositionViewController : IQLoadingViewDelegate {
-    
-    open func willShow(loadingView: QLoadingViewType) {
-        self.view.addSubview(loadingView)
-        self._updateConstraints(self.view, loadingView: loadingView)
-    }
-
-    open func didHide(loadingView: QLoadingViewType) {
-        loadingView.removeFromSuperview()
-    }
-    
 }
 
 // MARK: IQContainerSpec

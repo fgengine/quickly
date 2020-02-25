@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QCollectionViewController : QViewController, IQInputContentViewController, IQCollectionControllerObserver, IQKeyboardObserver, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController {
+open class QCollectionViewController : QViewController, IQInputContentViewController, IQCollectionControllerObserver, IQKeyboardObserver, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController, IQLoadingViewDelegate {
     
     public enum PagesPosition {
         case top(offset: CGFloat)
@@ -190,9 +190,6 @@ open class QCollectionViewController : QViewController, IQInputContentViewContro
     open func triggeredRefreshControl() {
     }
     
-    open func dialogDidPressedOutside() {
-    }
-    
     open func isLoading() -> Bool {
         guard let loadingView = self.loadingView else { return false }
         return loadingView.isAnimating()
@@ -293,6 +290,11 @@ open class QCollectionViewController : QViewController, IQInputContentViewContro
         }
     }
     
+    // MARK: IQDialogContentViewController
+    
+    open func dialogDidPressedOutside() {
+    }
+    
     // MARK: IQKeyboardObserver
     
     open func willShowKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
@@ -329,6 +331,23 @@ open class QCollectionViewController : QViewController, IQInputContentViewContro
     }
     
     open func didHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
+    }
+
+    // MARK: IQLoadingViewDelegate
+
+    open func willShow(loadingView: QLoadingViewType) {
+        self._updateFrame(loadingView: loadingView, bounds: self.view.bounds)
+        if let pagesView = self.pagesView {
+            self.view.insertSubview(loadingView, aboveSubview: pagesView)
+        } else if let collectionView = self.collectionView {
+            self.view.insertSubview(loadingView, aboveSubview: collectionView)
+        } else {
+            self.view.addSubview(loadingView)
+        }
+    }
+
+    open func didHide(loadingView: QLoadingViewType) {
+        loadingView.removeFromSuperview()
     }
     
 }
@@ -431,27 +450,6 @@ private extension QCollectionViewController {
             pagesView.sizeToFit()
             self._updateFrame(pagesView: pagesView, bounds: bounds)
         }
-    }
-    
-}
-
-// MARK: IQLoadingViewDelegate
-
-extension QCollectionViewController : IQLoadingViewDelegate {
-    
-    open func willShow(loadingView: QLoadingViewType) {
-        self._updateFrame(loadingView: loadingView, bounds: self.view.bounds)
-        if let pagesView = self.pagesView {
-            self.view.insertSubview(loadingView, aboveSubview: pagesView)
-        } else if let collectionView = self.collectionView {
-            self.view.insertSubview(loadingView, aboveSubview: collectionView)
-        } else {
-            self.view.addSubview(loadingView)
-        }
-    }
-    
-    open func didHide(loadingView: QLoadingViewType) {
-        loadingView.removeFromSuperview()
     }
     
 }

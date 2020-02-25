@@ -6,13 +6,13 @@ open class QCollectionSection : IQCollectionSection {
 
     public private(set) weak var controller: IQCollectionController?
     public private(set) var index: Int?
-    public var insets: UIEdgeInsets = UIEdgeInsets.zero {
+    public var insets: UIEdgeInsets? {
         didSet { self._reloadSection() }
     }
-    public var minimumLineSpacing: CGFloat = 0 {
+    public var minimumLineSpacing: CGFloat? {
         didSet { self._reloadSection() }
     }
-    public var minimumInteritemSpacing: CGFloat = 0 {
+    public var minimumInteritemSpacing: CGFloat? {
         didSet { self._reloadSection() }
     }
     public var canMove: Bool = true {

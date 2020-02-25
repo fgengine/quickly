@@ -282,6 +282,17 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
             else { return }
         collectionView.deselectItem(at: indexPath, animated: animated)
     }
+    
+    open func deselectAll(animated: Bool) {
+        guard
+            let collectionView = self.collectionView
+            else { return }
+        if let selectedItems = collectionView.indexPathsForSelectedItems {
+            for selectedItem in selectedItems.reversed() {
+                collectionView.deselectItem(at: selectedItem, animated: animated)
+            }
+        }
+    }
 
     open func update(header: IQCollectionData, animated: Bool) {
         if #available(iOS 9.0, *) {
@@ -625,7 +636,13 @@ extension QCollectionController : UICollectionViewDelegateFlowLayout {
         insetForSectionAt index: Int
     ) -> UIEdgeInsets {
         let section = self.section(index: index)
-        return section.insets
+        if let inset = section.insets {
+            return inset
+        }
+        if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
+            return layout.sectionInset
+        }
+        return UIEdgeInsets.zero
     }
     
     @objc
@@ -635,7 +652,13 @@ extension QCollectionController : UICollectionViewDelegateFlowLayout {
         minimumLineSpacingForSectionAt index: Int
     ) -> CGFloat {
         let section = self.section(index: index)
-        return section.minimumLineSpacing
+        if let minimumLineSpacing = section.minimumLineSpacing {
+            return minimumLineSpacing
+        }
+        if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
+            return layout.minimumInteritemSpacing
+        }
+        return 0
     }
     
     @objc
@@ -645,7 +668,13 @@ extension QCollectionController : UICollectionViewDelegateFlowLayout {
         minimumInteritemSpacingForSectionAt index: Int
     ) -> CGFloat {
         let section = self.section(index: index)
-        return section.minimumInteritemSpacing
+        if let minimumInteritemSpacing = section.minimumInteritemSpacing {
+            return minimumInteritemSpacing
+        }
+        if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
+            return layout.minimumInteritemSpacing
+        }
+        return 0
     }
     
     @objc

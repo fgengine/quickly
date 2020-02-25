@@ -15,7 +15,7 @@ open class QTableViewControllerFooterView : QView {
     
 }
 
-open class QTableViewController : QViewController, IQTableControllerObserver, IQKeyboardObserver, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController {
+open class QTableViewController : QViewController, IQTableControllerObserver, IQKeyboardObserver, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController, IQLoadingViewDelegate {
 
     public private(set) var tableView: QTableView? {
         willSet {
@@ -209,9 +209,6 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     open func triggeredRefreshControl() {
     }
     
-    open func dialogDidPressedOutside() {
-    }
-    
     open func isLoading() -> Bool {
         guard let loadingView = self.loadingView else { return false }
         return loadingView.isAnimating()
@@ -331,6 +328,22 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     
     open func didHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
     }
+    
+    // MARK: IQDialogContentViewController
+    
+    open func dialogDidPressedOutside() {
+    }
+
+    // MARK: IQLoadingViewDelegate
+    
+    open func willShow(loadingView: QLoadingViewType) {
+        self._updateFrame(loadingView: loadingView, bounds: self.view.bounds)
+        self.view.addSubview(loadingView)
+    }
+    
+    open func didHide(loadingView: QLoadingViewType) {
+        loadingView.removeFromSuperview()
+    }
         
 }
 
@@ -415,21 +428,6 @@ private extension QTableViewController {
             bottom: edgeInsets.bottom,
             right: edgeInsets.right
         )
-    }
-    
-}
-
-// MARK: IQLoadingViewDelegate
-
-extension QTableViewController : IQLoadingViewDelegate {
-    
-    open func willShow(loadingView: QLoadingViewType) {
-        self._updateFrame(loadingView: loadingView, bounds: self.view.bounds)
-        self.view.addSubview(loadingView)
-    }
-    
-    open func didHide(loadingView: QLoadingViewType) {
-        loadingView.removeFromSuperview()
     }
     
 }

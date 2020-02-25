@@ -4,6 +4,14 @@
 
 public extension Double {
     
+    var degreesToRadians: Self {
+        get { return self * .pi / 180 }
+    }
+    
+    var radiansToDegrees: Self {
+        get { return self * 180 / .pi }
+    }
+    
     func ceil() -> Double {
         return Foundation.ceil(self)
     }

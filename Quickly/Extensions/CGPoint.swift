@@ -3,6 +3,13 @@
 //
 
 public extension CGPoint {
+    
+    func wrap() -> CGPoint {
+        return CGPoint(
+            x: self.y,
+            y: self.x
+        )
+    }
 
     func distance(to: CGPoint) -> CGFloat {
         return sqrt(pow(to.x - self.x, 2) + pow(to.y - self.y, 2))

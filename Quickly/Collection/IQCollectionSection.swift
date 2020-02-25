@@ -6,9 +6,9 @@ public protocol IQCollectionSection : class {
 
     var controller: IQCollectionController? { get }
     var index: Int? { get }
-    var insets: UIEdgeInsets { get }
-    var minimumLineSpacing: CGFloat { get }
-    var minimumInteritemSpacing: CGFloat { get }
+    var insets: UIEdgeInsets? { get }
+    var minimumLineSpacing: CGFloat? { get }
+    var minimumInteritemSpacing: CGFloat? { get }
 
     var canMove: Bool { get }
     var hidden: Bool { get }
