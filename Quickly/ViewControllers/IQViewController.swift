@@ -63,6 +63,8 @@ public protocol IQViewController : class {
     func preferedStatusBarStyle() -> UIStatusBarStyle
     func preferedStatusBarAnimation() -> UIStatusBarAnimation
     func setNeedUpdateStatusBar()
+    
+    func snapshot() -> UIImage?
 
 }
 

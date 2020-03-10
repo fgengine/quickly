@@ -54,16 +54,18 @@ open class QStackViewController : QViewController, IQStackViewController {
         self.viewController.view.frame = self.view.bounds
         self.view.addSubview(self.viewController.view)
 
-        if let stackbar = self._barView {
-            self.view.addSubview(stackbar)
+        if let barView = self._barView {
+            barView.edgeInsets = self._barEdgeInsets()
+            barView.frame = self._barFrame(bounds: self.view.bounds)
+            self.view.addSubview(barView)
         }
     }
 
     open override func layout(bounds: CGRect) {
         self.viewController.view.frame = bounds
-        if let stackbar = self._barView {
-            stackbar.edgeInsets = self._barEdgeInsets()
-            stackbar.frame = self._barFrame(bounds: bounds)
+        if let barView = self._barView {
+            barView.edgeInsets = self._barEdgeInsets()
+            barView.frame = self._barFrame(bounds: bounds)
         }
     }
 
@@ -145,7 +147,7 @@ open class QStackViewController : QViewController, IQStackViewController {
 
     open func set(barView: QStackbar?, animated: Bool = false) {
         if self._barView != barView {
-            if self.isLoaded == true {
+            if self.isLoaded == true && self.isLoading == false {
                 if let view = self._barView {
                     view.removeFromSuperview()
                 }
@@ -166,9 +168,9 @@ open class QStackViewController : QViewController, IQStackViewController {
     open func set(barSize: QStackViewControllerBarSize, animated: Bool = false) {
         if self._barSize != barSize {
             self._barSize = barSize
-            self.setNeedLayout()
             self._updateAdditionalEdgeInsets()
-            if self.isLoaded == true {
+            if self.isLoaded == true && self.isLoading == false {
+                self.setNeedLayout()
                 if animated == true {
                     UIView.animate(withDuration: 0.1, delay: 0, options: [ .beginFromCurrentState ], animations: {
                         self.layoutIfNeeded()

@@ -356,6 +356,30 @@ open class QViewController : NSObject, IQViewController {
         }
     }
     
+    open func snapshot() -> UIImage? {
+        let snapshot: UIImage?
+        if #available(iOS 10.0, *) {
+            let bounds = self.view.bounds
+            let renderer = UIGraphicsImageRenderer(size: bounds.size)
+            snapshot = renderer.image(actions: { _ in
+                self.view.drawHierarchy(in: bounds, afterScreenUpdates: true)
+            })
+        } else {
+            let layer = self.view.layer
+            let bounds = layer.bounds
+            UIGraphicsBeginImageContextWithOptions(bounds.size, false, 0)
+            guard let context = UIGraphicsGetCurrentContext() else {
+                return nil
+            }
+            context.saveGState()
+            layer.render(in: context)
+            context.restoreGState()
+            snapshot = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+        }
+        return snapshot
+    }
+    
 }
 
 // MARK: Private

@@ -98,5 +98,57 @@ public extension UIImage {
         }
         return nil
     }
+    
+    func compare(expected: UIImage, tolerance: CGFloat) -> Bool {
+        guard let expected = expected.cgImage, let observed = self.cgImage else {
+            return false
+        }
+        guard let expectedColorSpace = expected.colorSpace, let observedColorSpace = observed.colorSpace else {
+            return false
+        }
+        if expected.width != observed.width || expected.height != observed.height {
+            return false
+        }
+        let imageSize = CGSize(width: expected.width, height: expected.height)
+        let numberOfPixels = Int(imageSize.width * imageSize.height)
+        let bytesPerRow = min(expected.bytesPerRow, observed.bytesPerRow)
+        assert(MemoryLayout< UInt32 >.stride == bytesPerRow / Int(imageSize.width))
+        let expectedPixels = UnsafeMutablePointer<UInt32>.allocate(capacity: numberOfPixels)
+        let observedPixels = UnsafeMutablePointer<UInt32>.allocate(capacity: numberOfPixels)
+        let expectedPixelsRaw = UnsafeMutableRawPointer(expectedPixels)
+        let observedPixelsRaw = UnsafeMutableRawPointer(observedPixels)
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
+        guard let expectedContext = CGContext(data: expectedPixelsRaw, width: Int(imageSize.width), height: Int(imageSize.height), bitsPerComponent: expected.bitsPerComponent, bytesPerRow: bytesPerRow, space: expectedColorSpace, bitmapInfo: bitmapInfo.rawValue) else {
+            expectedPixels.deallocate()
+            observedPixels.deallocate()
+            return false
+        }
+        guard let observedContext = CGContext(data: observedPixelsRaw, width: Int(imageSize.width), height: Int(imageSize.height), bitsPerComponent: observed.bitsPerComponent, bytesPerRow: bytesPerRow, space: observedColorSpace, bitmapInfo: bitmapInfo.rawValue) else {
+            expectedPixels.deallocate()
+            observedPixels.deallocate()
+            return false
+        }
+        expectedContext.draw(expected, in: CGRect(origin: .zero, size: imageSize))
+        observedContext.draw(observed, in: CGRect(origin: .zero, size: imageSize))
+        let expectedBuffer = UnsafeBufferPointer(start: expectedPixels, count: numberOfPixels)
+        let observedBuffer = UnsafeBufferPointer(start: observedPixels, count: numberOfPixels)
+        var isEqual = true
+        if tolerance == 0 {
+            isEqual = expectedBuffer.elementsEqual(observedBuffer)
+        } else {
+            var numDiffPixels = 0
+            for pixel in 0 ..< numberOfPixels where expectedBuffer[pixel] != observedBuffer[pixel] {
+                numDiffPixels += 1
+                let percentage = 100 * CGFloat(numDiffPixels) / CGFloat(numberOfPixels)
+                if percentage > tolerance {
+                    isEqual = false
+                    break
+                }
+            }
+        }
+        expectedPixels.deallocate()
+        observedPixels.deallocate()
+        return isEqual
+    }
 
 }
