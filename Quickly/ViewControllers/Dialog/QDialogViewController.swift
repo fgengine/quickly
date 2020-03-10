@@ -44,13 +44,19 @@ open class QDialogViewController : QViewController, IQDialogViewController {
         widthBehaviour: QDialogViewControllerSizeBehaviour = .fit(min: 0, max: 0),
         heightBehaviour: QDialogViewControllerSizeBehaviour = .fit(min: 0, max: 0),
         verticalAlignment: QDialogViewControllerVerticalAlignment = .center(offset: 0),
-        horizontalAlignment: QDialogViewControllerHorizontalAlignment = .center(offset: 0)
+        horizontalAlignment: QDialogViewControllerHorizontalAlignment = .center(offset: 0),
+        presentAnimation: IQDialogViewControllerFixedAnimation? = nil,
+        dismissAnimation: IQDialogViewControllerFixedAnimation? = nil,
+        interactiveDismissAnimation: IQDialogViewControllerInteractiveAnimation? = nil
     ) {
         self.viewController = viewController
         self.widthBehaviour = widthBehaviour
         self.heightBehaviour = heightBehaviour
         self.verticalAlignment = verticalAlignment
         self.horizontalAlignment = horizontalAlignment
+        self.presentAnimation = presentAnimation
+        self.dismissAnimation = dismissAnimation
+        self.interactiveDismissAnimation = interactiveDismissAnimation
         super.init()
     }
 

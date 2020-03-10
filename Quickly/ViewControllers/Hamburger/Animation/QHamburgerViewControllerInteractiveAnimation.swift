@@ -27,12 +27,13 @@ public final class QHamburgerViewControllerInteractiveAnimation : IQHamburgerVie
     public var ease: IQAnimationEase
     public var canFinish: Bool
     
-    init(
+    public init(
         contentShadow: QViewShadow = QViewShadow(color: UIColor.black, opacity: 0.45, radius: 6, offset: CGSize.zero),
         leftSize: CGFloat = UIScreen.main.bounds.width * 0.6,
         rightSize: CGFloat = UIScreen.main.bounds.width * 0.6,
         acceleration: CGFloat = 1200,
-        finishDistanceRate: CGFloat = 0.4
+        finishDistanceRate: CGFloat = 0.4,
+        ease: IQAnimationEase = QAnimationEaseQuadraticOut()
     ) {
         self.currentState = .idle
         self.targetState = .idle
@@ -44,7 +45,7 @@ public final class QHamburgerViewControllerInteractiveAnimation : IQHamburgerVie
         self.velocity = CGPoint.zero
         self.acceleration = acceleration
         self.finishDistanceRate = finishDistanceRate
-        self.ease = QAnimationEaseQuadraticOut()
+        self.ease = ease
         self.canFinish = false
     }
     

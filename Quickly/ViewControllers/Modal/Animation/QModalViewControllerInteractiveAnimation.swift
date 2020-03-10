@@ -38,13 +38,13 @@ public final class QModalViewControllerInteractiveDismissAnimation : IQModalView
     public var ease: IQAnimationEase
     public private(set) var canFinish: Bool
 
-    public init(acceleration: CGFloat = 2200, dismissDistanceRate: CGFloat = 0.4) {
+    public init(acceleration: CGFloat = 2200, dismissDistanceRate: CGFloat = 0.4, ease: IQAnimationEase = QAnimationEaseQuadraticOut()) {
         self.position = CGPoint.zero
         self.deltaPosition = 0
         self.velocity = CGPoint.zero
         self.acceleration = acceleration
         self.dismissDistanceRate = dismissDistanceRate
-        self.ease = QAnimationEaseQuadraticOut()
+        self.ease = ease
         self.canFinish = false
     }
 

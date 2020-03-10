@@ -20,9 +20,18 @@ open class QPageViewController : QViewController, IQPageViewController {
         super.init()
     }
 
-    public init(item: QPagebarItem?, viewController: IQPageContentViewController) {
+    public init(
+        item: QPagebarItem?,
+        viewController: IQPageContentViewController,
+        forwardAnimation: IQPageViewControllerAnimation? = nil,
+        backwardAnimation: IQPageViewControllerAnimation? = nil,
+        interactiveAnimation: IQPageViewControllerInteractiveAnimation? = nil
+    ) {
         self._item = item
         self.viewController = viewController
+        self.forwardAnimation = forwardAnimation
+        self.backwardAnimation = backwardAnimation
+        self.interactiveAnimation = interactiveAnimation
         super.init()
     }
 

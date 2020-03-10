@@ -17,6 +17,9 @@ public final class QAnimationEaseBounceIn : IQAnimationEase {
 }
 
 public final class QAnimationEaseBounceOut : IQAnimationEase {
+    
+    public init() {
+    }
 
     public func perform(_ x: Double) -> Double {
         if x < 4 / 11 {

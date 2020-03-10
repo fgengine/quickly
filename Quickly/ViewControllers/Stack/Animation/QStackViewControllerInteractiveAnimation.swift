@@ -28,7 +28,8 @@ public final class QStackViewControllerinteractiveDismissAnimation : IQStackView
         shadow: QViewShadow = QViewShadow(color: UIColor.black, opacity: 0.45, radius: 6, offset: CGSize.zero),
         overlapping: CGFloat = 1,
         acceleration: CGFloat = 1200,
-        dismissDistanceRate: CGFloat = 0.4
+        dismissDistanceRate: CGFloat = 0.4,
+        ease: IQAnimationEase = QAnimationEaseQuadraticOut()
     ) {
         self.shadow = shadow
         self.currentBeginFrame = CGRect.zero
@@ -44,7 +45,7 @@ public final class QStackViewControllerinteractiveDismissAnimation : IQStackView
         self.dismissDistanceRate = dismissDistanceRate
         self.overlapping = overlapping
         self.acceleration = acceleration
-        self.ease = QAnimationEaseQuadraticOut()
+        self.ease = ease
         self.canFinish = false
     }
 

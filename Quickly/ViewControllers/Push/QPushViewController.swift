@@ -24,11 +24,20 @@ open class QPushViewController : QViewController, IQPushViewController {
     private var _timer: QTimer?
     private var _contentLayoutConstraints: [NSLayoutConstraint]
 
-    public init(viewController: IQPushContentViewController, displayTime: TimeInterval? = nil) {
+    public init(
+        viewController: IQPushContentViewController,
+        displayTime: TimeInterval? = nil,
+        presentAnimation: IQPushViewControllerFixedAnimation? = nil,
+        dismissAnimation: IQPushViewControllerFixedAnimation? = nil,
+        interactiveDismissAnimation: IQPushViewControllerInteractiveAnimation? = nil
+    ) {
         self.viewController = viewController
         self.state = .hide
         self.offset = 0
         self.displayTime = displayTime
+        self.presentAnimation = presentAnimation
+        self.dismissAnimation = dismissAnimation
+        self.interactiveDismissAnimation = interactiveDismissAnimation
         self._contentLayoutConstraints = []
         super.init()
     }

@@ -66,14 +66,16 @@ open class QHamburgerContainerViewController : QViewController, IQHamburgerConta
     public init(
         contentViewController: IQHamburgerViewController? = nil,
         leftViewController: IQHamburgerViewController? = nil,
-        rightViewController: IQHamburgerViewController? = nil
+        rightViewController: IQHamburgerViewController? = nil,
+        animation: IQHamburgerViewControllerFixedAnimation = QHamburgerViewControllerAnimation(),
+        interactiveAnimation: IQHamburgerViewControllerInteractiveAnimation = QHamburgerViewControllerInteractiveAnimation()
     ) {
         self._state = .idle
         self._contentViewController = contentViewController
         self._leftViewController = leftViewController
         self._rightViewController = rightViewController
-        self.animation = QHamburgerViewControllerAnimation()
-        self.interactiveAnimation = QHamburgerViewControllerInteractiveAnimation()
+        self.animation = animation
+        self.interactiveAnimation = interactiveAnimation
         self.isAnimating = false
         super.init()
     }

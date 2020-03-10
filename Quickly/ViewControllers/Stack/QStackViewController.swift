@@ -25,10 +25,20 @@ open class QStackViewController : QViewController, IQStackViewController {
     private var _barSize: QStackViewControllerBarSize
     private var _barHidden: Bool
 
-    public init(barSize: QStackViewControllerBarSize = .fixed(height: 50), barHidden: Bool = false, viewController: IQStackContentViewController) {
+    public init(
+        barSize: QStackViewControllerBarSize = .fixed(height: 50),
+        barHidden: Bool = false,
+        viewController: IQStackContentViewController,
+        presentAnimation: IQStackViewControllerPresentAnimation? = nil,
+        dismissAnimation: IQStackViewControllerDismissAnimation? = nil,
+        interactiveDismissAnimation: IQStackViewControllerInteractiveDismissAnimation? = nil
+    ) {
         self._barSize = barSize
         self._barHidden = false
         self.viewController = viewController
+        self.presentAnimation = presentAnimation
+        self.dismissAnimation = dismissAnimation
+        self.interactiveDismissAnimation = interactiveDismissAnimation
         super.init()
     }
 

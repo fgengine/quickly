@@ -77,7 +77,13 @@ public final class QPageViewControllerInteractiveAnimation : IQPageViewControlle
     public var ease: IQAnimationEase
     public private(set) var finishMode: QPageViewControllerAnimationMode
 
-    public init(overlapping: CGFloat = 1, acceleration: CGFloat = 1200, finishDistanceRate: CGFloat = 0.4, deceleration: CGFloat = 0.35) {
+    public init(
+        overlapping: CGFloat = 1,
+        acceleration: CGFloat = 1200,
+        finishDistanceRate: CGFloat = 0.4,
+        deceleration: CGFloat = 0.35,
+        ease: IQAnimationEase = QAnimationEaseSineOut()
+    ) {
         self.position = CGPoint.zero
         self.deltaPosition = 0
         self.velocity = CGPoint.zero
@@ -85,7 +91,7 @@ public final class QPageViewControllerInteractiveAnimation : IQPageViewControlle
         self.overlapping = overlapping
         self.acceleration = acceleration
         self.deceleration = deceleration
-        self.ease = QAnimationEaseSineOut()
+        self.ease = ease
         self.finishMode = .none
     }
 

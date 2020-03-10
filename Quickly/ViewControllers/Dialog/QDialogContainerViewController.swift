@@ -41,13 +41,19 @@ open class QDialogContainerViewController : QViewController, IQDialogContainerVi
     private var _activeInteractiveViewController: IQDialogViewController?
     private var _activeInteractiveDismissAnimation: IQDialogViewControllerInteractiveAnimation?
 
-    public override init() {
+    public init(
+        backgroundView: BackgroundView? = nil,
+        presentAnimation: IQDialogViewControllerFixedAnimation = QDialogViewControllerPresentAnimation(),
+        dismissAnimation: IQDialogViewControllerFixedAnimation = QDialogViewControllerDismissAnimation(),
+        interactiveDismissAnimation: IQDialogViewControllerInteractiveAnimation? = QDialogViewControllerinteractiveDismissAnimation()
+    ) {
         self.viewControllers = []
-        self.presentAnimation = QDialogViewControllerPresentAnimation()
-        self.dismissAnimation = QDialogViewControllerDismissAnimation()
-        self.interactiveDismissAnimation = QDialogViewControllerinteractiveDismissAnimation()
+        self.presentAnimation = presentAnimation
+        self.dismissAnimation = dismissAnimation
+        self.interactiveDismissAnimation = interactiveDismissAnimation
         self.isAnimating = false
         super.init()
+        self.backgroundView = backgroundView
     }
 
     open override func didLoad() {

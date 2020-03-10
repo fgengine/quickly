@@ -49,13 +49,17 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
     private var _activeInteractiveBackwardViewController: IQPageViewController?
     private var _activeInteractiveAnimation: IQPageViewControllerInteractiveAnimation?
 
-    public override init() {
+    public init(
+        forwardAnimation: IQPageViewControllerAnimation = QPageViewControllerForwardAnimation(),
+        backwardAnimation: IQPageViewControllerAnimation = QPageViewControllerBackwardAnimation(),
+        interactiveAnimation: IQPageViewControllerInteractiveAnimation? = QPageViewControllerInteractiveAnimation()
+    ) {
         self._barHeight = 44
         self._barHidden = false
         self._viewControllers = []
-        self.forwardAnimation = QPageViewControllerForwardAnimation()
-        self.backwardAnimation = QPageViewControllerBackwardAnimation()
-        self.interactiveAnimation = QPageViewControllerInteractiveAnimation()
+        self.forwardAnimation = forwardAnimation
+        self.backwardAnimation = backwardAnimation
+        self.interactiveAnimation = interactiveAnimation
         self.isAnimating = false
         super.init()
     }

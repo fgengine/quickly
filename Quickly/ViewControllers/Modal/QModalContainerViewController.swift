@@ -29,11 +29,15 @@ open class QModalContainerViewController : QViewController, IQModalContainerView
     private var _activeInteractivePreviousViewController: IQModalViewController?
     private var _activeInteractiveDismissAnimation: IQModalViewControllerInteractiveAnimation?
 
-    public override init() {
+    public init(
+        presentAnimation: IQModalViewControllerFixedAnimation = QModalViewControllerPresentAnimation(),
+        dismissAnimation: IQModalViewControllerFixedAnimation = QModalViewControllerDismissAnimation(),
+        interactiveDismissAnimation: IQModalViewControllerInteractiveAnimation? = QModalViewControllerInteractiveDismissAnimation()
+    ) {
         self.viewControllers = []
-        self.presentAnimation = QModalViewControllerPresentAnimation()
-        self.dismissAnimation = QModalViewControllerDismissAnimation()
-        self.interactiveDismissAnimation = QModalViewControllerInteractiveDismissAnimation()
+        self.presentAnimation = presentAnimation
+        self.dismissAnimation = dismissAnimation
+        self.interactiveDismissAnimation = interactiveDismissAnimation
         self.isAnimating = false
         self._deferredViewControllers = []
         super.init()

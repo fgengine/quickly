@@ -3,6 +3,9 @@
 //
 
 public final class QAnimationEaseElasticIn : IQAnimationEase {
+    
+    public init() {
+    }
 
     public func perform(_ x: Double) -> Double {
         return sin(13 * Double.pi / 2 * x) * pow(2, 10 * (x - 1))
@@ -11,6 +14,9 @@ public final class QAnimationEaseElasticIn : IQAnimationEase {
 }
 
 public final class QAnimationEaseElasticOut : IQAnimationEase {
+    
+    public init() {
+    }
 
     public func perform(_ x: Double) -> Double {
         let f = sin(-13 * Double.pi / 2 * (x + 1))
@@ -21,6 +27,9 @@ public final class QAnimationEaseElasticOut : IQAnimationEase {
 }
 
 public final class QAnimationEaseElasticInOut : IQAnimationEase {
+    
+    public init() {
+    }
 
     public func perform(_ x: Double) -> Double {
         if x < 1 / 2 {

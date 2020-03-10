@@ -9,7 +9,7 @@ public final class QHamburgerViewControllerAnimation : IQHamburgerViewController
     public var rightSize: CGFloat
     public var acceleration: CGFloat
     
-    init(
+    public init(
         contentShadow: QViewShadow = QViewShadow(color: UIColor.black, opacity: 0.45, radius: 6, offset: CGSize.zero),
         leftSize: CGFloat = UIScreen.main.bounds.width * 0.6,
         rightSize: CGFloat = UIScreen.main.bounds.width * 0.6,

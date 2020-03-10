@@ -3,6 +3,9 @@
 //
 
 public final class QAnimationEaseCubicIn : IQAnimationEase {
+    
+    public init() {
+    }
 
     public func perform(_ x: Double) -> Double {
         return x * x * x
@@ -11,6 +14,9 @@ public final class QAnimationEaseCubicIn : IQAnimationEase {
 }
 
 public final class QAnimationEaseCubicOut : IQAnimationEase {
+    
+    public init() {
+    }
 
     public func perform(_ x: Double) -> Double {
         let p = x - 1
@@ -20,6 +26,9 @@ public final class QAnimationEaseCubicOut : IQAnimationEase {
 }
 
 public final class QAnimationEaseCubicInOut : IQAnimationEase {
+    
+    public init() {
+    }
 
     public func perform(_ x: Double) -> Double {
         if x < 1/2 {

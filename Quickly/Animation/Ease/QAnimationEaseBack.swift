@@ -3,6 +3,9 @@
 //
 
 public final class QAnimationEaseBackIn : IQAnimationEase {
+    
+    public init() {
+    }
 
     public func perform(_ x: Double) -> Double {
         return x * x * x - x * sin(x * Double.pi)
@@ -11,6 +14,9 @@ public final class QAnimationEaseBackIn : IQAnimationEase {
 }
 
 public final class QAnimationEaseBackOut : IQAnimationEase {
+    
+    public init() {
+    }
 
     public func perform(_ x: Double) -> Double {
         let f = (1 - x)
@@ -20,6 +26,9 @@ public final class QAnimationEaseBackOut : IQAnimationEase {
 }
 
 public final class QAnimationEaseBackInOut : IQAnimationEase {
+    
+    public init() {
+    }
 
     public func perform(_ x: Double) -> Double {
         if x < 1 / 2 {

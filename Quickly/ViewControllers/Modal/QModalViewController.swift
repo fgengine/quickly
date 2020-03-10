@@ -9,8 +9,16 @@ open class QModalViewController : QViewController, IQModalViewController {
     open var dismissAnimation: IQModalViewControllerFixedAnimation?
     open var interactiveDismissAnimation: IQModalViewControllerInteractiveAnimation?
 
-    public init(viewController: IQModalContentViewController) {
+    public init(
+        viewController: IQModalContentViewController,
+        presentAnimation: IQModalViewControllerFixedAnimation? = nil,
+        dismissAnimation: IQModalViewControllerFixedAnimation? = nil,
+        interactiveDismissAnimation: IQModalViewControllerInteractiveAnimation? = nil
+    ) {
         self.viewController = viewController
+        self.presentAnimation = presentAnimation
+        self.dismissAnimation = dismissAnimation
+        self.interactiveDismissAnimation = interactiveDismissAnimation
         super.init()
     }
 

@@ -21,11 +21,15 @@ open class QPushContainerViewController : QViewController, IQPushContainerViewCo
     private var _activeInteractiveViewController: IQPushViewController?
     private var _activeInteractiveDismissAnimation: IQPushViewControllerInteractiveAnimation?
 
-    public override init() {
+    public init(
+        presentAnimation: IQPushViewControllerFixedAnimation = QPushViewControllerPresentAnimation(),
+        dismissAnimation: IQPushViewControllerFixedAnimation = QPushViewControllerDismissAnimation(),
+        interactiveDismissAnimation: IQPushViewControllerInteractiveAnimation? = QPushViewControllerInteractiveDismissAnimation()
+    ) {
         self.viewControllers = []
-        self.presentAnimation = QPushViewControllerPresentAnimation()
-        self.dismissAnimation = QPushViewControllerDismissAnimation()
-        self.interactiveDismissAnimation = QPushViewControllerInteractiveDismissAnimation()
+        self.presentAnimation = presentAnimation
+        self.dismissAnimation = dismissAnimation
+        self.interactiveDismissAnimation = interactiveDismissAnimation
         self.isAnimating = false
         super.init()
     }

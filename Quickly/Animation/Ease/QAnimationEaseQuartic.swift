@@ -3,6 +3,9 @@
 //
 
 public final class QAnimationEaseQuarticIn : IQAnimationEase {
+    
+    public init() {
+    }
 
     public func perform(_ x: Double) -> Double {
         return x * x * x * x
@@ -11,6 +14,9 @@ public final class QAnimationEaseQuarticIn : IQAnimationEase {
 }
 
 public final class QAnimationEaseQuarticOut : IQAnimationEase {
+    
+    public init() {
+    }
 
     public func perform(_ x: Double) -> Double {
         let f = x - 1
@@ -20,6 +26,9 @@ public final class QAnimationEaseQuarticOut : IQAnimationEase {
 }
 
 public final class QAnimationEaseQuarticInOut : IQAnimationEase {
+    
+    public init() {
+    }
 
     public func perform(_ x: Double) -> Double {
         if x < 1/2 {
