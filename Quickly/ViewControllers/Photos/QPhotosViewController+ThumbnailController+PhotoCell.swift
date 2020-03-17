@@ -8,16 +8,28 @@ extension QPhotosViewController.ThumbnailController {
         
         public var photo: IQPhotoItem
         public var selectedAlpha: CGFloat
+        public var selectedBorderWidth: CGFloat
+        public var selectedBorderColor: UIColor?
         public var unselectedAlpha: CGFloat
+        public var unselectedBorderWidth: CGFloat
+        public var unselectedBorderColor: UIColor?
 
         init(
             photo: IQPhotoItem,
-            selectedAlpha: CGFloat = 1,
-            unselectedAlpha: CGFloat = 0.8
+            selectedAlpha: CGFloat,
+            selectedBorderWidth: CGFloat,
+            selectedBorderColor: UIColor?,
+            unselectedAlpha: CGFloat,
+            unselectedBorderWidth: CGFloat,
+            unselectedBorderColor: UIColor?
         ) {
             self.photo = photo
             self.selectedAlpha = selectedAlpha
+            self.selectedBorderWidth = selectedBorderWidth
+            self.selectedBorderColor = selectedBorderColor
             self.unselectedAlpha = unselectedAlpha
+            self.unselectedBorderWidth = unselectedBorderWidth
+            self.unselectedBorderColor = unselectedBorderColor
             super.init(
                 canSelect: true,
                 canDeselect: false,
@@ -32,7 +44,7 @@ extension QPhotosViewController.ThumbnailController {
         open override var isSelected: Bool {
             didSet {
                 if let item = self.item {
-                    self._applyContentAlpha(item: item)
+                    self._applySelected(item: item)
                 }
             }
         }
@@ -65,7 +77,7 @@ extension QPhotosViewController.ThumbnailController {
             } else if let image = item.photo.image {
                 self._imageView.image = image
             }
-            self._applyContentAlpha(item: item)
+            self._applySelected(item: item)
         }
         
         override func prepareForReuse() {
@@ -84,16 +96,39 @@ extension QPhotosViewController.ThumbnailController {
 
 private extension QPhotosViewController.ThumbnailController.PhotoCell {
 
-    func _applyContentAlpha(item: Item) {
-        self._applyContentAlpha(item: item, selected: self.isSelected)
+    func _applySelected(item: Item) {
+        self._applySelected(item: item, selected: self.isSelected)
     }
 
-    func _applyContentAlpha(item: Item, selected: Bool) {
-        let alpha = self._currentContentAlpha(item: item, selected: selected)
+    func _applySelected(item: Item, selected: Bool) {
+        let borderWidth = self._borderWidth(item: item, selected: selected)
+        let borderColor = self._borderColor(item: item, selected: selected)
+        let alpha = self._alpha(item: item, selected: selected)
+        if let borderColor = borderColor {
+            self._imageView.layer.borderWidth = borderWidth
+            self._imageView.layer.borderColor = borderColor.cgColor
+        } else {
+            self._imageView.layer.borderWidth = 0
+            self._imageView.layer.borderColor = nil
+        }
         self._imageView.alpha = alpha
     }
 
-    func _currentContentAlpha(item: Item, selected: Bool) -> CGFloat {
+    func _borderWidth(item: Item, selected: Bool) -> CGFloat {
+        if selected == true {
+            return item.selectedBorderWidth
+        }
+        return item.unselectedBorderWidth
+    }
+
+    func _borderColor(item: Item, selected: Bool) -> UIColor? {
+        if selected == true {
+            return item.selectedBorderColor
+        }
+        return item.unselectedBorderColor
+    }
+
+    func _alpha(item: Item, selected: Bool) -> CGFloat {
         if selected == true {
             return item.selectedAlpha
         }

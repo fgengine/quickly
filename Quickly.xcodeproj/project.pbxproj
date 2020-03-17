@@ -197,6 +197,7 @@
 		406CD7652255774100CC444B /* QHamburgerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400D362122553743003C0FDA /* QHamburgerViewController.swift */; };
 		406CD7672255775A00CC444B /* QHamburgerWireframe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406CD7662255775A00CC444B /* QHamburgerWireframe.swift */; };
 		406F082822312B7100874B38 /* QRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406F082722312B7100874B38 /* QRatingView.swift */; };
+		406FB7382420DC670098D742 /* QPhotosViewController+ThumbnailItemStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406FB7372420DC670098D742 /* QPhotosViewController+ThumbnailItemStyle.swift */; };
 		406FDF6B20908071004178CC /* QApiPagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406FDF6A20908071004178CC /* QApiPagination.swift */; };
 		406FDF6F209082E4004178CC /* IQApiPagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406FDF6E209082E4004178CC /* IQApiPagination.swift */; };
 		4070B6A920628E4E00B568A9 /* QReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4070B6A720628E4E00B568A9 /* QReachability.swift */; };
@@ -544,6 +545,7 @@
 		406C598A21D1B08A00CAA611 /* QLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QLoadingView.swift; sourceTree = "<group>"; };
 		406CD7662255775A00CC444B /* QHamburgerWireframe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QHamburgerWireframe.swift; sourceTree = "<group>"; };
 		406F082722312B7100874B38 /* QRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRatingView.swift; sourceTree = "<group>"; };
+		406FB7372420DC670098D742 /* QPhotosViewController+ThumbnailItemStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QPhotosViewController+ThumbnailItemStyle.swift"; sourceTree = "<group>"; };
 		406FDF6A20908071004178CC /* QApiPagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QApiPagination.swift; sourceTree = "<group>"; };
 		406FDF6E209082E4004178CC /* IQApiPagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQApiPagination.swift; sourceTree = "<group>"; };
 		4070B6A720628E4E00B568A9 /* QReachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QReachability.swift; sourceTree = "<group>"; };
@@ -1355,6 +1357,7 @@
 				406BEBDA23FBE1E900F794AC /* QPhotosViewController.swift */,
 				406BEBDE23FBE26E00F794AC /* QPhotosViewController+PreviewController.swift */,
 				406BEBDF23FBE26E00F794AC /* QPhotosViewController+PreviewController+PhotoCell.swift */,
+				406FB7372420DC670098D742 /* QPhotosViewController+ThumbnailItemStyle.swift */,
 				406BEBDD23FBE26E00F794AC /* QPhotosViewController+ThumbnailController.swift */,
 				406BEBE023FBE26F00F794AC /* QPhotosViewController+ThumbnailController+PhotoCell.swift */,
 				4073E60123FEA56D00204527 /* QPhotosViewController+ThumbnailLayout.swift */,
@@ -2021,6 +2024,7 @@
 				40836AAC216CAD8E00777404 /* QTitleDetailValueComposition.swift in Sources */,
 				4040718220569F4600F6ECC2 /* CGPoint.swift in Sources */,
 				40E2D6021F67850600B954E4 /* QImageLoader.swift in Sources */,
+				406FB7382420DC670098D742 /* QPhotosViewController+ThumbnailItemStyle.swift in Sources */,
 				4062C8C32088B9930098F809 /* QDialogBackgroundView.swift in Sources */,
 				4026FD4B228EC18500D4D105 /* QInputViewController.swift in Sources */,
 				40CF45C41F4DE6AB004D00D8 /* UIColor.swift in Sources */,

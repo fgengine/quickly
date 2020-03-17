@@ -59,6 +59,13 @@ open class QPhotosViewController : QViewController, IQContentViewController, IQI
             }
         }
     }
+    public var thumbnailItemStyle: ThumbnailItemStyle {
+        didSet(oldValue) {
+            guard let controller = self._thumbnailCollectionController else { return }
+            controller.itemStyle = self.thumbnailItemStyle
+            controller.rebuild()
+        }
+    }
     public var thumbnailsSpacing: CGFloat = 8 {
         didSet(oldValue) {
             if self.thumbnailsSpacing != oldValue {
@@ -138,6 +145,11 @@ open class QPhotosViewController : QViewController, IQContentViewController, IQI
     private var _edgesForExtendedLayout: UIRectEdge?
     private var _keyboard: QKeyboard!
     
+    public override init() {
+        self.thumbnailItemStyle = ThumbnailItemStyle()
+        super.init()
+    }
+    
     deinit {
         self._thumbnailCollectionController = nil
         self._previewCollectionController = nil
@@ -152,18 +164,27 @@ open class QPhotosViewController : QViewController, IQContentViewController, IQI
 
     open override func didLoad() {
         self.previewCollectionView = QCollectionView(frame: self._previewCollectionFrame(), collectionViewLayout: self._previewCollectionLayout)
-        self._previewCollectionController = PreviewController(photos: self.items, selectedPhoto: self.selectedItem, didSelectPhoto: { [weak self] photo in
-            guard let self = self else { return }
-            self.selectedItem = photo
-            self._thumbnailCollectionController?.set(selectedPhoto: photo)
-        })
+        self._previewCollectionController = PreviewController(
+            photos: self.items,
+            selectedPhoto: self.selectedItem,
+            didSelectPhoto: { [weak self] photo in
+                guard let self = self else { return }
+                self.selectedItem = photo
+                self._thumbnailCollectionController?.set(selectedPhoto: photo)
+            }
+        )
         self.thumbnailSeparatorView = QDisplayView(frame: self._thumbnailSeparatorFrame(), backgroundColor: UIColor.clear)
         self.thumbnailCollectionView = QCollectionView(frame: self._thumbnailCollectionFrame(), collectionViewLayout: self._thumbnailCollectionLayout)
-        self._thumbnailCollectionController = ThumbnailController(photos: self.items, selectedPhoto: self.selectedItem, didSelectPhoto: { [weak self] photo in
-            guard let self = self else { return }
-            self.selectedItem = photo
-            self._previewCollectionController?.set(selectedPhoto: photo)
-        })
+        self._thumbnailCollectionController = ThumbnailController(
+            itemStyle: self.thumbnailItemStyle,
+            photos: self.items,
+            selectedPhoto: self.selectedItem,
+            didSelectPhoto: { [weak self] photo in
+                guard let self = self else { return }
+                self.selectedItem = photo
+                self._previewCollectionController?.set(selectedPhoto: photo)
+            }
+        )
         self._keyboard.add(observer: self, priority: 0)
     }
 

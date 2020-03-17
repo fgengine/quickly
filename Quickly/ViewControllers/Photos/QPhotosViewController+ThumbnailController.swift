@@ -6,6 +6,8 @@ extension QPhotosViewController {
     
     class ThumbnailController : QCollectionController {
         
+        public var itemStyle: ThumbnailItemStyle
+        
         var didSelectPhoto: (_ photo: IQPhotoItem) -> Void
         
         private var _items: [PhotoItem]
@@ -13,11 +15,13 @@ extension QPhotosViewController {
         private var _selectedPhoto: IQPhotoItem?
         
         init(
+            itemStyle: ThumbnailItemStyle,
             photos: [IQPhotoItem],
             selectedPhoto: IQPhotoItem?,
             didSelectPhoto: @escaping (_ photo: IQPhotoItem) -> Void
         ) {
             self.didSelectPhoto = didSelectPhoto
+            self.itemStyle = itemStyle
             self._photos = photos
             self._selectedPhoto = selectedPhoto
             self._items = []
@@ -33,7 +37,15 @@ extension QPhotosViewController {
         
         func rebuild(_ forceReload: Bool = true) {
             self._items = self._photos.compactMap({
-                return PhotoItem(photo: $0)
+                return PhotoItem(
+                    photo: $0,
+                    selectedAlpha: self.itemStyle.selectedAlpha,
+                    selectedBorderWidth: self.itemStyle.selectedBorderWidth,
+                    selectedBorderColor: self.itemStyle.selectedBorderColor,
+                    unselectedAlpha: self.itemStyle.unselectedAlpha,
+                    unselectedBorderWidth: self.itemStyle.unselectedBorderWidth,
+                    unselectedBorderColor: self.itemStyle.unselectedBorderColor
+                )
             })
             self.sections = [
                 QCollectionSection(items: self._items)
