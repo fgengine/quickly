@@ -24,7 +24,11 @@ open class QApiResponse : IQApiResponse {
         }
         do {
             if let data = data {
-                try self.parse(data: data)
+                if try self.hasParse(data: data) == true {
+                    try self.parse(data: data)
+                } else {
+                    try self.parse()
+                }
             } else {
                 try self.parse()
             }
@@ -34,6 +38,10 @@ open class QApiResponse : IQApiResponse {
     }
     
     open func parse() throws {
+    }
+    
+    open func hasParse(data: Data) throws -> Bool {
+        return true
     }
 
     open func parse(data: Data) throws {
