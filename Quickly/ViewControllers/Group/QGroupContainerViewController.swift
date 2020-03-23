@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QGroupContainerViewController : QViewController, IQGroupContainerViewController, IQStackContentViewController, IQModalContentViewController, IQHamburgerContentViewController {
+open class QGroupContainerViewController : QViewController, IQGroupContainerViewController, IQStackContentViewController, IQModalContentViewController, IQHamburgerContentViewController, IQJalousieContentViewController {
 
     open var barView: QGroupbar? {
         set(value) { self.set(barView: value) }
@@ -322,6 +322,24 @@ open class QGroupContainerViewController : QViewController, IQGroupContainerView
         if let viewController = self.contentOwnerViewController {
             viewController.endUpdateContent()
         }
+    }
+    
+    // MARK: IQModalContentViewController
+    
+    open func modalShouldInteractive() -> Bool {
+        return true
+    }
+    
+    // MARK: IQHamburgerContentViewController
+    
+    open func hamburgerShouldInteractive() -> Bool {
+        return true
+    }
+    
+    // MARK: IQJalousieContentViewController
+    
+    open func jalousieShouldInteractive() -> Bool {
+        return true
     }
     
 }

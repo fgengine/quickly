@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QPageContainerViewController : QViewController, IQPageContainerViewController, IQStackContentViewController, IQGroupContentViewController, IQModalContentViewController, IQHamburgerContentViewController {
+open class QPageContainerViewController : QViewController, IQPageContainerViewController, IQStackContentViewController, IQGroupContentViewController, IQModalContentViewController, IQHamburgerContentViewController, IQJalousieContentViewController {
 
     open var barView: QPagebar? {
         set(value) { self.set(barView: value) }
@@ -359,6 +359,24 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
         if let viewController = self.contentOwnerViewController {
             viewController.endUpdateContent()
         }
+    }
+    
+    // MARK: IQModalContentViewController
+    
+    open func modalShouldInteractive() -> Bool {
+        return true
+    }
+    
+    // MARK: IQHamburgerContentViewController
+    
+    open func hamburgerShouldInteractive() -> Bool {
+        return true
+    }
+    
+    // MARK: IQJalousieContentViewController
+    
+    open func jalousieShouldInteractive() -> Bool {
+        return true
     }
     
 }

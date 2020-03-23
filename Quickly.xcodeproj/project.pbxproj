@@ -202,6 +202,11 @@
 		406FDF6F209082E4004178CC /* IQApiPagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406FDF6E209082E4004178CC /* IQApiPagination.swift */; };
 		4070B6A920628E4E00B568A9 /* QReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4070B6A720628E4E00B568A9 /* QReachability.swift */; };
 		4070B6AD206297BB00B568A9 /* QKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4070B6AB206297BB00B568A9 /* QKeyboard.swift */; };
+		407137812426A24900E2FDF9 /* QJalousieViewControllerAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4071377F2426A24900E2FDF9 /* QJalousieViewControllerAnimation.swift */; };
+		407137822426A24900E2FDF9 /* QJalousieViewControllerInteractiveAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407137802426A24900E2FDF9 /* QJalousieViewControllerInteractiveAnimation.swift */; };
+		407137842426A28000E2FDF9 /* QJalousieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407137832426A28000E2FDF9 /* QJalousieViewController.swift */; };
+		4073620A2422214E0090F688 /* IQJalousieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407362092422214E0090F688 /* IQJalousieViewController.swift */; };
+		4073620C24222AC90090F688 /* QJalousieContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4073620B24222AC90090F688 /* QJalousieContainerViewController.swift */; };
 		4073E60023FE858400204527 /* QPdfPagePhotoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4073E5FF23FE858400204527 /* QPdfPagePhotoItem.swift */; };
 		4073E60223FEA56D00204527 /* QPhotosViewController+ThumbnailLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4073E60123FEA56D00204527 /* QPhotosViewController+ThumbnailLayout.swift */; };
 		4075266923C88F560074D0DC /* QProgressLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4075266823C88F560074D0DC /* QProgressLoadingView.swift */; };
@@ -550,6 +555,11 @@
 		406FDF6E209082E4004178CC /* IQApiPagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQApiPagination.swift; sourceTree = "<group>"; };
 		4070B6A720628E4E00B568A9 /* QReachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QReachability.swift; sourceTree = "<group>"; };
 		4070B6AB206297BB00B568A9 /* QKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QKeyboard.swift; sourceTree = "<group>"; };
+		4071377F2426A24900E2FDF9 /* QJalousieViewControllerAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QJalousieViewControllerAnimation.swift; sourceTree = "<group>"; };
+		407137802426A24900E2FDF9 /* QJalousieViewControllerInteractiveAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QJalousieViewControllerInteractiveAnimation.swift; sourceTree = "<group>"; };
+		407137832426A28000E2FDF9 /* QJalousieViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QJalousieViewController.swift; sourceTree = "<group>"; };
+		407362092422214E0090F688 /* IQJalousieViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQJalousieViewController.swift; sourceTree = "<group>"; };
+		4073620B24222AC90090F688 /* QJalousieContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QJalousieContainerViewController.swift; sourceTree = "<group>"; };
 		4073E5FF23FE858400204527 /* QPdfPagePhotoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QPdfPagePhotoItem.swift; sourceTree = "<group>"; };
 		4073E60123FEA56D00204527 /* QPhotosViewController+ThumbnailLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QPhotosViewController+ThumbnailLayout.swift"; sourceTree = "<group>"; };
 		4075266823C88F560074D0DC /* QProgressLoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QProgressLoadingView.swift; sourceTree = "<group>"; };
@@ -1399,6 +1409,26 @@
 			path = Keyboard;
 			sourceTree = "<group>";
 		};
+		4071377E2426A21700E2FDF9 /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				4071377F2426A24900E2FDF9 /* QJalousieViewControllerAnimation.swift */,
+				407137802426A24900E2FDF9 /* QJalousieViewControllerInteractiveAnimation.swift */,
+			);
+			path = Animation;
+			sourceTree = "<group>";
+		};
+		40736208242221200090F688 /* Jalousie */ = {
+			isa = PBXGroup;
+			children = (
+				4071377E2426A21700E2FDF9 /* Animation */,
+				407362092422214E0090F688 /* IQJalousieViewController.swift */,
+				4073620B24222AC90090F688 /* QJalousieContainerViewController.swift */,
+				407137832426A28000E2FDF9 /* QJalousieViewController.swift */,
+			);
+			path = Jalousie;
+			sourceTree = "<group>";
+		};
 		4073E5FE23FE856A00204527 /* Pdf */ = {
 			isa = PBXGroup;
 			children = (
@@ -1680,7 +1710,7 @@
 				4062C8CE2089E6E00098F809 /* Page */,
 				406915352084861D008934D5 /* Group */,
 				40FC3F0320C7C3D70013B71A /* Hamburger */,
-				40FC3F0220C7C3D70013B71A /* Jalousie */,
+				40736208242221200090F688 /* Jalousie */,
 				406BEBDC23FBE23C00F794AC /* Photos */,
 				4026FD47228EB36F00D4D105 /* Input */,
 				40CF45A91F4DE6AB004D00D8 /* IQViewController.swift */,
@@ -1775,13 +1805,6 @@
 				40FBE6A11F543EFD00F5194B /* QTextStyle.swift */,
 			);
 			path = Text;
-			sourceTree = "<group>";
-		};
-		40FC3F0220C7C3D70013B71A /* Jalousie */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Jalousie;
 			sourceTree = "<group>";
 		};
 		40FC3F0320C7C3D70013B71A /* Hamburger */ = {
@@ -1899,6 +1922,7 @@
 				403DF8F420CA72A8003C5D6D /* QModalViewController.swift in Sources */,
 				4007B0A42144236900AE17DC /* QImageTitleShapeComposition.swift in Sources */,
 				406BC12C217722EA00164485 /* QProxy.swift in Sources */,
+				407137822426A24900E2FDF9 /* QJalousieViewControllerInteractiveAnimation.swift in Sources */,
 				4062C8CD2088DD4C0098F809 /* QStackWireframe.swift in Sources */,
 				4007B0A12144236900AE17DC /* QTitleValueShapeComposition.swift in Sources */,
 				4007B09E2144236900AE17DC /* QTitleShapeComposition.swift in Sources */,
@@ -1943,6 +1967,7 @@
 				40385F2121F86890001125D0 /* QMultiTextFieldComposition.swift in Sources */,
 				40691540208487BE008934D5 /* IQStackViewController.swift in Sources */,
 				40DF75E822F8A8E90009BA4A /* QDateFieldStyleSheet.swift in Sources */,
+				407137842426A28000E2FDF9 /* QJalousieViewController.swift in Sources */,
 				40CF45EF1F4DE6AB004D00D8 /* QView.swift in Sources */,
 				40CF45CA1F4DE6AB004D00D8 /* QLabel.swift in Sources */,
 				40CF45DD1F4DE6AB004D00D8 /* IQTableSection.swift in Sources */,
@@ -1990,6 +2015,7 @@
 				40CF45C11F4DE6AB004D00D8 /* QCollectionSection.swift in Sources */,
 				40D9C5AB2147DCE40086DD57 /* QPlaceholderImageTitleValueShapeComposition.swift in Sources */,
 				4007EDE8232D827F00CC8479 /* Array.swift in Sources */,
+				4073620C24222AC90090F688 /* QJalousieContainerViewController.swift in Sources */,
 				4039F8DB2072629D00A88E45 /* QListFieldPickerRow.swift in Sources */,
 				40D9C5B32147E5270086DD57 /* QPlaceholderTitleValueIconComposition.swift in Sources */,
 				4085C07120E4CEDF0079AF90 /* QAnimationEaseBack.swift in Sources */,
@@ -2047,6 +2073,7 @@
 				4023D97E21470637005F915D /* QPlaceholderImageTitleValueComposition.swift in Sources */,
 				40134EFB1F62DAE3009F81A6 /* IQInputValidator.swift in Sources */,
 				406BEBEA23FBE3D400F794AC /* IQPhotoItem.swift in Sources */,
+				4073620A2422214E0090F688 /* IQJalousieViewController.swift in Sources */,
 				40E738541F5606C500B192C6 /* QBackgroundColorTableCell.swift in Sources */,
 				4007B0A82144236900AE17DC /* QTitleDetailIconComposition.swift in Sources */,
 				402BCEBA20B855EA00748D60 /* QPageContainerViewController.swift in Sources */,
@@ -2078,6 +2105,7 @@
 				402D43491F7194B000EAA69C /* IQDebug.swift in Sources */,
 				408B575520BC2D920045C0B2 /* IQContentViewController.swift in Sources */,
 				408E90942286E4C900E6E68E /* QImageLoaderTask.swift in Sources */,
+				407137812426A24900E2FDF9 /* QJalousieViewControllerAnimation.swift in Sources */,
 				401E8F8E206D429D008A5BE4 /* QLabelPickerCell.swift in Sources */,
 				40CF45BA1F4DE6AB004D00D8 /* IQCollectionReuse.swift in Sources */,
 				40FC3F0820C7F46A0013B71A /* QModalContainerViewController.swift in Sources */,

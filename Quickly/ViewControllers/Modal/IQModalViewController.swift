@@ -62,7 +62,9 @@ public protocol IQModalViewController : IQContentOwnerViewController {
     var presentAnimation: IQModalViewControllerFixedAnimation? { get }
     var dismissAnimation: IQModalViewControllerFixedAnimation? { get }
     var interactiveDismissAnimation: IQModalViewControllerInteractiveAnimation? { get }
-
+    
+    func shouldInteractive() -> Bool
+    
     func dismissModal(animated: Bool, completion: (() -> Swift.Void)?)
 
 }
@@ -85,6 +87,8 @@ public extension IQModalViewController {
 public protocol IQModalContentViewController : IQContentViewController {
 
     var modalViewController: IQModalViewController? { get }
+    
+    func modalShouldInteractive() -> Bool
 
 }
 

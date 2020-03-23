@@ -109,9 +109,5 @@ public extension IQHamburgerContentViewController {
     var hamburgerViewController: IQHamburgerViewController? {
         get { return self.parentViewControllerOf() }
     }
-    
-    func hamburgerShouldInteractive() -> Bool {
-        return true
-    }
 
 }

@@ -329,10 +329,28 @@ open class QPhotosViewController : QViewController, IQContentViewController, IQI
             viewController.endUpdateContent()
         }
     }
+    
+    // MARK: IQModalContentViewController
+    
+    open func modalShouldInteractive() -> Bool {
+        return true
+    }
 
     // MARK: IQDialogContentViewController
 
     open func dialogDidPressedOutside() {
+    }
+    
+    // MARK: IQHamburgerContentViewController
+    
+    open func hamburgerShouldInteractive() -> Bool {
+        return true
+    }
+    
+    // MARK: IQJalousieContentViewController
+    
+    open func jalousieShouldInteractive() -> Bool {
+        return true
     }
 
     // MARK: IQCollectionControllerObserver

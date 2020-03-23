@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QStackContainerViewController : QViewController, IQStackContainerViewController, IQModalContentViewController, IQHamburgerContentViewController {
+open class QStackContainerViewController : QViewController, IQStackContainerViewController, IQModalContentViewController, IQHamburgerContentViewController, IQJalousieContentViewController {
 
     open var viewControllers: [IQStackViewController] {
         set(value) { self.set(viewControllers: value, animated: false, completion: nil) }
@@ -314,6 +314,24 @@ open class QStackContainerViewController : QViewController, IQStackContainerView
         if let viewController = self.contentOwnerViewController {
             viewController.endUpdateContent()
         }
+    }
+    
+    // MARK: IQModalContentViewController
+    
+    open func modalShouldInteractive() -> Bool {
+        return true
+    }
+    
+    // MARK: IQHamburgerContentViewController
+    
+    open func hamburgerShouldInteractive() -> Bool {
+        return true
+    }
+    
+    // MARK: IQJalousieContentViewController
+    
+    open func jalousieShouldInteractive() -> Bool {
+        return true
     }
     
 }

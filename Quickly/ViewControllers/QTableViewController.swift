@@ -15,7 +15,7 @@ open class QTableViewControllerFooterView : QView {
     
 }
 
-open class QTableViewController : QViewController, IQTableControllerObserver, IQKeyboardObserver, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController, IQLoadingViewDelegate {
+open class QTableViewController : QViewController, IQTableControllerObserver, IQKeyboardObserver, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController, IQJalousieContentViewController, IQLoadingViewDelegate {
 
     public private(set) var tableView: QTableView? {
         willSet {
@@ -329,9 +329,27 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     open func didHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
     }
     
+    // MARK: IQModalContentViewController
+    
+    open func modalShouldInteractive() -> Bool {
+        return true
+    }
+    
     // MARK: IQDialogContentViewController
     
     open func dialogDidPressedOutside() {
+    }
+    
+    // MARK: IQHamburgerContentViewController
+    
+    open func hamburgerShouldInteractive() -> Bool {
+        return true
+    }
+    
+    // MARK: IQJalousieContentViewController
+    
+    open func jalousieShouldInteractive() -> Bool {
+        return true
     }
 
     // MARK: IQLoadingViewDelegate

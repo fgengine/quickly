@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDelegate, UIScrollViewDelegate, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController, IQLoadingViewDelegate {
+open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDelegate, UIScrollViewDelegate, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController, IQJalousieContentViewController, IQLoadingViewDelegate {
     
     public class WebView : WKWebView {
         
@@ -256,9 +256,27 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
         }
     }
     
+    // MARK: IQModalContentViewController
+    
+    open func modalShouldInteractive() -> Bool {
+        return true
+    }
+    
     // MARK: IQDialogContentViewController
     
     open func dialogDidPressedOutside() {
+    }
+    
+    // MARK: IQHamburgerContentViewController
+    
+    open func hamburgerShouldInteractive() -> Bool {
+        return true
+    }
+    
+    // MARK: IQJalousieContentViewController
+    
+    open func jalousieShouldInteractive() -> Bool {
+        return true
     }
 
     // MARK: IQLoadingViewDelegate

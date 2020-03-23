@@ -2,23 +2,12 @@
 //  Quickly
 //
 
-open class QModalViewController : QViewController, IQModalViewController {
+open class QJalousieViewController : QViewController, IQJalousieViewController {
 
-    open private(set) var viewController: IQModalContentViewController
-    open var presentAnimation: IQModalViewControllerFixedAnimation?
-    open var dismissAnimation: IQModalViewControllerFixedAnimation?
-    open var interactiveDismissAnimation: IQModalViewControllerInteractiveAnimation?
+    open private(set) var viewController: IQJalousieContentViewController
 
-    public init(
-        viewController: IQModalContentViewController,
-        presentAnimation: IQModalViewControllerFixedAnimation? = nil,
-        dismissAnimation: IQModalViewControllerFixedAnimation? = nil,
-        interactiveDismissAnimation: IQModalViewControllerInteractiveAnimation? = nil
-    ) {
+    public init(viewController: IQJalousieContentViewController) {
         self.viewController = viewController
-        self.presentAnimation = presentAnimation
-        self.dismissAnimation = dismissAnimation
-        self.interactiveDismissAnimation = interactiveDismissAnimation
         super.init()
     }
 
@@ -114,10 +103,10 @@ open class QModalViewController : QViewController, IQModalViewController {
     }
     
     open func shouldInteractive() -> Bool {
-        return self.viewController.modalShouldInteractive()
+        return self.viewController.jalousieShouldInteractive()
     }
     
-    // MARK: IQContentOwnerViewController
+    // MARK: IQContentOwnderViewController
     
     open func beginUpdateContent() {
     }

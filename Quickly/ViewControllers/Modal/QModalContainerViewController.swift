@@ -389,11 +389,12 @@ extension QModalContainerViewController {
 extension QModalContainerViewController : UIGestureRecognizerDelegate {
 
     open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard let viewController = self.currentViewController else {
-            return false
+        guard let viewController = self.currentViewController else { return false }
+        if viewController.shouldInteractive() == true {
+            let location = gestureRecognizer.location(in: viewController.viewController.view)
+            return viewController.viewController.view.point(inside: location, with: nil)
         }
-        let location = gestureRecognizer.location(in: viewController.viewController.view)
-        return viewController.viewController.view.point(inside: location, with: nil)
+        return false
     }
 
 }

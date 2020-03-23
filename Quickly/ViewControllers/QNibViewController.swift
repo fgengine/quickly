@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QNibViewController : QViewController, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController, IQLoadingViewDelegate {
+open class QNibViewController : QViewController, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController, IQJalousieContentViewController, IQLoadingViewDelegate {
 
     @IBOutlet
     public var rootView: UIView! {
@@ -113,9 +113,27 @@ open class QNibViewController : QViewController, IQInputContentViewController, I
         }
     }
     
+    // MARK: IQModalContentViewController
+    
+    open func modalShouldInteractive() -> Bool {
+        return true
+    }
+    
     // MARK: IQDialogContentViewController
     
     open func dialogDidPressedOutside() {
+    }
+    
+    // MARK: IQHamburgerContentViewController
+    
+    open func hamburgerShouldInteractive() -> Bool {
+        return true
+    }
+    
+    // MARK: IQJalousieContentViewController
+    
+    open func jalousieShouldInteractive() -> Bool {
+        return true
     }
 
     // MARK: IQLoadingViewDelegate
