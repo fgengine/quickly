@@ -147,26 +147,20 @@ open class QImageView : QDisplayView {
     open private(set) var loader: QImageLoader!
     open override var frame: CGRect {
         set(value) {
-            if(super.frame != value) {
-                let sizeChanged = super.frame.size != value.size
-                super.frame = value
-                if sizeChanged == true {
-                    self.invalidateIntrinsicContentSize()
-                    self.setNeedsDisplay()
-                }
+            let sizeChanged = super.frame.size != value.size
+            super.frame = value
+            if sizeChanged == true {
+                self.invalidateIntrinsicContentSize()
             }
         }
         get { return super.frame }
     }
     open override var bounds: CGRect {
         set(value) {
-            if(super.bounds != value) {
-                let sizeChanged = super.bounds.size != value.size
-                super.bounds = value
-                if sizeChanged == true {
-                    self.invalidateIntrinsicContentSize()
-                    self.setNeedsDisplay()
-                }
+            let sizeChanged = super.bounds.size != value.size
+            super.bounds = value
+            if sizeChanged == true {
+                self.invalidateIntrinsicContentSize()
             }
         }
         get { return super.bounds }
@@ -341,6 +335,26 @@ private extension QImageView {
         }
         var size: CGSize? {
             didSet { self.setNeedsDisplay() }
+        }
+        open override var frame: CGRect {
+            set(value) {
+                let sizeChanged = super.frame.size != value.size
+                super.frame = value
+                if sizeChanged == true {
+                    self.setNeedsDisplay()
+                }
+            }
+            get { return super.frame }
+        }
+        open override var bounds: CGRect {
+            set(value) {
+                let sizeChanged = super.bounds.size != value.size
+                super.bounds = value
+                if sizeChanged == true {
+                    self.setNeedsDisplay()
+                }
+            }
+            get { return super.bounds }
         }
         
         private var _tintImage: UIImage?
