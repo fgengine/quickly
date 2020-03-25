@@ -148,6 +148,9 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
     open func pressedReturn(textField: QTextField) {
     }
     
+    open func select(textField: QTextField, suggestion: String) {
+    }
+    
     // MARK: IQMultiTextFieldObserver
     
     open func beginEditing(multiTextField: QMultiTextField) {

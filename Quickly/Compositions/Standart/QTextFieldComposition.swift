@@ -6,6 +6,7 @@ open class QTextFieldComposable : QComposable {
 
     public typealias ShouldClosure = (_ composable: QTextFieldComposable) -> Bool
     public typealias Closure = (_ composable: QTextFieldComposable) -> Void
+    public typealias SelectSuggestionClosure = (_ composable: QTextFieldComposable, _ suggestion: String) -> Void
 
     public var field: QTextFieldStyleSheet
     public var height: CGFloat
@@ -26,6 +27,7 @@ open class QTextFieldComposable : QComposable {
     public var pressedClear: Closure?
     public var shouldReturn: ShouldClosure?
     public var pressedReturn: Closure?
+    public var selectSuggestion: SelectSuggestionClosure?
 
     public init(
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
@@ -40,7 +42,8 @@ open class QTextFieldComposable : QComposable {
         shouldClear: ShouldClosure? = nil,
         pressedClear: Closure? = nil,
         shouldReturn: ShouldClosure? = nil,
-        pressedReturn: Closure? = nil
+        pressedReturn: Closure? = nil,
+        selectSuggestion: SelectSuggestionClosure? = nil
     ) {
         self.field = field
         self.text = text
@@ -55,6 +58,7 @@ open class QTextFieldComposable : QComposable {
         self.pressedClear = pressedClear
         self.shouldReturn = shouldReturn
         self.pressedReturn = pressedReturn
+        self.selectSuggestion = selectSuggestion
         super.init(edgeInsets: edgeInsets)
     }
 
@@ -74,6 +78,7 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
         view.onPressedClear = { [weak self] _ in self?._pressedClear() }
         view.onShouldReturn = { [weak self] _ in return self?._shouldReturn() ?? true }
         view.onPressedReturn = { [weak self] _ in self?._pressedReturn() }
+        view.onSelectSuggestion = { [weak self] _, suggestion in self?._select(suggestion: suggestion) }
         self.contentView.addSubview(view)
         return view
     }()
@@ -133,9 +138,13 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
         self.field.endEditing(false)
     }
     
-    // MARK: Private
+}
 
-    private func _shouldBeginEditing() -> Bool {
+// MARK: Private
+
+private extension QTextFieldComposition {
+
+    func _shouldBeginEditing() -> Bool {
         guard let composable = self.composable else { return true }
         if let closure = composable.shouldBeginEditing {
             return closure(composable)
@@ -143,7 +152,7 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
         return true
     }
 
-    private func _beginEditing() {
+    func _beginEditing() {
         guard let composable = self.composable else { return }
         composable.isEditing = self.field.isEditing
         if let closure = composable.beginEditing {
@@ -151,7 +160,7 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
         }
     }
 
-    private func _editing() {
+    func _editing() {
         guard let composable = self.composable else { return }
         composable.text = self.field.unformatText
         if let closure = composable.editing {
@@ -159,7 +168,7 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
         }
     }
 
-    private func _shouldEndEditing() -> Bool {
+    func _shouldEndEditing() -> Bool {
         guard let composable = self.composable else { return true }
         if let closure = composable.shouldEndEditing {
             return closure(composable)
@@ -167,7 +176,7 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
         return true
     }
 
-    private func _endEditing() {
+    func _endEditing() {
         guard let composable = self.composable else { return }
         composable.isEditing = self.field.isEditing
         if let closure = composable.endEditing {
@@ -175,7 +184,7 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
         }
     }
 
-    private func _shouldClear() -> Bool {
+    func _shouldClear() -> Bool {
         guard let composable = self.composable else { return true }
         if let closure = composable.shouldClear {
             return closure(composable)
@@ -183,7 +192,7 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
         return true
     }
 
-    private func _pressedClear() {
+    func _pressedClear() {
         guard let composable = self.composable else { return }
         composable.text = self.field.unformatText
         if let closure = composable.pressedClear {
@@ -191,7 +200,7 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
         }
     }
 
-    private func _shouldReturn() -> Bool {
+    func _shouldReturn() -> Bool {
         guard let composable = self.composable else { return true }
         if let closure = composable.shouldReturn {
             return closure(composable)
@@ -199,10 +208,17 @@ open class QTextFieldComposition< Composable: QTextFieldComposable > : QComposit
         return true
     }
 
-    private func _pressedReturn() {
+    func _pressedReturn() {
         guard let composable = self.composable else { return }
         if let closure = composable.pressedReturn {
             closure(composable)
+        }
+    }
+    
+    func _select(suggestion: String) {
+        guard let composable = self.composable else { return }
+        if let closure = composable.selectSuggestion {
+            closure(composable, suggestion)
         }
     }
 

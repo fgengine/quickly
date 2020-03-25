@@ -18,6 +18,7 @@ public protocol IQTextFieldObserver : class {
     func pressedDone(textField: QTextField)
     func pressedClear(textField: QTextField)
     func pressedReturn(textField: QTextField)
+    func select(textField: QTextField, suggestion: String)
     
 }
 
@@ -25,6 +26,7 @@ public class QTextField : QDisplayView, IQField {
 
     public typealias ShouldClosure = (_ textField: QTextField) -> Bool
     public typealias Closure = (_ textField: QTextField) -> Void
+    public typealias SelectSuggestionClosure = (_ textField: QTextField, _ suggestion: String) -> Void
 
     public var requireValidator: Bool = false
     public var validator: IQInputValidator? {
@@ -249,6 +251,7 @@ public class QTextField : QDisplayView, IQField {
     public var onPressedClear: Closure?
     public var onShouldReturn: ShouldClosure?
     public var onPressedReturn: Closure?
+    public var onSelectSuggestion: SelectSuggestionClosure?
     
     open override var intrinsicContentSize: CGSize {
         get { return self._field.intrinsicContentSize }
@@ -390,8 +393,9 @@ private extension QTextField {
     
     @objc
     func _pressedSuggestion(_ sender: UIBarButtonItem) {
+        guard let suggestion = sender.title else { return }
         self.suggestionToolbar.items = []
-        self._field.text = sender.title
+        self._field.text = suggestion
         self._field.sendActions(for: .editingChanged)
         NotificationCenter.default.post(name: UITextField.textDidChangeNotification, object: self._field)
         if let closure = self.onEditing {
@@ -403,6 +407,12 @@ private extension QTextField {
         if let form = self.form {
             form.changed(field: self)
         }
+        if let closure = self.onSelectSuggestion {
+            closure(self, suggestion)
+        }
+        self._observer.notify({ (observer) in
+            observer.select(textField: self, suggestion: suggestion)
+        })
         self.endEditing(false)
     }
     

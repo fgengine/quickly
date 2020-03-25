@@ -95,6 +95,9 @@ open class QCompositionCollectionCell< Composition: IQComposition > : QBackgroun
     open func pressedReturn(textField: QTextField) {
     }
     
+    open func select(textField: QTextField, suggestion: String) {
+    }
+    
     // MARK: IQMultiTextFieldObserver
     
     open func beginEditing(multiTextField: QMultiTextField) {

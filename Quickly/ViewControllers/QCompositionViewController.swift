@@ -224,6 +224,9 @@ extension QCompositionViewController : IQTextFieldObserver {
     open func pressedReturn(textField: QTextField) {
     }
     
+    open func select(textField: QTextField, suggestion: String) {
+    }
+    
 }
 
 // MARK: IQMultiTextFieldObserver
