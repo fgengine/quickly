@@ -8,6 +8,14 @@ open class QCollectionView : UICollectionView, IQView {
         willSet {
             self.delegate = nil
             self.dataSource = nil
+            if #available(iOS 11.0, *) {
+                if self.dragDelegate === self.collectionController {
+                   self.dragDelegate = nil
+                }
+                if self.dropDelegate === self.collectionController {
+                   self.dropDelegate = nil
+                }
+            }
             if let collectionController = self.collectionController {
                 collectionController.collectionView = nil
             }
@@ -15,6 +23,14 @@ open class QCollectionView : UICollectionView, IQView {
         didSet {
             self.delegate = self.collectionController
             self.dataSource = self.collectionController
+            if #available(iOS 11.0, *) {
+                if let dragDelegate = self.collectionController as? UICollectionViewDragDelegate {
+                    self.dragDelegate = dragDelegate
+                }
+                if let dropDelegate = self.collectionController as? UICollectionViewDropDelegate {
+                    self.dropDelegate = dropDelegate
+                }
+            }
             if let collectionController = self.collectionController {
                 collectionController.collectionView = self
             }
