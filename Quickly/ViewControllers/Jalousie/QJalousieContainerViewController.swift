@@ -456,14 +456,4 @@ extension QJalousieContainerViewController : UIGestureRecognizerDelegate {
         return false
     }
     
-    open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard let gestureRecognizerView = gestureRecognizer.view, let otherGestureRecognizerView = otherGestureRecognizer.view else {
-            return false
-        }
-        if gestureRecognizer == self.interactiveGesture {
-            return otherGestureRecognizerView.isDescendant(of: gestureRecognizerView)
-        }
-        return false
-    }
-
 }
