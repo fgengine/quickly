@@ -366,8 +366,10 @@ private extension QStackContainerViewController {
                 )
             } else {
                 self._appear(viewController: viewController)
-                viewController.willPresent(animated: false)
-                viewController.didPresent(animated: false)
+                if self.isPresented == true {
+                    viewController.willPresent(animated: false)
+                    viewController.didPresent(animated: false)
+                }
                 self.setNeedUpdateOrientations()
                 self.setNeedUpdateStatusBar()
                 completion?()
@@ -412,8 +414,10 @@ private extension QStackContainerViewController {
                         }
                     )
                 } else {
-                    self.willDismiss(animated: false)
-                    self.didDismiss(animated: false)
+                    if self.isPresented == true {
+                        viewController.willDismiss(animated: false)
+                        viewController.didDismiss(animated: false)
+                    }
                     self._disappear(viewController: viewController)
                     self._remove(childViewController: viewController)
                     completion?()
