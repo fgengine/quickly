@@ -205,6 +205,8 @@
 		407137812426A24900E2FDF9 /* QJalousieViewControllerAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4071377F2426A24900E2FDF9 /* QJalousieViewControllerAnimation.swift */; };
 		407137822426A24900E2FDF9 /* QJalousieViewControllerInteractiveAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407137802426A24900E2FDF9 /* QJalousieViewControllerInteractiveAnimation.swift */; };
 		407137842426A28000E2FDF9 /* QJalousieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407137832426A28000E2FDF9 /* QJalousieViewController.swift */; };
+		4071C33B24446A06006E323D /* QQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4071C33A24446A06006E323D /* QQRCode.swift */; };
+		4071C33D24446BD1006E323D /* CIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4071C33C24446BD1006E323D /* CIImage.swift */; };
 		4073620A2422214E0090F688 /* IQJalousieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407362092422214E0090F688 /* IQJalousieViewController.swift */; };
 		4073620C24222AC90090F688 /* QJalousieContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4073620B24222AC90090F688 /* QJalousieContainerViewController.swift */; };
 		4073E60023FE858400204527 /* QPdfPagePhotoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4073E5FF23FE858400204527 /* QPdfPagePhotoItem.swift */; };
@@ -558,6 +560,8 @@
 		4071377F2426A24900E2FDF9 /* QJalousieViewControllerAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QJalousieViewControllerAnimation.swift; sourceTree = "<group>"; };
 		407137802426A24900E2FDF9 /* QJalousieViewControllerInteractiveAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QJalousieViewControllerInteractiveAnimation.swift; sourceTree = "<group>"; };
 		407137832426A28000E2FDF9 /* QJalousieViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QJalousieViewController.swift; sourceTree = "<group>"; };
+		4071C33A24446A06006E323D /* QQRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QQRCode.swift; sourceTree = "<group>"; };
+		4071C33C24446BD1006E323D /* CIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIImage.swift; sourceTree = "<group>"; };
 		407362092422214E0090F688 /* IQJalousieViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQJalousieViewController.swift; sourceTree = "<group>"; };
 		4073620B24222AC90090F688 /* QJalousieContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QJalousieContainerViewController.swift; sourceTree = "<group>"; };
 		4073E5FF23FE858400204527 /* QPdfPagePhotoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QPdfPagePhotoItem.swift; sourceTree = "<group>"; };
@@ -975,6 +979,7 @@
 				400CF9E52125646700F9238D /* AuthenticationChallenge */,
 				406BC14721773BD600164485 /* Proxy */,
 				409403561F4E125E008A8B90 /* Api */,
+				4071C339244469E6006E323D /* QRCode */,
 				40CF458B1F4DE6AB004D00D8 /* Router */,
 				40266D282170D3E5009CC9B4 /* Context */,
 				40527CAF2245424300D921D3 /* Analitics */,
@@ -1418,6 +1423,14 @@
 			path = Animation;
 			sourceTree = "<group>";
 		};
+		4071C339244469E6006E323D /* QRCode */ = {
+			isa = PBXGroup;
+			children = (
+				4071C33A24446A06006E323D /* QQRCode.swift */,
+			);
+			path = QRCode;
+			sourceTree = "<group>";
+		};
 		40736208242221200090F688 /* Jalousie */ = {
 			isa = PBXGroup;
 			children = (
@@ -1622,6 +1635,7 @@
 				4040718020569F4500F6ECC2 /* CGPoint.swift */,
 				400DDF721F5623D400D11991 /* CGSize.swift */,
 				400DDF6F1F5622EB00D11991 /* CGRect.swift */,
+				4071C33C24446BD1006E323D /* CIImage.swift */,
 				40536F2522B6A5D3004547EE /* URLComponents.swift */,
 				40571363217DB408009ED2E3 /* Bundle.swift */,
 				40F73CDF22AC07F30035EC7A /* FileManager.swift */,
@@ -1946,6 +1960,7 @@
 				4007B0A72144236900AE17DC /* QTitleButtonComposition.swift in Sources */,
 				400DDF711F5622EB00D11991 /* CGRect.swift in Sources */,
 				4085C07920E4D56A0079AF90 /* CGFloat.swift in Sources */,
+				4071C33D24446BD1006E323D /* CIImage.swift in Sources */,
 				4094035B1F4E12BF008A8B90 /* QApiRequest.swift in Sources */,
 				4085C06D20E4CDCD0079AF90 /* QAnimationEaseExponencial.swift in Sources */,
 				4007B0A92144236900AE17DC /* QTitleValueComposition.swift in Sources */,
@@ -2068,6 +2083,7 @@
 				402F1FB61F4EF525007625CA /* QApiError.swift in Sources */,
 				40CF45BE1F4DE6AB004D00D8 /* QCollectionData.swift in Sources */,
 				4062C8CB2088DB220098F809 /* QCollectionViewController.swift in Sources */,
+				4071C33B24446A06006E323D /* QQRCode.swift in Sources */,
 				403E7C132225034E001098BD /* IQPagesView.swift in Sources */,
 				4070B6AD206297BB00B568A9 /* QKeyboard.swift in Sources */,
 				4023D97E21470637005F915D /* QPlaceholderImageTitleValueComposition.swift in Sources */,

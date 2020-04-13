@@ -10,10 +10,6 @@ public extension Data {
         return string
     }
 
-}
-
-public extension Data {
-
     var md2: Data {
         var hash = [UInt8](repeating: 0,  count: Int(CC_MD2_DIGEST_LENGTH))
         _ = self.withUnsafeBytes({ _ = CC_MD2($0.baseAddress, CC_LONG(self.count), &hash) })
