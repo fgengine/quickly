@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public protocol IQAnaliticsProvider : class {
+public protocol IQAnalyticsProvider : class {
     
     func send(event: String, params: [String : String]?)
     
