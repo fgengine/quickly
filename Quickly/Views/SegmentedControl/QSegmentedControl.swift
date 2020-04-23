@@ -120,6 +120,11 @@ open class QSegmentedControl : UISegmentedControl, IQView {
         self.setup()
     }
     
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.setup()
+    }
+    
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.setup()
