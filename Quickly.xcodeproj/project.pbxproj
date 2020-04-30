@@ -180,6 +180,7 @@
 		40691540208487BE008934D5 /* IQStackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4069153C208487BD008934D5 /* IQStackViewController.swift */; };
 		406A2EFD22EEE50A00664CA2 /* IQFieldForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406A2EFC22EEE50A00664CA2 /* IQFieldForm.swift */; };
 		406A2EFF22EEE58D00664CA2 /* QFieldForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406A2EFE22EEE58D00664CA2 /* QFieldForm.swift */; };
+		406A9A8B24599E440009DBEF /* QImagePhotoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406A9A8A24599E440009DBEF /* QImagePhotoItem.swift */; };
 		406BC12C217722EA00164485 /* QProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406BC12B217722EA00164485 /* QProxy.swift */; };
 		406BC12E2177231C00164485 /* IQProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406BC12D2177231C00164485 /* IQProxy.swift */; };
 		406BEBDB23FBE1E900F794AC /* QPhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406BEBDA23FBE1E900F794AC /* QPhotosViewController.swift */; };
@@ -209,7 +210,7 @@
 		4071C33D24446BD1006E323D /* CIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4071C33C24446BD1006E323D /* CIImage.swift */; };
 		4073620A2422214E0090F688 /* IQJalousieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407362092422214E0090F688 /* IQJalousieViewController.swift */; };
 		4073620C24222AC90090F688 /* QJalousieContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4073620B24222AC90090F688 /* QJalousieContainerViewController.swift */; };
-		4073E60023FE858400204527 /* QPdfPagePhotoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4073E5FF23FE858400204527 /* QPdfPagePhotoItem.swift */; };
+		4073E60023FE858400204527 /* QPdfPhotoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4073E5FF23FE858400204527 /* QPdfPhotoItem.swift */; };
 		4073E60223FEA56D00204527 /* QPhotosViewController+ThumbnailLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4073E60123FEA56D00204527 /* QPhotosViewController+ThumbnailLayout.swift */; };
 		4075266923C88F560074D0DC /* QProgressLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4075266823C88F560074D0DC /* QProgressLoadingView.swift */; };
 		40781A61228DBA4200447318 /* QImageThumbnailLoaderFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40781A60228DBA4200447318 /* QImageThumbnailLoaderFilter.swift */; };
@@ -540,6 +541,7 @@
 		4069EF6C240E40FF00C8C1B1 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		406A2EFC22EEE50A00664CA2 /* IQFieldForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQFieldForm.swift; sourceTree = "<group>"; };
 		406A2EFE22EEE58D00664CA2 /* QFieldForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QFieldForm.swift; sourceTree = "<group>"; };
+		406A9A8A24599E440009DBEF /* QImagePhotoItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QImagePhotoItem.swift; sourceTree = "<group>"; };
 		406BC12B217722EA00164485 /* QProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QProxy.swift; sourceTree = "<group>"; };
 		406BC12D2177231C00164485 /* IQProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQProxy.swift; sourceTree = "<group>"; };
 		406BEBDA23FBE1E900F794AC /* QPhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QPhotosViewController.swift; sourceTree = "<group>"; };
@@ -564,7 +566,7 @@
 		4071C33C24446BD1006E323D /* CIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIImage.swift; sourceTree = "<group>"; };
 		407362092422214E0090F688 /* IQJalousieViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQJalousieViewController.swift; sourceTree = "<group>"; };
 		4073620B24222AC90090F688 /* QJalousieContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QJalousieContainerViewController.swift; sourceTree = "<group>"; };
-		4073E5FF23FE858400204527 /* QPdfPagePhotoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QPdfPagePhotoItem.swift; sourceTree = "<group>"; };
+		4073E5FF23FE858400204527 /* QPdfPhotoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QPdfPhotoItem.swift; sourceTree = "<group>"; };
 		4073E60123FEA56D00204527 /* QPhotosViewController+ThumbnailLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "QPhotosViewController+ThumbnailLayout.swift"; sourceTree = "<group>"; };
 		4075266823C88F560074D0DC /* QProgressLoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QProgressLoadingView.swift; sourceTree = "<group>"; };
 		40781A60228DBA4200447318 /* QImageThumbnailLoaderFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QImageThumbnailLoaderFilter.swift; sourceTree = "<group>"; };
@@ -1367,7 +1369,7 @@
 		406BEBDC23FBE23C00F794AC /* Photos */ = {
 			isa = PBXGroup;
 			children = (
-				4073E5FE23FE856A00204527 /* Pdf */,
+				4073E5FE23FE856A00204527 /* PhotoItems */,
 				406BEBE923FBE3D400F794AC /* IQPhotoItem.swift */,
 				406BEBDA23FBE1E900F794AC /* QPhotosViewController.swift */,
 				406BEBDE23FBE26E00F794AC /* QPhotosViewController+PreviewController.swift */,
@@ -1442,12 +1444,13 @@
 			path = Jalousie;
 			sourceTree = "<group>";
 		};
-		4073E5FE23FE856A00204527 /* Pdf */ = {
+		4073E5FE23FE856A00204527 /* PhotoItems */ = {
 			isa = PBXGroup;
 			children = (
-				4073E5FF23FE858400204527 /* QPdfPagePhotoItem.swift */,
+				406A9A8A24599E440009DBEF /* QImagePhotoItem.swift */,
+				4073E5FF23FE858400204527 /* QPdfPhotoItem.swift */,
 			);
-			path = Pdf;
+			path = PhotoItems;
 			sourceTree = "<group>";
 		};
 		408200412240F20800D0779B /* ApplicationState */ = {
@@ -2096,7 +2099,7 @@
 				4007B0A62144236900AE17DC /* QImageTitleDetailComposition.swift in Sources */,
 				4085C06520E4C9800079AF90 /* QAnimationEaseQuartic.swift in Sources */,
 				406258E420B3F73E000E3AB2 /* QCompositionViewController.swift in Sources */,
-				4073E60023FE858400204527 /* QPdfPagePhotoItem.swift in Sources */,
+				4073E60023FE858400204527 /* QPdfPhotoItem.swift in Sources */,
 				4039BCB51F516F1B00E38090 /* QButton.swift in Sources */,
 				4062C8BC208882540098F809 /* QViewController.swift in Sources */,
 				408EE9AD22C0D3F400483EB4 /* IQApiTaskQuery.swift in Sources */,
@@ -2226,6 +2229,7 @@
 				4085C06320E4C9290079AF90 /* QAnimationEaseCubic.swift in Sources */,
 				401E8F7C206D34C4008A5BE4 /* IQPickerCell.swift in Sources */,
 				4007B0852144236900AE17DC /* QTextFieldComposition.swift in Sources */,
+				406A9A8B24599E440009DBEF /* QImagePhotoItem.swift in Sources */,
 				405ABE0D20C1745A005E1192 /* QPagebarTitleCell.swift in Sources */,
 				4025A7B02261183F00B4160F /* QDatabaseLiteralExpression.swift in Sources */,
 				40CF45DC1F4DE6AB004D00D8 /* IQTableRow.swift in Sources */,

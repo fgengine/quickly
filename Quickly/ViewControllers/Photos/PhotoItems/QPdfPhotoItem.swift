@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-public class QPdfPagePhotoItem : IQPhotoItem {
+public class QPdfPhotoItem : IQPhotoItem {
     
     public var isNeedLoad: Bool {
         get { return self.image == nil }
@@ -28,10 +28,10 @@ public class QPdfPagePhotoItem : IQPhotoItem {
     public static func photoItems(data: Data) -> [IQPhotoItem] {
         guard let provider = CGDataProvider(data: data as CFData) else { return [] }
         guard let document = CGPDFDocument(provider) else { return [] }
-        var photos: [QPdfPagePhotoItem] = []
+        var photos: [QPdfPhotoItem] = []
         for pageIndex in 0..<document.numberOfPages {
             guard let page = document.page(at: pageIndex) else { continue }
-            photos.append(QPdfPagePhotoItem(page: page))
+            photos.append(QPdfPhotoItem(page: page))
         }
         return photos
     }
@@ -60,7 +60,7 @@ public class QPdfPagePhotoItem : IQPhotoItem {
             self._observer.notify({ $0.willLoadPhotoItem(self) })
             self._task = DispatchWorkItem(block: { [weak self] in
                 guard let self = self else { return }
-                let image = QPdfPagePhotoItem._render(page: self._page)
+                let image = QPdfPhotoItem._render(page: self._page)
                 DispatchQueue.main.async(execute: { [weak self] in
                     guard let self = self else { return }
                     self.image = image
@@ -73,7 +73,7 @@ public class QPdfPagePhotoItem : IQPhotoItem {
     }
     
     public func draw(context: CGContext, bounds: CGRect, scale: CGFloat) {
-        QPdfPagePhotoItem._render(
+        QPdfPhotoItem._render(
             context: context,
             page: self._page,
             bounds: bounds,
@@ -85,7 +85,7 @@ public class QPdfPagePhotoItem : IQPhotoItem {
 
 // MARK: Private
 
-private extension QPdfPagePhotoItem {
+private extension QPdfPhotoItem {
     
     static func _render(page: CGPDFPage) -> UIImage? {
         let size: CGSize
@@ -97,7 +97,7 @@ private extension QPdfPagePhotoItem {
         guard let context = UIGraphicsGetCurrentContext() else {
             return nil
         }
-        QPdfPagePhotoItem._render(
+        QPdfPhotoItem._render(
             context: context,
             page: page,
             bounds: CGRect(origin: CGPoint.zero, size: size),
