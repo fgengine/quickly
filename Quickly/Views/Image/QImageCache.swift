@@ -90,13 +90,23 @@ public class QImageCache {
         }
     }
 
-    public func cleanup() {
+    public func cleanup(before: TimeInterval) {
         self._queue.sync(execute: {
             self.memory.removeAll()
         })
+        let now = Date()
         if let urls = try? self._fileManager.contentsOfDirectory(at: self.url, includingPropertiesForKeys: nil, options: [ .skipsHiddenFiles ]) {
             for url in urls {
-                try? self._fileManager.removeItem(at: url)
+                guard
+                    let attributes = try? self._fileManager.attributesOfItem(atPath: url.path),
+                    let modificationDate = attributes[FileAttributeKey.modificationDate] as? Date
+                else {
+                    continue
+                }
+                let delta = now.timeIntervalSince1970 - modificationDate.timeIntervalSince1970
+                if delta > before {
+                    try? self._fileManager.removeItem(at: url)
+                }
             }
         }
     }
