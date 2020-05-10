@@ -13,14 +13,18 @@ open class QAttributedText : IQText {
     public var color: UIColor? {
         get { return nil }
     }
-    public private(set) var attributed: NSAttributedString?
+    public var attributed: NSAttributedString? {
+        get { return self._attributed }
+    }
+    
+    private var _attributed: NSMutableAttributedString
     
     public init(_ attributed: NSAttributedString) {
-        self.attributed = attributed
+        self._attributed = NSMutableAttributedString(attributedString: attributed)
     }
 
     public init(_ text: String, style: IQTextStyle) {
-        self.attributed = style.attributed(text)
+        self._attributed = style.mutableAttributed(text)
     }
     
     public init(_ text: String, style: IQTextStyle, parts: [String : QAttributedText]) {
@@ -30,12 +34,33 @@ open class QAttributedText : IQText {
                 attributed.replaceCharacters(in: attributed.string.nsRange(from: range), with: valueAttributed)
             }
         })
-        self.attributed = attributed
+        self._attributed = attributed
+    }
+    
+    public init(_ texts: IQText...) {
+        let attributed = NSMutableAttributedString()
+        for text in texts {
+            if let attributedText = text.attributed {
+                attributed.append(attributedText)
+            } else if let textFont = text.font, let textColor = text.color {
+                attributed.append(NSAttributedString(
+                    string: text.string,
+                    attributes: [
+                        .font : textFont,
+                        .foregroundColor : textColor
+                    ]
+                ))
+            }
+        }
+        self._attributed = attributed
+    }
+    
+    public func append(_ text: String, style: IQTextStyle) {
+        self._attributed.append(style.attributed(text))
     }
     
     public func size(size: CGSize) -> CGSize {
-        guard let attributed = self.attributed else { return CGSize.zero }
-        let rect = attributed.boundingRect(
+        let rect = self._attributed.boundingRect(
             with: size,
             options: [ .usesLineFragmentOrigin ],
             context: nil
