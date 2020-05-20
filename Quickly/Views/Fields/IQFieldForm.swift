@@ -13,7 +13,7 @@ public protocol IQFieldForm : class {
     func add(field: IQField)
     func remove(field: IQField)
     
-    func changed(field: IQField)
+    func validation()
     
 }
 

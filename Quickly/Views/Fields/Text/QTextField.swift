@@ -78,7 +78,7 @@ public class QTextField : QDisplayView, IQField {
                 }
             }
             if let form = self.form {
-                form.changed(field: self)
+                form.validation()
             }
         }
     }
@@ -118,7 +118,7 @@ public class QTextField : QDisplayView, IQField {
         set(value) {
             self._field.text = value
             if let form = self.form {
-                form.changed(field: self)
+                form.validation()
             }
         }
         get {
@@ -145,7 +145,7 @@ public class QTextField : QDisplayView, IQField {
                 self._field.text = value
             }
             if let form = self.form {
-                form.changed(field: self)
+                form.validation()
             }
         }
         get {
@@ -405,7 +405,7 @@ private extension QTextField {
             observer.editing(textField: self)
         })
         if let form = self.form {
-            form.changed(field: self)
+            form.validation()
         }
         if let closure = self.onSelectSuggestion {
             closure(self, suggestion)
@@ -618,7 +618,7 @@ private extension QTextField {
                     observer.editing(textField: field)
                 })
                 if let form = field.form {
-                    form.changed(field: field)
+                    form.validation()
                 }
             }
             return false

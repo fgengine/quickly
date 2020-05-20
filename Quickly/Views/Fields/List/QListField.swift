@@ -195,7 +195,7 @@ public class QListField : QDisplayView, IQField {
                 observer.select(listField: self, row: self.selectedRow!)
             })
             if let form = self.form {
-                form.changed(field: self)
+                form.validation()
             }
         }
         return true
@@ -286,7 +286,7 @@ extension QListField : IQPickerControllerDelegate {
             observer.select(listField: self, row: row)
         })
         if let form = self.form {
-            form.changed(field: self)
+            form.validation()
         }
     }
 

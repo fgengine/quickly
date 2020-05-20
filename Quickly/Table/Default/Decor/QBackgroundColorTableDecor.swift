@@ -20,7 +20,6 @@ open class QBackgroundColorTableDecor< Type: QBackgroundColorTableData > : QTabl
     open override func set(data: Type, spec: IQContainerSpec, animated: Bool) {
         super.set(data: data, spec: spec, animated: animated)
         
-        self.backgroundColor = data.backgroundColor
         self.contentView.backgroundColor = data.backgroundColor
     }
 

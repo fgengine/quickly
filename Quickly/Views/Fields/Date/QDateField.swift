@@ -222,7 +222,7 @@ public class QDateField : QDisplayView, IQField {
                 observer.select(dateField: self, date: self.date!)
             })
             if let form = self.form {
-                form.changed(field: self)
+                form.validation()
             }
         }
         return true
@@ -312,7 +312,7 @@ extension QDateField {
             observer.select(dateField: self, date: self._picker.date)
         })
         if let form = self.form {
-            form.changed(field: self)
+            form.validation()
         }
     }
     

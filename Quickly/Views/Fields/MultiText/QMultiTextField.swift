@@ -58,7 +58,7 @@ public class QMultiTextField : QDisplayView, IQField {
                 self._updatePlaceholderVisibility()
                 self.textHeight = self._textHeight()
                 if let form = self.form {
-                    form.changed(field: self)
+                    form.validation()
                 }
             }
         }
@@ -70,7 +70,7 @@ public class QMultiTextField : QDisplayView, IQField {
             self._updatePlaceholderVisibility()
             self.textHeight = self._textHeight()
             if let form = self.form {
-                form.changed(field: self)
+                form.validation()
             }
         }
         get {
@@ -458,7 +458,7 @@ private extension QMultiTextField {
                 observer.editing(multiTextField: field)
             })
             if let form = field.form {
-                form.changed(field: field)
+                form.validation()
             }
         }
         
