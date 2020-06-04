@@ -28,7 +28,7 @@ public class QDateFieldFormatter : IQDateFieldFormatter {
 
     public func from(_ date: Date) -> IQText {
         let string = self.formatter.string(from: date)
-        return QAttributedText(string, style: self.textStyle)
+        return QAttributedText(text: string, style: self.textStyle)
     }
 
 }

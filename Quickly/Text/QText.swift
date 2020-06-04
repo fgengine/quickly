@@ -12,24 +12,24 @@ open class QText : IQText {
     }
 
     public init(
-        _ string: String,
+        text: String,
         font: UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize),
         color: UIColor = UIColor.black
     ) {
-        self.string = string
+        self.string = text
         self.font = font
         self.color = color
     }
     
     public init(
-        _ string: String,
+        text: String,
         font: UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize),
         color: UIColor = UIColor.black,
         parts: [String : String]
     ) {
-        self.string = string
+        self.string = text
         parts.forEach({ (key: String, value: String) in
-            if let range = string.range(of: key) {
+            if let range = text.range(of: key) {
                 self.string.replaceSubrange(range, with: value)
             }
         })

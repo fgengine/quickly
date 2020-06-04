@@ -45,37 +45,29 @@ open class QProgressView : QView, IQProgressView {
         get { return CGFloat(self._view.progress) }
     }
     
-    private var _view: UIProgressView!
-
-    open override var intrinsicContentSize: CGSize {
-        get { return self._view.intrinsicContentSize }
-    }
+    private lazy var _view: UIProgressView = {
+        let view = UIProgressView(frame: self.bounds)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.clear
+        self.addSubview(view)
+        return view
+    }()
 
     open override func setup() {
         super.setup()
 
         self.backgroundColor = UIColor.clear
 
-        self._view = UIProgressView(frame: self.bounds)
-        self._view.backgroundColor = UIColor.clear
-        self._view.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
-        self.addSubview(self._view)
+        self.addConstraints([
+            self._view.topLayout == self.topLayout,
+            self._view.leadingLayout == self.leadingLayout,
+            self._view.trailingLayout == self.trailingLayout,
+            self._view.bottomLayout == self.bottomLayout
+        ])
     }
     
     open func setProgress(_ progress: CGFloat, animated: Bool) {
         self._view.setProgress(Float(progress), animated: animated)
-    }
-
-    open override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return self._view.sizeThatFits(size)
-    }
-
-    open override func sizeToFit() {
-        self._view.sizeToFit()
-        self.frame = CGRect(
-            origin: self.frame.origin,
-            size: self._view.frame.size
-        )
     }
     
     public func apply(_ styleSheet: QProgressViewStyleSheet) {

@@ -2,21 +2,18 @@
 //  Quickly
 //
 
-open class QStackWireframe< WireframeType: IQWireframe, ContextType: IQContext > : IQChildWireframe {
+open class QStackWireframe< RouterType: IQRouter, ContextType: IQContext > : IQWireframe, IQWeakRouterable, IQContextable {
 
-    open var viewController: IQViewController {
-        get { return self.containerViewController }
-    }
-    open private(set) var containerViewController: QStackContainerViewController
-    open private(set) weak var parent: WireframeType?
-    open private(set) var context: ContextType
+    public private(set) var viewController: QStackContainerViewController
+    public private(set) weak var router: RouterType?
+    public private(set) var context: ContextType
 
     public init(
-        parent: WireframeType,
+        router: RouterType,
         context: ContextType
     ) {
-        self.containerViewController = QStackContainerViewController()
-        self.parent = parent
+        self.viewController = QStackContainerViewController()
+        self.router = router
         self.context = context
         self.setup()
     }
@@ -27,53 +24,102 @@ open class QStackWireframe< WireframeType: IQWireframe, ContextType: IQContext >
     open func open(_ url: URL) -> Bool {
         return true
     }
-    
-    open func push(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.containerViewController.push(viewController: viewController, animated: animated, completion: completion)
-    }
-    
-    open func push(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.containerViewController.push(viewController: viewController, animated: animated, completion: completion)
-    }
 
-    open func replace(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.containerViewController.replace(viewController: viewController, animated: animated, completion: completion)
-    }
+}
 
-    open func replace(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.containerViewController.replace(viewController: viewController, animated: animated, completion: completion)
+// MARK: Public
+
+public extension QStackWireframe {
+    
+    func push(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.viewController.push(viewController: viewController, animated: animated, completion: completion)
     }
     
-    open func replaceAll(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.containerViewController.replaceAll(viewController: viewController, animated: animated, completion: completion)
+    func push(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.viewController.push(viewController: viewController, animated: animated, completion: completion)
+    }
+
+    func replace(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.viewController.replace(viewController: viewController, animated: animated, completion: completion)
+    }
+
+    func replace(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.viewController.replace(viewController: viewController, animated: animated, completion: completion)
     }
     
-    open func replaceAll(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.containerViewController.replaceAll(viewController: viewController, animated: animated, completion: completion)
-    }
-
-    open func pop(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.containerViewController.pop(viewController: viewController, animated: animated, completion: completion)
-    }
-
-    open func pop(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.containerViewController.pop(viewController: viewController, animated: animated, completion: completion)
-    }
-
-    open func popTo(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.containerViewController.popTo(viewController: viewController, animated: animated, completion: completion)
-    }
-
-    open func popTo(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        self.containerViewController.popTo(viewController: viewController, animated: animated, completion: completion)
+    func replaceAll(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.viewController.replaceAll(viewController: viewController, animated: animated, completion: completion)
     }
     
-    open func reset(animated: Bool, completion: (() -> Swift.Void)? = nil) {
-        if let rootViewController = self.containerViewController.rootViewController {
-            self.containerViewController.popTo(viewController: rootViewController, animated: animated, completion: completion)
+    func replaceAll(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.viewController.replaceAll(viewController: viewController, animated: animated, completion: completion)
+    }
+
+    func pop(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.viewController.pop(viewController: viewController, animated: animated, completion: completion)
+    }
+
+    func pop(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.viewController.pop(viewController: viewController, animated: animated, completion: completion)
+    }
+
+    func popTo(viewController: IQStackViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.viewController.popTo(viewController: viewController, animated: animated, completion: completion)
+    }
+
+    func popTo(viewController: IQStackContentViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.viewController.popTo(viewController: viewController, animated: animated, completion: completion)
+    }
+    
+    func reset(animated: Bool, completion: (() -> Swift.Void)?) {
+        if let rootViewController = self.viewController.rootViewController {
+            self.viewController.popTo(viewController: rootViewController, animated: animated, completion: completion)
         } else {
             completion?()
         }
     }
+    
+}
 
+// MARK: IQRouter
+
+extension QStackWireframe : IQRouter where RouterType : IQRouter {
+}
+
+// MARK: IQWireframeDefaultRouter
+
+extension QStackWireframe : IQWireframeDefaultRouter where RouterType : IQWireframeDefaultRouter {
+    
+    public func present(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.router?.present(viewController: viewController, animated: animated, completion: completion)
+    }
+    
+    public func dismiss(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.router?.dismiss(viewController: viewController, animated: animated, completion: completion)
+    }
+    
+    public func present(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.router?.present(viewController: viewController, animated: animated, completion: completion)
+    }
+    
+    public func dismiss(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.router?.dismiss(viewController: viewController, animated: animated, completion: completion)
+    }
+    
+    public func present(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.router?.present(viewController: viewController, animated: animated, completion: completion)
+    }
+    
+    public func dismiss(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.router?.dismiss(viewController: viewController, animated: animated, completion: completion)
+    }
+    
+    public func present(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.router?.present(viewController: viewController, animated: animated, completion: completion)
+    }
+    
+    public func dismiss(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.router?.dismiss(viewController: viewController, animated: animated, completion: completion)
+    }
+    
 }

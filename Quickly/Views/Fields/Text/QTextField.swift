@@ -9,16 +9,150 @@ public protocol IQTextFieldSuggestion : class {
     
 }
 
+public protocol IQTextFieldSuggestionController : IQCollectionController {
+    
+    typealias SelectSuggestionClosure = (_ controller: IQTextFieldSuggestionController, _ suggestion: String) -> Void
+    
+    var onSelectSuggestion: SelectSuggestionClosure? { set get }
+    
+    func set(variants: [String])
+    
+}
+
 public protocol IQTextFieldObserver : class {
     
     func beginEditing(textField: QTextField)
     func editing(textField: QTextField)
     func endEditing(textField: QTextField)
-    func pressedCancel(textField: QTextField)
-    func pressedDone(textField: QTextField)
+    func pressed(textField: QTextField, action: QFieldAction)
     func pressedClear(textField: QTextField)
     func pressedReturn(textField: QTextField)
     func select(textField: QTextField, suggestion: String)
+    
+}
+
+open class QTextFieldStyleSheet : QDisplayStyleSheet {
+    
+    public var requireValidator: Bool
+    public var validator: IQInputValidator?
+    public var form: IQFieldForm?
+    public var formatter: IQStringFormatter?
+    public var textInsets: UIEdgeInsets
+    public var textStyle: IQTextStyle?
+    public var editingInsets: UIEdgeInsets?
+    public var placeholderInsets: UIEdgeInsets?
+    public var placeholder: IQText?
+    public var typingStyle: IQTextStyle?
+    public var autocapitalizationType: UITextAutocapitalizationType
+    public var autocorrectionType: UITextAutocorrectionType
+    public var spellCheckingType: UITextSpellCheckingType
+    public var keyboardType: UIKeyboardType
+    public var keyboardAppearance: UIKeyboardAppearance
+    public var returnKeyType: UIReturnKeyType
+    public var enablesReturnKeyAutomatically: Bool
+    public var isSecureTextEntry: Bool
+    public var textContentType: UITextContentType!
+    public var isEnabled: Bool
+    public var toolbarStyle: QToolbarStyleSheet?
+    public var toolbarActions: QFieldAction
+    public var suggestion: IQTextFieldSuggestion?
+    public var suggestionStyle: QCollectionStyleSheet?
+    public var suggestionController: IQTextFieldSuggestionController?
+    
+    public init(
+        requireValidator: Bool = false,
+        validator: IQInputValidator? = nil,
+        form: IQFieldForm? = nil,
+        formatter: IQStringFormatter? = nil,
+        textInsets: UIEdgeInsets = UIEdgeInsets.zero,
+        textStyle: IQTextStyle? = nil,
+        editingInsets: UIEdgeInsets? = nil,
+        placeholderInsets: UIEdgeInsets? = nil,
+        placeholder: IQText? = nil,
+        typingStyle: IQTextStyle? = nil,
+        autocapitalizationType: UITextAutocapitalizationType = .none,
+        autocorrectionType: UITextAutocorrectionType = .default,
+        spellCheckingType: UITextSpellCheckingType = .default,
+        keyboardType: UIKeyboardType = .default,
+        keyboardAppearance: UIKeyboardAppearance = .default,
+        returnKeyType: UIReturnKeyType = .default,
+        enablesReturnKeyAutomatically: Bool = true,
+        isSecureTextEntry: Bool = false,
+        textContentType: UITextContentType! = nil,
+        isEnabled: Bool = true,
+        toolbarStyle: QToolbarStyleSheet? = nil,
+        toolbarActions: QFieldAction = [],
+        suggestion: IQTextFieldSuggestion? = nil,
+        suggestionStyle: QCollectionStyleSheet? = nil,
+        suggestionController: IQTextFieldSuggestionController? = QTextFieldSuggestionController(),
+        backgroundColor: UIColor? = nil,
+        tintColor: UIColor? = nil,
+        cornerRadius: QViewCornerRadius = .none,
+        border: QViewBorder = .none,
+        shadow: QViewShadow? = nil
+    ) {
+        self.requireValidator = requireValidator
+        self.validator = validator
+        self.form = form
+        self.formatter = formatter
+        self.textInsets = textInsets
+        self.textStyle = textStyle
+        self.editingInsets = editingInsets
+        self.placeholderInsets = placeholderInsets
+        self.placeholder = placeholder
+        self.autocapitalizationType = autocapitalizationType
+        self.autocorrectionType = autocorrectionType
+        self.spellCheckingType = spellCheckingType
+        self.keyboardType = keyboardType
+        self.keyboardAppearance = keyboardAppearance
+        self.returnKeyType = returnKeyType
+        self.enablesReturnKeyAutomatically = enablesReturnKeyAutomatically
+        self.isSecureTextEntry = isSecureTextEntry
+        self.textContentType = textContentType
+        self.isEnabled = isEnabled
+        self.toolbarStyle = toolbarStyle
+        self.toolbarActions = toolbarActions
+        self.suggestion = suggestion
+        self.suggestionStyle = suggestionStyle
+        self.suggestionController = suggestionController
+        
+        super.init(
+            backgroundColor: backgroundColor,
+            tintColor: tintColor,
+            cornerRadius: cornerRadius,
+            border: border,
+            shadow: shadow
+        )
+    }
+    
+    public init(_ styleSheet: QTextFieldStyleSheet) {
+        self.requireValidator = styleSheet.requireValidator
+        self.validator = styleSheet.validator
+        self.form = styleSheet.form
+        self.formatter = styleSheet.formatter
+        self.textInsets = styleSheet.textInsets
+        self.textStyle = styleSheet.textStyle
+        self.editingInsets = styleSheet.editingInsets
+        self.placeholderInsets = styleSheet.placeholderInsets
+        self.placeholder = styleSheet.placeholder
+        self.autocapitalizationType = styleSheet.autocapitalizationType
+        self.autocorrectionType = styleSheet.autocorrectionType
+        self.spellCheckingType = styleSheet.spellCheckingType
+        self.keyboardType = styleSheet.keyboardType
+        self.keyboardAppearance = styleSheet.keyboardAppearance
+        self.returnKeyType = styleSheet.returnKeyType
+        self.enablesReturnKeyAutomatically = styleSheet.enablesReturnKeyAutomatically
+        self.isSecureTextEntry = styleSheet.isSecureTextEntry
+        self.textContentType = styleSheet.textContentType
+        self.isEnabled = styleSheet.isEnabled
+        self.toolbarStyle = styleSheet.toolbarStyle
+        self.toolbarActions = styleSheet.toolbarActions
+        self.suggestion = styleSheet.suggestion
+        self.suggestionStyle = styleSheet.suggestionStyle
+        self.suggestionController = styleSheet.suggestionController
+        
+        super.init(styleSheet)
+    }
     
 }
 
@@ -26,6 +160,7 @@ public class QTextField : QDisplayView, IQField {
 
     public typealias ShouldClosure = (_ textField: QTextField) -> Bool
     public typealias Closure = (_ textField: QTextField) -> Void
+    public typealias ActionClosure = (_ textField: QTextField, _ action: QFieldAction) -> Void
     public typealias SelectSuggestionClosure = (_ textField: QTextField, _ suggestion: String) -> Void
 
     public var requireValidator: Bool = false
@@ -208,7 +343,7 @@ public class QTextField : QDisplayView, IQField {
         }
         get {
             if let attributed = self._field.attributedPlaceholder {
-                return QAttributedText(attributed)
+                return QAttributedText(attributed: attributed)
             }
             return nil
         }
@@ -231,12 +366,25 @@ public class QTextField : QDisplayView, IQField {
             }
         }
     }
-    public lazy var suggestionToolbar: QToolbar = QToolbar(items: [])
     public var suggestion: IQTextFieldSuggestion? {
         didSet(oldValue) {
             if self.suggestion !== oldValue {
                 self._updateAccessoryView()
             }
+        }
+    }
+    public lazy var suggestionView: QCollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        let view = QCollectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50), collectionViewLayout: layout)
+        return view
+    }()
+    public var suggestionController: IQTextFieldSuggestionController? {
+        didSet {
+            if let controller = self.suggestionController {
+                controller.onSelectSuggestion = { [weak self] in self?._select(controller: $0, suggestion: $1) }
+            }
+            self.suggestionView.collectionController = self.suggestionController
         }
     }
     
@@ -245,8 +393,7 @@ public class QTextField : QDisplayView, IQField {
     public var onEditing: Closure?
     public var onShouldEndEditing: ShouldClosure?
     public var onEndEditing: Closure?
-    public var onPressedCancel: Closure?
-    public var onPressedDone: Closure?
+    public var onPressedAction: ActionClosure?
     public var onShouldClear: ShouldClosure?
     public var onPressedClear: Closure?
     public var onShouldReturn: ShouldClosure?
@@ -338,8 +485,9 @@ public class QTextField : QDisplayView, IQField {
         }
         self.toolbarActions = styleSheet.toolbarActions
         if let style = styleSheet.suggestionStyle {
-            self.suggestionToolbar.apply(style)
+            self.suggestionView.apply(style)
         }
+        self.suggestionController = styleSheet.suggestionController
         self.suggestion = styleSheet.suggestion
     }
     
@@ -363,10 +511,6 @@ private extension QTextField {
         return items
     }
     
-    func _createBarButtonItem(suggestion: String) -> UIBarButtonItem {
-        return UIBarButtonItem(title: suggestion, style: .plain, target: self, action: #selector(self._pressedSuggestion))
-    }
-    
     func _updateAccessoryView() {
         var height: CGFloat = 0
         if self.toolbarActions.isEmpty == false {
@@ -374,8 +518,8 @@ private extension QTextField {
             height += self.toolbar.frame.height
         }
         if self.suggestion != nil {
-            self._accessoryView.addSubview(self.suggestionToolbar)
-            height += self.suggestionToolbar.frame.height
+            self._accessoryView.addSubview(self.suggestionView)
+            height += self.suggestionView.frame.height
         }
         let origin = self._accessoryView.frame.origin
         let size = self._accessoryView.frame.size
@@ -391,10 +535,8 @@ private extension QTextField {
         }
     }
     
-    @objc
-    func _pressedSuggestion(_ sender: UIBarButtonItem) {
-        guard let suggestion = sender.title else { return }
-        self.suggestionToolbar.items = []
+    func _select(controller: IQTextFieldSuggestionController, suggestion: String) {
+        self.suggestionController?.set(variants: [])
         self._field.text = suggestion
         self._field.sendActions(for: .editingChanged)
         NotificationCenter.default.post(name: UITextField.textDidChangeNotification, object: self._field)
@@ -418,24 +560,23 @@ private extension QTextField {
     
     @objc
     func _pressedCancel(_ sender: Any) {
-        if let closure = self.onPressedCancel {
-            closure(self)
-        }
-        self._observer.notify({ (observer) in
-            observer.pressedCancel(textField: self)
-        })
+        self._pressed(action: .cancel)
         self.endEditing(false)
     }
     
     @objc
     func _pressedDone(_ sender: Any) {
-        if let closure = self.onPressedDone {
-            closure(self)
+        self._pressed(action: .done)
+        self.endEditing(false)
+    }
+    
+    func _pressed(action: QFieldAction) {
+        if let closure = self.onPressedAction {
+            closure(self, action)
         }
         self._observer.notify({ (observer) in
-            observer.pressedDone(textField: self)
+            observer.pressed(textField: self, action: action)
         })
-        self.endEditing(false)
     }
     
 }
@@ -606,9 +747,7 @@ private extension QTextField {
                 if let selectionFrom = selectionFrom, let selectionTo = selectionTo {
                     textField.selectedTextRange = textField.textRange(from: selectionFrom, to: selectionTo)
                 }
-                field.suggestionToolbar.items = autoCompleteVariants.compactMap({
-                    return field._createBarButtonItem(suggestion: $0)
-                })
+                field.suggestionController?.set(variants: autoCompleteVariants)
                 textField.sendActions(for: .editingChanged)
                 NotificationCenter.default.post(name: UITextField.textDidChangeNotification, object: textField)
                 if let closure = field.onEditing {

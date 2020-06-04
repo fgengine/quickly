@@ -2,71 +2,40 @@
 //  Quickly
 //
 
-public protocol IQAppWireframe : IQWireframe {
+open class QAppWireframe< ContextType: IQContext > : IQWireframe, IQContextable {
     
-    associatedtype ContextType: IQContext
-    
-    var context: ContextType { get }
-    
-    func launch(_ options: [UIApplication.LaunchOptionsKey : Any]?)
-    
-    var backgroundViewController: IQViewController? { set get }
-    var contentViewController: IQViewController? { set get }
-    var modalContainerViewController: IQModalContainerViewController? { set get }
-    var dialogContainerViewController: IQDialogContainerViewController? { set get }
-    var pushContainerViewController: IQPushContainerViewController? { set get }
-    
-    func present(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?)
-    func dismiss(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?)
-    
-}
+    public private(set) var window: QWindow
+    public var viewController: QMainViewController
+    public var backgroundViewController: IQViewController? {
+        set(value) { self.viewController.backgroundViewController = value }
+        get { return self.viewController.backgroundViewController }
+    }
+    public var contentViewController: IQViewController? {
+        set(value) { self.viewController.contentViewController = value }
+        get { return self.viewController.contentViewController }
+    }
+    public var modalContainerViewController: IQModalContainerViewController? {
+        set(value) { self.viewController.modalContainerViewController = value }
+        get { return self.viewController.modalContainerViewController }
+    }
+    public var dialogContainerViewController: IQDialogContainerViewController? {
+        set(value) { self.viewController.dialogContainerViewController = value }
+        get { return self.viewController.dialogContainerViewController }
+    }
+    public var pushContainerViewController: IQPushContainerViewController? {
+        set(value) { self.viewController.pushContainerViewController = value }
+        get { return self.viewController.pushContainerViewController }
+    }
+    public private(set) var context: ContextType
 
-open class QAppWireframe< ContextType: IQContext > : IQAppWireframe {
-    
-    open var viewController: IQViewController {
-        get { return self.mainViewController }
-    }
-    open private(set) var mainViewController: QMainViewController = QMainViewController()
-    open private(set) var context: ContextType
-    open var backgroundViewController: IQViewController? {
-        set(value) { self.mainViewController.backgroundViewController = value }
-        get { return self.mainViewController.backgroundViewController }
-    }
-    open var contentViewController: IQViewController? {
-        set(value) { self.mainViewController.contentViewController = value }
-        get { return self.mainViewController.contentViewController }
-    }
-    open var modalContainerViewController: IQModalContainerViewController? {
-        set(value) { self.mainViewController.modalContainerViewController = value }
-        get { return self.mainViewController.modalContainerViewController }
-    }
-    open var dialogContainerViewController: IQDialogContainerViewController? {
-        set(value) { self.mainViewController.dialogContainerViewController = value }
-        get { return self.mainViewController.dialogContainerViewController }
-    }
-    open var pushContainerViewController: IQPushContainerViewController? {
-        set(value) { self.mainViewController.pushContainerViewController = value }
-        get { return self.mainViewController.pushContainerViewController }
-    }
-
-    open private(set) var window: QWindow
-    
-    open var current: IQWireframe? {
-        didSet {
-            if let current = self.current {
-                self.mainViewController.contentViewController = current.viewController
-            } else {
-                self.mainViewController.contentViewController = nil
-            }
-        }
-    }
+    private var _wireframe: AnyObject?
 
     public init(
         context: ContextType
     ) {
-        self.mainViewController = QMainViewController()
+        self.viewController = QMainViewController()
         self.context = context
-        self.window = QWindow(self.mainViewController)
+        self.window = QWindow(self.viewController)
         self.setup()
     }
     
@@ -82,38 +51,57 @@ open class QAppWireframe< ContextType: IQContext > : IQAppWireframe {
     open func open(_ url: URL) -> Bool {
         return true
     }
+
+}
+
+// MARK: Public
+
+public extension QAppWireframe {
     
-    open func present(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+    func set< WireframeType: IQWireframe >(wireframe: WireframeType) {
+        if self._wireframe !== wireframe {
+            self._wireframe = wireframe
+            self.viewController.contentViewController = wireframe.viewController
+        }
+    }
+    
+}
+
+// MARK: IQWireframeDefaultRouter
+
+extension QAppWireframe : IQWireframeDefaultRouter {
+    
+    public func present(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         guard let rootViewController = self.window.rootViewController else { return }
         rootViewController.present(viewController, animated: animated, completion: completion)
     }
     
-    open func dismiss(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+    public func dismiss(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         viewController.dismiss(animated: animated, completion: completion)
     }
     
-    open func present(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+    public func present(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         self.modalContainerViewController?.present(viewController: viewController, animated: animated, completion: completion)
     }
     
-    open func dismiss(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+    public func dismiss(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         self.modalContainerViewController?.dismiss(viewController: viewController, animated: animated, completion: completion)
     }
     
-    open func present(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+    public func present(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         self.dialogContainerViewController?.present(viewController: viewController, animated: animated, completion: completion)
     }
     
-    open func dismiss(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+    public func dismiss(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         self.dialogContainerViewController?.dismiss(viewController: viewController, animated: animated, completion: completion)
     }
     
-    open func present(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+    public func present(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         self.pushContainerViewController?.present(viewController: viewController, animated: animated, completion: completion)
     }
     
-    open func dismiss(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)? = nil) {
+    public func dismiss(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         self.pushContainerViewController?.dismiss(viewController: viewController, animated: animated, completion: completion)
     }
-
+    
 }

@@ -2,21 +2,18 @@
 //  Quickly
 //
 
-open class QHamburgerWireframe< WireframeType: IQWireframe, ContextType: IQContext > : IQChildWireframe {
+open class QHamburgerWireframe< RouterType: IQRouter, ContextType: IQContext > : IQWireframe, IQWeakRouterable, IQContextable {
 
-    open var viewController: IQViewController {
-        get { return self.containerViewController }
-    }
-    open private(set) var containerViewController: QHamburgerContainerViewController
-    open private(set) weak var parent: WireframeType?
-    open private(set) var context: ContextType
+    public private(set) var viewController: QHamburgerContainerViewController
+    public private(set) weak var router: RouterType?
+    public private(set) var context: ContextType
 
     public init(
-        parent: WireframeType,
+        router: RouterType,
         context: ContextType
     ) {
-        self.containerViewController = QHamburgerContainerViewController()
-        self.parent = parent
+        self.viewController = QHamburgerContainerViewController()
+        self.router = router
         self.context = context
         self.setup()
     }
@@ -28,4 +25,47 @@ open class QHamburgerWireframe< WireframeType: IQWireframe, ContextType: IQConte
         return true
     }
 
+}
+
+// MARK: IQRouter
+
+extension QHamburgerWireframe : IQRouter where RouterType : IQRouter {
+}
+
+// MARK: IQWireframePresetable
+
+extension QHamburgerWireframe : IQWireframeDefaultRouter where RouterType : IQWireframeDefaultRouter {
+
+    public func present(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.router?.present(viewController: viewController, animated: animated, completion: completion)
+    }
+    
+    public func dismiss(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.router?.dismiss(viewController: viewController, animated: animated, completion: completion)
+    }
+    
+    public func present(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.router?.present(viewController: viewController, animated: animated, completion: completion)
+    }
+    
+    public func dismiss(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.router?.dismiss(viewController: viewController, animated: animated, completion: completion)
+    }
+    
+    public func present(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.router?.present(viewController: viewController, animated: animated, completion: completion)
+    }
+    
+    public func dismiss(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.router?.dismiss(viewController: viewController, animated: animated, completion: completion)
+    }
+    
+    public func present(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.router?.present(viewController: viewController, animated: animated, completion: completion)
+    }
+    
+    public func dismiss(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)?) {
+        self.router?.dismiss(viewController: viewController, animated: animated, completion: completion)
+    }
+    
 }

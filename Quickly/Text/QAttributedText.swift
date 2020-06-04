@@ -19,15 +19,15 @@ open class QAttributedText : IQText {
     
     private var _attributed: NSMutableAttributedString
     
-    public init(_ attributed: NSAttributedString) {
+    public init(attributed: NSAttributedString) {
         self._attributed = NSMutableAttributedString(attributedString: attributed)
     }
 
-    public init(_ text: String, style: IQTextStyle) {
+    public init(text: String, style: IQTextStyle) {
         self._attributed = style.mutableAttributed(text)
     }
     
-    public init(_ text: String, style: IQTextStyle, parts: [String : QAttributedText]) {
+    public init(text: String, style: IQTextStyle, parts: [String : QAttributedText]) {
         let attributed = style.mutableAttributed(text)
         parts.forEach({ (key: String, value: QAttributedText) in
             if let range = attributed.string.range(of: key), let valueAttributed = value.attributed {
@@ -37,7 +37,7 @@ open class QAttributedText : IQText {
         self._attributed = attributed
     }
     
-    public init(_ texts: IQText...) {
+    public init(texts: IQText...) {
         let attributed = NSMutableAttributedString()
         for text in texts {
             if let attributedText = text.attributed {
@@ -55,7 +55,7 @@ open class QAttributedText : IQText {
         self._attributed = attributed
     }
     
-    public func append(_ text: String, style: IQTextStyle) {
+    public func append(text: String, style: IQTextStyle) {
         self._attributed.append(style.attributed(text))
     }
     

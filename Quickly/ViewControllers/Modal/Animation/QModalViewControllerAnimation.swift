@@ -120,9 +120,9 @@ public final class QModalViewControllerDismissAnimation : IQModalViewControllerF
             let duration = TimeInterval(abs(distance) / self.acceleration)
             
             if let vc = previousViewController {
-                vc.willDismiss(animated: animated)
+                vc.willPresent(animated: animated)
             }
-            currentViewController.willPresent(animated: animated)
+            currentViewController.willDismiss(animated: animated)
             UIView.animate(withDuration: duration, delay: 0, options: [ .beginFromCurrentState, .layoutSubviews, .curveEaseOut ], animations: {
                 if let vc = previousViewController {
                     vc.view.frame = previousEndFrame
@@ -130,19 +130,19 @@ public final class QModalViewControllerDismissAnimation : IQModalViewControllerF
                 currentViewController.view.frame = currentEndFrame
             }, completion: { (completed: Bool) in
                 if let vc = previousViewController {
-                    vc.didDismiss(animated: animated)
+                    vc.didPresent(animated: animated)
                 }
-                currentViewController.didPresent(animated: animated)
+                currentViewController.didDismiss(animated: animated)
                 complete()
             })
         } else {
             if let vc = previousViewController {
-                vc.willDismiss(animated: animated)
-                vc.didDismiss(animated: animated)
+                vc.willPresent(animated: animated)
+                vc.didPresent(animated: animated)
                 vc.view.frame = previousEndFrame
             }
-            currentViewController.willPresent(animated: animated)
-            currentViewController.didPresent(animated: animated)
+            currentViewController.willDismiss(animated: animated)
+            currentViewController.didDismiss(animated: animated)
             currentViewController.view.frame = currentEndFrame
             complete()
         }

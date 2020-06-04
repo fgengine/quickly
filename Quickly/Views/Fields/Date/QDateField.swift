@@ -2,6 +2,12 @@
 //  Quickly
 //
 
+public protocol IQDateFieldFormatter {
+
+    func from(_ date: Date) -> IQText
+
+}
+
 public enum QDateFieldMode {
     case date
     case time
@@ -23,8 +29,76 @@ public protocol IQDateFieldObserver : class {
     func beginEditing(dateField: QDateField)
     func select(dateField: QDateField, date: Date)
     func endEditing(dateField: QDateField)
-    func pressedCancel(dateField: QDateField)
-    func pressedDone(dateField: QDateField)
+    func pressed(dateField: QDateField, action: QFieldAction)
+    
+}
+
+open class QDateFieldStyleSheet : QDisplayStyleSheet {
+    
+    public var form: IQFieldForm?
+    public var formatter: IQDateFieldFormatter
+    public var mode: QDateFieldMode
+    public var calendar: Calendar?
+    public var locale: Locale?
+    public var minimumDate: Date?
+    public var maximumDate: Date?
+    public var placeholder: IQText?
+    public var isEnabled: Bool
+    public var toolbarStyle: QToolbarStyleSheet?
+    public var toolbarActions: QFieldAction
+    
+    public init(
+        form: IQFieldForm? = nil,
+        formatter: IQDateFieldFormatter,
+        mode: QDateFieldMode = .date,
+        calendar: Calendar? = nil,
+        locale: Locale? = nil,
+        minimumDate: Date? = nil,
+        maximumDate: Date? = nil,
+        placeholder: IQText? = nil,
+        isEnabled: Bool = true,
+        toolbarStyle: QToolbarStyleSheet? = nil,
+        toolbarActions: QFieldAction = [ .done ],
+        backgroundColor: UIColor? = nil,
+        cornerRadius: QViewCornerRadius = .none,
+        border: QViewBorder = .none,
+        shadow: QViewShadow? = nil
+    ) {
+        self.form = form
+        self.formatter = formatter
+        self.mode = mode
+        self.calendar = calendar
+        self.locale = locale
+        self.minimumDate = minimumDate
+        self.maximumDate = maximumDate
+        self.placeholder = placeholder
+        self.isEnabled = isEnabled
+        self.toolbarStyle = toolbarStyle
+        self.toolbarActions = toolbarActions
+        
+        super.init(
+            backgroundColor: backgroundColor,
+            cornerRadius: cornerRadius,
+            border: border,
+            shadow: shadow
+        )
+    }
+    
+    public init(_ styleSheet: QDateFieldStyleSheet) {
+        self.form = styleSheet.form
+        self.formatter = styleSheet.formatter
+        self.mode = styleSheet.mode
+        self.calendar = styleSheet.calendar
+        self.locale = styleSheet.locale
+        self.minimumDate = styleSheet.minimumDate
+        self.maximumDate = styleSheet.maximumDate
+        self.placeholder = styleSheet.placeholder
+        self.isEnabled = styleSheet.isEnabled
+        self.toolbarStyle = styleSheet.toolbarStyle
+        self.toolbarActions = styleSheet.toolbarActions
+        
+        super.init(styleSheet)
+    }
     
 }
 
@@ -32,6 +106,7 @@ public class QDateField : QDisplayView, IQField {
 
     public typealias ShouldClosure = (_ dateField: QDateField) -> Bool
     public typealias SelectClosure = (_ dateField: QDateField, _ date: Date) -> Void
+    public typealias ActionClosure = (_ dateField: QDateField, _ action: QFieldAction) -> Void
     public typealias Closure = (_ dateField: QDateField) -> Void
 
     public var form: IQFieldForm? {
@@ -117,8 +192,7 @@ public class QDateField : QDisplayView, IQField {
     public var onSelect: SelectClosure?
     public var onShouldEndEditing: ShouldClosure?
     public var onEndEditing: Closure?
-    public var onPressedCancel: Closure?
-    public var onPressedDone: Closure?
+    public var onPressedAction: ActionClosure?
     
     open override var canBecomeFirstResponder: Bool {
         get {
@@ -324,25 +398,24 @@ extension QDateField {
     }
     
     @objc
-    private func _pressedCancel(_ sender: Any) {
-        if let closure = self.onPressedCancel {
-            closure(self)
-        }
-        self._observer.notify({ (observer) in
-            observer.pressedCancel(dateField: self)
-        })
+    func _pressedCancel(_ sender: Any) {
+        self._pressed(action: .cancel)
         self.endEditing(false)
     }
     
     @objc
-    private func _pressedDone(_ sender: Any) {
-        if let closure = self.onPressedDone {
-            closure(self)
+    func _pressedDone(_ sender: Any) {
+        self._pressed(action: .done)
+        self.endEditing(false)
+    }
+    
+    func _pressed(action: QFieldAction) {
+        if let closure = self.onPressedAction {
+            closure(self, action)
         }
         self._observer.notify({ (observer) in
-            observer.pressedDone(dateField: self)
+            observer.pressed(dateField: self, action: action)
         })
-        self.endEditing(false)
     }
 
 }
