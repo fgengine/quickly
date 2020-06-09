@@ -6,7 +6,11 @@ extension QTextFieldSuggestionController {
     
     class Composable : QTitleComposable {
         
-        init(text: String) {
+        init(
+            text: String,
+            font: UIFont,
+            color: UIColor
+        ) {
             super.init(
                 edgeInsets: UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 12),
                 titleStyle: QLabelStyleSheet(
@@ -38,10 +42,14 @@ extension QTextFieldSuggestionController {
         
         let text: String
         
-        init(text: String) {
+        init(
+            text: String,
+            font: UIFont,
+            color: UIColor
+        ) {
             self.text = text
             super.init(
-                composable: Composable(text: text),
+                composable: Composable(text: text, font: font, color: color),
                 backgroundColor: UIColor.white,
                 selectedBackgroundColor: UIColor.lightGray
             )

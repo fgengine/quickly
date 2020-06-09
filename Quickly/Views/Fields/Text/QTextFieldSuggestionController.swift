@@ -5,6 +5,8 @@
 public class QTextFieldSuggestionController : QCollectionController, IQTextFieldSuggestionController {
     
     public var onSelectSuggestion: SelectSuggestionClosure?
+    public var font: UIFont
+    public var color: UIColor
     
     private lazy var _section: QCollectionSection = {
         let section = QCollectionSection(items: [])
@@ -13,7 +15,12 @@ public class QTextFieldSuggestionController : QCollectionController, IQTextField
         return section
     }()
     
-    public init() {
+    public init(
+        font: UIFont,
+        color: UIColor
+    ) {
+        self.font = font
+        self.color = color
         super.init(cells: [
             Cell.self
         ])
@@ -26,8 +33,9 @@ public class QTextFieldSuggestionController : QCollectionController, IQTextField
     
     public func set(variants: [String]) {
         self._section.setItems(variants.compactMap({
-            return Item(text: $0)
+            return Item(text: $0, font: self.font, color: self.color)
         }))
+        self.reload()
     }
     
 }

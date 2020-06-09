@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QHamburgerWireframe< RouterType: IQRouter, ContextType: IQContext > : IQWireframe, IQWeakRouterable, IQContextable {
+open class QHamburgerWireframe< RouterType: IQRouter, ContextType: IQContext > : IQWireframe, IQWireframeDeeplinkable, IQWeakRouterable, IQContextable {
 
     public private(set) var viewController: QHamburgerContainerViewController
     public private(set) weak var router: RouterType?

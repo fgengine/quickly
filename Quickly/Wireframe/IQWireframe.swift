@@ -8,6 +8,10 @@ public protocol IQWireframe : class {
     
     var viewController: ViewControllerType { get }
     
+}
+
+public protocol IQWireframeDeeplinkable : class {
+    
     func open(_ url: URL) -> Bool
     
 }

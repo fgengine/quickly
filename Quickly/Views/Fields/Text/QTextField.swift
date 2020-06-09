@@ -84,7 +84,7 @@ open class QTextFieldStyleSheet : QDisplayStyleSheet {
         toolbarActions: QFieldAction = [],
         suggestion: IQTextFieldSuggestion? = nil,
         suggestionStyle: QCollectionStyleSheet? = nil,
-        suggestionController: IQTextFieldSuggestionController? = QTextFieldSuggestionController(),
+        suggestionController: IQTextFieldSuggestionController? = nil,
         backgroundColor: UIColor? = nil,
         tintColor: UIColor? = nil,
         cornerRadius: QViewCornerRadius = .none,
@@ -375,7 +375,7 @@ public class QTextField : QDisplayView, IQField {
     }
     public lazy var suggestionView: QCollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
+        layout.scrollDirection = .horizontal
         let view = QCollectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50), collectionViewLayout: layout)
         return view
     }()
@@ -676,6 +676,9 @@ private extension QTextField {
 
         public func textFieldDidBeginEditing(_ textField: UITextField) {
             guard let field = self.field else { return }
+            if let suggestion = field.suggestion {
+                field.suggestionController?.set(variants: suggestion.variants(field.unformatText))
+            }
             if let closure = field.onBeginEditing {
                 closure(field)
             }

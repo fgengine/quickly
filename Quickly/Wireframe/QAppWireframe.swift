@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QAppWireframe< ContextType: IQContext > : IQWireframe, IQContextable {
+open class QAppWireframe< ContextType: IQContext > : IQWireframe, IQWireframeDeeplinkable, IQContextable {
     
     public private(set) var window: QWindow
     public var viewController: QMainViewController
@@ -49,7 +49,8 @@ open class QAppWireframe< ContextType: IQContext > : IQWireframe, IQContextable 
     }
     
     open func open(_ url: URL) -> Bool {
-        return true
+        guard let deeplinkable = self._wireframe as? IQWireframeDeeplinkable else { return false }
+        return deeplinkable.open(url)
     }
 
 }
@@ -63,6 +64,10 @@ public extension QAppWireframe {
             self._wireframe = wireframe
             self.viewController.contentViewController = wireframe.viewController
         }
+    }
+    
+    func wireframe< WireframeType: IQWireframe >() -> WireframeType? {
+        return self._wireframe as? WireframeType
     }
     
 }
