@@ -361,7 +361,7 @@ public class QTextField : QDisplayView, IQField {
             if self.toolbarActions != oldValue {
                 let items = self._toolbarItems()
                 self.toolbar.items = items
-                self.toolbar.isHidden = items.isEmpty
+                self.toolbar.isHidden = self.toolbarActions.isEmpty
                 self._updateAccessoryView()
             }
         }

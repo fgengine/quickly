@@ -4,29 +4,13 @@
 
 open class QFormViewControllerDateField : QFormViewControllerField {
     
-    public private(set) lazy var inputView: QDisplayView = {
-        let view = QDisplayView(frame: CGRect.zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(view)
-        return view
-    }()
+    public private(set) var inputView: QDisplayView!
     public var inputEdgeInsets: UIEdgeInsets {
         set(inputEdgeInsets) { self.set(inputEdgeInsets: inputEdgeInsets, animated: false, completion: nil) }
         get { return self._inputEdgeInsets }
     }
-    public private(set) lazy var inputTitleView: QLabel = {
-        let view = QLabel(frame: CGRect.zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        self.inputView.addSubview(view)
-        return view
-    }()
-    public private(set) lazy var inputFieldView: QDateField = {
-        let view = QDateField(frame: CGRect.zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.onSelect = { [weak self] field, date in self?.select(date: date) }
-        self.inputView.addSubview(view)
-        return view
-    }()
+    public private(set) var inputTitleView: QLabel!
+    public private(set) var inputFieldView: QDateField!
     public var inputFieldHeight: CGFloat {
         set(inputFieldHeight) { self.set(inputFieldHeight: inputFieldHeight, animated: false, completion: nil) }
         get { return self._inputFieldHeight }
@@ -35,12 +19,7 @@ open class QFormViewControllerDateField : QFormViewControllerField {
         set(inputFieldSpacing) { self.set(inputFieldSpacing: inputFieldSpacing, animated: false, completion: nil) }
         get { return self._inputFieldSpacing }
     }
-    public private(set) lazy var hintView: QLabel = {
-        let view = QLabel(frame: CGRect.zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(view)
-        return view
-    }()
+    public private(set) var hintView: QLabel!
     public var hintEdgeInsets: UIEdgeInsets {
         set(hintEdgeInsets) { self.set(hintEdgeInsets: hintEdgeInsets, animated: false, completion: nil) }
         get { return self._hintEdgeInsets }
@@ -50,7 +29,10 @@ open class QFormViewControllerDateField : QFormViewControllerField {
         get { return self.inputFieldView.date }
     }
     open override var isValid: Bool {
-        get { return self.inputFieldView.isValid }
+        get {
+            self.loadViewIfNeeded()
+            return self.inputFieldView.isValid
+        }
     }
     
     private var _inputEdgeInsets: UIEdgeInsets
@@ -79,6 +61,23 @@ open class QFormViewControllerDateField : QFormViewControllerField {
 
     open override func didLoad() {
         super.didLoad()
+        
+        self.inputView = QDisplayView(frame: CGRect.zero)
+        self.inputView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.inputView)
+        
+        self.inputTitleView = QLabel(frame: CGRect.zero)
+        self.inputTitleView.translatesAutoresizingMaskIntoConstraints = false
+        self.inputView.addSubview(self.inputTitleView)
+        
+        self.inputFieldView = QDateField(frame: CGRect.zero)
+        self.inputFieldView.translatesAutoresizingMaskIntoConstraints = false
+        self.inputFieldView.onSelect = { [weak self] _, date in self?.select(date: date) }
+        self.inputView.addSubview(self.inputFieldView)
+        
+        self.hintView = QLabel(frame: CGRect.zero)
+        self.hintView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.hintView)
         
         self._relayout()
     }

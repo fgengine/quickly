@@ -4,50 +4,23 @@
 
 open class QFormViewControllerMultiTextField : QFormViewControllerField {
     
-    public private(set) lazy var inputView: QDisplayView = {
-        let view = QDisplayView(frame: CGRect.zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(view)
-        return view
-    }()
+    public private(set) var inputView: QDisplayView!
     public var inputEdgeInsets: UIEdgeInsets {
         set(inputEdgeInsets) { self.set(inputEdgeInsets: inputEdgeInsets, animated: false, completion: nil) }
         get { return self._inputEdgeInsets }
     }
-    public private(set) lazy var inputTitleView: QLabel = {
-        let view = QLabel(frame: CGRect.zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        self.inputView.addSubview(view)
-        return view
-    }()
-    public private(set) lazy var inputFieldView: QMultiTextField = {
-        let view = QMultiTextField(frame: CGRect.zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.onEditing = { [weak self] textField in self?._editing() }
-        view.onChangedHeight = { [weak self] textField in self?._changedHeight() }
-        self.inputView.addSubview(view)
-        return view
-    }()
+    public private(set) var inputTitleView: QLabel!
+    public private(set) var inputFieldView: QMultiTextField!
     public var inputFieldSpacing: CGFloat {
         set(inputFieldSpacing) { self.set(inputFieldSpacing: inputFieldSpacing, animated: false, completion: nil) }
         get { return self._inputFieldSpacing }
     }
-    public private(set) lazy var hintView: QLabel = {
-        let view = QLabel(frame: CGRect.zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(view)
-        return view
-    }()
+    public private(set) var hintView: QLabel!
     public var hintEdgeInsets: UIEdgeInsets {
         set(hintEdgeInsets) { self.set(hintEdgeInsets: hintEdgeInsets, animated: false, completion: nil) }
         get { return self._hintEdgeInsets }
     }
-    public private(set) lazy var errorView: QLabel = {
-        let view = QLabel(frame: CGRect.zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(view)
-        return view
-    }()
+    public private(set) var errorView: QLabel!
     public var errorEdgeInsets: UIEdgeInsets {
         set(errorEdgeInsets) { self.set(errorEdgeInsets: errorEdgeInsets, animated: false, completion: nil) }
         get { return self._errorEdgeInsets }
@@ -58,7 +31,10 @@ open class QFormViewControllerMultiTextField : QFormViewControllerField {
         get { return self.inputFieldView.unformatText }
     }
     open override var isValid: Bool {
-        get { return self.inputFieldView.isValid }
+        get {
+            self.loadViewIfNeeded()
+            return self.inputFieldView.isValid
+        }
     }
     
     private var _inputEdgeInsets: UIEdgeInsets
@@ -96,6 +72,28 @@ open class QFormViewControllerMultiTextField : QFormViewControllerField {
 
     open override func didLoad() {
         super.didLoad()
+        
+        self.inputView = QDisplayView(frame: CGRect.zero)
+        self.inputView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.inputView)
+        
+        self.inputTitleView = QLabel(frame: CGRect.zero)
+        self.inputTitleView.translatesAutoresizingMaskIntoConstraints = false
+        self.inputView.addSubview(self.inputTitleView)
+        
+        self.inputFieldView = QMultiTextField(frame: CGRect.zero)
+        self.inputFieldView.translatesAutoresizingMaskIntoConstraints = false
+        self.inputFieldView.onEditing = { [weak self] textField in self?._editing() }
+        self.inputFieldView.onChangedHeight = { [weak self] textField in self?._changedHeight() }
+        self.inputView.addSubview(self.inputFieldView)
+        
+        self.hintView = QLabel(frame: CGRect.zero)
+        self.hintView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.hintView)
+        
+        self.errorView = QLabel(frame: CGRect.zero)
+        self.errorView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.errorView)
         
         self._relayout()
     }

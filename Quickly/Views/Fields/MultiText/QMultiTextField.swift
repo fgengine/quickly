@@ -252,13 +252,19 @@ public class QMultiTextField : QDisplayView, IQField {
     public var isEditing: Bool {
         get { return self._field.isFirstResponder }
     }
-    public lazy var toolbar: QToolbar = QToolbar(items: self._toolbarItems())
+    public lazy var toolbar: QToolbar = {
+        let items = self._toolbarItems()
+        let view = QToolbar(items: items)
+        view.isHidden = items.isEmpty
+        return view
+    }()
     public var toolbarActions: QFieldAction = [] {
         didSet(oldValue) {
             if self.toolbarActions != oldValue {
                 let items = self._toolbarItems()
                 self.toolbar.items = items
                 self.toolbar.isHidden = items.isEmpty
+                self.reloadInputViews()
             }
         }
     }

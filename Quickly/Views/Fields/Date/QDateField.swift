@@ -176,13 +176,19 @@ public class QDateField : QDisplayView, IQField {
     public var isEditing: Bool {
         get { return self.isFirstResponder }
     }
-    public lazy var toolbar: QToolbar = QToolbar(items: self._toolbarItems())
+    public lazy var toolbar: QToolbar = {
+        let items = self._toolbarItems()
+        let view = QToolbar(items: items)
+        view.isHidden = items.isEmpty
+        return view
+    }()
     public var toolbarActions: QFieldAction = [] {
         didSet(oldValue) {
             if self.toolbarActions != oldValue {
                 let items = self._toolbarItems()
                 self.toolbar.items = items
                 self.toolbar.isHidden = items.isEmpty
+                self.reloadInputViews()
             }
         }
     }
@@ -211,7 +217,9 @@ public class QDateField : QDisplayView, IQField {
         get { return self._picker }
     }
     open override var inputAccessoryView: UIView? {
-        get { return self.toolbar }
+        get {
+            return self.toolbar.isHidden == true ? nil : self.toolbar
+        }
     }
     open override var intrinsicContentSize: CGSize {
         get { return self._label.intrinsicContentSize }

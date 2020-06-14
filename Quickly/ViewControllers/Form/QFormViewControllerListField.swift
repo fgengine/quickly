@@ -4,29 +4,13 @@
 
 open class QFormViewControllerListField : QFormViewControllerField {
     
-    public private(set) lazy var inputView: QDisplayView = {
-        let view = QDisplayView(frame: CGRect.zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(view)
-        return view
-    }()
+    public private(set) var inputView: QDisplayView!
     public var inputEdgeInsets: UIEdgeInsets {
         set(inputEdgeInsets) { self.set(inputEdgeInsets: inputEdgeInsets, animated: false, completion: nil) }
         get { return self._inputEdgeInsets }
     }
-    public private(set) lazy var inputTitleView: QLabel = {
-        let view = QLabel(frame: CGRect.zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        self.inputView.addSubview(view)
-        return view
-    }()
-    public private(set) lazy var inputFieldView: QListField = {
-        let view = QListField(frame: CGRect.zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.onSelect = { [weak self] field, row in self?.select(row: row) }
-        self.inputView.addSubview(view)
-        return view
-    }()
+    public private(set) var inputTitleView: QLabel!
+    public private(set) var inputFieldView: QListField!
     public var inputFieldHeight: CGFloat {
         set(inputFieldHeight) { self.set(inputFieldHeight: inputFieldHeight, animated: false, completion: nil) }
         get { return self._inputFieldHeight }
@@ -35,12 +19,7 @@ open class QFormViewControllerListField : QFormViewControllerField {
         set(inputFieldSpacing) { self.set(inputFieldSpacing: inputFieldSpacing, animated: false, completion: nil) }
         get { return self._inputFieldSpacing }
     }
-    public private(set) lazy var hintView: QLabel = {
-        let view = QLabel(frame: CGRect.zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(view)
-        return view
-    }()
+    public private(set) var hintView: QLabel!
     public var hintEdgeInsets: UIEdgeInsets {
         set(hintEdgeInsets) { self.set(hintEdgeInsets: hintEdgeInsets, animated: false, completion: nil) }
         get { return self._hintEdgeInsets }
@@ -50,7 +29,10 @@ open class QFormViewControllerListField : QFormViewControllerField {
         get { return self.inputFieldView.selectedRow }
     }
     open override var isValid: Bool {
-        get { return self.inputFieldView.isValid }
+        get {
+            self.loadViewIfNeeded()
+            return self.inputFieldView.isValid
+        }
     }
     
     private var _inputEdgeInsets: UIEdgeInsets
@@ -79,6 +61,23 @@ open class QFormViewControllerListField : QFormViewControllerField {
 
     open override func didLoad() {
         super.didLoad()
+        
+        self.inputView = QDisplayView(frame: CGRect.zero)
+        self.inputView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.inputView)
+        
+        self.inputTitleView = QLabel(frame: CGRect.zero)
+        self.inputTitleView.translatesAutoresizingMaskIntoConstraints = false
+        self.inputView.addSubview(self.inputTitleView)
+        
+        self.inputFieldView = QListField(frame: CGRect.zero)
+        self.inputFieldView.translatesAutoresizingMaskIntoConstraints = false
+        self.inputFieldView.onSelect = { [weak self] _, row in self?.select(row: row) }
+        self.inputView.addSubview(self.inputFieldView)
+        
+        self.hintView = QLabel(frame: CGRect.zero)
+        self.hintView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.hintView)
         
         self._relayout()
     }
