@@ -196,7 +196,13 @@ open class QFormViewController : QViewController, IQFormViewController, IQInputC
     }
     
     open func set(fields: [IQFormViewControllerField], currentField: IQFormViewControllerField?, animated: Bool, completion: (() -> Swift.Void)?) {
+        for field in self._fields {
+            field.delegate = nil
+        }
         self._fields = fields
+        for field in self._fields {
+            field.delegate = self
+        }
         if fields.contains(where: { return $0 === currentField }) == true {
             self.set(currentField: currentField, animated: animated, completion: completion)
         } else {
@@ -373,14 +379,6 @@ private extension QFormViewController {
     }
     
     func _pressedPrev() {
-        if let field = self._currentField {
-            if field.isValid == false {
-                if #available(iOS 10.0, *) {
-                    self._notificationFeedbackGenerator.notificationOccurred(.error)
-                }
-                return
-            }
-        }
         if let field = self._prevField() {
             self.set(currentField: field, animated: true, completion: nil)
             if #available(iOS 10.0, *) {
@@ -392,6 +390,7 @@ private extension QFormViewController {
     func _pressedNext() {
         if let field = self._currentField {
             if field.isValid == false {
+                field.showError()
                 if #available(iOS 10.0, *) {
                     self._notificationFeedbackGenerator.notificationOccurred(.error)
                 }
@@ -409,7 +408,7 @@ private extension QFormViewController {
     func _pressedDone() {
         for field in self._fields {
             if field.isValid == false {
-                self.set(currentField: field, animated: true, completion: nil)
+                self.set(currentField: field, animated: true, completion: { field.showError() })
                 if #available(iOS 10.0, *) {
                     self._notificationFeedbackGenerator.notificationOccurred(.error)
                 }
@@ -691,4 +690,14 @@ extension QFormViewController : IQKeyboardObserver {
     public func didHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
     }
 
+}
+
+// MARK: IQFormViewControllerFieldDelegate
+
+extension QFormViewController : IQFormViewControllerFieldDelegate {
+    
+    public func `continue`(field: IQFormViewControllerField) {
+        self._pressedNext()
+    }
+    
 }

@@ -23,12 +23,8 @@ open class QFormViewControllerMultiTextField : QFormViewControllerField {
     public private(set) lazy var inputFieldView: QMultiTextField = {
         let view = QMultiTextField(frame: CGRect.zero)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.onShouldBeginEditing = { [weak self] textField -> Bool in return self?.fieldShouldBeginEditing() ?? true }
-        view.onBeginEditing = { [weak self] textField in self?.fieldBeginEditing() }
-        view.onEditing = { [weak self] textField in self?.fieldEditing() }
-        view.onShouldEndEditing = { [weak self] textField -> Bool in return self?.fieldShouldEndEditing() ?? true }
-        view.onEndEditing = { [weak self] textField in self?.fieldEndEditing() }
-        view.onChangedHeight = { [weak self] textField in self?._fieldChangedHeight() }
+        view.onEditing = { [weak self] textField in self?._editing() }
+        view.onChangedHeight = { [weak self] textField in self?._changedHeight() }
         self.inputView.addSubview(view)
         return view
     }()
@@ -46,7 +42,18 @@ open class QFormViewControllerMultiTextField : QFormViewControllerField {
         set(hintEdgeInsets) { self.set(hintEdgeInsets: hintEdgeInsets, animated: false, completion: nil) }
         get { return self._hintEdgeInsets }
     }
-    open var text: String {
+    public private(set) lazy var errorView: QLabel = {
+        let view = QLabel(frame: CGRect.zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(view)
+        return view
+    }()
+    public var errorEdgeInsets: UIEdgeInsets {
+        set(errorEdgeInsets) { self.set(errorEdgeInsets: errorEdgeInsets, animated: false, completion: nil) }
+        get { return self._errorEdgeInsets }
+    }
+    public var errorTextStyle: IQTextStyle
+    public var text: String {
         set(value) { self.inputFieldView.unformatText = value }
         get { return self.inputFieldView.unformatText }
     }
@@ -57,6 +64,8 @@ open class QFormViewControllerMultiTextField : QFormViewControllerField {
     private var _inputEdgeInsets: UIEdgeInsets
     private var _inputFieldSpacing: CGFloat
     private var _hintEdgeInsets: UIEdgeInsets
+    private var _errorEdgeInsets: UIEdgeInsets
+    private var _errorShowed: Bool
     private var _constraints: [NSLayoutConstraint] = [] {
         willSet { self.view.removeConstraints(self._constraints) }
         didSet { self.view.addConstraints(self._constraints) }
@@ -76,10 +85,13 @@ open class QFormViewControllerMultiTextField : QFormViewControllerField {
         }
     }
     
-    public override init() {
+    public init(errorTextStyle: IQTextStyle) {
+        self.errorTextStyle = errorTextStyle
         self._inputEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
         self._inputFieldSpacing = 8
         self._hintEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+        self._errorEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+        self._errorShowed = false
     }
 
     open override func didLoad() {
@@ -92,25 +104,11 @@ open class QFormViewControllerMultiTextField : QFormViewControllerField {
         self.inputFieldView.beginEditing()
     }
     
+    open func editing(text: String) {
+    }
+    
     open override func endEditing() {
         self.inputFieldView.endEditing(false)
-    }
-    
-    open func fieldShouldBeginEditing() -> Bool {
-        return true
-    }
-    
-    open func fieldBeginEditing() {
-    }
-    
-    open func fieldEditing() {
-    }
-    
-    open func fieldShouldEndEditing() -> Bool {
-        return true
-    }
-    
-    open func fieldEndEditing() {
     }
     
     public func set(inputEdgeInsets: UIEdgeInsets, animated: Bool, completion: (() -> Swift.Void)?) {
@@ -134,6 +132,13 @@ open class QFormViewControllerMultiTextField : QFormViewControllerField {
         }
     }
     
+    public func set(errorEdgeInsets: UIEdgeInsets, animated: Bool, completion: (() -> Swift.Void)?) {
+        if self._errorEdgeInsets != errorEdgeInsets {
+            self._errorEdgeInsets = errorEdgeInsets
+            self._relayout(animated: animated, completion: completion)
+        }
+    }
+    
 }
 
 // MARK: Private
@@ -145,6 +150,8 @@ private extension QFormViewControllerMultiTextField {
         if animated == true {
             UIView.animate(withDuration: 0.2, animations: {
                 self.view.layoutIfNeeded()
+                self.hintView.alpha = self._errorShowed == true ? 0 : 1
+                self.errorView.alpha = self._errorShowed == true ? 1 : 0
             }, completion: { _ in
                 completion?()
             })
@@ -154,15 +161,33 @@ private extension QFormViewControllerMultiTextField {
     }
 
     func _relayout() {
-        self._constraints = [
-            self.inputView.topLayout == self.view.topLayout,
-            self.inputView.leadingLayout == self.view.leadingLayout,
-            self.inputView.trailingLayout == self.view.trailingLayout,
-            self.hintView.topLayout == self.inputView.bottomLayout.offset(self.hintEdgeInsets.top),
-            self.hintView.leadingLayout == self.view.leadingLayout.offset(self.hintEdgeInsets.left),
-            self.hintView.trailingLayout == self.view.trailingLayout.offset(-self.hintEdgeInsets.right),
-            self.hintView.bottomLayout <= self.view.bottomLayout.offset(-self.hintEdgeInsets.bottom)
-        ]
+        if self._errorShowed == true {
+            self._constraints = [
+                self.inputView.topLayout == self.view.topLayout,
+                self.inputView.leadingLayout == self.view.leadingLayout,
+                self.inputView.trailingLayout == self.view.trailingLayout,
+                self.errorView.topLayout == self.inputView.bottomLayout.offset(self._errorEdgeInsets.top),
+                self.errorView.leadingLayout == self.view.leadingLayout.offset(self._errorEdgeInsets.left),
+                self.errorView.trailingLayout == self.view.trailingLayout.offset(-self._errorEdgeInsets.right),
+                self.errorView.bottomLayout <= self.view.bottomLayout.offset(-self._errorEdgeInsets.bottom),
+                self.hintView.topLayout == self.errorView.bottomLayout.offset(self._hintEdgeInsets.top),
+                self.hintView.leadingLayout == self.view.leadingLayout.offset(self._hintEdgeInsets.left),
+                self.hintView.trailingLayout == self.view.trailingLayout.offset(-self._hintEdgeInsets.right)
+            ]
+        } else {
+            self._constraints = [
+                self.inputView.topLayout == self.view.topLayout,
+                self.inputView.leadingLayout == self.view.leadingLayout,
+                self.inputView.trailingLayout == self.view.trailingLayout,
+                self.hintView.topLayout == self.inputView.bottomLayout.offset(self._hintEdgeInsets.top),
+                self.hintView.leadingLayout == self.view.leadingLayout.offset(self._hintEdgeInsets.left),
+                self.hintView.trailingLayout == self.view.trailingLayout.offset(-self._hintEdgeInsets.right),
+                self.hintView.bottomLayout <= self.view.bottomLayout.offset(-self._hintEdgeInsets.bottom),
+                self.errorView.topLayout == self.hintView.bottomLayout.offset(self._errorEdgeInsets.top),
+                self.errorView.leadingLayout == self.view.leadingLayout.offset(self._errorEdgeInsets.left),
+                self.errorView.trailingLayout == self.view.trailingLayout.offset(-self._errorEdgeInsets.right)
+            ]
+        }
         self._inputConstraints = [
             self.inputTitleView.topLayout == self.inputView.topLayout.offset(self.inputEdgeInsets.top),
             self.inputTitleView.leadingLayout == self.inputView.leadingLayout.offset(self.inputEdgeInsets.left),
@@ -175,8 +200,28 @@ private extension QFormViewControllerMultiTextField {
         self._inputFieldHeightConstraint = self.inputFieldView.heightLayout == self.inputFieldView.textHeight
     }
     
-    func _fieldChangedHeight() {
+    func _editing() {
+        self.editing(text: self.inputFieldView.unformatText)
+        self._hideError()
+    }
+    
+    func _changedHeight() {
         self._inputFieldHeightConstraint?.constant = self.inputFieldView.textHeight
+    }
+    
+    func _showError(text: String) {
+        self.errorView.text = QAttributedText(text: text, style: self.errorTextStyle)
+        if self._errorShowed == false {
+            self._errorShowed = true
+            self._relayout(animated: true, completion: nil)
+        }
+    }
+    
+    func _hideError() {
+        if self._errorShowed == true {
+            self._errorShowed = false
+            self._relayout(animated: true, completion: nil)
+        }
     }
 
 }

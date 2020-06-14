@@ -23,11 +23,7 @@ open class QFormViewControllerDateField : QFormViewControllerField {
     public private(set) lazy var inputFieldView: QDateField = {
         let view = QDateField(frame: CGRect.zero)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.onShouldBeginEditing = { [weak self] field -> Bool in return self?.fieldShouldBeginEditing() ?? true }
-        view.onBeginEditing = { [weak self] field in self?.fieldBeginEditing() }
-        view.onSelect = { [weak self] field, date in self?.fieldSelect(date: date) }
-        view.onShouldEndEditing = { [weak self] field -> Bool in return self?.fieldShouldEndEditing() ?? true }
-        view.onEndEditing = { [weak self] field in self?.fieldEndEditing() }
+        view.onSelect = { [weak self] field, date in self?.select(date: date) }
         self.inputView.addSubview(view)
         return view
     }()
@@ -91,25 +87,11 @@ open class QFormViewControllerDateField : QFormViewControllerField {
         self.inputFieldView.beginEditing()
     }
     
+    open func select(date: Date) {
+    }
+    
     open override func endEditing() {
         self.inputFieldView.endEditing(false)
-    }
-    
-    open func fieldShouldBeginEditing() -> Bool {
-        return true
-    }
-    
-    open func fieldBeginEditing() {
-    }
-    
-    open func fieldSelect(date: Date) {
-    }
-    
-    open func fieldShouldEndEditing() -> Bool {
-        return true
-    }
-    
-    open func fieldEndEditing() {
     }
     
     public func set(inputEdgeInsets: UIEdgeInsets, animated: Bool, completion: (() -> Swift.Void)?) {

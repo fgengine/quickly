@@ -4,7 +4,8 @@
 
 open class QFormViewControllerField : IQFormViewControllerField {
     
-    open var view: QDisplayView {
+    public var delegate: IQFormViewControllerFieldDelegate?
+    public var view: QDisplayView {
         get {
             self.loadViewIfNeeded()
             return self._view
@@ -13,8 +14,8 @@ open class QFormViewControllerField : IQFormViewControllerField {
     open var isValid: Bool {
         get { return false }
     }
-    open private(set) var isLoading: Bool = false
-    open var isLoaded: Bool {
+    public private(set) var isLoading: Bool = false
+    public var isLoaded: Bool {
         get { return (self._view != nil) }
     }
     
@@ -44,6 +45,9 @@ open class QFormViewControllerField : IQFormViewControllerField {
     }
     
     open func endEditing() {
+    }
+    
+    open func showError() {
     }
     
 }

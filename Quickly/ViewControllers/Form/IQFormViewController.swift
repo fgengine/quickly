@@ -6,6 +6,7 @@
 
 public protocol IQFormViewController : IQViewController {
     
+    var fields: [IQFormViewControllerField] { set get }
     var currentField: IQFormViewControllerField? { set get }
     var toolbarView: QDisplayView { get }
     var toolbarEdgeInsets: UIEdgeInsets { set get }
@@ -35,14 +36,25 @@ public protocol IQFormViewController : IQViewController {
     
 }
 
+// MARK: IQFormViewControllerFieldDelegate
+
+public protocol IQFormViewControllerFieldDelegate : class {
+    
+    func `continue`(field: IQFormViewControllerField)
+    
+}
+
 // MARK: IQFormViewControllerField
 
 public protocol IQFormViewControllerField : class {
     
+    var delegate: IQFormViewControllerFieldDelegate? { set get }
     var view: QDisplayView { get }
     var isValid: Bool { get }
     
     func beginEditing()
     func endEditing()
+    
+    func showError()
     
 }

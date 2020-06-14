@@ -23,11 +23,7 @@ open class QFormViewControllerListField : QFormViewControllerField {
     public private(set) lazy var inputFieldView: QListField = {
         let view = QListField(frame: CGRect.zero)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.onShouldBeginEditing = { [weak self] field -> Bool in return self?.fieldShouldBeginEditing() ?? true }
-        view.onBeginEditing = { [weak self] field in self?.fieldBeginEditing() }
-        view.onSelect = { [weak self] field, row in self?.fieldSelect(row: row) }
-        view.onShouldEndEditing = { [weak self] field -> Bool in return self?.fieldShouldEndEditing() ?? true }
-        view.onEndEditing = { [weak self] field in self?.fieldEndEditing() }
+        view.onSelect = { [weak self] field, row in self?.select(row: row) }
         self.inputView.addSubview(view)
         return view
     }()
@@ -91,25 +87,11 @@ open class QFormViewControllerListField : QFormViewControllerField {
         self.inputFieldView.beginEditing()
     }
     
+    open func select(row: QListFieldPickerRow) {
+    }
+    
     open override func endEditing() {
         self.inputFieldView.endEditing(false)
-    }
-    
-    open func fieldShouldBeginEditing() -> Bool {
-        return true
-    }
-    
-    open func fieldBeginEditing() {
-    }
-    
-    open func fieldSelect(row: QListFieldPickerRow) {
-    }
-    
-    open func fieldShouldEndEditing() -> Bool {
-        return true
-    }
-    
-    open func fieldEndEditing() {
     }
     
     public func set(inputEdgeInsets: UIEdgeInsets, animated: Bool, completion: (() -> Swift.Void)?) {
