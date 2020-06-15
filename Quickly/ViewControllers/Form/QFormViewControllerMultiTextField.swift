@@ -105,10 +105,6 @@ open class QFormViewControllerMultiTextField : QFormViewControllerField {
     open func editing(text: String) {
     }
     
-    open override func endEditing() {
-        self.inputFieldView.endEditing(false)
-    }
-    
     public func set(inputEdgeInsets: UIEdgeInsets, animated: Bool, completion: (() -> Swift.Void)?) {
         if self._inputEdgeInsets != inputEdgeInsets {
             self._inputEdgeInsets = inputEdgeInsets

@@ -89,10 +89,6 @@ open class QFormViewControllerListField : QFormViewControllerField {
     open func select(row: QListFieldPickerRow) {
     }
     
-    open override func endEditing() {
-        self.inputFieldView.endEditing(false)
-    }
-    
     public func set(inputEdgeInsets: UIEdgeInsets, animated: Bool, completion: (() -> Swift.Void)?) {
         if self._inputEdgeInsets != inputEdgeInsets {
             self._inputEdgeInsets = inputEdgeInsets

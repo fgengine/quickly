@@ -21,7 +21,7 @@ open class QFormViewControllerField : IQFormViewControllerField {
     
     private var _view: QDisplayView!
     
-    init() {
+    public init() {
         self.setup()
     }
 
@@ -45,6 +45,7 @@ open class QFormViewControllerField : IQFormViewControllerField {
     }
     
     open func endEditing() {
+        self.view.endEditing(false)
     }
     
     open func showError() {

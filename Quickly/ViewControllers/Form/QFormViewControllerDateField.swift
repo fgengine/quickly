@@ -89,10 +89,6 @@ open class QFormViewControllerDateField : QFormViewControllerField {
     open func select(date: Date) {
     }
     
-    open override func endEditing() {
-        self.inputFieldView.endEditing(false)
-    }
-    
     public func set(inputEdgeInsets: UIEdgeInsets, animated: Bool, completion: (() -> Swift.Void)?) {
         if self._inputEdgeInsets != inputEdgeInsets {
             self._inputEdgeInsets = inputEdgeInsets

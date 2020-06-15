@@ -107,10 +107,6 @@ open class QFormViewControllerTextField : QFormViewControllerField {
     open func editing(text: String) {
     }
     
-    open override func endEditing() {
-        self.inputFieldView.endEditing(false)
-    }
-    
     open override func showError() {
         guard let validator = self.inputFieldView.validator else { return }
         let errors = validator.messages(self.inputFieldView.unformatText)
