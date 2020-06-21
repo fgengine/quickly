@@ -336,7 +336,11 @@ private extension QImageView {
         var size: CGSize? {
             didSet { self.setNeedsDisplay() }
         }
-        open override var frame: CGRect {
+        override var tintColor: UIColor! {
+            set(value) { self._tintColor = value }
+            get { return self._tintColor }
+        }
+        override var frame: CGRect {
             set(value) {
                 let sizeChanged = super.frame.size != value.size
                 super.frame = value
@@ -346,7 +350,7 @@ private extension QImageView {
             }
             get { return super.frame }
         }
-        open override var bounds: CGRect {
+        override var bounds: CGRect {
             set(value) {
                 let sizeChanged = super.bounds.size != value.size
                 super.bounds = value
@@ -357,6 +361,7 @@ private extension QImageView {
             get { return super.bounds }
         }
         
+        private var _tintColor: UIColor!
         private var _tintImage: UIImage?
         
         override init(frame: CGRect) {
@@ -366,6 +371,7 @@ private extension QImageView {
             super.init(frame: frame)
             self.backgroundColor = UIColor.clear
             self.contentMode = .scaleAspectFit
+            self._tintColor = super.tintColor
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -393,32 +399,24 @@ private extension QImageView {
             }
             context.translateBy(x: 0, y: bounds.height)
             context.scaleBy(x: 1.0, y: -1.0)
-            switch image.renderingMode {
-            case .automatic, .alwaysOriginal:
-                if let cgImage = image.cgImage {
-                    context.draw(cgImage, in: imageRect)
+            if let tintColor = self._tintColor {
+                var tintImage: UIImage?
+                if let cacheTintImage = self._tintImage {
+                    tintImage = cacheTintImage
+                } else if let realtimeTintImage = image.tintImage(tintColor) {
+                    self._tintImage = realtimeTintImage
+                    tintImage = realtimeTintImage
                 }
-            case .alwaysTemplate:
-                if let tintColor = self.tintColor {
-                    var tintImage: UIImage?
-                    if let cacheTintImage = self._tintImage {
-                        tintImage = cacheTintImage
-                    } else if let realtimeTintImage = image.tintImage(tintColor) {
-                        self._tintImage = realtimeTintImage
-                        tintImage = realtimeTintImage
-                    }
-                    if let tintImage = tintImage {
-                        if let cgTintImage = tintImage.cgImage {
-                            context.draw(cgTintImage, in: imageRect)
-                        }
+                if let tintImage = tintImage {
+                    if let cgTintImage = tintImage.cgImage {
+                        context.draw(cgTintImage, in: imageRect)
                     }
                 } else {
                     if let cgImage = image.cgImage {
                         context.draw(cgImage, in: imageRect)
                     }
                 }
-                break
-            @unknown default:
+            } else {
                 if let cgImage = image.cgImage {
                     context.draw(cgImage, in: imageRect)
                 }
