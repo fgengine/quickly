@@ -35,7 +35,7 @@ public class QFieldForm : IQFieldForm {
         }
     }
     
-    public func changed(field: IQField) {
+    public func validation() {
         let invalids = self.fields.filter({ return $0.isValid == false })
         let isValid = (self.fields.count > 0) && (invalids.count == 0)
         if self.isValid != isValid {

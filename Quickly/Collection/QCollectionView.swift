@@ -2,6 +2,74 @@
 //  Quickly
 //
 
+open class QCollectionStyleSheet : IQStyleSheet {
+    
+    public var backgroundColor: UIColor?
+    public var isDirectionalLockEnabled: Bool
+    public var bounces: Bool
+    public var alwaysBounceVertical: Bool
+    public var alwaysBounceHorizontal: Bool
+    public var isPagingEnabled: Bool
+    public var isScrollEnabled: Bool
+    public var showsVerticalScrollIndicator: Bool
+    public var showsHorizontalScrollIndicator: Bool
+    public var scrollIndicatorStyle: UIScrollView.IndicatorStyle
+    public var decelerationRate: UIScrollView.DecelerationRate
+    public var indexDisplayMode: UIScrollView.IndexDisplayMode
+    public var allowsSelection: Bool
+    public var allowsMultipleSelection: Bool
+
+    public init(
+        backgroundColor: UIColor,
+        isDirectionalLockEnabled: Bool = false,
+        bounces: Bool = true,
+        alwaysBounceVertical: Bool = false,
+        alwaysBounceHorizontal: Bool = false,
+        isPagingEnabled: Bool = false,
+        isScrollEnabled: Bool = true,
+        showsVerticalScrollIndicator: Bool = true,
+        showsHorizontalScrollIndicator: Bool = true,
+        scrollIndicatorStyle: UIScrollView.IndicatorStyle = .default,
+        decelerationRate: UIScrollView.DecelerationRate = .normal,
+        indexDisplayMode: UIScrollView.IndexDisplayMode = .automatic,
+        allowsSelection: Bool = true,
+        allowsMultipleSelection: Bool = false
+    ) {
+        self.backgroundColor = backgroundColor
+        self.isDirectionalLockEnabled = isDirectionalLockEnabled
+        self.bounces = bounces
+        self.alwaysBounceVertical = alwaysBounceVertical
+        self.alwaysBounceHorizontal = alwaysBounceHorizontal
+        self.isPagingEnabled = isPagingEnabled
+        self.isScrollEnabled = isScrollEnabled
+        self.showsVerticalScrollIndicator = showsVerticalScrollIndicator
+        self.showsHorizontalScrollIndicator = showsHorizontalScrollIndicator
+        self.scrollIndicatorStyle = scrollIndicatorStyle
+        self.decelerationRate = decelerationRate
+        self.indexDisplayMode = indexDisplayMode
+        self.allowsSelection = allowsSelection
+        self.allowsMultipleSelection = allowsMultipleSelection
+    }
+
+    public init(_ styleSheet: QCollectionStyleSheet) {
+        self.backgroundColor = styleSheet.backgroundColor
+        self.isDirectionalLockEnabled = styleSheet.isDirectionalLockEnabled
+        self.bounces = styleSheet.bounces
+        self.alwaysBounceVertical = styleSheet.alwaysBounceVertical
+        self.alwaysBounceHorizontal = styleSheet.alwaysBounceHorizontal
+        self.isPagingEnabled = styleSheet.isPagingEnabled
+        self.isScrollEnabled = styleSheet.isScrollEnabled
+        self.showsVerticalScrollIndicator = styleSheet.showsVerticalScrollIndicator
+        self.showsHorizontalScrollIndicator = styleSheet.showsHorizontalScrollIndicator
+        self.scrollIndicatorStyle = styleSheet.scrollIndicatorStyle
+        self.decelerationRate = styleSheet.decelerationRate
+        self.indexDisplayMode = styleSheet.indexDisplayMode
+        self.allowsSelection = styleSheet.allowsSelection
+        self.allowsMultipleSelection = styleSheet.allowsMultipleSelection
+    }
+
+}
+
 open class QCollectionView : UICollectionView, IQView {
 
     public var collectionController: IQCollectionController? {
@@ -93,9 +161,21 @@ open class QCollectionView : UICollectionView, IQView {
         }
     }
     
-    @available(iOS 11.0, *)
-    open override func adjustedContentInsetDidChange() {
-        super.adjustedContentInsetDidChange()
+    public func apply(_ styleSheet: QCollectionStyleSheet) {
+        self.backgroundColor = styleSheet.backgroundColor
+        self.isDirectionalLockEnabled = styleSheet.isDirectionalLockEnabled
+        self.bounces = styleSheet.bounces
+        self.alwaysBounceVertical = styleSheet.alwaysBounceVertical
+        self.alwaysBounceHorizontal = styleSheet.alwaysBounceHorizontal
+        self.isPagingEnabled = styleSheet.isPagingEnabled
+        self.isScrollEnabled = styleSheet.isScrollEnabled
+        self.showsVerticalScrollIndicator = styleSheet.showsVerticalScrollIndicator
+        self.showsHorizontalScrollIndicator = styleSheet.showsHorizontalScrollIndicator
+        self.indicatorStyle = styleSheet.scrollIndicatorStyle
+        self.decelerationRate = styleSheet.decelerationRate
+        self.indexDisplayMode = styleSheet.indexDisplayMode
+        self.allowsSelection = styleSheet.allowsSelection
+        self.allowsMultipleSelection = styleSheet.allowsMultipleSelection
     }
 
 }

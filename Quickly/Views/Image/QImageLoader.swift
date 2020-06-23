@@ -60,8 +60,8 @@ public class QImageLoader {
         })
     }
     
-    public func cleanup() {
-        self.cache.cleanup()
+    public func cleanup(before: TimeInterval) {
+        self.cache.cleanup(before: before)
     }
     
 }

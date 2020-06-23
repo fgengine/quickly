@@ -75,7 +75,11 @@ open class QPincodeComposable : QComposable {
     }
     
     open func styleSheet(error: String) -> QLabelStyleSheet {
-        return QLabelStyleSheet(text: QText(error, font: UIFont.systemFont(ofSize: UIFont.systemFontSize), color: UIColor.red))
+        return QLabelStyleSheet(text: QText(
+            text: error,
+            font: UIFont.systemFont(ofSize: UIFont.systemFontSize),
+            color: UIColor.red
+        ))
     }
 
 }

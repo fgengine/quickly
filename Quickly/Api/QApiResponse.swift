@@ -63,9 +63,11 @@ open class QApiResponse : IQApiResponse {
     }
 
     open func parse(json: QJson) throws {
+        self.parse(error: QApiError.invalidResponse)
     }
     
     open func parse(xml: QXmlDocument) throws {
+        self.parse(error: QApiError.invalidResponse)
     }
 
     open func parse(error: Error) {

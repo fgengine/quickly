@@ -212,10 +212,7 @@ extension QCompositionViewController : IQTextFieldObserver {
     open func endEditing(textField: QTextField) {
     }
     
-    open func pressedCancel(textField: QTextField) {
-    }
-    
-    open func pressedDone(textField: QTextField) {
+    open func pressed(textField: QTextField, action: QFieldAction) {
     }
     
     open func pressedClear(textField: QTextField) {
@@ -242,10 +239,7 @@ extension QCompositionViewController : IQMultiTextFieldObserver {
     open func endEditing(multiTextField: QMultiTextField) {
     }
     
-    open func pressedCancel(multiTextField: QMultiTextField) {
-    }
-    
-    open func pressedDone(multiTextField: QMultiTextField) {
+    open func pressed(multiTextField: QMultiTextField, action: QFieldAction) {
     }
 
     open func changed(multiTextField: QMultiTextField, height: CGFloat) {
@@ -266,10 +260,7 @@ extension QCompositionViewController : IQListFieldObserver {
     open func endEditing(listField: QListField) {
     }
     
-    open func pressedCancel(listField: QListField) {
-    }
-    
-    open func pressedDone(listField: QListField) {
+    open func pressed(listField: QListField, action: QFieldAction) {
     }
     
 }
@@ -287,10 +278,7 @@ extension QCompositionViewController : IQDateFieldObserver {
     open func endEditing(dateField: QDateField) {
     }
     
-    open func pressedCancel(dateField: QDateField) {
-    }
-    
-    open func pressedDone(dateField: QDateField) {
+    open func pressed(dateField: QDateField, action: QFieldAction) {
     }
     
 }

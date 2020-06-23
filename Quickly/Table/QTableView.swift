@@ -2,6 +2,98 @@
 //  Quickly
 //
 
+open class QTableStyleSheet : IQStyleSheet {
+    
+    public var backgroundColor: UIColor?
+    public var isDirectionalLockEnabled: Bool
+    public var bounces: Bool
+    public var alwaysBounceVertical: Bool
+    public var alwaysBounceHorizontal: Bool
+    public var isPagingEnabled: Bool
+    public var isScrollEnabled: Bool
+    public var showsVerticalScrollIndicator: Bool
+    public var showsHorizontalScrollIndicator: Bool
+    public var scrollIndicatorStyle: UIScrollView.IndicatorStyle
+    public var decelerationRate: UIScrollView.DecelerationRate
+    public var indexDisplayMode: UIScrollView.IndexDisplayMode
+    public var allowsSelection: Bool
+    public var allowsSelectionDuringEditing: Bool
+    public var allowsMultipleSelection: Bool
+    public var allowsMultipleSelectionDuringEditing: Bool
+    public var separatorStyle: UITableViewCell.SeparatorStyle
+    public var separatorColor: UIColor?
+    public var separatorEffect: UIVisualEffect?
+    public var remembersLastFocusedIndexPath: Bool
+
+    public init(
+        backgroundColor: UIColor,
+        isDirectionalLockEnabled: Bool = false,
+        bounces: Bool = true,
+        alwaysBounceVertical: Bool = false,
+        alwaysBounceHorizontal: Bool = false,
+        isPagingEnabled: Bool = false,
+        isScrollEnabled: Bool = true,
+        showsVerticalScrollIndicator: Bool = true,
+        showsHorizontalScrollIndicator: Bool = true,
+        scrollIndicatorStyle: UIScrollView.IndicatorStyle = .default,
+        decelerationRate: UIScrollView.DecelerationRate = .normal,
+        indexDisplayMode: UIScrollView.IndexDisplayMode = .automatic,
+        allowsSelection: Bool = true,
+        allowsSelectionDuringEditing: Bool = false,
+        allowsMultipleSelection: Bool = false,
+        allowsMultipleSelectionDuringEditing: Bool = false,
+        separatorStyle: UITableViewCell.SeparatorStyle = .singleLine,
+        separatorColor: UIColor? = .gray,
+        separatorEffect: UIVisualEffect? = nil,
+        remembersLastFocusedIndexPath: Bool = false
+    ) {
+        self.backgroundColor = backgroundColor
+        self.isDirectionalLockEnabled = isDirectionalLockEnabled
+        self.bounces = bounces
+        self.alwaysBounceVertical = alwaysBounceVertical
+        self.alwaysBounceHorizontal = alwaysBounceHorizontal
+        self.isPagingEnabled = isPagingEnabled
+        self.isScrollEnabled = isScrollEnabled
+        self.showsVerticalScrollIndicator = showsVerticalScrollIndicator
+        self.showsHorizontalScrollIndicator = showsHorizontalScrollIndicator
+        self.scrollIndicatorStyle = scrollIndicatorStyle
+        self.decelerationRate = decelerationRate
+        self.indexDisplayMode = indexDisplayMode
+        self.allowsSelection = allowsSelection
+        self.allowsSelectionDuringEditing = allowsSelectionDuringEditing
+        self.allowsMultipleSelection = allowsMultipleSelection
+        self.allowsMultipleSelectionDuringEditing = allowsMultipleSelectionDuringEditing
+        self.separatorStyle = separatorStyle
+        self.separatorColor = separatorColor
+        self.separatorEffect = separatorEffect
+        self.remembersLastFocusedIndexPath = remembersLastFocusedIndexPath
+    }
+
+    public init(_ styleSheet: QTableStyleSheet) {
+        self.backgroundColor = styleSheet.backgroundColor
+        self.isDirectionalLockEnabled = styleSheet.isDirectionalLockEnabled
+        self.bounces = styleSheet.bounces
+        self.alwaysBounceVertical = styleSheet.alwaysBounceVertical
+        self.alwaysBounceHorizontal = styleSheet.alwaysBounceHorizontal
+        self.isPagingEnabled = styleSheet.isPagingEnabled
+        self.isScrollEnabled = styleSheet.isScrollEnabled
+        self.showsVerticalScrollIndicator = styleSheet.showsVerticalScrollIndicator
+        self.showsHorizontalScrollIndicator = styleSheet.showsHorizontalScrollIndicator
+        self.scrollIndicatorStyle = styleSheet.scrollIndicatorStyle
+        self.decelerationRate = styleSheet.decelerationRate
+        self.indexDisplayMode = styleSheet.indexDisplayMode
+        self.allowsSelection = styleSheet.allowsSelection
+        self.allowsSelectionDuringEditing = styleSheet.allowsSelectionDuringEditing
+        self.allowsMultipleSelection = styleSheet.allowsMultipleSelection
+        self.allowsMultipleSelectionDuringEditing = styleSheet.allowsMultipleSelectionDuringEditing
+        self.separatorStyle = styleSheet.separatorStyle
+        self.separatorColor = styleSheet.separatorColor
+        self.separatorEffect = styleSheet.separatorEffect
+        self.remembersLastFocusedIndexPath = styleSheet.remembersLastFocusedIndexPath
+    }
+
+}
+
 open class QTableView : UITableView, IQView {
 
     open var stretchFooterView: UIView? {
@@ -105,6 +197,29 @@ open class QTableView : UITableView, IQView {
                 height: max(contentBottomEdge - fullContentHeight, 0)
             )
         }
+    }
+    
+    public func apply(_ styleSheet: QTableStyleSheet) {
+        self.backgroundColor = styleSheet.backgroundColor
+        self.isDirectionalLockEnabled = styleSheet.isDirectionalLockEnabled
+        self.bounces = styleSheet.bounces
+        self.alwaysBounceVertical = styleSheet.alwaysBounceVertical
+        self.alwaysBounceHorizontal = styleSheet.alwaysBounceHorizontal
+        self.isPagingEnabled = styleSheet.isPagingEnabled
+        self.isScrollEnabled = styleSheet.isScrollEnabled
+        self.showsVerticalScrollIndicator = styleSheet.showsVerticalScrollIndicator
+        self.showsHorizontalScrollIndicator = styleSheet.showsHorizontalScrollIndicator
+        self.indicatorStyle = styleSheet.scrollIndicatorStyle
+        self.decelerationRate = styleSheet.decelerationRate
+        self.indexDisplayMode = styleSheet.indexDisplayMode
+        self.allowsSelection = styleSheet.allowsSelection
+        self.allowsSelectionDuringEditing = styleSheet.allowsSelectionDuringEditing
+        self.allowsMultipleSelection = styleSheet.allowsMultipleSelection
+        self.allowsMultipleSelectionDuringEditing = styleSheet.allowsMultipleSelectionDuringEditing
+        self.separatorStyle = styleSheet.separatorStyle
+        self.separatorColor = styleSheet.separatorColor
+        self.separatorEffect = styleSheet.separatorEffect
+        self.remembersLastFocusedIndexPath = styleSheet.remembersLastFocusedIndexPath
     }
     
 }

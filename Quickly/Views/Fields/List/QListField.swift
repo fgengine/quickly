@@ -7,8 +7,60 @@ public protocol IQListFieldObserver : class {
     func beginEditing(listField: QListField)
     func select(listField: QListField, row: QListFieldPickerRow)
     func endEditing(listField: QListField)
-    func pressedCancel(listField: QListField)
-    func pressedDone(listField: QListField)
+    func pressed(listField: QListField, action: QFieldAction)
+    
+}
+
+open class QListFieldStyleSheet : QDisplayStyleSheet {
+    
+    public var form: IQFieldForm?
+    public var rows: [QListFieldPickerRow]
+    public var rowHeight: CGFloat
+    public var placeholder: IQText?
+    public var isEnabled: Bool
+    public var toolbarStyle: QToolbarStyleSheet?
+    public var toolbarActions: QFieldAction
+    
+    public init(
+        form: IQFieldForm? = nil,
+        rows: [QListFieldPickerRow],
+        rowHeight: CGFloat = 40,
+        placeholder: IQText? = nil,
+        isEnabled: Bool = true,
+        toolbarStyle: QToolbarStyleSheet? = nil,
+        toolbarActions: QFieldAction = [ .done ],
+        backgroundColor: UIColor? = nil,
+        cornerRadius: QViewCornerRadius = .none,
+        border: QViewBorder = .none,
+        shadow: QViewShadow? = nil
+    ) {
+        self.form = form
+        self.rows = rows
+        self.rowHeight = rowHeight
+        self.placeholder = placeholder
+        self.isEnabled = isEnabled
+        self.toolbarStyle = toolbarStyle
+        self.toolbarActions = toolbarActions
+        
+        super.init(
+            backgroundColor: backgroundColor,
+            cornerRadius: cornerRadius,
+            border: border,
+            shadow: shadow
+        )
+    }
+    
+    public init(_ styleSheet: QListFieldStyleSheet) {
+        self.form = styleSheet.form
+        self.rows = styleSheet.rows
+        self.rowHeight = styleSheet.rowHeight
+        self.placeholder = styleSheet.placeholder
+        self.isEnabled = styleSheet.isEnabled
+        self.toolbarStyle = styleSheet.toolbarStyle
+        self.toolbarActions = styleSheet.toolbarActions
+        
+        super.init(styleSheet)
+    }
     
 }
 
@@ -16,6 +68,7 @@ public class QListField : QDisplayView, IQField {
 
     public typealias ShouldClosure = (_ listField: QListField) -> Bool
     public typealias SelectClosure = (_ listField: QListField, _ row: QListFieldPickerRow) -> Void
+    public typealias ActionClosure = (_ textField: QListField, _ action: QFieldAction) -> Void
     public typealias Closure = (_ listField: QListField) -> Void
 
     public var form: IQFieldForm? {
@@ -67,13 +120,19 @@ public class QListField : QDisplayView, IQField {
     public var isEditing: Bool {
         get { return self.isFirstResponder }
     }
-    public lazy var toolbar: QToolbar = QToolbar(items: self._toolbarItems())
+    public lazy var toolbar: QToolbar = {
+        let items = self._toolbarItems()
+        let view = QToolbar(items: items)
+        view.isHidden = items.isEmpty
+        return view
+    }()
     public var toolbarActions: QFieldAction = [] {
         didSet(oldValue) {
             if self.toolbarActions != oldValue {
                 let items = self._toolbarItems()
                 self.toolbar.items = items
                 self.toolbar.isHidden = items.isEmpty
+                self.reloadInputViews()
             }
         }
     }
@@ -83,8 +142,7 @@ public class QListField : QDisplayView, IQField {
     public var onSelect: SelectClosure?
     public var onShouldEndEditing: ShouldClosure?
     public var onEndEditing: Closure?
-    public var onPressedCancel: Closure?
-    public var onPressedDone: Closure?
+    public var onPressedAction: ActionClosure?
     
     open override var canBecomeFirstResponder: Bool {
         get {
@@ -103,7 +161,9 @@ public class QListField : QDisplayView, IQField {
         get { return self._picker }
     }
     open override var inputAccessoryView: UIView? {
-        get { return self.toolbar }
+        get {
+            return self.toolbar.isHidden == true ? nil : self.toolbar
+        }
     }
     open override var intrinsicContentSize: CGSize {
         get { return self._label.intrinsicContentSize }
@@ -195,7 +255,7 @@ public class QListField : QDisplayView, IQField {
                 observer.select(listField: self, row: self.selectedRow!)
             })
             if let form = self.form {
-                form.changed(field: self)
+                form.validation()
             }
         }
         return true
@@ -251,25 +311,24 @@ extension QListField {
     }
     
     @objc
-    private func _pressedCancel(_ sender: Any) {
-        if let closure = self.onPressedCancel {
-            closure(self)
-        }
-        self._observer.notify({ (observer) in
-            observer.pressedCancel(listField: self)
-        })
+    func _pressedCancel(_ sender: Any) {
+        self._pressed(action: .cancel)
         self.endEditing(false)
     }
     
     @objc
-    private func _pressedDone(_ sender: Any) {
-        if let closure = self.onPressedDone {
-            closure(self)
+    func _pressedDone(_ sender: Any) {
+        self._pressed(action: .done)
+        self.endEditing(false)
+    }
+    
+    func _pressed(action: QFieldAction) {
+        if let closure = self.onPressedAction {
+            closure(self, action)
         }
         self._observer.notify({ (observer) in
-            observer.pressedDone(listField: self)
+            observer.pressed(listField: self, action: action)
         })
-        self.endEditing(false)
     }
 
 }
@@ -286,7 +345,7 @@ extension QListField : IQPickerControllerDelegate {
             observer.select(listField: self, row: row)
         })
         if let form = self.form {
-            form.changed(field: self)
+            form.validation()
         }
     }
 
