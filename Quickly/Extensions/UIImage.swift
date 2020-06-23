@@ -3,6 +3,21 @@
 //
 
 public extension UIImage {
+    
+    convenience init?(size: CGSize, scale: CGFloat, color: UIColor) {
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        defer {
+            UIGraphicsEndImageContext()
+        }
+        if let context = UIGraphicsGetCurrentContext() {
+            context.setFillColor(color.cgColor)
+            context.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height))
+            if let image = context.makeImage() {
+                self.init(cgImage: image)
+            }
+        }
+        return nil
+    }
 
     func tintImage(_ color: UIColor) -> UIImage? {
         return modify { (context: CGContext, rect: CGRect) in
