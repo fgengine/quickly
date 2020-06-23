@@ -16,8 +16,8 @@ extension QTextFieldSuggestionController {
                 titleStyle: QLabelStyleSheet(
                     text: QText(
                         text: text,
-                        font: UIFont.boldSystemFont(ofSize: UIFont.buttonFontSize),
-                        color: UIColor.systemBlue
+                        font: font,
+                        color: color
                     )
                 )
             )
