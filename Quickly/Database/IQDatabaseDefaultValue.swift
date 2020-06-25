@@ -24,7 +24,7 @@ public extension QDatabase {
     
 }
 
-// MARK: Bool : IQDatabaseDefaultValue -
+// MARK: Bool : IQDatabaseDefaultValue
 
 extension Bool : IQDatabaseDefaultValue {
     
@@ -34,7 +34,7 @@ extension Bool : IQDatabaseDefaultValue {
     
 }
 
-// MARK: Int8 : IQDatabaseDefaultValue -
+// MARK: Int8 : IQDatabaseDefaultValue
 
 extension Int8 : IQDatabaseDefaultValue {
     
@@ -44,7 +44,7 @@ extension Int8 : IQDatabaseDefaultValue {
     
 }
 
-// MARK: UInt8 : IQDatabaseDefaultValue -
+// MARK: UInt8 : IQDatabaseDefaultValue
 
 extension UInt8 : IQDatabaseDefaultValue {
     
@@ -54,7 +54,7 @@ extension UInt8 : IQDatabaseDefaultValue {
     
 }
 
-// MARK: Int16 : IQDatabaseDefaultValue -
+// MARK: Int16 : IQDatabaseDefaultValue
 
 extension Int16 : IQDatabaseDefaultValue {
     
@@ -64,7 +64,7 @@ extension Int16 : IQDatabaseDefaultValue {
     
 }
 
-// MARK: UInt16 : IQDatabaseDefaultValue -
+// MARK: UInt16 : IQDatabaseDefaultValue
 
 extension UInt16 : IQDatabaseDefaultValue {
     
@@ -74,7 +74,7 @@ extension UInt16 : IQDatabaseDefaultValue {
     
 }
 
-// MARK: Int32 : IQDatabaseDefaultValue -
+// MARK: Int32 : IQDatabaseDefaultValue
 
 extension Int32 : IQDatabaseDefaultValue {
     
@@ -84,7 +84,7 @@ extension Int32 : IQDatabaseDefaultValue {
     
 }
 
-// MARK: UInt32 : IQDatabaseDefaultValue -
+// MARK: UInt32 : IQDatabaseDefaultValue
 
 extension UInt32 : IQDatabaseDefaultValue {
     
@@ -94,7 +94,7 @@ extension UInt32 : IQDatabaseDefaultValue {
     
 }
 
-// MARK: Int64 : IQDatabaseDefaultValue -
+// MARK: Int64 : IQDatabaseDefaultValue
 
 extension Int64 : IQDatabaseDefaultValue {
     
@@ -104,7 +104,7 @@ extension Int64 : IQDatabaseDefaultValue {
     
 }
 
-// MARK: UInt64 : IQDatabaseDefaultValue -
+// MARK: UInt64 : IQDatabaseDefaultValue
 
 extension UInt64 : IQDatabaseDefaultValue {
     
@@ -114,7 +114,7 @@ extension UInt64 : IQDatabaseDefaultValue {
     
 }
 
-// MARK: Int : IQDatabaseDefaultValue -
+// MARK: Int : IQDatabaseDefaultValue
 
 extension Int : IQDatabaseDefaultValue {
     
@@ -124,7 +124,7 @@ extension Int : IQDatabaseDefaultValue {
     
 }
 
-// MARK: UInt : IQDatabaseDefaultValue -
+// MARK: UInt : IQDatabaseDefaultValue
 
 extension UInt : IQDatabaseDefaultValue {
     
@@ -134,7 +134,7 @@ extension UInt : IQDatabaseDefaultValue {
     
 }
 
-// MARK: Float : IQDatabaseDefaultValue -
+// MARK: Float : IQDatabaseDefaultValue
 
 extension Float : IQDatabaseDefaultValue {
     
@@ -144,7 +144,7 @@ extension Float : IQDatabaseDefaultValue {
     
 }
 
-// MARK: Double : IQDatabaseDefaultValue -
+// MARK: Double : IQDatabaseDefaultValue
 
 extension Double : IQDatabaseDefaultValue {
     
@@ -154,7 +154,7 @@ extension Double : IQDatabaseDefaultValue {
     
 }
 
-// MARK: String : IQDatabaseDefaultValue -
+// MARK: String : IQDatabaseDefaultValue
 
 extension String : IQDatabaseDefaultValue {
     
@@ -164,7 +164,7 @@ extension String : IQDatabaseDefaultValue {
     
 }
 
-// MARK: URL : IQDatabaseDefaultValue -
+// MARK: URL : IQDatabaseDefaultValue
 
 extension URL : IQDatabaseDefaultValue {
     
@@ -174,7 +174,7 @@ extension URL : IQDatabaseDefaultValue {
     
 }
 
-// MARK: Date : IQDatabaseDefaultValue -
+// MARK: Date : IQDatabaseDefaultValue
 
 extension Date : IQDatabaseDefaultValue {
     

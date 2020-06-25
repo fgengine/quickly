@@ -751,7 +751,7 @@ fileprivate protocol IQJsonPath {
 
 }
 
-// MARK: String : IQJsonPath -
+// MARK: String : IQJsonPath
 
 extension String : IQJsonPath {
 
@@ -764,7 +764,7 @@ extension String : IQJsonPath {
 
 }
 
-// MARK: NSNumber : IQJsonPath -
+// MARK: NSNumber : IQJsonPath
 
 extension NSNumber : IQJsonPath {
 
