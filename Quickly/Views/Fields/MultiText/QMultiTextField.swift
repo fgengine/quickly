@@ -14,7 +14,7 @@ public protocol IQMultiTextFieldObserver : class {
 
 open class QMultiTextFieldStyleSheet : QDisplayStyleSheet {
     
-    public var validator: IQInputValidator?
+    public var validator: IQStringValidator?
     public var form: IQFieldForm?
     public var textInsets: UIEdgeInsets
     public var textStyle: IQTextStyle?
@@ -38,7 +38,7 @@ open class QMultiTextFieldStyleSheet : QDisplayStyleSheet {
     public var toolbarActions: QFieldAction
     
     public init(
-        validator: IQInputValidator? = nil,
+        validator: IQStringValidator? = nil,
         form: IQFieldForm? = nil,
         textInsets: UIEdgeInsets = UIEdgeInsets.zero,
         textStyle: IQTextStyle? = nil,
@@ -134,7 +134,7 @@ public class QMultiTextField : QDisplayView, IQField {
     public typealias ActionClosure = (_ multiTextField: QMultiTextField, _ action: QFieldAction) -> Void
     public typealias Closure = (_ multiTextField: QMultiTextField) -> Void
     
-    public var validator: IQInputValidator? {
+    public var validator: IQStringValidator? {
         willSet { self._field.delegate = nil }
         didSet {self._field.delegate = self._fieldDelegate }
     }
@@ -227,7 +227,7 @@ public class QMultiTextField : QDisplayView, IQField {
     public var isValid: Bool {
         get {
             guard let validator = self.validator else { return true }
-            return validator.validate(self.unformatText)
+            return validator.validate(self.unformatText).isValid
         }
     }
     public var placeholder: IQText? {

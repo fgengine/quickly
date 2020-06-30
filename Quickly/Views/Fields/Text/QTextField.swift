@@ -34,7 +34,7 @@ public protocol IQTextFieldObserver : class {
 open class QTextFieldStyleSheet : QDisplayStyleSheet {
     
     public var requireValidator: Bool
-    public var validator: IQInputValidator?
+    public var validator: IQStringValidator?
     public var form: IQFieldForm?
     public var formatter: IQStringFormatter?
     public var textInsets: UIEdgeInsets
@@ -61,7 +61,7 @@ open class QTextFieldStyleSheet : QDisplayStyleSheet {
     
     public init(
         requireValidator: Bool = false,
-        validator: IQInputValidator? = nil,
+        validator: IQStringValidator? = nil,
         form: IQFieldForm? = nil,
         formatter: IQStringFormatter? = nil,
         textInsets: UIEdgeInsets = UIEdgeInsets.zero,
@@ -164,7 +164,7 @@ public class QTextField : QDisplayView, IQField {
     public typealias SelectSuggestionClosure = (_ textField: QTextField, _ suggestion: String) -> Void
 
     public var requireValidator: Bool = false
-    public var validator: IQInputValidator? {
+    public var validator: IQStringValidator? {
         willSet { self._field.delegate = nil }
         didSet {self._field.delegate = self._fieldDelegate }
     }
@@ -321,7 +321,7 @@ public class QTextField : QDisplayView, IQField {
     public var isValid: Bool {
         get {
             guard let validator = self.validator else { return true }
-            return validator.validate(self.unformatText)
+            return validator.validate(self.unformatText).isValid
         }
     }
     public var placeholder: IQText? {
@@ -730,7 +730,7 @@ private extension QTextField {
             }
             var isValid: Bool
             if let validator = field.validator {
-                isValid = validator.validate(sourceUnformat)
+                isValid = validator.validate(sourceUnformat).isValid
             } else {
                 isValid = true
             }

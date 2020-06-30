@@ -139,10 +139,8 @@ public final class QTimer : NSObject {
     }
 
     public func restart() {
-        if self.isStarted == true {
-            self.stop()
-            self.start()
-        }
+        self.stop()
+        self.start()
     }
 
     @IBAction private func _handler(_ sender: Any) {
