@@ -42,26 +42,28 @@ open class QLengthStringValidator : IQStringValidator {
     }
 
     public func validate(_ string: String) -> QStringValidatorResult {
-        var errors: [String] = []
+        var errors = Set< String >()
         if let maximumLength = self.maximumLength, let maximumError = self.maximumError {
             if self.minimumLength == maximumLength {
                 if string.count != maximumLength {
-                    errors.append(maximumError)
+                    errors.insert(maximumError)
                 }
             } else {
                 if string.count < self.minimumLength {
-                    errors.append(self.minimumError)
+                    errors.insert(self.minimumError)
                 }
                 if string.count > maximumLength {
-                    errors.append(maximumError)
+                    errors.insert(maximumError)
                 }
             }
         } else {
             if string.count < self.minimumLength {
-                errors.append(self.minimumError)
+                errors.insert(self.minimumError)
             }
         }
-        return QStringValidatorResult(errors: errors)
+        return QStringValidatorResult(
+            errors: Array(errors)
+        )
     }
 
 }

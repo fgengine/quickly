@@ -16,10 +16,12 @@ open class QCharacterSetStringValidator : IQStringValidator {
     }
 
     public func validate(_ string: String) -> QStringValidatorResult {
-        var errors: [String] = []
+        var errors = Set< String >()
         if self.characterSet.isSuperset(of: CharacterSet(charactersIn: string)) == false {
-            errors.append(self.error)
+            errors.insert(self.error)
         }
-        return QStringValidatorResult(errors: errors)
+        return QStringValidatorResult(
+            errors: Array(errors)
+        )
     }
 }
