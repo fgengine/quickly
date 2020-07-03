@@ -224,6 +224,11 @@ public extension QDatabase {
         return FileManager.default.fileExists(atPath: "\(path)/\(filename).sqlite")
     }
     
+    static func drop(filename: String) throws {
+        let path = try FileManager.default.documentDirectory() as String
+        try FileManager.default.removeItem(atPath: path)
+    }
+    
 }
 
 // MARK: Public • QDatabase • UserVersion
