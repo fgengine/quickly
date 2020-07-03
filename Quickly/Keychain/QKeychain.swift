@@ -63,6 +63,14 @@ public final class QKeychain {
         return self._processSet(value, key: key, access: access)
     }
 
+    @discardableResult
+    public func set< ValueType: BinaryInteger >(_ value: ValueType?, key: String, access: QKeychainAccessOptions = .defaultOption) -> Bool {
+        guard let value = value else {
+            return self._processDelete(key)
+        }
+        return self._processSet(String(value), key: key, access: access)
+    }
+
     public func get(_ key: String) -> Data? {
         let query = self._process(query: [
             Constants.klass : kSecClassGenericPassword,
@@ -90,6 +98,16 @@ public final class QKeychain {
         guard let data: Data = self.get(key) else { return nil }
         guard let firstBit = data.first else { return nil }
         return firstBit != 0
+    }
+
+    public func get(_ key: String, radix: Int = 10) -> Int? {
+        guard let string: String = self.get(key) else { return nil }
+        return Int(string, radix: radix)
+    }
+
+    public func get(_ key: String, radix: Int = 10) -> UInt? {
+        guard let string: String = self.get(key) else { return nil }
+        return UInt(string, radix: radix)
     }
 
     @discardableResult
