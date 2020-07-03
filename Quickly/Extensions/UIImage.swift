@@ -61,10 +61,14 @@ public extension UIImage {
         default:
             break
         }
-        guard let cgImage = self.cgImage, let colorSpace = cgImage.colorSpace else {
+        guard let cgImage = self.cgImage else {
             return nil
         }
-        if let context = CGContext(data: nil, width: Int(size.width), height: Int(size.height), bitsPerComponent: cgImage.bitsPerComponent, bytesPerRow: 0, space: colorSpace, bitmapInfo: cgImage.bitmapInfo.rawValue) {
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        defer {
+            UIGraphicsEndImageContext()
+        }
+        if let context = UIGraphicsGetCurrentContext() {
             context.concatenate(transform)
             let rect: CGRect
             switch imageOrientation {
@@ -80,18 +84,22 @@ public extension UIImage {
     }
     
     func scaleTo(size: CGSize) -> UIImage? {
-        guard let cgImage = self.cgImage, let colorSpace = cgImage.colorSpace else {
+        guard let cgImage = self.cgImage else {
             return nil
         }
         let originalSize = self.size
         let originalScale = self.scale
         let aspectFitRect = CGRect(origin: CGPoint.zero, size: size).aspectFit(size: originalSize)
-        let newSize = CGSize(
-            width: floor(aspectFitRect.width),
-            height: floor(aspectFitRect.height)
+        let size = CGSize(
+            width: Int(floor(aspectFitRect.width)),
+            height: Int(floor(aspectFitRect.height))
         )
-        if let context = CGContext(data: nil, width: Int(newSize.width), height: Int(newSize.height), bitsPerComponent: cgImage.bitsPerComponent, bytesPerRow: 0, space: colorSpace, bitmapInfo: cgImage.bitmapInfo.rawValue) {
-            context.draw(cgImage, in: CGRect(origin: CGPoint.zero, size: newSize))
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        defer {
+            UIGraphicsEndImageContext()
+        }
+        if let context = UIGraphicsGetCurrentContext() {
+            context.draw(cgImage, in: CGRect(origin: .zero, size: size))
             if let image = context.makeImage() {
                 return UIImage(cgImage: image, scale: originalScale, orientation: .up)
             }
