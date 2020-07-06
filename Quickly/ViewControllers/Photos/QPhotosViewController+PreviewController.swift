@@ -26,21 +26,14 @@ extension QPhotosViewController {
             ])
         }
         
-        override func configure() {
-            self.rebuild(false)
-            super.configure()
-        }
-        
-        func rebuild(_ forceReload: Bool = true) {
+        override func rebuild() {
             self._items = self._photos.compactMap({
                 return PhotoItem(photo: $0, zoomLevels: 2)
             })
             self.sections = [
                 QCollectionSection(items: self._items)
             ]
-            if forceReload == true {
-                self.reload()
-            }
+            super.rebuild()
         }
         
         func set(photos: [IQPhotoItem], selectedPhoto: IQPhotoItem?) {

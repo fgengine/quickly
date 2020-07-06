@@ -43,6 +43,7 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
             if let controller = value {
                 controller.add(observer: self, priority: 0)
             }
+            self.collectionView.layoutIfNeeded()
             self.collectionView.collectionController = value
         }
         get { return self.collectionView.collectionController }

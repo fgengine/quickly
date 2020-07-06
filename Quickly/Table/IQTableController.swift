@@ -49,6 +49,8 @@ public protocol IQTableController : UITableViewDataSource, UITableViewDelegate {
     func setup()
     
     func configure()
+    
+    func rebuild()
 
     func add(observer: IQTableControllerObserver, priority: UInt)
     func remove(observer: IQTableControllerObserver)

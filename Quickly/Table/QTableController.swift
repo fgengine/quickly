@@ -121,6 +121,10 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
             tableView.estimatedSectionHeaderHeight = self.estimatedSectionHeaderHeight
             tableView.estimatedSectionFooterHeight = self.estimatedSectionFooterHeight
         }
+        self.rebuild()
+    }
+    
+    open func rebuild() {
         self.reload([])
     }
 

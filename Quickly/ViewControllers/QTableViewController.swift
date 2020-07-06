@@ -101,6 +101,9 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
             loadingView.delegate = self
         }
     }
+    public var batchUpdateDelay: TimeInterval {
+        didSet { self._batchUpdateTimer?.interval = self.batchUpdateDelay }
+    }
     
     private var _refreshControl: UIRefreshControl? {
         willSet {
@@ -114,10 +117,22 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     }
     private var _footerView: QTableViewControllerFooterView?
     private var _edgesForExtendedLayout: UIRectEdge?
+    private var _batchUpdateTimer: QTimer? {
+        willSet { self._batchUpdateTimer?.stop() }
+        didSet { self._batchUpdateTimer?.start() }
+    }
+    private var _batchUpdateCounter: UInt
     private var _keyboard: QKeyboard!
+
+    public override init() {
+        self.batchUpdateDelay = 0.2
+        self._batchUpdateCounter = 0
+        super.init()
+    }
 
     deinit {
         self.tableController = nil
+        self._batchUpdateTimer = nil
         self._keyboard.remove(observer: self)
     }
     
@@ -164,10 +179,21 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
             self._updateFrame(loadingView: loadingView, bounds: self.view.bounds)
         }
     }
+    
+    open override func prepareInteractivePresent() {
+        super.prepareInteractivePresent()
+        self._updateRefreshControlState()
+        if self._batchUpdateCounter > 0 {
+            self._triggeredBatchUpdate()
+        }
+    }
 
     open override func willPresent(animated: Bool) {
         super.willPresent(animated: animated)
         self._updateRefreshControlState()
+        if self._batchUpdateCounter > 0 {
+            self._triggeredBatchUpdate()
+        }
     }
     
     open override func prepareInteractiveDismiss() {
@@ -196,30 +222,41 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
         }
     }
 
-    open func beginRefreshing() {
+    public func beginRefreshing() {
         guard let refreshControl = self._refreshControl else { return }
         refreshControl.beginRefreshing()
     }
 
-    open func endRefreshing() {
+    public func endRefreshing() {
         guard let refreshControl = self._refreshControl else { return }
         refreshControl.endRefreshing()
     }
 
     open func triggeredRefreshControl() {
     }
+
+    public func setNeedBatchUpdate() {
+        if let timer = self._batchUpdateTimer {
+            timer.restart()
+        } else {
+            self._batchUpdateTimer = QTimer(interval: self.batchUpdateDelay, onFinished: { [weak self] _ in self?._triggeredBatchUpdate() })
+        }
+    }
+
+    open func triggeredBatchUpdate() {
+    }
     
-    open func isLoading() -> Bool {
+    public func isLoading() -> Bool {
         guard let loadingView = self.loadingView else { return false }
         return loadingView.isAnimating()
     }
     
-    open func startLoading() {
+    public func startLoading() {
         guard let loadingView = self.loadingView else { return }
         loadingView.start()
     }
     
-    open func stopLoading() {
+    public func stopLoading() {
         guard let loadingView = self.loadingView else { return }
         loadingView.stop()
     }
@@ -354,12 +391,12 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
 
     // MARK: IQLoadingViewDelegate
     
-    open func willShow(loadingView: QLoadingViewType) {
+    public func willShow(loadingView: QLoadingViewType) {
         self._updateFrame(loadingView: loadingView, bounds: self.view.bounds)
         self.view.addSubview(loadingView)
     }
     
-    open func didHide(loadingView: QLoadingViewType) {
+    public func didHide(loadingView: QLoadingViewType) {
         loadingView.removeFromSuperview()
     }
         
@@ -372,6 +409,13 @@ private extension QTableViewController {
     @objc
     func _triggeredRefreshControl(_ sender: Any) {
         self.triggeredRefreshControl()
+    }
+    
+    func _triggeredBatchUpdate() {
+        self.loadViewIfNeeded()
+        self._batchUpdateTimer?.stop()
+        self._batchUpdateCounter = 0
+        self.triggeredBatchUpdate()
     }
 
     func _updateRefreshControlState() {
