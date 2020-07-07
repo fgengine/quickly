@@ -13,7 +13,7 @@ open class QMaskStringFormatter : IQStringFormatter {
     }
 
     public func format(_ unformat: String) -> String {
-        return unformat.applyMask(mask: self.mask)
+        return unformat.format(mask: self.mask)
     }
 
     public func format(_ unformat: String, caret: inout Int) -> String {

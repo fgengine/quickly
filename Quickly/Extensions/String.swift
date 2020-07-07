@@ -44,7 +44,7 @@ public extension String {
 
 public extension String {
 
-    func applyMask(mask: String) -> String {
+    func format(mask: String) -> String {
         var result = String()
         var maskIndex = mask.startIndex
         let maskEndIndex = mask.endIndex
