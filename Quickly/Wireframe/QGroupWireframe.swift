@@ -4,17 +4,17 @@
 
 open class QGroupWireframe< RouterType: IQRouter, ContextType: IQContext > : IQWireframe, IQWireframeDeeplinkable, IQWeakRouterable, IQContextable {
 
-    public private(set) var viewController: QGroupContainerViewController
     public private(set) weak var router: RouterType?
     public private(set) var context: ContextType
+    public private(set) var viewController: QGroupContainerViewController
 
     public init(
         router: RouterType,
         context: ContextType
     ) {
-        self.viewController = QGroupContainerViewController()
         self.router = router
         self.context = context
+        self.viewController = QGroupContainerViewController()
         self.setup()
     }
     

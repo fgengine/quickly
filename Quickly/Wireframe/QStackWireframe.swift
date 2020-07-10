@@ -4,9 +4,9 @@
 
 open class QStackWireframe< RouterType: IQRouter, ContextType: IQContext > : IQWireframe, IQWireframeDeeplinkable, IQWeakRouterable, IQContextable {
 
-    public private(set) var viewController: QStackContainerViewController
     public private(set) weak var router: RouterType?
     public private(set) var context: ContextType
+    public private(set) var viewController: QStackContainerViewController
 
     public init(
         router: RouterType,

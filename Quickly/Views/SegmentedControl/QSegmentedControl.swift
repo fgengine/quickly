@@ -11,6 +11,7 @@ open class QSegmentedControlStyleSheet : IQStyleSheet {
     public var highlightedTextStyle: IQTextStyle?
     public var disabledTextStyle: IQTextStyle?
     public var selectedTextStyle: IQTextStyle?
+    public var isEnabled: Bool
     public var backgroundColor: UIColor?
     public var selectedSegmentTintColor: UIColor?
     public var tintColor: UIColor?
@@ -23,6 +24,7 @@ open class QSegmentedControlStyleSheet : IQStyleSheet {
         highlightedTextStyle: IQTextStyle? = nil,
         disabledTextStyle: IQTextStyle? = nil,
         selectedTextStyle: IQTextStyle? = nil,
+        isEnabled: Bool = true,
         backgroundColor: UIColor? = nil,
         tintColor: UIColor? = nil
     ) {
@@ -33,6 +35,7 @@ open class QSegmentedControlStyleSheet : IQStyleSheet {
         self.highlightedTextStyle = highlightedTextStyle
         self.disabledTextStyle = disabledTextStyle
         self.selectedTextStyle = selectedTextStyle
+        self.isEnabled = isEnabled
         self.backgroundColor = backgroundColor
         self.tintColor = tintColor
     }
@@ -46,6 +49,7 @@ open class QSegmentedControlStyleSheet : IQStyleSheet {
         highlightedTextStyle: IQTextStyle? = nil,
         disabledTextStyle: IQTextStyle? = nil,
         selectedTextStyle: IQTextStyle? = nil,
+        isEnabled: Bool = true,
         backgroundColor: UIColor? = nil,
         selectedSegmentTintColor: UIColor? = nil,
         tintColor: UIColor? = nil
@@ -57,6 +61,7 @@ open class QSegmentedControlStyleSheet : IQStyleSheet {
         self.highlightedTextStyle = highlightedTextStyle
         self.disabledTextStyle = disabledTextStyle
         self.selectedTextStyle = selectedTextStyle
+        self.isEnabled = isEnabled
         self.backgroundColor = backgroundColor
         self.selectedSegmentTintColor = selectedSegmentTintColor
         self.tintColor = tintColor
@@ -70,6 +75,7 @@ open class QSegmentedControlStyleSheet : IQStyleSheet {
         self.highlightedTextStyle = styleSheet.highlightedTextStyle
         self.disabledTextStyle = styleSheet.disabledTextStyle
         self.selectedTextStyle = styleSheet.selectedTextStyle
+        self.isEnabled = styleSheet.isEnabled
         self.backgroundColor = styleSheet.backgroundColor
         self.selectedSegmentTintColor = styleSheet.selectedSegmentTintColor
         self.tintColor = styleSheet.tintColor
@@ -181,6 +187,7 @@ open class QSegmentedControl : UISegmentedControl, IQView {
         self.highlightedTextStyle = styleSheet.highlightedTextStyle
         self.disabledTextStyle = styleSheet.disabledTextStyle
         self.selectedTextStyle = styleSheet.selectedTextStyle
+        self.isEnabled = styleSheet.isEnabled
         self.backgroundColor = styleSheet.backgroundColor
         if #available(iOS 13.0, *) {
             self.selectedSegmentTintColor = styleSheet.selectedSegmentTintColor

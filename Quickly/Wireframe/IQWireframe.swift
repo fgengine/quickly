@@ -10,6 +10,14 @@ public protocol IQWireframe : class {
     
 }
 
+public protocol IQPartialWireframe : class {
+    
+    associatedtype ViewControllerType: IQViewController
+    
+    func initialViewController() -> ViewControllerType?
+    
+}
+
 public protocol IQWireframeDeeplinkable : class {
     
     func open(_ url: URL) -> Bool

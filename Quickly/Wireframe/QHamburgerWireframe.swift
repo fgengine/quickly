@@ -4,17 +4,17 @@
 
 open class QHamburgerWireframe< RouterType: IQRouter, ContextType: IQContext > : IQWireframe, IQWireframeDeeplinkable, IQWeakRouterable, IQContextable {
 
-    public private(set) var viewController: QHamburgerContainerViewController
     public private(set) weak var router: RouterType?
     public private(set) var context: ContextType
+    public private(set) var viewController: QHamburgerContainerViewController
 
     public init(
         router: RouterType,
         context: ContextType
     ) {
-        self.viewController = QHamburgerContainerViewController()
         self.router = router
         self.context = context
+        self.viewController = QHamburgerContainerViewController()
         self.setup()
     }
     
