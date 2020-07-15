@@ -514,6 +514,23 @@ extension QJson : IQDebug {
 
 #endif
 
+// MARK: NSNull • IQJsonValue
+
+extension NSNull : IQJsonValue {
+
+    public static func fromJson(value: Any) throws -> NSNull {
+        guard let null = value as? NSNull else {
+            throw QJsonError.cast
+        }
+        return null
+    }
+
+    public func toJsonValue() throws -> Any {
+        return NSNull()
+    }
+
+}
+
 // MARK: Bool • IQJsonValue
 
 extension Bool : IQJsonValue {
