@@ -426,8 +426,8 @@ private extension QTableController {
         if let metatype = self._aliasDecors.first(where: { return $0.key == dataMetatype }) {
             return metatype.value
         }
-        if let cellType = self._aliasDecors[dataMetatype] {
-            return cellType
+        if let decorType = self._aliasDecors[dataMetatype] {
+            return decorType
         }
         let usings = self._decors.filter({ return $0.using(any: data) })
         if usings.count > 1 {
@@ -437,13 +437,13 @@ private extension QTableController {
                 return (type, level)
             })
             let sorted = levels.sorted(by: { return $0.1 > $1.1 })
-            let decorType = sorted.first!.0
-            self._aliasDecors[dataMetatype] = decorType
-            return decorType
-        } else if usings.count == 1 {
-            let decorType = usings.first!
-            self._aliasDecors[dataMetatype] = decorType
-            return decorType
+            if let sortedFirst = sorted.first {
+                self._aliasDecors[dataMetatype] = sortedFirst.0
+                return sortedFirst.0
+            }
+        } else if let usingFirst = usings.first {
+            self._aliasDecors[dataMetatype] = usingFirst
+            return usingFirst
         }
         return nil
     }
@@ -464,13 +464,13 @@ private extension QTableController {
                 return (type, level)
             })
             let sorted = levels.sorted(by: { return $0.1 > $1.1 })
-            let cellType = sorted.first!.0
-            self._aliasCells[rowMetatype] = cellType
-            return cellType
-        } else if usings.count == 1 {
-            let cellType = usings.first!
-            self._aliasCells[rowMetatype] = cellType
-            return cellType
+            if let sortedFirst = sorted.first {
+                self._aliasCells[rowMetatype] = sortedFirst.0
+                return sortedFirst.0
+            }
+        } else if let usingFirst = usings.first {
+            self._aliasCells[rowMetatype] = usingFirst
+            return usingFirst
         }
         return nil
     }
