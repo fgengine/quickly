@@ -99,6 +99,8 @@ public extension UIImage {
             UIGraphicsEndImageContext()
         }
         if let context = UIGraphicsGetCurrentContext() {
+            context.translateBy(x: 0, y: size.height)
+            context.scaleBy(x: 1.0, y: -1.0)
             context.draw(cgImage, in: CGRect(origin: .zero, size: size))
             if let image = context.makeImage() {
                 return UIImage(cgImage: image, scale: originalScale, orientation: .up)
