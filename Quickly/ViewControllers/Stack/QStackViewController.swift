@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-open class QStackViewController : QViewController, IQStackViewController {
+open class QStackViewController : QViewController, IQStackViewController, IQModalContentViewController, IQHamburgerContentViewController, IQJalousieContentViewController {
 
     open var barView: QStackbar? {
         set(value) { self.set(barView: value) }
@@ -235,6 +235,65 @@ open class QStackViewController : QViewController, IQStackViewController {
         if let view = self._barView {
             view.frame = self._barFrame(bounds: self.view.bounds)
         }
+    }
+    
+    // MARK: IQContentViewController
+    
+    public var contentOffset: CGPoint {
+        get { return CGPoint.zero }
+    }
+    
+    public var contentSize: CGSize {
+        get {
+            guard self.isLoaded == true else { return CGSize.zero }
+            return self.view.bounds.size
+        }
+    }
+    
+    open func notifyBeginUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.beginUpdateContent()
+        }
+    }
+    
+    open func notifyUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.updateContent()
+        }
+    }
+    
+    open func notifyFinishUpdateContent(velocity: CGPoint) -> CGPoint? {
+        if let viewController = self.contentOwnerViewController {
+            return viewController.finishUpdateContent(velocity: velocity)
+        }
+        return nil
+    }
+    
+    open func notifyEndUpdateContent() {
+        if let viewController = self.contentOwnerViewController {
+            viewController.endUpdateContent()
+        }
+    }
+    
+    // MARK: IQModalContentViewController
+    
+    open func modalShouldInteractive() -> Bool {
+        guard let currentViewController = self.viewController as? IQModalContentViewController else { return false }
+        return currentViewController.modalShouldInteractive()
+    }
+    
+    // MARK: IQHamburgerContentViewController
+    
+    open func hamburgerShouldInteractive() -> Bool {
+        guard let currentViewController = self.viewController as? IQHamburgerContentViewController else { return false }
+        return currentViewController.hamburgerShouldInteractive()
+    }
+    
+    // MARK: IQJalousieContentViewController
+    
+    open func jalousieShouldInteractive() -> Bool {
+        guard let currentViewController = self.viewController as? IQJalousieContentViewController else { return false }
+        return currentViewController.jalousieShouldInteractive()
     }
     
 }
