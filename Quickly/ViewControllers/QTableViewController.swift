@@ -236,10 +236,14 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
     }
 
     public func setNeedBatchUpdate() {
-        if let timer = self._batchUpdateTimer {
-            timer.restart()
+        if self.isPresented == true {
+            if let timer = self._batchUpdateTimer {
+                timer.restart()
+            } else {
+                self._batchUpdateTimer = QTimer(interval: self.batchUpdateDelay, onFinished: { [weak self] _ in self?._triggeredBatchUpdate() })
+            }
         } else {
-            self._batchUpdateTimer = QTimer(interval: self.batchUpdateDelay, onFinished: { [weak self] _ in self?._triggeredBatchUpdate() })
+            self._batchUpdateCounter += 1
         }
     }
 
