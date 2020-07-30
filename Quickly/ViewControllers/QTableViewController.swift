@@ -75,6 +75,7 @@ open class QTableViewController : QViewController, IQTableControllerObserver, IQ
                         footerView.insets = self._footerViewInsets()
                         self.view.insertSubview(footerView, aboveSubview: tableView)
                     }
+                    self.didChangeContentEdgeInsets()
                 }
             }
         }
@@ -437,7 +438,12 @@ private extension QTableViewController {
     
     func _updateContentInsets(_ tableView: QTableView) {
         let edgeInsets = self.adjustedContentInset
-        let footerHeight = (self.footerView != nil) ? self.footerViewHeight : 0
+        let footerHeight: CGFloat
+        if self.footerView != nil {
+            footerHeight = self.footerViewHeight
+        } else {
+            footerHeight = 0
+        }
         let oldContentInset = tableView.contentInset
         let newContentInset = UIEdgeInsets(
             top: edgeInsets.top,
