@@ -351,7 +351,13 @@ extension QApiProvider : URLSessionTaskDelegate {
         newRequest request: URLRequest,
         completionHandler: @escaping (URLRequest?) -> Swift.Void
     ) {
-        completionHandler(request)
+        let redirectRequest: URLRequest?
+        if let query = self._query(task: task) {
+            redirectRequest = query.redirect(request: request)
+        } else {
+            redirectRequest = nil
+        }
+        completionHandler(redirectRequest)
     }
 
     public func urlSession(

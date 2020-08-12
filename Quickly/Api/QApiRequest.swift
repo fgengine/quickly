@@ -18,6 +18,7 @@ open class QApiRequest : IQApiRequest {
     public var retries: TimeInterval = 0
     public var delay: TimeInterval = 1
     public var cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
+    public var redirect: QApiRequestRedirectOption = [ .enabled, .authorization ]
     #if DEBUG
     public var logging: QApiLogging = .never
     #endif
