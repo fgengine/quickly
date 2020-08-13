@@ -33,12 +33,13 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         willSet { self._unbindSections() }
         didSet { self._bindSections() }
     }
+    var indexPaths: [IndexPath] {
+        return self.sections.flatMap({ return $0.indexPaths })
+    }
     public var rows: [IQTableRow] {
-        get {
-            return self.sections.flatMap({ (section: IQTableSection) -> [IQTableRow] in
-                return section.rows
-            })
-        }
+        return self.sections.flatMap({ (section: IQTableSection) -> [IQTableRow] in
+            return section.rows
+        })
     }
     public var selectedRows: [IQTableRow] {
         get {
@@ -53,6 +54,9 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
     }
     public var canEdit: Bool = true
     public var canMove: Bool = true
+    public var postVisibleIndexPaths: [IndexPath] = []
+    public var preVisibleIndexPaths: [IndexPath] = []
+    public var visibleCells: [UITableViewCell] = []
     public private(set) var isBatchUpdating: Bool = false
     
     private var _decors: [IQTableDecor.Type]
@@ -361,7 +365,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
             let index = self.index(header: header),
             let decorView = tableView.headerView(forSection: index) as? IQTableDecor
             else { return }
-        decorView.set(any: header, spec: tableView, animated: animated)
+        decorView.prepare(any: header, spec: tableView, animated: animated)
         if self.isBatchUpdating == false {
             self._notifyUpdate()
         }
@@ -373,7 +377,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
             let index = self.index(footer: footer),
             let decorView = tableView.headerView(forSection: index) as? IQTableDecor
             else { return }
-        decorView.set(any: footer, spec: tableView, animated: animated)
+        decorView.prepare(any: footer, spec: tableView, animated: animated)
         if self.isBatchUpdating == false {
             self._notifyUpdate()
         }
@@ -385,7 +389,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
             let indexPath = self.indexPath(row: row),
             let cell = tableView.cellForRow(at: indexPath) as? IQTableCell
             else { return }
-        cell.set(any: row, spec: tableView, animated: animated)
+        cell.prepare(any: row, spec: tableView, animated: animated)
         if self.isBatchUpdating == false {
             self._notifyUpdate()
         }
@@ -473,6 +477,29 @@ private extension QTableController {
             return usingFirst
         }
         return nil
+    }
+    
+    func _updateVisibleIndexPaths(_ tableView: UITableView) {
+        if let visibleIndexPaths = tableView.indexPathsForVisibleRows {
+            let indexPaths = self.indexPaths
+            if let visibleIndexPath = visibleIndexPaths.first, let index = indexPaths.firstIndex(of: visibleIndexPath) {
+                let start = 0
+                let end = max(0, index - 1)
+                self.postVisibleIndexPaths = Array(indexPaths[start..<end])
+            } else {
+                self.postVisibleIndexPaths = []
+            }
+            if let visibleIndexPath = visibleIndexPaths.last, let index = indexPaths.firstIndex(of: visibleIndexPath) {
+                let start = min(index + 1, indexPaths.count)
+                let end = indexPaths.count
+                self.preVisibleIndexPaths = Array(indexPaths[start..<end])
+            } else {
+                self.preVisibleIndexPaths = []
+            }
+        } else {
+            self.postVisibleIndexPaths = []
+            self.preVisibleIndexPaths = []
+        }
     }
 
 }
@@ -565,7 +592,9 @@ extension QTableController : UITableViewDataSource {
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
         let row = self.row(indexPath: indexPath)
-        return self.dequeue(row: row, indexPath: indexPath).unsafelyUnwrapped
+        let cell = self.dequeue(row: row, indexPath: indexPath).unsafelyUnwrapped
+        cell.prepare(any: row, spec: tableView as! TableView, animated: false)
+        return cell
     }
 
     @objc
@@ -603,12 +632,52 @@ extension QTableController : UITableViewDelegate {
     @objc
     open func tableView(
         _ tableView: UITableView,
-        willDisplay cell: UITableViewCell,
-        forRowAt indexPath: IndexPath
-    ) {
-        if let tableCell = cell as? IQTableCell {
-            let row = self.row(indexPath: indexPath)
-            tableCell.set(any: row, spec: tableView as! TableView, animated: false)
+        viewForHeaderInSection section: Int
+    ) -> UIView? {
+        if let data = self.header(index: section) {
+            if let decorClass = self._decorClass(data: data) {
+                let decor = decorClass.dequeue(tableView: tableView).unsafelyUnwrapped
+                decor.prepare(any: data, spec: tableView as! TableView, animated: false)
+                return decor
+            }
+        }
+        return nil
+    }
+
+    @objc
+    open func tableView(
+        _ tableView: UITableView,
+        viewForFooterInSection section: Int
+    ) -> UIView? {
+        if let data = self.footer(index: section) {
+            if let decorClass = self._decorClass(data: data) {
+                let decor = decorClass.dequeue(tableView: tableView).unsafelyUnwrapped
+                decor.prepare(any: data, spec: tableView as! TableView, animated: false)
+                return decor
+            }
+        }
+        return nil
+    }
+
+    @objc
+    open func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let row = self.row(indexPath: indexPath)
+        row.cacheHeight = cell.frame.height
+        self.visibleCells.append(cell)
+        self._updateVisibleIndexPaths(tableView)
+        if let cell = cell as? IQTableCell {
+            cell.beginDisplay()
+        }
+    }
+
+    @objc
+    open func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let index = self.visibleCells.firstIndex(where: { return $0 === cell }) {
+            self.visibleCells.remove(at: index)
+        }
+        self._updateVisibleIndexPaths(tableView)
+        if let cell = cell as? IQTableCell {
+            cell.endDisplay()
         }
     }
 
@@ -618,10 +687,19 @@ extension QTableController : UITableViewDelegate {
         willDisplayHeaderView view: UIView,
         forSection section: Int
     ) {
-        if let data = self.header(index: section) {
-            if let decorView = view as? IQTableDecor {
-                decorView.set(any: data, spec: tableView as! TableView, animated: false)
-            }
+        if let decorView = view as? IQTableDecor {
+            decorView.beginDisplay()
+        }
+    }
+
+    @objc
+    open func tableView(
+        _ tableView: UITableView,
+        didEndDisplayingHeaderView view: UIView,
+        forSection section: Int
+    ) {
+        if let decorView = view as? IQTableDecor {
+            decorView.endDisplay()
         }
     }
 
@@ -631,10 +709,19 @@ extension QTableController : UITableViewDelegate {
         willDisplayFooterView view: UIView,
         forSection section: Int
     ) {
-        if let data = self.footer(index: section) {
-            if let decorView = view as? IQTableDecor {
-                decorView.set(any: data, spec: tableView as! TableView, animated: false)
-            }
+        if let decorView = view as? IQTableDecor {
+            decorView.beginDisplay()
+        }
+    }
+
+    @objc
+    open func tableView(
+        _ tableView: UITableView,
+        didEndDisplayingFooterView view: UIView,
+        forSection section: Int
+    ) {
+        if let decorView = view as? IQTableDecor {
+            decorView.endDisplay()
         }
     }
 
@@ -694,31 +781,32 @@ extension QTableController : UITableViewDelegate {
         data.cacheHeight = caclulatedHeight
         return caclulatedHeight
     }
-
+    
     @objc
     open func tableView(
         _ tableView: UITableView,
-        viewForHeaderInSection section: Int
-    ) -> UIView? {
-        if let data = self.header(index: section) {
-            if let decorClass = self._decorClass(data: data) {
-                return decorClass.dequeue(tableView: tableView)
-            }
-        }
-        return nil
+        estimatedHeightForRowAt indexPath: IndexPath
+    ) -> CGFloat {
+        let row = self.row(indexPath: indexPath)
+        return row.cacheHeight ?? tableView.estimatedRowHeight
     }
-
+    
     @objc
     open func tableView(
         _ tableView: UITableView,
-        viewForFooterInSection section: Int
-    ) -> UIView? {
-        if let data = self.footer(index: section) {
-            if let decorClass = self._decorClass(data: data) {
-                return decorClass.dequeue(tableView: tableView)
-            }
-        }
-        return nil
+        estimatedHeightForHeaderInSection section: Int
+    ) -> CGFloat {
+        guard let data = self.header(index: section) else { return 0 }
+        return data.cacheHeight ?? tableView.estimatedSectionHeaderHeight
+    }
+    
+    @objc
+    open func tableView(
+        _ tableView: UITableView,
+        estimatedHeightForFooterInSection section: Int
+    ) -> CGFloat {
+        guard let data = self.footer(index: section) else { return 0 }
+        return data.cacheHeight ?? tableView.estimatedSectionFooterHeight
     }
 
     @objc

@@ -30,6 +30,9 @@ open class QTableSection : IQTableSection {
             self._reloadSection()
         }
     }
+    public var indexPaths: [IndexPath] {
+        return self.rows.compactMap({ return $0.indexPath })
+    }
     public private(set) var rows: [IQTableRow]
 
     public init(rows: [IQTableRow]) {

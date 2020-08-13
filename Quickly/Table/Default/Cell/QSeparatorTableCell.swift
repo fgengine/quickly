@@ -39,8 +39,8 @@ open class QSeparatorTableCell< RowType: QSeparatorTableRow > : QBackgroundColor
         self.contentView.addSubview(self.lineView)
     }
 
-    open override func set(row: RowType, spec: IQContainerSpec, animated: Bool) {
-        super.set(row: row, spec: spec, animated: animated)
+    open override func prepare(row: RowType, spec: IQContainerSpec, animated: Bool) {
+        super.prepare(row: row, spec: spec, animated: animated)
         
         if self._edgeInsets != row.edgeInsets {
             self._edgeInsets = row.edgeInsets

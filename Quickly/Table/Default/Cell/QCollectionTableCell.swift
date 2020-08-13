@@ -76,8 +76,8 @@ open class QCollectionTableCell< RowType: QCollectionTableRow > : QBackgroundCol
         self._collectionController = nil
     }
     
-    open override func set(row: RowType, spec: IQContainerSpec, animated: Bool) {
-        super.set(row: row, spec: spec, animated: animated)
+    open override func prepare(row: RowType, spec: IQContainerSpec, animated: Bool) {
+        super.prepare(row: row, spec: spec, animated: animated)
 
         self.collectionView.contentInset = row.edgeInsets
         self.collectionView.scrollIndicatorInsets = row.edgeInsets

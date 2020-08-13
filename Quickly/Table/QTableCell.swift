@@ -38,10 +38,16 @@ open class QTableCell< RowType: IQTableRow > : UITableViewCell, IQTypedTableCell
     open func configure() {
     }
 
-    open func set(row: RowType, spec: IQContainerSpec, animated: Bool) {
+    open func prepare(row: RowType, spec: IQContainerSpec, animated: Bool) {
         self.row = row
         self.selectionStyle = row.selectionStyle
         self.spec = spec
+    }
+    
+    open func beginDisplay() {
+    }
+    
+    open func endDisplay() {
     }
 
 }
