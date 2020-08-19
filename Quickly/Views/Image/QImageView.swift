@@ -95,30 +95,40 @@ open class QImageView : QDisplayView {
     }
     public var verticalAlignment: QViewVerticalAlignment = .center {
         didSet {
-            self._localView.verticalAlignment = self.verticalAlignment
-            self._remoteView.verticalAlignment = self.verticalAlignment
+            self._localLayer.set(
+                verticalAlignment: self.verticalAlignment,
+                horizontalAlignment: self.horizontalAlignment
+            )
+            self._remoteLayer.set(
+                verticalAlignment: self.verticalAlignment,
+                horizontalAlignment: self.horizontalAlignment
+            )
+            self.setNeedsLayout()
         }
     }
     public var horizontalAlignment: QViewHorizontalAlignment = .center {
         didSet {
-            self._localView.horizontalAlignment = self.horizontalAlignment
-            self._remoteView.horizontalAlignment = self.horizontalAlignment
+            self._localLayer.set(
+                verticalAlignment: self.verticalAlignment,
+                horizontalAlignment: self.horizontalAlignment
+            )
+            self._remoteLayer.set(
+                verticalAlignment: self.verticalAlignment,
+                horizontalAlignment: self.horizontalAlignment
+            )
+            self.setNeedsLayout()
         }
     }
     public var localSource: QImageLocalSource? {
         didSet(oldValue) {
             if self.localSource != oldValue {
-                if let source = self.localSource {
-                    self._localView.image = source.image
-                    self._localView.size = source.size
-                    self._localView.scale = source.scale
-                    self._localView.tintColor = source.tintColor
-                } else {
-                    self._localView.image = nil
-                    self._localView.size = nil
-                    self._localView.scale = .origin
-                    self._localView.tintColor = nil
-                }
+                self._localLayer.set(
+                    scale: self.localSource?.scale,
+                    size: self.localSource?.size,
+                    image: self.localSource?.image,
+                    tintColor: self.localSource?.tintColor
+                )
+                self.setNeedsLayout()
             }
         }
     }
@@ -126,20 +136,13 @@ open class QImageView : QDisplayView {
         didSet(oldValue) {
             if self.remoteSource != oldValue {
                 if let source = self.remoteSource {
-                    self._remoteView.image = nil
-                    self._remoteView.size = source.size
-                    self._remoteView.scale = source.scale
-                    self._remoteView.tintColor = source.tintColor
                     self._start(url: source.url, loader: source.loader, filter: source.filter)
                 } else {
-                    self._remoteView.image = nil
-                    self._remoteView.size = nil
-                    self._remoteView.scale = .origin
-                    self._remoteView.tintColor = nil
                     self._stop()
                 }
-                self._localView.isHidden = false
-                self._remoteView.isHidden = true
+                self._localLayer.isHidden = false
+                self._remoteLayer.isHidden = true
+                self.setNeedsLayout()
             }
         }
     }
@@ -151,6 +154,7 @@ open class QImageView : QDisplayView {
             super.frame = value
             if sizeChanged == true {
                 self.invalidateIntrinsicContentSize()
+                self.setNeedsLayout()
             }
         }
         get { return super.frame }
@@ -161,6 +165,7 @@ open class QImageView : QDisplayView {
             super.bounds = value
             if sizeChanged == true {
                 self.invalidateIntrinsicContentSize()
+                self.setNeedsLayout()
             }
         }
         get { return super.bounds }
@@ -169,8 +174,8 @@ open class QImageView : QDisplayView {
         get { return self.sizeThatFits(CGSize.zero) }
     }
 
-    private var _localView: View!
-    private var _remoteView: View!
+    private var _localLayer: Layer!
+    private var _remoteLayer: Layer!
     
     public required init() {
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
@@ -203,32 +208,42 @@ open class QImageView : QDisplayView {
 
         self.backgroundColor = UIColor.clear
         
-        self._localView = View(frame: self.bounds)
-        self._localView.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
-        self._localView.verticalAlignment = self.verticalAlignment
-        self._localView.horizontalAlignment = self.horizontalAlignment
-        self.addSubview(self._localView)
+        self._localLayer = Layer()
+        self._localLayer.set(
+            verticalAlignment: self.verticalAlignment,
+            horizontalAlignment: self.horizontalAlignment
+        )
+        self.layer.addSublayer(self._localLayer)
         
-        self._remoteView = View(frame: self.bounds)
-        self._remoteView.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
-        self._remoteView.verticalAlignment = self.verticalAlignment
-        self._remoteView.horizontalAlignment = self.horizontalAlignment
-        self._remoteView.isHidden = true
-        self.addSubview(self._remoteView)
+        self._remoteLayer = Layer()
+        self._remoteLayer.set(
+            verticalAlignment: self.verticalAlignment,
+            horizontalAlignment: self.horizontalAlignment
+        )
+        self._remoteLayer.isHidden = true
+        self.layer.addSublayer(self._remoteLayer)
+    }
+    
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let bounds = self.bounds
+        self._localLayer.layout(bounds: bounds)
+        self._remoteLayer.layout(bounds: bounds)
     }
     
     open override func sizeThatFits(_ size: CGSize) -> CGSize {
+        var currentScale: QImageViewScale?
         var currentImage: UIImage?
-        var currentScale: QImageViewScale
-        if let remoteImage = self._remoteView.image {
+        if let remoteImage = self._remoteLayer.image {
+            currentScale = self._remoteLayer.scale
             currentImage = remoteImage
-            currentScale = self._remoteView.scale
         } else {
-            currentImage = self._localView.image
-            currentScale = self._localView.scale
+            currentScale = self._localLayer.scale
+            currentImage = self._localLayer.image
         }
-        if let image = currentImage {
-            guard let size = currentScale.size(size, size: image.size) else {
+        if let scale = currentScale, let image = currentImage {
+            guard let size = scale.size(size, size: image.size) else {
                 return image.size.ceil()
             }
             return size
@@ -294,135 +309,137 @@ extension QImageView : IQImageLoaderTarget {
     }
     
     public func imageLoader(image: UIImage) {
-        self._remoteView.image = image
-        self._localView.isHidden = true
-        self._remoteView.isHidden = false
+        self._remoteLayer.set(
+            scale: self.remoteSource?.scale,
+            size: self.remoteSource?.size,
+            image: image,
+            tintColor: self.remoteSource?.tintColor
+        )
+        self._localLayer.isHidden = true
+        self._remoteLayer.isHidden = false
         if let progressView = self.progressView {
             progressView.isHidden = true
         }
         self.isDownloading = false
+        self.setNeedsLayout()
+        self.layoutIfNeeded()
     }
     
     public func imageLoader(error: Error) {
-        self._localView.isHidden = false
-        self._remoteView.isHidden = true
+        self._localLayer.isHidden = false
+        self._remoteLayer.isHidden = true
         if let progressView = self.progressView {
             progressView.isHidden = true
         }
         self.isDownloading = false
+        self.setNeedsLayout()
+        self.layoutIfNeeded()
     }
     
 }
 
 private extension QImageView {
     
-    class View : UIView {
+    class Layer : CALayer {
         
-        var verticalAlignment: QViewVerticalAlignment {
-            didSet { self.setNeedsDisplay() }
-        }
-        var horizontalAlignment: QViewHorizontalAlignment {
-            didSet { self.setNeedsDisplay() }
-        }
-        var scale: QImageViewScale {
-            didSet { self.setNeedsDisplay() }
-        }
-        var image: UIImage? {
-            didSet {
-                self._tintImage = nil
-                self.setNeedsDisplay()
-            }
-        }
-        var size: CGSize? {
-            didSet { self.setNeedsDisplay() }
-        }
-        override var tintColor: UIColor! {
-            set(value) { self._tintColor = value }
-            get { return self._tintColor }
-        }
+        private(set) var verticalAlignment: QViewVerticalAlignment
+        private(set) var horizontalAlignment: QViewHorizontalAlignment
+        private(set) var scale: QImageViewScale?
+        private(set) var size: CGSize?
+        private(set) var image: UIImage?
+        private(set) var tintColor: UIColor?
         override var frame: CGRect {
             set(value) {
-                let sizeChanged = super.frame.size != value.size
                 super.frame = value
-                if sizeChanged == true {
-                    self.setNeedsDisplay()
-                }
+                self.mask?.frame = self.bounds
             }
             get { return super.frame }
         }
-        override var bounds: CGRect {
-            set(value) {
-                let sizeChanged = super.bounds.size != value.size
-                super.bounds = value
-                if sizeChanged == true {
-                    self.setNeedsDisplay()
-                }
-            }
-            get { return super.bounds }
-        }
         
-        private var _tintColor: UIColor!
-        private var _tintImage: UIImage?
-        
-        override init(frame: CGRect) {
+        override init() {
             self.verticalAlignment = .center
             self.horizontalAlignment = .center
-            self.scale = .origin
-            super.init(frame: frame)
-            self.backgroundColor = UIColor.clear
-            self.contentMode = .scaleAspectFit
-            self._tintColor = super.tintColor
+            super.init()
+        }
+        
+        override init(layer: Any) {
+            guard let layer = layer as? Layer else {
+                fatalError("init(layer:) invalid copy layer")
+            }
+            self.verticalAlignment = layer.verticalAlignment
+            self.horizontalAlignment = layer.horizontalAlignment
+            super.init(layer: layer)
         }
         
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
         
-        override func draw(_ rect: CGRect) {
-            guard let context = UIGraphicsGetCurrentContext(), let image = self.image else { return }
-            let bounds = self.bounds
-            let imageRect: CGRect
-            if var scaleRect = self.scale.rect(bounds, size: self.size ?? image.size) {
-                switch self.verticalAlignment {
-                case .top: scaleRect.origin.y = bounds.origin.y
-                case .center: scaleRect.origin.y = bounds.midY - (scaleRect.height / 2)
-                case .bottom: scaleRect.origin.y = (bounds.origin.y + bounds.height) - scaleRect.height
-                }
-                switch self.horizontalAlignment {
-                case .left: scaleRect.origin.x = bounds.origin.x
-                case .center: scaleRect.origin.x = bounds.midX - (scaleRect.width / 2)
-                case .right: scaleRect.origin.x = (bounds.origin.x + bounds.width) - scaleRect.width
-                }
-                imageRect = scaleRect
-            } else {
-                imageRect = bounds
-            }
-            context.translateBy(x: 0, y: bounds.height)
-            context.scaleBy(x: 1.0, y: -1.0)
-            if let tintColor = self._tintColor {
-                var tintImage: UIImage?
-                if let cacheTintImage = self._tintImage {
-                    tintImage = cacheTintImage
-                } else if let realtimeTintImage = image.tintImage(tintColor) {
-                    self._tintImage = realtimeTintImage
-                    tintImage = realtimeTintImage
-                }
-                if let tintImage = tintImage {
-                    if let cgTintImage = tintImage.cgImage {
-                        context.draw(cgTintImage, in: imageRect)
-                    }
+        func layout(bounds: CGRect) {
+            self.frame = self._frame(bounds: bounds)
+        }
+        
+        func set(
+            verticalAlignment: QViewVerticalAlignment,
+            horizontalAlignment: QViewHorizontalAlignment
+        ) {
+            self.verticalAlignment = verticalAlignment
+            self.horizontalAlignment = horizontalAlignment
+        }
+        
+        func set(
+            scale: QImageViewScale?,
+            size: CGSize?,
+            image: UIImage?,
+            tintColor: UIColor?
+        ) {
+            self.scale = scale
+            self.size = size
+            self.image = image
+            self.tintColor = tintColor
+            if let image = image {
+                if let tintColor = self.tintColor {
+                    let maskLayer = CALayer()
+                    maskLayer.frame = self.bounds
+                    maskLayer.contents = image.cgImage
+                    self.mask = maskLayer
+                    self.contents = nil
+                    self.backgroundColor = tintColor.cgColor
                 } else {
-                    if let cgImage = image.cgImage {
-                        context.draw(cgImage, in: imageRect)
-                    }
+                    self.mask = nil
+                    self.contents = image.cgImage
+                    self.backgroundColor = nil
                 }
             } else {
-                if let cgImage = image.cgImage {
-                    context.draw(cgImage, in: imageRect)
-                }
+                self.mask = nil
+                self.contents = nil
             }
         }
         
+    }
+    
+}
+
+private extension QImageView.Layer {
+    
+    func _frame(bounds: CGRect) -> CGRect {
+        let imageRect: CGRect
+        if let image = self.image, let scale = self.scale, var scaleRect = scale.rect(bounds, size: self.size ?? image.size) {
+            switch self.verticalAlignment {
+            case .top: scaleRect.origin.y = bounds.origin.y
+            case .center: scaleRect.origin.y = bounds.midY - (scaleRect.height / 2)
+            case .bottom: scaleRect.origin.y = (bounds.origin.y + bounds.height) - scaleRect.height
+            }
+            switch self.horizontalAlignment {
+            case .left: scaleRect.origin.x = bounds.origin.x
+            case .center: scaleRect.origin.x = bounds.midX - (scaleRect.width / 2)
+            case .right: scaleRect.origin.x = (bounds.origin.x + bounds.width) - scaleRect.width
+            }
+            imageRect = scaleRect
+        } else {
+            imageRect = bounds
+        }
+        return imageRect
     }
     
 }
