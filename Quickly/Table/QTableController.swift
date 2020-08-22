@@ -11,15 +11,6 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
     public weak var tableView: TableView? {
         didSet { if self.tableView != nil { self.configure() } }
     }
-    public var rowHeight: CGFloat {
-        didSet { if let tableView = self.tableView { tableView.rowHeight = self.rowHeight } }
-    }
-    public var sectionHeaderHeight: CGFloat {
-        didSet { if let tableView = self.tableView { tableView.sectionHeaderHeight = self.sectionHeaderHeight } }
-    }
-    public var sectionFooterHeight: CGFloat {
-        didSet { if let tableView = self.tableView { tableView.sectionFooterHeight = self.sectionFooterHeight } }
-    }
     public var estimatedRowHeight: CGFloat {
         didSet { if let tableView = self.tableView { tableView.estimatedRowHeight = self.estimatedRowHeight } }
     }
@@ -69,12 +60,9 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
     public init(
         cells: [IQTableCell.Type]
     ) {
-        self.rowHeight = UITableView.automaticDimension
-        self.sectionHeaderHeight = UITableView.automaticDimension
-        self.sectionFooterHeight = UITableView.automaticDimension
-        self.estimatedRowHeight = UITableView.automaticDimension
-        self.estimatedSectionHeaderHeight = UITableView.automaticDimension
-        self.estimatedSectionFooterHeight = UITableView.automaticDimension
+        self.estimatedRowHeight = 44
+        self.estimatedSectionHeaderHeight = 44
+        self.estimatedSectionFooterHeight = 44
 
         self._decors = []
         self._aliasDecors = [:]
@@ -90,12 +78,9 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         decors: [IQTableDecor.Type],
         cells: [IQTableCell.Type]
     ) {
-        self.rowHeight = UITableView.automaticDimension
-        self.sectionHeaderHeight = UITableView.automaticDimension
-        self.sectionFooterHeight = UITableView.automaticDimension
-        self.estimatedRowHeight = UITableView.automaticDimension
-        self.estimatedSectionHeaderHeight = UITableView.automaticDimension
-        self.estimatedSectionFooterHeight = UITableView.automaticDimension
+        self.estimatedRowHeight = 44
+        self.estimatedSectionHeaderHeight = 44
+        self.estimatedSectionFooterHeight = 44
 
         self._decors = decors
         self._aliasDecors = [:]
@@ -118,9 +103,6 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
             for type in self._cells {
                 type.register(tableView: tableView)
             }
-            tableView.rowHeight = self.rowHeight
-            tableView.sectionHeaderHeight = self.sectionHeaderHeight
-            tableView.sectionFooterHeight = self.sectionFooterHeight
             tableView.estimatedRowHeight = self.estimatedRowHeight
             tableView.estimatedSectionHeaderHeight = self.estimatedSectionHeaderHeight
             tableView.estimatedSectionFooterHeight = self.estimatedSectionFooterHeight
@@ -687,6 +669,8 @@ extension QTableController : UITableViewDelegate {
         willDisplayHeaderView view: UIView,
         forSection section: Int
     ) {
+        guard let data = self.header(index: section) else { return }
+        data.cacheHeight = view.frame.height
         if let decorView = view as? IQTableDecor {
             decorView.beginDisplay()
         }
@@ -709,6 +693,8 @@ extension QTableController : UITableViewDelegate {
         willDisplayFooterView view: UIView,
         forSection section: Int
     ) {
+        guard let data = self.footer(index: section) else { return }
+        data.cacheHeight = view.frame.height
         if let decorView = view as? IQTableDecor {
             decorView.beginDisplay()
         }
@@ -788,7 +774,7 @@ extension QTableController : UITableViewDelegate {
         estimatedHeightForRowAt indexPath: IndexPath
     ) -> CGFloat {
         let row = self.row(indexPath: indexPath)
-        return row.cacheHeight ?? tableView.estimatedRowHeight
+        return row.cacheHeight ?? self.estimatedRowHeight
     }
     
     @objc
@@ -796,8 +782,8 @@ extension QTableController : UITableViewDelegate {
         _ tableView: UITableView,
         estimatedHeightForHeaderInSection section: Int
     ) -> CGFloat {
-        guard let data = self.header(index: section) else { return 0 }
-        return data.cacheHeight ?? tableView.estimatedSectionHeaderHeight
+        guard let data = self.header(index: section) else { return self.estimatedSectionFooterHeight }
+        return data.cacheHeight ?? self.estimatedSectionHeaderHeight
     }
     
     @objc
@@ -805,8 +791,8 @@ extension QTableController : UITableViewDelegate {
         _ tableView: UITableView,
         estimatedHeightForFooterInSection section: Int
     ) -> CGFloat {
-        guard let data = self.footer(index: section) else { return 0 }
-        return data.cacheHeight ?? tableView.estimatedSectionFooterHeight
+        guard let data = self.footer(index: section) else { return self.estimatedSectionFooterHeight }
+        return data.cacheHeight ?? self.estimatedSectionFooterHeight
     }
 
     @objc
