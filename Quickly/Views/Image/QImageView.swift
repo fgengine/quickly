@@ -95,54 +95,62 @@ open class QImageView : QDisplayView {
     }
     public var verticalAlignment: QViewVerticalAlignment = .center {
         didSet {
-            self._localLayer.set(
-                verticalAlignment: self.verticalAlignment,
-                horizontalAlignment: self.horizontalAlignment
-            )
-            self._remoteLayer.set(
-                verticalAlignment: self.verticalAlignment,
-                horizontalAlignment: self.horizontalAlignment
-            )
-            self.setNeedsLayout()
+            CATransaction.withoutActions({
+                self._localLayer.set(
+                    verticalAlignment: self.verticalAlignment,
+                    horizontalAlignment: self.horizontalAlignment
+                )
+                self._remoteLayer.set(
+                    verticalAlignment: self.verticalAlignment,
+                    horizontalAlignment: self.horizontalAlignment
+                )
+                self.setNeedsLayout()
+            })
         }
     }
     public var horizontalAlignment: QViewHorizontalAlignment = .center {
         didSet {
-            self._localLayer.set(
-                verticalAlignment: self.verticalAlignment,
-                horizontalAlignment: self.horizontalAlignment
-            )
-            self._remoteLayer.set(
-                verticalAlignment: self.verticalAlignment,
-                horizontalAlignment: self.horizontalAlignment
-            )
-            self.setNeedsLayout()
+            CATransaction.withoutActions({
+                self._localLayer.set(
+                    verticalAlignment: self.verticalAlignment,
+                    horizontalAlignment: self.horizontalAlignment
+                )
+                self._remoteLayer.set(
+                    verticalAlignment: self.verticalAlignment,
+                    horizontalAlignment: self.horizontalAlignment
+                )
+                self.setNeedsLayout()
+            })
         }
     }
     public var localSource: QImageLocalSource? {
         didSet(oldValue) {
             if self.localSource != oldValue {
-                self._localLayer.set(
-                    scale: self.localSource?.scale,
-                    size: self.localSource?.size,
-                    image: self.localSource?.image,
-                    tintColor: self.localSource?.tintColor
-                )
-                self.setNeedsLayout()
+                CATransaction.withoutActions({
+                    self._localLayer.set(
+                        scale: self.localSource?.scale,
+                        size: self.localSource?.size,
+                        image: self.localSource?.image,
+                        tintColor: self.localSource?.tintColor
+                    )
+                    self.setNeedsLayout()
+                })
             }
         }
     }
     public var remoteSource: QImageRemoteSource? {
         didSet(oldValue) {
             if self.remoteSource != oldValue {
-                if let source = self.remoteSource {
-                    self._start(url: source.url, loader: source.loader, filter: source.filter)
-                } else {
-                    self._stop()
-                }
-                self._localLayer.isHidden = false
-                self._remoteLayer.isHidden = true
-                self.setNeedsLayout()
+                CATransaction.withoutActions({
+                    if let source = self.remoteSource {
+                        self._start(url: source.url, loader: source.loader, filter: source.filter)
+                    } else {
+                        self._stop()
+                    }
+                    self._localLayer.isHidden = false
+                    self._remoteLayer.isHidden = true
+                    self.setNeedsLayout()
+                })
             }
         }
     }
@@ -228,8 +236,10 @@ open class QImageView : QDisplayView {
         super.layoutSubviews()
         
         let bounds = self.bounds
-        self._localLayer.layout(bounds: bounds)
-        self._remoteLayer.layout(bounds: bounds)
+        CATransaction.withoutActions({
+            self._localLayer.layout(bounds: bounds)
+            self._remoteLayer.layout(bounds: bounds)
+        })
     }
     
     open override func sizeThatFits(_ size: CGSize) -> CGSize {
@@ -309,31 +319,33 @@ extension QImageView : IQImageLoaderTarget {
     }
     
     public func imageLoader(image: UIImage) {
-        self._remoteLayer.set(
-            scale: self.remoteSource?.scale,
-            size: self.remoteSource?.size,
-            image: image,
-            tintColor: self.remoteSource?.tintColor
-        )
-        self._localLayer.isHidden = true
-        self._remoteLayer.isHidden = false
-        if let progressView = self.progressView {
-            progressView.isHidden = true
-        }
-        self.isDownloading = false
-        self.setNeedsLayout()
-        self.layoutIfNeeded()
+        CATransaction.withoutActions({
+            self._remoteLayer.set(
+                scale: self.remoteSource?.scale,
+                size: self.remoteSource?.size,
+                image: image,
+                tintColor: self.remoteSource?.tintColor
+            )
+            self._localLayer.isHidden = true
+            self._remoteLayer.isHidden = false
+            if let progressView = self.progressView {
+                progressView.isHidden = true
+            }
+            self.isDownloading = false
+            self.setNeedsLayout()
+        })
     }
     
     public func imageLoader(error: Error) {
-        self._localLayer.isHidden = false
-        self._remoteLayer.isHidden = true
-        if let progressView = self.progressView {
-            progressView.isHidden = true
-        }
-        self.isDownloading = false
-        self.setNeedsLayout()
-        self.layoutIfNeeded()
+        CATransaction.withoutActions({
+            self._localLayer.isHidden = false
+            self._remoteLayer.isHidden = true
+            if let progressView = self.progressView {
+                progressView.isHidden = true
+            }
+            self.isDownloading = false
+            self.setNeedsLayout()
+        })
     }
     
 }
