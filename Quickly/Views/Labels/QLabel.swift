@@ -101,6 +101,7 @@ open class QLabel : QDisplayView {
         let view = UILabel(frame: self.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor.clear
+        view.setContentHuggingPriority(horizontal: .required, vertical: .required)
         self.addSubview(view)
         self.addConstraints([
             view.topLayout == self.topLayout,
