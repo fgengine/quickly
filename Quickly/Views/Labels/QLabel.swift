@@ -58,15 +58,23 @@ open class QLabelStyleSheet : QDisplayStyleSheet {
 open class QLabel : QDisplayView {
     
     public var alignment: NSTextAlignment {
-        set(value) { self.label.textAlignment = value }
+        set(value) {
+            self.label.textAlignment = value
+            self.label.invalidateIntrinsicContentSize()
+        }
         get { return self.label.textAlignment }
     }
     public var lineBreakMode: NSLineBreakMode {
-        set(value) { self.label.lineBreakMode = value }
+        set(value) {
+            self.label.lineBreakMode = value
+            self.label.invalidateIntrinsicContentSize()
+        }
         get { return self.label.lineBreakMode }
     }
     public var numberOfLines: Int {
-        set(value) { self.label.numberOfLines = value }
+        set(value) {
+            self.label.numberOfLines = value
+        }
         get { return self.label.numberOfLines }
     }
     public var text: IQText? {
@@ -86,6 +94,7 @@ open class QLabel : QDisplayView {
                     self.label.text = nil
                     self.label.attributedText = nil
                 }
+                self.label.invalidateIntrinsicContentSize()
             }
         }
     }
@@ -144,14 +153,15 @@ open class QLabel : QDisplayView {
         self.backgroundColor = UIColor.clear
         self.contentMode = .center
     }
-
-    open override func invalidateIntrinsicContentSize() {
-        super.invalidateIntrinsicContentSize()
-        self.label.invalidateIntrinsicContentSize()
+    
+    open override func setContentHuggingPriority(_ priority: UILayoutPriority, for axis: NSLayoutConstraint.Axis) {
+        super.setContentHuggingPriority(priority, for: axis)
+        self.label.setContentHuggingPriority(priority, for: axis)
     }
-
-    open override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return self.label.sizeThatFits(size)
+    
+    open override func setContentCompressionResistancePriority(_ priority: UILayoutPriority, for axis: NSLayoutConstraint.Axis) {
+        super.setContentCompressionResistancePriority(priority, for: axis)
+        self.label.setContentCompressionResistancePriority(priority, for: axis)
     }
     
     public func apply(_ styleSheet: QLabelStyleSheet) {
