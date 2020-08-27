@@ -126,10 +126,6 @@ open class QLabel : QDisplayView {
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        self.setContentHuggingPriority(
-            horizontal: UILayoutPriority(rawValue: 251),
-            vertical: UILayoutPriority(rawValue: 251)
-        )
     }
 
     public convenience init(frame: CGRect, styleSheet: QLabelStyleSheet) {
@@ -152,6 +148,10 @@ open class QLabel : QDisplayView {
 
         self.backgroundColor = UIColor.clear
         self.contentMode = .center
+        self.setContentHuggingPriority(
+            horizontal: UILayoutPriority(rawValue: 251),
+            vertical: UILayoutPriority(rawValue: 251)
+        )
     }
     
     open override func setContentHuggingPriority(_ priority: UILayoutPriority, for axis: NSLayoutConstraint.Axis) {
