@@ -199,7 +199,7 @@ public class QMultiTextField : QDisplayView, IQField {
     public var placeholderInsets: UIEdgeInsets = UIEdgeInsets.zero {
         didSet(oldValue) {
             if self.placeholderInsets != oldValue {
-                self.setNeedsLayout()
+                self.setNeedsUpdateConstraints()
             }
         }
     }
@@ -276,20 +276,15 @@ public class QMultiTextField : QDisplayView, IQField {
     public var onEndEditing: Closure?
     public var onPressedAction: ActionClosure?
     public var onChangedHeight: Closure?
-    
-    open override var intrinsicContentSize: CGSize {
-        get {
-            if self._placeholderLabel.isHidden == false {
-                return self._placeholderLabel.intrinsicContentSize
-            }
-            return self._field.intrinsicContentSize
-        }
-    }
 
     private var _placeholderLabel: QLabel!
     private var _field: Field!
     private var _fieldDelegate: FieldDelegate!
     private var _observer: QObserver< IQMultiTextFieldObserver > = QObserver< IQMultiTextFieldObserver >()
+    private var _constraints: [NSLayoutConstraint] = [] {
+        willSet { self.removeConstraints(self._constraints) }
+        didSet { self.addConstraints(self._constraints) }
+    }
     
     open override func setup() {
         super.setup()
@@ -299,19 +294,33 @@ public class QMultiTextField : QDisplayView, IQField {
         self._fieldDelegate = FieldDelegate(field: self)
         
         self._placeholderLabel = QLabel(frame: self.bounds.inset(by: self.placeholderInsets))
-        self._placeholderLabel.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
+        self._placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(self._placeholderLabel)
         
         self._field = Field(frame: self.bounds)
-        self._field.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
+        self._field.translatesAutoresizingMaskIntoConstraints = false
         self._field.textContainer.lineFragmentPadding = 0
-        self._field.textContainerInset = UIEdgeInsets.zero
         self._field.layoutManager.usesFontLeading = false
         self._field.inputAccessoryView = self.toolbar
         self._field.delegate = self._fieldDelegate
         self.insertSubview(self._field, aboveSubview: self._placeholderLabel)
         
         self.textHeight = self._textHeight()
+    }
+    
+    open override func updateConstraints() {
+        super.updateConstraints()
+        
+        self._constraints = [
+            self._placeholderLabel.topLayout == self.topLayout.offset(self.placeholderInsets.top),
+            self._placeholderLabel.leadingLayout == self.leadingLayout.offset(self.placeholderInsets.left),
+            self._placeholderLabel.trailingLayout == self.trailingLayout.offset(-self.placeholderInsets.right),
+            self._placeholderLabel.bottomLayout == self.bottomLayout.offset(-self.placeholderInsets.bottom),
+            self._field.topLayout == self.topLayout,
+            self._field.leadingLayout == self.leadingLayout,
+            self._field.trailingLayout == self.trailingLayout,
+            self._field.bottomLayout == self.bottomLayout
+        ]
     }
     
     public func add(observer: IQMultiTextFieldObserver, priority: UInt) {
@@ -324,28 +333,6 @@ public class QMultiTextField : QDisplayView, IQField {
     
     open func beginEditing() {
         self._field.becomeFirstResponder()
-    }
-    
-    open override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        let placeholderAvailableRect = self.bounds.inset(by: self.placeholderInsets)
-        let placeholderFitSize = self._placeholderLabel.sizeThatFits(placeholderAvailableRect.size)
-        self._placeholderLabel.frame = CGRect(
-            origin: placeholderAvailableRect.origin,
-            size: CGSize(
-                width: placeholderAvailableRect.width,
-                height: placeholderFitSize.height
-            )
-        )
-    }
-    
-    open override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return self._field.sizeThatFits(size)
-    }
-    
-    open override func sizeToFit() {
-        return self._field.sizeToFit()
     }
     
     public func apply(_ styleSheet: QMultiTextFieldStyleSheet) {
