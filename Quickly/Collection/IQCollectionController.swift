@@ -31,6 +31,8 @@ public protocol IQCollectionController : UICollectionViewDataSource, UICollectio
     var isBatchUpdating: Bool { get }
 
     func configure()
+    
+    func rebuild()
 
     func add(observer: IQCollectionControllerObserver, priority: UInt)
     func remove(observer: IQCollectionControllerObserver)

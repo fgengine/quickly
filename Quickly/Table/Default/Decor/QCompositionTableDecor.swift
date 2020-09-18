@@ -53,8 +53,8 @@ open class QCompositionTableDecor< Composition: IQComposition > : QBackgroundCol
         super.prepareForReuse()
     }
     
-    open override func set(data: DataType, spec: IQContainerSpec, animated: Bool) {
-        super.set(data: data, spec: spec, animated: animated)
+    open override func prepare(data: DataType, spec: IQContainerSpec, animated: Bool) {
+        super.prepare(data: data, spec: spec, animated: animated)
         self.composition.prepare(composable: data.composable, spec: spec, animated: animated)
     }
 

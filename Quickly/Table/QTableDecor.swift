@@ -33,8 +33,14 @@ open class QTableDecor< DataType: IQTableData > : UITableViewHeaderFooterView, I
     open func configure() {
     }
 
-    open func set(data: DataType, spec: IQContainerSpec, animated: Bool) {
+    open func prepare(data: DataType, spec: IQContainerSpec, animated: Bool) {
         self.data = data
+    }
+    
+    open func beginDisplay() {
+    }
+    
+    open func endDisplay() {
     }
 
 }

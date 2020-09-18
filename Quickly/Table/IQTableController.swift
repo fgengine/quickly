@@ -32,9 +32,6 @@ public protocol IQTableController : UITableViewDataSource, UITableViewDelegate {
     typealias Cell = IQTableCell.DequeueType
 
     var tableView: TableView? { set get }
-    var rowHeight: CGFloat { set get }
-    var sectionHeaderHeight: CGFloat { set get }
-    var sectionFooterHeight: CGFloat { set get }
     var estimatedRowHeight: CGFloat { set get }
     var estimatedSectionHeaderHeight: CGFloat { set get }
     var estimatedSectionFooterHeight: CGFloat { set get }
@@ -49,6 +46,8 @@ public protocol IQTableController : UITableViewDataSource, UITableViewDelegate {
     func setup()
     
     func configure()
+    
+    func rebuild()
 
     func add(observer: IQTableControllerObserver, priority: UInt)
     func remove(observer: IQTableControllerObserver)

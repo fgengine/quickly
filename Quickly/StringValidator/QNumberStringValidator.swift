@@ -49,23 +49,25 @@ open class QNumberStringValidator : IQStringValidator {
     }
 
     open func validate(_ string: String) -> QStringValidatorResult {
-        var errors: [String] = []
+        var errors = Set< String >()
         if let number = NSDecimalNumber.decimalNumber(from: string) {
             let value = number as Decimal
             if let limit = self.minimumValue, let error = self.minimumError {
                 if value < limit {
-                    errors.append(error)
+                    errors.insert(error)
                 }
             }
             if let limit = self.maximumValue, let error = self.maximumError {
                 if value > limit {
-                    errors.append(error)
+                    errors.insert(error)
                 }
             }
         } else {
-            errors.append(self.notNumberError)
+            errors.insert(self.notNumberError)
         }
-        return QStringValidatorResult(errors: errors)
+        return QStringValidatorResult(
+            errors: Array(errors)
+        )
     }
 
 }

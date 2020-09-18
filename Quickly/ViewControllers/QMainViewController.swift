@@ -21,6 +21,7 @@ open class QMainViewController : QViewController {
             vc.parentViewController = self
             if self.isLoaded == true {
                 self._appendBackgroundController(vc)
+                self.layoutIfNeeded()
                 vc.willPresent(animated: false)
                 vc.didPresent(animated: false)
             }
@@ -47,6 +48,7 @@ open class QMainViewController : QViewController {
             vc.parentViewController = self
             if self.isLoaded == true {
                 self._appendContentController(vc)
+                self.layoutIfNeeded()
                 vc.willPresent(animated: false)
                 vc.didPresent(animated: false)
             }
@@ -73,6 +75,7 @@ open class QMainViewController : QViewController {
             vc.parentViewController = self
             if self.isLoaded == true {
                 self._appendModalContainer(vc)
+                self.layoutIfNeeded()
                 vc.willPresent(animated: false)
                 vc.didPresent(animated: false)
             }
@@ -95,6 +98,7 @@ open class QMainViewController : QViewController {
             vc.parentViewController = self
             if self.isLoaded == true {
                 self._appendPushContainer(vc)
+                self.layoutIfNeeded()
                 vc.willPresent(animated: false)
                 vc.didPresent(animated: false)
             }
@@ -117,6 +121,7 @@ open class QMainViewController : QViewController {
             vc.parentViewController = self
             if self.isLoaded == true {
                 self._appendDialogContainer(vc)
+                self.layoutIfNeeded()
                 vc.willPresent(animated: false)
                 vc.didPresent(animated: false)
             }

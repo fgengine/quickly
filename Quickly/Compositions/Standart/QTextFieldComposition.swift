@@ -14,7 +14,7 @@ open class QTextFieldComposable : QComposable {
     public var isValid: Bool {
         get {
             guard let validator = self.field.validator else { return true }
-            return validator.validate(self.text)
+            return validator.validate(self.text).isValid
         }
     }
     public var isEditing: Bool

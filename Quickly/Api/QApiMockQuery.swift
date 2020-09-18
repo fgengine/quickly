@@ -45,6 +45,10 @@ public final class QApiMockQuery< ResponseType: IQApiResponse > : IQApiQuery {
         }
     }
     
+    public func redirect(request: URLRequest) -> URLRequest? {
+        return nil
+    }
+    
     public func cancel() {
         self._workItem?.cancel()
         self._workItem = nil

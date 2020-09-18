@@ -26,7 +26,7 @@ internal extension QDatabase.Statement {
     
 }
 
-// MARK: Bool : IQDatabaseInputValue -
+// MARK: Bool : IQDatabaseInputValue
 
 extension Bool : IQDatabaseInputValue {
     
@@ -36,7 +36,7 @@ extension Bool : IQDatabaseInputValue {
     
 }
 
-// MARK: Int8 : IQDatabaseInputValue -
+// MARK: Int8 : IQDatabaseInputValue
 
 extension Int8 : IQDatabaseInputValue {
     
@@ -46,7 +46,7 @@ extension Int8 : IQDatabaseInputValue {
     
 }
 
-// MARK: UInt8 : IQDatabaseInputValue -
+// MARK: UInt8 : IQDatabaseInputValue
 
 extension UInt8 : IQDatabaseInputValue {
     
@@ -56,7 +56,7 @@ extension UInt8 : IQDatabaseInputValue {
     
 }
 
-// MARK: Int16 : IQDatabaseInputValue -
+// MARK: Int16 : IQDatabaseInputValue
 
 extension Int16 : IQDatabaseInputValue {
     
@@ -66,7 +66,7 @@ extension Int16 : IQDatabaseInputValue {
     
 }
 
-// MARK: UInt16 : IQDatabaseInputValue -
+// MARK: UInt16 : IQDatabaseInputValue
 
 extension UInt16 : IQDatabaseInputValue {
     
@@ -76,7 +76,7 @@ extension UInt16 : IQDatabaseInputValue {
     
 }
 
-// MARK: Int32 : IQDatabaseInputValue -
+// MARK: Int32 : IQDatabaseInputValue
 
 extension Int32 : IQDatabaseInputValue {
     
@@ -86,7 +86,7 @@ extension Int32 : IQDatabaseInputValue {
     
 }
 
-// MARK: UInt32 : IQDatabaseInputValue -
+// MARK: UInt32 : IQDatabaseInputValue
 
 extension UInt32 : IQDatabaseInputValue {
     
@@ -96,7 +96,7 @@ extension UInt32 : IQDatabaseInputValue {
     
 }
 
-// MARK: Int64 : IQDatabaseInputValue -
+// MARK: Int64 : IQDatabaseInputValue
 
 extension Int64 : IQDatabaseInputValue {
     
@@ -106,7 +106,7 @@ extension Int64 : IQDatabaseInputValue {
     
 }
 
-// MARK: UInt64 : IQDatabaseInputValue -
+// MARK: UInt64 : IQDatabaseInputValue
 
 extension UInt64 : IQDatabaseInputValue {
     
@@ -116,7 +116,7 @@ extension UInt64 : IQDatabaseInputValue {
     
 }
 
-// MARK: Int : IQDatabaseInputValue -
+// MARK: Int : IQDatabaseInputValue
 
 extension Int : IQDatabaseInputValue {
     
@@ -126,7 +126,7 @@ extension Int : IQDatabaseInputValue {
     
 }
 
-// MARK: UInt : IQDatabaseInputValue -
+// MARK: UInt : IQDatabaseInputValue
 
 extension UInt : IQDatabaseInputValue {
     
@@ -136,7 +136,7 @@ extension UInt : IQDatabaseInputValue {
     
 }
 
-// MARK: Float : IQDatabaseInputValue -
+// MARK: Float : IQDatabaseInputValue
 
 extension Float : IQDatabaseInputValue {
     
@@ -146,7 +146,7 @@ extension Float : IQDatabaseInputValue {
     
 }
 
-// MARK: Double : IQDatabaseInputValue -
+// MARK: Double : IQDatabaseInputValue
 
 extension Double : IQDatabaseInputValue {
     
@@ -156,7 +156,7 @@ extension Double : IQDatabaseInputValue {
     
 }
 
-// MARK: CGFloat : IQDatabaseInputValue -
+// MARK: CGFloat : IQDatabaseInputValue
 
 extension CGFloat : IQDatabaseInputValue {
     
@@ -166,7 +166,7 @@ extension CGFloat : IQDatabaseInputValue {
     
 }
 
-// MARK: Decimal : IQDatabaseInputValue -
+// MARK: Decimal : IQDatabaseInputValue
 
 extension Decimal : IQDatabaseInputValue {
     
@@ -176,7 +176,7 @@ extension Decimal : IQDatabaseInputValue {
     
 }
 
-// MARK: String : IQDatabaseInputValue -
+// MARK: String : IQDatabaseInputValue
 
 extension String : IQDatabaseInputValue {
     
@@ -186,7 +186,7 @@ extension String : IQDatabaseInputValue {
     
 }
 
-// MARK: URL : IQDatabaseInputValue -
+// MARK: URL : IQDatabaseInputValue
 
 extension URL : IQDatabaseInputValue {
     
@@ -196,7 +196,7 @@ extension URL : IQDatabaseInputValue {
     
 }
 
-// MARK: Date : IQDatabaseInputValue -
+// MARK: Date : IQDatabaseInputValue
 
 extension Date : IQDatabaseInputValue {
     
@@ -206,7 +206,7 @@ extension Date : IQDatabaseInputValue {
     
 }
 
-// MARK: Data : IQDatabaseInputValue -
+// MARK: Data : IQDatabaseInputValue
 
 extension Data : IQDatabaseInputValue {
     
@@ -216,7 +216,7 @@ extension Data : IQDatabaseInputValue {
     
 }
 
-// MARK: Optional : IQDatabaseInputValue -
+// MARK: Optional : IQDatabaseInputValue
 
 extension Optional : IQDatabaseInputValue where Wrapped : IQDatabaseInputValue {
     

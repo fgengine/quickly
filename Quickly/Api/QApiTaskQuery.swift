@@ -93,6 +93,21 @@ public final class QApiTaskQuery< RequestType: IQApiRequest, ResponseType: IQApi
             task.resume()
         }
     }
+    
+    public func redirect(request: URLRequest) -> URLRequest? {
+        guard let original = self.task?.originalRequest else { return nil }
+        guard self.request.redirect.contains(.enabled) == true else { return nil }
+        var copy = request
+        if self.request.redirect.contains(.authorization) == true {
+            if let authorization = original.value(forHTTPHeaderField: "Authorization") {
+                copy.addValue(authorization, forHTTPHeaderField: "Authorization")
+            }
+        }
+        if self.request.redirect.contains(.method) == true {
+            copy.httpMethod = original.httpMethod
+        }
+        return copy
+    }
 
     public func cancel() {
         if let task = self.task {

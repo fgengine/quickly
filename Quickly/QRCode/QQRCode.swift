@@ -23,9 +23,10 @@ public struct QQRCode {
     }
     
     public func generate(
-        color: UIColor = UIColor.white,
-        backgroundColor: UIColor = UIColor.black,
-        size: CGSize = CGSize(width: 200, height: 200)
+        color: UIColor = UIColor.black,
+        backgroundColor: UIColor = UIColor.white,
+        insets: UIEdgeInsets,
+        size: CGSize
     ) -> UIImage? {
         guard let qrFilter = CIFilter(name: "CIQRCodeGenerator") else {
             return nil
@@ -46,7 +47,23 @@ public struct QQRCode {
         let ciImageSize = ciImage.extent.size
         let widthRatio = size.width / ciImageSize.width
         let heightRatio = size.height / ciImageSize.height
-        return ciImage.nonInterpolatedImage(withScale: CGPoint(x: widthRatio, y: heightRatio))
+        guard
+            let qrCodeImage = ciImage.nonInterpolatedImage(withScale: CGPoint(x: widthRatio, y: heightRatio)),
+            let qrCodeCgImage = qrCodeImage.cgImage,
+            let qrCodeCgColorSpace = qrCodeCgImage.colorSpace
+        else {
+            return nil
+        }
+        guard let context = CGContext(data: nil, width: Int(size.width + insets.left + insets.right), height: Int(size.height + insets.top + insets.bottom), bitsPerComponent: qrCodeCgImage.bitsPerComponent, bytesPerRow: 0, space: qrCodeCgColorSpace, bitmapInfo: qrCodeCgImage.bitmapInfo.rawValue) else {
+            return nil
+        }
+        context.setFillColor(backgroundColor.cgColor)
+        context.fill(CGRect(x: 0, y: 0, width: context.width, height: context.height))
+        context.draw(qrCodeCgImage, in: CGRect(x: insets.left, y: insets.bottom, width: size.width, height: size.height))
+        guard let cgImage = context.makeImage() else {
+            return nil
+        }
+        return UIImage(cgImage: cgImage)
     }
     
 }

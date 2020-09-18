@@ -24,11 +24,7 @@ open class QApiResponse : IQApiResponse {
         }
         do {
             if let data = data {
-                if try self.hasParse(data: data) == true {
-                    try self.parse(data: data)
-                } else {
-                    try self.parse()
-                }
+                try self.parse(data: data)
             } else {
                 try self.parse()
             }
@@ -39,35 +35,9 @@ open class QApiResponse : IQApiResponse {
     
     open func parse() throws {
     }
-    
-    open func hasParse(data: Data) throws -> Bool {
-        return true
-    }
 
     open func parse(data: Data) throws {
-        if let json = try? QJson(data: data) {
-            do {
-                try self.parse(json: json)
-            } catch let error {
-                self.parse(error: error)
-            }
-        } else if let xml = try? QXmlReader(data: data) {
-            do {
-                try self.parse(xml: xml.document)
-            } catch let error {
-                self.parse(error: error)
-            }
-        } else {
-            self.parse(error: QApiError.invalidResponse)
-        }
-    }
-
-    open func parse(json: QJson) throws {
-        self.parse(error: QApiError.invalidResponse)
-    }
-    
-    open func parse(xml: QXmlDocument) throws {
-        self.parse(error: QApiError.invalidResponse)
+        throw QApiError.invalidResponse
     }
 
     open func parse(error: Error) {

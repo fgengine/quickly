@@ -88,6 +88,10 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
                 type.register(collectionView: collectionView)
             }
         }
+        self.rebuild()
+    }
+    
+    open func rebuild() {
         self.reload()
     }
 

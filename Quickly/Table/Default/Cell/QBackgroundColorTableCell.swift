@@ -56,8 +56,8 @@ open class QBackgroundColorTableRow : QTableRow {
 
 open class QBackgroundColorTableCell< RowType: QBackgroundColorTableRow > : QTableCell< RowType > {
 
-    open override func set(row: RowType, spec: IQContainerSpec, animated: Bool) {
-        super.set(row: row, spec: spec, animated: animated)
+    open override func prepare(row: RowType, spec: IQContainerSpec, animated: Bool) {
+        super.prepare(row: row, spec: spec, animated: animated)
 
         self._applyContentBackgroundColor(
             row: row,

@@ -4,6 +4,7 @@
 
 open class QAppWireframe< ContextType: IQContext > : IQWireframe, IQWireframeDeeplinkable, IQContextable {
     
+    public private(set) var context: ContextType
     public private(set) var window: QWindow
     public var viewController: QMainViewController
     public var backgroundViewController: IQViewController? {
@@ -26,15 +27,14 @@ open class QAppWireframe< ContextType: IQContext > : IQWireframe, IQWireframeDee
         set(value) { self.viewController.pushContainerViewController = value }
         get { return self.viewController.pushContainerViewController }
     }
-    public private(set) var context: ContextType
 
     private var _wireframe: AnyObject?
 
     public init(
         context: ContextType
     ) {
-        self.viewController = QMainViewController()
         self.context = context
+        self.viewController = QMainViewController()
         self.window = QWindow(self.viewController)
         self.setup()
     }

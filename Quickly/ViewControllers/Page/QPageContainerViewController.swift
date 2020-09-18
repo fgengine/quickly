@@ -364,19 +364,22 @@ open class QPageContainerViewController : QViewController, IQPageContainerViewCo
     // MARK: IQModalContentViewController
     
     open func modalShouldInteractive() -> Bool {
-        return true
+        guard let currentViewController = self.currentViewController as? IQModalContentViewController else { return false }
+        return currentViewController.modalShouldInteractive()
     }
     
     // MARK: IQHamburgerContentViewController
     
     open func hamburgerShouldInteractive() -> Bool {
-        return true
+        guard let currentViewController = self.currentViewController as? IQHamburgerContentViewController else { return false }
+        return currentViewController.hamburgerShouldInteractive()
     }
     
     // MARK: IQJalousieContentViewController
     
     open func jalousieShouldInteractive() -> Bool {
-        return true
+        guard let currentViewController = self.currentViewController as? IQJalousieContentViewController else { return false }
+        return currentViewController.jalousieShouldInteractive()
     }
     
 }

@@ -24,7 +24,6 @@ public final class QJalousieViewControllerInteractiveAnimation : IQJalousieViewC
     public var deltaPosition: CGFloat
     public var velocity: CGPoint
     public var acceleration: CGFloat
-    public var finishDistanceRate: CGFloat
     public var ease: IQAnimationEase
     public var canFinish: Bool
     
@@ -33,7 +32,6 @@ public final class QJalousieViewControllerInteractiveAnimation : IQJalousieViewC
         detailFullscreenSize: CGFloat = UIScreen.main.bounds.height,
         detailShowedSize: CGFloat = UIScreen.main.bounds.height * 0.5,
         acceleration: CGFloat = 1200,
-        finishDistanceRate: CGFloat = 0.4,
         ease: IQAnimationEase = QAnimationEaseLinear()
     ) {
         self.currentState = .closed
@@ -44,7 +42,6 @@ public final class QJalousieViewControllerInteractiveAnimation : IQJalousieViewC
         self.deltaPosition = 0
         self.velocity = CGPoint.zero
         self.acceleration = acceleration
-        self.finishDistanceRate = finishDistanceRate
         self.ease = ease
         self.canFinish = false
     }
@@ -85,6 +82,7 @@ public final class QJalousieViewControllerInteractiveAnimation : IQJalousieViewC
         var positionDelta: CGFloat = position.y - self.position.y
         let contentBeginFrame, contentEndFrame: CGRect
         let detailBeginFrame, detailEndFrame: CGRect
+        let deviation: CGFloat
         switch self.currentState {
         case .fullscreen:
             if positionDelta < 0 {
@@ -93,24 +91,28 @@ public final class QJalousieViewControllerInteractiveAnimation : IQJalousieViewC
                 contentEndFrame = self.contentFullscreenFrame
                 detailBeginFrame = self.detailFullscreenFrame
                 detailEndFrame = self.detailFullscreenFrame
+                deviation = 0
                 self.targetState = .fullscreen
             } else if positionDelta > self.detailShowedSize {
-                contentBeginFrame = self.contentFullscreenFrame
+                contentBeginFrame = self.contentShowedFrame
                 contentEndFrame = self.contentClosedFrame
-                detailBeginFrame = self.detailFullscreenFrame
+                detailBeginFrame = self.detailShowedFrame
                 detailEndFrame = self.detailClosedFrame
+                deviation = self.detailShowedSize
                 self.targetState = .closed
             } else if positionDelta > 0 {
                 contentBeginFrame = self.contentFullscreenFrame
                 contentEndFrame = self.contentShowedFrame
                 detailBeginFrame = self.detailFullscreenFrame
                 detailEndFrame = self.detailShowedFrame
+                deviation = 0
                 self.targetState = .showed
             } else {
                 contentBeginFrame = self.contentFullscreenFrame
                 contentEndFrame = self.contentFullscreenFrame
                 detailBeginFrame = self.detailFullscreenFrame
                 detailEndFrame = self.detailFullscreenFrame
+                deviation = 0
                 self.targetState = .fullscreen
             }
         case .showed:
@@ -120,18 +122,21 @@ public final class QJalousieViewControllerInteractiveAnimation : IQJalousieViewC
                 contentEndFrame = self.contentFullscreenFrame
                 detailBeginFrame = self.detailShowedFrame
                 detailEndFrame = self.detailFullscreenFrame
+                deviation = 0
                 self.targetState = .fullscreen
             } else if positionDelta > 0 {
                 contentBeginFrame = self.contentShowedFrame
                 contentEndFrame = self.contentClosedFrame
                 detailBeginFrame = self.detailShowedFrame
                 detailEndFrame = self.detailClosedFrame
+                deviation = 0
                 self.targetState = .closed
             } else {
                 contentBeginFrame = self.contentShowedFrame
                 contentEndFrame = self.contentShowedFrame
                 detailBeginFrame = self.detailShowedFrame
                 detailEndFrame = self.detailShowedFrame
+                deviation = 0
                 self.targetState = .showed
             }
         case .closed:
@@ -139,15 +144,16 @@ public final class QJalousieViewControllerInteractiveAnimation : IQJalousieViewC
             contentEndFrame = self.contentClosedFrame
             detailBeginFrame = self.detailClosedFrame
             detailEndFrame = self.detailClosedFrame
+            deviation = 0
             self.targetState = .closed
         }
         if contentBeginFrame != contentEndFrame || detailBeginFrame != detailEndFrame {
             let detailDelta = detailBeginFrame.topPoint.distance(to: detailEndFrame.topPoint)
-            self.deltaPosition = self.ease.lerp(positionDelta, from: 0, to: detailDelta)
-            let progress = max(0, min(self.deltaPosition / detailDelta, 1))
+            self.deltaPosition = self.ease.lerp(positionDelta, from: 0, to: detailDelta + deviation)
+            let progress = max(0, min((self.deltaPosition - deviation) / detailDelta, 1))
             self.contentViewController?.view.frame = contentBeginFrame.lerp(contentEndFrame, progress: progress)
             self.detailViewController?.view.frame = detailBeginFrame.lerp(detailEndFrame, progress: progress)
-            self.canFinish = self.deltaPosition > (detailDelta * self.finishDistanceRate)
+            self.canFinish = self.currentState != self.targetState
         }
     }
     

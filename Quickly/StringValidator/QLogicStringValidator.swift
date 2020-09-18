@@ -21,13 +21,15 @@ open class QLogicStringValidator : IQStringValidator {
     }
 
     public func validate(_ string: String) -> QStringValidatorResult {
-        var errors: [String] = []
+        var errors = Set< String >()
         switch self.mode {
         case .and:
             for validator in self.validators {
                 let result = validator.validate(string)
                 if result.isValid == false {
-                    errors.append(contentsOf: result.errors)
+                    for error in result.errors {
+                        errors.insert(error)
+                    }
                 }
             }
         case .or:
@@ -36,12 +38,14 @@ open class QLogicStringValidator : IQStringValidator {
                 if result.isValid == true {
                     break
                 } else {
-                    errors.append(contentsOf: result.errors)
+                    for error in result.errors {
+                        errors.insert(error)
+                    }
                 }
             }
         }
         return QStringValidatorResult(
-            errors: errors
+            errors: Array(errors)
         )
     }
 

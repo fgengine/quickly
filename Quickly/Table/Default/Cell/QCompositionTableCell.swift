@@ -105,8 +105,8 @@ open class QCompositionTableCell< Composition: IQComposition > : QBackgroundColo
         super.prepareForReuse()
     }
     
-    open override func set(row: RowType, spec: IQContainerSpec, animated: Bool) {
-        super.set(row: row, spec: spec, animated: animated)
+    open override func prepare(row: RowType, spec: IQContainerSpec, animated: Bool) {
+        super.prepare(row: row, spec: spec, animated: animated)
         self._prepareComposition(row: row, spec: spec, highlighted: self.isHighlighted, selected: self.isSelected, animated: animated)
     }
     

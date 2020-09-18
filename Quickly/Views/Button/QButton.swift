@@ -211,14 +211,6 @@ public class QButton : QView {
             }
         }
     }
-    open override var intrinsicContentSize: CGSize {
-        get {
-            return self.sizeThatFits(CGSize(
-                width: CGFloat.greatestFiniteMagnitude,
-                height: CGFloat.greatestFiniteMagnitude
-            ))
-        }
-    }
     
     public required init() {
         super.init(frame: CGRect(x: 0, y: 0, width: 120, height: 40))
@@ -248,6 +240,10 @@ public class QButton : QView {
         super.setup()
 
         self.backgroundColor = UIColor.clear
+        self.setContentHuggingPriority(
+            horizontal: UILayoutPriority(rawValue: 252),
+            vertical: UILayoutPriority(rawValue: 252)
+        )
 
         self.addSubview(self.backgroundView)
         self.addSubview(self.contentView)
@@ -257,6 +253,22 @@ public class QButton : QView {
         self.addGestureRecognizer(self.tapGesture)
         
         self._invalidate()
+    }
+    
+    open override func setContentHuggingPriority(_ priority: UILayoutPriority, for axis: NSLayoutConstraint.Axis) {
+        super.setContentHuggingPriority(priority, for: axis)
+        self.backgroundView.setContentHuggingPriority(priority, for: axis)
+        self.contentView.setContentHuggingPriority(priority, for: axis)
+        self.imageView.setContentHuggingPriority(priority, for: axis)
+        self.textLabel.setContentHuggingPriority(priority, for: axis)
+    }
+    
+    open override func setContentCompressionResistancePriority(_ priority: UILayoutPriority, for axis: NSLayoutConstraint.Axis) {
+        super.setContentCompressionResistancePriority(priority, for: axis)
+        self.backgroundView.setContentCompressionResistancePriority(priority, for: axis)
+        self.contentView.setContentCompressionResistancePriority(priority, for: axis)
+        self.imageView.setContentCompressionResistancePriority(priority, for: axis)
+        self.textLabel.setContentCompressionResistancePriority(priority, for: axis)
     }
 
     public func isSpinnerAnimating() -> Bool {
@@ -298,77 +310,6 @@ public class QButton : QView {
         }
     }
 
-    open override func invalidateIntrinsicContentSize() {
-        super.invalidateIntrinsicContentSize()
-        self.imageView.invalidateIntrinsicContentSize()
-        self.textLabel.invalidateIntrinsicContentSize()
-    }
-
-    open override func sizeThatFits(_ size: CGSize) -> CGSize {
-        let contentSize = CGSize(
-            width: size.width - (self.contentInsets.left + self.contentInsets.right),
-            height: size.height - (self.contentInsets.top + self.contentInsets.bottom)
-        )
-        var imageSize = CGSize.zero
-        var textSize = CGSize.zero
-        if self.isSpinnerAnimating() == true {
-            let spinnerSizeThatFits = self.spinnerView!.sizeThatFits(contentSize)
-            imageSize = CGSize(
-                width: self.imageInsets.left + spinnerSizeThatFits.width + self.imageInsets.right,
-                height: self.imageInsets.top + spinnerSizeThatFits.height + self.imageInsets.bottom
-            )
-            switch self.spinnerPosition {
-            case .fill:
-                break
-            case .image:
-                if self.textLabel.alpha > CGFloat.leastNonzeroMagnitude {
-                    let textSizeThatFits = self.textLabel.sizeThatFits(contentSize)
-                    textSize = CGSize(
-                        width: self.textInsets.left + textSizeThatFits.width + self.textInsets.right,
-                        height: self.textInsets.top + textSizeThatFits.height + self.textInsets.bottom
-                    )
-                }
-                break
-            }
-        } else {
-            if self.imageView.alpha > CGFloat.leastNonzeroMagnitude {
-                let imageSizeThatFits = self.imageView.sizeThatFits(CGSize.zero)
-                imageSize = CGSize(
-                    width: self.imageInsets.left + imageSizeThatFits.width + self.imageInsets.right,
-                    height: self.imageInsets.top + imageSizeThatFits.height + self.imageInsets.bottom
-                )
-            }
-            if self.textLabel.alpha > CGFloat.leastNonzeroMagnitude {
-                let textSizeThatFits = self.textLabel.sizeThatFits(contentSize)
-                textSize = CGSize(
-                    width: self.textInsets.left + textSizeThatFits.width + self.textInsets.right,
-                    height: self.textInsets.top + textSizeThatFits.height + self.textInsets.bottom
-                )
-            }
-        }
-        switch self.imagePosition {
-        case .top, .bottom:
-            return CGSize(
-                width: self.contentInsets.left + max(imageSize.width, textSize.width) + self.contentInsets.right,
-                height: self.contentInsets.top + imageSize.height + textSize.height + self.contentInsets.bottom
-            )
-        case .left, .right:
-            return CGSize(
-                width: self.contentInsets.left + imageSize.width + textSize.width + self.contentInsets.right,
-                height: self.contentInsets.top + max(imageSize.height, textSize.height) + self.contentInsets.bottom
-            )
-        }
-    }
-
-    open override func sizeToFit() {
-        var frame = self.frame
-        frame.size = self.sizeThatFits(CGSize(
-            width: CGFloat.greatestFiniteMagnitude,
-            height: CGFloat.greatestFiniteMagnitude
-        ))
-        self.frame = frame
-    }
-
     open override func updateConstraints() {
         var constraints: [NSLayoutConstraint] = [
             self.backgroundView.topLayout == self.topLayout,
@@ -385,17 +326,17 @@ public class QButton : QView {
         case .left:
             constraints.append(contentsOf: [
                 self.contentView.leadingLayout == self.leadingLayout.offset(self.contentInsets.left),
-                self.contentView.trailingLayout <= self.trailingLayout.offset(-self.contentInsets.right)
+                self.contentView.trailingLayout == self.trailingLayout.offset(-self.contentInsets.right)
             ])
         case .center:
             constraints.append(contentsOf: [
                 self.contentView.centerXLayout == self.centerXLayout,
-                self.contentView.leadingLayout >= self.leadingLayout.offset(self.contentInsets.left),
-                self.contentView.trailingLayout <= self.trailingLayout.offset(-self.contentInsets.right)
+                self.contentView.leadingLayout == self.leadingLayout.offset(self.contentInsets.left),
+                self.contentView.trailingLayout == self.trailingLayout.offset(-self.contentInsets.right)
             ])
         case .right:
             constraints.append(contentsOf: [
-                self.contentView.leadingLayout >= self.leadingLayout.offset(self.contentInsets.left),
+                self.contentView.leadingLayout == self.leadingLayout.offset(self.contentInsets.left),
                 self.contentView.trailingLayout == self.trailingLayout.offset(-self.contentInsets.right)
             ])
         }
@@ -408,17 +349,17 @@ public class QButton : QView {
         case .top:
             constraints.append(contentsOf: [
                 self.contentView.topLayout == self.topLayout.offset(self.contentInsets.top),
-                self.contentView.bottomLayout <= self.bottomLayout.offset(-self.contentInsets.bottom)
+                self.contentView.bottomLayout == self.bottomLayout.offset(-self.contentInsets.bottom)
             ])
         case .center:
             constraints.append(contentsOf: [
                 self.contentView.centerYLayout == self.centerYLayout,
-                self.contentView.topLayout >= self.topLayout.offset(self.contentInsets.top),
-                self.contentView.bottomLayout <= self.bottomLayout.offset(-self.contentInsets.bottom)
+                self.contentView.topLayout == self.topLayout.offset(self.contentInsets.top),
+                self.contentView.bottomLayout == self.bottomLayout.offset(-self.contentInsets.bottom)
             ])
         case .bottom:
             constraints.append(contentsOf: [
-                self.contentView.topLayout >= self.topLayout.offset(self.contentInsets.top),
+                self.contentView.topLayout == self.topLayout.offset(self.contentInsets.top),
                 self.contentView.bottomLayout == self.bottomLayout.offset(-self.contentInsets.bottom)
             ])
         }

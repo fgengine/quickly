@@ -8,6 +8,7 @@ public protocol IQApiQuery : class {
     var createAt: Date { get }
 
     func start()
+    func redirect(request: URLRequest) -> URLRequest?
     func cancel()
 
 }

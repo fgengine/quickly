@@ -26,12 +26,14 @@ open class QRegularExpressionStringValidator : IQStringValidator {
     }
 
     public func validate(_ string: String) -> QStringValidatorResult {
-        var errors: [String] = []
+        var errors = Set< String >()
         let range = NSRange(location: 0, length: string.count)
         let match = self.expression.rangeOfFirstMatch(in: string, options: .reportProgress, range: range)
         if match.location == NSNotFound && match.length == 0 {
-            errors.append(self.error)
+            errors.insert(self.error)
         }
-        return QStringValidatorResult(errors: errors)
+        return QStringValidatorResult(
+            errors: Array(errors)
+        )
     }
 }

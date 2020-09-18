@@ -12,6 +12,7 @@ public protocol IQTableSection : class {
 
     var header: IQTableData? { set get }
     var footer: IQTableData? { set get }
+    var indexPaths: [IndexPath] { get }
     var rows: [IQTableRow] { get }
 
     func bind(_ controller: IQTableController, _ index: Int)
