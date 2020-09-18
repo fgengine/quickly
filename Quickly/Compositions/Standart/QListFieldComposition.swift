@@ -51,10 +51,10 @@ open class QListFieldComposition< Composable: QListFieldComposable > : QComposit
         let view = QListField(frame: self.contentView.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.onShouldBeginEditing = { [weak self] _ in return self?._shouldBeginEditing() ?? true }
-        view.onBeginEditing = { [weak self] _ in return self?._beginEditing() }
-        view.onSelect = { [weak self] listField, composable in return self?._select(composable) }
+        view.onBeginEditing = { [weak self] _ in return self?._beginEditing() ?? () }
+        view.onSelect = { [weak self] listField, composable in return self?._select(composable) ?? () }
         view.onShouldEndEditing = { [weak self] _ in return self?._shouldEndEditing() ?? true }
-        view.onEndEditing = { [weak self] _ in return self?._endEditing() }
+        view.onEndEditing = { [weak self] _ in return self?._endEditing() ?? () }
         self.contentView.addSubview(view)
         return view
     }()
