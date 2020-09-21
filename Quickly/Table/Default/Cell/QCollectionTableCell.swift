@@ -14,13 +14,15 @@ open class QCollectionTableRow : QBackgroundColorTableRow {
         edgeInsets: UIEdgeInsets = UIEdgeInsets.zero,
         height: CGFloat,
         controller: IQCollectionController,
-        layout: UICollectionViewLayout
+        layout: UICollectionViewLayout,
+        backgroundColor: UIColor? = nil
     ) {
         self.edgeInsets = edgeInsets
         self.height = height
         self.controller = controller
         self.layout = layout
         super.init(
+            backgroundColor: backgroundColor,
             canSelect: false
         )
     }
