@@ -254,22 +254,6 @@ public class QButton : QView {
         
         self._invalidate()
     }
-    
-    open override func setContentHuggingPriority(_ priority: UILayoutPriority, for axis: NSLayoutConstraint.Axis) {
-        super.setContentHuggingPriority(priority, for: axis)
-        self.backgroundView.setContentHuggingPriority(priority, for: axis)
-        self.contentView.setContentHuggingPriority(priority, for: axis)
-        self.imageView.setContentHuggingPriority(priority, for: axis)
-        self.textLabel.setContentHuggingPriority(priority, for: axis)
-    }
-    
-    open override func setContentCompressionResistancePriority(_ priority: UILayoutPriority, for axis: NSLayoutConstraint.Axis) {
-        super.setContentCompressionResistancePriority(priority, for: axis)
-        self.backgroundView.setContentCompressionResistancePriority(priority, for: axis)
-        self.contentView.setContentCompressionResistancePriority(priority, for: axis)
-        self.imageView.setContentCompressionResistancePriority(priority, for: axis)
-        self.textLabel.setContentCompressionResistancePriority(priority, for: axis)
-    }
 
     public func isSpinnerAnimating() -> Bool {
         if let spinnerView = self.spinnerView {
@@ -326,17 +310,17 @@ public class QButton : QView {
         case .left:
             constraints.append(contentsOf: [
                 self.contentView.leadingLayout == self.leadingLayout.offset(self.contentInsets.left),
-                self.contentView.trailingLayout == self.trailingLayout.offset(-self.contentInsets.right)
+                self.contentView.trailingLayout <= self.trailingLayout.offset(-self.contentInsets.right)
             ])
         case .center:
             constraints.append(contentsOf: [
                 self.contentView.centerXLayout == self.centerXLayout,
-                self.contentView.leadingLayout == self.leadingLayout.offset(self.contentInsets.left),
-                self.contentView.trailingLayout == self.trailingLayout.offset(-self.contentInsets.right)
+                self.contentView.leadingLayout >= self.leadingLayout.offset(self.contentInsets.left),
+                self.contentView.trailingLayout <= self.trailingLayout.offset(-self.contentInsets.right)
             ])
         case .right:
             constraints.append(contentsOf: [
-                self.contentView.leadingLayout == self.leadingLayout.offset(self.contentInsets.left),
+                self.contentView.leadingLayout >= self.leadingLayout.offset(self.contentInsets.left),
                 self.contentView.trailingLayout == self.trailingLayout.offset(-self.contentInsets.right)
             ])
         }
@@ -349,17 +333,17 @@ public class QButton : QView {
         case .top:
             constraints.append(contentsOf: [
                 self.contentView.topLayout == self.topLayout.offset(self.contentInsets.top),
-                self.contentView.bottomLayout == self.bottomLayout.offset(-self.contentInsets.bottom)
+                self.contentView.bottomLayout <= self.bottomLayout.offset(-self.contentInsets.bottom)
             ])
         case .center:
             constraints.append(contentsOf: [
                 self.contentView.centerYLayout == self.centerYLayout,
-                self.contentView.topLayout == self.topLayout.offset(self.contentInsets.top),
-                self.contentView.bottomLayout == self.bottomLayout.offset(-self.contentInsets.bottom)
+                self.contentView.topLayout >= self.topLayout.offset(self.contentInsets.top),
+                self.contentView.bottomLayout <= self.bottomLayout.offset(-self.contentInsets.bottom)
             ])
         case .bottom:
             constraints.append(contentsOf: [
-                self.contentView.topLayout == self.topLayout.offset(self.contentInsets.top),
+                self.contentView.topLayout >= self.topLayout.offset(self.contentInsets.top),
                 self.contentView.bottomLayout == self.bottomLayout.offset(-self.contentInsets.bottom)
             ])
         }

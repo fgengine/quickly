@@ -190,7 +190,6 @@ open class QStackbar : QView {
         self._contentView.addSubview(self._leftView)
 
         self._centerView = WrapView(frame: self.bounds)
-        self._centerView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         self._contentView.addSubview(self._centerView)
 
         self._rightView = WrapView(frame: self.bounds)
@@ -328,6 +327,8 @@ open class QStackbar : QView {
             didSet {
                 for view in self.views {
                     view.translatesAutoresizingMaskIntoConstraints = false
+                    view.setContentCompressionResistancePriority(self.contentCompressionResistancePriority(for: .horizontal), for: .horizontal)
+                    view.setContentCompressionResistancePriority(self.contentCompressionResistancePriority(for: .vertical), for: .vertical)
                     view.setContentHuggingPriority(self.contentHuggingPriority(for: .horizontal), for: .horizontal)
                     view.setContentHuggingPriority(self.contentHuggingPriority(for: .vertical), for: .vertical)
                     self.addSubview(view)
