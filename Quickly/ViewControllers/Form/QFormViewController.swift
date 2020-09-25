@@ -51,7 +51,7 @@ open class QFormViewController : QViewController, IQFormViewController, IQInputC
     public private(set) lazy var toolbarPrevView: QButton = {
         let view = QButton()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.setContentHuggingPriority(horizontal: .required, vertical: .defaultHigh)
+        view.setContentHuggingPriority(horizontal: .defaultHigh, vertical: .defaultLow)
         view.onPressed = { [weak self] _ in self?._pressedPrev() }
         self.toolbarView.addSubview(view)
         return view
@@ -63,7 +63,7 @@ open class QFormViewController : QViewController, IQFormViewController, IQInputC
     public private(set) lazy var toolbarNextView: QButton = {
         let view = QButton()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.setContentHuggingPriority(horizontal: .required, vertical: .defaultHigh)
+        view.setContentHuggingPriority(horizontal: .defaultHigh, vertical: .defaultLow)
         view.onPressed = { [weak self] _ in self?._pressedNext() }
         self.toolbarView.addSubview(view)
         return view
@@ -75,7 +75,7 @@ open class QFormViewController : QViewController, IQFormViewController, IQInputC
     public private(set) lazy var toolbarDoneView: QButton = {
         let view = QButton()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.setContentHuggingPriority(horizontal: .required, vertical: .defaultHigh)
+        view.setContentHuggingPriority(horizontal: .defaultHigh, vertical: .defaultLow)
         view.onPressed = { [weak self] _ in self?._pressedDone() }
         self.toolbarView.addSubview(view)
         return view

@@ -22,8 +22,8 @@ open class QButtonStyleSheet : IQStyleSheet {
     public var isEnabled: Bool
     
     public init(
-        contentHorizontalAlignment: QButton.ContentHorizontalAlignment = .center,
-        contentVerticalAlignment: QButton.ContentVerticalAlignment = .center,
+        contentHorizontalAlignment: QButton.ContentHorizontalAlignment = .fill,
+        contentVerticalAlignment: QButton.ContentVerticalAlignment = .fill,
         contentInsets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8),
         imagePosition: QButton.ImagePosition = .left,
         imageInsets: UIEdgeInsets = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2),
@@ -241,8 +241,8 @@ public class QButton : QView {
 
         self.backgroundColor = UIColor.clear
         self.setContentHuggingPriority(
-            horizontal: UILayoutPriority(rawValue: 252),
-            vertical: UILayoutPriority(rawValue: 252)
+            horizontal: UILayoutPriority(rawValue: 251),
+            vertical: UILayoutPriority(rawValue: 251)
         )
 
         self.addSubview(self.backgroundView)
@@ -253,6 +253,22 @@ public class QButton : QView {
         self.addGestureRecognizer(self.tapGesture)
         
         self._invalidate()
+    }
+    
+    open override func setContentHuggingPriority(_ priority: UILayoutPriority, for axis: NSLayoutConstraint.Axis) {
+        super.setContentHuggingPriority(priority, for: axis)
+        self.backgroundView.setContentHuggingPriority(priority, for: axis)
+        self.contentView.setContentHuggingPriority(priority, for: axis)
+        self.imageView.setContentHuggingPriority(UILayoutPriority(priority.rawValue + 1), for: axis)
+        self.textLabel.setContentHuggingPriority(UILayoutPriority(priority.rawValue + 1), for: axis)
+    }
+    
+    open override func setContentCompressionResistancePriority(_ priority: UILayoutPriority, for axis: NSLayoutConstraint.Axis) {
+        super.setContentCompressionResistancePriority(priority, for: axis)
+        self.backgroundView.setContentCompressionResistancePriority(priority, for: axis)
+        self.contentView.setContentCompressionResistancePriority(priority, for: axis)
+        self.imageView.setContentCompressionResistancePriority(priority, for: axis)
+        self.textLabel.setContentCompressionResistancePriority(priority, for: axis)
     }
 
     public func isSpinnerAnimating() -> Bool {
