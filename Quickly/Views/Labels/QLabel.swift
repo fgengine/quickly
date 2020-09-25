@@ -148,6 +148,7 @@ open class QLabel : QDisplayView {
 
         self.backgroundColor = UIColor.clear
         self.contentMode = .center
+        self.label.numberOfLines = 0
         self.setContentHuggingPriority(
             horizontal: UILayoutPriority(rawValue: 251),
             vertical: UILayoutPriority(rawValue: 251)
