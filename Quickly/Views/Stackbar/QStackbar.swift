@@ -177,23 +177,24 @@ open class QStackbar : QView {
 
     open override func setup() {
         super.setup()
-
+        
         self.backgroundColor = UIColor.white
         
         self._contentView = UIView(frame: self.bounds)
         self._contentView.translatesAutoresizingMaskIntoConstraints = false
         self._contentView.backgroundColor = UIColor.clear
         self.addSubview(self._contentView)
-
+        
         self._leftView = WrapView(frame: self.bounds)
-        self._leftView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        self._leftView.setContentCompressionResistancePriority(.defaultHigh , for: .horizontal)
         self._contentView.addSubview(self._leftView)
-
+        
         self._centerView = WrapView(frame: self.bounds)
+        self._centerView.setContentCompressionResistancePriority(.defaultLow , for: .horizontal)
         self._contentView.addSubview(self._centerView)
-
+        
         self._rightView = WrapView(frame: self.bounds)
-        self._rightView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        self._rightView.setContentCompressionResistancePriority(.defaultHigh , for: .horizontal)
         self._contentView.addSubview(self._rightView)
     }
 
