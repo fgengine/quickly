@@ -55,9 +55,6 @@ open class QPagesView : QView, IQPagesView {
         set(value) { self._pageControl.currentPageIndicatorTintColor = value }
         get { return self._pageControl.currentPageIndicatorTintColor }
     }
-    open override var intrinsicContentSize: CGSize {
-        get { return self._pageControl.intrinsicContentSize }
-    }
     
     private var _pageControl: UIPageControl!
     
@@ -68,20 +65,16 @@ open class QPagesView : QView, IQPagesView {
         self.backgroundColor = UIColor.clear
         
         self._pageControl = UIPageControl(frame: self.bounds)
-        self._pageControl.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
+        self._pageControl.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(self._pageControl)
-    }
-    
-    open override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return self._pageControl.sizeThatFits(size)
-    }
-    
-    open override func sizeToFit() {
-        self._pageControl.sizeToFit()
-        self.frame = CGRect(
-            origin: self.frame.origin,
-            size: self._pageControl.frame.size
-        )
+        self.addConstraints([
+            self.topLayout >= self._pageControl.topLayout,
+            self.leadingLayout >= self._pageControl.leadingLayout,
+            self.trailingLayout <= self._pageControl.trailingLayout,
+            self.bottomLayout <= self._pageControl.bottomLayout,
+            self.centerXLayout == self._pageControl.centerXLayout,
+            self.centerYLayout == self._pageControl.centerYLayout
+        ])
     }
     
     public func apply(_ styleSheet: QPagesViewStyleSheet) {
