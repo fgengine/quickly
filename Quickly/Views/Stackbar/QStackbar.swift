@@ -58,6 +58,7 @@ open class QStackbar : QView {
         set(value) {
             if self._centerView.views != value {
                 self._centerView.views = value
+                self._centerView.layoutIfNeeded()
                 self.setNeedsUpdateConstraints()
             }
         }
