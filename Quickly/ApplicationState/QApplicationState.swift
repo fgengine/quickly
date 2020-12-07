@@ -24,11 +24,11 @@ public final class QApplicationState {
     
     public init() {
         self._observer = QObserver< IQApplicationStateObserver >()
-        self._start()
+        self._subsribe()
     }
     
     deinit {
-        self._stop()
+        self._unsubsribe()
     }
     
     public func add(observer: IQApplicationStateObserver, priority: UInt) {
@@ -39,7 +39,11 @@ public final class QApplicationState {
         self._observer.remove(observer)
     }
     
-    private func _start() {
+}
+
+private extension QApplicationState {
+    
+    func _subsribe() {
         NotificationCenter.default.addObserver(self, selector: #selector(self._didReceiveMemoryWarning(_:)), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self._didFinishLaunching(_:)), name: UIApplication.didFinishLaunchingNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self._didEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
@@ -49,7 +53,7 @@ public final class QApplicationState {
         NotificationCenter.default.addObserver(self, selector: #selector(self._willTerminate(_:)), name: UIApplication.willTerminateNotification, object: nil)
     }
     
-    private func _stop() {
+    func _unsubsribe() {
         NotificationCenter.default.removeObserver(self, name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIApplication.didFinishLaunchingNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
@@ -59,57 +63,39 @@ public final class QApplicationState {
         NotificationCenter.default.removeObserver(self, name: UIApplication.willTerminateNotification, object: nil)
     }
     
-}
-
-extension QApplicationState {
-    
     @objc
-    private func _didReceiveMemoryWarning(_ notification: Notification) {
-        self._observer.notify({ (observer: IQApplicationStateObserver) in
-            observer.didReceiveMemoryWarning(self)
-        })
+    func _didReceiveMemoryWarning(_ notification: Notification) {
+        self._observer.notify({ $0.didReceiveMemoryWarning(self) })
     }
     
     @objc
-    private func _didFinishLaunching(_ notification: Notification) {
-        self._observer.notify({ (observer: IQApplicationStateObserver) in
-            observer.didFinishLaunching(self)
-        })
+    func _didFinishLaunching(_ notification: Notification) {
+        self._observer.notify({ $0.didFinishLaunching(self) })
     }
     
     @objc
-    private func _didEnterBackground(_ notification: Notification) {
-        self._observer.notify({ (observer: IQApplicationStateObserver) in
-            observer.didEnterBackground(self)
-        })
+    func _didEnterBackground(_ notification: Notification) {
+        self._observer.notify({ $0.didEnterBackground(self) })
     }
     
     @objc
-    private func _willEnterForeground(_ notification: Notification) {
-        self._observer.notify({ (observer: IQApplicationStateObserver) in
-            observer.willEnterForeground(self)
-        })
+    func _willEnterForeground(_ notification: Notification) {
+        self._observer.notify({ $0.willEnterForeground(self) })
     }
     
     @objc
-    private func _didBecomeActive(_ notification: Notification) {
-        self._observer.notify({ (observer: IQApplicationStateObserver) in
-            observer.didBecomeActive(self)
-        })
+    func _didBecomeActive(_ notification: Notification) {
+        self._observer.notify({ $0.didBecomeActive(self) })
     }
     
     @objc
-    private func _willResignActive(_ notification: Notification) {
-        self._observer.notify({ (observer: IQApplicationStateObserver) in
-            observer.willResignActive(self)
-        })
+    func _willResignActive(_ notification: Notification) {
+        self._observer.notify({ $0.willResignActive(self) })
     }
     
     @objc
-    private func _willTerminate(_ notification: Notification) {
-        self._observer.notify({ (observer: IQApplicationStateObserver) in
-            observer.willTerminate(self)
-        })
+    func _willTerminate(_ notification: Notification) {
+        self._observer.notify({ $0.willTerminate(self) })
     }
     
 }

@@ -34,6 +34,8 @@ public final class QTimer : NSObject {
         self.isStarted = false
         self.isPaused = false
         self.repeated = 0
+        super.init()
+        self._subsribe()
     }
 
     public convenience init(
@@ -53,6 +55,10 @@ public final class QTimer : NSObject {
         self.init(interval: interval, delay: 0, repeating: repeating)
         self.onRepeat = onRepeat
         self.onFinished = onFinished
+    }
+    
+    deinit {
+        self._unsubsribe()
     }
 
     public func start() {
@@ -77,9 +83,7 @@ public final class QTimer : NSObject {
                 repeats: (self.isDelaying == true) || (self.repeating != 0)
             )
             if self.isDelaying == false {
-                if let closure = self.onStarted {
-                    closure(self)
-                }
+                self.onStarted?(self)
             }
             RunLoop.main.add(self._timer!, forMode: RunLoop.Mode.common)
         }
@@ -97,9 +101,7 @@ public final class QTimer : NSObject {
                 timer.invalidate()
                 self._timer = nil
             }
-            if let closure = self.onStoped {
-                closure(self)
-            }
+            self.onStoped?(self)
         }
     }
 
@@ -111,16 +113,13 @@ public final class QTimer : NSObject {
                 timer.invalidate()
                 self._timer = nil
             }
-            if let closure = self.onPaused {
-                closure(self)
-            }
+            self.onPaused?(self)
         }
     }
 
     public func resume() {
         if (self.isStarted == true) && (self.isPaused == true) {
             self.isPaused = false
-
             self._startDate = self._startDate! + (Date().timeIntervalSince1970 - self._pauseDate!.timeIntervalSince1970)
             self._pauseDate = nil;
             self._timer = Timer(
@@ -131,9 +130,7 @@ public final class QTimer : NSObject {
                 userInfo: nil,
                 repeats: (self.repeating != 0)
             )
-            if let closure = self.onResumed {
-                closure(self)
-            }
+            self.onResumed?(self)
             RunLoop.main.add(self._timer!, forMode: RunLoop.Mode.common)
         }
     }
@@ -142,8 +139,33 @@ public final class QTimer : NSObject {
         self.stop()
         self.start()
     }
+    
+}
 
-    @IBAction private func _handler(_ sender: Any) {
+private extension QTimer {
+    
+    func _subsribe() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self._didEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self._willEnterForeground(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
+    }
+    
+    func _unsubsribe() {
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
+    }
+    
+    @objc
+    func _didEnterBackground(_ notification: Notification) {
+        self.pause()
+    }
+    
+    @objc
+    func _willEnterForeground(_ notification: Notification) {
+        self.resume()
+    }
+
+    @objc
+    func _handler(_ sender: Any) {
         if self.isDelaying == true {
             self.isDelaying = false
             if let closure = self.onStarted {
