@@ -338,6 +338,7 @@
 		40E2D6031F67850600B954E4 /* QImageRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E2D5FF1F67850600B954E4 /* QImageRequest.swift */; };
 		40E2D6041F67850600B954E4 /* QImageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E2D6001F67850600B954E4 /* QImageResponse.swift */; };
 		40E2D6061F6785F300B954E4 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E2D6051F6785F300B954E4 /* Data.swift */; };
+		40E4B53625891F7E00040E5B /* QTitleDetailButtonComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E4B53525891F7E00040E5B /* QTitleDetailButtonComposition.swift */; };
 		40E52949204E9466002EDB0A /* QBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E52947204E9466002EDB0A /* QBlurView.swift */; };
 		40E7382C1F556AF600B192C6 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E7382B1F556AF600B192C6 /* UIDevice.swift */; };
 		40E738541F5606C500B192C6 /* QBackgroundColorTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E7384E1F5606C500B192C6 /* QBackgroundColorTableCell.swift */; };
@@ -697,6 +698,7 @@
 		40E2D6051F6785F300B954E4 /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		40E2D6091F678D3100B954E4 /* Quickly.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = Quickly.modulemap; sourceTree = "<group>"; };
 		40E2D60E1F678E7E00B954E4 /* Quickly.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Quickly.xcconfig; sourceTree = "<group>"; };
+		40E4B53525891F7E00040E5B /* QTitleDetailButtonComposition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QTitleDetailButtonComposition.swift; sourceTree = "<group>"; };
 		40E52947204E9466002EDB0A /* QBlurView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QBlurView.swift; sourceTree = "<group>"; };
 		40E7382B1F556AF600B192C6 /* UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		40E7384E1F5606C500B192C6 /* QBackgroundColorTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QBackgroundColorTableCell.swift; sourceTree = "<group>"; };
@@ -806,6 +808,7 @@
 				4007B0502144236900AE17DC /* QTitleDetailShapeComposition.swift */,
 				40836AAB216CAD8E00777404 /* QTitleDetailValueComposition.swift */,
 				4007B07A2144236900AE17DC /* QTitleButtonComposition.swift */,
+				40E4B53525891F7E00040E5B /* QTitleDetailButtonComposition.swift */,
 				4055E9CA215E21BE00D66AA6 /* QTitleSwitchComposition.swift */,
 				4039AF33221BF14300ED421C /* QSegmentedControlComposition.swift */,
 				4043EA562148458900AA5F98 /* QSpinnerComposition.swift */,
@@ -1953,6 +1956,7 @@
 				403DF8F420CA72A8003C5D6D /* QModalViewController.swift in Sources */,
 				4007B0A42144236900AE17DC /* QImageTitleShapeComposition.swift in Sources */,
 				406BC12C217722EA00164485 /* QProxy.swift in Sources */,
+				40E4B53625891F7E00040E5B /* QTitleDetailButtonComposition.swift in Sources */,
 				407137822426A24900E2FDF9 /* QJalousieViewControllerInteractiveAnimation.swift in Sources */,
 				4062C8CD2088DD4C0098F809 /* QStackWireframe.swift in Sources */,
 				4007B0A12144236900AE17DC /* QTitleValueShapeComposition.swift in Sources */,
