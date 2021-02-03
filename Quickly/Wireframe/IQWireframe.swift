@@ -28,6 +28,8 @@ public protocol IQWireframeDeeplinkable : class {
 
 public protocol IQWireframeDefaultRouter : IQRouter {
     
+    func present(notificationView: QDisplayView, duration: TimeInterval)
+    
     func present(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?)
     func dismiss(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?)
     

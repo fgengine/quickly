@@ -30,7 +30,7 @@ public class QPdfPhotoItem : IQPhotoItem {
         guard let document = CGPDFDocument(provider) else { return [] }
         var photos: [QPdfPhotoItem] = []
         for pageIndex in 0..<document.numberOfPages {
-            guard let page = document.page(at: pageIndex) else { continue }
+            guard let page = document.page(at: pageIndex + 1) else { continue }
             photos.append(QPdfPhotoItem(page: page))
         }
         return photos

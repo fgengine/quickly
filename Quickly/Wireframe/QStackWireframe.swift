@@ -90,6 +90,10 @@ extension QStackWireframe : IQRouter where RouterType : IQRouter {
 
 extension QStackWireframe : IQWireframeDefaultRouter where RouterType : IQWireframeDefaultRouter {
     
+    public func present(notificationView: QDisplayView, duration: TimeInterval) {
+        self.router?.present(notificationView: notificationView, duration: duration)
+    }
+    
     public func present(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         self.router?.present(viewController: viewController, animated: animated, completion: completion)
     }

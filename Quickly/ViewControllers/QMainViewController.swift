@@ -127,6 +127,43 @@ open class QMainViewController : QViewController {
             }
         }
     }
+    open var notificationInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 12, bottom: 72, right: 12)
+    
+    private var _notificationView: QDisplayView? {
+        willSet {
+            guard let notificationView = self._notificationView else { return }
+            notificationView.removeFromSuperview()
+        }
+        didSet {
+            guard let notificationView = self._notificationView else { return }
+            self.view.addSubview(notificationView)
+            self._notificationConstraints = [
+                self.view.leadingLayout >= notificationView.leadingLayout.offset(-self.notificationInsets.left),
+                self.view.trailingLayout <= notificationView.trailingLayout.offset(self.notificationInsets.right),
+                self.view.bottomLayout == notificationView.bottomLayout.offset(self.notificationInsets.bottom),
+                self.view.centerXLayout == notificationView.centerXLayout
+            ]
+            self.view.layoutIfNeeded()
+        }
+    }
+    private var _notificationTimer: QTimer? {
+        willSet {
+            guard let notificationTimer = self._notificationTimer else { return }
+            notificationTimer.stop()
+        }
+        didSet {
+            guard let notificationTimer = self._notificationTimer else { return }
+            notificationTimer.start()
+        }
+    }
+    private var _notificationConstraints: [NSLayoutConstraint] = [] {
+        willSet { self.view.removeConstraints(self._notificationConstraints) }
+        didSet { self.view.addConstraints(self._notificationConstraints) }
+    }
+    
+    deinit {
+        self._notificationTimer?.stop()
+    }
 
     open override func didLoad() {
         if let vc = self.backgroundViewController {
@@ -289,12 +326,36 @@ open class QMainViewController : QViewController {
         return super.preferedStatusBarAnimation()
     }
     
+    open func present(notificationView: QDisplayView, duration: TimeInterval) {
+        notificationView.alpha = 0
+        self._notificationView = notificationView
+        self._notificationTimer = QTimer(
+            interval: duration,
+            onFinished: { [weak self] _ in self?._triggeredNotificationTimer() }
+        )
+        UIView.animate(withDuration: 0.1, animations: {
+            notificationView.alpha = 1
+        })
+    }
+    
 }
 
 // MARK: Private
 
 private extension QMainViewController {
 
+    func _triggeredNotificationTimer() {
+        UIView.animate(withDuration: 0.1, animations: { [weak self] in
+            guard let self = self else { return }
+            self._notificationView?.alpha = 0
+        }, completion: { [weak self] _ in
+            guard let self = self else { return }
+            self._notificationView = nil
+            self._notificationTimer = nil
+            self._notificationConstraints = []
+        })
+    }
+    
     func _appendBackgroundController(_ viewController: IQViewController) {
         viewController.view.frame = self.view.bounds
         self.view.insertSubview(viewController.view, at: 0)

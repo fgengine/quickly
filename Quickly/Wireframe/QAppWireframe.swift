@@ -76,6 +76,10 @@ public extension QAppWireframe {
 
 extension QAppWireframe : IQWireframeDefaultRouter {
     
+    public func present(notificationView: QDisplayView, duration: TimeInterval) {
+        self.viewController.present(notificationView: notificationView, duration: duration)
+    }
+    
     public func present(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         guard let rootViewController = self.window.rootViewController else { return }
         rootViewController.present(viewController, animated: animated, completion: completion)
