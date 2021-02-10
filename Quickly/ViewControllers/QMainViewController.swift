@@ -137,13 +137,6 @@ open class QMainViewController : QViewController {
         didSet {
             guard let notificationView = self._notificationView else { return }
             self.view.addSubview(notificationView)
-            self._notificationConstraints = [
-                self.view.leadingLayout >= notificationView.leadingLayout.offset(-self.notificationInsets.left),
-                self.view.trailingLayout <= notificationView.trailingLayout.offset(self.notificationInsets.right),
-                self.view.bottomLayout == notificationView.bottomLayout.offset(self.notificationInsets.bottom),
-                self.view.centerXLayout == notificationView.centerXLayout
-            ]
-            self.view.layoutIfNeeded()
         }
     }
     private var _notificationTimer: QTimer? {
@@ -326,16 +319,32 @@ open class QMainViewController : QViewController {
         return super.preferedStatusBarAnimation()
     }
     
-    open func present(notificationView: QDisplayView, duration: TimeInterval) {
+    open func present(notificationView: QDisplayView, alignment: NotificationAlignment, duration: TimeInterval) {
         notificationView.alpha = 0
         self._notificationView = notificationView
+        self._beganConstraints(notificationView: notificationView, alignment: alignment)
+        self.view.layoutIfNeeded()
         self._notificationTimer = QTimer(
             interval: duration,
             onFinished: { [weak self] _ in self?._triggeredNotificationTimer() }
         )
-        UIView.animate(withDuration: 0.1, animations: {
+        UIView.animate(withDuration: 0.1, animations: { [weak self] in
+            guard let self = self else { return }
+            self._endedConstraints(notificationView: notificationView, alignment: alignment)
+            self.view.layoutIfNeeded()
             notificationView.alpha = 1
         })
+    }
+    
+}
+
+// MARK: Public
+
+public extension QMainViewController {
+    
+    enum NotificationAlignment {
+        case leading
+        case trailing
     }
     
 }
@@ -343,6 +352,38 @@ open class QMainViewController : QViewController {
 // MARK: Private
 
 private extension QMainViewController {
+    
+    func _beganConstraints(notificationView: QDisplayView, alignment: NotificationAlignment) {
+        switch alignment {
+        case .leading:
+            self._notificationConstraints = [
+                self.view.leadingLayout == notificationView.trailingLayout.offset(-self.notificationInsets.left),
+                self.view.bottomLayout == notificationView.bottomLayout.offset(self.notificationInsets.bottom)
+            ]
+        case .trailing:
+            self._notificationConstraints = [
+                self.view.trailingLayout == notificationView.trailingLayout.offset(-self.notificationInsets.right),
+                self.view.bottomLayout == notificationView.bottomLayout.offset(self.notificationInsets.bottom)
+            ]
+        }
+    }
+    
+    func _endedConstraints(notificationView: QDisplayView, alignment: NotificationAlignment) {
+        switch alignment {
+        case .leading:
+            self._notificationConstraints = [
+                self.view.leadingLayout == notificationView.leadingLayout.offset(-self.notificationInsets.left),
+                self.view.trailingLayout >= notificationView.trailingLayout.offset(self.notificationInsets.right),
+                self.view.bottomLayout == notificationView.bottomLayout.offset(self.notificationInsets.bottom)
+            ]
+        case .trailing:
+            self._notificationConstraints = [
+                self.view.leadingLayout <= notificationView.leadingLayout.offset(-self.notificationInsets.left),
+                self.view.trailingLayout == notificationView.trailingLayout.offset(self.notificationInsets.right),
+                self.view.bottomLayout == notificationView.bottomLayout.offset(self.notificationInsets.bottom)
+            ]
+        }
+    }
 
     func _triggeredNotificationTimer() {
         UIView.animate(withDuration: 0.1, animations: { [weak self] in
