@@ -18,6 +18,9 @@ public protocol IQCollectionCell : IQCollectionReuse {
     func configure()
 
     func set(any: Any, spec: IQContainerSpec, animated: Bool)
+    
+    func beginDisplay()
+    func endDisplay()
 
 }
 

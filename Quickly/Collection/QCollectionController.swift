@@ -563,6 +563,18 @@ extension QCollectionController : UICollectionViewDelegate {
         if let collectionCell = cell as? IQCollectionCell {
             let item = self.item(indexPath: indexPath)
             collectionCell.set(any: item, spec: collectionView as! IQContainerSpec, animated: false)
+            collectionCell.beginDisplay()
+        }
+    }
+    
+    @objc
+    open func collectionView(
+        _ collectionView: UICollectionView,
+        didEndDisplaying cell: UICollectionViewCell,
+        forItemAt indexPath: IndexPath
+    ) {
+        if let collectionCell = cell as? IQCollectionCell {
+            collectionCell.endDisplay()
         }
     }
     
