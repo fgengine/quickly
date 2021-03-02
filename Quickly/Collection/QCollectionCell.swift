@@ -38,5 +38,11 @@ open class QCollectionCell< Item: IQCollectionItem > : UICollectionViewCell, IQT
         self.item = item
         self.spec = spec
     }
+    
+    open func beginDisplay() {
+    }
+    
+    open func endDisplay() {
+    }
 
 }
