@@ -4,16 +4,18 @@
 
 open class QMaskStringFormatter : IQStringFormatter {
 
+    public let prefix: String
     public let mask: String
     public let characterSet: CharacterSet
 
-    public init(mask: String, characterSet: CharacterSet = CharacterSet.decimalDigits.inverted) {
+    public init(prefix: String, mask: String, characterSet: CharacterSet = CharacterSet.decimalDigits.inverted) {
+        self.prefix = prefix
         self.mask = mask
         self.characterSet = characterSet
     }
 
     public func format(_ unformat: String) -> String {
-        return unformat.format(mask: self.mask)
+        return self.prefix + unformat.format(mask: self.mask)
     }
 
     public func format(_ unformat: String, caret: inout Int) -> String {
@@ -29,7 +31,11 @@ open class QMaskStringFormatter : IQStringFormatter {
     }
 
     public func unformat(_ format: String) -> String {
-        return format.remove(self.characterSet)
+        var result = format
+        if result.hasPrefix(self.prefix) == true {
+            result.removeFirst(self.prefix.count)
+        }
+        return result.remove(self.characterSet)
     }
 
     public func unformat(_ format: String, caret: inout Int) -> String {

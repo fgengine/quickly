@@ -29,7 +29,7 @@ open class QText : IQText {
     ) {
         self.string = text
         parts.forEach({ (key: String, value: String) in
-            if let range = text.range(of: key) {
+            if let range = self.string.range(of: key) {
                 self.string.replaceSubrange(range, with: value)
             }
         })
