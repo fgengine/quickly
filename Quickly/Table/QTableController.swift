@@ -644,12 +644,12 @@ extension QTableController : UITableViewDelegate {
     @objc
     open func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let row = self.row(indexPath: indexPath)
-        row.cacheHeight = cell.frame.height
         self.visibleCells.append(cell)
         self._updateVisibleIndexPaths(tableView)
         if let cell = cell as? IQTableCell {
             cell.beginDisplay()
         }
+        row.cacheHeight = cell.frame.height
     }
 
     @objc
@@ -670,10 +670,10 @@ extension QTableController : UITableViewDelegate {
         forSection section: Int
     ) {
         guard let data = self.header(index: section) else { return }
-        data.cacheHeight = view.frame.height
         if let decorView = view as? IQTableDecor {
             decorView.beginDisplay()
         }
+        data.cacheHeight = view.frame.height
     }
 
     @objc
@@ -694,10 +694,10 @@ extension QTableController : UITableViewDelegate {
         forSection section: Int
     ) {
         guard let data = self.footer(index: section) else { return }
-        data.cacheHeight = view.frame.height
         if let decorView = view as? IQTableDecor {
             decorView.beginDisplay()
         }
+        data.cacheHeight = view.frame.height
     }
 
     @objc
@@ -726,7 +726,9 @@ extension QTableController : UITableViewDelegate {
         } else {
             caclulatedHeight = 0
         }
-        row.cacheHeight = caclulatedHeight
+        if caclulatedHeight != UITableView.automaticDimension {
+            row.cacheHeight = caclulatedHeight
+        }
         return caclulatedHeight
     }
 
@@ -745,7 +747,9 @@ extension QTableController : UITableViewDelegate {
         } else {
             caclulatedHeight = 0
         }
-        data.cacheHeight = caclulatedHeight
+        if caclulatedHeight != UITableView.automaticDimension {
+            data.cacheHeight = caclulatedHeight
+        }
         return caclulatedHeight
     }
 
@@ -764,7 +768,9 @@ extension QTableController : UITableViewDelegate {
         } else {
             caclulatedHeight = 0
         }
-        data.cacheHeight = caclulatedHeight
+        if caclulatedHeight != UITableView.automaticDimension {
+            data.cacheHeight = caclulatedHeight
+        }
         return caclulatedHeight
     }
     
@@ -783,7 +789,7 @@ extension QTableController : UITableViewDelegate {
         estimatedHeightForHeaderInSection section: Int
     ) -> CGFloat {
         guard let data = self.header(index: section) else { return self.estimatedSectionFooterHeight }
-        return data.cacheHeight ?? self.estimatedSectionHeaderHeight
+        return data.cacheHeight ?? self.estimatedSectionFooterHeight
     }
     
     @objc
