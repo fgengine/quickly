@@ -26,6 +26,8 @@ open class QDialogViewController : QViewController, IQDialogViewController {
         return gesture
     }()
     
+    private var _keyboard: QKeyboard
+    private var _keyboardHeight: CGFloat
     private lazy var _backgroundView: QInvisibleView = {
         let view = QInvisibleView(frame: self.view.bounds)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -57,6 +59,8 @@ open class QDialogViewController : QViewController, IQDialogViewController {
         self.presentAnimation = presentAnimation
         self.dismissAnimation = dismissAnimation
         self.interactiveDismissAnimation = interactiveDismissAnimation
+        self._keyboard = QKeyboard()
+        self._keyboardHeight = 0
         super.init()
     }
 
@@ -66,6 +70,12 @@ open class QDialogViewController : QViewController, IQDialogViewController {
         self.edgesForExtendedLayout = []
         
         self.viewController.parentViewController = self
+        
+        self._keyboard.add(observer: self, priority: 0)
+    }
+    
+    deinit {
+        self._keyboard.remove(observer: self)
     }
 
     open override func didLoad() {
@@ -243,12 +253,12 @@ private extension QDialogViewController {
             case .center(let offset):
                 self._contentLayoutConstraints.append(contentsOf: [
                     self.viewController.view.topLayout == self.view.topLayout.offset(before + offset),
-                    self.view.bottomLayout == self.viewController.view.bottomLayout.offset(after - offset)
+                    self.view.bottomLayout == self.viewController.view.bottomLayout.offset(-((after - offset) + self._keyboardHeight))
                 ])
             default:
                 self._contentLayoutConstraints.append(contentsOf: [
                     self.viewController.view.topLayout == self.view.topLayout.offset(before),
-                    self.view.bottomLayout == self.viewController.view.bottomLayout.offset(after)
+                    self.view.bottomLayout == self.viewController.view.bottomLayout.offset(-(after + self._keyboardHeight))
                 ])
                 break
             }
@@ -270,10 +280,10 @@ private extension QDialogViewController {
             self._contentLayoutConstraints.append(self.viewController.view.topLayout == self.view.topLayout.offset(offset))
             break
         case .center(let offset):
-            self._contentLayoutConstraints.append(self.viewController.view.centerYLayout == self.view.centerYLayout.offset(offset))
+            self._contentLayoutConstraints.append(self.viewController.view.centerYLayout == self.view.centerYLayout.offset(offset + self._keyboardHeight))
             break
         case .bottom(let offset):
-            self._contentLayoutConstraints.append(self.viewController.view.bottomLayout == self.view.bottomLayout.offset(offset))
+            self._contentLayoutConstraints.append(self.viewController.view.bottomLayout == self.view.bottomLayout.offset(-(offset + self._keyboardHeight)))
             break
         }
         if self._contentLayoutConstraints.count > 0 {
@@ -283,12 +293,41 @@ private extension QDialogViewController {
             self.viewController.view.addConstraints(self._contentSizeConstraints)
         }
     }
+    
+    func _keyboard(duration: TimeInterval, height: CGFloat) {
+        guard self._keyboardHeight != height else { return }
+        self._keyboardHeight = height
+        self._relayoutContentViewController()
+        UIView.animate(withDuration: duration, animations: {
+            self.view.layoutIfNeeded()
+        })
+    }
 
     @objc
     func _handleTapGesture(_ sender: Any) {
         self.viewController.dialogDidPressedOutside()
     }
 
+}
+
+// MARK: IQKeyboardObserver
+
+extension QDialogViewController : IQKeyboardObserver {
+    
+    public func willShowKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
+        self._keyboard(duration: animationInfo.duration, height: animationInfo.endFrame.height)
+    }
+    
+    public func didShowKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
+    }
+
+    public func willHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
+        self._keyboard(duration: animationInfo.duration, height: 0)
+    }
+    
+    public func didHideKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo) {
+    }
+    
 }
 
 // MARK: UIGestureRecognizerDelegate
