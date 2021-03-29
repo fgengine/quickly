@@ -24,7 +24,7 @@ public final class QDialogViewControllerPresentAnimation : IQDialogViewControlle
             switch originalVerticalAlignment {
             case .top(let offset): viewController.verticalAlignment = .top(offset: offset - self.verticalOffset)
             case .center(let offset): viewController.verticalAlignment = .center(offset: offset - self.verticalOffset)
-            case .bottom(let offset): viewController.verticalAlignment = .bottom(offset: offset + self.verticalOffset)
+            case .bottom(let offset): viewController.verticalAlignment = .bottom(offset: offset - self.verticalOffset)
             }
             viewController.layoutIfNeeded()
             viewController.view.alpha = 0
@@ -68,7 +68,7 @@ public final class QDialogViewControllerDismissAnimation : IQDialogViewControlle
                 switch originalVerticalAlignment {
                 case .top(let offset): viewController.verticalAlignment = .top(offset: offset - self.verticalOffset)
                 case .center(let offset): viewController.verticalAlignment = .center(offset: offset - self.verticalOffset)
-                case .bottom(let offset): viewController.verticalAlignment = .bottom(offset: offset + self.verticalOffset)
+                case .bottom(let offset): viewController.verticalAlignment = .bottom(offset: offset - self.verticalOffset)
                 }
                 viewController.view.alpha = 0
                 viewController.layoutIfNeeded()
