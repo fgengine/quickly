@@ -533,7 +533,7 @@ public final class QTextStyle : IQTextStyle {
         if let underlineStyle = self.underlineStyle {
             attributes[.underlineStyle] = NSNumber(value: underlineStyle.rawValue)
         }
-        if #available(iOS 6.0, *) {
+        if self.shadowColor != nil || self.shadowOffset != nil || self.shadowBlurRadius != nil {
             let shadow = NSShadow()
             if let shadowColor = self.shadowColor {
                 shadow.shadowColor = shadowColor
