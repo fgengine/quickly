@@ -244,8 +244,7 @@ private extension QApiRequest {
                     }
                 })
                 uploadedItems.forEach({ (uploadedItem) in
-                    let encodeName = self._encode(value: uploadedItem.name)
-                    var headerString = "--\(boundary)\r\nContent-Disposition: form-data; name=\"\(encodeName)\""
+                    var headerString = "--\(boundary)\r\nContent-Disposition: form-data; name=\"\(uploadedItem.name)\""
                     if let filename = uploadedItem.filename {
                         let encodeFilename = self._encode(value: filename)
                         headerString += "; filename=\"\(encodeFilename)\"\r\n"
