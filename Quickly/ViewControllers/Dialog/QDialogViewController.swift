@@ -253,12 +253,12 @@ private extension QDialogViewController {
             case .center(let offset):
                 self._contentLayoutConstraints.append(contentsOf: [
                     self.viewController.view.topLayout == self.view.topLayout.offset(before + offset),
-                    self.view.bottomLayout == self.viewController.view.bottomLayout.offset(-((after - offset) + self._keyboardHeight))
+                    self.view.bottomLayout == self.viewController.view.bottomLayout.offset(-((after - offset) - (self._keyboardHeight / 2)))
                 ])
             default:
                 self._contentLayoutConstraints.append(contentsOf: [
                     self.viewController.view.topLayout == self.view.topLayout.offset(before),
-                    self.view.bottomLayout == self.viewController.view.bottomLayout.offset(-(after + self._keyboardHeight))
+                    self.view.bottomLayout == self.viewController.view.bottomLayout.offset(-(after - self._keyboardHeight))
                 ])
                 break
             }
@@ -280,7 +280,7 @@ private extension QDialogViewController {
             self._contentLayoutConstraints.append(self.viewController.view.topLayout == self.view.topLayout.offset(offset))
             break
         case .center(let offset):
-            self._contentLayoutConstraints.append(self.viewController.view.centerYLayout == self.view.centerYLayout.offset(offset + self._keyboardHeight))
+            self._contentLayoutConstraints.append(self.viewController.view.centerYLayout == self.view.centerYLayout.offset(offset - (self._keyboardHeight / 2)))
             break
         case .bottom(let offset):
             self._contentLayoutConstraints.append(self.viewController.view.bottomLayout == self.view.bottomLayout.offset(-(offset + self._keyboardHeight)))
