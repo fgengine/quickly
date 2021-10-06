@@ -169,6 +169,9 @@ open class QTableView : UITableView, IQView {
         if #available(iOS 13.0, *) {
             self.automaticallyAdjustsScrollIndicatorInsets = false
         }
+        if #available(iOS 15.0, *) {
+            self.sectionHeaderTopPadding = 0.0
+        }
     }
     
     open override func setNeedsLayout() {
