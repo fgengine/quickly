@@ -42,6 +42,7 @@ open class QTextFieldStyleSheet : QDisplayStyleSheet {
     public var editingInsets: UIEdgeInsets?
     public var placeholderInsets: UIEdgeInsets?
     public var placeholder: IQText?
+    public var clearButtonMode: UITextField.ViewMode
     public var typingStyle: IQTextStyle?
     public var autocapitalizationType: UITextAutocapitalizationType
     public var autocorrectionType: UITextAutocorrectionType
@@ -69,6 +70,7 @@ open class QTextFieldStyleSheet : QDisplayStyleSheet {
         editingInsets: UIEdgeInsets? = nil,
         placeholderInsets: UIEdgeInsets? = nil,
         placeholder: IQText? = nil,
+        clearButtonMode: UITextField.ViewMode = .never,
         typingStyle: IQTextStyle? = nil,
         autocapitalizationType: UITextAutocapitalizationType = .none,
         autocorrectionType: UITextAutocorrectionType = .default,
@@ -100,6 +102,7 @@ open class QTextFieldStyleSheet : QDisplayStyleSheet {
         self.editingInsets = editingInsets
         self.placeholderInsets = placeholderInsets
         self.placeholder = placeholder
+        self.clearButtonMode = clearButtonMode
         self.autocapitalizationType = autocapitalizationType
         self.autocorrectionType = autocorrectionType
         self.spellCheckingType = spellCheckingType
@@ -135,6 +138,7 @@ open class QTextFieldStyleSheet : QDisplayStyleSheet {
         self.editingInsets = styleSheet.editingInsets
         self.placeholderInsets = styleSheet.placeholderInsets
         self.placeholder = styleSheet.placeholder
+        self.clearButtonMode = styleSheet.clearButtonMode
         self.autocapitalizationType = styleSheet.autocapitalizationType
         self.autocorrectionType = styleSheet.autocorrectionType
         self.spellCheckingType = styleSheet.spellCheckingType
@@ -348,6 +352,10 @@ public class QTextField : QDisplayView, IQField {
             return nil
         }
     }
+    public var clearButtonMode: UITextField.ViewMode {
+        set(value) { self._field.clearButtonMode = value }
+        get { return self._field.clearButtonMode }
+    }
     public var isEnabled: Bool {
         set(value) { self._field.isEnabled = value }
         get { return self._field.isEnabled }
@@ -467,6 +475,7 @@ public class QTextField : QDisplayView, IQField {
         self.editingInsets = styleSheet.editingInsets
         self.placeholderInsets = styleSheet.placeholderInsets
         self.placeholder = styleSheet.placeholder
+        self.clearButtonMode = styleSheet.clearButtonMode
         self.typingStyle = styleSheet.typingStyle
         self.autocapitalizationType = styleSheet.autocapitalizationType
         self.autocorrectionType = styleSheet.autocorrectionType
@@ -768,6 +777,7 @@ private extension QTextField {
 
         public func textFieldShouldClear(_ textField: UITextField) -> Bool {
             guard let field = self.field else { return true }
+            field.text = ""
             if let shouldClosure = field.onShouldClear {
                 if shouldClosure(field) == true {
                     if let pressedClosure = field.onPressedClear {
