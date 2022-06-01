@@ -275,6 +275,8 @@
 		40B8A1AB1F50736C00204E5A /* QTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B8A1AA1F50736C00204E5A /* QTimer.swift */; };
 		40BFA8492018AFDE00E41933 /* IQPushViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40BFA8472018AFDE00E41933 /* IQPushViewController.swift */; };
 		40BFDAE61F87B8EE00ECED22 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40BFDAE51F87B8EE00ECED22 /* UIImage.swift */; };
+		40C1BD0D284742B100C2FB52 /* QImageGrayscaleLoaderFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C1BD0C284742B100C2FB52 /* QImageGrayscaleLoaderFilter.swift */; };
+		40C1BD0F2847432700C2FB52 /* QImageGroupLoaderFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C1BD0E2847432700C2FB52 /* QImageGroupLoaderFilter.swift */; };
 		40C8A63C2142FD920064DD8E /* QPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C8A63B2142FD920064DD8E /* QPlaceholderView.swift */; };
 		40C8F8251F55109100C75D34 /* IQSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F8231F55109100C75D34 /* IQSpinnerView.swift */; };
 		40C8F8281F55145D00C75D34 /* QSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F8271F55145D00C75D34 /* QSpinnerView.swift */; };
@@ -636,6 +638,8 @@
 		40BFA8472018AFDE00E41933 /* IQPushViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQPushViewController.swift; sourceTree = "<group>"; };
 		40BFDAE51F87B8EE00ECED22 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		40C08C23205086D50016EF7D /* QDialogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QDialogViewController.swift; sourceTree = "<group>"; };
+		40C1BD0C284742B100C2FB52 /* QImageGrayscaleLoaderFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QImageGrayscaleLoaderFilter.swift; sourceTree = "<group>"; };
+		40C1BD0E2847432700C2FB52 /* QImageGroupLoaderFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QImageGroupLoaderFilter.swift; sourceTree = "<group>"; };
 		40C8A63B2142FD920064DD8E /* QPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QPlaceholderView.swift; sourceTree = "<group>"; };
 		40C8F81C1F550EA500C75D34 /* Quickly.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = Quickly.podspec; sourceTree = "<group>"; };
 		40C8F8231F55109100C75D34 /* IQSpinnerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IQSpinnerView.swift; sourceTree = "<group>"; };
@@ -1176,7 +1180,9 @@
 				40E2D5FE1F67850600B954E4 /* QImageLoader.swift */,
 				408E90932286E4C900E6E68E /* QImageLoaderTask.swift */,
 				408E908F2286E06100E6E68E /* IQImageLoaderFilter.swift */,
+				40C1BD0E2847432700C2FB52 /* QImageGroupLoaderFilter.swift */,
 				40781A60228DBA4200447318 /* QImageThumbnailLoaderFilter.swift */,
+				40C1BD0C284742B100C2FB52 /* QImageGrayscaleLoaderFilter.swift */,
 				408E90912286E14300E6E68E /* IQImageLoaderTarget.swift */,
 				40E2D5FF1F67850600B954E4 /* QImageRequest.swift */,
 				40E2D6001F67850600B954E4 /* QImageResponse.swift */,
@@ -1959,6 +1965,7 @@
 				40E4B53625891F7E00040E5B /* QTitleDetailButtonComposition.swift in Sources */,
 				407137822426A24900E2FDF9 /* QJalousieViewControllerInteractiveAnimation.swift in Sources */,
 				4062C8CD2088DD4C0098F809 /* QStackWireframe.swift in Sources */,
+				40C1BD0D284742B100C2FB52 /* QImageGrayscaleLoaderFilter.swift in Sources */,
 				4007B0A12144236900AE17DC /* QTitleValueShapeComposition.swift in Sources */,
 				4007B09E2144236900AE17DC /* QTitleShapeComposition.swift in Sources */,
 				406A2EFF22EEE58D00664CA2 /* QFieldForm.swift in Sources */,
@@ -2229,6 +2236,7 @@
 				4007B0A52144236900AE17DC /* QImageTitleValueIconComposition.swift in Sources */,
 				406BEBE323FBE26F00F794AC /* QPhotosViewController+PreviewController+PhotoCell.swift in Sources */,
 				406EFD20248A2D13008EBD6A /* QFormViewControllerListField.swift in Sources */,
+				40C1BD0F2847432700C2FB52 /* QImageGroupLoaderFilter.swift in Sources */,
 				40CA3C0722C56EF400C4C1DC /* IQProgressView.swift in Sources */,
 				406F39E2248E1C6F00FA9E0E /* QTextFieldSuggestionController+Cell.swift in Sources */,
 				403B3D9420D39704008F80D4 /* IQRouterable.swift in Sources */,
