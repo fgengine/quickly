@@ -17,6 +17,7 @@ public class QImageLoaderTask {
     public private(set) var filter: IQImageLoaderFilter?
     public private(set) var targets: [IQImageLoaderTarget]
     public private(set) var workItem: DispatchWorkItem?
+    public private(set) var semaphore: DispatchSemaphore?
     public private(set) var query: IQApiQuery?
     
     public init(delegate: IQImageLoaderTaskDelegate, provider: QApiProvider, cache: QImageCache, url: URL, filter: IQImageLoaderFilter?, target: IQImageLoaderTarget) {
@@ -56,6 +57,10 @@ public class QImageLoaderTask {
     }
     
     public func cancel() {
+        if let semaphore = self.semaphore {
+            semaphore.signal()
+            self.semaphore = nil
+        }
         if let workItem = self.workItem {
             workItem.cancel()
             self.workItem = nil
@@ -119,13 +124,13 @@ public class QImageLoaderTask {
     }
     
     private func _remoteWorkItem() -> DispatchWorkItem {
-        let semaphore = DispatchSemaphore(value: 0)
         return DispatchWorkItem(block: { [weak self] in
             guard let self = self, let workItem = self.workItem else { return }
             var downloadData: Data?
             var downloadImage: UIImage?
             var resultImage: UIImage?
             var resultError: Error?
+            self.semaphore = DispatchSemaphore(value: 0)
             self._progress(progress: Progress(totalUnitCount: 0))
             self.query = self.provider.send(
                 request: QImageRequest(url: self.url),
@@ -137,12 +142,13 @@ public class QImageLoaderTask {
                     downloadData = response.data
                     downloadImage = response.image
                     resultError = response.error
-                    semaphore.signal()
+                    self.semaphore?.signal()
                 }
             )
-            semaphore.wait()
+            self.semaphore?.wait()
+            self.semaphore = nil
             self.query = nil
-            if workItem.isCancelled == false, let data = downloadData, let originImage = downloadImage {
+            if let data = downloadData, let originImage = downloadImage {
                 do {
                     try self.cache.set(data: data, image: originImage, url: self.url)
                     if workItem.isCancelled == false, let filter = self.filter, let image = filter.apply(originImage) {
@@ -160,6 +166,8 @@ public class QImageLoaderTask {
                 } catch let error {
                     resultError = error
                 }
+            } else {
+                print("CANCELED")
             }
             self._finish(workItem: workItem, image: resultImage, error: resultError)
         })
