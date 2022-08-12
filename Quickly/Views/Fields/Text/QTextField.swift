@@ -672,9 +672,11 @@ private extension QTextField {
     class FieldDelegate : NSObject, UITextFieldDelegate {
 
         public weak var field: QTextField?
+        private var _shouldReplacementString: Bool
 
         public init(field: QTextField?) {
             self.field = field
+            self._shouldReplacementString = false
             super.init()
         }
 
@@ -713,64 +715,68 @@ private extension QTextField {
 
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             guard let field = self.field else { return true }
-            var caretPosition: Int = range.location + string.count
-            var caretLength: Int = 0
-            var sourceText = textField.text ?? ""
-            if let sourceTextRange = sourceText.range(from: range) {
-                sourceText = sourceText.replacingCharacters(in: sourceTextRange, with: string)
-            }
-            var sourceUnformat: String
-            if let formatter = field.formatter {
-                sourceUnformat = formatter.unformat(sourceText, caret: &caretPosition)
-            } else {
-                sourceUnformat = sourceText
-            }
-            var autoCompleteVariants: [String] = []
-            if let suggestion = field.suggestion {
-                if sourceUnformat.count > 0 {
-                    autoCompleteVariants = suggestion.variants(sourceUnformat)
+            if self._shouldReplacementString == false {
+                self._shouldReplacementString = true
+                var caretPosition: Int = range.location + string.count
+                var caretLength: Int = 0
+                var sourceText = textField.text ?? ""
+                if let sourceTextRange = sourceText.range(from: range) {
+                    sourceText = sourceText.replacingCharacters(in: sourceTextRange, with: string)
                 }
-                if sourceUnformat.isEmpty == false && sourceUnformat.count <= caretPosition && string.count > 0 {
-                    if let autoComplete = suggestion.autoComplete(sourceUnformat) {
-                        caretLength = autoComplete.count - sourceUnformat.count
-                        sourceUnformat = autoComplete
+                var sourceUnformat: String
+                if let formatter = field.formatter {
+                    sourceUnformat = formatter.unformat(sourceText, caret: &caretPosition)
+                } else {
+                    sourceUnformat = sourceText
+                }
+                var autoCompleteVariants: [String] = []
+                if let suggestion = field.suggestion {
+                    if sourceUnformat.count > 0 {
+                        autoCompleteVariants = suggestion.variants(sourceUnformat)
+                    }
+                    if sourceUnformat.isEmpty == false && sourceUnformat.count <= caretPosition && string.count > 0 {
+                        if let autoComplete = suggestion.autoComplete(sourceUnformat) {
+                            caretLength = autoComplete.count - sourceUnformat.count
+                            sourceUnformat = autoComplete
+                        }
                     }
                 }
-            }
-            var isValid: Bool
-            if let validator = field.validator {
-                isValid = validator.validate(sourceUnformat).isValid
-            } else {
-                isValid = true
-            }
-            if field.requireValidator == false || string.isEmpty == true || isValid == true {
-                var selectionFrom: UITextPosition?
-                var selectionTo: UITextPosition?
-                if let formatter = field.formatter {
-                    let format = formatter.format(sourceUnformat, caret: &caretPosition)
-                    textField.text = format
-                    selectionFrom = textField.position(from: textField.beginningOfDocument, offset: caretPosition)
-                    selectionTo = textField.position(from: textField.beginningOfDocument, offset: caretPosition + caretLength)
+                var isValid: Bool
+                if let validator = field.validator {
+                    isValid = validator.validate(sourceUnformat).isValid
                 } else {
-                    textField.text = sourceUnformat
-                    selectionFrom = textField.position(from: textField.beginningOfDocument, offset: caretPosition)
-                    selectionTo = textField.position(from: textField.beginningOfDocument, offset: caretPosition + caretLength)
+                    isValid = true
                 }
-                if let selectionFrom = selectionFrom, let selectionTo = selectionTo {
-                    textField.selectedTextRange = textField.textRange(from: selectionFrom, to: selectionTo)
+                if field.requireValidator == false || string.isEmpty == true || isValid == true {
+                    var selectionFrom: UITextPosition?
+                    var selectionTo: UITextPosition?
+                    if let formatter = field.formatter {
+                        let format = formatter.format(sourceUnformat, caret: &caretPosition)
+                        textField.text = format
+                        selectionFrom = textField.position(from: textField.beginningOfDocument, offset: caretPosition)
+                        selectionTo = textField.position(from: textField.beginningOfDocument, offset: caretPosition + caretLength)
+                    } else {
+                        textField.text = sourceUnformat
+                        selectionFrom = textField.position(from: textField.beginningOfDocument, offset: caretPosition)
+                        selectionTo = textField.position(from: textField.beginningOfDocument, offset: caretPosition + caretLength)
+                    }
+                    if let selectionFrom = selectionFrom, let selectionTo = selectionTo {
+                        textField.selectedTextRange = textField.textRange(from: selectionFrom, to: selectionTo)
+                    }
+                    field.suggestionController?.set(variants: autoCompleteVariants)
+                    textField.sendActions(for: .editingChanged)
+                    NotificationCenter.default.post(name: UITextField.textDidChangeNotification, object: textField)
+                    if let closure = field.onEditing {
+                        closure(field)
+                    }
+                    field._observer.notify({ (observer) in
+                        observer.editing(textField: field)
+                    })
+                    if let form = field.form {
+                        form.validation()
+                    }
                 }
-                field.suggestionController?.set(variants: autoCompleteVariants)
-                textField.sendActions(for: .editingChanged)
-                NotificationCenter.default.post(name: UITextField.textDidChangeNotification, object: textField)
-                if let closure = field.onEditing {
-                    closure(field)
-                }
-                field._observer.notify({ (observer) in
-                    observer.editing(textField: field)
-                })
-                if let form = field.form {
-                    form.validation()
-                }
+                self._shouldReplacementString = false
             }
             return false
         }
