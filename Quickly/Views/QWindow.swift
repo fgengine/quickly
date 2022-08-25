@@ -123,9 +123,6 @@ open class QWindow : UIWindow, IQView, IQApplicationStateObserver {
         override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
             get { return self.contentViewController.supportedOrientations() }
         }
-        override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-            get { return self._interfaceOrientation() }
-        }
         
         private var _isShowedSecurityView: Bool
 
