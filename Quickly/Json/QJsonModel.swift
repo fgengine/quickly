@@ -2,7 +2,7 @@
 //  Quickly
 //
 
-import Quickly.Private
+import Foundation
 
 open class QJsonModel : IQJsonModel {
 
@@ -68,7 +68,7 @@ extension QJsonModel : IQJsonValue {
 
 extension QJsonModel : IQDebug {
 
-    open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+    public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         let nextIndent = indent + 1
 
         if headerIndent > 0 {

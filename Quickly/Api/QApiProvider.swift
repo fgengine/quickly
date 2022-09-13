@@ -2,6 +2,9 @@
 //  Quickly
 //
 
+import Foundation
+import QuicklyObjC
+
 public final class QApiProvider : NSObject, IQApiProvider {
 
     public var baseUrl: URL? = nil

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 open class QCharacterSetStringValidator : IQStringValidator {
 
     public let characterSet: CharacterSet

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QPushContainerViewController : QViewController, IQPushContainerViewController {
 
     open private(set) var viewControllers: [IQPushViewController]

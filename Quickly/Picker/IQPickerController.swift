@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQPickerControllerDelegate : class {
+import UIKit
+
+public protocol IQPickerControllerDelegate : AnyObject {
 
     func select(_ controller: IQPickerController, section: IQPickerSection, row: IQPickerRow)
 

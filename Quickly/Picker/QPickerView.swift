@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QPickerView : UIPickerView {
 
     public var pickerController: IQPickerController? {

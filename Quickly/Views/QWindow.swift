@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 // MARK: IQWindowSecurityView
 
 public protocol IQWindowSecurityView : IQView {

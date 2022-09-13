@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public final class QApiTaskQuery< RequestType: IQApiRequest, ResponseType: IQApiResponse > : IQApiTaskQuery {
 
     public typealias ProgressClosure = (_ progress: Progress) -> Void

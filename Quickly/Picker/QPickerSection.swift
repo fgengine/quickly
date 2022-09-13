@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QPickerSection : IQPickerSection {
 
     public typealias CellType = IQPickerSection.CellType

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public extension Double {
     
     var degreesToRadians: Self {

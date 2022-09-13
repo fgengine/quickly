@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 extension UInt {
     
     init?(_ string: String, radix: UInt) {

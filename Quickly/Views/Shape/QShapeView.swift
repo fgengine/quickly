@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QShapeView : QView {
 
     public var model: Model? {

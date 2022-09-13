@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 // MARK: QJsonError
 
 public enum QJsonError : Error {

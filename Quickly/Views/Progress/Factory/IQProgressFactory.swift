@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQProgressFactory : class {
+import UIKit
+
+public protocol IQProgressFactory : AnyObject {
     
     func create() -> QProgressViewType
     

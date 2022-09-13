@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QFormViewController : QViewController, IQFormViewController, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController, IQJalousieContentViewController {
     
     public var fields: [IQFormViewControllerField] {

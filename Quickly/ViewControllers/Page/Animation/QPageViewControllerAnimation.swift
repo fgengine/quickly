@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public final class QPageViewControllerForwardAnimation : IQPageViewControllerAnimation {
     
     public var overlapping: CGFloat

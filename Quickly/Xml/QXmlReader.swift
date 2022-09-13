@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public final class QXmlReader {
     
     public var document: QXmlDocument

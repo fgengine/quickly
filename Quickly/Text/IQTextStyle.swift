@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQTextStyle : class {
+import UIKit
+
+public protocol IQTextStyle : AnyObject {
 
     var parent: IQTextStyle? { set get }
     var children: [IQTextStyle] { get }

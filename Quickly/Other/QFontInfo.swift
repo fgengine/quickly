@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public struct QFontInfo {
 
     var height: CGFloat

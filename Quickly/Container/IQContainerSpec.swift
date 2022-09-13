@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQContainerSpec : class {
+import UIKit
+
+public protocol IQContainerSpec : AnyObject {
     
     var containerSize: CGSize { get }
 

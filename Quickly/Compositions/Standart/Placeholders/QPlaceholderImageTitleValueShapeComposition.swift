@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QPlaceholderImageTitleValueShapeComposable : QComposable {
     
     public var imageStyle: QImageViewStyleSheet

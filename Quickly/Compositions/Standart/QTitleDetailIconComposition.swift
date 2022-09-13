@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QTitleDetailIconComposable : QComposable {
     
     public var titleStyle: QLabelStyleSheet

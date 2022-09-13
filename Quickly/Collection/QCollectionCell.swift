@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QCollectionCell< Item: IQCollectionItem > : UICollectionViewCell, IQTypedCollectionCell {
     
     public weak var collectionDelegate: CollectionCellDelegate?

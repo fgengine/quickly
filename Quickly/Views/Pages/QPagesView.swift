@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QPagesViewStyleSheet : IQStyleSheet {
     
     var hidesForSinglePage: Bool

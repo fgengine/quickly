@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QImageTitleDetailComposable : QComposable {
 
     public var imageStyle: QImageViewStyleSheet

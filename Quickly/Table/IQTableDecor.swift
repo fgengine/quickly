@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQTableDecorDelegate : class {
+import UIKit
+
+public protocol IQTableDecorDelegate : AnyObject {
 }
 
 public protocol IQTableDecor : IQTableReuse {

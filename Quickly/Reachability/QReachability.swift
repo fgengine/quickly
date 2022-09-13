@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import SystemConfiguration
+
 public enum QReachabilityError : Error {
     case failedToCreateWithAddress(sockaddr_in)
     case failedToCreateWithHostname(String)

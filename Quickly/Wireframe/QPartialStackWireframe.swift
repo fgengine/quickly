@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QPartialStackWireframe< RouterType: IQRouter, ContextType: IQContext > : IQPartialWireframe, IQWireframeDeeplinkable, IQWeakRouterable, IQContextable {
     
     public typealias WireframeType = QStackWireframe< RouterType, ContextType >

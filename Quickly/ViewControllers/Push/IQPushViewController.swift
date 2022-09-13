@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 // MARK: QPushViewControllerState
 
 public enum QPushViewControllerState {
@@ -11,7 +13,7 @@ public enum QPushViewControllerState {
 
 // MARK: IQPushViewControllerFixedAnimation
 
-public protocol IQPushViewControllerFixedAnimation : class {
+public protocol IQPushViewControllerFixedAnimation : AnyObject {
 
     func animate(
         viewController: IQPushViewController,
@@ -23,7 +25,7 @@ public protocol IQPushViewControllerFixedAnimation : class {
 
 // MARK: IQPushViewControllerInteractiveAnimation
 
-public protocol IQPushViewControllerInteractiveAnimation : class {
+public protocol IQPushViewControllerInteractiveAnimation : AnyObject {
 
     var canFinish: Bool { get }
     

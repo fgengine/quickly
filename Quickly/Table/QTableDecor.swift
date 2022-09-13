@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QTableDecor< DataType: IQTableData > : UITableViewHeaderFooterView, IQTypedTableDecor {
 
     open weak var tableDelegate: IQTableDecorDelegate?

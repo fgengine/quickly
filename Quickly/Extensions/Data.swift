@@ -2,6 +2,9 @@
 //  Quickly
 //
 
+import Foundation
+import CommonCrypto
+
 public extension Data {
 
     var hexString: String {

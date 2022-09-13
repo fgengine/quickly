@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QDialogContainerViewController : QViewController, IQDialogContainerViewController {
     
     open private(set) var viewControllers: [IQDialogViewController]

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QTitleValueShapeComposable : QComposable {
 
     public var titleStyle: QLabelStyleSheet

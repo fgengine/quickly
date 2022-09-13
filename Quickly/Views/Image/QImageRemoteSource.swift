@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public class QImageRemoteSource {
     
     public var url: URL

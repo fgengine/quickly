@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public final class QPushViewControllerPresentAnimation : IQPushViewControllerFixedAnimation {
     
     public var duration: TimeInterval

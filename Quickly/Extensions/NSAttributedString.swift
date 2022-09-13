@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public extension NSMutableAttributedString {
 
     func fontInfo(range: NSRange) -> QFontInfo {

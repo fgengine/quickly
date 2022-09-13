@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public class QPdfPhotoItem : IQPhotoItem {
     
     public var isNeedLoad: Bool {

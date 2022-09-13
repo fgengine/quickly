@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QImageTitleComposable : QComposable {
 
     public var direction: QViewDirection

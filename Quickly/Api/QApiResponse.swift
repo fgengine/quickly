@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 open class QApiResponse : IQApiResponse {
 
     public private(set) var url: URL?
@@ -59,7 +61,7 @@ open class QApiResponse : IQApiResponse {
 
 extension QApiResponse : IQDebug {
 
-    open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+    public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         let nextIndent = indent + 1
 
         if headerIndent > 0 {

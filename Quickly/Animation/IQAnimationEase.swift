@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQAnimationEase : class {
+import CoreGraphics
+
+public protocol IQAnimationEase : AnyObject {
 
     func perform(_ x: Float) -> Float
     func perform(_ x: Double) -> Double

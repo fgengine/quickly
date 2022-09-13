@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public extension UIColor {
     
     var isOpaque: Bool {

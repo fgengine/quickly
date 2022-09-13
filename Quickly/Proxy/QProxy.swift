@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public final class QProxy : IQProxy {
     
     public private(set) var host: String

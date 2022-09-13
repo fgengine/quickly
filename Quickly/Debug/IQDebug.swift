@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 #if DEBUG
 
 public protocol IQDebug {

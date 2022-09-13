@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QGroupContainerViewController : QViewController, IQGroupContainerViewController, IQStackContentViewController, IQModalContentViewController, IQHamburgerContentViewController, IQJalousieContentViewController {
 
     open var barView: QGroupbar? {

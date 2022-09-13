@@ -2,6 +2,8 @@
 //  Docusketch
 //
 
+import UIKit
+
 open class QPincodeComposable : QComposable {
 
     public let titleStyle: QLabelStyleSheet
@@ -84,7 +86,7 @@ open class QPincodeComposable : QComposable {
 
 }
 
-public protocol QPincodeCompositionDelegate : class {
+public protocol QPincodeCompositionDelegate : AnyObject {
     
     func pincodeCompositionUpdated(_ composition: QPincodeComposition, pin: String)
     func pincodeCompositionCompited(_ composition: QPincodeComposition, pin: String)

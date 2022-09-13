@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import CoreGraphics
+
 public final class QAnimationEaseQuarticIn : IQAnimationEase {
     
     public init() {

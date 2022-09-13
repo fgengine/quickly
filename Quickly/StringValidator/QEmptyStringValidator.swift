@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 open class QEmptyStringValidator : IQStringValidator {
     
     public let error: String

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QText : IQText {
     
     public private(set) var string: String

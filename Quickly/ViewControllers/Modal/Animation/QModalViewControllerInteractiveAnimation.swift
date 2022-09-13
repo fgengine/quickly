@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public final class QModalViewControllerInteractiveDismissAnimation : IQModalViewControllerInteractiveAnimation {
 
     public var contentView: UIView!

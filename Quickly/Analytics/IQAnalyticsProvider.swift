@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQAnalyticsProvider : class {
+import Foundation
+
+public protocol IQAnalyticsProvider : AnyObject {
     
     func send(event: String, params: [String : String]?)
     

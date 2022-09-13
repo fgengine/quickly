@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQWireframe : class {
+import UIKit
+
+public protocol IQWireframe : AnyObject {
     
     associatedtype ViewControllerType: IQViewController
     
@@ -10,7 +12,7 @@ public protocol IQWireframe : class {
     
 }
 
-public protocol IQPartialWireframe : class {
+public protocol IQPartialWireframe : AnyObject {
     
     associatedtype ViewControllerType: IQViewController
     
@@ -18,7 +20,7 @@ public protocol IQPartialWireframe : class {
     
 }
 
-public protocol IQWireframeDeeplinkable : class {
+public protocol IQWireframeDeeplinkable : AnyObject {
     
     func open(_ url: URL) -> Bool
     

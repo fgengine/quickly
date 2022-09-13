@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public enum QViewDirection {
     case vertical
     case horizontal
@@ -58,7 +60,7 @@ public struct QViewShadow {
 
 }
 
-public protocol IQView : class {
+public protocol IQView : AnyObject {
     
     init()
 

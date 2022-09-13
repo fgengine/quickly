@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 open class QMaskStringFormatter : IQStringFormatter {
 
     public let prefix: String

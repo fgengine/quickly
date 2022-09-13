@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QJalousieContainerViewController : QViewController, IQJalousieContainerViewController {
 
     open var state: QJalousieViewControllerState {

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public final class QJalousieViewControllerAnimation : IQJalousieViewControllerFixedAnimation {
     
     public var detailFullscreenSize: CGFloat

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QJalousieViewController : QViewController, IQJalousieViewController {
 
     open private(set) var viewController: IQJalousieContentViewController

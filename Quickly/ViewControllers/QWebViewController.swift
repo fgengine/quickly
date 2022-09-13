@@ -2,6 +2,10 @@
 //  Quickly
 //
 
+import UIKit
+import WebKit
+import QuicklyObjC
+
 open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDelegate, UIScrollViewDelegate, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController, IQJalousieContentViewController, IQLoadingViewDelegate {
     
     public class WebView : WKWebView {
@@ -166,7 +170,7 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
             } else {
                 let application = UIApplication.shared
                 if application.canOpenURL(url) == true {
-                    application.openURL(url)
+                    application.open(url, options: [:], completionHandler: nil)
                 }
             }
         }
@@ -182,7 +186,7 @@ open class QWebViewController : QViewController, WKUIDelegate, WKNavigationDeleg
             case "tel", "mailto":
                 let application = UIApplication.shared
                 if application.canOpenURL(url) == true {
-                    application.openURL(url)
+                    application.open(url, options: [:], completionHandler: nil)
                 }
                 actionPolicy = .cancel
                 break

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QStackViewController : QViewController, IQStackViewController, IQModalContentViewController, IQHamburgerContentViewController, IQJalousieContentViewController {
 
     open var barView: QStackbar? {

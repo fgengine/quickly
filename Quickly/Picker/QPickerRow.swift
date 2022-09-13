@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QPickerRow : IQPickerRow {
 
     public private(set) weak var section: IQPickerSection?

@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQApiQuery : class {
+import Foundation
+
+public protocol IQApiQuery : AnyObject {
 
     var provider: IQApiProvider { get }
     var createAt: Date { get }

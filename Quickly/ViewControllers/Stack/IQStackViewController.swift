@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 // MARK: QStackViewControllerBarSize
 
 public enum QStackViewControllerBarSize : Equatable {
@@ -11,7 +13,7 @@ public enum QStackViewControllerBarSize : Equatable {
 
 // MARK: IQStackViewControllerAnimation
 
-public protocol IQStackViewControllerPresentAnimation : class {
+public protocol IQStackViewControllerPresentAnimation : AnyObject {
 
     func animate(
         containerViewController: IQStackContainerViewController,
@@ -26,7 +28,7 @@ public protocol IQStackViewControllerPresentAnimation : class {
 
 }
 
-public protocol IQStackViewControllerDismissAnimation : class {
+public protocol IQStackViewControllerDismissAnimation : AnyObject {
 
     func animate(
         containerViewController: IQStackContainerViewController,
@@ -41,7 +43,7 @@ public protocol IQStackViewControllerDismissAnimation : class {
 
 }
 
-public protocol IQStackViewControllerInteractiveDismissAnimation : class {
+public protocol IQStackViewControllerInteractiveDismissAnimation : AnyObject {
 
     var canFinish: Bool { get }
     

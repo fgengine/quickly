@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QCollectionStyleSheet : IQStyleSheet {
     
     public var backgroundColor: UIColor?
@@ -182,13 +184,15 @@ open class QCollectionView : UICollectionView, IQView {
 
 extension QCollectionView : IQContainerSpec {
     
-    open var containerSize: CGSize {
+    public var containerSize: CGSize {
         get { return self.bounds.inset(by: self.contentInset).size }
     }
-    open var containerLeftInset: CGFloat {
+    
+    public var containerLeftInset: CGFloat {
         get { return self.contentLeftInset }
     }
-    open var containerRightInset: CGFloat {
+    
+    public var containerRightInset: CGFloat {
         get { return self.contentRightInset }
     }
     

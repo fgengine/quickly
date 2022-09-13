@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QSwitchStyleSheet : IQStyleSheet {
     
     public var tintColor: UIColor?

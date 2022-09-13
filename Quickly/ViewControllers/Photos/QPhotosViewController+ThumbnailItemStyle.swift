@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 extension QPhotosViewController {
     
     public class ThumbnailItemStyle {

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public protocol IQDateFieldFormatter {
 
     func from(_ date: Date) -> IQText
@@ -24,7 +26,7 @@ public enum QDateFieldMode {
     }
 }
 
-public protocol IQDateFieldObserver : class {
+public protocol IQDateFieldObserver : AnyObject {
     
     func beginEditing(dateField: QDateField)
     func select(dateField: QDateField, date: Date)

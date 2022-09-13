@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QPickerCell< Type: IQPickerRow > : UIView, IQTypedPickerCell {
 
     public private(set) var row: Type?

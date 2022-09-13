@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public extension NSDecimalNumber {
 
     class func decimalNumber(from string: String) -> NSDecimalNumber? {

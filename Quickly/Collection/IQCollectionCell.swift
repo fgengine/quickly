@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol CollectionCellDelegate : class {
+import UIKit
+
+public protocol CollectionCellDelegate : AnyObject {
 }
 
 public protocol IQCollectionCell : IQCollectionReuse {

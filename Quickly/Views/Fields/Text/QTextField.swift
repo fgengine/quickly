@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQTextFieldSuggestion : class {
+import UIKit
+
+public protocol IQTextFieldSuggestion : AnyObject {
     
     func autoComplete(_ text: String) -> String?
     func variants(_ text: String) -> [String]
@@ -19,7 +21,7 @@ public protocol IQTextFieldSuggestionController : IQCollectionController {
     
 }
 
-public protocol IQTextFieldObserver : class {
+public protocol IQTextFieldObserver : AnyObject {
     
     func beginEditing(textField: QTextField)
     func editing(textField: QTextField)

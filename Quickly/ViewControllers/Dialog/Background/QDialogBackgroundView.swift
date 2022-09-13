@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public final class QDialogBackgroundView : QView, IQDialogContainerBackgroundView {
 
     public weak var containerViewController: IQDialogContainerViewController?

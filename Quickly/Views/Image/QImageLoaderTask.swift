@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQImageLoaderTaskDelegate : class {
+import UIKit
+
+public protocol IQImageLoaderTaskDelegate : AnyObject {
     
     func didFinishImageLoaderTask(_ imageLoaderTask: QImageLoaderTask)
     

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QBlurView : UIVisualEffectView, IQView {
     
     public var blur: UIBlurEffect? {

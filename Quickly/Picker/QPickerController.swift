@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QPickerController : NSObject, IQPickerController {
 
     public weak var delegate: IQPickerControllerDelegate?

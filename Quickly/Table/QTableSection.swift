@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QTableSection : IQTableSection {
 
     public private(set) weak var controller: IQTableController?

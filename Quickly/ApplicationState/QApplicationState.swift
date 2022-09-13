@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public protocol IQApplicationStateObserver {
     
     func didReceiveMemoryWarning(_ applicationState: QApplicationState)

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public extension Date {
     
     func isEqual(calendar: Calendar, date: Date, component: Calendar.Component) -> Bool {

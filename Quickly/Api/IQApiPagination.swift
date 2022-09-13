@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public protocol IQApiPagination {
 
     func next() -> Self

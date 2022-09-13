@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public class QImageGroupLoaderFilter : IQImageLoaderFilter {
 
     public var filters: [IQImageLoaderFilter]

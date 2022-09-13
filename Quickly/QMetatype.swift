@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public struct QMetatype : Hashable {
 
     public let base: AnyClass

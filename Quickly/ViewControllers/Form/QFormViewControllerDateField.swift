@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QFormViewControllerDateField : QFormViewControllerField {
     
     public private(set) var inputView: QDisplayView!

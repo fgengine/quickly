@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQImageLoaderFilter : class {
+import UIKit
+
+public protocol IQImageLoaderFilter : AnyObject {
     
     var name: String { get }
     

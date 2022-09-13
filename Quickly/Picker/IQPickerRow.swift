@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQPickerRow : class {
+import UIKit
+
+public protocol IQPickerRow : AnyObject {
 
     var section: IQPickerSection? { get }
     var indexPath: IndexPath? { get }

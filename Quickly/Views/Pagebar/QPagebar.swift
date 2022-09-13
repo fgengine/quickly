@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QPagebarItem : QCollectionItem {
 }
 
@@ -206,7 +208,7 @@ open class QPagebar : QView {
 
 }
 
-public protocol QPagebarDelegate : class {
+public protocol QPagebarDelegate : AnyObject {
 
     func pagebar(_ pagebar: QPagebar, didSelectItem: QPagebarItem)
 

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 // MARK: QXmlError
 
 public enum QXmlError : Error {

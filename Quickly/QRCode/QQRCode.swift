@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public struct QQRCode {
     
     public enum ErrorCorrection : String {

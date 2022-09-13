@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QHamburgerContainerViewController : QViewController, IQHamburgerContainerViewController {
     
     public var contentOffset: CGPoint {

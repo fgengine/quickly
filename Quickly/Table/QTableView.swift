@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QTableStyleSheet : IQStyleSheet {
     
     public var backgroundColor: UIColor?
@@ -255,13 +257,15 @@ private extension QTableView {
 
 extension QTableView : IQContainerSpec {
     
-    open var containerSize: CGSize {
+    public var containerSize: CGSize {
         get { return self.bounds.inset(by: self.contentInset).size }
     }
-    open var containerLeftInset: CGFloat {
+    
+    public var containerLeftInset: CGFloat {
         get { return self.contentLeftInset }
     }
-    open var containerRightInset: CGFloat {
+    
+    public var containerRightInset: CGFloat {
         get { return self.contentRightInset }
     }
     

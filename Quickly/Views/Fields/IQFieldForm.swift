@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQFieldForm : class {
+import UIKit
+
+public protocol IQFieldForm : AnyObject {
     
     var fields: [IQField] { get }
     var isValid: Bool { get }
@@ -17,7 +19,7 @@ public protocol IQFieldForm : class {
     
 }
 
-public protocol IQFieldFormObserver : class {
+public protocol IQFieldFormObserver : AnyObject {
 
     func fieldForm(_ fieldForm: IQFieldForm, isValid: Bool)
     

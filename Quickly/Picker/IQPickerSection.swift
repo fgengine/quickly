@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQPickerSection : class {
+import UIKit
+
+public protocol IQPickerSection : AnyObject {
 
     typealias CellType = IQPickerCell.DequeueType.Type
 

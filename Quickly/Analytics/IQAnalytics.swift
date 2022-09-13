@@ -2,5 +2,7 @@
 //  Quickly
 //
 
-public protocol IQAnalytics : class {
+import Foundation
+
+public protocol IQAnalytics : AnyObject {
 }

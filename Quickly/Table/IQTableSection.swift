@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQTableSection : class {
+import UIKit
+
+public protocol IQTableSection : AnyObject {
 
     var controller: IQTableController? { get }
     var index: Int? { get }

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 extension QPhotosViewController {
     
     class PreviewController : QCollectionController {

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public final class QPageViewControllerInteractiveAnimation : IQPageViewControllerInteractiveAnimation {
 
     public var contentView: UIView!

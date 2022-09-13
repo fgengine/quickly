@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public enum QJalousieViewControllerState {
     case fullscreen
     case showed
@@ -10,7 +12,7 @@ public enum QJalousieViewControllerState {
 
 // MARK: IQJalousieViewControllerFixedAnimation
 
-public protocol IQJalousieViewControllerFixedAnimation : class {
+public protocol IQJalousieViewControllerFixedAnimation : AnyObject {
 
     func layout(
         contentView: UIView,
@@ -33,7 +35,7 @@ public protocol IQJalousieViewControllerFixedAnimation : class {
 
 // MARK: IQJalousieViewControllerInteractiveAnimation
 
-public protocol IQJalousieViewControllerInteractiveAnimation : class {
+public protocol IQJalousieViewControllerInteractiveAnimation : AnyObject {
 
     var canFinish: Bool { get }
     

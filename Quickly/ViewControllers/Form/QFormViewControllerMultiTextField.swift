@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QFormViewControllerMultiTextField : QFormViewControllerField {
     
     public private(set) var inputView: QDisplayView!

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public extension NSError {
 
     func isUrlError() -> Bool {

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QComposable : IQComposable {
 
     public var edgeInsets: UIEdgeInsets

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public protocol IQKeyboardObserver {
 
     func willShowKeyboard(_ keyboard: QKeyboard, animationInfo: QKeyboardAnimationInfo)

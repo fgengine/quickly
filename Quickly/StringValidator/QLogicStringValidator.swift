@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 open class QLogicStringValidator : IQStringValidator {
     
     public enum Mode {

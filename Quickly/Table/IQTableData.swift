@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQTableData : class {
+import UIKit
+
+public protocol IQTableData : AnyObject {
 
     var section: IQTableSection? { get }
     var cacheHeight: CGFloat? { set get }

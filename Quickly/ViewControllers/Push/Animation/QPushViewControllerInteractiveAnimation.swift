@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public final class QPushViewControllerInteractiveDismissAnimation : IQPushViewControllerInteractiveAnimation {
 
     public var viewController: IQPushViewController!

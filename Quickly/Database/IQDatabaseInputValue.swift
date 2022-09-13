@@ -2,6 +2,9 @@
 //  Quickly
 //
 
+import Foundation
+import CoreGraphics
+
 // MARK: IQDatabaseInputValue
 
 public protocol IQDatabaseInputValue {

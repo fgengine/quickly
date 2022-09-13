@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public protocol IQProxy {
 
     var host: String { get }

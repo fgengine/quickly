@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QLoadingView : QView, IQLoadingView {
     
     public weak var delegate: IQLoadingViewDelegate?

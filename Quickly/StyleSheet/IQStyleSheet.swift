@@ -2,5 +2,7 @@
 //  Quickly
 //
 
-public protocol IQStyleSheet : class {
+import UIKit
+
+public protocol IQStyleSheet : AnyObject {
 }

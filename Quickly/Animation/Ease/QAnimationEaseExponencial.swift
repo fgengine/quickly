@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import CoreGraphics
+
 public final class QAnimationEaseExponencialIn : IQAnimationEase {
     
     public init() {

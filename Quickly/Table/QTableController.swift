@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QTableController : NSObject, IQTableController, IQTableCellDelegate, IQTableDecorDelegate {
     
     public typealias TableView = IQTableController.TableView

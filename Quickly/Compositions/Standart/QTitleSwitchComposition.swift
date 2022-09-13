@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QTitleSwitchComposable : QComposable {
 
     public typealias Closure = (_ composable: QTitleSwitchComposable) -> Void

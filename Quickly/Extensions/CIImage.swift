@@ -2,6 +2,9 @@
 //  Quickly
 //
 
+import UIKit
+import CoreImage
+
 public extension CIImage {
     
     func nonInterpolatedImage(withScale scale: CGPoint) -> UIImage? {

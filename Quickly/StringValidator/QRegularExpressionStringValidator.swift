@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 open class QRegularExpressionStringValidator : IQStringValidator {
 
     public let expression: NSRegularExpression

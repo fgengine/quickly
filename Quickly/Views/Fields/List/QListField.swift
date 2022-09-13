@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQListFieldObserver : class {
+import UIKit
+
+public protocol IQListFieldObserver : AnyObject {
     
     func beginEditing(listField: QListField)
     func select(listField: QListField, row: QListFieldPickerRow)

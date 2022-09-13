@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public enum QDeviceFamily : Int {
     case unknown
     case iPhone

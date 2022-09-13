@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQCollectionControllerObserver : class {
+import UIKit
+
+public protocol IQCollectionControllerObserver : AnyObject {
 
     func beginScroll(_ controller: IQCollectionController, collectionView: UICollectionView)
     func scroll(_ controller: IQCollectionController, collectionView: UICollectionView)

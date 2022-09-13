@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public extension UIView {
     
     func setContentHuggingPriority(horizontal: UILayoutPriority, vertical: UILayoutPriority) {

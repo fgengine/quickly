@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QStackContainerViewController : QViewController, IQStackContainerViewController, IQModalContentViewController, IQHamburgerContentViewController, IQJalousieContentViewController {
 
     open var viewControllers: [IQStackViewController] {

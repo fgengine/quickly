@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public enum QCompositionTableRowSizeBehaviour {
     case dynamic
     case full

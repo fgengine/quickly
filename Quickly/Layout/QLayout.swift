@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public protocol QLayoutTarget : AnyObject {
 }
 

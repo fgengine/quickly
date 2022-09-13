@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QAttributedText : IQText {
     
     public var string: String {

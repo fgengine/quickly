@@ -2,5 +2,7 @@
 //  Quickly
 //
 
-public protocol IQContext : class {
+import Foundation
+
+public protocol IQContext : AnyObject {
 }

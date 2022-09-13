@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public struct QFieldAction : OptionSet {
     
     public let rawValue: UInt
@@ -15,7 +17,7 @@ public struct QFieldAction : OptionSet {
     
 }
 
-public protocol IQField : class {
+public protocol IQField : AnyObject {
 
     var isValid: Bool { get }
     var placeholder: IQText?  { set get }

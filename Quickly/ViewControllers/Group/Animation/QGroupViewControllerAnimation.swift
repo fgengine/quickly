@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public final class QGroupViewControllerAnimation : IQGroupViewControllerAnimation {
     
     public var overlapping: CGFloat

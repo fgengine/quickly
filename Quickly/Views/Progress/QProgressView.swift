@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QProgressViewStyleSheet : IQStyleSheet {
     
     var style: UIProgressView.Style

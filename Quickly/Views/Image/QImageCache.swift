@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public class QImageCache {
 
     public private(set) var name: String

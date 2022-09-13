@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QFormViewControllerField : IQFormViewControllerField {
     
     public var delegate: IQFormViewControllerFieldDelegate?

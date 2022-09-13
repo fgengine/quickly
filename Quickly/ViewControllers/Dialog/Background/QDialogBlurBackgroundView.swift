@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public final class QDialogBlurBackgroundView : QBlurView, IQDialogContainerBackgroundView {
 
     public weak var containerViewController: IQDialogContainerViewController?

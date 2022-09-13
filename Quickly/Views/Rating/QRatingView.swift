@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QRatingStyleSheet : IQStyleSheet {
     
     public var starSize: CGSize

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QCollectionTableRow : QBackgroundColorTableRow {
 
     public var edgeInsets: UIEdgeInsets

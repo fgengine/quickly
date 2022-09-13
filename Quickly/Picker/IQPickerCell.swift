@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public protocol IQPickerCell : IQView {
 
     typealias DequeueType = UIView & IQPickerCell

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QButtonStyleSheet : IQStyleSheet {
     
     public var contentHorizontalAlignment: QButton.ContentHorizontalAlignment

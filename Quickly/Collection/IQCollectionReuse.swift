@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public protocol IQCollectionReuse : IQView {
 
     static func reuseIdentifier() -> String

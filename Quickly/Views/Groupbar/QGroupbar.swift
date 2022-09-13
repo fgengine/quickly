@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QGroupbarItem : QCollectionItem {
 }
 
@@ -308,7 +310,7 @@ open class QGroupbar : QView {
     
 }
 
-public protocol QGroupbarDelegate : class {
+public protocol QGroupbarDelegate : AnyObject {
     
     func groupbar(_ groupbar: QGroupbar, didSelectItem: QGroupbarItem)
     

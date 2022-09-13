@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QLabelPickerSection : QPickerSection {
 
     public init(size: CGSize, rows: [IQPickerRow]) {

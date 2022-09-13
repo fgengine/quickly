@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QSegmentedControlStyleSheet : IQStyleSheet {
     
     public var items: [QSegmentedControl.Item]

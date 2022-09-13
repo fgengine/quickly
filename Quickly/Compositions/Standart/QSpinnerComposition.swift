@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QSpinnerComposable : QComposable {
     
     public var size: CGFloat

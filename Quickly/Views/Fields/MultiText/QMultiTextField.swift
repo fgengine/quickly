@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQMultiTextFieldObserver : class {
+import UIKit
+
+public protocol IQMultiTextFieldObserver : AnyObject {
     
     func beginEditing(multiTextField: QMultiTextField)
     func editing(multiTextField: QMultiTextField)

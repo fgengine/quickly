@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QImageComposable : QComposable {
 
     public var imageStyle: QImageViewStyleSheet

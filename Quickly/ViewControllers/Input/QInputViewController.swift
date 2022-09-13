@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QInputViewController : QViewController, IQInputViewController {
     
     open var toolbar: QToolbar?

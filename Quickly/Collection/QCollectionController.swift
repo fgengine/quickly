@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QCollectionController : NSObject, IQCollectionController, CollectionCellDelegate, IQCollectionDecorDelegate {
     
     public typealias CollectionView = IQCollectionController.CollectionView

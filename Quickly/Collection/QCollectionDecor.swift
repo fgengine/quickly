@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QCollectionDecor< Type: IQCollectionData > : UICollectionReusableView, IQTypedCollectionDecor {
 
     public override init(frame: CGRect) {

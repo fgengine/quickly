@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QSegmentedControlComposable : QComposable {
 
     public typealias Closure = (_ composable: QSegmentedControlComposable) -> Void

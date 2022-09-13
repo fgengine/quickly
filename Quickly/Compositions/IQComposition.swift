@@ -2,10 +2,12 @@
 //  Quickly
 //
 
-public protocol IQComposable : class {
+import UIKit
+
+public protocol IQComposable : AnyObject {
 }
 
-public protocol IQComposition : class {
+public protocol IQComposition : AnyObject {
 
     associatedtype Composable: IQComposable
     
@@ -27,7 +29,7 @@ public protocol IQComposition : class {
 
 }
 
-public protocol IQEditableComposition : class {
+public protocol IQEditableComposition : AnyObject {
     
     func beginEditing()
     func endEditing()

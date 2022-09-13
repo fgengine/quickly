@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QPageContainerViewController : QViewController, IQPageContainerViewController, IQStackContentViewController, IQGroupContentViewController, IQModalContentViewController, IQHamburgerContentViewController, IQJalousieContentViewController {
 
     open var barView: QPagebar? {

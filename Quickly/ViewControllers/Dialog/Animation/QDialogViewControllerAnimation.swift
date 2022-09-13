@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public final class QDialogViewControllerPresentAnimation : IQDialogViewControllerFixedAnimation {
     
     public var duration: TimeInterval

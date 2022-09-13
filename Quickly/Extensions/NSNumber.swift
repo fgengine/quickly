@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public extension NSNumber {
 
     class func number(from string: String) -> NSNumber? {

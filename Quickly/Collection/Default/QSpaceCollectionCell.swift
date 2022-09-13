@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QSpaceCollectionItem : QBackgroundColorCollectionItem {
 
     public var size: CGSize

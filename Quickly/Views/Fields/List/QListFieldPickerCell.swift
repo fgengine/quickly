@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public class QListFieldPickerCell : QPickerCell< QListFieldPickerRow > {
 
     private lazy var _title: QLabel = {

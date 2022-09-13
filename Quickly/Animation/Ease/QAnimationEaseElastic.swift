@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import CoreGraphics
+
 public final class QAnimationEaseElasticIn : IQAnimationEase {
     
     public init() {

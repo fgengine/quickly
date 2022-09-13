@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QImageResponse : QApiResponse {
 
     open var data: Data?

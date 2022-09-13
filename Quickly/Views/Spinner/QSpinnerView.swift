@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QSpinnerViewStyleSheet : IQStyleSheet {
     
     var style: UIActivityIndicatorView.Style

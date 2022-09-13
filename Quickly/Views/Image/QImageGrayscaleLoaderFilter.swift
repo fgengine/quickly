@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public class QImageGrayscaleLoaderFilter : IQImageLoaderFilter {
 
     public var name: String {

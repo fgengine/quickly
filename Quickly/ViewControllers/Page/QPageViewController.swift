@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QPageViewController : QViewController, IQPageViewController {
     
     open private(set) var viewController: IQPageContentViewController

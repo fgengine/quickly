@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QPincodeStyleSheet : QDisplayStyleSheet {
     
     public var length: Int = 4

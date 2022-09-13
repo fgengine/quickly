@@ -1,5 +1,0 @@
-//
-//  Quickly
-//
-
-#import "QImplAuthenticationChallenge.h"

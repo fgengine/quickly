@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public final class QJalousieViewControllerInteractiveAnimation : IQJalousieViewControllerInteractiveAnimation {
     
     public var contentView: UIView!

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public protocol IQRouterable {
 
     associatedtype RouterType

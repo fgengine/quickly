@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public extension Float {
     
     var degreesToRadians: Self {

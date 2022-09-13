@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QDisplayStyleSheet : IQStyleSheet {
 
     public var backgroundColor: UIColor?

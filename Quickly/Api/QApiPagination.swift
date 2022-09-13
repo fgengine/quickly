@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public struct QApiPagePagination : IQApiPagePagination {
 
     public var page: UInt

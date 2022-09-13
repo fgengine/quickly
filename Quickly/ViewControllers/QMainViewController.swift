@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QMainViewController : QViewController {
 
     open var backgroundViewController: IQViewController? {

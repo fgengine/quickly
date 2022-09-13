@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public final class QHamburgerViewControllerAnimation : IQHamburgerViewControllerFixedAnimation {
     
     public var contentShadow: QViewShadow

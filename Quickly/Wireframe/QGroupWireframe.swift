@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QGroupWireframe< RouterType: IQRouter, ContextType: IQContext > : IQWireframe, IQWireframeDeeplinkable, IQWeakRouterable, IQContextable {
 
     public private(set) weak var router: RouterType?

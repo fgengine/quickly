@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QTitleDetailButtonComposable : QComposable {
 
     public typealias Closure = (_ composable: QTitleDetailButtonComposable) -> Void

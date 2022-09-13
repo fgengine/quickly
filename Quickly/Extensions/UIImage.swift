@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public extension UIImage {
     
     convenience init?(size: CGSize, scale: CGFloat, color: UIColor) {

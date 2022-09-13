@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQCollectionItem : class {
+import UIKit
+
+public protocol IQCollectionItem : AnyObject {
 
     var section: IQCollectionSection? { get }
     var indexPath: IndexPath? { get }

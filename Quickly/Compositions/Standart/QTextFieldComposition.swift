@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QTextFieldComposable : QComposable {
 
     public typealias ShouldClosure = (_ composable: QTextFieldComposable) -> Bool

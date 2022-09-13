@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QGroupViewController : QViewController, IQGroupViewController {
     
     open private(set) var viewController: IQGroupContentViewController

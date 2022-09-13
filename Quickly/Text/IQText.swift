@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQText : class {
+import UIKit
+
+public protocol IQText : AnyObject {
 
     var string: String { get }
     var font: UIFont? { get }

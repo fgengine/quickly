@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QCompositionCollectionItem< Composable: IQComposable > : QBackgroundColorCollectionItem {
 
     public var composable: Composable

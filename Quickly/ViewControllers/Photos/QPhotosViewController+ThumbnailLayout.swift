@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 extension QPhotosViewController {
     
     class ThumbnailLayout : UICollectionViewFlowLayout {

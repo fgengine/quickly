@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 open class QAmountStringValidator : QRegularExpressionStringValidator {
 
     public init(

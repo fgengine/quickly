@@ -2,5 +2,7 @@
 //  Quickly
 //
 
-public protocol IQRouter : class {
+import Foundation
+
+public protocol IQRouter : AnyObject {
 }

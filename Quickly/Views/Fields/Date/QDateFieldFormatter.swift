@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public class QDateFieldFormatter : IQDateFieldFormatter {
 
     public private(set) var formatter: DateFormatter

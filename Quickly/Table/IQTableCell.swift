@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQTableCellDelegate : class {
+import UIKit
+
+public protocol IQTableCellDelegate : AnyObject {
 }
 
 public protocol IQTableCell : IQTableReuse {

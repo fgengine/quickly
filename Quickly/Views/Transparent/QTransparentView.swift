@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QTransparentView : QInvisibleView {
 
     open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {

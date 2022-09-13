@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public class QFieldForm : IQFieldForm {
     
     public private(set) var fields: [IQField]

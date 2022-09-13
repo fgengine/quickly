@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QSeparatorTableRow : QBackgroundColorTableRow {
 
     public var edgeInsets: UIEdgeInsets

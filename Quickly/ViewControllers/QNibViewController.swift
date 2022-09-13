@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QNibViewController : QViewController, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController, IQJalousieContentViewController, IQLoadingViewDelegate {
 
     @IBOutlet
@@ -178,13 +180,15 @@ private extension QNibViewController {
 
 extension QNibViewController : IQContainerSpec {
     
-    open var containerSize: CGSize {
+    public var containerSize: CGSize {
         get { return self.view.bounds.size }
     }
-    open var containerLeftInset: CGFloat {
+    
+    public var containerLeftInset: CGFloat {
         get { return self.inheritedEdgeInsets.left }
     }
-    open var containerRightInset: CGFloat {
+    
+    public var containerRightInset: CGFloat {
         get { return self.inheritedEdgeInsets.right }
     }
     

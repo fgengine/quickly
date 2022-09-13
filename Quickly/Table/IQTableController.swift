@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public struct QTableControllerReloadOption : OptionSet {
     
     public let rawValue: Int
@@ -14,7 +16,7 @@ public struct QTableControllerReloadOption : OptionSet {
     
 }
 
-public protocol IQTableControllerObserver : class {
+public protocol IQTableControllerObserver : AnyObject {
 
     func beginScroll(_ controller: IQTableController, tableView: UITableView)
     func scroll(_ controller: IQTableController, tableView: UITableView)

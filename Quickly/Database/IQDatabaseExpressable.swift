@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 // MARK: IQDatabaseExpressable
 
 public protocol IQDatabaseExpressable {

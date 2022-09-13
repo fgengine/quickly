@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public class QImageLocalSource {
 
     public var image: UIImage

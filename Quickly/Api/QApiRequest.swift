@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 open class QApiRequest : IQApiRequest {
 
     public var method: String
@@ -406,7 +408,7 @@ private extension QApiRequest {
 
 extension QApiRequest : IQDebug {
 
-    open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+    public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         let nextIndent = indent + 1
 
         if headerIndent > 0 {
@@ -494,7 +496,7 @@ open class QApiRequestUploadItem {
 
 extension QApiRequestUploadItem : IQDebug {
 
-    open func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
+    public func debugString(_ buffer: inout String, _ headerIndent: Int, _ indent: Int, _ footerIndent: Int) {
         let nextIndent = indent + 1
 
         if headerIndent > 0 {

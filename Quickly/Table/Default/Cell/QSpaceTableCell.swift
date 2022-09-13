@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QSpaceTableRow : QBackgroundColorTableRow {
 
     public var size: CGFloat

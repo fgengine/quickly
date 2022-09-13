@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 // MARK: Public • QDatabase.LikeExpression
 
 public extension QDatabase {

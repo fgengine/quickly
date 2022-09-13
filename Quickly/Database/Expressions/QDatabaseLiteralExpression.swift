@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 // MARK: Public • QDatabase.LiteralExpression
 
 public extension QDatabase {

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QView : UIView, IQView {
     
     open override var backgroundColor: UIColor? {

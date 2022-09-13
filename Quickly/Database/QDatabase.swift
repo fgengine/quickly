@@ -2,7 +2,8 @@
 //  Quickly
 //
 
-import QuicklySqlite3
+import Foundation
+import SQLite3
 
 // MARK: QDatabase
 

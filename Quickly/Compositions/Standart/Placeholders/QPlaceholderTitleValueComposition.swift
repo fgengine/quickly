@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QPlaceholderTitleValueComposable : QComposable {
     
     public var titleStyle: QPlaceholderStyleSheet

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public protocol IQProgressView : IQView {
 
     var progress: CGFloat { set get }

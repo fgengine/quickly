@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQCollectionDecorDelegate : class {
+import UIKit
+
+public protocol IQCollectionDecorDelegate : AnyObject {
 }
 
 public protocol IQCollectionDecor : IQCollectionReuse {

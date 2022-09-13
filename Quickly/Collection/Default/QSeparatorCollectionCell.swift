@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QSeparatorCollectionItem : QBackgroundColorCollectionItem {
 
     public var edgeInsets: UIEdgeInsets

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public final class QHamburgerViewControllerInteractiveAnimation : IQHamburgerViewControllerInteractiveAnimation {
     
     public var contentView: UIView!

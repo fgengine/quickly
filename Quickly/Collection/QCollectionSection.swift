@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QCollectionSection : IQCollectionSection {
 
     public private(set) weak var controller: IQCollectionController?

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QCompositionViewController< Composition: IQComposition > : QViewController, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController, IQJalousieContentViewController, IQLoadingViewDelegate {
 
     public var backgroundView: UIView? {
@@ -147,6 +149,74 @@ open class QCompositionViewController< Composition: IQComposition > : QViewContr
         loadingView.removeFromSuperview()
     }
     
+    // MARK: IQTextFieldObserver
+
+    open func beginEditing(textField: QTextField) {
+    }
+    
+    open func editing(textField: QTextField) {
+    }
+    
+    open func endEditing(textField: QTextField) {
+    }
+    
+    open func pressed(textField: QTextField, action: QFieldAction) {
+    }
+    
+    open func pressedClear(textField: QTextField) {
+    }
+    
+    open func pressedReturn(textField: QTextField) {
+    }
+    
+    open func select(textField: QTextField, suggestion: String) {
+    }
+
+    // MARK: IQMultiTextFieldObserver
+
+    open func beginEditing(multiTextField: QMultiTextField) {
+    }
+
+    open func editing(multiTextField: QMultiTextField) {
+    }
+
+    open func endEditing(multiTextField: QMultiTextField) {
+    }
+    
+    open func pressed(multiTextField: QMultiTextField, action: QFieldAction) {
+    }
+
+    open func changed(multiTextField: QMultiTextField, height: CGFloat) {
+    }
+
+    // MARK: IQListFieldObserver
+
+    open func beginEditing(listField: QListField) {
+    }
+    
+    open func select(listField: QListField, row: QListFieldPickerRow) {
+    }
+    
+    open func endEditing(listField: QListField) {
+    }
+    
+    open func pressed(listField: QListField, action: QFieldAction) {
+    }
+
+    // MARK: IQDateFieldObserver
+
+    open func beginEditing(dateField: QDateField) {
+    }
+    
+    open func select(dateField: QDateField, date: Date) {
+    }
+    
+    open func endEditing(dateField: QDateField) {
+    }
+    
+    open func pressed(dateField: QDateField, action: QFieldAction) {
+    }
+    
 }
 
 // MARK: Private
@@ -187,13 +257,15 @@ private extension QCompositionViewController {
 
 extension QCompositionViewController : IQContainerSpec {
     
-    open var containerSize: CGSize {
+    public var containerSize: CGSize {
         get { return self.view.bounds.size }
     }
-    open var containerLeftInset: CGFloat {
+    
+    public var containerLeftInset: CGFloat {
         get { return self.inheritedEdgeInsets.left }
     }
-    open var containerRightInset: CGFloat {
+    
+    public var containerRightInset: CGFloat {
         get { return self.inheritedEdgeInsets.right }
     }
     
@@ -202,84 +274,20 @@ extension QCompositionViewController : IQContainerSpec {
 // MARK: IQTextFieldObserver
 
 extension QCompositionViewController : IQTextFieldObserver {
-    
-    open func beginEditing(textField: QTextField) {
-    }
-    
-    open func editing(textField: QTextField) {
-    }
-    
-    open func endEditing(textField: QTextField) {
-    }
-    
-    open func pressed(textField: QTextField, action: QFieldAction) {
-    }
-    
-    open func pressedClear(textField: QTextField) {
-    }
-    
-    open func pressedReturn(textField: QTextField) {
-    }
-    
-    open func select(textField: QTextField, suggestion: String) {
-    }
-    
 }
 
 // MARK: IQMultiTextFieldObserver
 
 extension QCompositionViewController : IQMultiTextFieldObserver {
-    
-    open func beginEditing(multiTextField: QMultiTextField) {
-    }
-
-    open func editing(multiTextField: QMultiTextField) {
-    }
-
-    open func endEditing(multiTextField: QMultiTextField) {
-    }
-    
-    open func pressed(multiTextField: QMultiTextField, action: QFieldAction) {
-    }
-
-    open func changed(multiTextField: QMultiTextField, height: CGFloat) {
-    }
-
 }
 
 // MARK: IQListFieldObserver
 
 extension QCompositionViewController : IQListFieldObserver {
-    
-    open func beginEditing(listField: QListField) {
-    }
-    
-    open func select(listField: QListField, row: QListFieldPickerRow) {
-    }
-    
-    open func endEditing(listField: QListField) {
-    }
-    
-    open func pressed(listField: QListField, action: QFieldAction) {
-    }
-    
 }
 
 // MARK: IQDateFieldObserver
 
 extension QCompositionViewController : IQDateFieldObserver {
-    
-    open func beginEditing(dateField: QDateField) {
-    }
-    
-    open func select(dateField: QDateField, date: Date) {
-    }
-    
-    open func endEditing(dateField: QDateField) {
-    }
-    
-    open func pressed(dateField: QDateField, action: QFieldAction) {
-    }
-    
 }
 

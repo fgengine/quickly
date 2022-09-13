@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QHamburgerViewController : QViewController, IQHamburgerViewController {
 
     open private(set) var viewController: IQHamburgerContentViewController

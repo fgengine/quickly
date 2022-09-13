@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public final class QObserver< T > {
 
     private var _items: [Item]

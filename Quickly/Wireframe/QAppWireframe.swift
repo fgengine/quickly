@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QAppWireframe< ContextType: IQContext > : IQWireframe, IQWireframeDeeplinkable, IQContextable {
     
     public private(set) var context: ContextType

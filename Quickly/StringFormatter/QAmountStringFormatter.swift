@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 open class QAmountStringFormatter : IQStringFormatter {
 
     public let groupingSeparator: String

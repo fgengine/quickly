@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QTableCell< RowType: IQTableRow > : UITableViewCell, IQTypedTableCell {
 
     open weak var tableDelegate: IQTableCellDelegate?

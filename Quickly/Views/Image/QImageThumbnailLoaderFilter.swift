@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public class QImageThumbnailLoaderFilter : IQImageLoaderFilter {
 
     public var size: CGSize

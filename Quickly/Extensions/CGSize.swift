@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import CoreGraphics
+
 public extension CGSize {
     
     func wrap() -> CGSize {

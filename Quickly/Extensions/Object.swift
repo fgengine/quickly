@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public func QInheritanceLevel(_ selfClass: AnyClass, _ targetClass: AnyClass) -> UInt? {
     var currentClass: AnyClass = selfClass
     var level: UInt = 0

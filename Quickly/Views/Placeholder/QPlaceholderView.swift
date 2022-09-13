@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QPlaceholderStyleSheet : IQStyleSheet {
     
     public var bubble: QDisplayStyleSheet

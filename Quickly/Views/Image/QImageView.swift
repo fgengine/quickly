@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public enum QImageViewScale : Int {
     case origin
     case stretch

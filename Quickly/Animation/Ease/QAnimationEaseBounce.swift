@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import CoreGraphics
+
 public final class QAnimationEaseBounceIn : IQAnimationEase {
 
     private let easeOut: QAnimationEaseBounceOut

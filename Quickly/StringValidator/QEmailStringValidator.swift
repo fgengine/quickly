@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 open class QEmailStringValidator : IQStringValidator {
     
     public let error: String

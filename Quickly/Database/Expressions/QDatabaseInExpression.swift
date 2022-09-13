@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 // MARK: Public • QDatabase.InExpression
 
 public extension QDatabase {

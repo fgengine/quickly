@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QCollectionData : IQCollectionData {
 
     public private(set) weak var section: IQCollectionSection? = nil

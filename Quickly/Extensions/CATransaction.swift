@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public extension CATransaction {
     
     class func withoutActions(_ closure: () -> Void) {

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QControl : UIControl, IQView {
 
     public override init(frame: CGRect) {

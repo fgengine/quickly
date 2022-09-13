@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QStackbar : QView {
     
     public enum DisplayMode {

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public extension UIControl {
 
     func addTouchUpInside(_ target: Any?, action: Selector) {

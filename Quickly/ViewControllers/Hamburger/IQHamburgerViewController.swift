@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public enum QHamburgerViewControllerState {
     case idle
     case left
@@ -10,7 +12,7 @@ public enum QHamburgerViewControllerState {
 
 // MARK: IQHamburgerViewControllerFixedAnimation
 
-public protocol IQHamburgerViewControllerFixedAnimation : class {
+public protocol IQHamburgerViewControllerFixedAnimation : AnyObject {
 
     func layout(
         contentView: UIView,
@@ -35,7 +37,7 @@ public protocol IQHamburgerViewControllerFixedAnimation : class {
 
 // MARK: IQHamburgerViewControllerInteractiveAnimation
 
-public protocol IQHamburgerViewControllerInteractiveAnimation : class {
+public protocol IQHamburgerViewControllerInteractiveAnimation : AnyObject {
 
     var canFinish: Bool { get }
     

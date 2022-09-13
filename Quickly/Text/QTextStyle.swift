@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public final class QTextStyle : IQTextStyle {
 
     public weak var parent: IQTextStyle? {

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public protocol IQDatabaseEnum {
     
     associatedtype RealValue

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public final class QDialogViewControllerinteractiveDismissAnimation : IQDialogViewControllerInteractiveAnimation {
 
     internal var viewController: IQDialogViewController!

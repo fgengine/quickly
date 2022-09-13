@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public protocol IQTableReuse : IQView {
 
     static func reuseIdentifier() -> String

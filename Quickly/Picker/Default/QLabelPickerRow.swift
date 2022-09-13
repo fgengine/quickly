@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QLabelPickerRow : QPickerRow {
 
     public var edgeInsets: UIEdgeInsets

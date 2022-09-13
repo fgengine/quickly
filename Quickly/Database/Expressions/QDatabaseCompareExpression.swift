@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public extension QDatabase {
     
     struct CompareExpression : IQDatabaseExpressable {

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QModalContainerViewController : QViewController, IQModalContainerViewController {
 
     open private(set) var viewControllers: [IQModalViewController]

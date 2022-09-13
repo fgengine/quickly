@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQPhotoItem : class {
+import UIKit
+
+public protocol IQPhotoItem : AnyObject {
     
     var isNeedLoad: Bool { get }
     var isLoading: Bool { get }
@@ -18,7 +20,7 @@ public protocol IQPhotoItem : class {
     
 }
 
-public protocol IQPhotoItemObserver : class {
+public protocol IQPhotoItemObserver : AnyObject {
     
     func willLoadPhotoItem(_ photoItem: IQPhotoItem)
     func didLoadPhotoItem(_ photoItem: IQPhotoItem)

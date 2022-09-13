@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 // MARK: QDialogViewControllerSizeBehaviour
 
 public enum QDialogViewControllerSizeBehaviour {
@@ -47,7 +49,7 @@ public enum QDialogViewControllerHorizontalAlignment {
 
 // MARK: IQDialogViewControllerFixedAnimation
 
-public protocol IQDialogViewControllerFixedAnimation : class {
+public protocol IQDialogViewControllerFixedAnimation : AnyObject {
 
     func animate(
         viewController: IQDialogViewController,
@@ -59,7 +61,7 @@ public protocol IQDialogViewControllerFixedAnimation : class {
 
 // MARK: IQDialogViewControllerInteractiveAnimation
 
-public protocol IQDialogViewControllerInteractiveAnimation : class {
+public protocol IQDialogViewControllerInteractiveAnimation : AnyObject {
 
     var canFinish: Bool { get }
     
@@ -96,7 +98,7 @@ public protocol IQDialogContainerViewController : IQViewController {
 
 // MARK: IQDialogContainerBackgroundView
 
-public protocol IQDialogContainerBackgroundView : class {
+public protocol IQDialogContainerBackgroundView : AnyObject {
 
     var containerViewController: IQDialogContainerViewController? { set get }
 

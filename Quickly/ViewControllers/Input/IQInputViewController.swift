@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 // MARK: IQInputViewController
 
 public protocol IQInputViewController : IQViewController {

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public class QImageLoader {
 
     public typealias ImageClosure = (_ image: UIImage?) -> Void

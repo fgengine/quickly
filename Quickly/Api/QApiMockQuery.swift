@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public final class QApiMockQuery< ResponseType: IQApiResponse > : IQApiQuery {
     
     public typealias PrepareClosure = (_ query: QApiMockQuery< ResponseType >) -> (http: HTTPURLResponse?, data: Data?, error: Error?)

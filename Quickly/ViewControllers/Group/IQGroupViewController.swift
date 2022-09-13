@@ -2,9 +2,11 @@
 //  Quickly
 //
 
+import UIKit
+
 // MARK: IQGroupViewControllerAnimation
 
-public protocol IQGroupViewControllerAnimation : class {
+public protocol IQGroupViewControllerAnimation : AnyObject {
 
     func animate(
         contentView: UIView,

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import CoreGraphics
+
 public extension CGPoint {
     
     func wrap() -> CGPoint {

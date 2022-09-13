@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQApiProvider : class {
+import Foundation
+
+public protocol IQApiProvider : AnyObject {
 
     var baseUrl: URL? { get }
     var urlParams: [String: Any] { get }

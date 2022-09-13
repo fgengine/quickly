@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public final class QStackViewControllerPresentAnimation : IQStackViewControllerPresentAnimation {
 
     public var shadow: QViewShadow

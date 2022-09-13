@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public final class QModalViewControllerPresentAnimation : IQModalViewControllerFixedAnimation {
     
     public var acceleration: CGFloat

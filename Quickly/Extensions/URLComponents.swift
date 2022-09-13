@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public extension URLComponents {
     
     func queryItem(by name: String) -> URLQueryItem? {

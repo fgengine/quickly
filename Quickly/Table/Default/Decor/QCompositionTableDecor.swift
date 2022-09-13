@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public enum QCompositionTableDataSizeBehaviour {
     case dynamic
     case fixed(height: CGFloat)

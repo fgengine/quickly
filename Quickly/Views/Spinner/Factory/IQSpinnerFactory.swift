@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQSpinnerFactory : class {
+import UIKit
+
+public protocol IQSpinnerFactory : AnyObject {
     
     func create() -> QSpinnerViewType
     

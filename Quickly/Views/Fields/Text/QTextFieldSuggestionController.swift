@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public class QTextFieldSuggestionController : QCollectionController, IQTextFieldSuggestionController {
     
     public var onSelectSuggestion: SelectSuggestionClosure?

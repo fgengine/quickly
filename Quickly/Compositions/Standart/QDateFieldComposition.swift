@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QDateFieldComposable : QComposable {
 
     public typealias ShouldClosure = (_ composable: QDateFieldComposable) -> Bool

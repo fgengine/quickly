@@ -2,14 +2,16 @@
 //  Quickly
 //
 
-public protocol IQViewControllerDelegate : class {
+import UIKit
+
+public protocol IQViewControllerDelegate : AnyObject {
 
     func requestUpdateStatusBar(viewController: IQViewController)
     func requestUpdateOrientation(viewController: IQViewController)
 
 }
 
-public protocol IQViewController : class {
+public protocol IQViewController : AnyObject {
 
     var delegate: IQViewControllerDelegate? { set get }
     var parentViewController: IQViewController? { set get }

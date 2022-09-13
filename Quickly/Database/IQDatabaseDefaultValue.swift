@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 // MARK: IQDatabaseDefaultValue
 
 public protocol IQDatabaseDefaultValue {

@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQLoadingViewDelegate : class {
+import UIKit
+
+public protocol IQLoadingViewDelegate : AnyObject {
     
     func willShow(loadingView: QLoadingViewType)
     func didHide(loadingView: QLoadingViewType)

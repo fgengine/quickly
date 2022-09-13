@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QListFieldPickerRow : QPickerRow {
 
     public var field: QLabelStyleSheet

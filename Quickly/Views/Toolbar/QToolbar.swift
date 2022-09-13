@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QToolbarStyleSheet : IQStyleSheet {
     
     public var isTranslucent: Bool

@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QPhotosViewController : QViewController, IQContentViewController, IQInputContentViewController, IQStackContentViewController, IQPageContentViewController, IQGroupContentViewController, IQModalContentViewController, IQDialogContentViewController, IQHamburgerContentViewController, IQCollectionControllerObserver, IQKeyboardObserver, IQLoadingViewDelegate {
     
     public private(set) var items: [IQPhotoItem] = []

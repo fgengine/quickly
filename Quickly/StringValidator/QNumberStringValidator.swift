@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 open class QNumberStringValidator : IQStringValidator {
 
     public var minimumValue: Decimal?

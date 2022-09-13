@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QViewController : NSObject, IQViewController {
 
     open weak var delegate: IQViewControllerDelegate?

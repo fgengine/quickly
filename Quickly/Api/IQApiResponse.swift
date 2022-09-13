@@ -2,7 +2,9 @@
 //  Quickly
 //
 
-public protocol IQApiResponse : class {
+import Foundation
+
+public protocol IQApiResponse : AnyObject {
 
     var error: Error? { get }
 

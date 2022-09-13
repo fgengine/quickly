@@ -2,9 +2,11 @@
 //  Quickly
 //
 
+import UIKit
+
 // MARK: IQModalViewControllerFixedAnimation
 
-public protocol IQModalViewControllerFixedAnimation : class {
+public protocol IQModalViewControllerFixedAnimation : AnyObject {
 
     func animate(
         contentView: UIView,
@@ -18,7 +20,7 @@ public protocol IQModalViewControllerFixedAnimation : class {
 
 // MARK: IQModalViewControllerInteractiveAnimation
 
-public protocol IQModalViewControllerInteractiveAnimation : class {
+public protocol IQModalViewControllerInteractiveAnimation : AnyObject {
 
     var canFinish: Bool { get }
     

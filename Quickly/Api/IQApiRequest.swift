@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import Foundation
+
 public struct QApiRequestRedirectOption : OptionSet {
     
     public var rawValue: UInt
@@ -16,7 +18,7 @@ public struct QApiRequestRedirectOption : OptionSet {
     
 }
 
-public protocol IQApiRequest : class {
+public protocol IQApiRequest : AnyObject {
 
     var timeout: TimeInterval { get }
     var retries: TimeInterval { get }

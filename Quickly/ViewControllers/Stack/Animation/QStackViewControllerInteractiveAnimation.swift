@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public final class QStackViewControllerinteractiveDismissAnimation : IQStackViewControllerInteractiveDismissAnimation {
 
     public var containerViewController: IQStackContainerViewController!

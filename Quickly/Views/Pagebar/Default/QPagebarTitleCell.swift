@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QPagebarTitleItem : QPagebarItem {
 
     public var edgeInsets: UIEdgeInsets

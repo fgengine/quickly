@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 public class QLabelPickerCell< RowType: QLabelPickerRow > : QPickerCell< RowType > {
 
     public private(set) lazy var labelView: QLabel = {

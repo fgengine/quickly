@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 extension QPhotosViewController.PreviewController {
     
     class PhotoItem : QCollectionItem {

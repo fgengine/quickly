@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 // MARK: IQFormViewController
 
 public protocol IQFormViewController : IQViewController {
@@ -38,7 +40,7 @@ public protocol IQFormViewController : IQViewController {
 
 // MARK: IQFormViewControllerFieldDelegate
 
-public protocol IQFormViewControllerFieldDelegate : class {
+public protocol IQFormViewControllerFieldDelegate : AnyObject {
     
     func `continue`(field: IQFormViewControllerField)
     
@@ -46,7 +48,7 @@ public protocol IQFormViewControllerFieldDelegate : class {
 
 // MARK: IQFormViewControllerField
 
-public protocol IQFormViewControllerField : class {
+public protocol IQFormViewControllerField : AnyObject {
     
     var delegate: IQFormViewControllerFieldDelegate? { set get }
     var view: QDisplayView { get }

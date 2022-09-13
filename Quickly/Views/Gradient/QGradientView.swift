@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QGradientStyleSheet : IQStyleSheet {
 
     public var points: [QGradientView.Point]

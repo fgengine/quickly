@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 open class QTableViewControllerFooterView : QView {
     
     public var insets: UIEdgeInsets = UIEdgeInsets.zero {

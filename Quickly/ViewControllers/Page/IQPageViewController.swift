@@ -2,6 +2,8 @@
 //  Quickly
 //
 
+import UIKit
+
 // MARK: QPageViewControllerAnimationMode
 
 public enum QPageViewControllerAnimationMode {
@@ -22,7 +24,7 @@ public enum QPageViewControllerAnimationMode {
 
 // MARK: IQPageViewControllerAnimation
 
-public protocol IQPageViewControllerAnimation : class {
+public protocol IQPageViewControllerAnimation : AnyObject {
 
     func animate(
         contentView: UIView,
@@ -34,7 +36,7 @@ public protocol IQPageViewControllerAnimation : class {
 
 }
 
-public protocol IQPageViewControllerInteractiveAnimation : class {
+public protocol IQPageViewControllerInteractiveAnimation : AnyObject {
 
     var canFinish: Bool { get }
     var finishMode: QPageViewControllerAnimationMode { get }
