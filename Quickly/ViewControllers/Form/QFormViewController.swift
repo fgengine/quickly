@@ -108,10 +108,8 @@ open class QFormViewController : QViewController, IQFormViewController, IQInputC
     private lazy var _keyboard: QKeyboard = QKeyboard()
     private var _keyboardHeight: CGFloat
     
-    @available(iOS 10.0, *)
     private lazy var _notificationFeedbackGenerator: UINotificationFeedbackGenerator = UINotificationFeedbackGenerator()
     
-    @available(iOS 10.0, *)
     private lazy var _selectionFeedbackGenerator: UISelectionFeedbackGenerator = UISelectionFeedbackGenerator()
     
     public init(
