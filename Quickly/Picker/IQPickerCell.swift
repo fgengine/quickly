@@ -6,11 +6,9 @@ import UIKit
 
 public protocol IQPickerCell : IQView {
 
-    typealias DequeueType = UIView & IQPickerCell
-
     static func using(any: Any) -> Bool
 
-    static func dequeue(_ view: UIView?) -> DequeueType?
+    static func dequeue(_ view: UIView?) -> (UIView & IQPickerCell)?
 
     func set(any: Any)
 
@@ -18,11 +16,11 @@ public protocol IQPickerCell : IQView {
 
 extension IQPickerCell where Self : UIView {
 
-    public static func dequeue(_ view: UIView?) -> DequeueType? {
+    public static func dequeue(_ view: UIView?) -> (UIView & IQPickerCell)? {
         if let view = view as? Self {
-            return (view as DequeueType)
+            return (view as (UIView & IQPickerCell))
         }
-        return (self.init() as DequeueType)
+        return (self.init() as (UIView & IQPickerCell))
     }
 
 }

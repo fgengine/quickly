@@ -12,13 +12,11 @@ open class QGroupbarCell< Item: QGroupbarItem > : QCollectionCell< Item > {
 
 open class QGroupbar : QView {
     
-    public typealias ItemType = IQCollectionController.Cell
-    
     public weak var delegate: QGroupbarDelegate?
     public var edgeInsets: UIEdgeInsets = UIEdgeInsets() {
         didSet(oldValue) { if self.edgeInsets != oldValue { self.setNeedsUpdateConstraints() } }
     }
-    public private(set) var cellTypes: [ItemType.Type]
+    public private(set) var cellTypes: [(UICollectionViewCell & IQCollectionCell).Type]
     public var items: [QGroupbarItem] {
         set(value) {
             self._collectionSection.setItems(value)
@@ -115,7 +113,7 @@ open class QGroupbar : QView {
     }
     
     public init(
-        cellTypes: [ItemType.Type]
+        cellTypes: [(UICollectionViewCell & IQCollectionCell).Type]
     ) {
         self.cellTypes = cellTypes
         super.init(
@@ -295,7 +293,7 @@ open class QGroupbar : QView {
         
         public private(set) weak var groupbar: QGroupbar?
         
-        public init(_ groupbar: QGroupbar, cells: [ItemType.Type]) {
+        public init(_ groupbar: QGroupbar, cells: [(UICollectionViewCell & IQCollectionCell).Type]) {
             self.groupbar = groupbar
             super.init(cells: cells)
         }

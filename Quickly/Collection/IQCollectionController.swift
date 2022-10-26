@@ -21,11 +21,7 @@ public protocol IQCollectionControllerObserver : AnyObject {
 
 public protocol IQCollectionController : UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    typealias CollectionView = UICollectionView & IQContainerSpec
-    typealias Decor = IQCollectionDecor.Dequeue
-    typealias Cell = IQCollectionCell.Dequeue
-
-    var collectionView: CollectionView? { set get }
+    var collectionView: (UICollectionView & IQContainerSpec)? { set get }
     var sections: [IQCollectionSection] { set get }
     var items: [IQCollectionItem] { get }
     var selectedItems: [IQCollectionItem] { set get }
@@ -54,8 +50,8 @@ public protocol IQCollectionController : UICollectionViewDataSource, UICollectio
     func indexPath(item: IQCollectionItem) -> IndexPath?
     func indexPath(predicate: (IQCollectionItem) -> Bool) -> IndexPath?
 
-    func dequeue(data: IQCollectionData, kind: String, indexPath: IndexPath) -> Decor?
-    func dequeue(item: IQCollectionItem, indexPath: IndexPath) -> Cell?
+    func dequeue(data: IQCollectionData, kind: String, indexPath: IndexPath) -> (UICollectionReusableView & IQCollectionDecor)?
+    func dequeue(item: IQCollectionItem, indexPath: IndexPath) -> (UICollectionViewCell & IQCollectionCell)?
 
     func reload()
 

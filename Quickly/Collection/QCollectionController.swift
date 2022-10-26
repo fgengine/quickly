@@ -6,11 +6,7 @@ import UIKit
 
 open class QCollectionController : NSObject, IQCollectionController, CollectionCellDelegate, IQCollectionDecorDelegate {
     
-    public typealias CollectionView = IQCollectionController.CollectionView
-    public typealias Decor = IQCollectionController.Decor
-    public typealias Cell = IQCollectionController.Cell
-
-    public weak var collectionView: CollectionView? = nil {
+    public weak var collectionView: (UICollectionView & IQContainerSpec)? = nil {
         didSet { if self.collectionView != nil { self.configure() } }
     }
     public var sections: [IQCollectionSection] = [] {
@@ -165,7 +161,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
         return nil
     }
 
-    open func dequeue(data: IQCollectionData, kind: String, indexPath: IndexPath) -> Decor? {
+    open func dequeue(data: IQCollectionData, kind: String, indexPath: IndexPath) -> (UICollectionReusableView & IQCollectionDecor)? {
         guard
             let collectionView = self.collectionView,
             let decorClass = self._decorClass(data: data),
@@ -175,7 +171,7 @@ open class QCollectionController : NSObject, IQCollectionController, CollectionC
         return decorView
     }
 
-    open func dequeue(item: IQCollectionItem, indexPath: IndexPath) -> Cell? {
+    open func dequeue(item: IQCollectionItem, indexPath: IndexPath) -> (UICollectionViewCell & IQCollectionCell)? {
         guard
             let collectionView = self.collectionView,
             let cellClass = self._cellClass(item: item),

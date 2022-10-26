@@ -8,7 +8,7 @@ open class QTableCell< RowType: IQTableRow > : UITableViewCell, IQTypedTableCell
 
     open weak var tableDelegate: IQTableCellDelegate?
     open private(set) var row: RowType?
-    open private(set) var spec: IQContainerSpec?
+    open private(set) weak var spec: IQContainerSpec?
 
     open class func currentNibName() -> String {
         return String(describing: self.classForCoder())

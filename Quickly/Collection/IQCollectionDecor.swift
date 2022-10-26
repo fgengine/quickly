@@ -9,13 +9,11 @@ public protocol IQCollectionDecorDelegate : AnyObject {
 
 public protocol IQCollectionDecor : IQCollectionReuse {
 
-    typealias Dequeue = UICollectionReusableView & IQCollectionDecor
-
     var collectionDelegate: IQCollectionDecorDelegate? { set get }
 
     static func register(collectionView: UICollectionView, kind: String)
 
-    static func dequeue(collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> Dequeue?
+    static func dequeue(collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> (UICollectionReusableView & IQCollectionDecor)?
 
     func configure()
 
@@ -33,12 +31,12 @@ extension IQCollectionDecor where Self : UICollectionReusableView {
         }
     }
 
-    public static func dequeue(collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> Dequeue? {
+    public static func dequeue(collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> (UICollectionReusableView & IQCollectionDecor)? {
         return collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
             withReuseIdentifier: self.reuseIdentifier(),
             for: indexPath
-        ) as? Dequeue
+        ) as? (UICollectionReusableView & IQCollectionDecor)
     }
 
 }

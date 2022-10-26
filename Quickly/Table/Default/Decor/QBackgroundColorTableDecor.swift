@@ -17,9 +17,9 @@ open class QBackgroundColorTableData : QTableData {
 
 }
 
-open class QBackgroundColorTableDecor< Type: QBackgroundColorTableData > : QTableDecor< Type > {
+open class QBackgroundColorTableDecor< DataType : QBackgroundColorTableData > : QTableDecor< DataType > {
 
-    open override func prepare(data: Type, spec: IQContainerSpec, animated: Bool) {
+    open override func prepare(data: DataType, spec: IQContainerSpec, animated: Bool) {
         super.prepare(data: data, spec: spec, animated: animated)
         
         self.contentView.backgroundColor = data.backgroundColor

@@ -28,12 +28,8 @@ public protocol IQTableControllerObserver : AnyObject {
 }
 
 public protocol IQTableController : UITableViewDataSource, UITableViewDelegate {
-    
-    typealias TableView = UITableView & IQContainerSpec
-    typealias Decor = IQTableDecor.Dequeue
-    typealias Cell = IQTableCell.DequeueType
 
-    var tableView: TableView? { set get }
+    var tableView: (UITableView & IQContainerSpec)? { set get }
     var estimatedRowHeight: CGFloat { set get }
     var estimatedSectionHeaderHeight: CGFloat { set get }
     var estimatedSectionFooterHeight: CGFloat { set get }
@@ -73,8 +69,8 @@ public protocol IQTableController : UITableViewDataSource, UITableViewDelegate {
     func footer(data: IQTableData) -> IQTableDecor?
     func cell(row: IQTableRow) -> IQTableCell?
 
-    func dequeue(data: IQTableData) -> Decor?
-    func dequeue(row: IQTableRow, indexPath: IndexPath) -> Cell?
+    func dequeue(data: IQTableData) -> (UITableViewHeaderFooterView & IQTableDecor)?
+    func dequeue(row: IQTableRow, indexPath: IndexPath) -> (UITableViewCell & IQTableCell)?
 
     func reload(_ options: QTableControllerReloadOption)
 

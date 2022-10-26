@@ -9,13 +9,11 @@ public protocol CollectionCellDelegate : AnyObject {
 
 public protocol IQCollectionCell : IQCollectionReuse {
 
-    typealias Dequeue = UICollectionViewCell & IQCollectionCell
-
     var collectionDelegate: CollectionCellDelegate? { set get }
 
     static func register(collectionView: UICollectionView)
 
-    static func dequeue(collectionView: UICollectionView, indexPath: IndexPath) -> Dequeue?
+    static func dequeue(collectionView: UICollectionView, indexPath: IndexPath) -> (UICollectionViewCell & IQCollectionCell)?
 
     func configure()
 
@@ -36,11 +34,11 @@ extension IQCollectionCell where Self : UICollectionViewCell {
         }
     }
 
-    public static func dequeue(collectionView: UICollectionView, indexPath: IndexPath) -> Dequeue? {
+    public static func dequeue(collectionView: UICollectionView, indexPath: IndexPath) -> (UICollectionViewCell & IQCollectionCell)? {
         return collectionView.dequeueReusableCell(
             withReuseIdentifier: self.reuseIdentifier(),
             for: indexPath
-        ) as? Dequeue
+        ) as? (UICollectionViewCell & IQCollectionCell)
     }
 
 }

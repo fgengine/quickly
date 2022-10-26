@@ -33,7 +33,7 @@ open class QCompositionTableDecor< Composition: IQComposition > : QBackgroundCol
 
     public private(set) var composition: Composition!
     
-    open override class func height(data: DataType, spec: IQContainerSpec) -> CGFloat {
+    open override class func height(data: QCompositionTableData< Composition.Composable >, spec: IQContainerSpec) -> CGFloat {
         switch data.sizeBehaviour {
         case .dynamic:
             return Composition.height(composable: data.composable, spec: spec)
@@ -55,7 +55,7 @@ open class QCompositionTableDecor< Composition: IQComposition > : QBackgroundCol
         super.prepareForReuse()
     }
     
-    open override func prepare(data: DataType, spec: IQContainerSpec, animated: Bool) {
+    open override func prepare(data: QCompositionTableData< Composition.Composable >, spec: IQContainerSpec, animated: Bool) {
         super.prepare(data: data, spec: spec, animated: animated)
         self.composition.prepare(composable: data.composable, spec: spec, animated: animated)
     }

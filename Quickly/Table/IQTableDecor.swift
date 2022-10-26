@@ -9,11 +9,9 @@ public protocol IQTableDecorDelegate : AnyObject {
 
 public protocol IQTableDecor : IQTableReuse {
 
-    typealias Dequeue = UITableViewHeaderFooterView & IQTableDecor
-
     var tableDelegate: IQTableDecorDelegate? { set get }
 
-    static func dequeue(tableView: UITableView) -> Dequeue?
+    static func dequeue(tableView: UITableView) -> (UITableViewHeaderFooterView & IQTableDecor)?
 
     func configure()
 
@@ -34,10 +32,10 @@ extension IQTableDecor where Self : UITableViewHeaderFooterView {
         }
     }
 
-    public static func dequeue(tableView: UITableView) -> Dequeue? {
+    public static func dequeue(tableView: UITableView) -> (UITableViewHeaderFooterView & IQTableDecor)? {
         return tableView.dequeueReusableHeaderFooterView(
             withIdentifier: self.reuseIdentifier()
-        ) as? Dequeue
+        ) as? (UITableViewHeaderFooterView & IQTableDecor)
     }
 
 }

@@ -12,13 +12,11 @@ open class QPagebarCell< Item: QPagebarItem > : QCollectionCell< Item > {
 
 open class QPagebar : QView {
 
-    public typealias ItemType = IQCollectionController.Cell
-
     public weak var delegate: QPagebarDelegate?
     public var edgeInsets: UIEdgeInsets = UIEdgeInsets() {
            didSet(oldValue) { if self.edgeInsets != oldValue { self.setNeedsUpdateConstraints() } }
        }
-    public private(set) var cellTypes: [ItemType.Type]
+    public private(set) var cellTypes: [(UICollectionViewCell & IQCollectionCell).Type]
     public var itemsSpacing: CGFloat {
         set(value) { self._collectionLayout.minimumInteritemSpacing = value }
         get { return self._collectionLayout.minimumInteritemSpacing }
@@ -66,7 +64,7 @@ open class QPagebar : QView {
     }
 
     public init(
-        cellTypes: [ItemType.Type]
+        cellTypes: [(UICollectionViewCell & IQCollectionCell).Type]
     ) {
         self.cellTypes = cellTypes
         super.init(
@@ -192,7 +190,7 @@ open class QPagebar : QView {
 
         public private(set) weak var pagebar: QPagebar?
 
-        public init(_ pagebar: QPagebar, cells: [ItemType.Type]) {
+        public init(_ pagebar: QPagebar, cells: [(UICollectionViewCell & IQCollectionCell).Type]) {
             self.pagebar = pagebar
             super.init(cells: cells)
         }

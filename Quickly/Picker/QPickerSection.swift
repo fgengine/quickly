@@ -6,10 +6,8 @@ import UIKit
 
 open class QPickerSection : IQPickerSection {
 
-    public typealias CellType = IQPickerSection.CellType
-
     public weak var controller: IQPickerController?
-    public var cellType: CellType {
+    public var cellType: (UIView & IQPickerCell).Type {
         didSet { self._reloadColumn() }
     }
     public var size: CGSize {
@@ -25,13 +23,13 @@ open class QPickerSection : IQPickerSection {
         }
     }
 
-    public init(cellType: CellType, size: CGSize, rows: [IQPickerRow]) {
+    public init(cellType: (UIView & IQPickerCell).Type, size: CGSize, rows: [IQPickerRow]) {
         self.cellType = cellType
         self.size = size
         self.rows = rows
     }
 
-    public convenience init(cellType: CellType, height: CGFloat, rows: [IQPickerRow]) {
+    public convenience init(cellType: (UIView & IQPickerCell).Type, height: CGFloat, rows: [IQPickerRow]) {
         self.init(cellType: cellType, size: CGSize(width: 0, height: height), rows: rows)
     }
 

@@ -6,10 +6,8 @@ import UIKit
 
 public protocol IQPickerSection : AnyObject {
 
-    typealias CellType = IQPickerCell.DequeueType.Type
-
     var controller: IQPickerController? { get }
-    var cellType: CellType { get }
+    var cellType: (UIView & IQPickerCell).Type { get }
     var size: CGSize { get }
     var index: Int? { get }
     var rows: [IQPickerRow] { set get }

@@ -9,11 +9,9 @@ public protocol IQTableCellDelegate : AnyObject {
 
 public protocol IQTableCell : IQTableReuse {
 
-    typealias DequeueType = UITableViewCell & IQTableCell
-
     var tableDelegate: IQTableCellDelegate? { set get }
 
-    static func dequeue(tableView: UITableView, indexPath: IndexPath) -> DequeueType?
+    static func dequeue(tableView: UITableView, indexPath: IndexPath) -> (UITableViewCell & IQTableCell)?
 
     func configure()
 
@@ -34,11 +32,11 @@ extension IQTableCell where Self : UITableViewCell {
         }
     }
 
-    public static func dequeue(tableView: UITableView, indexPath: IndexPath) -> DequeueType? {
+    public static func dequeue(tableView: UITableView, indexPath: IndexPath) -> (UITableViewCell & IQTableCell)? {
         return tableView.dequeueReusableCell(
             withIdentifier: self.reuseIdentifier(),
             for: indexPath
-        ) as? DequeueType
+        ) as? (UITableViewCell & IQTableCell)
     }
 
 }

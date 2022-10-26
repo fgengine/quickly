@@ -5,12 +5,8 @@
 import UIKit
 
 open class QTableController : NSObject, IQTableController, IQTableCellDelegate, IQTableDecorDelegate {
-    
-    public typealias TableView = IQTableController.TableView
-    public typealias Decor = IQTableController.Decor
-    public typealias Cell = IQTableController.Cell
 
-    public weak var tableView: TableView? {
+    public weak var tableView: (UITableView & IQContainerSpec)? {
         didSet { if self.tableView != nil { self.configure() } }
     }
     public var estimatedRowHeight: CGFloat {
@@ -204,7 +200,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         return tableView.cellForRow(at: indexPath) as? IQTableCell
     }
 
-    open func dequeue(data: IQTableData) -> Decor? {
+    open func dequeue(data: IQTableData) -> (UITableViewHeaderFooterView & IQTableDecor)? {
         guard
             let tableView = self.tableView,
             let decorClass = self._decorClass(data: data),
@@ -214,7 +210,7 @@ open class QTableController : NSObject, IQTableController, IQTableCellDelegate, 
         return decorView
     }
 
-    open func dequeue(row: IQTableRow, indexPath: IndexPath) -> Cell? {
+    open func dequeue(row: IQTableRow, indexPath: IndexPath) -> (UITableViewCell & IQTableCell)? {
         guard
             let tableView = self.tableView,
             let cellClass = self._cellClass(row: row),
@@ -577,7 +573,7 @@ extension QTableController : UITableViewDataSource {
     ) -> UITableViewCell {
         let row = self.row(indexPath: indexPath)
         let cell = self.dequeue(row: row, indexPath: indexPath).unsafelyUnwrapped
-        cell.prepare(any: row, spec: tableView as! TableView, animated: false)
+        cell.prepare(any: row, spec: tableView as! IQContainerSpec, animated: false)
         return cell
     }
 
@@ -621,7 +617,7 @@ extension QTableController : UITableViewDelegate {
         if let data = self.header(index: section) {
             if let decorClass = self._decorClass(data: data) {
                 let decor = decorClass.dequeue(tableView: tableView).unsafelyUnwrapped
-                decor.prepare(any: data, spec: tableView as! TableView, animated: false)
+                decor.prepare(any: data, spec: tableView as! IQContainerSpec, animated: false)
                 return decor
             }
         }
@@ -636,7 +632,7 @@ extension QTableController : UITableViewDelegate {
         if let data = self.footer(index: section) {
             if let decorClass = self._decorClass(data: data) {
                 let decor = decorClass.dequeue(tableView: tableView).unsafelyUnwrapped
-                decor.prepare(any: data, spec: tableView as! TableView, animated: false)
+                decor.prepare(any: data, spec: tableView as! IQContainerSpec, animated: false)
                 return decor
             }
         }
@@ -724,7 +720,7 @@ extension QTableController : UITableViewDelegate {
         }
         var caclulatedHeight: CGFloat = 0
         if let cellClass = self._cellClass(row: row) {
-            caclulatedHeight = cellClass.height(any: row, spec: tableView as! TableView)
+            caclulatedHeight = cellClass.height(any: row, spec: tableView as! IQContainerSpec)
         } else {
             caclulatedHeight = 0
         }
@@ -745,7 +741,7 @@ extension QTableController : UITableViewDelegate {
         }
         var caclulatedHeight: CGFloat = 0
         if let decorClass = self._decorClass(data: data) {
-            caclulatedHeight = decorClass.height(any: data, spec: tableView as! TableView)
+            caclulatedHeight = decorClass.height(any: data, spec: tableView as! IQContainerSpec)
         } else {
             caclulatedHeight = 0
         }
@@ -766,7 +762,7 @@ extension QTableController : UITableViewDelegate {
         }
         var caclulatedHeight: CGFloat = 0
         if let decorClass = self._decorClass(data: data) {
-            caclulatedHeight = decorClass.height(any: data, spec: tableView as! TableView)
+            caclulatedHeight = decorClass.height(any: data, spec: tableView as! IQContainerSpec)
         } else {
             caclulatedHeight = 0
         }

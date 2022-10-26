@@ -8,7 +8,7 @@ open class QCollectionCell< Item: IQCollectionItem > : UICollectionViewCell, IQT
     
     public weak var collectionDelegate: CollectionCellDelegate?
     public private(set) var item: Item?
-    public private(set) var spec: IQContainerSpec?
+    public private(set) weak var spec: IQContainerSpec?
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
