@@ -7,14 +7,19 @@ import UIKit
 public class QImageCache {
 
     public private(set) var name: String
+    public private(set) var maxImageAreaInMemory: CGFloat
     public private(set) var memory: [String: UIImage]
     public private(set) var url: URL
     
     private var _fileManager: FileManager
     private var _queue: DispatchQueue
 
-    public init(name: String) throws {
+    public init(
+        name: String,
+        maxImageAreaInMemory: CGFloat = 2048 * 2048
+    ) throws {
         self.name = name
+        self.maxImageAreaInMemory = maxImageAreaInMemory
         self.memory = [:]
         self._fileManager = FileManager.default
         self._queue = DispatchQueue(label: name)
@@ -27,6 +32,7 @@ public class QImageCache {
         if self._fileManager.fileExists(atPath: self.url.path) == false {
             try self._fileManager.createDirectory(at: self.url, withIntermediateDirectories: true, attributes: nil)
         }
+        NotificationCenter.default.addObserver(self, selector: #selector(self._didReceiveMemoryWarning(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self._didReceiveMemoryWarning(_:)), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
     }
 
@@ -56,9 +62,11 @@ public class QImageCache {
         }
         let url = self.url.appendingPathComponent(key)
         if let image = UIImage(contentsOfFile: url.path) {
-            self._queue.sync(execute: {
-                self.memory[key] = image
-            })
+            if self._canStoreInMemory(image: image) == true {
+                self._queue.sync(execute: {
+                    self.memory[key] = image
+                })
+            }
             return image
         }
         return nil
@@ -69,9 +77,11 @@ public class QImageCache {
         let url = self.url.appendingPathComponent(key)
         do {
             try data.write(to: url, options: .atomic)
-            self._queue.sync(execute: {
-                self.memory[key] = image
-            })
+            if self._canStoreInMemory(image: image) == true {
+                self._queue.sync(execute: {
+                    self.memory[key] = image
+                })
+            }
         } catch let error {
             throw error
         }
@@ -111,6 +121,10 @@ public class QImageCache {
                 }
             }
         }
+    }
+    
+    private func _canStoreInMemory(image: UIImage) -> Bool {
+        return image.size.width * image.size.height < self.maxImageAreaInMemory
     }
 
     @objc
