@@ -11,6 +11,7 @@ let package = Package(
     ],
     products: [
         .library(name: "Quickly", type: .static, targets: [ "Quickly" ]),
+        .library(name: "QuicklyDynamic", type: .dynamic, targets: [ "Quickly" ])
     ],
     targets: [
         .target(
