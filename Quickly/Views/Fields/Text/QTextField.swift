@@ -56,6 +56,7 @@ open class QTextFieldStyleSheet : QDisplayStyleSheet {
     public var isSecureTextEntry: Bool
     public var textContentType: UITextContentType!
     public var isEnabled: Bool
+    public var accessorySeparatorStyle: QDisplayStyleSheet?
     public var toolbarStyle: QToolbarStyleSheet?
     public var toolbarActions: QFieldAction
     public var suggestion: IQTextFieldSuggestion?
@@ -84,6 +85,7 @@ open class QTextFieldStyleSheet : QDisplayStyleSheet {
         isSecureTextEntry: Bool = false,
         textContentType: UITextContentType! = nil,
         isEnabled: Bool = true,
+        accessorySeparatorStyle: QDisplayStyleSheet? = nil,
         toolbarStyle: QToolbarStyleSheet? = nil,
         toolbarActions: QFieldAction = [],
         suggestion: IQTextFieldSuggestion? = nil,
@@ -115,6 +117,7 @@ open class QTextFieldStyleSheet : QDisplayStyleSheet {
         self.isSecureTextEntry = isSecureTextEntry
         self.textContentType = textContentType
         self.isEnabled = isEnabled
+        self.accessorySeparatorStyle = accessorySeparatorStyle
         self.toolbarStyle = toolbarStyle
         self.toolbarActions = toolbarActions
         self.suggestion = suggestion
@@ -151,6 +154,7 @@ open class QTextFieldStyleSheet : QDisplayStyleSheet {
         self.isSecureTextEntry = styleSheet.isSecureTextEntry
         self.textContentType = styleSheet.textContentType
         self.isEnabled = styleSheet.isEnabled
+        self.accessorySeparatorStyle = styleSheet.accessorySeparatorStyle
         self.toolbarStyle = styleSheet.toolbarStyle
         self.toolbarActions = styleSheet.toolbarActions
         self.suggestion = styleSheet.suggestion
@@ -365,6 +369,10 @@ public class QTextField : QDisplayView, IQField {
     public var isEditing: Bool {
         get { return self._field.isEditing }
     }
+    public var accessorySeparatorStyle: QDisplayStyleSheet? {
+        set(value) { self._accessoryView.separatorStyle = value }
+        get { return self._accessoryView.separatorStyle }
+    }
     public lazy var toolbar: QToolbar = QToolbar(items: self._toolbarItems())
     public var toolbarActions: QFieldAction = [] {
         didSet(oldValue) {
@@ -491,6 +499,7 @@ public class QTextField : QDisplayView, IQField {
             self.textContentType = styleSheet.textContentType
         }
         self.isEnabled = styleSheet.isEnabled
+        self.accessorySeparatorStyle = styleSheet.accessorySeparatorStyle
         if let style = styleSheet.toolbarStyle {
             self.toolbar.apply(style)
         }
@@ -524,6 +533,9 @@ private extension QTextField {
     
     func _updateAccessoryView() {
         var height: CGFloat = 0
+        if let separatorView = self._accessoryView.separatorView {
+            height += separatorView.frame.height
+        }
         if self.toolbarActions.isEmpty == false {
             self._accessoryView.addSubview(self.toolbar)
             height += self.toolbar.frame.height
@@ -597,6 +609,37 @@ private extension QTextField {
 private extension QTextField {
     
     class AccessoryView : UIView {
+        
+        var separatorStyle: QDisplayStyleSheet? {
+            didSet {
+                if let style = self.separatorStyle {
+                    if let view = self.separatorView {
+                        view.apply(style)
+                    } else {
+                        let view = QDisplayView(frame: .init(
+                            x: 0,
+                            y: 0,
+                            width: UIScreen.main.bounds.width,
+                            height: 1
+                        ))
+                        view.apply(style)
+                        self.separatorView = view
+                    }
+                } else {
+                    self.separatorView = nil
+                }
+            }
+        }
+        var separatorView: QDisplayView? {
+            willSet {
+                guard let view = self.separatorView else { return }
+                view.removeFromSuperview()
+            }
+            didSet {
+                guard let view = self.separatorView else { return }
+                self.insertSubview(view, at: 0)
+            }
+        }
         
         override func layoutSubviews() {
             super.layoutSubviews()
@@ -733,9 +776,7 @@ private extension QTextField {
                 }
                 var autoCompleteVariants: [String] = []
                 if let suggestion = field.suggestion {
-                    if sourceUnformat.count > 0 {
-                        autoCompleteVariants = suggestion.variants(sourceUnformat)
-                    }
+                    autoCompleteVariants = suggestion.variants(sourceUnformat)
                     if sourceUnformat.isEmpty == false && sourceUnformat.count <= caretPosition && string.count > 0 {
                         if let autoComplete = suggestion.autoComplete(sourceUnformat) {
                             caretLength = autoComplete.count - sourceUnformat.count
