@@ -522,18 +522,18 @@ private extension QTextField {
         if self.toolbarActions.isEmpty == false {
             if self.toolbarActions.contains(.delete) == true {
                 let item = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(self._pressedDelete(_:)))
-                item.setTitleTextAttributes([ .foregroundColor : UIColor(hex: 0xff645b) ], for: .normal)
+                item.setTitleTextAttributes([ .foregroundColor : UIColor(hex: 0xff645bff) ], for: .normal)
                 items.append(item)
             }
             if self.toolbarActions.contains(.cancel) == true {
                 let item = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self._pressedCancel(_:)))
-                item.setTitleTextAttributes([ .foregroundColor : UIColor(hex: 0x357baa) ], for: .normal)
+                item.setTitleTextAttributes([ .foregroundColor : UIColor(hex: 0x357baaff) ], for: .normal)
                 items.append(item)
             }
             items.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
             if self.toolbarActions.contains(.done) == true {
                 let item = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self._pressedDone(_:)))
-                item.setTitleTextAttributes([ .foregroundColor : UIColor(hex: 0x357baa) ], for: .normal)
+                item.setTitleTextAttributes([ .foregroundColor : UIColor(hex: 0x357baaff) ], for: .normal)
                 items.append(item)
             }
         }
