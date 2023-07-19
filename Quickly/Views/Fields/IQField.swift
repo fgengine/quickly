@@ -14,6 +14,7 @@ public struct QFieldAction : OptionSet {
     
     public static let cancel = QFieldAction(rawValue: 1 << 0)
     public static let done = QFieldAction(rawValue: 1 << 1)
+    public static let delete = QFieldAction(rawValue: 1 << 2)
     
 }
 

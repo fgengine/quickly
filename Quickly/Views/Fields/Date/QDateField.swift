@@ -258,6 +258,9 @@ public class QDateField : QDisplayView, IQField {
 
         self._picker = UIDatePicker()
         self._picker.datePickerMode = self.mode.datePickerMode
+        if #available(iOS 13.4, *) {
+            self._picker.preferredDatePickerStyle = .wheels
+        }
         self._picker.addValueChanged(self, action: #selector(self._changeDate(_:)))
         
         self._tapGesture = UITapGestureRecognizer(target: self, action: #selector(self._tapGesture(_:)))
@@ -357,12 +360,21 @@ extension QDateField {
     private func _toolbarItems() -> [UIBarButtonItem] {
         var items: [UIBarButtonItem] = []
         if self.toolbarActions.isEmpty == false {
+            if self.toolbarActions.contains(.delete) == true {
+                let item = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(self._pressedDelete(_:)))
+                item.setTitleTextAttributes([ .foregroundColor : UIColor(hex: 0xff645b) ], for: .normal)
+                items.append(item)
+            }
             if self.toolbarActions.contains(.cancel) == true {
-                items.append(UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self._pressedCancel(_:))))
+                let item = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self._pressedCancel(_:)))
+                item.setTitleTextAttributes([ .foregroundColor : UIColor(hex: 0x357baa) ], for: .normal)
+                items.append(item)
             }
             items.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
             if self.toolbarActions.contains(.done) == true {
-                items.append(UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self._pressedDone(_:))))
+                let item = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self._pressedDone(_:)))
+                item.setTitleTextAttributes([ .foregroundColor : UIColor(hex: 0x357baa) ], for: .normal)
+                items.append(item)
             }
         }
         return items
@@ -405,6 +417,12 @@ extension QDateField {
         if self.canBecomeFirstResponder == true {
             self.becomeFirstResponder()
         }
+    }
+    
+    @objc
+    func _pressedDelete(_ sender: Any) {
+        self._pressed(action: .delete)
+        self.endEditing(false)
     }
     
     @objc

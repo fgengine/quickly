@@ -520,12 +520,21 @@ private extension QTextField {
     func _toolbarItems() -> [UIBarButtonItem] {
         var items: [UIBarButtonItem] = []
         if self.toolbarActions.isEmpty == false {
+            if self.toolbarActions.contains(.delete) == true {
+                let item = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(self._pressedDelete(_:)))
+                item.setTitleTextAttributes([ .foregroundColor : UIColor(hex: 0xff645b) ], for: .normal)
+                items.append(item)
+            }
             if self.toolbarActions.contains(.cancel) == true {
-                items.append(UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self._pressedCancel(_:))))
+                let item = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self._pressedCancel(_:)))
+                item.setTitleTextAttributes([ .foregroundColor : UIColor(hex: 0x357baa) ], for: .normal)
+                items.append(item)
             }
             items.append(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil))
             if self.toolbarActions.contains(.done) == true {
-                items.append(UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self._pressedDone(_:))))
+                let item = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self._pressedDone(_:)))
+                item.setTitleTextAttributes([ .foregroundColor : UIColor(hex: 0x357baa) ], for: .normal)
+                items.append(item)
             }
         }
         return items
@@ -578,6 +587,12 @@ private extension QTextField {
         self._observer.notify({ (observer) in
             observer.select(textField: self, suggestion: suggestion)
         })
+        self.endEditing(false)
+    }
+    
+    @objc
+    func _pressedDelete(_ sender: Any) {
+        self._pressed(action: .delete)
         self.endEditing(false)
     }
     
