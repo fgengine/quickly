@@ -36,7 +36,7 @@ extension IQTableReuse where Self : UIView {
     }
 
     public static func currentNibName() -> String {
-        return String(describing: self.classForCoder())
+        return NSStringFromClass(self)
     }
 
     public static func currentNibBundle() -> Bundle {

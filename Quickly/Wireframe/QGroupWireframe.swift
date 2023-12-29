@@ -33,14 +33,10 @@ open class QGroupWireframe< RouterType: IQRouter, ContextType: IQContext > : IQW
 
 extension QGroupWireframe : IQRouter where RouterType : IQRouter {
 }
-    
-// MARK: IQWireframePresetable
 
-extension QGroupWireframe : IQWireframeDefaultRouter where RouterType : IQWireframeDefaultRouter {
-    
-    public func present(notificationView: QDisplayView, alignment: QMainViewController.NotificationAlignment, duration: TimeInterval) {
-        self.router?.present(notificationView: notificationView, alignment: alignment, duration: duration)
-    }
+// MARK: IQWireframeSystemRouter
+
+extension QGroupWireframe : IQWireframeSystemRouter where RouterType : IQWireframeSystemRouter {
     
     public func present(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         self.router?.present(viewController: viewController, animated: animated, completion: completion)
@@ -50,6 +46,12 @@ extension QGroupWireframe : IQWireframeDefaultRouter where RouterType : IQWirefr
         self.router?.dismiss(viewController: viewController, animated: animated, completion: completion)
     }
     
+}
+    
+// MARK: IQWireframeModalRouter
+
+extension QGroupWireframe : IQWireframeModalRouter where RouterType : IQWireframeModalRouter {
+    
     public func present(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         self.router?.present(viewController: viewController, animated: animated, completion: completion)
     }
@@ -58,12 +60,28 @@ extension QGroupWireframe : IQWireframeDefaultRouter where RouterType : IQWirefr
         self.router?.dismiss(viewController: viewController, animated: animated, completion: completion)
     }
     
+}
+    
+// MARK: IQWireframeDialogRouter
+
+extension QGroupWireframe : IQWireframeDialogRouter where RouterType : IQWireframeDialogRouter {
+    
     public func present(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         self.router?.present(viewController: viewController, animated: animated, completion: completion)
     }
     
     public func dismiss(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         self.router?.dismiss(viewController: viewController, animated: animated, completion: completion)
+    }
+    
+}
+    
+// MARK: IQWireframePushRouter
+
+extension QGroupWireframe : IQWireframePushRouter where RouterType : IQWireframePushRouter {
+    
+    public func present(notificationView: QDisplayView, alignment: QMainViewController.NotificationAlignment, duration: TimeInterval) {
+        self.router?.present(notificationView: notificationView, alignment: alignment, duration: duration)
     }
     
     public func present(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)?) {

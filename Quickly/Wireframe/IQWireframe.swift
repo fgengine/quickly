@@ -26,20 +26,30 @@ public protocol IQWireframeDeeplinkable : AnyObject {
     
 }
 
-// MARK: IQWireframeDefaultRouter
-
-public protocol IQWireframeDefaultRouter : IQRouter {
-    
-    func present(notificationView: QDisplayView, alignment: QMainViewController.NotificationAlignment, duration: TimeInterval)
+public protocol IQWireframeSystemRouter : IQRouter {
     
     func present(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?)
     func dismiss(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?)
     
+}
+
+public protocol IQWireframeModalRouter : IQRouter {
+    
     func present(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?)
     func dismiss(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?)
     
+}
+
+public protocol IQWireframeDialogRouter : IQRouter {
+    
     func present(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?)
     func dismiss(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?)
+    
+}
+
+public protocol IQWireframePushRouter : IQRouter {
+    
+    func present(notificationView: QDisplayView, alignment: QMainViewController.NotificationAlignment, duration: TimeInterval)
     
     func present(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)?)
     func dismiss(viewController: IQPushViewController, animated: Bool, completion: (() -> Swift.Void)?)

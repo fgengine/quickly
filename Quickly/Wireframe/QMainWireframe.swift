@@ -4,95 +4,89 @@
 
 import UIKit
 
-open class QAppWireframe< ContextType: IQContext > : IQWireframe, IQWireframeDeeplinkable, IQContextable {
+open class QMainWireframe< ContextType: IQContext > : IQWireframe, IQWireframeDeeplinkable, IQContextable {
     
-    public var context: ContextType {
-        return self._main.context
-    }
-    
-    public private(set) var window: QWindow
-    public var viewController: QMainViewController {
-        return self._main.viewController
-    }
+    public weak var router: IQWireframeSystemRouter?
+    public private(set) var context: ContextType
+    public var viewController: QMainViewController
     public var backgroundViewController: IQViewController? {
-        set(value) { self._main.backgroundViewController = value }
-        get { return self._main.backgroundViewController }
+        set(value) { self.viewController.backgroundViewController = value }
+        get { return self.viewController.backgroundViewController }
     }
     public var contentViewController: IQViewController? {
-        set(value) { self._main.contentViewController = value }
-        get { return self._main.contentViewController }
+        set(value) { self.viewController.contentViewController = value }
+        get { return self.viewController.contentViewController }
     }
     public var modalContainerViewController: IQModalContainerViewController? {
-        set(value) { self._main.modalContainerViewController = value }
-        get { return self._main.modalContainerViewController }
+        set(value) { self.viewController.modalContainerViewController = value }
+        get { return self.viewController.modalContainerViewController }
     }
     public var dialogContainerViewController: IQDialogContainerViewController? {
-        set(value) { self._main.dialogContainerViewController = value }
-        get { return self._main.dialogContainerViewController }
+        set(value) { self.viewController.dialogContainerViewController = value }
+        get { return self.viewController.dialogContainerViewController }
     }
     public var pushContainerViewController: IQPushContainerViewController? {
-        set(value) { self._main.pushContainerViewController = value }
-        get { return self._main.pushContainerViewController }
+        set(value) { self.viewController.pushContainerViewController = value }
+        get { return self.viewController.pushContainerViewController }
     }
-
-    private let _main: QMainWireframe< ContextType >
-
+    
+    private var _wireframe: AnyObject?
+    
     public init(
         context: ContextType
     ) {
-        self._main = .init(context: context)
-        self.window = QWindow(self._main.viewController)
-        self._main.router = self
+        self.context = context
+        self.viewController = QMainViewController()
         self.setup()
     }
     
     open func setup() {
     }
-
+    
     open func launch(_ options: [UIApplication.LaunchOptionsKey : Any]?) {
-        if self.window.isKeyWindow == false {
-            self.window.makeKeyAndVisible()
-        }
     }
     
     open func open(_ url: URL) -> Bool {
-        return self._main.open(url)
+        guard let deeplinkable = self._wireframe as? IQWireframeDeeplinkable else { return false }
+        return deeplinkable.open(url)
     }
-
+    
 }
 
 // MARK: Public
 
-public extension QAppWireframe {
+public extension QMainWireframe {
     
     func set< WireframeType: IQWireframe >(wireframe: WireframeType) {
-        self._main.set(wireframe: wireframe)
+        if self._wireframe !== wireframe {
+            self._wireframe = wireframe
+            self.viewController.contentViewController = wireframe.viewController
+        }
     }
     
     func wireframe< WireframeType: IQWireframe >() -> WireframeType? {
-        return self._main.wireframe()
+        return self._wireframe as? WireframeType
     }
     
 }
 
 // MARK: IQWireframeSystemRouter
 
-extension QAppWireframe : IQWireframeSystemRouter {
+extension QMainWireframe : IQWireframeSystemRouter {
     
     public func present(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
-        guard let rootViewController = self.window.rootViewController else { return }
-        rootViewController.present(viewController, animated: animated, completion: completion)
+        self.router?.present(viewController: viewController, animated: animated, completion: completion)
     }
     
     public func dismiss(viewController: UIViewController, animated: Bool, completion: (() -> Swift.Void)?) {
-        viewController.dismiss(animated: animated, completion: completion)
+        self.router?.dismiss(viewController: viewController, animated: animated, completion: completion)
     }
     
 }
 
 // MARK: IQWireframeModalRouter
 
-extension QAppWireframe : IQWireframeModalRouter {
+extension QMainWireframe : IQWireframeModalRouter {
     
     public func present(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         self.modalContainerViewController?.present(viewController: viewController, animated: animated, completion: completion)
@@ -101,12 +95,11 @@ extension QAppWireframe : IQWireframeModalRouter {
     public func dismiss(viewController: IQModalViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         self.modalContainerViewController?.dismiss(viewController: viewController, animated: animated, completion: completion)
     }
-    
 }
 
 // MARK: IQWireframeDialogRouter
 
-extension QAppWireframe : IQWireframeDialogRouter {
+extension QMainWireframe : IQWireframeDialogRouter {
     
     public func present(viewController: IQDialogViewController, animated: Bool, completion: (() -> Swift.Void)?) {
         self.dialogContainerViewController?.present(viewController: viewController, animated: animated, completion: completion)
@@ -120,7 +113,7 @@ extension QAppWireframe : IQWireframeDialogRouter {
 
 // MARK: IQWireframePushRouter
 
-extension QAppWireframe : IQWireframePushRouter {
+extension QMainWireframe : IQWireframePushRouter {
     
     public func present(notificationView: QDisplayView, alignment: QMainViewController.NotificationAlignment, duration: TimeInterval) {
         self.viewController.present(notificationView: notificationView, alignment: alignment, duration: duration)

@@ -10,10 +10,6 @@ open class QTableCell< RowType: IQTableRow > : UITableViewCell, IQTypedTableCell
     open private(set) var row: RowType?
     open private(set) weak var spec: IQContainerSpec?
 
-    open class func currentNibName() -> String {
-        return String(describing: self.classForCoder())
-    }
-
     open class func height(row: RowType, spec: IQContainerSpec) -> CGFloat {
         return UITableView.automaticDimension
     }
